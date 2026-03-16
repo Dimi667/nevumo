@@ -1,0 +1,13 @@
+<svg viewBox="-150 0 900 160" shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg">
+  <text x="300" y="150"
+        font-family="'Avenir Next Arabic','Avenir Next',Arial,sans-serif"
+        font-weight="700"
+        font-size="160"
+        text-anchor="middle"
+        dominant-baseline="central">
+        
+    <tspan fill="#FF6600" font-size="210">N</tspan>
+    <tspan fill="#2D2D2D" letter-spacing="6" dx="-40">evumo</tspan>
+    
+  </text>
+</svg>

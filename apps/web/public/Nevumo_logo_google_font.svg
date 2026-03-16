@@ -1,0 +1,19 @@
+<svg viewBox="-150 0 900 130" shape-rendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@800&amp;display=swap');
+    </style>
+  </defs>
+  <text x="300" y="120"
+        font-family="'Tajawal', Arial, sans-serif"
+        font-weight="900"
+        font-size="140"
+        font-stretch="ultra-expanded"
+        text-anchor="middle"
+        dominant-baseline="central">
+        
+    <tspan fill="#FF6600" font-size="200" stroke="#FF6600" stroke-width="6">N</tspan>
+    <tspan fill="#2D2D2D" letter-spacing="6" dx="-40" stroke="#2D2D2D" stroke-width="6">evumo</tspan>
+    
+  </text>
+</svg>
