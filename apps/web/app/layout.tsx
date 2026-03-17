@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { cookies, headers } from "next/headers";
+
+import {
+  DEFAULT_LANGUAGE,
+  LANGUAGE_COOKIE_NAME,
+  LANGUAGE_HEADER_NAME,
+  normalizeLanguage,
+} from "../lib/locales";
+
 import "./globals.css";
 
 const geistSans = localFont({
@@ -17,13 +26,20 @@ export const metadata: Metadata = {
   viewport: 'width=device-width, initial-scale=1',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headerStore = await headers();
+  const cookieStore = await cookies();
+  const lang =
+    normalizeLanguage(headerStore.get(LANGUAGE_HEADER_NAME)) ??
+    normalizeLanguage(cookieStore.get(LANGUAGE_COOKIE_NAME)?.value) ??
+    DEFAULT_LANGUAGE;
+
   return (
-    <html lang="en">
+    <html lang={lang}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
       </body>

@@ -1,0 +1,118 @@
+export const SUPPORTED_LANGUAGES = [
+  "bg",
+  "cs",
+  "da",
+  "de",
+  "el",
+  "en",
+  "es",
+  "et",
+  "fi",
+  "fr",
+  "ga",
+  "hr",
+  "hu",
+  "it",
+  "lt",
+  "lv",
+  "mk",
+  "mt",
+  "nl",
+  "no",
+  "pl",
+  "pt",
+  "pt-PT",
+  "ro",
+  "sk",
+  "sl",
+  "sq",
+  "sr",
+  "sv",
+  "tr",
+];
+
+export const DEFAULT_LANGUAGE = "en";
+export const LANGUAGE_COOKIE_NAME = "lang";
+export const LANGUAGE_HEADER_NAME = "x-nevumo-lang";
+export const LANGUAGE_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
+export const LANGUAGE_REDIRECT_COOKIE_NAME = "lang-redirect";
+export const LANGUAGE_REDIRECT_COOKIE_MAX_AGE = 10;
+
+export const DEFAULT_PROVIDER_ROUTE_BASE = "/sofia/massage/maria-petrova-1";
+export const DEFAULT_PROVIDER_ROUTE = `/en${DEFAULT_PROVIDER_ROUTE_BASE}`;
+
+export function normalizeLanguage(value?: string | null): string | null {
+  if (!value) return null;
+
+  const candidate = value.trim();
+  if (!candidate) return null;
+
+  const exact = SUPPORTED_LANGUAGES.find(
+    (supported) => supported.toLowerCase() === candidate.toLowerCase()
+  );
+  if (exact) return exact;
+
+  const base = candidate.toLowerCase().split("-")[0];
+  if (!base) return null;
+
+  return (
+    SUPPORTED_LANGUAGES.find((supported) => {
+      if (supported === "pt-PT") {
+        return base === "pt";
+      }
+
+      return supported.toLowerCase() === base;
+    }) ?? null
+  );
+}
+
+export function getLanguageFromPath(pathname: string): string | null {
+  const segment = pathname.split("/").filter(Boolean)[0];
+  return normalizeLanguage(segment);
+}
+
+export function resolveRequestLanguage(input: {
+  cookieLang?: string | null;
+  acceptLanguage?: string | null;
+}): string {
+  return (
+    normalizeLanguage(input.cookieLang) ??
+    resolvePreferredLanguage(input.acceptLanguage ?? undefined)
+  );
+}
+
+export function resolvePreferredLanguage(acceptHeader?: string): string {
+  if (!acceptHeader) return DEFAULT_LANGUAGE;
+
+  const parsed = acceptHeader
+    .split(",")
+    .map((token) => {
+      const [lang, qPart] = token.trim().split(";");
+      if (!lang) return null;
+      const quality = qPart?.split("=")[1];
+      return {
+        lang: lang.toLowerCase(),
+        quality: quality ? Number(quality) : 1,
+      };
+    })
+    .filter((entry): entry is { lang: string; quality: number } => Boolean(entry))
+    .sort((a, b) => b.quality - a.quality);
+
+  for (const entry of parsed) {
+    const exact = SUPPORTED_LANGUAGES.find(
+      (supported) => supported.toLowerCase() === entry.lang
+    );
+    if (exact) return exact;
+
+    const base = entry.lang.split("-")[0] || entry.lang;
+    const baseMatch = SUPPORTED_LANGUAGES.find((supported) => {
+      if (supported === "pt-PT") {
+        return base === "pt";
+      }
+      return supported.startsWith(base);
+    });
+    if (baseMatch) return baseMatch;
+  }
+
+  return DEFAULT_LANGUAGE;
+}

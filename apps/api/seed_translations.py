@@ -18,6 +18,7 @@ def seed():
     
     maria.job_title = "job_title_massage" # Използваме ключ за превод вместо твърд низ
     maria.category = MASSAGE_PROVIDER_CATEGORY_KEY
+    maria.city = "Sofia"
     maria.rating = 4.9
     maria.jobs_completed = 120
     maria.is_verified = True
