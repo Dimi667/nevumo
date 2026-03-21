@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import { getProviderBySlug, getCategories } from '@/lib/api';
 import LeadForm from '@/components/LeadForm';
+import { generateHreflangAlternates, generateLocalBusinessJsonLd } from '@/lib/seo';
+import { JsonLd } from '@/components/JsonLd';
 
 type ProviderRouteParams = {
   lang: string;
@@ -20,7 +22,7 @@ function getInitials(name: string): string {
 }
 
 export async function generateMetadata(props: { params: Promise<ProviderRouteParams> }) {
-  const { lang, category, providerPage } = await props.params;
+  const { lang, city, category, providerPage } = await props.params;
   try {
     const [provider, categories] = await Promise.all([
       getProviderBySlug(providerPage),
@@ -28,7 +30,18 @@ export async function generateMetadata(props: { params: Promise<ProviderRoutePar
     ]);
     if (!provider) return { title: 'Nevumo' };
     const categoryName = categories.find((c) => c.slug === category)?.name ?? category;
-    return { title: `${provider.business_name} | ${categoryName} | Nevumo` };
+    const description = provider.description ?? `Book ${provider.business_name} for ${categoryName} services.`;
+    return {
+      title: `${provider.business_name} | ${categoryName}`,
+      description,
+      alternates: {
+        languages: generateHreflangAlternates(`/${city}/${category}/${providerPage}`),
+      },
+      openGraph: {
+        title: `${provider.business_name} | ${categoryName} | Nevumo`,
+        description,
+      },
+    };
   } catch {
     return { title: 'Nevumo' };
   }
@@ -40,6 +53,8 @@ export default async function Page(props: { params: Promise<ProviderRouteParams>
   if (!provider) return notFound();
 
   return (
+    <>
+      <JsonLd data={generateLocalBusinessJsonLd(provider, category, city)} />
     <div className="min-h-screen bg-gray-50 py-6 px-4">
       <div className="max-w-md mx-auto">
 
@@ -123,5 +138,6 @@ export default async function Page(props: { params: Promise<ProviderRouteParams>
         </div>
       </div>
     </div>
+    </>
   );
 }

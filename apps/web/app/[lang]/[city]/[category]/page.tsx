@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { getProviders, getCategories, getCities } from '@/lib/api';
+import { generateHreflangAlternates, generateServiceListJsonLd } from '@/lib/seo';
+import { JsonLd } from '@/components/JsonLd';
 
 interface PageProps {
   params: Promise<{ lang: string; city: string; category: string }>;
@@ -24,9 +26,17 @@ export async function generateMetadata({ params }: PageProps) {
   const categoryName = categories.find((c) => c.slug === category)?.name ?? category;
   const cityName = cities.find((c) => c.slug === city)?.name ?? city;
 
+  const description = `Find the best ${categoryName} providers in ${cityName}. Compare ratings, read reviews, and book services on Nevumo.`;
   return {
-    title: `${categoryName} in ${cityName} | Nevumo`,
-    description: `Find the best ${categoryName} providers in ${cityName}. Compare ratings, read reviews, and book services on Nevumo.`,
+    title: `${categoryName} in ${cityName}`,
+    description,
+    alternates: {
+      languages: generateHreflangAlternates(`/${city}/${category}`),
+    },
+    openGraph: {
+      title: `${categoryName} in ${cityName} | Nevumo`,
+      description,
+    },
   };
 }
 
@@ -43,6 +53,8 @@ export default async function CategoryPage({ params }: PageProps) {
   const cityName = cities.find((c) => c.slug === city)?.name ?? city;
 
   return (
+    <>
+      <JsonLd data={generateServiceListJsonLd(providers, categoryName, cityName)} />
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-2xl mx-auto">
 
@@ -96,5 +108,6 @@ export default async function CategoryPage({ params }: PageProps) {
         )}
       </div>
     </div>
+    </>
   );
 }

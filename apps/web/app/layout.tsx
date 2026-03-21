@@ -22,9 +22,29 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Nevumo",
-  description: "Намери или предложи професионални услуги",
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com'),
+  title: {
+    default: 'Nevumo',
+    template: '%s | Nevumo',
+  },
+  description: 'Find and book local services. Compare providers, read reviews, and request quotes.',
+  openGraph: {
+    type: 'website',
+    siteName: 'Nevumo',
+    locale: 'en',
+    images: [{ url: '/og-default.png', width: 1200, height: 630, alt: 'Nevumo' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@nevumo',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default async function RootLayout({

@@ -1,19 +1,18 @@
 import { getCategories, getCities } from '@/lib/api';
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
+import { generateHreflangAlternates } from '@/lib/seo';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  const { lang } = await params;
+  const { lang: _lang } = await params;
   return {
     title: `Nevumo — Find local service providers`,
     description: `Browse service categories and find trusted providers near you.`,
     alternates: {
-      languages: Object.fromEntries(
-        SUPPORTED_LANGUAGES.map((l) => [l, `/${l}`]),
-      ),
+      languages: generateHreflangAlternates('/'),
     },
   };
 }
