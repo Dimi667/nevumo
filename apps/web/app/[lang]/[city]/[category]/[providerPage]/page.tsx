@@ -15,6 +15,10 @@ function formatPrice(price: number | null, priceType: string): string {
   return `${price} лв.`;
 }
 
+function getInitials(name: string): string {
+  return name.charAt(0).toUpperCase();
+}
+
 export async function generateMetadata(props: { params: Promise<ProviderRouteParams> }) {
   const { lang, category, providerPage } = await props.params;
   try {
@@ -36,62 +40,88 @@ export default async function Page(props: { params: Promise<ProviderRouteParams>
   if (!provider) return notFound();
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-2xl mx-auto space-y-5">
+    <div className="min-h-screen bg-gray-50 py-6 px-4">
+      <div className="max-w-md mx-auto">
 
-        {/* Provider info */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            {provider.business_name}
-          </h1>
-          {provider.description && (
-            <p className="text-gray-600 mb-4">{provider.description}</p>
-          )}
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="text-amber-500 font-semibold text-lg">
-              ★ {provider.rating.toFixed(1)}
+        {/* Card */}
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden pb-24 md:pb-0">
+
+          {/* Logo bar */}
+          <div className="px-6 pt-5 pb-2 text-center">
+            <span className="text-xl font-extrabold tracking-tight">
+              <span className="text-orange-500">N</span>evumo
             </span>
-            {provider.verified && (
-              <span className="inline-flex items-center gap-1 text-sm font-semibold text-green-700 bg-green-50 border border-green-200 px-3 py-1 rounded-full">
-                ✓ Verified
-              </span>
-            )}
           </div>
-        </section>
 
-        {/* Services */}
-        {provider.services.length > 0 && (
-          <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Services</h2>
-            <ul className="divide-y divide-gray-50">
-              {provider.services.map((service) => (
-                <li key={service.id} className="flex justify-between items-start py-3 first:pt-0 last:pb-0">
-                  <div className="flex-1 min-w-0 pr-4">
-                    <p className="font-semibold text-gray-800">{service.title}</p>
+          {/* Avatar + name + description */}
+          <div className="px-6 pt-3 pb-5 text-center border-b border-gray-100">
+            <div className="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3">
+              <span className="text-orange-600 text-3xl font-bold">
+                {getInitials(provider.business_name)}
+              </span>
+            </div>
+
+            <h1 className="text-xl font-bold text-gray-900 mb-1">
+              {provider.business_name}
+            </h1>
+
+            {provider.description && (
+              <p className="text-sm text-gray-500 mb-3">{provider.description}</p>
+            )}
+
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <span className="text-amber-500 font-semibold">
+                ⭐ {provider.rating.toFixed(1)} rating
+              </span>
+              {provider.verified && (
+                <span className="inline-flex items-center gap-1 text-sm font-semibold text-green-700 bg-green-50 border border-green-200 px-3 py-1 rounded-full">
+                  ✓ Verified professional
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Services */}
+          {provider.services.length > 0 && (
+            <div className="px-6 py-5 border-b border-gray-100">
+              <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">
+                Services
+              </h2>
+              <ul className="space-y-3">
+                {provider.services.map((service) => (
+                  <li key={service.id}>
+                    <div className="flex justify-between items-start gap-2">
+                      <span className="font-semibold text-gray-800 text-sm">
+                        {service.title}
+                      </span>
+                      <span className="text-sm font-bold text-gray-700 whitespace-nowrap flex-shrink-0">
+                        {formatPrice(service.base_price, service.price_type)}
+                      </span>
+                    </div>
                     {service.description && (
-                      <p className="text-sm text-gray-500 mt-0.5">{service.description}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{service.description}</p>
                     )}
-                  </div>
-                  <span className="text-sm font-semibold text-gray-700 whitespace-nowrap">
-                    {formatPrice(service.base_price, service.price_type)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
-        {/* Contact form */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Contact Provider</h2>
-          <LeadForm
-            categorySlug={category}
-            citySlug={city}
-            providerSlug={provider.slug}
-          />
-        </section>
+          {/* Request form */}
+          <div className="px-6 py-5">
+            <h2 className="text-base font-bold text-gray-900 mb-4">Request Service</h2>
+            <LeadForm
+              categorySlug={category}
+              citySlug={city}
+              providerSlug={provider.slug}
+            />
+            <p className="text-xs text-gray-400 text-center mt-4">
+              Free request · No obligation
+            </p>
+          </div>
 
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
