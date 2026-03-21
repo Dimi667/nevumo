@@ -1,70 +1,74 @@
-/* 1. Включване на Tailwind v4 */
+/* 1. Tailwind v4 — CSS-first config */
 @import "tailwindcss";
 
-/* 2. Твоите персонализирани променливи */
+/* 2. Custom design tokens */
 @theme {
-  /* Тук дефинираме цветовете, за да може Tailwind да ги разпознава като класове (напр. text-primary) */
   --color-primary: #ff5a1f;
   --color-primary-hover: #e04e1a;
   --color-background: #f9f9f9;
   --color-foreground: #171717;
-  
-  /* Персонализирани сенки и радиус */
   --shadow-card: 0 10px 25px rgba(0,0,0,0.05);
   --radius-nevumo: 16px;
 }
 
-/* 3. Базови стилове за целия проект */
-:root {
-  --background: #f9f9f9;
-  --foreground: #171717;
+/*
+ * 3. Custom base styles — MUST be inside @layer base.
+ *
+ * Root cause of Tailwind utility classes not applying:
+ * Unlayered CSS rules (outside any @layer) beat @layer rules in the
+ * CSS cascade regardless of specificity. The old `* { padding: 0; margin: 0 }`
+ * was unlayered, so it overrode every padding/margin utility in
+ * @layer utilities. Wrapping in @layer base fixes this.
+ */
+@layer base {
+  :root {
+    --background: #f9f9f9;
+    --foreground: #171717;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100dvh;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100dvh;
-  background-color: var(--background);
-  color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  overflow-x: hidden;
-  -webkit-text-size-adjust: 100%;
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Премахваме подчертаването на линковете */
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* 4. Помощни класове (Компоненти) */
+/* 4. Custom utility components */
 @utility nevumo-card {
   background-color: white;
   border-radius: var(--radius-nevumo);
   border: 1px solid #eee;
   box-shadow: var(--shadow-card);
-  padding: 2rem; /* 32px (p-8) */
+  padding: 2rem;
 }
 
 @utility btn-primary {
   background-color: var(--color-primary);
   color: white;
   font-weight: 800;
-  padding: 1rem 1.5rem; /* py-4 px-6 */
-  border-radius: 0.5rem; /* rounded-lg */
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
   transition: background-color 0.2s;
-  
+
   &:hover {
     background-color: var(--color-primary-hover);
   }
