@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Optional, List
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 # -------------------------
@@ -45,8 +45,15 @@ class ServiceOut(BaseModel):
     title: str
     description: Optional[str] = None
     price_type: Optional[str] = None
-    base_price: Optional[Decimal] = None
+    base_price: Optional[float] = None
     category_slug: Optional[str] = None
+
+    @field_validator("base_price", mode="before")
+    @classmethod
+    def convert_price(cls, v):
+        if v is not None:
+            return float(v)
+        return None
 
 
 # -------------------------
@@ -56,9 +63,16 @@ class ServiceOut(BaseModel):
 class ProviderListItem(BaseModel):
     id: UUID
     business_name: str
-    rating: Decimal
+    rating: float
     verified: bool
     slug: str
+
+    @field_validator("rating", mode="before")
+    @classmethod
+    def convert_rating(cls, v):
+        if v is not None:
+            return float(v)
+        return 0.0
 
 
 class ProviderListResponse(BaseModel):
@@ -73,11 +87,18 @@ class ProviderDetail(BaseModel):
     business_name: str
     description: Optional[str] = None
     slug: str
-    rating: Decimal
+    rating: float
     verified: bool
     availability_status: str
     created_at: datetime
     services: List[ServiceOut] = []
+
+    @field_validator("rating", mode="before")
+    @classmethod
+    def convert_rating(cls, v):
+        if v is not None:
+            return float(v)
+        return 0.0
 
 
 class ProviderDetailResponse(BaseModel):
