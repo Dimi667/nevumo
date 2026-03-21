@@ -11,27 +11,13 @@ type ProviderRouteParams = {
   providerPage: string;
 };
 
-const PROVIDER_PAGE_REGEX = /^(.*)-(\d+)$/;
-
-const parseProviderPage = (providerPage: string): { slugPart: string; id: number } | null => {
-  const match = providerPage.match(PROVIDER_PAGE_REGEX);
-  if (!match) return null;
-  const id = Number(match[2]);
-  if (!Number.isFinite(id) || id <= 0) return null;
-  const slugPart = match[1];
-  if (!slugPart) return null;
-  return { slugPart, id };
-};
-
 export async function generateMetadata(props: { params: Promise<ProviderRouteParams> }) {
   const params = await props.params;
   const { lang, category, providerPage } = params;
-  const parsed = parseProviderPage(providerPage);
-  if (!parsed) return { title: 'Nevumo' };
 
   try {
     const [provider, categories] = await Promise.all([
-      getProviderBySlug(parsed.slugPart),
+      getProviderBySlug(providerPage),
       getCategories(lang),
     ]);
     if (!provider) return { title: 'Nevumo' };
@@ -46,12 +32,10 @@ export async function generateMetadata(props: { params: Promise<ProviderRoutePar
 export default async function Page(props: { params: Promise<ProviderRouteParams> }) {
   const params = await props.params;
   const { lang, city, category, providerPage } = params;
-  const parsed = parseProviderPage(providerPage);
-  if (!parsed) return notFound();
 
   try {
     const [provider, transRes] = await Promise.all([
-      getProviderBySlug(parsed.slugPart),
+      getProviderBySlug(providerPage),
       fetch(`${API_BASE}/translations/${lang}`, { cache: 'no-store' }),
     ]);
 
