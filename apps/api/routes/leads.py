@@ -88,7 +88,10 @@ async def create_lead(
 
     db.add(LeadRateLimit(ip=client_ip))
 
-    if not provider_id:
+    if provider_id:
+        # Direct assignment: create a single LeadMatch so the PATCH endpoint can update it
+        db.add(LeadMatch(lead_id=lead.id, provider_id=provider_id, status="invited"))
+    else:
         matching_providers = (
             db.query(Provider)
             .join(Service, Provider.id == Service.provider_id)
