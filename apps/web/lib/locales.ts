@@ -118,16 +118,15 @@ export function resolvePreferredLanguage(acceptHeader?: string): string {
 }
 
 export type TranslationDictionary = {
-  login?: {
-    [key: string]: string | any;
-  };
+  login?: Record<string, string>;
 };
 
-export async function getDictionary(lang: string): Promise<any> {
+export async function getDictionary(lang: string): Promise<TranslationDictionary> {
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
   const normalized = lang || 'bg';
   try {
-    const response = await fetch(`http://127.0.0.1:8000/translations/${normalized}`, {
-      next: { revalidate: 0 } // ВАЖНО: 0 за разработка, промени на 3600 в продукция
+    const response = await fetch(`${API_BASE}/translations/${normalized}`, {
+      next: { revalidate: 0 }, // ВАЖНО: 0 за разработка, промени на 3600 в продукция
     });
 
     if (!response.ok) {
@@ -135,7 +134,7 @@ export async function getDictionary(lang: string): Promise<any> {
         return {};
     }
 
-    const data = await response.json();
+    const data: Record<string, string> = await response.json();
 
     // ВРЪЩАНЕ КЪМ СТАБИЛНИТЕ КЛЮЧОВЕ:
     // Използваме старите ключове с точка (.), защото те са преведени коректно.
