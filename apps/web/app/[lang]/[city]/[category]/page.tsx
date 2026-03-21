@@ -5,6 +5,10 @@ interface PageProps {
   params: Promise<{ lang: string; city: string; category: string }>;
 }
 
+function capitalize(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 export async function generateMetadata({ params }: PageProps) {
   const { lang, city, category } = await params;
 
@@ -13,8 +17,7 @@ export async function generateMetadata({ params }: PageProps) {
     getCities('BG'),
   ]);
 
-  const categoryName =
-    categories.find((c) => c.slug === category)?.name ?? category;
+  const categoryName = categories.find((c) => c.slug === category)?.name ?? category;
   const cityName = cities.find((c) => c.slug === city)?.name ?? city;
 
   return {
@@ -32,104 +35,54 @@ export default async function CategoryPage({ params }: PageProps) {
     getCities('BG'),
   ]);
 
-  const categoryName =
-    categories.find((c) => c.slug === category)?.name ?? category;
+  const categoryName = categories.find((c) => c.slug === category)?.name ?? category;
   const cityName = cities.find((c) => c.slug === city)?.name ?? city;
 
   return (
-    <main
-      style={{
-        maxWidth: '900px',
-        margin: '0 auto',
-        padding: '2rem',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      }}
-    >
-      <h1 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#333', marginBottom: '0.5rem' }}>
-        {categoryName} in {cityName}
-      </h1>
+    <main className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-3xl mx-auto">
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">
+          {capitalize(categoryName)} in {capitalize(cityName)}
+        </h1>
 
-      <p style={{ color: '#666', marginBottom: '2rem' }}>
-        {providers.length} provider{providers.length !== 1 ? 's' : ''} found
-      </p>
+        <p className="text-gray-500 mb-6 text-sm">
+          {providers.length} provider{providers.length !== 1 ? 's' : ''} found
+        </p>
 
-      {providers.length === 0 ? (
-        <div
-          style={{
-            textAlign: 'center',
-            padding: '3rem',
-            color: '#888',
-            background: '#f9f9f9',
-            borderRadius: '12px',
-          }}
-        >
-          <p style={{ fontSize: '1.1rem' }}>No providers found in this category yet.</p>
-          <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>Check back soon!</p>
-        </div>
-      ) : (
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: '1rem',
-          }}
-        >
-          {providers.map((provider) => (
-            <a
-              key={provider.id}
-              href={`/${lang}/${city}/${category}/${provider.slug}-${provider.id}`}
-              style={{
-                display: 'block',
-                padding: '1.25rem',
-                background: '#ffffff',
-                borderRadius: '12px',
-                border: '1px solid #eee',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                textDecoration: 'none',
-                color: 'inherit',
-                transition: 'box-shadow 0.2s',
-              }}
-            >
-              <h2
-                style={{
-                  fontSize: '1.05rem',
-                  fontWeight: '700',
-                  color: '#333',
-                  margin: '0 0 0.5rem 0',
-                }}
+        {providers.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <p className="text-gray-600 text-lg font-medium">No providers found in this category yet.</p>
+            <p className="text-gray-400 text-sm mt-1">Check back soon!</p>
+          </div>
+        ) : (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {providers.map((provider) => (
+              <Link
+                key={provider.id}
+                href={`/${lang}/${city}/${category}/${provider.slug}`}
+                className="flex items-center justify-between bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md hover:border-gray-200 transition-all no-underline"
               >
-                {provider.business_name}
-              </h2>
-
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  fontSize: '0.9rem',
-                  color: '#555',
-                }}
-              >
-                <span>⭐ {provider.rating.toFixed(1)}</span>
-                {provider.verified && (
-                  <span
-                    style={{
-                      background: '#e8f5e9',
-                      color: '#27ae60',
-                      fontSize: '0.75rem',
-                      fontWeight: '600',
-                      padding: '2px 8px',
-                      borderRadius: '999px',
-                    }}
-                  >
-                    ✓ Verified
-                  </span>
-                )}
-              </div>
-            </a>
-          ))}
-        </div>
-      )}
+                <div className="min-w-0">
+                  <h2 className="text-base font-bold text-gray-900 mb-1 truncate">
+                    {provider.business_name}
+                  </h2>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-amber-500 font-semibold text-sm">
+                      ★ {provider.rating.toFixed(1)}
+                    </span>
+                    {provider.verified && (
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded-full">
+                        ✓ Verified
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <span className="text-gray-400 font-semibold ml-4 flex-shrink-0">View →</span>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </main>
   );
 }

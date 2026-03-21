@@ -27,6 +27,7 @@ export interface ProviderListItem {
 export interface ServiceOut {
   id: string;
   title: string;
+  description: string | null;
   price_type: string;
   base_price: number | null;
 }
