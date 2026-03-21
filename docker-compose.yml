@@ -1,17 +1,67 @@
-version: '3.8'
 services:
-  db:
+  postgres:
     image: postgres:15
-    container_name: nevumo_db
+    container_name: nevumo-postgres
     restart: always
     environment:
-      POSTGRES_USER: nevumo_user
-      POSTGRES_PASSWORD: secure_password
-      POSTGRES_DB: nevumo_leads
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - nevumo_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: nevumo-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - nevumo_redisdata:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./apps/api
+    container_name: nevumo-api
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: .env
+    volumes:
+      - ./apps/api:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  web:
+    build: ./apps/web
+    container_name: nevumo-web
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    env_file: .env
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+    command: npm run dev
 
 volumes:
-  postgres_data:
+  nevumo_pgdata:
+  nevumo_redisdata:
