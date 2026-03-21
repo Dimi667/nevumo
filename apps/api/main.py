@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import os
 
 from fastapi import FastAPI, Depends, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -22,9 +23,11 @@ app = FastAPI(title="Nevumo API")
 
 init_db()
 
+origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
