@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
+
 from fastapi import FastAPI, Depends, Response, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -7,8 +9,8 @@ from sqlalchemy.orm import Session
 import redis
 import json
 
-from database import SessionLocal, init_db, Lead as LeadModel
-from models import Provider 
+from database import SessionLocal, init_db
+from models import Provider, Lead as LeadModel
 from i18n import (
     DEFAULT_LANGUAGE,
     SUPPORTED_LANGUAGES,
@@ -20,10 +22,14 @@ from i18n import (
 app = FastAPI(title="Nevumo API")
 
 try:
-    # Конфигурация на Redis
-    redis_client = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
+    redis_client = redis.Redis(
+        host=os.getenv("REDIS_HOST", "localhost"),
+        port=int(os.getenv("REDIS_PORT", 6379)),
+        db=int(os.getenv("REDIS_DB", 0)),
+        decode_responses=True,
+    )
     redis_client.ping()
-except:
+except Exception:
     redis_client = None
 
 init_db()
