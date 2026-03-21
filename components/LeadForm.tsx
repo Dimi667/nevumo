@@ -94,22 +94,22 @@ export default function LeadWidget({ initialProvider, initialT, currentLang }: P
             <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
               <img src="/Nevumo_logo.svg" alt="Nevumo" style={{ height: '50px', margin: '0 auto' }} />
               {provider.profile_image_url && <img src={provider.profile_image_url} alt={provider.name} style={{ width: '120px', height: '120px', borderRadius: '50%', objectFit: 'cover', margin: '1.5rem auto 0.5rem auto', border: '4px solid #ffffff', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }} />}
-              <h1 style={{ color: '#333', fontSize: '1.8rem', marginTop: '15px', marginBottom: '5px' }}>{provider.name}</h1>
-              <p style={{ color: '#666', fontSize: '1.1rem', marginTop: '0' }}>{provider.job_title}</p>
+              <h1 style={{ color: '#333', fontSize: '1.25rem', fontWeight: '700', marginTop: '15px', marginBottom: '0' }}>{provider.name}</h1>
+              <p style={{ color: '#666', fontSize: '0.85rem', marginTop: '0', marginBottom: '0' }}>{provider.job_title}</p>
               
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', fontSize: '0.95rem', color: '#444', marginTop: '10px', fontWeight: '600' }}>
                 <span>⭐ {provider.rating} {t.rating_label}</span> • <span>{provider.jobs_completed} {t.jobs_label}</span>
               </div>
               
               {provider.is_verified && (
-                <p style={{ color: '#27ae60', fontSize: '0.85rem', fontWeight: 'bold', marginTop: '5px' }}>
+                <p style={{ color: '#27ae60', fontSize: '0.85rem', fontWeight: 'bold', marginTop: '2px', marginBottom: '0' }}>
                   {t.verified_label}
                 </p>
               )}
             </div>
 
             <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
-              <h2 style={{ fontSize: '1.25rem', color: '#333', marginBottom: '0.5rem' }}>{t.button_text}</h2>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#333', marginBottom: '0.5rem' }}>{t.button_text}</h2>
             </div>
 
             <form id="lead-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
@@ -185,6 +185,7 @@ export default function LeadWidget({ initialProvider, initialT, currentLang }: P
 
       <style jsx>{`
         @media (max-width: 768px) { .desktop-only-button { display: none !important; } }
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
       `}</style>
     </div>
   );

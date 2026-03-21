@@ -116,3 +116,52 @@ export function resolvePreferredLanguage(acceptHeader?: string): string {
 
   return DEFAULT_LANGUAGE;
 }
+
+export type TranslationDictionary = {
+  login?: {
+    [key: string]: string | any;
+  };
+};
+
+export async function getDictionary(lang: string): Promise<any> {
+  const normalized = lang || 'bg';
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/translations/${normalized}`, {
+      next: { revalidate: 0 } // ВАЖНО: 0 за разработка, промени на 3600 в продукция
+    });
+
+    if (!response.ok) {
+        console.error(`Failed to fetch translations for ${normalized}: ${response.status}`);
+        return {};
+    }
+
+    const data = await response.json();
+
+    // ВРЪЩАНЕ КЪМ СТАБИЛНИТЕ КЛЮЧОВЕ:
+    // Използваме старите ключове с точка (.), защото те са преведени коректно.
+    // Оставяме новите като резервен вариант (||).
+    return {
+      login: {
+        'login:heading': data["login.heading"] || data["login:heading"],
+        'login:metaTitle': data["login.metaTitle"] || data["login:metaTitle"],
+        'login:metaDescription': data["login.metaDescription"] || data["login:metaDescription"],
+        'login:footerNote': data["login.footerNote"] || data["login:footerNote"],
+        'login:featureFree': data["login.featureFree"] || data["login:featureFree"],
+        'login:featureTime': data["login.featureTime"] || data["login:featureTime"],
+
+        // Ключове за картите
+        'login:findService.label': data["login.findService.label"] || data["login:findService.label"],
+        'login:findService.subtext': data["login.findService.subtext"] || data["login:findService.subtext"],
+        'login:offerService.label': data["login.offerService.label"] || data["login:offerService.label"],
+        'login:offerService.subtext': data["login.offerService.subtext"] || data["login:offerService.subtext"],
+
+        // Навигационни ключове за footer (добавени)
+        'login:nav.home': data["login:nav.home"],
+        'login:nav.services': data["login:nav.services"],
+      }
+    };
+  } catch (error) {
+    console.error("Dictionary Fetch Error:", error);
+    return {};
+  }
+}
