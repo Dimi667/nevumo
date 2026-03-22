@@ -9,12 +9,22 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   const login = dictionary.login ?? {};
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://nevumo.com";
+  const fullUrl = `${baseUrl}/${lang}/login`;
+  const metaTitle = login['login:metaTitle'] || "Nevumo – Find services or start offering services";
+  const metaDescription = login['login:metaDescription'] || "Discover and book services or start offering yours on Nevumo. Free registration and quick start for clients and providers.";
 
   return {
-    title: login['login:metaTitle'] || "Вход | Nevumo",
-    description: login['login:metaDescription'] || "Намери професионални услуги или предложи своите в Nevumo.",
-    alternates: { canonical: `${baseUrl}/${lang}/login` },
+    title: { absolute: metaTitle },
+    description: metaDescription,
+    alternates: { canonical: fullUrl },
     robots: { index: false, follow: true },
+    openGraph: {
+      title: metaTitle,
+      description: metaDescription,
+      url: fullUrl,
+      siteName: 'Nevumo',
+      type: 'website',
+    },
   };
 }
 
@@ -24,23 +34,11 @@ export default async function LoginPage({ params }: { params: Promise<{ lang: st
   const login = dictionary.login ?? {};
 
   return (
-    <main 
-      style={{ 
-        display: 'flex', 
-        flexDirection: 'column', 
-        alignItems: 'center', 
-        justifyContent: 'flex-start', 
-        minHeight: '100vh', 
-        backgroundColor: '#f9f9f9',
-        paddingTop: '80px', 
-        paddingLeft: '16px',
-        paddingRight: '16px'
-      }}
-    >
-      <div style={{ width: '100%', maxWidth: '400px' }} className="flex flex-col items-center">
-        
+    <main className="flex flex-col items-center justify-start min-h-screen bg-[#f9f9f9] pt-20 px-4">
+      <div className="w-full max-w-[400px] flex flex-col items-center">
+
         {/* Лого */}
-        <div style={{ marginBottom: '1.5rem' }}>
+        <div className="mb-6">
           <Image
             src="/Nevumo_logo.svg"
             alt="Nevumo"
@@ -52,70 +50,47 @@ export default async function LoginPage({ params }: { params: Promise<{ lang: st
         </div>
 
         {/* Заглавие */}
-        <h1 
-          style={{ marginBottom: '1.5rem' }}
-          className="text-[22px] font-bold text-[#171717] text-center leading-tight tracking-tight px-2"
-        >
-          {login['login:heading'] || "Намери услуга или започни да предлагаш!"}
+        <h1 className="text-[22px] font-bold text-[#171717] text-center leading-tight tracking-tight px-2 mb-6">
+          {login['login:heading'] || "Find or offer a service!"}
         </h1>
 
         {/* Карти */}
-        <div className="flex flex-col w-full" style={{ gap: '1rem', marginBottom: '40px' }}>
-          <ActionCard 
+        <div className="flex flex-col gap-4 mb-10 w-full">
+          <ActionCard
             href={`/${lang}/auth?role=client`}
-            label={login['login:findService.label'] || "Намери услуга"}
-            subtext={login['login:findService.subtext'] || "Търси и резервирай услуги."}
+            label={login['login:findService.label'] || "Find a service"}
+            subtext={login['login:findService.subtext'] || "Search and book services. You can become a provider later."}
           />
-          <ActionCard 
+          <ActionCard
             href={`/${lang}/auth?role=provider`}
-            label={login['login:offerService.label'] || "Предлагай услуги"}
-            subtext={login['login:offerService.subtext'] || "Предлагай услуги и създай профил."}
+            label={login['login:offerService.label'] || "Offer services"}
+            subtext={login['login:offerService.subtext'] || "Create your profile and offer services. You can always search for services as a client."}
           />
         </div>
 
         {/* UX Блок */}
         <div className="flex flex-col items-center w-full">
-          
+
           {/* Текстът "Можеш да използваш..." */}
-          <p className="text-[#666] text-[14px] font-medium text-center mb-8"> 
-            {login['login:footerNote'] || "Можеш да използваш платформата и по двата начина"}
+          <p className="text-[#666] text-[14px] font-medium text-center mb-8">
+            {login['login:footerNote'] || "You can search and offer services with one account"}
           </p>
-          
+
           {/* Центриран контейнер, в който чекчетата са подравнени вляво */}
-          <div style={{ display: 'inline-block', textAlign: 'left' }}>
+          <div className="inline-block text-left">
             <div className="flex items-center gap-2 text-[#171717] text-[15px] font-bold mb-2">
-              <span className="text-green-500 text-lg"></span> 
-              <span>{login['login:featureFree'] || "✔ Безплатна регистрация"}</span>
+              <span className="text-green-600 mr-1">✔</span>
+              <span>{login['login:featureFree'] || "Free registration"}</span>
             </div>
             <div className="flex items-center gap-2 text-[#171717] text-[15px] font-bold">
-              <span className="text-green-500 text-lg"></span> 
-              <span>{login['login:featureTime'] || "✔ Отнема под 1 минута"}</span>
+              <span className="text-green-600 mr-1">✔</span>
+              <span>{login['login:featureTime'] || "Takes less than 1 minute"}</span>
             </div>
           </div>
         </div>
 
         {/* Футър */}
-        <footer
-          style={{ marginTop: '80px', paddingBottom: '40px' }}
-          className="flex flex-col items-center gap-3 w-full"
-        >
-          {/* SEO линкове към важни страници */}
-          <nav className="flex items-center gap-4">
-            <a
-              href={`/${lang}`}
-              className="text-[#aaa] text-[11px] font-medium uppercase tracking-[0.15em] hover:text-[#666] transition-colors"
-            >
-              {login['login:nav.home'] || "Начало"}
-            </a>
-            <span className="text-[#ddd] text-[11px]">&nbsp;·&nbsp;</span>
-            <a
-              href={`/${lang}/services`}
-              className="text-[#aaa] text-[11px] font-medium uppercase tracking-[0.15em] hover:text-[#666] transition-colors"
-            >
-              {login['login:nav.services'] || "Услуги"}
-            </a>
-          </nav>
-
+        <footer className="mt-20 pb-10 flex flex-col items-center gap-3 w-full">
           <p className="text-[#aaa] text-[10px] font-bold uppercase tracking-[0.25em]">
             Nevumo &copy; 2026
           </p>

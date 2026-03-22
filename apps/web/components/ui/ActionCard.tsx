@@ -9,12 +9,11 @@ interface ActionCardProps {
 
 export const ActionCard = ({ href, label, subtext }: ActionCardProps) => {
   return (
-    <Link 
-      href={href} 
-      style={{ padding: '24px 32px' }}
-      className="group block w-full bg-white border border-[#eee] rounded-[20px] no-underline transition-all duration-300 hover:border-primary hover:shadow-lg active:scale-[0.98]"
+    <Link
+      href={href}
+      className="group block w-full bg-white border border-[#eee] rounded-[20px] no-underline transition-all duration-300 hover:border-primary hover:shadow-lg active:scale-[0.98] py-6 px-8"
     >
-      <div className="flex justify-between items-center" style={{ marginBottom: '4px' }}>
+      <div className="flex justify-between items-center mb-1">
         <span className="text-[17px] font-bold text-[#171717] group-hover:text-primary transition-colors">
           {label}
         </span>

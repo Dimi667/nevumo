@@ -126,7 +126,7 @@ export async function getDictionary(lang: string): Promise<TranslationDictionary
   const normalized = lang || 'bg';
   try {
     const response = await fetch(`${API_BASE}/translations/${normalized}`, {
-      next: { revalidate: 0 }, // ВАЖНО: 0 за разработка, промени на 3600 в продукция
+      next: { revalidate: 3600 },
     });
 
     if (!response.ok) {
