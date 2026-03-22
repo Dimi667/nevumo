@@ -300,3 +300,25 @@ class Translation(Base):
         Index("idx_translations_lang", "lang"),
         Index("idx_translations_key", "key"),
     )
+
+
+# -------------------------
+# Page Events (Tracking)
+# -------------------------
+
+class PageEvent(Base):
+    __tablename__ = "page_events"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    event_type: Mapped[str] = mapped_column(Text, nullable=False)
+    page: Mapped[str] = mapped_column(Text, nullable=False)
+    event_metadata: Mapped[Optional[dict]] = mapped_column("metadata", JSONB, default=dict)
+    ip: Mapped[Optional[str]] = mapped_column(Text)
+    user_agent: Mapped[Optional[str]] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("idx_page_events_type", "event_type"),
+        Index("idx_page_events_page", "page"),
+        Index("idx_page_events_created", "created_at"),
+    )

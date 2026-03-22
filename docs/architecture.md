@@ -465,6 +465,26 @@ Track:
 
 ---
 
+## Event Tracking (IMPORTANT)
+
+### Двуслойна система
+1. **Google Analytics 4 (GA4)** — глобално, автоматично на всички страници чрез GoogleAnalytics компонент в root layout.tsx
+2. **Custom DB tracking** — per-page events записвани в page_events таблица чрез POST /api/v1/page-events
+
+### Shared utility
+import { trackPageEvent } from "@/lib/tracking";
+trackPageEvent("event_name", "page_name", { key: "value" });
+
+Изпраща и към DB (sendBeacon) и към GA4 (gtag event) автоматично.
+
+### Правило за нови страници
+Всяка страница с user actions (клик на бутон, submit на форма, избор) ТРЯБВА да извиква trackPageEvent(). GA4 pageview се записва автоматично.
+
+### page_events таблица
+- id UUID, event_type TEXT, page TEXT, metadata JSONB, ip TEXT, user_agent TEXT, created_at TIMESTAMP
+
+---
+
 ## Key Principles
 
 - Keep backend simple

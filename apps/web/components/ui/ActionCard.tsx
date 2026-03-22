@@ -5,12 +5,14 @@ interface ActionCardProps {
   href: string;
   label: string;
   subtext?: string;
+  onClick?: () => void;
 }
 
-export const ActionCard = ({ href, label, subtext }: ActionCardProps) => {
+export const ActionCard = ({ href, label, subtext, onClick }: ActionCardProps) => {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className="group block w-full bg-white border border-[#eee] rounded-[20px] no-underline transition-all duration-300 hover:border-primary hover:shadow-lg active:scale-[0.98] py-6 px-8"
     >
       <div className="flex justify-between items-center mb-1">

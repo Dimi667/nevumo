@@ -17,6 +17,7 @@ from routes import (
     providers_router,
     leads_router,
     events_router,
+    page_events_router,
 )
 
 app = FastAPI(title="Nevumo API")
@@ -51,6 +52,7 @@ app.include_router(cities_router)
 app.include_router(providers_router)
 app.include_router(leads_router)
 app.include_router(events_router)
+app.include_router(page_events_router)
 
 
 # Keep existing translations endpoint

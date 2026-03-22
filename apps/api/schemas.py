@@ -180,3 +180,13 @@ class ErrorDetail(BaseModel):
 class ErrorResponse(BaseModel):
     success: bool = False
     error: ErrorDetail
+
+
+# -------------------------
+# Page Events (Tracking)
+# -------------------------
+
+class PageEventCreate(BaseModel):
+    event_type: str
+    page: str
+    metadata: dict = {}

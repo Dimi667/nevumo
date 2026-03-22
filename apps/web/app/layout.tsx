@@ -8,6 +8,7 @@ import {
   LANGUAGE_HEADER_NAME,
   normalizeLanguage,
 } from "../lib/locales";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 // Глобалните стилове с Tailwind
 import "./globals.css";
@@ -62,6 +63,7 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f9f9f9]`}>
+        <GoogleAnalytics />
         {children}
       </body>
     </html>

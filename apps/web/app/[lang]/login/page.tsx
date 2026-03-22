@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import { getDictionary } from "@/lib/locales";
-import { ActionCard } from "@/components/ui/ActionCard";
+import { LoginCards } from "./LoginCards";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params;
@@ -56,15 +56,12 @@ export default async function LoginPage({ params }: { params: Promise<{ lang: st
 
         {/* Карти */}
         <div className="flex flex-col gap-4 mb-10 w-full">
-          <ActionCard
-            href={`/${lang}/auth?role=client`}
-            label={login['login:findService.label'] || "Find a service"}
-            subtext={login['login:findService.subtext'] || "Search and book services. You can become a provider later."}
-          />
-          <ActionCard
-            href={`/${lang}/auth?role=provider`}
-            label={login['login:offerService.label'] || "Offer services"}
-            subtext={login['login:offerService.subtext'] || "Create your profile and offer services. You can always search for services as a client."}
+          <LoginCards
+            lang={lang}
+            findLabel={login['login:findService.label'] || "Find a service"}
+            findSubtext={login['login:findService.subtext'] || "Search and book services. You can become a provider later."}
+            offerLabel={login['login:offerService.label'] || "Offer services"}
+            offerSubtext={login['login:offerService.subtext'] || "Create your profile and offer services. You can always search for services as a client."}
           />
         </div>
 
