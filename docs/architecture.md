@@ -483,6 +483,11 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 ### page_events таблица
 - id UUID, event_type TEXT, page TEXT, metadata JSONB, ip TEXT, user_agent TEXT, created_at TIMESTAMP
 
+### Intent Persistence
+- При клик на login card: localStorage записва nevumo_intent ("client" | "provider") и nevumo_lang
+- Utility: lib/intent.ts — getStoredIntent() и clearStoredIntent()
+- Auth и onboarding pages трябва да извикат clearStoredIntent() след като прочетат intent-а
+
 ---
 
 ## Key Principles
