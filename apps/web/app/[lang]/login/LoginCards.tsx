@@ -11,8 +11,10 @@ interface LoginCardsProps {
   offerSubtext: string;
 }
 
-function trackClick(intent: string, lang: string): void {
-  trackPageEvent("login_card_click", "login", { intent, lang });
+function trackClick(intent: "client" | "provider", cta: string, lang: string): void {
+  localStorage.setItem("nevumo_intent", intent);
+  localStorage.setItem("nevumo_lang", lang);
+  trackPageEvent("login_intent_selected", "login", { intent, cta, lang });
 }
 
 export function LoginCards({
@@ -28,13 +30,13 @@ export function LoginCards({
         href={`/${lang}/auth?role=client`}
         label={findLabel}
         subtext={findSubtext}
-        onClick={() => trackClick("client", lang)}
+        onClick={() => trackClick("client", "find_service", lang)}
       />
       <ActionCard
         href={`/${lang}/auth?role=provider`}
         label={offerLabel}
         subtext={offerSubtext}
-        onClick={() => trackClick("provider", lang)}
+        onClick={() => trackClick("provider", "offer_service", lang)}
       />
     </>
   );

@@ -1,3 +1,5 @@
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+
 export function trackPageEvent(
   eventType: string,
   page: string,
@@ -9,13 +11,15 @@ export function trackPageEvent(
     metadata,
   });
 
+  const url = `${API_BASE}/api/v1/page-events`;
+
   // DB tracking
   const sent = navigator.sendBeacon(
-    "/api/v1/page-events",
+    url,
     new Blob([data], { type: "application/json" })
   );
   if (!sent) {
-    fetch("/api/v1/page-events", {
+    fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: data,
