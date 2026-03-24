@@ -1,7 +1,5 @@
 from datetime import datetime, timedelta
-from uuid import UUID
-
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
 from dependencies import get_db
@@ -11,8 +9,6 @@ from exceptions import (
     CITY_NOT_FOUND,
     PROVIDER_NOT_FOUND,
     RATE_LIMIT_EXCEEDED,
-    INVALID_MATCH_STATUS,
-    LEAD_NOT_FOUND,
 )
 from models import (
     Lead,
@@ -27,10 +23,6 @@ from models import (
 from schemas import (
     LeadCreate,
     LeadCreatedResponse,
-    LeadOut,
-    ProviderLeadsResponse,
-    LeadMatchUpdate,
-    LeadMatchUpdateResponse,
 )
 
 router = APIRouter(prefix="/api/v1", tags=["leads"])
@@ -111,51 +103,3 @@ async def create_lead(
     db.refresh(lead)
 
     return LeadCreatedResponse(data={"lead_id": str(lead.id)})
-
-
-@router.get("/provider/leads", response_model=ProviderLeadsResponse)
-async def get_provider_leads(
-    provider_id: UUID = Query(...),
-    db: Session = Depends(get_db),
-) -> ProviderLeadsResponse:
-    leads = db.query(Lead).filter(Lead.provider_id == provider_id).all()
-
-    data = [
-        LeadOut(
-            id=l.id,
-            phone=l.phone,
-            description=l.description,
-            budget=l.budget,
-            status=l.status,
-            created_at=l.created_at,
-        )
-        for l in leads
-    ]
-
-    return ProviderLeadsResponse(data=data)
-
-
-@router.patch("/provider/leads/{lead_id}", response_model=LeadMatchUpdateResponse)
-async def update_lead_match(
-    lead_id: UUID,
-    payload: LeadMatchUpdate,
-    provider_id: UUID = Query(...),
-    db: Session = Depends(get_db),
-) -> LeadMatchUpdateResponse:
-    if payload.status not in ("accepted", "rejected"):
-        raise INVALID_MATCH_STATUS
-
-    match = (
-        db.query(LeadMatch)
-        .filter(LeadMatch.lead_id == lead_id, LeadMatch.provider_id == provider_id)
-        .first()
-    )
-    if not match:
-        raise LEAD_NOT_FOUND
-
-    match.status = payload.status
-    db.commit()
-
-    return LeadMatchUpdateResponse(
-        data={"lead_id": str(lead_id), "status": payload.status}
-    )

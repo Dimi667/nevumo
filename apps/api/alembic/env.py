@@ -22,6 +22,9 @@ from models import (
     LeadEvent,
     LeadRateLimit,
     Translation,
+    PageEvent,
+    PasswordResetToken,
+    AuthRateLimit,
 )
 
 # this is the Alembic Config object, which provides

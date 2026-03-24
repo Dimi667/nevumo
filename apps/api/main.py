@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
+import logging
 import os
 
 from fastapi import FastAPI, Depends, Response, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
@@ -11,13 +13,22 @@ from database import init_db
 from dependencies import get_db, get_redis
 from exceptions import NevumoException
 from i18n import fetch_translations
+from fastapi.staticfiles import StaticFiles
+
 from routes import (
+    auth_router,
     categories_router,
     cities_router,
     providers_router,
     leads_router,
     events_router,
     page_events_router,
+    provider_router,
+)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
 )
 
 app = FastAPI(title="Nevumo API")
@@ -46,13 +57,35 @@ async def nevumo_exception_handler(request: Request, exc: NevumoException) -> JS
     )
 
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+    errors = exc.errors()
+    first = errors[0] if errors else {}
+    field = ".".join(str(loc) for loc in first.get("loc", [])[1:]) if first.get("loc") else "unknown"
+    message = first.get("msg", "Validation error")
+    return JSONResponse(
+        status_code=422,
+        content={
+            "success": False,
+            "error": {"code": "VALIDATION_ERROR", "message": f"{field}: {message}"},
+        },
+    )
+
+
 # Include all API v1 routers
+app.include_router(auth_router)
 app.include_router(categories_router)
 app.include_router(cities_router)
 app.include_router(providers_router)
 app.include_router(leads_router)
 app.include_router(events_router)
 app.include_router(page_events_router)
+app.include_router(provider_router)
+
+# Serve uploaded provider images
+import os as _os
+_os.makedirs("uploads/provider_images", exist_ok=True)
+app.mount("/static/provider_images", StaticFiles(directory="uploads/provider_images"), name="provider_images")
 
 
 # Keep existing translations endpoint

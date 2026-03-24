@@ -7,12 +7,39 @@ export interface ApiSuccess<T> {
   data: T;
 }
 
-export interface ApiError {
+interface ApiErrorEnvelope {
   success: false;
   error: { code: string; message: string };
 }
 
-export type ApiResponse<T> = ApiSuccess<T> | ApiError;
+export type ApiResponse<T> = ApiSuccess<T> | ApiErrorEnvelope;
+
+// ─── Auth API error class ─────────────────────────────────────────────────────
+
+export class ApiError extends Error {
+  code: string;
+  constructor(code: string, message: string) {
+    super(message);
+    this.code = code;
+    this.name = "ApiError";
+  }
+}
+
+export async function apiPost<T>(path: string, body: Record<string, unknown>): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const json = await res.json();
+  if (!json.success) {
+    throw new ApiError(
+      json.error?.code || "UNKNOWN_ERROR",
+      json.error?.message || "An unexpected error occurred"
+    );
+  }
+  return json.data as T;
+}
 
 // ─── Domain types ─────────────────────────────────────────────────────────────
 

@@ -27,6 +27,8 @@ class User(Base):
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    password_hash: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     role: Mapped[str] = mapped_column(String, nullable=False)
     locale: Mapped[str] = mapped_column(String, default="en")
     country_code: Mapped[Optional[str]] = mapped_column(String(2))
@@ -53,6 +55,7 @@ class Provider(Base):
     business_name: Mapped[str] = mapped_column(String, nullable=False)
     description: Mapped[Optional[str]] = mapped_column(Text)
     slug: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    profile_image_url: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     rating: Mapped[float] = mapped_column(Numeric(2, 1), default=0)
     verified: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -321,4 +324,42 @@ class PageEvent(Base):
         Index("idx_page_events_type", "event_type"),
         Index("idx_page_events_page", "page"),
         Index("idx_page_events_created", "created_at"),
+    )
+
+
+# -------------------------
+# Password Reset Tokens
+# -------------------------
+
+class PasswordResetToken(Base):
+    __tablename__ = "password_reset_tokens"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    token_hash: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    expires_at: Mapped[datetime] = mapped_column(nullable=False)
+    used_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("idx_reset_tokens_hash", "token_hash"),
+        Index("idx_reset_tokens_user", "user_id"),
+    )
+
+
+# -------------------------
+# Auth Rate Limits
+# -------------------------
+
+class AuthRateLimit(Base):
+    __tablename__ = "auth_rate_limits"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ip: Mapped[str] = mapped_column(String, nullable=False)
+    action: Mapped[str] = mapped_column(String, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("idx_auth_rate_limits_ip_action", "ip", "action"),
+        Index("idx_auth_rate_limits_created", "created_at"),
     )

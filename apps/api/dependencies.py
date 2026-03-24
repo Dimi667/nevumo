@@ -2,9 +2,12 @@ import os
 from typing import Optional
 
 import redis as redis_lib
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 from database import SessionLocal
+from services.auth_service import decode_jwt
 
 
 def get_db():
@@ -31,3 +34,38 @@ except Exception:
 
 def get_redis() -> Optional[redis_lib.Redis]:
     return _redis_client
+
+
+_bearer = HTTPBearer()
+
+
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(_bearer),
+    db: Session = Depends(get_db),
+):
+    from models import User  # local import to avoid circular
+
+    token = credentials.credentials
+    payload = decode_jwt(token)
+    if not payload:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
+
+    user_id = payload.get("sub")
+    user = db.query(User).filter(User.id == user_id, User.is_active == True).first()  # noqa: E712
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found or inactive")
+
+    return user
+
+
+def get_current_provider(
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    from models import Provider  # local import to avoid circular
+
+    provider = db.query(Provider).filter(Provider.user_id == current_user.id).first()
+    if not provider:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a provider account")
+
+    return provider

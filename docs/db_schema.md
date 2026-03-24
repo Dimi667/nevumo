@@ -14,6 +14,8 @@
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT UNIQUE NOT NULL,
+    password_hash TEXT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
     role TEXT NOT NULL CHECK (role IN ('client', 'provider')),
     locale TEXT NOT NULL DEFAULT 'en',
     country_code CHAR(2),
@@ -31,6 +33,8 @@ CREATE TABLE providers (
     user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,
     business_name TEXT NOT NULL,
     description TEXT,
+    slug TEXT UNIQUE NOT NULL,                -- URL slug, auto-generated from business_name
+    profile_image_url TEXT,                   -- served at /static/provider_images/
     rating NUMERIC(2,1) DEFAULT 0,
     verified BOOLEAN DEFAULT FALSE,
     availability_status TEXT DEFAULT 'active',
@@ -39,6 +43,7 @@ CREATE TABLE providers (
 
 CREATE INDEX idx_providers_rating ON providers(rating);
 CREATE INDEX idx_providers_status ON providers(availability_status);
+CREATE INDEX idx_providers_slug ON providers(slug);
 
 ---
 
@@ -130,6 +135,8 @@ CREATE TABLE leads (
     landing_page TEXT,
 
     status TEXT NOT NULL DEFAULT 'created',
+    -- CHECK constraint (added via migration c3d4e5f6a7b8):
+    -- CHECK (status IN ('created', 'pending_match', 'matched', 'contacted', 'done', 'expired', 'cancelled', 'rejected'))
 
     created_at TIMESTAMP DEFAULT NOW()
 );
@@ -148,7 +155,8 @@ CREATE TABLE lead_matches (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     lead_id UUID REFERENCES leads(id) ON DELETE CASCADE,
     provider_id UUID REFERENCES providers(id),
-    status TEXT CHECK (status IN ('invited', 'accepted', 'rejected')),
+    status TEXT CHECK (status IN ('invited', 'contacted', 'done', 'rejected')),
+    -- Updated via migration c3d4e5f6a7b8 to support dashboard lead status flow
     created_at TIMESTAMP DEFAULT NOW(),
     UNIQUE(lead_id, provider_id)
 );
@@ -194,6 +202,36 @@ CREATE TABLE lead_rate_limits (
 );
 
 CREATE INDEX idx_rate_limits_ip ON lead_rate_limits(ip);
+
+---
+
+## 13. Password Reset Tokens
+
+CREATE TABLE password_reset_tokens (
+    id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    token_hash TEXT NOT NULL UNIQUE,  -- SHA-256 of raw token; raw token is sent in email
+    expires_at TIMESTAMP NOT NULL,    -- 30 minutes from creation
+    used_at TIMESTAMP,                -- set on first use; NULL = unused
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_reset_tokens_hash ON password_reset_tokens(token_hash);
+CREATE INDEX idx_reset_tokens_user ON password_reset_tokens(user_id);
+
+---
+
+## 14. Auth Rate Limits
+
+CREATE TABLE auth_rate_limits (
+    id SERIAL PRIMARY KEY,
+    ip TEXT NOT NULL,
+    action TEXT NOT NULL,  -- 'register' | 'login' | 'forgot' | 'reset'
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_auth_rate_limits_ip_action ON auth_rate_limits(ip, action);
+CREATE INDEX idx_auth_rate_limits_created ON auth_rate_limits(created_at);
 
 ---
 

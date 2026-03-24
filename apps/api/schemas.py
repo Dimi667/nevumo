@@ -190,3 +190,166 @@ class PageEventCreate(BaseModel):
     event_type: str
     page: str
     metadata: dict = {}
+
+
+# -------------------------
+# Auth
+# -------------------------
+
+class CheckEmailRequest(BaseModel):
+    email: str
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, v: str) -> str:
+        return v.strip().lower()
+
+
+class CheckEmailResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
+    role: str = "client"
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, v: str) -> str:
+        return v.strip().lower()
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        return v
+
+    @field_validator("role")
+    @classmethod
+    def validate_role(cls, v: str) -> str:
+        if v not in ("client", "provider"):
+            raise ValueError("Role must be client or provider")
+        return v
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, v: str) -> str:
+        return v.strip().lower()
+
+
+class AuthTokenResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, v: str) -> str:
+        return v.strip().lower()
+
+
+class ForgotPasswordResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ValidateResetTokenRequest(BaseModel):
+    token: str
+
+
+class ValidateResetTokenResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    password: str
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        return v
+
+
+class ResetPasswordResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+# -------------------------
+# Provider Dashboard Schemas
+# -------------------------
+
+class ProviderDashboardResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ProviderProfileUpdateRequest(BaseModel):
+    business_name: Optional[str] = None
+    description: Optional[str] = None
+    availability_status: Optional[str] = None
+
+    @field_validator("availability_status")
+    @classmethod
+    def validate_status(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and v not in ("active", "busy", "offline"):
+            raise ValueError("availability_status must be active, busy, or offline")
+        return v
+
+
+class ProviderProfileUpdateResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class CreateServiceRequest(BaseModel):
+    category_id: int
+    title: str
+    description: Optional[str] = None
+    price_type: str
+    base_price: Optional[Decimal] = None
+
+
+class AddCityRequest(BaseModel):
+    city_id: int
+
+
+class LeadStatusUpdateRequest(BaseModel):
+    status: str
+
+    @field_validator("status")
+    @classmethod
+    def validate_lead_status(cls, v: str) -> str:
+        if v not in ("contacted", "done", "rejected"):
+            raise ValueError("status must be contacted, done, or rejected")
+        return v
+
+
+class LeadStatusUpdateResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ProviderLeadsResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class QRCodeResponse(BaseModel):
+    success: bool = True
+    data: dict

@@ -465,6 +465,55 @@ Track:
 
 ---
 
+## Provider Dashboard (Phase 1 — Backend Complete)
+
+### Endpoints (all under /api/v1/provider/, JWT required)
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | /dashboard | KPIs + profile completeness |
+| GET | /leads | Leads inbox |
+| PATCH | /leads/{id} | Update lead status (contacted/done/rejected) |
+| GET | /profile | Full provider profile |
+| PATCH | /profile | Update business_name, description, availability_status |
+| POST | /profile/image | Upload profile image (multipart, max 5MB) |
+| GET | /services | List provider's services |
+| POST | /services | Add service (= choose category for onboarding) |
+| POST | /cities | Add city to provider profile |
+| GET | /qr-code | QR code as base64 data URI + public URL |
+
+### Lead Status State Machine
+- new → contacted, rejected
+- contacted → done, rejected
+- done → (terminal)
+- rejected → (terminal)
+
+UI status mapping: DB statuses "created"/"pending_match"/"matched"/"invited" all map to "new" in dashboard.
+
+### Onboarding Completeness Check
+Provider is complete when ALL are true:
+- business_name exists
+- At least 1 service (= category selected)
+- At least 1 city
+
+Returned in dashboard response as profile.is_complete + profile.missing_fields[].
+
+### Image Storage
+- Phase 1: Local filesystem at uploads/provider_images/{provider_id}.{ext}
+- Served via FastAPI StaticFiles mount at /static/provider_images
+- Storage abstraction (save_provider_image in provider_service.py) ready for S3/R2 migration
+
+### QR Code Generation
+- Generated on-the-fly as base64 PNG data URI (no file storage needed)
+- Encodes provider's public SEO URL: {APP_URL}/{lang}/{city_slug}/{category_slug}/{provider_slug}
+- Uses qrcode[pil] library
+
+### JWT Auth Chain
+get_current_user (HTTPBearer → JWT decode → User lookup) → get_current_provider (User → Provider)
+Both in dependencies.py alongside existing get_db/get_redis.
+
+---
+
 ## Event Tracking (IMPORTANT)
 
 ### Двуслойна система
@@ -487,6 +536,80 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - При клик на login card: localStorage записва nevumo_intent ("client" | "provider") и nevumo_lang
 - Utility: lib/intent.ts — getStoredIntent() и clearStoredIntent()
 - Auth и onboarding pages трябва да извикат clearStoredIntent() след като прочетат intent-а
+
+---
+
+## Authentication (Phase 1 — Email-based)
+
+### Frontend Pages (COMPLETE — connected to real API)
+
+#### /[lang]/auth — Login/Register/Forgot Password
+- File: `apps/web/app/[lang]/auth/LoginClient.tsx`
+- Single page, multi-step flow (state machine: initial → login | register | forgot)
+- Intent-based headers: reads `nevumo_intent` from localStorage (client | provider)
+- Social login buttons: Google + Facebook (UI only, placeholder — OAuth integration later)
+- Email step: validation, sessionStorage persistence (key: nevumo_auth_email)
+- Login step: password + "Забравена парола?" link
+- Register step: password with show/hide toggle + built-in password generator (onClick on empty field)
+- Forgot step: sends reset link → success toast "Провери имейла си"; catch also shows success (no enumeration)
+- All buttons: orange active (bg-orange-500), gray disabled (bg-gray-300)
+- Browser password save: hidden iframe technique (triggerPasswordSave)
+- Post-auth: `saveAuth(token, user)` → localStorage; redirect by role (provider → /provider/dashboard, client → /)
+- Events: auth_view, auth_email_entered, auth_password_shown, auth_success
+
+#### /[lang]/auth/reset-password — Reset Password
+- File: `apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx`
+- Token from URL param: ?token=XYZ
+- 5 states: loading, valid (form), success, expired/invalid, already used
+- Password + confirm password with match validation
+- Success: saveAuth() → "Паролата е сменена успешно" + "Логваме те..." + auto-redirect 2s
+- Redirect by role (from JWT user) or localStorage intent; provider → /provider/dashboard
+- Events: password_reset_view, password_reset_success, password_reset_error, token_expired, token_used
+
+### Frontend Auth Lib
+- `apps/web/lib/api.ts` — `ApiError` class + `apiPost<T>()` generic fetch wrapper
+- `apps/web/lib/auth-types.ts` — `UserInfo`, `AuthResult`, `CheckEmailResult`, `ValidateTokenResult`, `MessageResult`
+- `apps/web/lib/auth-api.ts` — 6 typed functions wrapping `apiPost`
+- `apps/web/lib/auth-store.ts` — `saveAuth`, `getAuthToken`, `getAuthUser`, `clearAuth`, `isAuthenticated`
+
+### Backend Endpoints (COMPLETE — Phase A)
+- POST /api/v1/auth/check-email → { exists: boolean }
+- POST /api/v1/auth/register → { token: JWT, user: {id, email, role} }
+- POST /api/v1/auth/login → { token: JWT, user: {id, email, role} }
+- POST /api/v1/auth/forgot-password → { message } (always same response, no email enumeration)
+- POST /api/v1/auth/reset-password → { token: JWT, user: {id, email, role} } (auto-login)
+- POST /api/v1/auth/validate-reset-token → { valid: boolean, error?: 'expired' | 'used' }
+
+### Security Measures
+- bcrypt password hashing (direct bcrypt library, not passlib)
+- Reset tokens: raw token in email, SHA-256 hash stored in DB — never raw in DB
+- Rate limiting: 5 attempts / 15 min per IP per action (register/login/forgot/reset)
+- Email normalization: lowercased + stripped on every input
+- Password policy: minimum 8 characters (enforced in both Pydantic schema and frontend)
+- No email enumeration: forgot-password always returns same response; login returns INVALID_CREDENTIALS for both wrong email and wrong password (with timing protection via dummy bcrypt verify)
+- Account disabled: separate 403 ACCOUNT_DISABLED error code
+
+### Backend Files
+- `apps/api/routes/auth.py` — 6 endpoints, all errors as `{ success: false, error: { code, message } }`
+- `apps/api/services/auth_service.py` — hash_password, verify_password, create_jwt, decode_jwt, generate_reset_token, hash_token, send_reset_email, check_rate_limit, record_rate_limit
+- `apps/api/config.py` — Settings (JWT_SECRET, JWT_EXPIRY_HOURS=720, RESET_TOKEN_EXPIRY_MINUTES=30, AUTH_RATE_LIMIT_MAX=5, AUTH_RATE_LIMIT_WINDOW_MINUTES=15, APP_URL)
+- `apps/api/alembic/versions/a1b2c3d4e5f6_add_auth_tables.py` — migration
+
+### Tech Decisions
+- Password hashing: bcrypt (direct, bcrypt==4.2.1)
+- JWT: python-jose, HS256, 30-day expiry
+- JWT storage: localStorage Phase 1 (key: nevumo_auth_token + nevumo_auth_user)
+- Reset tokens: secrets.token_urlsafe(32), expire 30 min, one-time use, SHA-256 hash in DB
+- Email sending Phase 1: console log only (send_reset_email logs to stdout)
+- Email sending Phase 2: TBD (Resend, SendGrid, or SMTP)
+- OAuth: Google + Facebook (future, UI placeholders exist)
+
+### Intent System
+- localStorage key: nevumo_intent ('client' | 'provider')
+- Set on homepage/landing when user clicks role card
+- Read on auth pages for header text + post-auth redirect
+- Cleared after successful auth (clearStoredIntent)
+- Cross-device limitation: intent not available if reset link opened on different device → fallback to role from JWT user object
 
 ---
 

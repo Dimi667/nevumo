@@ -28,7 +28,13 @@ Nevumo е уеб платформа за marketplace на услуги.
 - FastAPI
 - Python 3.13.12
 - SQLAlchemy (ORM)
-- Pydantic (validation)
+- Pydantic v2 + pydantic-settings (validation + config)
+- bcrypt 4.2.1 (password hashing)
+- python-jose (JWT — HS256, 30-day tokens)
+- Alembic (migrations)
+- python-slugify (URL slug generation)
+- qrcode[pil] (QR code generation for provider growth tools)
+- python-multipart (file upload support)
 
 ### Database & Caching
 - PostgreSQL (nevumo_leads)
@@ -38,6 +44,13 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Google Analytics 4 (GA4) — G-HKW6GBJJCK
 - Custom DB events — page_events таблица + /api/v1/page-events endpoint
 - Shared utility: lib/tracking.ts — trackPageEvent()
+
+### Auth (Phase 1 — COMPLETE)
+- Email-based: register, login, forgot password, reset password
+- Backend: 6 endpoints на /api/v1/auth/, bcrypt hashing, JWT tokens
+- Frontend: lib/auth-api.ts (typed API calls), lib/auth-store.ts (localStorage)
+- Security: rate limiting, no email enumeration, token hashing, password policy
+- Phase 2 (future): OAuth Google + Facebook, email sending via Resend/SendGrid
 
 ### Shared
 - packages/ui (shared UI components)
@@ -115,3 +128,28 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
 2. Conversion (landing → signup → action)
 3. Scalable architecture
 4. Clean DX (developer experience)
+
+---
+
+## Roadmap Status
+
+### ✅ Complete
+- SEO infrastructure (robots, sitemap, JSON-LD, hreflang, OG tags)
+- Provider listing + detail pages
+- Lead form (LeadForm component)
+- Event tracking (GA4 + custom DB)
+- Auth backend — Phase A (6 endpoints, bcrypt, JWT, rate limiting)
+- Auth frontend — connected to real API (login, register, forgot, reset)
+- Provider Dashboard backend — 10 endpoints, JWT auth, lead status management, image upload, QR generation, onboarding support
+
+### 🔜 Next
+- Provider Dashboard frontend (React UI for dashboard, leads inbox, analytics, growth tools)
+- Provider onboarding frontend (step-based: business name → category → city)
+- Email sending for reset password (Resend / SendGrid)
+- OAuth — Google + Facebook
+
+### 🔮 Future
+- AI lead matching
+- Subscription / pay-per-lead billing
+- Multi-region DB partitioning
+- Advanced provider analytics

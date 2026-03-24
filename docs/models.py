@@ -27,6 +27,8 @@ class User(Base):
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    password_hash: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     role: Mapped[str] = mapped_column(String, nullable=False)
     locale: Mapped[str] = mapped_column(String, default="en")
     country_code: Mapped[Optional[str]] = mapped_column(String(2))
@@ -268,4 +270,45 @@ class LeadRateLimit(Base):
 
     __table_args__ = (
         Index("idx_rate_limits_ip", "ip"),
+    )
+
+
+# -------------------------
+# Password Reset Tokens (Auth)
+# -------------------------
+
+class PasswordResetToken(Base):
+    __tablename__ = "password_reset_tokens"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    token_hash: Mapped[str] = mapped_column(String, nullable=False, unique=True)
+    # SHA-256 of the raw token. Raw token is sent in email; only hash is stored.
+    expires_at: Mapped[datetime] = mapped_column(nullable=False)
+    used_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    # None = unused; set to datetime on first use (one-time token)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("idx_reset_tokens_hash", "token_hash"),
+        Index("idx_reset_tokens_user", "user_id"),
+    )
+
+
+# -------------------------
+# Auth Rate Limits
+# -------------------------
+
+class AuthRateLimit(Base):
+    __tablename__ = "auth_rate_limits"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ip: Mapped[str] = mapped_column(String, nullable=False)
+    action: Mapped[str] = mapped_column(String, nullable=False)
+    # action: 'register' | 'login' | 'forgot' | 'reset'
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("idx_auth_rate_limits_ip_action", "ip", "action"),
+        Index("idx_auth_rate_limits_created", "created_at"),
     )
