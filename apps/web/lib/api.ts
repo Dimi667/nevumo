@@ -75,6 +75,7 @@ export interface CategoryOut {
 }
 
 export interface CityOut {
+  id: number;
   slug: string;
   name: string;
 }

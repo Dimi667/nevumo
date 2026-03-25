@@ -62,10 +62,8 @@ def get_current_provider(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    from models import Provider  # local import to avoid circular
-
-    provider = db.query(Provider).filter(Provider.user_id == current_user.id).first()
-    if not provider:
+    if current_user.role != "provider":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a provider account")
 
-    return provider
+    from services.provider_service import get_or_create_provider
+    return get_or_create_provider(current_user, db)

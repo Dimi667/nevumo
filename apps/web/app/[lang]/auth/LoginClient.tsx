@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { trackPageEvent } from "@/lib/tracking";
 import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
 import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@/lib/auth-api";
-import { saveAuth } from "@/lib/auth-store";
+import { saveAuth, isAuthenticated, getAuthUser } from "@/lib/auth-store";
 import { ApiError } from "@/lib/api";
 
 function generateStrongPassword(): string {
@@ -151,6 +151,17 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
 
   const isEmailValid = EMAIL_RE.test(state.email);
 
+  // On mount: redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated()) {
+      const user = getAuthUser();
+      window.location.href = user?.role === 'provider'
+        ? `/${lang}/provider/dashboard`
+        : `/${lang}/client/dashboard`;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // On mount: restore intent + email, fire auth_view event
   useEffect(() => {
     const stored = getStoredIntent();
@@ -244,7 +255,10 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
       sessionStorage.removeItem(SESSION_EMAIL_KEY);
       clearStoredIntent();
       setState(s => ({ ...s, loading: false, registerSuccess: true }));
-      // TODO: redirect to onboarding
+      const redirectPath = result.user.role === 'provider'
+        ? `/${lang}/provider/dashboard`
+        : `/${lang}/client/dashboard`;
+      setTimeout(() => { window.location.href = redirectPath; }, 1000);
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'EMAIL_ALREADY_EXISTS' || err.message.includes('already registered')) {

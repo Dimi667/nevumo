@@ -25,6 +25,7 @@ class CategoriesResponse(BaseModel):
 # -------------------------
 
 class CityOut(BaseModel):
+    id: int
     slug: str
     name: str
 
@@ -213,7 +214,7 @@ class CheckEmailResponse(BaseModel):
 class RegisterRequest(BaseModel):
     email: str
     password: str
-    role: str = "client"
+    role: str = "provider"
 
     @field_validator("email")
     @classmethod
@@ -290,6 +291,17 @@ class ResetPasswordResponse(BaseModel):
     data: dict
 
 
+class SwitchRoleRequest(BaseModel):
+    role: str
+
+    @field_validator("role")
+    @classmethod
+    def validate_role(cls, v: str) -> str:
+        if v not in ("client", "provider"):
+            raise ValueError("role must be client or provider")
+        return v
+
+
 # -------------------------
 # Provider Dashboard Schemas
 # -------------------------
@@ -303,6 +315,8 @@ class ProviderProfileUpdateRequest(BaseModel):
     business_name: Optional[str] = None
     description: Optional[str] = None
     availability_status: Optional[str] = None
+    category_slug: Optional[str] = None
+    city_slug: Optional[str] = None
 
     @field_validator("availability_status")
     @classmethod
@@ -317,12 +331,74 @@ class ProviderProfileUpdateResponse(BaseModel):
     data: dict
 
 
+_VALID_CURRENCIES = frozenset({
+    "EUR", "BGN", "USD", "GBP", "CHF", "CZK", "DKK", "HUF",
+    "PLN", "RON", "SEK", "NOK", "TRY", "ALL", "MKD", "RSD", "BAM", "HRK",
+})
+
+_VALID_PRICE_TYPES = frozenset({"fixed", "hourly", "request", "per_sqm"})
+
+
 class CreateServiceRequest(BaseModel):
-    category_id: int
     title: str
+    category_id: int
+    city_ids: List[int]
     description: Optional[str] = None
     price_type: str
     base_price: Optional[Decimal] = None
+    currency: str = "EUR"
+
+    @field_validator("price_type")
+    @classmethod
+    def validate_price_type(cls, v: str) -> str:
+        if v not in _VALID_PRICE_TYPES:
+            raise ValueError("price_type must be fixed, hourly, request, or per_sqm")
+        return v
+
+    @field_validator("currency")
+    @classmethod
+    def validate_currency(cls, v: str) -> str:
+        if v not in _VALID_CURRENCIES:
+            raise ValueError(f"currency must be one of: {', '.join(sorted(_VALID_CURRENCIES))}")
+        return v
+
+    @field_validator("city_ids")
+    @classmethod
+    def validate_city_ids(cls, v: List[int]) -> List[int]:
+        if len(v) < 1:
+            raise ValueError("city_ids must contain at least one city")
+        return v
+
+
+class UpdateServiceRequest(BaseModel):
+    title: Optional[str] = None
+    category_id: Optional[int] = None
+    city_ids: Optional[List[int]] = None
+    description: Optional[str] = None
+    price_type: Optional[str] = None
+    base_price: Optional[Decimal] = None
+    currency: Optional[str] = None
+
+    @field_validator("price_type")
+    @classmethod
+    def validate_price_type(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and v not in _VALID_PRICE_TYPES:
+            raise ValueError("price_type must be fixed, hourly, request, or per_sqm")
+        return v
+
+    @field_validator("currency")
+    @classmethod
+    def validate_currency(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and v not in _VALID_CURRENCIES:
+            raise ValueError(f"currency must be one of: {', '.join(sorted(_VALID_CURRENCIES))}")
+        return v
+
+    @field_validator("city_ids")
+    @classmethod
+    def validate_city_ids(cls, v: Optional[List[int]]) -> Optional[List[int]]:
+        if v is not None and len(v) < 1:
+            raise ValueError("city_ids must contain at least one city")
+        return v
 
 
 class AddCityRequest(BaseModel):

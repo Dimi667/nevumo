@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from config import settings
-from dependencies import get_db
+from dependencies import get_db, get_current_user
 from models import PasswordResetToken, User
 from schemas import (
     AuthTokenResponse,
@@ -17,6 +17,7 @@ from schemas import (
     RegisterRequest,
     ResetPasswordRequest,
     ResetPasswordResponse,
+    SwitchRoleRequest,
     ValidateResetTokenRequest,
     ValidateResetTokenResponse,
 )
@@ -63,11 +64,14 @@ async def register(
     user = User(
         email=body.email,
         password_hash=hash_password(body.password),
-        role=body.role,
+        role="provider",
         is_active=True,
     )
     db.add(user)
-    db.commit()
+    db.flush()  # assign user.id before creating Provider
+
+    from services.provider_service import get_or_create_provider
+    get_or_create_provider(user, db)
     db.refresh(user)
 
     record_rate_limit(db, ip, "register")
@@ -75,7 +79,7 @@ async def register(
     token = create_jwt(user.id, user.email, user.role)
     return AuthTokenResponse(data={
         "token": token,
-        "user": {"id": str(user.id), "email": user.email, "role": user.role},
+        "user": {"id": str(user.id), "email": user.email, "role": user.role, "locale": user.locale},
     })
 
 
@@ -219,4 +223,35 @@ async def reset_password(
     return ResetPasswordResponse(data={
         "token": token,
         "user": {"id": str(user.id), "email": user.email, "role": user.role},
+    })
+
+
+@router.post("/switch-role", response_model=AuthTokenResponse)
+async def switch_role(
+    body: SwitchRoleRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> AuthTokenResponse:
+    if current_user.role == body.role:
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "error": {"code": "ALREADY_IN_ROLE", "message": "Already in this role"}},
+        )
+
+    if body.role == "provider":
+        from services.provider_service import get_or_create_provider
+        get_or_create_provider(current_user, db)
+
+    current_user.role = body.role
+    db.commit()
+
+    token = create_jwt(current_user.id, current_user.email, body.role)
+    return AuthTokenResponse(data={
+        "token": token,
+        "user": {
+            "id": str(current_user.id),
+            "email": current_user.email,
+            "role": body.role,
+            "locale": current_user.locale,
+        },
     })

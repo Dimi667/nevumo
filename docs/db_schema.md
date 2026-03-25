@@ -106,13 +106,31 @@ CREATE TABLE services (
     category_id INT REFERENCES categories(id),
     title TEXT NOT NULL,
     description TEXT,
-    price_type TEXT CHECK (price_type IN ('fixed', 'hourly', 'request')),
+    price_type TEXT,           -- validated in Pydantic: fixed | hourly | request | per_sqm
     base_price NUMERIC,
+    currency TEXT NOT NULL DEFAULT 'EUR',
     created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_services_category ON services(category_id);
 CREATE INDEX idx_services_provider ON services(provider_id);
+
+---
+
+## 7a. Service Cities
+
+-- Many-to-many: which cities a specific service is offered in.
+-- Separate from provider_cities (provider-level availability).
+
+CREATE TABLE service_cities (
+    id SERIAL PRIMARY KEY,
+    service_id UUID NOT NULL REFERENCES services(id) ON DELETE CASCADE,
+    city_id INT NOT NULL REFERENCES locations(id),
+    UNIQUE(service_id, city_id)
+);
+
+CREATE INDEX idx_service_cities_service ON service_cities(service_id);
+CREATE INDEX idx_service_cities_city ON service_cities(city_id);
 
 ---
 

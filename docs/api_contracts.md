@@ -276,7 +276,26 @@ All fields optional. `availability_status` must be `active` | `busy` | `offline`
 
 ### Response
 ```json
-{ "success": true, "data": { "services": [ { "id": "uuid", "title": "...", "price_type": "fixed", "base_price": 50.0 } ] } }
+{
+  "success": true,
+  "data": {
+    "services": [
+      {
+        "id": "uuid",
+        "title": "Relax Massage",
+        "category_id": 1,
+        "category_slug": "massage",
+        "cities": [
+          { "id": 1, "slug": "sofia", "city": "Sofia" }
+        ],
+        "description": "...",
+        "price_type": "fixed",
+        "base_price": 50.0,
+        "currency": "EUR"
+      }
+    ]
+  }
+}
 ```
 
 ---
@@ -285,17 +304,86 @@ All fields optional. `availability_status` must be `active` | `busy` | `offline`
 
 ### Body
 ```json
-{ "category_id": 1, "title": "Relax Massage", "description": "...", "price_type": "fixed", "base_price": 50 }
+{
+  "title": "Relax Massage",
+  "category_id": 1,
+  "city_ids": [1, 2],
+  "description": "...",
+  "price_type": "fixed",
+  "base_price": 50,
+  "currency": "EUR"
+}
 ```
+`price_type` must be `fixed` | `hourly` | `request` | `per_sqm`
+`currency` must be one of: EUR, BGN, USD, GBP, CHF, CZK, DKK, HUF, PLN, RON, SEK, NOK, TRY, ALL, MKD, RSD, BAM, HRK
+`city_ids` must contain at least 1 item.
+Creating a service also upserts those cities into `provider_cities` (for lead matching).
 
 ### Response (201)
 ```json
-{ "success": true, "data": { "id": "uuid", "title": "Relax Massage", "category_id": 1, "price_type": "fixed", "base_price": 50.0 } }
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "title": "Relax Massage",
+    "category_id": 1,
+    "category_slug": "massage",
+    "cities": [{ "id": 1, "slug": "sofia", "city": "Sofia" }],
+    "description": "...",
+    "price_type": "fixed",
+    "base_price": 50.0,
+    "currency": "EUR"
+  }
+}
 ```
 
 ### Errors
 - 404 CATEGORY_NOT_FOUND — invalid category_id
-- 400 INVALID_PRICE_TYPE — must be fixed | hourly | request
+- 404 CITY_NOT_FOUND — one or more city_ids not found
+- 422 INVALID_CURRENCY — currency code not in allowed list
+
+---
+
+## PUT /api/v1/provider/services/{service_id}
+
+All fields optional — only provided fields are updated.
+If `city_ids` is provided, replaces all service cities and syncs `provider_cities`.
+
+### Body
+```json
+{
+  "title": "Updated Name",
+  "city_ids": [3],
+  "price_type": "hourly",
+  "base_price": 60,
+  "currency": "BGN"
+}
+```
+
+### Response
+```json
+{ "success": true, "data": { ...full ServiceResponse... } }
+```
+
+### Errors
+- 404 SERVICE_NOT_FOUND — service doesn't exist or provider doesn't own it
+- 404 CATEGORY_NOT_FOUND — invalid category_id
+- 404 CITY_NOT_FOUND — invalid city_ids
+- 422 INVALID_CURRENCY
+
+---
+
+## DELETE /api/v1/provider/services/{service_id}
+
+Deletes the service and cascades to `service_cities`.
+
+### Response
+```json
+{ "success": true, "data": { "message": "Service deleted" } }
+```
+
+### Errors
+- 404 SERVICE_NOT_FOUND — service doesn't exist or provider doesn't own it
 
 ---
 
@@ -339,9 +427,10 @@ All fields optional. `availability_status` must be `active` | `busy` | `offline`
 | LEAD_NOT_FOUND | 404 | Lead doesn't exist or provider doesn't own it |
 | INVALID_STATUS_TRANSITION | 400 | Invalid status change (e.g. done → contacted) |
 | CATEGORY_NOT_FOUND | 404 | Invalid category_id |
-| INVALID_PRICE_TYPE | 400 | price_type not in fixed/hourly/request |
-| CITY_NOT_FOUND | 404 | Invalid city_id |
+| CITY_NOT_FOUND | 404 | Invalid city_id in city_ids |
 | CITY_ALREADY_ADDED | 409 | Duplicate provider+city |
+| SERVICE_NOT_FOUND | 404 | Service doesn't exist or provider doesn't own it |
+| INVALID_CURRENCY | 422 | currency code not in the allowed list |
 
 ---
 

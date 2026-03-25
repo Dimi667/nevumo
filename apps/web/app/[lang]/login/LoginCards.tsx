@@ -1,7 +1,9 @@
 'use client';
 
+import { useEffect } from "react";
 import { ActionCard } from "@/components/ui/ActionCard";
 import { trackPageEvent } from "@/lib/tracking";
+import { isAuthenticated, getAuthUser } from "@/lib/auth-store";
 
 interface LoginCardsProps {
   lang: string;
@@ -24,6 +26,16 @@ export function LoginCards({
   offerLabel,
   offerSubtext,
 }: LoginCardsProps) {
+  useEffect(() => {
+    if (isAuthenticated()) {
+      const user = getAuthUser();
+      window.location.href = user?.role === "provider"
+        ? `/${lang}/provider/dashboard`
+        : `/${lang}/client/dashboard`;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <ActionCard

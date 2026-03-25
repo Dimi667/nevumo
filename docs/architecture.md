@@ -465,7 +465,7 @@ Track:
 
 ---
 
-## Provider Dashboard (Phase 1 — Backend Complete)
+## Provider Dashboard (Phase 1 — Backend + Frontend Complete)
 
 ### Endpoints (all under /api/v1/provider/, JWT required)
 
@@ -512,6 +512,42 @@ Returned in dashboard response as profile.is_complete + profile.missing_fields[]
 get_current_user (HTTPBearer → JWT decode → User lookup) → get_current_provider (User → Provider)
 Both in dependencies.py alongside existing get_db/get_redis.
 
+### Provider Dashboard Frontend (COMPLETE)
+
+Layout: Sidebar (logo + nav links + "НАМЕРИ УСЛУГА" CTA) + TopBar with user info.
+
+#### Pages (all under /[lang]/provider/dashboard/)
+
+**Overview** — Stats cards (total leads, new leads, accepted matches, rating, verified status, availability). "Last 30 days" analytics preview section. Auto-redirect to Profile page if is_complete === false (forces onboarding).
+
+**Leads** — Table with lead data (phone, description, status, source, date). Filter tabs by status (All, New, Contacted, Done, Rejected). Empty state when no leads.
+
+**Services** — Grid of service cards showing: title, category, cities (as badges), price + currency, price_type. "Add Service" button. Each card has Edit and Delete buttons. Delete triggers confirmation dialog → DELETE endpoint. Add → empty "New Service" form. Edit → pre-filled "Edit Service" form. Empty state when no services.
+
+**Analytics** — KPI cards (Total Leads, Contacted, Conversion %). Period toggle: 7 days / 30 days. Source breakdown horizontal bars (seo, direct, widget, qr).
+
+**QR Code** — Dedicated page. "Generate" button → displays QR code image + public provider URL.
+
+**Profile** — Two modes:
+- New provider (is_complete === false): 2-step onboarding wizard
+  - Step 1: Profile photo upload + Business name + Description
+  - Step 2: Add First Service — Title, Category (select), City (single-select), Price Type (fixed/hourly/request/per_sqm), Price, Currency (13 currencies)
+- Existing provider (is_complete === true): Edit mode with all profile fields
+
+**Settings** — Account info display, Availability status toggle (Active/Busy/Offline), Public URL slug display, "Switch to Client" button, Logout button.
+
+#### Client Dashboard
+Minimal dashboard with "ПРЕДЛАГАЙ УСЛУГИ" button that triggers role switch to provider.
+
+#### Role Switching
+Provider ↔ Client switching works. Updates user role via API and redirects to appropriate dashboard.
+
+#### Service Form Architecture
+- Service creation/edit includes: title, category_id, city_ids[], description, price_type, base_price, currency
+- currency field supports 13 currencies: EUR, BGN, USD, GBP, CHF, CZK, DKK, HUF, PLN, RON, SEK, NOK, TRY, ALL, MKD, RSD, BAM, HRK
+- price_type supports: fixed, hourly, request, per_sqm
+- Creating a service auto-syncs provider_cities for lead matching
+
 ---
 
 ## Event Tracking (IMPORTANT)
@@ -544,7 +580,7 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 ### Frontend Pages (COMPLETE — connected to real API)
 
 #### /[lang]/auth — Login/Register/Forgot Password
-- File: `apps/web/app/[lang]/auth/LoginClient.tsx`
+- File: `apps/web/app/[lang]/auth/LoginClient.tsx` 
 - Single page, multi-step flow (state machine: initial → login | register | forgot)
 - Intent-based headers: reads `nevumo_intent` from localStorage (client | provider)
 - Social login buttons: Google + Facebook (UI only, placeholder — OAuth integration later)
@@ -558,7 +594,7 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - Events: auth_view, auth_email_entered, auth_password_shown, auth_success
 
 #### /[lang]/auth/reset-password — Reset Password
-- File: `apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx`
+- File: `apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx` 
 - Token from URL param: ?token=XYZ
 - 5 states: loading, valid (form), success, expired/invalid, already used
 - Password + confirm password with match validation
@@ -568,9 +604,9 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 
 ### Frontend Auth Lib
 - `apps/web/lib/api.ts` — `ApiError` class + `apiPost<T>()` generic fetch wrapper
-- `apps/web/lib/auth-types.ts` — `UserInfo`, `AuthResult`, `CheckEmailResult`, `ValidateTokenResult`, `MessageResult`
-- `apps/web/lib/auth-api.ts` — 6 typed functions wrapping `apiPost`
-- `apps/web/lib/auth-store.ts` — `saveAuth`, `getAuthToken`, `getAuthUser`, `clearAuth`, `isAuthenticated`
+- `apps/web/lib/auth-types.ts` — `UserInfo`, `AuthResult`, `CheckEmailResult`, `ValidateTokenResult`, `MessageResult` 
+- `apps/web/lib/auth-api.ts` — 6 typed functions wrapping `apiPost` 
+- `apps/web/lib/auth-store.ts` — `saveAuth`, `getAuthToken`, `getAuthUser`, `clearAuth`, `isAuthenticated` 
 
 ### Backend Endpoints (COMPLETE — Phase A)
 - POST /api/v1/auth/check-email → { exists: boolean }
@@ -590,7 +626,7 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - Account disabled: separate 403 ACCOUNT_DISABLED error code
 
 ### Backend Files
-- `apps/api/routes/auth.py` — 6 endpoints, all errors as `{ success: false, error: { code, message } }`
+- `apps/api/routes/auth.py` — 6 endpoints, all errors as `{ success: false, error: { code, message } }` 
 - `apps/api/services/auth_service.py` — hash_password, verify_password, create_jwt, decode_jwt, generate_reset_token, hash_token, send_reset_email, check_rate_limit, record_rate_limit
 - `apps/api/config.py` — Settings (JWT_SECRET, JWT_EXPIRY_HOURS=720, RESET_TOKEN_EXPIRY_MINUTES=30, AUTH_RATE_LIMIT_MAX=5, AUTH_RATE_LIMIT_WINDOW_MINUTES=15, APP_URL)
 - `apps/api/alembic/versions/a1b2c3d4e5f6_add_auth_tables.py` — migration

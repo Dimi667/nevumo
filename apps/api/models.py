@@ -159,15 +159,36 @@ class Service(Base):
 
     price_type: Mapped[str] = mapped_column(String)
     base_price: Mapped[Optional[float]] = mapped_column(Numeric)
+    currency: Mapped[str] = mapped_column(String, default="EUR")
 
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     provider: Mapped["Provider"] = relationship(back_populates="services")
+    cities: Mapped[List["ServiceCity"]] = relationship(back_populates="service", cascade="all, delete-orphan")
 
     __table_args__ = (
-        CheckConstraint("price_type IN ('fixed', 'hourly', 'request')", name="ck_services_price_type"),
         Index("idx_services_category", "category_id"),
         Index("idx_services_provider", "provider_id"),
+    )
+
+
+# -------------------------
+# Service Cities
+# -------------------------
+
+class ServiceCity(Base):
+    __tablename__ = "service_cities"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    service_id: Mapped[UUID] = mapped_column(ForeignKey("services.id", ondelete="CASCADE"))
+    city_id: Mapped[int] = mapped_column(ForeignKey("locations.id"))
+
+    service: Mapped["Service"] = relationship(back_populates="cities")
+
+    __table_args__ = (
+        UniqueConstraint("service_id", "city_id", name="uq_service_cities"),
+        Index("idx_service_cities_service", "service_id"),
+        Index("idx_service_cities_city", "city_id"),
     )
 
 

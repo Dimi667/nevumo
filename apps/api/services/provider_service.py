@@ -2,10 +2,14 @@
 
 import base64
 import io
+from datetime import datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from uuid import UUID
+
+if TYPE_CHECKING:
+    from models import User
 
 import qrcode
 from slugify import slugify
@@ -15,12 +19,14 @@ from sqlalchemy.orm import Session
 from exceptions import NevumoException
 from models import (
     Category,
+    CategoryTranslation,
     Lead,
     LeadMatch,
     Location,
     Provider,
     ProviderCity,
     Service,
+    ServiceCity,
 )
 
 # ---------------------------------------------------------------------------
@@ -126,15 +132,31 @@ def change_lead_status(
 def check_onboarding_complete(
     db: Session, provider_id: UUID
 ) -> tuple[bool, list[str]]:
-    """Return (is_complete, missing_fields)."""
+    """Return (is_complete, missing_fields).
+    business_name counts as missing when it is absent or still an email placeholder.
+    A service is complete only when it has at least one associated city in service_cities.
+    """
     provider = db.query(Provider).filter(Provider.id == provider_id).first()
     missing: list[str] = []
-    if not provider or not provider.business_name:
+    if not provider or not provider.business_name or "@" in provider.business_name:
         missing.append("business_name")
-    if not db.query(Service).filter(Service.provider_id == provider_id).first():
+
+    has_service = (
+        db.query(Service).filter(Service.provider_id == provider_id).first()
+    ) is not None
+    if not has_service:
         missing.append("service")
-    if not db.query(ProviderCity).filter(ProviderCity.provider_id == provider_id).first():
         missing.append("city")
+    else:
+        has_city = (
+            db.query(ServiceCity)
+            .join(Service, Service.id == ServiceCity.service_id)
+            .filter(Service.provider_id == provider_id)
+            .first()
+        ) is not None
+        if not has_city:
+            missing.append("city")
+
     return (len(missing) == 0, missing)
 
 
@@ -142,24 +164,87 @@ def check_onboarding_complete(
 # Services
 # ---------------------------------------------------------------------------
 
+def _resolve_cities(
+    db: Session,
+    city_ids: list[int],
+) -> list[Location]:
+    """Validate and return Location records for the given city_ids.
+    Raises NevumoException for any id not found in locations table.
+    """
+    locations: list[Location] = []
+    for city_id in city_ids:
+        loc = db.query(Location).filter(Location.id == city_id).first()
+        if not loc:
+            raise NevumoException(404, "CITY_NOT_FOUND", f"City {city_id} not found")
+        locations.append(loc)
+    return locations
+
+
+def _sync_provider_cities(
+    db: Session,
+    provider_id: UUID,
+    locations: list[Location],
+) -> None:
+    """Ensure every location also exists in provider_cities (for lead matching)."""
+    for loc in locations:
+        existing = (
+            db.query(ProviderCity)
+            .filter(
+                ProviderCity.provider_id == provider_id,
+                ProviderCity.city_id == loc.id,
+            )
+            .first()
+        )
+        if not existing:
+            db.add(ProviderCity(provider_id=provider_id, city_id=loc.id))
+
+
+def _serialize_service(service: Service, db: Session) -> dict:
+    """Return a ServiceResponse-compatible dict for a single Service."""
+    category = db.query(Category).filter(Category.id == service.category_id).first()
+    category_slug = category.slug if category else ""
+
+    city_rows = (
+        db.query(ServiceCity, Location)
+        .join(Location, Location.id == ServiceCity.city_id)
+        .filter(ServiceCity.service_id == service.id)
+        .all()
+    )
+    cities = [
+        {"id": loc.id, "slug": loc.slug, "city": loc.city}
+        for _, loc in city_rows
+    ]
+
+    return {
+        "id": str(service.id),
+        "title": service.title,
+        "category_id": service.category_id,
+        "category_slug": category_slug,
+        "cities": cities,
+        "description": service.description,
+        "price_type": service.price_type,
+        "base_price": float(service.base_price) if service.base_price is not None else None,
+        "currency": service.currency,
+    }
+
+
 def add_service(
     db: Session,
     provider_id: UUID,
     category_id: int,
     title: str,
+    city_ids: list[int],
     description: Optional[str],
     price_type: str,
     base_price: Optional[Decimal],
+    currency: str = "EUR",
 ) -> Service:
     category = db.query(Category).filter(Category.id == category_id).first()
     if not category:
         raise NevumoException(404, "CATEGORY_NOT_FOUND", "Category not found")
-    if price_type not in ("fixed", "hourly", "request"):
-        raise NevumoException(
-            400,
-            "INVALID_PRICE_TYPE",
-            "price_type must be fixed, hourly, or request",
-        )
+
+    locations = _resolve_cities(db, city_ids)
+
     service = Service(
         provider_id=provider_id,
         category_id=category_id,
@@ -167,30 +252,90 @@ def add_service(
         description=description,
         price_type=price_type,
         base_price=base_price,
+        currency=currency,
     )
     db.add(service)
+    db.flush()  # get service.id before adding service_cities
+
+    for loc in locations:
+        db.add(ServiceCity(service_id=service.id, city_id=loc.id))
+
+    _sync_provider_cities(db, provider_id, locations)
+
     db.commit()
     db.refresh(service)
     return service
 
 
+def update_service(
+    db: Session,
+    service_id: str,
+    provider_id: UUID,
+    title: Optional[str],
+    category_id: Optional[int],
+    city_ids: Optional[list[int]],
+    description: Optional[str],
+    price_type: Optional[str],
+    base_price: Optional[Decimal],
+    currency: Optional[str],
+) -> Service:
+    service = (
+        db.query(Service)
+        .filter(Service.id == service_id, Service.provider_id == provider_id)
+        .first()
+    )
+    if not service:
+        raise NevumoException(404, "SERVICE_NOT_FOUND", "Service not found")
+
+    if title is not None:
+        service.title = title
+    if description is not None:
+        service.description = description
+    if price_type is not None:
+        service.price_type = price_type
+    if base_price is not None:
+        service.base_price = base_price
+    if currency is not None:
+        service.currency = currency
+
+    if category_id is not None:
+        category = db.query(Category).filter(Category.id == category_id).first()
+        if not category:
+            raise NevumoException(404, "CATEGORY_NOT_FOUND", "Category not found")
+        service.category_id = category_id
+
+    if city_ids is not None:
+        locations = _resolve_cities(db, city_ids)
+        db.query(ServiceCity).filter(ServiceCity.service_id == service.id).delete()
+        for loc in locations:
+            db.add(ServiceCity(service_id=service.id, city_id=loc.id))
+        _sync_provider_cities(db, provider_id, locations)
+
+    db.commit()
+    db.refresh(service)
+    return service
+
+
+def delete_service(db: Session, service_id: str, provider_id: UUID) -> None:
+    service = (
+        db.query(Service)
+        .filter(Service.id == service_id, Service.provider_id == provider_id)
+        .first()
+    )
+    if not service:
+        raise NevumoException(404, "SERVICE_NOT_FOUND", "Service not found")
+    db.delete(service)
+    db.commit()
+
+
 def get_provider_services(provider: Provider, db: Session) -> list:
-    """Return services for the provider."""
+    """Return services for the provider with cities and currency."""
     services = (
         db.query(Service)
         .filter(Service.provider_id == provider.id)
         .all()
     )
-    return [
-        {
-            "id": str(s.id),
-            "title": s.title,
-            "description": s.description,
-            "price_type": s.price_type,
-            "base_price": float(s.base_price) if s.base_price else None,
-        }
-        for s in services
-    ]
+    return [_serialize_service(s, db) for s in services]
 
 
 # ---------------------------------------------------------------------------
@@ -232,9 +377,30 @@ def generate_provider_slug(business_name: str, db: Session) -> str:
     return slug
 
 
-def get_provider_profile(provider: Provider) -> dict:
-    """Serialize provider profile for API response."""
-    return {
+def get_or_create_provider(user: "User", db: Session) -> Provider:
+    """Return the Provider record for *user*, creating one if it does not exist."""
+    provider = db.query(Provider).filter(Provider.user_id == user.id).first()
+    if provider is None:
+        slug = generate_provider_slug(user.email, db)
+        provider = Provider(
+            user_id=user.id,
+            business_name=user.email,
+            slug=slug,
+            rating=0,
+            verified=False,
+            availability_status="active",
+        )
+        db.add(provider)
+        db.commit()
+        db.refresh(provider)
+    return provider
+
+
+def get_provider_profile(provider: Provider, db: Optional[Session] = None) -> dict:
+    """Serialize provider profile for API response.
+    When *db* is provided, also includes current_category and current_city.
+    """
+    data: dict = {
         "id": str(provider.id),
         "business_name": provider.business_name,
         "description": provider.description,
@@ -246,6 +412,47 @@ def get_provider_profile(provider: Provider) -> dict:
         "created_at": provider.created_at.isoformat(),
     }
 
+    if db is not None:
+        # current_category: first service's category with English name
+        first_service = (
+            db.query(Service)
+            .filter(Service.provider_id == provider.id)
+            .first()
+        )
+        if first_service:
+            translation = (
+                db.query(CategoryTranslation)
+                .filter(
+                    CategoryTranslation.category_id == first_service.category_id,
+                    CategoryTranslation.lang == "en",
+                )
+                .first()
+            )
+            category = db.query(Category).filter(Category.id == first_service.category_id).first()
+            data["current_category"] = {
+                "slug": category.slug if category else "",
+                "name": translation.name if translation else (category.slug if category else ""),
+            }
+        else:
+            data["current_category"] = None
+
+        # current_city: first ProviderCity's Location
+        first_pc = (
+            db.query(ProviderCity)
+            .filter(ProviderCity.provider_id == provider.id)
+            .first()
+        )
+        if first_pc:
+            loc = db.query(Location).filter(Location.id == first_pc.city_id).first()
+            data["current_city"] = {
+                "slug": loc.slug if loc else "",
+                "name": loc.city if loc else "",
+            }
+        else:
+            data["current_city"] = None
+
+    return data
+
 
 def update_provider_profile(
     provider: Provider,
@@ -253,6 +460,8 @@ def update_provider_profile(
     business_name: Optional[str],
     description: Optional[str],
     availability_status: Optional[str],
+    category_slug: Optional[str] = None,
+    city_slug: Optional[str] = None,
 ) -> Provider:
     """Apply partial profile updates and commit."""
     if business_name is not None:
@@ -263,6 +472,44 @@ def update_provider_profile(
         provider.description = description
     if availability_status is not None:
         provider.availability_status = availability_status
+
+    if category_slug is not None:
+        category = db.query(Category).filter(Category.slug == category_slug).first()
+        if not category:
+            raise NevumoException(404, "CATEGORY_NOT_FOUND", "Category not found")
+        existing_service = (
+            db.query(Service)
+            .filter(Service.provider_id == provider.id, Service.category_id == category.id)
+            .first()
+        )
+        if not existing_service:
+            translation = (
+                db.query(CategoryTranslation)
+                .filter(
+                    CategoryTranslation.category_id == category.id,
+                    CategoryTranslation.lang == "en",
+                )
+                .first()
+            )
+            title = translation.name if translation else category.slug
+            db.add(Service(
+                provider_id=provider.id,
+                category_id=category.id,
+                title=title,
+                price_type="request",
+            ))
+
+    if city_slug is not None:
+        loc = db.query(Location).filter(Location.slug == city_slug).first()
+        if not loc:
+            raise NevumoException(404, "CITY_NOT_FOUND", "City not found")
+        existing_pc = (
+            db.query(ProviderCity)
+            .filter(ProviderCity.provider_id == provider.id, ProviderCity.city_id == loc.id)
+            .first()
+        )
+        if not existing_pc:
+            db.add(ProviderCity(provider_id=provider.id, city_id=loc.id))
 
     db.commit()
     db.refresh(provider)
@@ -363,6 +610,45 @@ def build_public_url(provider: Provider, db: Session, app_url: str) -> str:
             return f"{app_url}/{lang}/{city.slug}/{category.slug}/{provider.slug}"
 
     return f"{app_url}/provider/{provider.slug}"
+
+
+# ---------------------------------------------------------------------------
+# Analytics
+# ---------------------------------------------------------------------------
+
+_KNOWN_SOURCES = frozenset({"seo", "widget", "qr", "direct"})
+_CONTACTED_STATUSES = frozenset({"contacted", "done", "accepted", "in_progress", "completed"})
+
+
+def get_analytics(provider: Provider, db: Session, period_days: int = 30) -> dict:
+    """Return analytics data for the provider over the last *period_days* days."""
+    since = datetime.utcnow() - timedelta(days=period_days)
+
+    leads = (
+        db.query(Lead)
+        .filter(Lead.provider_id == provider.id, Lead.created_at >= since)
+        .all()
+    )
+
+    total = len(leads)
+    contacted = sum(1 for lead in leads if lead.status in _CONTACTED_STATUSES)
+    conversion_rate = round(contacted / total * 100, 1) if total > 0 else 0.0
+
+    sources: dict[str, int] = {"seo": 0, "widget": 0, "qr": 0, "direct": 0, "other": 0}
+    for lead in leads:
+        src = (lead.source or "").lower().strip()
+        if src in _KNOWN_SOURCES:
+            sources[src] += 1
+        else:
+            sources["other"] += 1
+
+    return {
+        "period_days": period_days,
+        "total_leads": total,
+        "contacted_leads": contacted,
+        "conversion_rate": conversion_rate,
+        "sources": sources,
+    }
 
 
 def generate_qr_code_base64(url: str) -> str:

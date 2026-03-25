@@ -33,7 +33,7 @@ async def list_cities(
         .all()
     )
 
-    data = [CityOut(slug=loc.slug, name=loc.city) for loc in rows]
+    data = [CityOut(id=loc.id, slug=loc.slug, name=loc.city) for loc in rows]
 
     if redis_client and data:
         redis_client.setex(cache_key, 3600, json.dumps([d.model_dump() for d in data]))

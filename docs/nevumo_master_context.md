@@ -141,10 +141,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
 - Auth backend — Phase A (6 endpoints, bcrypt, JWT, rate limiting)
 - Auth frontend — connected to real API (login, register, forgot, reset)
 - Provider Dashboard backend — 10 endpoints, JWT auth, lead status management, image upload, QR generation, onboarding support
+- Provider Dashboard frontend — all pages (Overview, Leads, Services, Analytics, QR Code, Profile, Settings)
+- Provider onboarding — 2-step wizard (profile info → first service), completeness check with auto-redirect
+- Service CRUD — add/edit/delete with category, multi-city, price type, currency
+- Client Dashboard — minimal with role switch to provider
+- DB: service_cities table (many-to-many service↔city), currency on services, per_sqm price type
 
 ### 🔜 Next
-- Provider Dashboard frontend (React UI for dashboard, leads inbox, analytics, growth tools)
-- Provider onboarding frontend (step-based: business name → category → city)
+- Dashboard design polish (UI refinements across all pages)
+- UX simplification: auto-currency from city, conditional price field
 - Email sending for reset password (Resend / SendGrid)
 - OAuth — Google + Facebook
 
