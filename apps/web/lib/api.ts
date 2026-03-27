@@ -122,8 +122,13 @@ export async function getProviders(
 
 export async function getProviderBySlug(slug: string, lang: string = 'en'): Promise<ProviderDetail | null> {
   try {
-    const response = await api.get(`/providers/${slug}?lang=${lang}`);
-    return response.data.data;
+    const response = await fetch(`${API_BASE}/api/v1/providers/${slug}?lang=${lang}`);
+    if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error(`HTTP ${response.status}`);
+    }
+    const json = await response.json();
+    return json.success ? json.data : null;
   } catch (error: any) {
     if (error.response?.status === 404) return null;
     throw error;
@@ -132,11 +137,15 @@ export async function getProviderBySlug(slug: string, lang: string = 'en'): Prom
 
 export async function resolveSlug(slug: string): Promise<{found: boolean, slug: string | null, redirected: boolean}> {
   try {
-    const response = await api.get(`/providers/resolve/${slug}`);
-    return response.data;
+    const response = await fetch(`${API_BASE}/api/v1/providers/resolve/${slug}`);
+    if (!response.ok) {
+      if (response.status === 404) return {found: false, slug: null, redirected: false};
+      throw new Error(`HTTP ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
   } catch (error: any) {
-    if (error.response?.status === 404) return {found: false, slug: null, redirected: false};
-    throw error;
+    return {found: false, slug: null, redirected: false};
   }
 }
 
