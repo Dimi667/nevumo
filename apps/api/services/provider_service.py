@@ -1030,13 +1030,13 @@ def load_nevumo_logo() -> Optional[Image.Image]:
         # Add a simple "N" text as placeholder
         draw = ImageDraw.Draw(logo)
         try:
-            # Try to use a bold font for the "N" - much larger now
-            font = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 42)
+            # Try to use a bold font for "N" - 30% larger (42 * 1.3 = 55)
+            font = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 55)
             text_bbox = draw.textbbox((0, 0), "N", font=font)
             text_width = text_bbox[2] - text_bbox[0]
             text_height = text_bbox[3] - text_bbox[1]
             
-            # Perfect centering in the 60x60 square
+            # Perfect centering both horizontally and vertically in 60x60 square
             text_x = (logo_size[0] - text_width) // 2
             text_y = (logo_size[1] - text_height) // 2
             
