@@ -1039,7 +1039,7 @@ def load_nevumo_logo() -> Optional[Image.Image]:
             # Perfect centering both horizontally and vertically in 60x60 square
             # Fix vertical centering by using the actual text bounds properly
             text_x = (logo_size[0] - text_width) // 2
-            text_y = (logo_size[1] - text_height) // 2 + text_bbox[1]  # Adjust for proper vertical center
+            text_y = (logo_size[1] - text_height) // 2 - text_bbox[1]  # Adjust for proper vertical center
             
             draw.text((text_x, text_y), "N", fill="white", font=font)
         except:
@@ -1050,7 +1050,7 @@ def load_nevumo_logo() -> Optional[Image.Image]:
                 text_width = text_bbox[2] - text_bbox[0]
                 text_height = text_bbox[3] - text_bbox[1]
                 text_x = (logo_size[0] - text_width) // 2
-                text_y = (logo_size[1] - text_height) // 2 + text_bbox[1]  # Adjust for proper vertical center
+                text_y = (logo_size[1] - text_height) // 2 - text_bbox[1]  # Adjust for proper vertical center
                 draw.text((text_x, text_y), "N", fill="white", font=font)
             except:
                 # Final fallback to default font
@@ -1060,7 +1060,7 @@ def load_nevumo_logo() -> Optional[Image.Image]:
                     text_width = text_bbox[2] - text_bbox[0]
                     text_height = text_bbox[3] - text_bbox[1]
                     text_x = (logo_size[0] - text_width) // 2
-                    text_y = (logo_size[1] - text_height) // 2 + text_bbox[1]  # Adjust for proper vertical center
+                    text_y = (logo_size[1] - text_height) // 2 - text_bbox[1]  # Adjust for proper vertical center
                     draw.text((text_x, text_y), "N", fill="white", font=font)
                 except:
                     # If font loading fails, just use it orange square
@@ -1107,7 +1107,7 @@ def add_text_to_qr(qr_img: Image.Image, business_name: str, service_name: str, s
     # Create space for text and padding
     qr_width, qr_height = qr_img.size
     padding = 24  # 24px padding around QR
-    text_height = 120  # Increased space for larger text
+    text_height = 140  # Space for larger text (29px + 36px + spacing)
     new_width = qr_width + 2 * padding
     new_height = qr_height + text_height + padding
     
@@ -1122,8 +1122,8 @@ def add_text_to_qr(qr_img: Image.Image, business_name: str, service_name: str, s
     
     try:
         # Try to load fonts with larger sizes
-        font_business = ImageFont.truetype("/System/Library/Fonts/Arial.ttf", 21)  # 50% larger than 14
-        font_slogan = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 29)  # ~20% larger than business text and bold
+        font_business = ImageFont.truetype("/System/Library/Fonts/Arial.ttf", 29)
+        font_slogan = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 36)
     except:
         # Fallback to default font
         font_business = ImageFont.load_default()
@@ -1142,7 +1142,7 @@ def add_text_to_qr(qr_img: Image.Image, business_name: str, service_name: str, s
     slogan_bbox = draw.textbbox((0, 0), slogan, font=font_slogan)
     slogan_width = slogan_bbox[2] - slogan_bbox[0]
     slogan_x = (new_width - slogan_width) // 2
-    slogan_y = text_y + 45  # More space for larger text
+    slogan_y = text_y + 55  # Space for 29px business text + padding
     
     draw.text((slogan_x, slogan_y), slogan, fill="black", font=font_slogan)
     

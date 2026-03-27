@@ -233,6 +233,20 @@ export async function getQRCode(): Promise<{ public_url: string; canonical_url: 
   return authFetch('/api/v1/provider/qr-code');
 }
 
+export async function getEnhancedQRCode(language: string = 'en'): Promise<{ 
+  public_url: string; 
+  canonical_url: string; 
+  qr_code: string; 
+  language: string;
+  business_name: string;
+  service_name: string;
+}> {
+  return authFetch('/api/v1/provider/enhanced-qr-code', {
+    method: 'POST',
+    body: JSON.stringify({ language }),
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Analytics
 // ---------------------------------------------------------------------------
