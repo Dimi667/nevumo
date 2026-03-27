@@ -634,6 +634,33 @@ def resolve_provider_slug(
     return None, None
 
 
+def resolve_provider_slug_safe(
+    provider_slug: str,
+    db: Session,
+    max_depth: int = 5
+) -> tuple[Optional[Provider], Optional[str]]:
+    """Resolve slug with loop prevention."""
+    visited_slugs = set()
+    current_slug = provider_slug
+    original_redirect_slug = None
+    
+    for _ in range(max_depth):
+        if current_slug in visited_slugs:
+            return None, None  # Loop detected
+        
+        visited_slugs.add(current_slug)
+        provider, redirect_slug = resolve_provider_slug(current_slug, db)
+        
+        if redirect_slug:
+            if original_redirect_slug is None:
+                original_redirect_slug = redirect_slug  # Store the original slug that redirected
+            current_slug = redirect_slug
+        else:
+            return provider, original_redirect_slug
+    
+    return None, None  # Max depth reached
+
+
 def get_or_create_provider(
     user: "User",
     db: Session,

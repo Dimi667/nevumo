@@ -2,9 +2,11 @@ import json
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 import redis as redis_lib
 
+from config import settings
 from dependencies import get_db, get_redis
 from exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
 from i18n import fetch_translations
@@ -20,6 +22,7 @@ from services.provider_service import (
     get_provider_rating,
     get_provider_jobs_completed,
     get_provider_review_count,
+    resolve_provider_slug_safe,
 )
 
 router = APIRouter(prefix="/api/v1", tags=["providers"])
@@ -89,7 +92,15 @@ async def get_provider(
     lang: str = Query("en", min_length=2, max_length=5),
     db: Session = Depends(get_db),
 ) -> ProviderDetailResponse:
-    provider = db.query(Provider).filter(Provider.slug == provider_slug).first()
+    # Use safe resolution to prevent redirect loops
+    provider, redirect_slug = resolve_provider_slug_safe(provider_slug, db)
+    
+    # If redirect found, return 301 redirect to new URL
+    if redirect_slug:
+        full_url = f"{settings.APP_URL.rstrip('/')}/providers/{provider.slug}"
+        return RedirectResponse(url=full_url, status_code=301)
+    
+    # If no provider found, raise 404
     if not provider:
         raise PROVIDER_NOT_FOUND
 
@@ -141,3 +152,19 @@ async def get_provider(
     )
 
     return ProviderDetailResponse(data=detail)
+
+
+@router.get("/providers/resolve/{slug}")
+async def resolve_slug(
+    slug: str,
+    db: Session = Depends(get_db),
+) -> dict:
+    """Resolve a slug and check if it redirects to another slug."""
+    provider, redirect_slug = resolve_provider_slug_safe(slug, db)
+    
+    if provider and redirect_slug:
+        return {"found": True, "slug": provider.slug, "redirected": True, "from_slug": redirect_slug}
+    elif provider:
+        return {"found": True, "slug": provider.slug, "redirected": False}
+    else:
+        return {"found": False, "slug": None, "redirected": False}

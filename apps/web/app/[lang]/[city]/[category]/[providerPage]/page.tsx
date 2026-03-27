@@ -1,5 +1,5 @@
-import { notFound } from 'next/navigation';
-import { getProviderBySlug, getCategories } from '@/lib/api';
+import { notFound, redirect } from 'next/navigation';
+import { getProviderBySlug, getCategories, resolveSlug } from '@/lib/api';
 import LeadForm from '@/components/LeadForm';
 import ProviderWidget from '@/components/ProviderWidget';
 import { generateHreflangAlternates, generateLocalBusinessJsonLd } from '@/lib/seo';
@@ -25,6 +25,14 @@ function getInitials(name: string): string {
 export async function generateMetadata(props: { params: Promise<ProviderRouteParams> }) {
   const { lang, city, category, providerPage } = await props.params;
   try {
+    // Check for redirect first
+    const slugResolution = await resolveSlug(providerPage);
+    
+    if (slugResolution.found && slugResolution.redirected) {
+      // Redirect to the new slug
+      redirect(`/${lang}/${city}/${category}/${slugResolution.slug}`);
+    }
+    
     const [provider, categories] = await Promise.all([
       getProviderBySlug(providerPage, lang),
       getCategories(lang),
@@ -55,6 +63,13 @@ export default async function Page(props: {
   const { lang, city, category, providerPage } = await props.params;
   const searchParams = await props.searchParams;
   const isEmbed = searchParams.embed === '1';
+
+  // Check for redirect first
+  const slugResolution = await resolveSlug(providerPage);
+  if (slugResolution.found && slugResolution.redirected) {
+    // Update browser URL without full page reload
+    redirect(`/${lang}/${city}/${category}/${slugResolution.slug}`);
+  }
 
   const [provider, categories] = await Promise.all([
     getProviderBySlug(providerPage, lang),

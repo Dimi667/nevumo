@@ -120,16 +120,23 @@ export async function getProviders(
   }
 }
 
-export async function getProviderBySlug(providerSlug: string, lang: string): Promise<ProviderDetail | null> {
+export async function getProviderBySlug(slug: string, lang: string = 'en'): Promise<ProviderDetail | null> {
   try {
-    const url = new URL(`${API_BASE}/api/v1/providers/${encodeURIComponent(providerSlug)}`);
-    url.searchParams.set('lang', lang);
-    const res = await fetch(url.toString(), { cache: 'no-store' });
-    if (!res.ok) return null;
-    const json: ApiResponse<ProviderDetail> = await res.json();
-    return json.success ? json.data : null;
-  } catch {
-    return null;
+    const response = await api.get(`/providers/${slug}?lang=${lang}`);
+    return response.data.data;
+  } catch (error: any) {
+    if (error.response?.status === 404) return null;
+    throw error;
+  }
+}
+
+export async function resolveSlug(slug: string): Promise<{found: boolean, slug: string | null, redirected: boolean}> {
+  try {
+    const response = await api.get(`/providers/resolve/${slug}`);
+    return response.data;
+  } catch (error: any) {
+    if (error.response?.status === 404) return {found: false, slug: null, redirected: false};
+    throw error;
   }
 }
 
