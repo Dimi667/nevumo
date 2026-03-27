@@ -1,6 +1,8 @@
 """Provider dashboard endpoints (auth required)."""
 
-from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, status
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, status
 from sqlalchemy.orm import Session
 
 from config import settings
@@ -12,6 +14,7 @@ from schemas import (
     LeadStatusUpdateRequest,
     LeadStatusUpdateResponse,
     ProviderDashboardResponse,
+    ProviderSlugHistoryResponse,
     ProviderLeadsResponse,
     ProviderProfileUpdateRequest,
     ProviderProfileUpdateResponse,
@@ -23,18 +26,23 @@ from services.provider_service import (
     add_city,
     add_service,
     build_public_url,
+    build_qr_public_url,
     change_lead_status,
     check_onboarding_complete,
     delete_service,
     generate_qr_code_base64,
+    generate_slug_suggestions,
+    is_slug_taken,
     get_analytics,
     get_dashboard_stats,
     get_provider_leads,
     get_provider_profile,
     get_provider_services,
+    get_slug_history,
     save_provider_image,
     update_provider_profile,
     update_service,
+    validate_slug,
 )
 
 router = APIRouter(prefix="/api/v1/provider", tags=["provider"])
@@ -85,19 +93,86 @@ def get_profile(
 @router.patch("/profile", response_model=ProviderProfileUpdateResponse)
 def update_profile(
     body: ProviderProfileUpdateRequest,
+    request: Request,
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ) -> ProviderProfileUpdateResponse:
-    updated = update_provider_profile(
-        provider,
-        db,
-        business_name=body.business_name,
-        description=body.description,
-        availability_status=body.availability_status,
-        category_slug=body.category_slug,
-        city_slug=body.city_slug,
-    )
-    return ProviderProfileUpdateResponse(data=get_provider_profile(updated, db))
+    print("=" * 50)
+    print("BACKEND: Profile update request started")
+    print(f"BACKEND: Request body: {body}")
+    print(f"BACKEND: Provider ID: {provider.id}")
+    print(f"BACKEND: Provider current state: slug={provider.slug}, slug_change_count={provider.slug_change_count}")
+    
+    try:
+        print("BACKEND: Calling update_provider_profile function...")
+        updated = update_provider_profile(
+            provider,
+            db,
+            business_name=body.business_name,
+            description=body.description,
+            availability_status=body.availability_status,
+            category_slug=body.category_slug,
+            city_slug=body.city_slug,
+            slug=body.slug,
+            request_ip=request.client.host if request.client else None,
+            user_agent=request.headers.get("user-agent"),
+            is_onboarding_setup=body.is_onboarding_setup,
+        )
+        print(f"BACKEND: Update successful: new_slug={updated.slug}, new_count={updated.slug_change_count}")
+        print("BACKEND: Building response data...")
+        response_data = get_provider_profile(updated, db)
+        print(f"BACKEND: Response data built successfully")
+        print("=" * 50)
+        return ProviderProfileUpdateResponse(data=response_data)
+    except Exception as e:
+        print(f"BACKEND: ERROR: Profile update failed: {e}")
+        print(f"BACKEND: ERROR: Exception type: {type(e)}")
+        import traceback
+        print("BACKEND: Full traceback:")
+        traceback.print_exc()
+        print("=" * 50)
+        raise
+
+
+@router.get("/slug-history", response_model=ProviderSlugHistoryResponse)
+def get_profile_slug_history(
+    provider: Provider = Depends(get_current_provider),
+    db: Session = Depends(get_db),
+) -> ProviderSlugHistoryResponse:
+    return ProviderSlugHistoryResponse(data={"items": get_slug_history(provider, db)})
+
+
+@router.get("/slug/check")
+def check_slug_availability(
+    slug: str = Query(..., min_length=2, max_length=50),
+    city_slug: Optional[str] = None,
+    category_slug: Optional[str] = None,
+    db: Session = Depends(get_db),
+) -> dict:
+    """Check if slug is available and return suggestions if taken."""
+    # Validate slug format
+    is_valid, error_msg = validate_slug(slug)
+    if not is_valid:
+        return {
+            "success": False,
+            "error": {"code": "INVALID_SLUG", "message": error_msg},
+            "data": {"available": False, "suggestions": []},
+        }
+
+    # Check availability
+    is_available = not is_slug_taken(slug, db)
+
+    suggestions = []
+    if not is_available:
+        suggestions = generate_slug_suggestions(slug, city_slug, category_slug, db)
+
+    return {
+        "success": True,
+        "data": {
+            "available": is_available,
+            "suggestions": suggestions if not is_available else None,
+        },
+    }
 
 
 # -------------------------
@@ -253,9 +328,14 @@ def get_qr_code(
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ) -> QRCodeResponse:
-    public_url = build_public_url(provider, db, settings.APP_URL)
+    public_url = build_qr_public_url(provider, db, settings.APP_URL)
+    canonical_url = build_public_url(provider, db, settings.APP_URL)
     qr_data_uri = generate_qr_code_base64(public_url)
-    return QRCodeResponse(data={"public_url": public_url, "qr_code": qr_data_uri})
+    return QRCodeResponse(data={
+        "public_url": public_url,
+        "canonical_url": canonical_url,
+        "qr_code": qr_data_uri,
+    })
 
 
 # -------------------------

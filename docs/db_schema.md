@@ -45,6 +45,17 @@ CREATE INDEX idx_providers_rating ON providers(rating);
 CREATE INDEX idx_providers_status ON providers(availability_status);
 CREATE INDEX idx_providers_slug ON providers(slug);
 
+### Slug Validation Rules
+- **Format**: 2-50 characters, lowercase letters, numbers, and hyphens only
+- **Pattern**: `^[a-z0-9]+(?:-[a-z0-9]+)*$`
+- **Restrictions**: No numeric suffixes (e.g., `devs-1`, `provider-123`)
+- **Uniqueness**: Must be unique across all providers
+- **Auto-generation**: Created from business_name during registration if not provided
+
+### Dynamic Fields (calculated, not stored)
+- **rating**: calculated as AVG(reviews.rating) - updated in real-time via get_provider_rating()
+- **jobs_completed**: calculated as COUNT(leads.status='done') + COUNT(lead_matches.status='done') via get_provider_jobs_completed()
+
 ---
 
 ## 3. Provider Availability (Cities)
@@ -93,6 +104,10 @@ CREATE TABLE locations (
     lng NUMERIC,
     UNIQUE(country_code, slug)
 );
+
+-- Current data includes:
+-- BG (Bulgaria) - Sofia (EUR as of March 2026)
+-- RS (Serbia) - Belgrade (RSD)
 
 CREATE INDEX idx_locations_country ON locations(country_code);
 
@@ -250,6 +265,30 @@ CREATE TABLE auth_rate_limits (
 
 CREATE INDEX idx_auth_rate_limits_ip_action ON auth_rate_limits(ip, action);
 CREATE INDEX idx_auth_rate_limits_created ON auth_rate_limits(created_at);
+
+---
+
+## 15. Reviews
+
+CREATE TABLE reviews (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider_id UUID NOT NULL REFERENCES providers(id) ON DELETE CASCADE,
+    client_id UUID NOT NULL REFERENCES users(id),
+    lead_id UUID REFERENCES leads(id) ON DELETE SET NULL,
+    rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    UNIQUE(lead_id)  -- one review per lead
+);
+
+CREATE INDEX idx_reviews_provider ON reviews(provider_id);
+CREATE INDEX idx_reviews_client ON reviews(client_id);
+
+### Notes
+- Rating is calculated dynamically as AVG(rating) from reviews table
+- One review per lead constraint prevents duplicate reviews
+- lead_id is nullable to allow reviews without a specific lead
+- Ratings are integers from 1 to 5 stars
 
 ---
 

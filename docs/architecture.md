@@ -372,20 +372,31 @@ Nevumo предоставя **embeddable lead widget**, който providers м�
 
 #### 2. Embeddable Widget (iframe / script)
 
-Example:
+URL Format with embed mode:
 
-<iframe src="https://nevumo.com/en/sofia/massage/maria-petrova" />
+<iframe src="https://nevumo.com/en/sofia/massage/maria-petrova?embed=1" />
+
+The `?embed=1` query parameter triggers widget mode:
+- Minimal layout (no Services section)
+- Sticky CTA button on mobile
+- Dynamic stats (rating, jobs_completed) - hidden if 0
+- Verified professional badge (if verified=true)
+- Full i18n support (32 languages via ?lang= param)
 
 ---
 
 #### 3. QR Code (Offline → Online)
 
-QR → opens provider lead page
+QR encodes: `/{lang}/{city}/{category}/{providerSlug}?embed=1`
+
+Opens provider lead page in widget mode (minimal, mobile-optimized).
 
 Used for:
 - business cards
 - flyers
 - physical locations
+
+QR codes are generated via `/api/v1/provider/qr-code` endpoint as base64 PNG.
 
 ---
 
@@ -465,6 +476,111 @@ Track:
 
 ---
 
+## Smart Slug Generation
+
+### Purpose
+
+Replace automatic numeric suffix slug generation with user-controlled slug selection featuring smart suggestions and validation. Prevents SEO-unfriendly URLs like "devs-1", "devs-2".
+
+### Validation Rules
+
+**Forbidden patterns:**
+- `devs-1`, `devs-123` (any numeric suffix)
+- `DevS` (uppercase)
+- `devs_studio` (underscores)
+- `devs@studio` (special chars)
+
+**Allowed patterns:**
+- `devs-sofia`
+- `devs-massage`
+- `devs-pro`
+- `devs-studio-bg`
+
+### Implementation
+
+**Backend (apps/api/services/provider_service.py):**
+- `validate_slug(slug)` — returns (is_valid, error_message)
+- `generate_slug_suggestions(base, city_slug, category_slug, db)` — generates contextual suggestions
+- `generate_provider_slug(business_name, db)` — generates base slug without auto-increment
+- `get_or_create_provider(user, db, preferred_slug?, city_slug?, category_slug?)` — creates provider with slug validation
+
+**Backend (apps/api/routes/provider.py):**
+- `GET /slug/check` — check availability + get suggestions (JWT required)
+
+**Backend (apps/api/routes/auth.py):**
+- `POST /register` — creates provider with draft slug, actual slug set during onboarding
+
+**Frontend (apps/web/lib/slug-utils.ts):**
+- `isValidSlugFormat(slug)` — client-side validation
+- `sanitizeSlug(input)` — normalize user input
+- `getSlugValidationError(slug)` — get specific error message
+- `slugify(text)` — convert text to slug format
+
+**Frontend (apps/web/lib/provider-api.ts):**
+- `checkSlugAvailability(slug, citySlug?, categorySlug?)` — API call (JWT required)
+
+**Frontend (apps/web/lib/auth-api.ts):**
+- `registerWithEmail(email, password, role, locale)` — registration without slug
+
+### Suggestion Logic
+
+Suggestions generated in priority order:
+1. `{slug}-{city_slug}` (if city provided)
+2. `{slug}-{category_slug}` (if category provided)
+3. `{slug}-{city_slug}-{category_slug}` (if both provided)
+4. Generic: `{slug}-pro`, `{slug}-studio`, `{slug}-bg`
+
+Taken slugs are filtered out. Maximum 5 suggestions returned.
+
+### API Behavior
+
+**Profile slug check endpoint (JWT required):**
+- Returns `{ available: true }` if slug is free
+- Returns `{ available: false, suggestions: [...] }` if taken
+- Returns validation error for invalid formats
+
+**Registration slug check endpoint (no auth required):**
+- Same behavior as profile endpoint
+- Used during registration flow before account creation
+
+**Profile update endpoint:**
+- Accepts optional `slug` field
+- Validates format (no numeric suffixes, only a-z/0-9/-)
+- Returns 409 SLUG_TAKEN with suggestions if slug in use
+- Returns 400 INVALID_SLUG for format violations
+
+**Registration endpoint:**
+- Accepts optional `slug`, `city_slug`, `category_slug` fields
+- For provider role: validates slug uniqueness, returns 409 SLUG_TAKEN if taken
+- Auto-generates slug from email if not provided
+- Rolls back user creation if provider creation fails
+
+### User Flow
+
+**Profile Update Flow:**
+1. User enters business name → base slug auto-generated (no suffix)
+2. If base slug is taken → error shown + 3-5 suggestions displayed
+3. User can:
+   - Click suggestion to use it
+   - Edit slug manually with real-time validation
+   - Check availability via "Check" button
+4. On save → server validates again, returns error with suggestions if needed
+
+**Registration Flow (Provider):**
+1. User enters email + password
+2. Account created immediately with temporary draft slug (not visible to user)
+3. Redirect to onboarding step 1 (`/[lang]/provider/dashboard/profile`)
+4. User enters business name → slug auto-generated from business name (not email)
+5. Real-time availability check shows suggestions if taken
+6. User can edit slug manually with validation
+7. On save with `is_onboarding_setup: true` → slug set without consuming allowed change count
+
+**Registration Flow (Client):**
+- No slug selection step
+- Registration proceeds directly after password entry
+
+---
+
 ## Provider Dashboard (Phase 1 — Backend + Frontend Complete)
 
 ### Endpoints (all under /api/v1/provider/, JWT required)
@@ -475,7 +591,8 @@ Track:
 | GET | /leads | Leads inbox |
 | PATCH | /leads/{id} | Update lead status (contacted/done/rejected) |
 | GET | /profile | Full provider profile |
-| PATCH | /profile | Update business_name, description, availability_status |
+| PATCH | /profile | Update business_name, description, availability_status, slug |
+| GET | /slug/check | Check slug availability + get suggestions |
 | POST | /profile/image | Upload profile image (multipart, max 5MB) |
 | GET | /services | List provider's services |
 | POST | /services | Add service (= choose category for onboarding) |
@@ -531,7 +648,10 @@ Layout: Sidebar (logo + nav links + "НАМЕРИ УСЛУГА" CTA) + TopBar wi
 **Profile** — Two modes:
 - New provider (is_complete === false): 2-step onboarding wizard
   - Step 1: Profile photo upload + Business name + Description
-  - Step 2: Add First Service — Title, Category (select), City (single-select), Price Type (fixed/hourly/request/per_sqm), Price, Currency (13 currencies)
+  - Step 2: Add First Service — Title, Category (select), **Cities (multi-select with SearchInput)**, Price Type (fixed/hourly/request/per_sqm), Price, Currency (auto-detected from first city)
+  - **Progress indicator**: Step numbers turn green when required fields are valid (orange → green transition)
+  - **Real-time inline validation**: Green border when valid, red border + error message when invalid, immediate feedback on typing
+  - **Field placeholders**: "Search or select a category", "Select cities where you offer this service", "e.g. Emergency pipe repair, Deep tissue massage (60 min)"
 - Existing provider (is_complete === true): Edit mode with all profile fields
 
 **Settings** — Account info display, Availability status toggle (Active/Busy/Offline), Public URL slug display, "Switch to Client" button, Logout button.
@@ -547,6 +667,11 @@ Provider ↔ Client switching works. Updates user role via API and redirects to 
 - currency field supports 13 currencies: EUR, BGN, USD, GBP, CHF, CZK, DKK, HUF, PLN, RON, SEK, NOK, TRY, ALL, MKD, RSD, BAM, HRK
 - price_type supports: fixed, hourly, request, per_sqm
 - Creating a service auto-syncs provider_cities for lead matching
+- **SearchInput Component**: Unified searchable select component supporting both single and multi-select modes
+  - Location: `apps/web/components/dashboard/SearchInput.tsx`
+  - Props: `mode: 'single' | 'multi'`, `options`, `value/values`, `onChange`, `placeholder`, `error`
+  - Used in: Profile onboarding (Category, Cities), Services page (Cities)
+  - Features: Search filtering, keyboard navigation (Enter/Escape), click-outside close, auto-focus input
 
 ---
 
@@ -587,10 +712,11 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - Email step: validation, sessionStorage persistence (key: nevumo_auth_email)
 - Login step: password + "Забравена парола?" link
 - Register step: password with show/hide toggle + built-in password generator (onClick on empty field)
+- **Provider registration**: no slug selection on auth page; account created immediately with temporary draft slug, redirect to onboarding step 1 for slug configuration
 - Forgot step: sends reset link → success toast "Провери имейла си"; catch also shows success (no enumeration)
 - All buttons: orange active (bg-orange-500), gray disabled (bg-gray-300)
 - Browser password save: hidden iframe technique (triggerPasswordSave)
-- Post-auth: `saveAuth(token, user)` → localStorage; redirect by role (provider → /provider/dashboard, client → /)
+- Post-auth: `saveAuth(token, user)` → localStorage; redirect by role (provider → /provider/dashboard/profile for onboarding, client → /)
 - Events: auth_view, auth_email_entered, auth_password_shown, auth_success
 
 #### /[lang]/auth/reset-password — Reset Password
@@ -610,7 +736,7 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 
 ### Backend Endpoints (COMPLETE — Phase A)
 - POST /api/v1/auth/check-email → { exists: boolean }
-- POST /api/v1/auth/register → { token: JWT, user: {id, email, role} }
+- POST /api/v1/auth/register → { token: JWT, user: {id, email, role} } (provider created with draft slug, actual slug set during onboarding)
 - POST /api/v1/auth/login → { token: JWT, user: {id, email, role} }
 - POST /api/v1/auth/forgot-password → { message } (always same response, no email enumeration)
 - POST /api/v1/auth/reset-password → { token: JWT, user: {id, email, role} } (auto-login)

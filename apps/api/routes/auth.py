@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
+from secrets import token_hex
+from typing import Optional
 
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Depends, Query, Request, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from config import settings
 from dependencies import get_db, get_current_user
-from models import PasswordResetToken, User
+from models import PasswordResetToken, Provider, User
 from schemas import (
     AuthTokenResponse,
     CheckEmailRequest,
@@ -17,6 +19,7 @@ from schemas import (
     RegisterRequest,
     ResetPasswordRequest,
     ResetPasswordResponse,
+    SlugCheckResponse,
     SwitchRoleRequest,
     ValidateResetTokenRequest,
     ValidateResetTokenResponse,
@@ -45,6 +48,37 @@ async def check_email(
     return CheckEmailResponse(data={"exists": user is not None})
 
 
+@router.get("/register/slug/check", response_model=SlugCheckResponse)
+async def check_registration_slug(
+    slug: str = Query(..., min_length=2, max_length=50),
+    city_slug: Optional[str] = Query(None),
+    category_slug: Optional[str] = Query(None),
+    db: Session = Depends(get_db),
+) -> SlugCheckResponse:
+    """Check slug availability during registration (no auth required)."""
+    from services.provider_service import validate_slug, generate_slug_suggestions
+    
+    is_valid, error = validate_slug(slug)
+    if not is_valid:
+        return SlugCheckResponse(
+            success=True,
+            data={"available": False, "valid": False, "error": error}
+        )
+    
+    existing = db.query(Provider).filter(Provider.slug == slug).first()
+    if existing:
+        suggestions = generate_slug_suggestions(slug, city_slug, category_slug, db)
+        return SlugCheckResponse(
+            success=True,
+            data={"available": False, "valid": True, "suggestions": suggestions}
+        )
+    
+    return SlugCheckResponse(
+        success=True,
+        data={"available": True, "valid": True}
+    )
+
+
 @router.post("/register", response_model=AuthTokenResponse, status_code=status.HTTP_201_CREATED)
 async def register(
     body: RegisterRequest,
@@ -70,8 +104,19 @@ async def register(
     db.add(user)
     db.flush()  # assign user.id before creating Provider
 
-    from services.provider_service import get_or_create_provider
-    get_or_create_provider(user, db)
+    # Create provider with draft slug (not based on email) and email as placeholder business_name
+    # The actual slug and business name will be set during onboarding step 1
+    draft_slug = f"draft{token_hex(6)}"  # e.g., drafta3f7b2d8e1c5
+    provider = Provider(
+        user_id=user.id,
+        business_name=body.email,  # Placeholder to indicate onboarding needed
+        slug=draft_slug,
+        rating=0,
+        verified=False,
+        availability_status="active",
+    )
+    db.add(provider)
+    
     db.refresh(user)
 
     record_rate_limit(db, ip, "register")

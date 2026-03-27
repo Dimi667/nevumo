@@ -7,6 +7,7 @@ import redis as redis_lib
 
 from dependencies import get_db, get_redis
 from exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
+from i18n import fetch_translations
 from models import Provider, Service, Category, Location, ProviderCity
 from schemas import (
     ProviderListItem,
@@ -14,6 +15,11 @@ from schemas import (
     ProviderDetail,
     ProviderDetailResponse,
     ServiceOut,
+)
+from services.provider_service import (
+    get_provider_rating,
+    get_provider_jobs_completed,
+    get_provider_review_count,
 )
 
 router = APIRouter(prefix="/api/v1", tags=["providers"])
@@ -80,11 +86,27 @@ async def list_providers(
 @router.get("/providers/{provider_slug}", response_model=ProviderDetailResponse)
 async def get_provider(
     provider_slug: str,
+    lang: str = Query("en", min_length=2, max_length=5),
     db: Session = Depends(get_db),
 ) -> ProviderDetailResponse:
     provider = db.query(Provider).filter(Provider.slug == provider_slug).first()
     if not provider:
         raise PROVIDER_NOT_FOUND
+
+    # Calculate dynamic stats
+    rating = get_provider_rating(provider.id, db)
+    jobs_completed = get_provider_jobs_completed(provider.id, db)
+    review_count = get_provider_review_count(provider.id, db)
+
+    # Get widget translations
+    all_translations = fetch_translations(db, lang)
+    widget_keys = [
+        'verified_label', 'rating_label', 'jobs_label', 'phone_label',
+        'phone_placeholder', 'notes_label', 'notes_placeholder',
+        'response_time', 'button_text', 'disclaimer', 'success_title',
+        'success_message', 'new_request_button'
+    ]
+    translations = {k: all_translations.get(k, k) for k in widget_keys}
 
     services = db.query(Service).filter(Service.provider_id == provider.id).all()
 
@@ -107,11 +129,15 @@ async def get_provider(
         business_name=provider.business_name,
         description=provider.description,
         slug=provider.slug,
-        rating=provider.rating,
+        profile_image_url=provider.profile_image_url,
+        rating=rating,
         verified=provider.verified,
         availability_status=provider.availability_status,
         created_at=provider.created_at,
         services=service_items,
+        jobs_completed=jobs_completed,
+        review_count=review_count,
+        translations=translations,
     )
 
     return ProviderDetailResponse(data=detail)

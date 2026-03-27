@@ -1,6 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional, List
+from typing import Optional, List, Dict
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, field_validator
@@ -11,6 +11,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 # -------------------------
 
 class CategoryOut(BaseModel):
+    id: int
     slug: str
     name: str
 
@@ -28,6 +29,8 @@ class CityOut(BaseModel):
     id: int
     slug: str
     name: str
+    country_code: str
+    currency: str
 
 
 class CitiesResponse(BaseModel):
@@ -88,11 +91,18 @@ class ProviderDetail(BaseModel):
     business_name: str
     description: Optional[str] = None
     slug: str
+    profile_image_url: Optional[str] = None
     rating: float
     verified: bool
     availability_status: str
     created_at: datetime
     services: List[ServiceOut] = []
+    jobs_completed: int = 0
+    review_count: int = 0
+    translations: Dict[str, str] = {}
+    canonical_path: Optional[str] = None
+    redirect_path: Optional[str] = None
+    redirect_status: Optional[int] = None
 
     @field_validator("rating", mode="before")
     @classmethod
@@ -215,6 +225,9 @@ class RegisterRequest(BaseModel):
     email: str
     password: str
     role: str = "provider"
+    slug: Optional[str] = None  # User's preferred slug
+    city_slug: Optional[str] = None  # For suggestions context
+    category_slug: Optional[str] = None  # For suggestions context
 
     @field_validator("email")
     @classmethod
@@ -233,6 +246,20 @@ class RegisterRequest(BaseModel):
     def validate_role(cls, v: str) -> str:
         if v not in ("client", "provider"):
             raise ValueError("Role must be client or provider")
+        return v
+
+    @field_validator("slug")
+    @classmethod
+    def validate_slug_format(cls, v: Optional[str]) -> Optional[str]:
+        if v is None:
+            return v
+        import re
+        if len(v) < 2 or len(v) > 50:
+            raise ValueError("Slug must be between 2 and 50 characters")
+        if re.search(r'-\d+$', v):
+            raise ValueError("Numeric suffixes like '-1', '-123' are not allowed for SEO reasons")
+        if not re.match(r'^[a-z0-9]+(?:-[a-z0-9]+)*$', v):
+            raise ValueError("Slug can only contain lowercase letters, numbers, and hyphens")
         return v
 
 
@@ -317,6 +344,8 @@ class ProviderProfileUpdateRequest(BaseModel):
     availability_status: Optional[str] = None
     category_slug: Optional[str] = None
     city_slug: Optional[str] = None
+    slug: Optional[str] = None
+    is_onboarding_setup: Optional[bool] = None
 
     @field_validator("availability_status")
     @classmethod
@@ -325,14 +354,41 @@ class ProviderProfileUpdateRequest(BaseModel):
             raise ValueError("availability_status must be active, busy, or offline")
         return v
 
+    @field_validator("slug")
+    @classmethod
+    def validate_slug_format(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None:
+            import re
+            if len(v) < 2 or len(v) > 50:
+                raise ValueError("Slug must be 2-50 characters")
+            if re.search(r'-\d+$', v):
+                raise ValueError("Numeric suffixes not allowed (e.g., devs-1)")
+            if not re.match(r'^[a-z0-9]+(?:-[a-z0-9]+)*$', v):
+                raise ValueError("Only lowercase letters, numbers, and hyphens allowed")
+        return v
+
 
 class ProviderProfileUpdateResponse(BaseModel):
     success: bool = True
     data: dict
 
 
+class ProviderSlugHistoryItem(BaseModel):
+    id: UUID
+    old_slug: str
+    new_slug: str
+    changed_at: datetime
+    ip_address: Optional[str] = None
+    user_agent: Optional[str] = None
+
+
+class ProviderSlugHistoryResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
 _VALID_CURRENCIES = frozenset({
-    "EUR", "BGN", "USD", "GBP", "CHF", "CZK", "DKK", "HUF",
+    "EUR", "USD", "GBP", "CHF", "CZK", "DKK", "HUF",
     "PLN", "RON", "SEK", "NOK", "TRY", "ALL", "MKD", "RSD", "BAM", "HRK",
 })
 
@@ -346,7 +402,7 @@ class CreateServiceRequest(BaseModel):
     description: Optional[str] = None
     price_type: str
     base_price: Optional[Decimal] = None
-    currency: str = "EUR"
+    currency: Optional[str] = None
 
     @field_validator("price_type")
     @classmethod
@@ -357,8 +413,8 @@ class CreateServiceRequest(BaseModel):
 
     @field_validator("currency")
     @classmethod
-    def validate_currency(cls, v: str) -> str:
-        if v not in _VALID_CURRENCIES:
+    def validate_currency(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and v not in _VALID_CURRENCIES:
             raise ValueError(f"currency must be one of: {', '.join(sorted(_VALID_CURRENCIES))}")
         return v
 
@@ -427,5 +483,18 @@ class ProviderLeadsResponse(BaseModel):
 
 
 class QRCodeResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+# -------------------------
+# Slug Check
+# -------------------------
+
+class SlugCheckRequest(BaseModel):
+    slug: str
+
+
+class SlugCheckResponse(BaseModel):
     success: bool = True
     data: dict

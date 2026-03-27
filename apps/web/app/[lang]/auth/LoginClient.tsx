@@ -1,7 +1,7 @@
 'use client';
 // TODO: i18n
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { trackPageEvent } from "@/lib/tracking";
 import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
 import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@/lib/auth-api";
@@ -245,6 +245,8 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
 
   async function handleRegister() {
     if (state.loading) return;
+
+    // Register both client and provider immediately (no slug step on auth page)
     setState(s => ({ ...s, loading: true, error: null }));
     try {
       const role = state.intent ?? 'client';
@@ -256,7 +258,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
       clearStoredIntent();
       setState(s => ({ ...s, loading: false, registerSuccess: true }));
       const redirectPath = result.user.role === 'provider'
-        ? `/${lang}/provider/dashboard`
+        ? `/${lang}/provider/dashboard/profile`
         : `/${lang}/client/dashboard`;
       setTimeout(() => { window.location.href = redirectPath; }, 1000);
     } catch (err) {
@@ -273,6 +275,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
       }
     }
   }
+
 
   async function handleForgot() {
     if (state.loading || state.forgotSuccess) return;

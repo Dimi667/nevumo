@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getProviderBySlug, getCategories } from '@/lib/api';
 import LeadForm from '@/components/LeadForm';
+import ProviderWidget from '@/components/ProviderWidget';
 import { generateHreflangAlternates, generateLocalBusinessJsonLd } from '@/lib/seo';
 import { JsonLd } from '@/components/JsonLd';
 
@@ -25,7 +26,7 @@ export async function generateMetadata(props: { params: Promise<ProviderRoutePar
   const { lang, city, category, providerPage } = await props.params;
   try {
     const [provider, categories] = await Promise.all([
-      getProviderBySlug(providerPage),
+      getProviderBySlug(providerPage, lang),
       getCategories(lang),
     ]);
     if (!provider) return { title: 'Nevumo' };
@@ -47,11 +48,40 @@ export async function generateMetadata(props: { params: Promise<ProviderRoutePar
   }
 }
 
-export default async function Page(props: { params: Promise<ProviderRouteParams> }) {
-  const { city, category, providerPage } = await props.params;
-  const provider = await getProviderBySlug(providerPage);
+export default async function Page(props: {
+  params: Promise<ProviderRouteParams>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const { lang, city, category, providerPage } = await props.params;
+  const searchParams = await props.searchParams;
+  const isEmbed = searchParams.embed === '1';
+
+  const [provider, categories] = await Promise.all([
+    getProviderBySlug(providerPage, lang),
+    getCategories(lang),
+  ]);
+
   if (!provider) return notFound();
 
+  const categoryName = categories.find((c) => c.slug === category)?.name ?? category;
+
+  // Embed mode - render widget only
+  if (isEmbed) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-4">
+        <div className="max-w-md mx-auto">
+          <ProviderWidget
+            provider={provider}
+            categoryName={categoryName}
+            categorySlug={category}
+            citySlug={city}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Full page mode (existing logic)
   return (
     <>
       <JsonLd data={generateLocalBusinessJsonLd(provider, category, city)} />
@@ -85,12 +115,14 @@ export default async function Page(props: { params: Promise<ProviderRouteParams>
             )}
 
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              <span className="text-amber-500 font-semibold">
-                ⭐ {provider.rating.toFixed(1)} rating
-              </span>
+              {provider.rating > 0 && (
+                <span className="text-amber-500 font-semibold">
+                  ⭐ {provider.rating.toFixed(1)} {provider.translations?.rating_label || 'rating'}
+                </span>
+              )}
               {provider.verified && (
                 <span className="inline-flex items-center gap-1 text-sm font-semibold text-green-700 bg-green-50 border border-green-200 px-3 py-1 rounded-full">
-                  ✓ Verified professional
+                  ✓ {provider.translations?.verified_label || 'Verified professional'}
                 </span>
               )}
             </div>

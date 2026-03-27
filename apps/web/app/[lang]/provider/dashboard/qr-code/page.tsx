@@ -5,6 +5,7 @@ import { getQRCode } from '@/lib/provider-api';
 
 interface QRData {
   public_url: string;
+  canonical_url: string;
   qr_code: string;
 }
 
@@ -73,7 +74,7 @@ export default function QRCodePage() {
 
             {/* URL */}
             <div className="bg-gray-50 rounded-lg px-4 py-3">
-              <p className="text-xs text-gray-500 mb-1">Your public URL</p>
+              <p className="text-xs text-gray-500 mb-1">Your QR URL</p>
               <a
                 href={qr.public_url}
                 target="_blank"
@@ -81,6 +82,17 @@ export default function QRCodePage() {
                 className="text-sm text-orange-500 hover:underline break-all font-medium"
               >
                 {qr.public_url}
+              </a>
+            </div>
+            <div className="bg-gray-50 rounded-lg px-4 py-3">
+              <p className="text-xs text-gray-500 mb-1">Canonical profile URL</p>
+              <a
+                href={qr.canonical_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-orange-500 hover:underline break-all font-medium"
+              >
+                {qr.canonical_url}
               </a>
             </div>
 

@@ -63,13 +63,18 @@ export interface ProviderDetail {
   id: string;
   business_name: string;
   description: string | null;
+  slug: string;
+  profile_image_url: string | null;
   rating: number;
   verified: boolean;
-  slug: string;
   services: ServiceOut[];
+  jobs_completed: number;
+  review_count: number;
+  translations: Record<string, string>;
 }
 
 export interface CategoryOut {
+  id: number;
   slug: string;
   name: string;
 }
@@ -78,6 +83,8 @@ export interface CityOut {
   id: number;
   slug: string;
   name: string;
+  country_code: string;
+  currency: string;
 }
 
 export interface LeadCreateInput {
@@ -113,12 +120,11 @@ export async function getProviders(
   }
 }
 
-export async function getProviderBySlug(providerSlug: string): Promise<ProviderDetail | null> {
+export async function getProviderBySlug(providerSlug: string, lang: string): Promise<ProviderDetail | null> {
   try {
-    const res = await fetch(
-      `${API_BASE}/api/v1/providers/${encodeURIComponent(providerSlug)}`,
-      { cache: 'no-store' },
-    );
+    const url = new URL(`${API_BASE}/api/v1/providers/${encodeURIComponent(providerSlug)}`);
+    url.searchParams.set('lang', lang);
+    const res = await fetch(url.toString(), { cache: 'no-store' });
     if (!res.ok) return null;
     const json: ApiResponse<ProviderDetail> = await res.json();
     return json.success ? json.data : null;

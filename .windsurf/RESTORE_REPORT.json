@@ -1,0 +1,238 @@
+{
+  "timestamp": "Mar 27, 2026 13:28:00 UTC+02:00",
+  "total_restored": 29,
+  "files": [
+    {
+      "rel_file": "apps/api/exceptions.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-da5454e/45Q1.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/exceptions.py",
+      "entry_id": "45Q1.py",
+      "mins_before": 1358.2,
+      "timestamp": 1774529385279
+    },
+    {
+      "rel_file": "apps/api/main.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/6438621d/uj7X.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/main.py",
+      "entry_id": "uj7X.py",
+      "mins_before": 1356.6,
+      "timestamp": 1774529485493
+    },
+    {
+      "rel_file": "apps/api/models.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-2e77fff4/RJ5E.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/models.py",
+      "entry_id": "RJ5E.py",
+      "mins_before": 2110.9,
+      "timestamp": 1774484226240
+    },
+    {
+      "rel_file": "apps/api/routes/auth.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/3d9a6dab/jgIi.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/routes/auth.py",
+      "entry_id": "jgIi.py",
+      "mins_before": 1196.2,
+      "timestamp": 1774539107686
+    },
+    {
+      "rel_file": "apps/api/routes/categories.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-3897e449/d18k.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/routes/categories.py",
+      "entry_id": "d18k.py",
+      "mins_before": 2592.8,
+      "timestamp": 1774455310932
+    },
+    {
+      "rel_file": "apps/api/routes/cities.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-70935696/MBsz.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/routes/cities.py",
+      "entry_id": "MBsz.py",
+      "mins_before": 2623.9,
+      "timestamp": 1774453447216
+    },
+    {
+      "rel_file": "apps/api/routes/provider.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-54c5b93e/r3VR.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/routes/provider.py",
+      "entry_id": "r3VR.py",
+      "mins_before": 33.2,
+      "timestamp": 1774608887355
+    },
+    {
+      "rel_file": "apps/api/routes/providers.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-43d30947/MSHr.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/routes/providers.py",
+      "entry_id": "MSHr.py",
+      "mins_before": 2101.6,
+      "timestamp": 1774484781690
+    },
+    {
+      "rel_file": "apps/api/schemas.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-39aa419a/gma6.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/schemas.py",
+      "entry_id": "gma6.py",
+      "mins_before": 155.8,
+      "timestamp": 1774601531448
+    },
+    {
+      "rel_file": "apps/api/services/provider_service.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/3645560/pjE2.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/api/services/provider_service.py",
+      "entry_id": "pjE2.py",
+      "mins_before": 33.2,
+      "timestamp": 1774608885426
+    },
+    {
+      "rel_file": "apps/web/app/[lang]/[city]/[category]/[providerPage]/page.tsx",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-57400d12/cCJt.tsx",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/app/[lang]/[city]/[category]/[providerPage]/page.tsx",
+      "entry_id": "cCJt.tsx",
+      "mins_before": 1572.2,
+      "timestamp": 1774516545044
+    },
+    {
+      "rel_file": "apps/web/app/[lang]/auth/LoginClient.tsx",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-52377562/2XRf.tsx",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/app/[lang]/auth/LoginClient.tsx",
+      "entry_id": "2XRf.tsx",
+      "mins_before": 1248.3,
+      "timestamp": 1774535982904
+    },
+    {
+      "rel_file": "apps/web/app/[lang]/provider/dashboard/layout.tsx",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-2e379018/OYVD.tsx",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/app/[lang]/provider/dashboard/layout.tsx",
+      "entry_id": "OYVD.tsx",
+      "mins_before": 2253.6,
+      "timestamp": 1774475665255
+    },
+    {
+      "rel_file": "apps/web/app/[lang]/provider/dashboard/page.tsx",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-3776ca73/l5z6.tsx",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/app/[lang]/provider/dashboard/page.tsx",
+      "entry_id": "l5z6.tsx",
+      "mins_before": 2252.3,
+      "timestamp": 1774475744383
+    },
+    {
+      "rel_file": "apps/web/app/[lang]/provider/dashboard/profile/page.tsx",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-585a67cd/5CLm.tsx",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/app/[lang]/provider/dashboard/profile/page.tsx",
+      "entry_id": "5CLm.tsx",
+      "mins_before": 130.5,
+      "timestamp": 1774603048711
+    },
+    {
+      "rel_file": "apps/web/app/[lang]/provider/dashboard/services/page.tsx",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-31ee29a8/rqRf.tsx",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/app/[lang]/provider/dashboard/services/page.tsx",
+      "entry_id": "rqRf.tsx",
+      "mins_before": 2507.9,
+      "timestamp": 1774460405632
+    },
+    {
+      "rel_file": "apps/web/app/[lang]/provider/dashboard/settings/page.tsx",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/3c789833/r9z1.tsx",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/app/[lang]/provider/dashboard/settings/page.tsx",
+      "entry_id": "r9z1.tsx",
+      "mins_before": 164.2,
+      "timestamp": 1774601026514
+    },
+    {
+      "rel_file": "apps/web/components/dashboard/SearchableSelect.tsx",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/415a7616/UhAw.tsx",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/components/dashboard/SearchableSelect.tsx",
+      "entry_id": "UhAw.tsx",
+      "mins_before": 2531.2,
+      "timestamp": 1774459010040
+    },
+    {
+      "rel_file": "apps/web/lib/api.ts",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-260217fc/zfiq.ts",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/lib/api.ts",
+      "entry_id": "zfiq.ts",
+      "mins_before": 1602.9,
+      "timestamp": 1774514704984
+    },
+    {
+      "rel_file": "apps/web/lib/auth-api.ts",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-4f8c4bf9/nsEa.ts",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/lib/auth-api.ts",
+      "entry_id": "nsEa.ts",
+      "mins_before": 1253.3,
+      "timestamp": 1774535684803
+    },
+    {
+      "rel_file": "apps/web/lib/locales.ts",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/504567e5/UjEz.ts",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/lib/locales.ts",
+      "entry_id": "UjEz.ts",
+      "mins_before": 2530.9,
+      "timestamp": 1774459027758
+    },
+    {
+      "rel_file": "apps/web/lib/provider-api.ts",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/3e6a081e/zNr4.ts",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/lib/provider-api.ts",
+      "entry_id": "zNr4.ts",
+      "mins_before": 134.6,
+      "timestamp": 1774602803723
+    },
+    {
+      "rel_file": "apps/web/types/provider.ts",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-47368d41/uVNy.ts",
+      "target_file": "/Users/dimitardimitrov/nevumo/apps/web/types/provider.ts",
+      "entry_id": "uVNy.ts",
+      "mins_before": 164.7,
+      "timestamp": 1774600997469
+    },
+    {
+      "rel_file": "docs/api_contracts.md",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-19c0afd4/o2da.md",
+      "target_file": "/Users/dimitardimitrov/nevumo/docs/api_contracts.md",
+      "entry_id": "o2da.md",
+      "mins_before": 1193.8,
+      "timestamp": 1774539251485
+    },
+    {
+      "rel_file": "docs/architecture.md",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/45444e8f/1Au9.md",
+      "target_file": "/Users/dimitardimitrov/nevumo/docs/architecture.md",
+      "entry_id": "1Au9.md",
+      "mins_before": 1178.3,
+      "timestamp": 1774540179596
+    },
+    {
+      "rel_file": "docs/db_schema.md",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-364df2da/6grC.md",
+      "target_file": "/Users/dimitardimitrov/nevumo/docs/db_schema.md",
+      "entry_id": "6grC.md",
+      "mins_before": 1193.7,
+      "timestamp": 1774539260464
+    },
+    {
+      "rel_file": "docs/models.py",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/26ab044a/Azwg.py",
+      "target_file": "/Users/dimitardimitrov/nevumo/docs/models.py",
+      "entry_id": "Azwg.py",
+      "mins_before": 2085.3,
+      "timestamp": 1774485764159
+    },
+    {
+      "rel_file": "docs/nevumo_master_context.md",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/-1a1a9351/XozW.md",
+      "target_file": "/Users/dimitardimitrov/nevumo/docs/nevumo_master_context.md",
+      "entry_id": "XozW.md",
+      "mins_before": 1176.3,
+      "timestamp": 1774540302265
+    },
+    {
+      "rel_file": ".env.example",
+      "entry_file": "/Users/dimitardimitrov/Library/Application Support/Windsurf/User/History/4d74dfcc/IBeQ.example",
+      "target_file": "/Users/dimitardimitrov/nevumo/.env.example",
+      "entry_id": "IBeQ.example",
+      "mins_before": 2365.1,
+      "timestamp": 1774468975073
+    }
+  ]
+}

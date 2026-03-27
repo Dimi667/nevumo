@@ -1,0 +1,64 @@
+/review 
+"Please /review my recent changes in provider_service.py and provider.py. Focus on edge cases where city_slug might be missing."
+Само дай мнение! Не променяй нищо по файловете и кода!
+
+Намирам файловете и ги преглеждам.
+
+Нека прочета остатъка от provider_service.py и да търся всички места с city_slug:
+
+Code Review: Edge Cases с city_slug
+
+Намерени проблеми
+
+1. Празен низ за city_slug в update_provider_profile
+provider_service.py:824
+
+python
+if city_slug is not None:
+    loc = db.query(Location).filter(Location.slug == city_slug).first()
+Проверява се само за None, но празен низ "" преминава
+Ще се опита търсене с празен slug → връща 404 (не е критично, но е неконсистентно)
+Предложение: Промени на if city_slug: за консистентност с други проверки (напр. ред 467 в generate_slug_suggestions)
+
+2. Race condition при slug reservation
+provider_service.py:660 и :778
+
+python
+if is_slug_taken(base, db):  # или (slug, db, provider_id=...)
+    suggestions = generate_slug_suggestions(...)
+    raise NevumoException(...)
+# ... след това commit
+Между проверката и db.commit() друг потребител може да заеме същия slug
+Риск: Duplicate key error при commit или (по-лошо) два provider-а с един и същи slug ако няма unique constraint
+
+3. Невалидиран slug генериран от email
+provider_service.py:652
+
+python
+base = preferred_slug or generate_provider_slug(user.email, db)
+generate_provider_slug използва slugify() без допълнителна валидация
+Ако email съдържа специални символи, slug може да не отговаря на правилата от validate_slug
+Пример: user@test--site.com → user-test--site (двойни тирета, може би невалидно според regex-а)
+
+4. Stale ProviderCity записи
+provider_service.py:245-262 (_sync_provider_cities)
+
+Функцията добавя градове от услуги в provider_cities, но не премахва стари
+Ако provider изтрие всички услуги от даден град, ProviderCity остава
+Ефект: Може да продължи да получава leads за град, в който вече няма услуги
+Позитиви (какво е наред)
+✅ generate_slug_suggestions правилно handle-ва None стойности (редове 467, 471, 486)
+✅ _get_provider_public_context safely връща None за липсващи градове/категории (ред 537)
+✅ build_public_path и build_qr_public_path имат коректни fallback-ове (редове 544-546, 554-558)
+✅ add_service има валидация за празен city_ids списък → използва DEFAULT_CURRENCY (ред 312-316)
+
+Препоръки
+Приоритет	Проблем	Решение
+Medium	Race condition	Добави try/except около db.commit() за IntegrityError или използри SELECT FOR UPDATE
+Low	Празен низ	Смени if city_slug is not None: с if city_slug:
+Low	Email slug	Валидирай резултата от generate_provider_slug преди да го използваш
+Low	Stale данни	Разгледай дали да се добави cleanup логика за ProviderCity при изтриване на услуги
+Обобщение: Кодът е стабилен за None стойности, но има няколко edge cases свързани с празни стрингове, race conditions и stale данни. Няма критични security проблеми.
+
+47898d74-a50b-48e3-b660-b06da5b6f425
+от 13:28 на 27.03.2026
