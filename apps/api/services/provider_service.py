@@ -796,7 +796,12 @@ def update_provider_profile(
         provider.availability_status = availability_status
 
     if slug is not None and slug != provider.slug:
-        if provider.slug_change_count >= MAX_SLUG_CHANGES:
+        # Автоматично проверяваме дали е в онбординг (игнорираме frontend параметъра)
+        is_complete, _ = check_onboarding_complete(db, provider.id)
+        is_actually_onboarding = not is_complete
+        
+        # Проверка за лимит САМО ако не е в онбординг
+        if provider.slug_change_count >= MAX_SLUG_CHANGES and not is_actually_onboarding:
             raise NevumoException(
                 409,
                 "SLUG_CHANGE_LIMIT_EXCEEDED",
@@ -821,12 +826,8 @@ def update_provider_profile(
         old_slug = provider.slug
         provider.slug = slug
         
-        # Record redirect if this is a real slug change (not initial empty slug)
-        # Initial setup: provider.slug was empty/None, this is not a "change"
-        # Onboarding setup: first change during onboarding should still create redirect
-        # Actual change: provider.slug had a value, this is a real change
-        if old_slug and old_slug.strip():
-            # Increment count for real changes
+        # Увеличаваме брояча САМО ако не е в онбординг
+        if old_slug and old_slug.strip() and not is_actually_onboarding:
             provider.slug_change_count += 1
             _record_slug_change(provider, db, old_slug, slug, request_ip, user_agent)
 
