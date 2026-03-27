@@ -1037,8 +1037,9 @@ def load_nevumo_logo() -> Optional[Image.Image]:
             text_height = text_bbox[3] - text_bbox[1]
             
             # Perfect centering both horizontally and vertically in 60x60 square
+            # Fix vertical centering by using the actual text bounds properly
             text_x = (logo_size[0] - text_width) // 2
-            text_y = (logo_size[1] - text_height) // 2
+            text_y = (logo_size[1] - text_height) // 2 + text_bbox[1]  # Adjust for proper vertical center
             
             draw.text((text_x, text_y), "N", fill="white", font=font)
         except:
@@ -1049,7 +1050,7 @@ def load_nevumo_logo() -> Optional[Image.Image]:
                 text_width = text_bbox[2] - text_bbox[0]
                 text_height = text_bbox[3] - text_bbox[1]
                 text_x = (logo_size[0] - text_width) // 2
-                text_y = (logo_size[1] - text_height) // 2
+                text_y = (logo_size[1] - text_height) // 2 + text_bbox[1]  # Adjust for proper vertical center
                 draw.text((text_x, text_y), "N", fill="white", font=font)
             except:
                 # Final fallback to default font
@@ -1059,7 +1060,7 @@ def load_nevumo_logo() -> Optional[Image.Image]:
                     text_width = text_bbox[2] - text_bbox[0]
                     text_height = text_bbox[3] - text_bbox[1]
                     text_x = (logo_size[0] - text_width) // 2
-                    text_y = (logo_size[1] - text_height) // 2
+                    text_y = (logo_size[1] - text_height) // 2 + text_bbox[1]  # Adjust for proper vertical center
                     draw.text((text_x, text_y), "N", fill="white", font=font)
                 except:
                     # If font loading fails, just use it orange square
