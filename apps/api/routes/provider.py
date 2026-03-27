@@ -1,6 +1,6 @@
 """Provider dashboard endpoints (auth required)."""
 
-from typing import Optional
+from typing import Union, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, status
 from sqlalchemy.orm import Session
@@ -19,7 +19,10 @@ from schemas import (
     ProviderProfileUpdateRequest,
     ProviderProfileUpdateResponse,
     QRCodeResponse,
+    EnhancedQRCodeRequest,
+    EnhancedQRCodeResponse,
     UpdateServiceRequest,
+    ErrorResponse,
 )
 from services import provider_service
 from services.provider_service import (
@@ -31,6 +34,7 @@ from services.provider_service import (
     check_onboarding_complete,
     delete_service,
     generate_qr_code_base64,
+    generate_enhanced_qr_code_base64,
     generate_slug_suggestions,
     is_slug_taken,
     get_analytics,
@@ -336,6 +340,47 @@ def get_qr_code(
         "canonical_url": canonical_url,
         "qr_code": qr_data_uri,
     })
+
+
+@router.post("/enhanced-qr-code", response_model=Union[EnhancedQRCodeResponse, ErrorResponse])
+def get_enhanced_qr_code(
+    request: EnhancedQRCodeRequest,
+    provider: Provider = Depends(get_current_provider),
+    db: Session = Depends(get_db),
+) -> Union[EnhancedQRCodeResponse, ErrorResponse]:
+    try:
+        public_url = build_qr_public_url(provider, db, settings.APP_URL)
+        canonical_url = build_public_url(provider, db, settings.APP_URL)
+        
+        # Get provider's primary service for QR code
+        services = get_provider_services(provider, db)
+        primary_service = services[0] if services else None
+        service_name = primary_service.get('title') if primary_service else "General Service"
+        
+        # Generate enhanced QR code with logo and multilingual text
+        qr_data_uri = generate_enhanced_qr_code_base64(
+            url=public_url,
+            business_name=provider.business_name,
+            service_name=service_name,
+            language=request.language,
+            db=db
+        )
+        
+        return EnhancedQRCodeResponse(data={
+            "public_url": public_url,
+            "canonical_url": canonical_url,
+            "qr_code": qr_data_uri,
+            "language": request.language,
+            "business_name": provider.business_name,
+            "service_name": service_name,
+        })
+    except Exception as e:
+        return ErrorResponse(
+            error={
+                "code": "QR_GENERATION_FAILED",
+                "message": f"Failed to generate QR code: {str(e)}"
+            }
+        )
 
 
 # -------------------------
