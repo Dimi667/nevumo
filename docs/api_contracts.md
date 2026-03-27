@@ -618,6 +618,7 @@ Deletes the service and cascades to `service_cities`.
     "business_name": "Maria Massage",
     "description": "...",
     "slug": "maria-petrova",
+    "slug_change_count": 0,
     "profile_image_url": "/static/provider_images/uuid.jpg",
     "rating": 4.9,
     "verified": true,
@@ -656,8 +657,55 @@ Deletes the service and cascades to `service_cities`.
 - **jobs_completed** is calculated from leads.status='done' + lead_matches.status='done'
 - **review_count** is the total number of reviews for this provider
 - **translations** contains widget-specific translations for the requested language
+- **slug_change_count** indicates remaining URL changes (0 = 1 change allowed, 1 = locked)
 - If rating = 0 and jobs_completed = 0, these fields are still returned but UI should hide them
 - All 32 supported languages are available (see i18n.py for full list)
+
+---
+
+## 2.1. Resolve Slug (Redirect Check)
+
+### GET
+/api/v1/providers/resolve/{slug}
+
+### Purpose
+Check if a slug redirects to another slug without following the redirect. Used by frontend for seamless URL updates.
+
+### Response
+
+**Found (no redirect):**
+```json
+{
+  "found": true,
+  "slug": "current-slug",
+  "redirected": false
+}
+```
+
+**Found (with redirect):**
+```json
+{
+  "found": true,
+  "slug": "new-slug",
+  "redirected": true,
+  "from_slug": "old-slug"
+}
+```
+
+**Not found:**
+```json
+{
+  "found": false,
+  "slug": null,
+  "redirected": false
+}
+```
+
+### Notes
+- Used by frontend to detect redirects and update browser URL seamlessly
+- Prevents infinite redirect loops with max depth protection
+- Returns 404 for non-existent slugs
+- Security-hardened against frontend manipulation
 
 ---
 

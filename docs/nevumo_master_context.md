@@ -147,6 +147,9 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
 - Client Dashboard — minimal with role switch to provider
 - DB: service_cities table (many-to-many service↔city), currency on services, per_sqm price type
 - SearchInput Component: Unified searchable select component (single/multi-select modes), replaces SearchableSelect/MultiSelect in Profile onboarding
+- **URL Redirect System** — Complete slug change management with 301 redirects, SEO protection, loop prevention
+- **Slug Change Security** — Backend-controlled change limits (1 change after onboarding), frontend manipulation protection
+- **Automatic Redirect Resolution** — Seamless frontend URL updates, browser address bar synchronization
 
 ### 🔜 Next
 - Dashboard design polish (UI refinements across all pages)
@@ -159,6 +162,9 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
 - Added missing `Optional` import in auth routes
 - Resolved frontend 404 errors caused by API connectivity issues
 - Updated documentation to reflect slug validation schema changes
+- **Implemented complete redirect system with SEO-safe slug changes**
+- **Secured slug change limits against frontend manipulation**
+- **Added automatic redirect detection and URL updates in frontend**
 
 ### 🔮 Future
 - AI lead matching

@@ -543,11 +543,14 @@ Taken slugs are filtered out. Maximum 5 suggestions returned.
 - Same behavior as profile endpoint
 - Used during registration flow before account creation
 
-**Profile update endpoint:**
+### Profile update endpoint:
 - Accepts optional `slug` field
 - Validates format (no numeric suffixes, only a-z/0-9/-)
 - Returns 409 SLUG_TAKEN with suggestions if slug in use
 - Returns 400 INVALID_SLUG for format violations
+- **SECURITY**: Backend automatically detects onboarding status using `check_onboarding_complete()`
+- **SLUG CHANGE LIMIT**: 1 change allowed after onboarding completion
+- **REDIRECT SYSTEM**: Automatic 301 redirects for old slugs to new slugs
 
 **Registration endpoint:**
 - Accepts optional `slug`, `city_slug`, `category_slug` fields
@@ -578,6 +581,76 @@ Taken slugs are filtered out. Maximum 5 suggestions returned.
 **Registration Flow (Client):**
 - No slug selection step
 - Registration proceeds directly after password entry
+
+---
+
+## URL Redirect System
+
+### Purpose
+
+Maintain SEO value and user experience when providers change their public URL slug. Old URLs automatically redirect to new ones with 301 status codes.
+
+### Database Schema
+
+**url_redirects table:**
+- `provider_id` - Foreign key to providers table
+- `old_slug` - The previous slug that should redirect
+- `new_slug` - The current slug that should receive traffic
+- `active` - Boolean flag to enable/disable redirects
+- `created_at` - Timestamp for tracking
+
+**Provider model relationships:**
+- `slug_change_count` - Number of real changes made (onboarding changes don't count)
+- `redirects` - One-to-many relationship to url_redirects
+
+### Redirect Logic
+
+**Backend Functions:**
+- `resolve_provider_slug(slug, db)` - Resolves current slug or active redirect
+- `resolve_provider_slug_safe(slug, db)` - Same but with loop prevention (max depth 5)
+- `_record_slug_change(provider, db, old_slug, new_slug, request_ip, user_agent)` - Creates redirect record
+
+**API Endpoints:**
+- `GET /api/v1/providers/{slug}` - Returns 301 redirect if old slug found
+- `GET /api/v1/providers/resolve/{slug}` - Checks if slug redirects without following
+
+### Security Features
+
+**Loop Prevention:**
+- Tracks visited slugs to prevent infinite redirect chains
+- Maximum depth of 5 redirects before aborting
+- Returns 404 if loop detected
+
+**Change Limit Enforcement:**
+- `MAX_SLUG_CHANGES = 1` - Only one real change allowed after onboarding
+- Backend automatically detects onboarding completion using `check_onboarding_complete()`
+- Frontend parameter `is_onboarding_setup` is ignored for security
+
+### Frontend Integration
+
+**Provider Pages:**
+- Automatic redirect detection via `resolveSlug()` API call
+- Browser URL updates seamlessly using Next.js `redirect()`
+- No user interruption - transparent redirect experience
+
+**Settings Page:**
+- Shows remaining changes allowed based on `slug_change_count`
+- Displays "URL locked" when limit reached
+- Provides support contact information
+
+### User Experience
+
+**Slug Change Flow:**
+1. User changes slug in settings (if allowed)
+2. Backend validates and creates redirect record
+3. Old URLs immediately start redirecting to new URL
+4. SEO value preserved with 301 redirects
+5. Browser address bar updates automatically
+
+**Error Handling:**
+- 404 for non-existent slugs
+- 409 for slug change limit exceeded
+- Graceful degradation if redirect system fails
 
 ---
 
