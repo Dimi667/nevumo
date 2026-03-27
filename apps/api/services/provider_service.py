@@ -826,6 +826,7 @@ def update_provider_profile(
         # Onboarding setup: first change during onboarding should still create redirect
         # Actual change: provider.slug had a value, this is a real change
         if old_slug and old_slug.strip():
+            # Increment count for real changes
             provider.slug_change_count += 1
             _record_slug_change(provider, db, old_slug, slug, request_ip, user_agent)
 

@@ -140,6 +140,7 @@ async def get_provider(
         business_name=provider.business_name,
         description=provider.description,
         slug=provider.slug,
+        slug_change_count=provider.slug_change_count,
         profile_image_url=provider.profile_image_url,
         rating=rating,
         verified=provider.verified,

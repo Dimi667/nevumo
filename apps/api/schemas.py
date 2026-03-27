@@ -91,6 +91,7 @@ class ProviderDetail(BaseModel):
     business_name: str
     description: Optional[str] = None
     slug: str
+    slug_change_count: int = 0
     profile_image_url: Optional[str] = None
     rating: float
     verified: bool
