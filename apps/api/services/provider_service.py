@@ -1030,13 +1030,16 @@ def load_nevumo_logo() -> Optional[Image.Image]:
         # Add a simple "N" text as placeholder
         draw = ImageDraw.Draw(logo)
         try:
-            # Try to use a bold font for the "N"
-            font = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 28)
+            # Try to use a bold font for the "N" - much larger now
+            font = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 42)
             text_bbox = draw.textbbox((0, 0), "N", font=font)
             text_width = text_bbox[2] - text_bbox[0]
             text_height = text_bbox[3] - text_bbox[1]
+            
+            # Perfect centering in the 60x60 square
             text_x = (logo_size[0] - text_width) // 2
             text_y = (logo_size[1] - text_height) // 2
+            
             draw.text((text_x, text_y), "N", fill="white", font=font)
         except:
             # Fallback to default font if bold font not available
@@ -1049,7 +1052,7 @@ def load_nevumo_logo() -> Optional[Image.Image]:
                 text_y = (logo_size[1] - text_height) // 2
                 draw.text((text_x, text_y), "N", fill="white", font=font)
             except:
-                # If font loading fails, just use the orange square
+                # If font loading fails, just use it orange square
                 pass
             
         return logo
