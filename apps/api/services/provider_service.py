@@ -14,12 +14,14 @@ if TYPE_CHECKING:
     from models import User
 
 import qrcode
+from PIL import Image, ImageDraw, ImageFont
 from slugify import slugify
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from exceptions import NevumoException
 from constants import COUNTRY_CURRENCY_MAP, DEFAULT_CURRENCY
+from i18n import resolve_translation
 from models import (
     Category,
     CategoryTranslation,
@@ -1010,5 +1012,169 @@ def generate_qr_code_base64(url: str) -> str:
     img = qr.make_image(fill_color="black", back_color="white")
     buffer = io.BytesIO()
     img.save(buffer, format="PNG")
+    encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return f"data:image/png;base64,{encoded}"
+
+
+def load_nevumo_logo() -> Optional[Image.Image]:
+    """Load Nevumo logo from web app public directory."""
+    try:
+        # Path to the logo in the web app public directory
+        logo_path = Path(__file__).parent.parent / "web" / "public" / "Nevumo_logo.svg"
+        
+        # For now, we'll create a simple placeholder logo
+        # In production, you might want to convert SVG to PNG beforehand
+        logo_size = (60, 60)  # 15-20% of typical QR code size
+        logo = Image.new('RGBA', logo_size, (255, 102, 0, 255))  # Orange background
+        
+        # Add a simple "N" text as placeholder
+        draw = ImageDraw.Draw(logo)
+        try:
+            # Try to use a bold font for the "N"
+            font = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 28)
+            text_bbox = draw.textbbox((0, 0), "N", font=font)
+            text_width = text_bbox[2] - text_bbox[0]
+            text_height = text_bbox[3] - text_bbox[1]
+            text_x = (logo_size[0] - text_width) // 2
+            text_y = (logo_size[1] - text_height) // 2
+            draw.text((text_x, text_y), "N", fill="white", font=font)
+        except:
+            # Fallback to default font if bold font not available
+            try:
+                font = ImageFont.load_default()
+                text_bbox = draw.textbbox((0, 0), "N", font=font)
+                text_width = text_bbox[2] - text_bbox[0]
+                text_height = text_bbox[3] - text_bbox[1]
+                text_x = (logo_size[0] - text_width) // 2
+                text_y = (logo_size[1] - text_height) // 2
+                draw.text((text_x, text_y), "N", fill="white", font=font)
+            except:
+                # If font loading fails, just use the orange square
+                pass
+            
+        return logo
+    except Exception as e:
+        print(f"Warning: Could not load Nevumo logo: {e}")
+        return None
+
+
+def add_logo_to_qr(qr_img: Image.Image, logo: Image.Image) -> Image.Image:
+    """Add logo to center of QR code with white padding."""
+    # Calculate logo size (15-20% of QR code size)
+    qr_width, qr_height = qr_img.size
+    logo_size = min(qr_width, qr_height) // 6  # ~16.7%
+    
+    # Resize logo
+    logo_resized = logo.resize((logo_size, logo_size), Image.Resampling.LANCZOS)
+    
+    # Create white padding around logo
+    padding = logo_size // 10  # 10% padding
+    padded_size = logo_size + 2 * padding
+    padded_logo = Image.new('RGBA', (padded_size, padded_size), (255, 255, 255, 255))
+    
+    # Paste logo in center of white padding
+    logo_x = (padded_size - logo_size) // 2
+    logo_y = (padded_size - logo_size) // 2
+    padded_logo.paste(logo_resized, (logo_x, logo_y))
+    
+    # Calculate position to center the logo on QR code
+    logo_x = (qr_width - padded_size) // 2
+    logo_y = (qr_height - padded_size) // 2
+    
+    # Create a copy of QR image and paste logo
+    qr_with_logo = qr_img.convert('RGBA')
+    qr_with_logo.paste(padded_logo, (logo_x, logo_y), padded_logo)
+    
+    return qr_with_logo.convert('RGB')
+
+
+def add_text_to_qr(qr_img: Image.Image, business_name: str, service_name: str, slogan: str) -> Image.Image:
+    """Add text below QR code."""
+    # Create space for text and padding
+    qr_width, qr_height = qr_img.size
+    padding = 24  # 24px padding around QR
+    text_height = 120  # Increased space for larger text
+    new_width = qr_width + 2 * padding
+    new_height = qr_height + text_height + padding
+    
+    # Create new image with space for text and padding
+    result_img = Image.new('RGB', (new_width, new_height), 'white')
+    
+    # Paste QR image with padding
+    result_img.paste(qr_img, (padding, padding))
+    
+    # Create drawing context
+    draw = ImageDraw.Draw(result_img)
+    
+    try:
+        # Try to load fonts with larger sizes
+        font_business = ImageFont.truetype("/System/Library/Fonts/Arial.ttf", 21)  # 50% larger than 14
+        font_slogan = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 29)  # ~20% larger than business text and bold
+    except:
+        # Fallback to default font
+        font_business = ImageFont.load_default()
+        font_slogan = ImageFont.load_default()
+    
+    # Add business name and service name (50% larger)
+    text_line = f'"{business_name}" - "{service_name}"'
+    text_bbox = draw.textbbox((0, 0), text_line, font=font_business)
+    text_width = text_bbox[2] - text_bbox[0]
+    text_x = (new_width - text_width) // 2
+    text_y = qr_height + padding + 15  # Position below QR with padding
+    
+    draw.text((text_x, text_y), text_line, fill="black", font=font_business)
+    
+    # Add slogan (even larger and bold)
+    slogan_bbox = draw.textbbox((0, 0), slogan, font=font_slogan)
+    slogan_width = slogan_bbox[2] - slogan_bbox[0]
+    slogan_x = (new_width - slogan_width) // 2
+    slogan_y = text_y + 45  # More space for larger text
+    
+    draw.text((slogan_x, slogan_y), slogan, fill="black", font=font_slogan)
+    
+    return result_img
+
+
+def generate_enhanced_qr_code_base64(
+    url: str,
+    business_name: str,
+    service_name: str,
+    language: str = "en",
+    db: Optional[Session] = None
+) -> str:
+    """Generate enhanced QR code with logo and multilingual text."""
+    
+    # Get localized slogan
+    slogan = "Send a request in 30 sec!"  # Default fallback
+    if db:
+        try:
+            slogan = resolve_translation(db, "qr_slogan_submit_request", language)
+        except Exception as e:
+            print(f"Warning: Could not resolve translation: {e}")
+    
+    # Generate QR code with high error correction for logo
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_H,  # High error correction for logo
+        box_size=12,
+        border=4,
+    )
+    qr.add_data(url)
+    qr.make(fit=True)
+    
+    # Create QR image
+    qr_img = qr.make_image(fill_color="black", back_color="white")
+    
+    # Add logo if available
+    logo = load_nevumo_logo()
+    if logo:
+        qr_img = add_logo_to_qr(qr_img, logo)
+    
+    # Add text
+    final_img = add_text_to_qr(qr_img, business_name, service_name, slogan)
+    
+    # Convert to base64
+    buffer = io.BytesIO()
+    final_img.save(buffer, format="PNG", quality=95)
     encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
     return f"data:image/png;base64,{encoded}"
