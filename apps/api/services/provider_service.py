@@ -626,6 +626,7 @@ def resolve_provider_slug(
         .order_by(UrlRedirect.created_at.desc())
         .first()
     )
+    
     if redirect:
         provider = db.query(Provider).filter(Provider.id == redirect.provider_id).first()
         if provider:
@@ -654,7 +655,7 @@ def resolve_provider_slug_safe(
         if redirect_slug:
             if original_redirect_slug is None:
                 original_redirect_slug = redirect_slug  # Store the original slug that redirected
-            current_slug = redirect_slug
+            current_slug = provider.slug  # Use the new slug for next iteration
         else:
             return provider, original_redirect_slug
     
@@ -820,11 +821,11 @@ def update_provider_profile(
         old_slug = provider.slug
         provider.slug = slug
         
-        # Only count as a change if this is not initial setup or onboarding
+        # Record redirect if this is a real slug change (not initial empty slug)
         # Initial setup: provider.slug was empty/None, this is not a "change"
-        # Onboarding setup: first change during onboarding, not counted against limit
-        # Actual change: provider.slug had a value and this is not onboarding, this is a real change
-        if old_slug and old_slug.strip() and not is_onboarding_setup:
+        # Onboarding setup: first change during onboarding should still create redirect
+        # Actual change: provider.slug had a value, this is a real change
+        if old_slug and old_slug.strip():
             provider.slug_change_count += 1
             _record_slug_change(provider, db, old_slug, slug, request_ip, user_agent)
 
