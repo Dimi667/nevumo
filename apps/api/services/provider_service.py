@@ -1030,8 +1030,8 @@ def load_nevumo_logo() -> Optional[Image.Image]:
         # Add a simple "N" text as placeholder
         draw = ImageDraw.Draw(logo)
         try:
-            # Try to use a bold font for "N" - 30% larger (42 * 1.3 = 55)
-            font = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 55)
+            # Try to use an even bolder font for "N" - use Black font variant
+            font = ImageFont.truetype("/System/Library/Fonts/Arial Black.ttf", 55)
             text_bbox = draw.textbbox((0, 0), "N", font=font)
             text_width = text_bbox[2] - text_bbox[0]
             text_height = text_bbox[3] - text_bbox[1]
@@ -1042,9 +1042,9 @@ def load_nevumo_logo() -> Optional[Image.Image]:
             
             draw.text((text_x, text_y), "N", fill="white", font=font)
         except:
-            # Fallback to default font if bold font not available
+            # Fallback to Bold if Black not available
             try:
-                font = ImageFont.load_default()
+                font = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 55)
                 text_bbox = draw.textbbox((0, 0), "N", font=font)
                 text_width = text_bbox[2] - text_bbox[0]
                 text_height = text_bbox[3] - text_bbox[1]
@@ -1052,8 +1052,18 @@ def load_nevumo_logo() -> Optional[Image.Image]:
                 text_y = (logo_size[1] - text_height) // 2
                 draw.text((text_x, text_y), "N", fill="white", font=font)
             except:
-                # If font loading fails, just use it orange square
-                pass
+                # Final fallback to default font
+                try:
+                    font = ImageFont.load_default()
+                    text_bbox = draw.textbbox((0, 0), "N", font=font)
+                    text_width = text_bbox[2] - text_bbox[0]
+                    text_height = text_bbox[3] - text_bbox[1]
+                    text_x = (logo_size[0] - text_width) // 2
+                    text_y = (logo_size[1] - text_height) // 2
+                    draw.text((text_x, text_y), "N", fill="white", font=font)
+                except:
+                    # If font loading fails, just use it orange square
+                    pass
             
         return logo
     except Exception as e:
