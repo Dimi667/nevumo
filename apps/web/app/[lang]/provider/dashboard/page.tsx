@@ -52,7 +52,7 @@ const SOURCE_LABELS: Record<string, string> = {
 
 // Motivational KPI values for incomplete onboarding
 const MOTIVATIONAL_RATING = '5.0';
-const MOTIVATIONAL_ACCEPTED = 137;
+const MOTIVATIONAL_CONTACTED = 137;
 
 export default function DashboardOverviewPage() {
   const params = useParams();
@@ -145,45 +145,70 @@ export default function DashboardOverviewPage() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Leads - locked during onboarding */}
-        <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
-          {!isOnboardingComplete && (
-            <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
-                 onClick={() => router.push(`${base}/profile`)}>
-              <div className="text-center">
-                <div className="text-2xl mb-1">🔒</div>
-                <p className="text-xs text-gray-600 font-medium">Add a service to unlock</p>
+        {/* Total Leads - clickable link, locked during onboarding */}
+        <Link href={`${base}/leads`} className={`relative block ${!isOnboardingComplete ? 'pointer-events-none' : ''}`}>
+          <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
+            {!isOnboardingComplete && (
+              <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
+                   onClick={() => router.push(`${base}/profile`)}>
+                <div className="text-center">
+                  <div className="text-2xl mb-1">🔒</div>
+                  <p className="text-xs text-gray-600 font-medium">Add a service to unlock</p>
+                </div>
               </div>
-            </div>
-          )}
-          <StatsCard
-            title="Total Leads"
-            value={stats?.total_leads ?? 0}
-            icon={<LeadsIcon />}
-          />
-        </div>
+            )}
+            <StatsCard
+              title="Total Leads"
+              value={stats?.total_leads ?? 0}
+              icon={<LeadsIcon />}
+            />
+          </div>
+        </Link>
 
-        {/* New Leads - locked during onboarding */}
-        <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
-          {!isOnboardingComplete && (
-            <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
-                 onClick={() => router.push(`${base}/profile`)}>
-              <div className="text-center">
-                <div className="text-2xl mb-1">🔒</div>
-                <p className="text-xs text-gray-600 font-medium">Add a service to unlock</p>
+        {/* New Leads - clickable link, locked during onboarding */}
+        <Link href={`${base}/leads?status=new`} className={`relative block ${!isOnboardingComplete ? 'pointer-events-none' : ''}`}>
+          <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
+            {!isOnboardingComplete && (
+              <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
+                   onClick={() => router.push(`${base}/profile`)}>
+                <div className="text-center">
+                  <div className="text-2xl mb-1">🔒</div>
+                  <p className="text-xs text-gray-600 font-medium">Add a service to unlock</p>
+                </div>
               </div>
-            </div>
-          )}
-          <StatsCard
-            title="New Leads"
-            value={stats?.new_leads ?? 0}
-            description="Awaiting action"
-            icon={<NewLeadsIcon />}
-            accent
-          />
-        </div>
+            )}
+            <StatsCard
+              title="New Leads"
+              value={stats?.new_leads ?? 0}
+              description="Awaiting action"
+              icon={<NewLeadsIcon />}
+              accent
+            />
+          </div>
+        </Link>
 
-        {/* Rating - shows motivational value during onboarding, real value after */}
+        {/* Contacted - clickable link, locked during onboarding */}
+        <Link href={`${base}/leads?status=contacted`} className={`relative block ${!isOnboardingComplete ? 'pointer-events-none' : ''}`}>
+          <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
+            {!isOnboardingComplete && (
+              <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
+                   onClick={() => router.push(`${base}/profile`)}>
+                <div className="text-center">
+                  <div className="text-2xl mb-1">🔒</div>
+                  <p className="text-xs text-gray-600 font-medium">Add a service to unlock</p>
+                </div>
+              </div>
+            )}
+            <StatsCard
+              title="Contacted"
+              value={isOnboardingComplete ? (stats?.contacted_leads ?? 0) : MOTIVATIONAL_CONTACTED}
+              description="Leads contacted"
+              icon={<CheckIcon />}
+            />
+          </div>
+        </Link>
+
+        {/* Rating - non-clickable, shows motivational value during onboarding */}
         <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
           {!isOnboardingComplete && (
             <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
@@ -201,25 +226,6 @@ export default function DashboardOverviewPage() {
               : MOTIVATIONAL_RATING
             }
             icon={<StarIcon />}
-          />
-        </div>
-
-        {/* Accepted - shows motivational value during onboarding, real value after */}
-        <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
-          {!isOnboardingComplete && (
-            <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
-                 onClick={() => router.push(`${base}/profile`)}>
-              <div className="text-center">
-                <div className="text-2xl mb-1">🔒</div>
-                <p className="text-xs text-gray-600 font-medium">Add a service to unlock</p>
-              </div>
-            </div>
-          )}
-          <StatsCard
-            title="Accepted"
-            value={isOnboardingComplete ? (stats?.accepted_matches ?? 0) : MOTIVATIONAL_ACCEPTED}
-            description="Completed matches"
-            icon={<CheckIcon />}
           />
         </div>
       </div>

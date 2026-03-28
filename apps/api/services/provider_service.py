@@ -897,11 +897,11 @@ def get_dashboard_stats(provider: Provider, db: Session) -> dict:
         or 0
     )
 
-    accepted_matches = (
-        db.query(func.count(LeadMatch.id))
+    contacted_leads = (
+        db.query(func.count(Lead.id))
         .filter(
-            LeadMatch.provider_id == provider.id,
-            LeadMatch.status == "contacted",
+            Lead.provider_id == provider.id,
+            Lead.status == "contacted",
         )
         .scalar()
         or 0
@@ -910,7 +910,7 @@ def get_dashboard_stats(provider: Provider, db: Session) -> dict:
     return {
         "total_leads": total_leads,
         "new_leads": new_leads,
-        "accepted_matches": accepted_matches,
+        "contacted_leads": contacted_leads,
         "rating": float(provider.rating or 0),
         "verified": provider.verified,
         "availability_status": provider.availability_status,
@@ -921,15 +921,66 @@ def get_dashboard_stats(provider: Provider, db: Session) -> dict:
 # Leads list
 # ---------------------------------------------------------------------------
 
-def get_provider_leads(provider: Provider, db: Session, limit: int = 50) -> list:
-    """Return recent leads for the provider."""
-    leads = (
-        db.query(Lead)
-        .filter(Lead.provider_id == provider.id)
-        .order_by(Lead.created_at.desc())
-        .limit(limit)
-        .all()
-    )
+def get_provider_leads(
+    provider: Provider,
+    db: Session,
+    status: str = "all",
+    period: str = "all",
+    date_from: Optional[str] = None,
+    date_to: Optional[str] = None,
+    limit: int = 50,
+) -> dict:
+    """Return filtered leads for the provider with total count.
+
+    Args:
+        provider: The provider to fetch leads for
+        db: Database session
+        status: Filter by status (all, new, contacted, done, rejected)
+              Note: 'new' maps to DB status 'created'
+        period: Preset period filter (all, 7, 30, 90 days)
+        date_from: Custom start date (YYYY-MM-DD), overrides period if set
+        date_to: Custom end date (YYYY-MM-DD), overrides period if set
+        limit: Maximum number of leads to return
+
+    Returns:
+        Dict with 'leads' list and 'total' count
+    """
+    from datetime import datetime, timedelta
+
+    query = db.query(Lead).filter(Lead.provider_id == provider.id)
+
+    # Status filter
+    if status == "new":
+        query = query.filter(Lead.status == "created")
+    elif status != "all" and status in ("contacted", "done", "rejected"):
+        query = query.filter(Lead.status == status)
+
+    # Date filter: custom range takes priority over period
+    if date_from or date_to:
+        if date_from:
+            try:
+                from_dt = datetime.strptime(date_from, "%Y-%m-%d")
+                query = query.filter(Lead.created_at >= from_dt)
+            except ValueError:
+                pass  # Invalid date format, ignore
+        if date_to:
+            try:
+                to_dt = datetime.strptime(date_to, "%Y-%m-%d")
+                # Add one day to include the full end date
+                to_dt = to_dt + timedelta(days=1)
+                query = query.filter(Lead.created_at < to_dt)
+            except ValueError:
+                pass  # Invalid date format, ignore
+    elif period != "all" and period in ("7", "30", "90"):
+        days = int(period)
+        since = datetime.utcnow() - timedelta(days=days)
+        query = query.filter(Lead.created_at >= since)
+
+    # Get total count before applying limit
+    total = query.count()
+
+    # Apply ordering and limit
+    leads = query.order_by(Lead.created_at.desc()).limit(limit).all()
 
     result = []
     for lead in leads:
@@ -943,7 +994,7 @@ def get_provider_leads(provider: Provider, db: Session, limit: int = 50) -> list
                 "created_at": lead.created_at.isoformat(),
             }
         )
-    return result
+    return {"leads": result, "total": total}
 
 
 # ---------------------------------------------------------------------------

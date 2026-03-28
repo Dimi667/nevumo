@@ -6,6 +6,8 @@ import type {
   DashboardResponse,
   Lead,
   LeadStatus,
+  LeadsFilters,
+  LeadsResponse,
   ProviderProfile,
   ProviderSlugHistoryItem,
   Service,
@@ -92,9 +94,17 @@ export async function getProviderDashboard(): Promise<DashboardResponse> {
 // Leads
 // ---------------------------------------------------------------------------
 
-export async function getProviderLeads(): Promise<Lead[]> {
-  const data = await authFetch<{ leads: Lead[]; total: number }>('/api/v1/provider/leads');
-  return data.leads;
+export async function getProviderLeads(filters?: LeadsFilters): Promise<LeadsResponse> {
+  const params = new URLSearchParams();
+  if (filters?.status) params.set('status', filters.status);
+  if (filters?.period) params.set('period', filters.period);
+  if (filters?.date_from) params.set('date_from', filters.date_from);
+  if (filters?.date_to) params.set('date_to', filters.date_to);
+
+  const queryString = params.toString();
+  const url = `/api/v1/provider/leads${queryString ? `?${queryString}` : ''}`;
+
+  return authFetch<LeadsResponse>(url);
 }
 
 export async function updateLeadStatus(

@@ -225,7 +225,7 @@ Provider must have a provider record (role=provider + completed registration).
     "stats": {
       "total_leads": 24,
       "new_leads": 5,
-      "accepted_matches": 15,
+      "contacted_leads": 15,
       "rating": 4.8,
       "verified": true,
       "availability_status": "active"
@@ -268,6 +268,15 @@ When `is_complete` is `false`, `missing_fields` contains the specific items need
 
 ## GET /api/v1/provider/leads
 
+### Query Params
+
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `status` | string | `all` | Filter by status: `all`, `new` (maps to DB `created`), `contacted`, `done`, `rejected` |
+| `period` | string | `all` | Preset period: `all`, `7`, `30`, `90` (days) |
+| `date_from` | string | - | Custom start date (YYYY-MM-DD), overrides `period` |
+| `date_to` | string | - | Custom end date (YYYY-MM-DD), overrides `period` |
+
 ### Response
 ```json
 {
@@ -278,7 +287,7 @@ When `is_complete` is `false`, `missing_fields` contains the specific items need
         "id": "uuid",
         "phone": "+359...",
         "description": "...",
-        "status": "new",
+        "status": "created",
         "source": "seo",
         "created_at": "2025-01-15T10:30:00"
       }
@@ -287,6 +296,11 @@ When `is_complete` is `false`, `missing_fields` contains the specific items need
   }
 }
 ```
+
+### Notes
+- Results are ordered by `created_at DESC`
+- `total` is the real count after filters (not limited by pagination)
+- `status=new` filters by DB status `created`
 
 ---
 

@@ -222,11 +222,22 @@ async def upload_profile_image(
 
 @router.get("/leads", response_model=ProviderLeadsResponse)
 def list_leads(
+    status: str = Query(default="all", pattern="^(all|new|contacted|done|rejected)$"),
+    period: str = Query(default="all", pattern="^(all|7|30|90)$"),
+    date_from: Optional[str] = Query(default=None, alias="date_from"),
+    date_to: Optional[str] = Query(default=None, alias="date_to"),
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ) -> ProviderLeadsResponse:
-    leads = get_provider_leads(provider, db)
-    return ProviderLeadsResponse(data={"leads": leads, "total": len(leads)})
+    result = get_provider_leads(
+        provider,
+        db,
+        status=status,
+        period=period,
+        date_from=date_from,
+        date_to=date_to,
+    )
+    return ProviderLeadsResponse(data=result)
 
 
 @router.patch("/leads/{lead_id}", response_model=LeadStatusUpdateResponse)

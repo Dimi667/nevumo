@@ -1,3 +1,4 @@
+export type LeadStatusQuery = 'all' | 'new' | 'contacted' | 'done' | 'rejected';
 export type LeadStatus = 'created' | 'contacted' | 'done' | 'rejected';
 export type AvailabilityStatus = 'active' | 'busy' | 'offline';
 export type PriceType = 'fixed' | 'hourly' | 'request' | 'per_sqm';
@@ -49,7 +50,7 @@ export interface ProviderProfile {
 export interface DashboardStats {
   total_leads: number;
   new_leads: number;
-  accepted_matches: number;
+  contacted_leads: number;
   rating: number;
   verified: boolean;
   availability_status: AvailabilityStatus;
@@ -102,6 +103,18 @@ export interface UpdateProfileInput {
   availability_status?: AvailabilityStatus;
   category_slug?: string;
   city_slug?: string;
+}
+
+export interface LeadsFilters {
+  status?: LeadStatusQuery;
+  period?: 'all' | '7' | '30' | '90';
+  date_from?: string;
+  date_to?: string;
+}
+
+export interface LeadsResponse {
+  leads: Lead[];
+  total: number;
 }
 
 export interface ProviderSlugHistoryItem {
