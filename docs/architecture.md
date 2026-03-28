@@ -635,6 +635,58 @@ The backend returns `service` (singular) in `missing_fields`, not `services`. Th
 
 ---
 
+## Onboarding Step 1 Draft Persistence
+
+### Problem
+
+When a provider fills Step 1 fields (business name, slug, description) and clicks "Skip for now", they navigate to the dashboard. Upon clicking the hero CTA to return to onboarding, all entered values were lost because they existed only in React state.
+
+### Solution
+
+**Frontend-only draft persistence using sessionStorage**:
+
+- Draft is saved to `sessionStorage` whenever Step 1 values change
+- Draft is scoped per provider ID to prevent cross-account leakage
+- Draft contains: `business_name`, `description`, `slug`, `slugManual`, `slugEditing`
+
+### Hydration Rules
+
+**On page load** (after fetching backend data):
+1. If backend has complete Step 1 (real business name + slug): **use backend values**, clear any stale draft
+2. If backend Step 1 is incomplete (placeholder email): **try to hydrate from draft** if exists
+3. If no draft: show empty form as before
+
+### Write Rules
+
+1. **Auto-save**: Draft saved whenever user edits Step 1 inputs (debounced via useEffect)
+2. **Explicit flush**: Before "Skip for now" navigation, latest snapshot is saved
+3. **Clear on success**: Draft cleared when Step 1 is successfully submitted (backend becomes source of truth)
+4. **Clear on complete**: Draft cleared when full onboarding completes
+
+### Implementation
+
+**Shared utilities** (`apps/web/lib/onboarding-utils.tsx`):
+- `saveStep1Draft(providerId, draft)` — persists to sessionStorage
+- `loadStep1Draft(providerId)` — retrieves draft if exists and matches provider
+- `clearStep1Draft(providerId)` — removes draft from storage
+- `Step1Draft` interface — type for draft data structure
+
+**Profile page integration** (`apps/web/app/[lang]/provider/dashboard/profile/page.tsx`):
+- `providerId` state — stores current provider ID for draft scoping
+- `persistStep1Draft` callback — memoized function to save current Step 1 state
+- Auto-save effect — saves draft whenever Step 1 values change
+- Draft hydration in initialization effect — loads draft if backend incomplete
+- Explicit save on "Skip for now" — flushes latest values before navigation
+- Draft clearing on successful Step 1 submit and complete onboarding
+
+### Security Considerations
+
+- Draft is per-provider scoped (key: `onboarding_step1_draft_{providerId}`)
+- Draft is stored in sessionStorage (cleared when tab closes, not shared across tabs)
+- Safety check ensures loaded draft matches current providerId before use
+
+---
+
 ## URL Redirect System
 
 ### Purpose

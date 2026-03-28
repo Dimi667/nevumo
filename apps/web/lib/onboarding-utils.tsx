@@ -1,5 +1,85 @@
 import React from 'react';
 
+// ─── Step 1 Draft Persistence (sessionStorage) ───────────────────────────────
+
+const STEP1_DRAFT_KEY = 'onboarding_step1_draft';
+
+export interface Step1Draft {
+  business_name: string;
+  description: string;
+  slug: string;
+  slugManual: boolean;
+  slugEditing: boolean;
+  providerId: string; // To prevent cross-account leakage
+  savedAt: string;
+}
+
+/**
+ * Get the scoped storage key for a specific provider
+ */
+function getDraftKey(providerId: string): string {
+  return `${STEP1_DRAFT_KEY}_${providerId}`;
+}
+
+/**
+ * Save Step 1 draft to sessionStorage
+ */
+export function saveStep1Draft(
+  providerId: string,
+  draft: Omit<Step1Draft, 'providerId' | 'savedAt'>
+): void {
+  if (typeof window === 'undefined') return;
+  
+  const data: Step1Draft = {
+    ...draft,
+    providerId,
+    savedAt: new Date().toISOString(),
+  };
+  
+  try {
+    sessionStorage.setItem(getDraftKey(providerId), JSON.stringify(data));
+  } catch {
+    // Silently fail if storage is unavailable
+  }
+}
+
+/**
+ * Load Step 1 draft from sessionStorage
+ * Returns null if no draft exists or if draft belongs to different provider
+ */
+export function loadStep1Draft(providerId: string): Step1Draft | null {
+  if (typeof window === 'undefined') return null;
+  
+  try {
+    const raw = sessionStorage.getItem(getDraftKey(providerId));
+    if (!raw) return null;
+    
+    const draft: Step1Draft = JSON.parse(raw);
+    
+    // Safety check: verify the draft belongs to current provider
+    if (draft.providerId !== providerId) return null;
+    
+    return draft;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Clear Step 1 draft from sessionStorage
+ */
+export function clearStep1Draft(providerId: string): void {
+  if (typeof window === 'undefined') return;
+  
+  try {
+    sessionStorage.removeItem(getDraftKey(providerId));
+  } catch {
+    // Silently fail
+  }
+}
+
+// ─── Onboarding State Types ───────────────────────────────────────────────────
+
 export interface OnboardingState {
   isProfileComplete: boolean;
   isServiceComplete: boolean;

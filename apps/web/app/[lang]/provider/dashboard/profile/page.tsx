@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import type { ProviderProfile, UpdateProfileInput, PriceType } from '@/types/provider';
 import type { CategoryOut, CityOut } from '@/lib/api';
@@ -16,6 +16,7 @@ import {
 } from '@/lib/provider-api';
 import SearchInput from '@/components/dashboard/SearchInput';
 import { getSlugValidationError, sanitizeSlug, slugify } from '@/lib/slug-utils';
+import { deriveOnboardingState, getHeroContent, CompactStepIndicator, saveStep1Draft, loadStep1Draft, clearStep1Draft } from '@/lib/onboarding-utils';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -276,6 +277,28 @@ export default function ProfilePage() {
   const [editError, setEditError] = useState<string | null>(null);
   const slugCheckRequestRef = useRef(0);
 
+  // Draft persistence
+  const [providerId, setProviderId] = useState<string | null>(null);
+
+  // Helper to persist current Step 1 state
+  const persistStep1Draft = useCallback(() => {
+    if (!providerId) return;
+    saveStep1Draft(providerId, {
+      business_name: step1.business_name,
+      description: step1.description,
+      slug: step1.slug,
+      slugManual: step1SlugManual,
+      slugEditing: step1SlugEditing,
+    });
+  }, [providerId, step1.business_name, step1.description, step1.slug, step1SlugManual, step1SlugEditing]);
+
+  // Auto-save draft whenever Step 1 values change
+  useEffect(() => {
+    if (step === 1 && providerId && step1.business_name.trim()) {
+      persistStep1Draft();
+    }
+  }, [step, providerId, step1, step1SlugManual, step1SlugEditing, persistStep1Draft]);
+
   useEffect(() => {
     Promise.all([
       getProviderProfile(),
@@ -289,18 +312,43 @@ export default function ProfilePage() {
         setCategories(cats);
         setCities([...bgCities, ...rsCities]);
         setIsComplete(dashboard.profile.is_complete);
+        setProviderId(dashboard.profile.id.toString());
+        
         const nameIsEmail = !p.business_name || p.business_name.includes('@');
         const hasExistingSlug = Boolean(p.slug && !nameIsEmail);
         const isOnboardingMode = !dashboard.profile.is_complete;
+        
+        // Check if we should hydrate from draft
+        const hasBackendStep1 = !nameIsEmail && p.business_name && p.slug;
+        let step1BusinessName = nameIsEmail ? '' : p.business_name;
+        let step1Description = p.description ?? '';
+        let step1Slug = nameIsEmail ? '' : p.slug;
+        let step1Manual = false;
+        let step1Editing = hasExistingSlug && !isOnboardingMode;
+        
+        if (!hasBackendStep1 && isOnboardingMode) {
+          // Try to hydrate from draft
+          const draft = loadStep1Draft(dashboard.profile.id.toString());
+          if (draft) {
+            step1BusinessName = draft.business_name;
+            step1Description = draft.description;
+            step1Slug = draft.slug;
+            step1Manual = draft.slugManual;
+            step1Editing = draft.slugEditing;
+          }
+        } else if (hasBackendStep1) {
+          // Backend has real data, clear any stale draft
+          clearStep1Draft(dashboard.profile.id.toString());
+        }
+        
         setStep1({
-          business_name: nameIsEmail ? '' : p.business_name,
-          description: p.description ?? '',
-          slug: nameIsEmail ? '' : p.slug,
+          business_name: step1BusinessName,
+          description: step1Description,
+          slug: step1Slug,
         });
-        setStep1SlugManual(false);
-        // Only enable edit mode if user has existing slug AND is not in onboarding mode
-        setStep1SlugEditing(hasExistingSlug && !isOnboardingMode);
-        setEditForm({ business_name: nameIsEmail ? '' : p.business_name, description: p.description ?? '' });
+        setStep1SlugManual(step1Manual);
+        setStep1SlugEditing(step1Editing);
+        setEditForm({ business_name: step1BusinessName, description: step1Description });
         setImageUrl(p.profile_image_url);
         
         // Check if we should skip to Step 2 (user has profile but no services)
@@ -525,6 +573,11 @@ export default function ProfilePage() {
       console.log("FRONTEND: Resetting step1 state to:", newStep1);
       setStep1(newStep1);
       
+      // Clear draft on successful submission (backend is now source of truth)
+      if (providerId) {
+        clearStep1Draft(providerId);
+      }
+      
       console.log("FRONTEND: Setting step to 2");
       setStep(2);
       console.log("FRONTEND: Step1 submit completed successfully");
@@ -595,6 +648,11 @@ export default function ProfilePage() {
 
       await createService(serviceData);
       setSaveSuccess(true);
+      
+      // Clear draft on complete onboarding
+      if (providerId) {
+        clearStep1Draft(providerId);
+      }
       
       // Force refresh of layout state by triggering custom event
       window.dispatchEvent(new CustomEvent('force-onboarding-refresh'));
@@ -858,7 +916,19 @@ export default function ProfilePage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => router.push(`/${lang}/provider/dashboard`)}
+                  onClick={() => {
+                    // Flush latest draft before navigating away
+                    if (providerId) {
+                      saveStep1Draft(providerId, {
+                        business_name: step1.business_name,
+                        description: step1.description,
+                        slug: step1.slug,
+                        slugManual: step1SlugManual,
+                        slugEditing: step1SlugEditing,
+                      });
+                    }
+                    router.push(`/${lang}/provider/dashboard`);
+                  }}
                   className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   Skip for now
