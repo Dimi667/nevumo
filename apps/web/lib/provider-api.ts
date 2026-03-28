@@ -247,6 +247,32 @@ export async function getEnhancedQRCode(language: string = 'en'): Promise<{
   });
 }
 
+export async function downloadEnhancedQRSVG(language: string = 'en', filename: string = 'nevumo-qr.svg'): Promise<void> {
+  const token = getAuthToken();
+  const res = await fetch(`${API_BASE}/api/v1/provider/enhanced-qr-code-svg`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ language }),
+  });
+  
+  if (!res.ok) {
+    throw new Error('Failed to download SVG');
+  }
+  
+  const blob = await res.blob();
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  window.URL.revokeObjectURL(url);
+}
+
 // ---------------------------------------------------------------------------
 // Analytics
 // ---------------------------------------------------------------------------

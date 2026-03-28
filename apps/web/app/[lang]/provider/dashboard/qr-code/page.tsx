@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getQRCode, getEnhancedQRCode } from '@/lib/provider-api';
+import { getEnhancedQRCode, downloadEnhancedQRSVG } from '@/lib/provider-api';
 
 interface QRData {
   public_url: string;
@@ -66,13 +66,13 @@ export default function QRCodePage() {
     }
   }
 
-  function handleDownload() {
+  async function handleDownload() {
     if (!enhancedQr) return;
-    const link = document.createElement('a');
-    link.href = enhancedQr.qr_code;
-    const filename = `nevumo-enhanced-qr-${selectedLanguage}.png`;
-    link.download = filename;
-    link.click();
+    try {
+      await downloadEnhancedQRSVG(selectedLanguage, `nevumo-qr-${selectedLanguage}.svg`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to download QR code');
+    }
   }
 
   return (

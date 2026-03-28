@@ -2,7 +2,7 @@
 
 from typing import Union, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, status, Response
 from sqlalchemy.orm import Session
 
 from config import settings
@@ -35,6 +35,7 @@ from services.provider_service import (
     delete_service,
     generate_qr_code_base64,
     generate_enhanced_qr_code_base64,
+    generate_enhanced_qr_code_svg,
     generate_slug_suggestions,
     is_slug_taken,
     get_analytics,
@@ -374,6 +375,46 @@ def get_enhanced_qr_code(
             "business_name": provider.business_name,
             "service_name": service_name,
         })
+    except Exception as e:
+        return ErrorResponse(
+            error={
+                "code": "QR_GENERATION_FAILED",
+                "message": f"Failed to generate QR code: {str(e)}"
+            }
+        )
+
+
+@router.post("/enhanced-qr-code-svg")
+def get_enhanced_qr_code_svg(
+    request: EnhancedQRCodeRequest,
+    provider: Provider = Depends(get_current_provider),
+    db: Session = Depends(get_db),
+) -> Response:
+    """Generate enhanced QR code as SVG for download."""
+    try:
+        public_url = build_qr_public_url(provider, db, settings.APP_URL)
+        
+        # Get provider's primary service for QR code
+        services = get_provider_services(provider, db)
+        primary_service = services[0] if services else None
+        service_name = primary_service.get('title') if primary_service else "General Service"
+        
+        # Generate SVG QR code
+        svg_content = generate_enhanced_qr_code_svg(
+            url=public_url,
+            business_name=provider.business_name,
+            service_name=service_name,
+            language=request.language,
+            db=db
+        )
+        
+        return Response(
+            content=svg_content,
+            media_type="image/svg+xml",
+            headers={
+                "Content-Disposition": f'attachment; filename="nevumo-qr-{request.language}.svg"'
+            }
+        )
     except Exception as e:
         return ErrorResponse(
             error={
