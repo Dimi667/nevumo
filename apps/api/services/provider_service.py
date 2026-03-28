@@ -1204,15 +1204,14 @@ def generate_enhanced_qr_code_svg(
 ) -> str:
     """
     Генерира print & web-ready SVG QR код.
-    - border=4 (ISO 18004 тиха зона — задължителна)
-    - box_size=1 → path координати са в 0.1-единични клетки → scale *10
-    - бяла подложка под логото (за четимост на QR)
-    - слоган от превода (qr_slogan_submit_request)
+    - ECC Level H (30% корекция) — задължително при централно лого
+    - border=4 (ISO 18004 тиха зона)
+    - Оптимизиран SVG: хоризонтални runs → <rect> групи (5-10x по-малък файл)
+    - Бяла подложка под логото
+    - Слоган от превода (qr_slogan_submit_request)
     """
-    import re
     import html
     import qrcode
-    import qrcode.image.svg
 
     # --- Слоган от превода ---
     slogan = "Пусни заявка за 30 сек!"  # fallback
@@ -1228,8 +1227,8 @@ def generate_enhanced_qr_code_svg(
     safe_slogan   = html.escape(slogan)
 
     # --- QR генериране ---
-    # ERROR_CORRECT_H = 30% корекция → издържа логото в центъра
-    # border=4 = стандартна ISO 18004 тиха зона
+    # ECC_H = 30% корекция — задължително при лого в центъра
+    # border=4 = ISO 18004 тиха зона (вградена в матрицата)
     qr = qrcode.QRCode(
         version=None,
         error_correction=qrcode.constants.ERROR_CORRECT_H,
@@ -1239,42 +1238,67 @@ def generate_enhanced_qr_code_svg(
     qr.add_data(url)
     qr.make(fit=True)
 
-    img = qr.make_image(image_factory=qrcode.image.svg.SvgPathImage)
-    qr_svg_raw = img.to_string().decode("utf-8")
+    # --- Матрица → оптимизирани <rect> (хоризонтални runs) ---
+    matrix    = qr.get_matrix()           # list[list[bool]], включва border
+    n_modules = len(matrix)               # брой редове = брой колони
 
-    path_match = re.search(r'd="([^"]+)"', qr_svg_raw)
-    qr_path = path_match.group(1) if path_match else ""
+    canvas_pad = 20
+    qr_size    = 360
+    module_px  = qr_size / n_modules      # размер на един модул в px
 
-    # --- Размери ---
-    # box_size=1 → SvgPathImage генерира 0.1-единични клетки
-    # total координатно пространство = (modules_count + 2*border) * 0.1
-    # → scale трябва да е *10 спрямо брой модули
-    total_modules = qr.modules_count + 8   # +8 = border=4 от двете страни
-    canvas_pad    = 20
-    qr_size       = 360
+    rects: list[str] = []
+    for row_idx, row in enumerate(matrix):
+        y        = canvas_pad + row_idx * module_px
+        h        = module_px
+        run_start: Optional[int] = None
+        run_len  = 0
 
-    scale = qr_size * 10 / total_modules   # ← КРИТИЧНО: *10 заради 0.1-единични клетки
+        for col_idx, dark in enumerate(row):
+            if dark:
+                if run_start is None:
+                    run_start = col_idx
+                    run_len   = 1
+                else:
+                    run_len  += 1
+            else:
+                if run_start is not None:
+                    x = canvas_pad + run_start * module_px
+                    w = run_len * module_px
+                    rects.append(
+                        f'<rect x="{x:.3f}" y="{y:.3f}" '
+                        f'width="{w:.3f}" height="{h:.3f}"/>'
+                    )
+                    run_start = None
+                    run_len   = 0
 
-    # QR заема canvas_pad..canvas_pad+qr_size, центърът е точно в средата
-    cx = canvas_pad + qr_size // 2         # 200
-    cy = canvas_pad + qr_size // 2         # 200
+        # Затвори последния run в реда
+        if run_start is not None:
+            x = canvas_pad + run_start * module_px
+            w = run_len * module_px
+            rects.append(
+                f'<rect x="{x:.3f}" y="{y:.3f}" '
+                f'width="{w:.3f}" height="{h:.3f}"/>'
+            )
+
+    qr_layer = f'<g fill="black">{"".join(rects)}</g>'
 
     # --- Logo (15% от QR + бяла подложка) ---
+    cx       = canvas_pad + qr_size // 2   # 200
+    cy       = canvas_pad + qr_size // 2   # 200
     logo_sz  = int(qr_size * 0.15)         # 54px
     logo_pad = 8
     white_sz = logo_sz + 2 * logo_pad      # 70px
-    wx = cx - white_sz // 2                # 165
-    wy = cy - white_sz // 2                # 165
-    lx = wx + logo_pad                     # 173
-    ly = wy + logo_pad                     # 173
+    wx       = cx - white_sz // 2          # 165
+    wy       = cy - white_sz // 2          # 165
+    lx       = wx + logo_pad               # 173
+    ly       = wy + logo_pad               # 173
 
     # --- Canvas ---
     svg_w   = qr_size + 2 * canvas_pad     # 400px
-    text_y1 = canvas_pad + qr_size + 36    # 416px  → "business" - "service"
-    text_y2 = text_y1 + 50                 # 466px  → слоган
+    text_y1 = canvas_pad + qr_size + 36    # 416px
+    text_y2 = text_y1 + 50                 # 466px
     svg_h   = text_y2 + 52                 # 518px
 
-    # Формат: "ЕТ Руменов" - "Ремонт на газови котли"
     if safe_service:
         text_line1 = f'&quot;{safe_business}&quot; - &quot;{safe_service}&quot;'
     else:
@@ -1288,12 +1312,10 @@ def generate_enhanced_qr_code_svg(
         # Бял фон
         f'<rect width="{svg_w}" height="{svg_h}" fill="white"/>'
 
-        # QR слой — translate само с canvas_pad, border=4 е вграден в path-а
-        f'<g transform="translate({canvas_pad},{canvas_pad}) scale({scale:.5f})">'
-        f'<path d="{qr_path}" fill="black"/>'
-        f'</g>'
+        # QR слой — оптимизирани хоризонтални rect runs
+        + qr_layer +
 
-        # Бяла подложка зад логото (изолира от QR модулите)
+        # Бяла подложка зад логото
         f'<rect x="{wx}" y="{wy}" width="{white_sz}" height="{white_sz}" fill="white"/>'
 
         # Оранжев квадрат
