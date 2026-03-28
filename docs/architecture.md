@@ -584,6 +584,57 @@ Taken slugs are filtered out. Maximum 5 suggestions returned.
 
 ---
 
+## Onboarding Hero Banner (Dashboard)
+
+When a provider has incomplete onboarding (`is_complete === false`), a hero banner appears on the dashboard overview page.
+
+### Dynamic Content Based on Missing Fields
+
+The hero banner uses `missing_fields` from the dashboard response to determine which onboarding step is incomplete:
+
+**Missing `business_name` (Profile incomplete):**
+- Headline: "You're 2 steps away from getting clients"
+- Description: "Complete your profile to start receiving requests"
+- CTA: "Complete your profile"
+
+**Profile complete but missing `service` and/or `city`:**
+- Headline: "You're 1 step away from getting clients"
+- Description: "Add your first service to start receiving requests"
+- CTA: "Add your first service"
+
+### Step Indicator
+
+A compact step indicator shows progress:
+- **Profile step**: Green checkmark when complete, orange "1" when incomplete
+- **Service step**: Gray inactive when profile incomplete, orange "2" when profile complete but service missing, green checkmark when complete
+- Visual styling matches the onboarding wizard step indicator exactly
+
+### Implementation
+
+**Shared utilities** (`apps/web/lib/onboarding-utils.tsx`):
+- `deriveOnboardingState(missing_fields)` — derives completion state from backend data
+- `getHeroContent(state)` — returns headline/description/CTA based on state
+- `CompactStepIndicator` — React component for the step indicator UI
+
+**Dashboard integration** (`apps/web/app/[lang]/provider/dashboard/page.tsx`):
+- Uses `deriveOnboardingState()` to compute onboarding state
+- Conditionally renders hero banner with dynamic content
+- Shows `CompactStepIndicator` in hero footer
+
+### Locked Stat Cards
+
+All 4 stat cards (Total Leads, New Leads, Rating, Accepted) are locked during incomplete onboarding:
+- Padlock overlay (🔒) with blur/dimmed treatment
+- Clicking any locked card redirects to profile onboarding
+- **Rating card**: Shows motivational value `5.0` while locked, real value after
+- **Accepted card**: Shows motivational value `137` while locked, real value after
+
+### Bug Fix: `services` vs `service`
+
+The backend returns `service` (singular) in `missing_fields`, not `services`. The profile page skip-to-step-2 logic was fixed to check for `'service'` instead of `'services'`.
+
+---
+
 ## URL Redirect System
 
 ### Purpose

@@ -305,7 +305,7 @@ export default function ProfilePage() {
         
         // Check if we should skip to Step 2 (user has profile but no services)
         if (!dashboard.profile.is_complete && 
-            dashboard.profile.missing_fields?.includes('services') &&
+            dashboard.profile.missing_fields?.includes('service') &&
             p.business_name && !p.business_name.includes('@')) {
           setStep(2);
         }
@@ -738,7 +738,7 @@ export default function ProfilePage() {
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 resize-none"
               />
               <div className="text-xs text-gray-400 mt-1">
-                {step1.description.length}/50 minimum characters
+                {step1.description.length}/At least 50 chars gets better results
               </div>
             </div>
 

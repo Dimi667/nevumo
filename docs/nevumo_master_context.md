@@ -158,6 +158,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
 - OAuth — Google + Facebook
 
 ### Recent Fixes (March 2026)
+- **Optimized QR Code SVG generation** — Replaced path-based rendering with horizontal rect runs for smaller file size and better performance
 - Fixed API server startup issues by adding missing `SlugCheckResponse` schema
 - Added missing `Optional` import in auth routes
 - Resolved frontend 404 errors caused by API connectivity issues

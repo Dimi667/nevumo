@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import StatsCard from '@/components/dashboard/StatsCard';
 import type { DashboardResponse } from '@/types/provider';
 import { getProviderDashboard } from '@/lib/provider-api';
+import { deriveOnboardingState, getHeroContent, CompactStepIndicator } from '@/lib/onboarding-utils';
 
 function LeadsIcon() {
   return (
@@ -49,6 +50,10 @@ const SOURCE_LABELS: Record<string, string> = {
   direct: 'Direct',
 };
 
+// Motivational KPI values for incomplete onboarding
+const MOTIVATIONAL_RATING = '5.0';
+const MOTIVATIONAL_ACCEPTED = 137;
+
 export default function DashboardOverviewPage() {
   const params = useParams();
   const router = useRouter();
@@ -88,6 +93,11 @@ export default function DashboardOverviewPage() {
   const profile = data?.profile;
   const analytics = data?.analytics_summary;
 
+  // Derive onboarding state from missing_fields
+  const onboardingState = deriveOnboardingState(profile?.missing_fields);
+  const isOnboardingComplete = profile?.is_complete ?? true;
+  const heroContent = !isOnboardingComplete ? getHeroContent(onboardingState) : null;
+
   // Top sources for the preview (sorted desc, top 3)
   const topSources = analytics
     ? Object.entries(analytics.sources)
@@ -105,15 +115,16 @@ export default function DashboardOverviewPage() {
         <p className="text-sm text-gray-500 mt-0.5">Overview of your business</p>
       </div>
 
-      {profile && !profile.is_complete && (
+      {/* Incomplete onboarding hero banner */}
+      {!isOnboardingComplete && heroContent && (
         <div className="bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6 space-y-4 max-w-2xl mx-auto">
           <div className="text-center">
             <div className="text-2xl mb-2">🚀</div>
             <h2 className="text-lg font-bold text-gray-900 mb-1">
-              You're 1 step away from getting clients
+              {heroContent.headline}
             </h2>
             <p className="text-sm text-gray-600 mb-4">
-              Add your first service to start receiving requests
+              {heroContent.description}
             </p>
             <Link
               href={`${base}/profile`}
@@ -122,29 +133,21 @@ export default function DashboardOverviewPage() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              Add your first service
+              {heroContent.ctaLabel}
             </Link>
           </div>
-          <div className="flex items-center justify-center gap-4 text-xs text-gray-500">
-            <div className="flex items-center gap-1">
-              <div className="w-4 h-4 rounded-full bg-green-500 text-white flex items-center justify-center">
-                <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              </div>
-              <span>Profile completed</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-4 h-4 rounded-full bg-orange-500 text-white flex items-center justify-center text-xs font-bold">2</div>
-              <span>Service missing</span>
-            </div>
-          </div>
+          {/* Compact step indicator */}
+          <CompactStepIndicator 
+            isProfileComplete={onboardingState.isProfileComplete}
+            isServiceComplete={onboardingState.isServiceComplete}
+          />
         </div>
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className={`relative ${profile && !profile.is_complete ? 'opacity-50' : ''}`}>
-          {profile && !profile.is_complete && (
+        {/* Total Leads - locked during onboarding */}
+        <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
+          {!isOnboardingComplete && (
             <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
                  onClick={() => router.push(`${base}/profile`)}>
               <div className="text-center">
@@ -159,8 +162,10 @@ export default function DashboardOverviewPage() {
             icon={<LeadsIcon />}
           />
         </div>
-        <div className={`relative ${profile && !profile.is_complete ? 'opacity-50' : ''}`}>
-          {profile && !profile.is_complete && (
+
+        {/* New Leads - locked during onboarding */}
+        <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
+          {!isOnboardingComplete && (
             <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
                  onClick={() => router.push(`${base}/profile`)}>
               <div className="text-center">
@@ -177,24 +182,53 @@ export default function DashboardOverviewPage() {
             accent
           />
         </div>
-        <StatsCard
-          title="Rating"
-          value={stats?.rating !== undefined && stats.rating !== null ? stats.rating.toFixed(1) : '—'}
-          icon={<StarIcon />}
-        />
-        <StatsCard
-          title="Accepted"
-          value={stats?.accepted_matches ?? 0}
-          description="Completed matches"
-          icon={<CheckIcon />}
-        />
+
+        {/* Rating - shows motivational value during onboarding, real value after */}
+        <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
+          {!isOnboardingComplete && (
+            <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
+                 onClick={() => router.push(`${base}/profile`)}>
+              <div className="text-center">
+                <div className="text-2xl mb-1">🔒</div>
+                <p className="text-xs text-gray-600 font-medium">Add a service to unlock</p>
+              </div>
+            </div>
+          )}
+          <StatsCard
+            title="Rating"
+            value={isOnboardingComplete 
+              ? (stats?.rating !== undefined && stats.rating !== null ? stats.rating.toFixed(1) : '—')
+              : MOTIVATIONAL_RATING
+            }
+            icon={<StarIcon />}
+          />
+        </div>
+
+        {/* Accepted - shows motivational value during onboarding, real value after */}
+        <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
+          {!isOnboardingComplete && (
+            <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
+                 onClick={() => router.push(`${base}/profile`)}>
+              <div className="text-center">
+                <div className="text-2xl mb-1">🔒</div>
+                <p className="text-xs text-gray-600 font-medium">Add a service to unlock</p>
+              </div>
+            </div>
+          )}
+          <StatsCard
+            title="Accepted"
+            value={isOnboardingComplete ? (stats?.accepted_matches ?? 0) : MOTIVATIONAL_ACCEPTED}
+            description="Completed matches"
+            icon={<CheckIcon />}
+          />
+        </div>
       </div>
 
       {/* Analytics preview */}
       <div className={`bg-white rounded-xl border border-gray-200 p-5 relative ${
-        profile && !profile.is_complete ? 'opacity-50' : ''
+        !isOnboardingComplete ? 'opacity-50' : ''
       }`}>
-        {profile && !profile.is_complete && (
+        {!isOnboardingComplete && (
           <div className="absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 cursor-pointer"
                onClick={() => router.push(`${base}/profile`)}>
             <div className="text-center">
@@ -205,7 +239,7 @@ export default function DashboardOverviewPage() {
         )}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-gray-800">Last 30 days</h2>
-          {!(profile && !profile.is_complete) && (
+          {isOnboardingComplete && (
             <Link
               href={`${base}/analytics`}
               className="text-xs text-orange-500 hover:text-orange-600 font-medium transition-colors"

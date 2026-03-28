@@ -241,6 +241,29 @@ Provider must have a provider record (role=provider + completed registration).
 }
 ```
 
+### Onboarding Completeness (missing_fields)
+
+When `is_complete` is `false`, `missing_fields` contains the specific items needed to complete onboarding:
+
+| Field | Meaning |
+|-------|---------|
+| `business_name` | Profile incomplete (no business name set) |
+| `service` | No service created |
+| `city` | Service exists but has no cities assigned |
+
+**Example incomplete states:**
+
+```json
+// Fresh provider with no profile or service
+"missing_fields": ["business_name", "service", "city"]
+
+// Profile complete, service missing
+"missing_fields": ["service", "city"]
+
+// Has service but no cities assigned
+"missing_fields": ["city"]
+```
+
 ---
 
 ## GET /api/v1/provider/leads
