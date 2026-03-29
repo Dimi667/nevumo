@@ -65,10 +65,13 @@ export default function ProviderWidget({
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       {/* Logo */}
-      <div className="px-6 pt-6 pb-2 text-center">
-        <span className="text-2xl font-extrabold tracking-tight">
-          <span className="text-orange-500">N</span>evumo
-        </span>
+      <div className="px-4 pt-6 pb-2 text-center">
+        <img 
+          src="/Nevumo_logo.svg" 
+          alt="Nevumo" 
+          className="mx-auto"
+          style={{ maxWidth: '332.5px', width: '100%', height: 'auto' }}
+        />
       </div>
 
       {/* Provider Info */}
