@@ -19,7 +19,9 @@ SUPPORTED_LANGUAGES = (
     "ga",
     "hr",
     "hu",
+    "is",
     "it",
+    "lb",
     "lt",
     "lv",
     "mk",
@@ -30,12 +32,14 @@ SUPPORTED_LANGUAGES = (
     "pt",
     "pt-PT",
     "ro",
+    "ru",
     "sk",
     "sl",
     "sq",
     "sr",
     "sv",
     "tr",
+    "uk",
 )
 
 DEFAULT_PROVIDER_CATEGORY_KEY = "provider_category_general"

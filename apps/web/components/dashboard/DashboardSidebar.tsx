@@ -51,6 +51,14 @@ function AnalyticsIcon() {
   );
 }
 
+function ReviewsIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  );
+}
+
 function QrIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -98,6 +106,7 @@ export default function DashboardSidebar({ open, onClose, lang }: DashboardSideb
     { label: 'Leads',     href: `${base}/leads`,        icon: <LeadsIcon /> },
     { label: 'Services',  href: `${base}/services`,     icon: <ServicesIcon /> },
     { label: 'Analytics', href: `${base}/analytics`,    icon: <AnalyticsIcon /> },
+    { label: 'Reviews',   href: `${base}/reviews`,      icon: <ReviewsIcon /> },
     { label: 'QR Code',   href: `${base}/qr-code`,      icon: <QrIcon /> },
     { label: 'Profile',   href: `${base}/profile`,      icon: <ProfileIcon /> },
     { label: 'Settings',  href: `${base}/settings`,     icon: <SettingsIcon /> },

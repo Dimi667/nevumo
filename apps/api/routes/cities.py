@@ -49,3 +49,36 @@ async def list_cities(
         redis_client.setex(cache_key, 3600, json.dumps([d.model_dump() for d in data]))
 
     return CitiesResponse(data=data)
+
+
+@router.get("/cities/{slug}", response_model=CityOut)
+async def get_city_by_slug(
+    slug: str,
+    db: Session = Depends(get_db),
+    redis_client: Optional[redis_lib.Redis] = Depends(get_redis),
+) -> CityOut:
+    cache_key = f"city:{slug}"
+
+    if redis_client:
+        cached = redis_client.get(cache_key)
+        if cached:
+            item = json.loads(cached)
+            return CityOut(**item)
+
+    location = db.query(Location).filter(Location.slug == slug).first()
+    if not location:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="City not found")
+
+    data = CityOut(
+        id=location.id,
+        slug=location.slug,
+        name=location.city,
+        country_code=location.country_code,
+        currency=COUNTRY_CURRENCY_MAP.get(location.country_code, DEFAULT_CURRENCY)
+    )
+
+    if redis_client:
+        redis_client.setex(cache_key, 3600, json.dumps(data.model_dump()))
+
+    return data

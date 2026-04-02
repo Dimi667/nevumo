@@ -34,11 +34,15 @@ class User(Base):
     country_code: Mapped[Optional[str]] = mapped_column(String(2))
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
+    # Email notification preferences
+    review_reply_email_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+
     provider: Mapped["Provider"] = relationship(back_populates="user", uselist=False)
 
     __table_args__ = (
         CheckConstraint("role IN ('client', 'provider')", name="ck_users_role"),
         Index("idx_users_role", "role"),
+        Index("idx_users_review_reply_email", "review_reply_email_enabled"),
     )
 
 
@@ -322,12 +326,19 @@ class Review(Base):
     rating: Mapped[int] = mapped_column(Integer, nullable=False)  # 1-5 stars
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
+    # Provider reply fields (closed trust conversation model)
+    provider_reply: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    provider_reply_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    provider_reply_edited_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    provider_reply_edit_count: Mapped[int] = mapped_column(Integer, default=0)
+
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     __table_args__ = (
         CheckConstraint("rating >= 1 AND rating <= 5", name="ck_reviews_rating_range"),
         Index("idx_reviews_provider", "provider_id"),
         Index("idx_reviews_client", "client_id"),
+        Index("idx_reviews_provider_reply_at", "provider_reply_at"),
         UniqueConstraint("lead_id", name="uq_reviews_lead"),
     )
 

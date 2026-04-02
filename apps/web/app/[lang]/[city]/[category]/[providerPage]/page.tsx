@@ -25,16 +25,14 @@ function getInitials(name: string): string {
 export async function generateMetadata(props: { params: Promise<ProviderRouteParams> }) {
   const { lang, city, category, providerPage } = await props.params;
   try {
-    // Check for redirect first
+    // Resolve slug to get the canonical slug (but don't redirect here - no access to searchParams)
     const slugResolution = await resolveSlug(providerPage);
     
-    if (slugResolution.found && slugResolution.redirected) {
-      // Redirect to the new slug
-      redirect(`/${lang}/${city}/${category}/${slugResolution.slug}`);
-    }
+    // Use the resolved slug for provider lookup (if found), otherwise fallback to original
+    const slugToUse = slugResolution.found ? slugResolution.slug : providerPage;
     
     const [provider, categories] = await Promise.all([
-      getProviderBySlug(providerPage, lang),
+      getProviderBySlug(slugToUse, lang),
       getCategories(lang),
     ]);
     if (!provider) return { title: 'Nevumo' };
@@ -44,7 +42,7 @@ export async function generateMetadata(props: { params: Promise<ProviderRoutePar
       title: `${provider.business_name} | ${categoryName}`,
       description,
       alternates: {
-        languages: generateHreflangAlternates(`/${city}/${category}/${providerPage}`),
+        languages: generateHreflangAlternates(`/${city}/${category}/${slugToUse}`),
       },
       openGraph: {
         title: `${provider.business_name} | ${categoryName} | Nevumo`,
@@ -67,12 +65,26 @@ export default async function Page(props: {
   // Check for redirect first
   const slugResolution = await resolveSlug(providerPage);
   if (slugResolution.found && slugResolution.redirected) {
-    // Update browser URL without full page reload
-    redirect(`/${lang}/${city}/${category}/${slugResolution.slug}`);
+    // Preserve the full query string when redirecting
+    const queryString = new URLSearchParams();
+    for (const [key, value] of Object.entries(searchParams)) {
+      if (value === undefined) continue;
+      if (Array.isArray(value)) {
+        value.forEach((v) => queryString.append(key, v));
+      } else {
+        queryString.set(key, value);
+      }
+    }
+    const query = queryString.toString();
+    const redirectUrl = `/${lang}/${city}/${category}/${slugResolution.slug}${query ? `?${query}` : ''}`;
+    redirect(redirectUrl);
   }
 
+  // Use the resolved slug consistently for provider lookups
+  const slugToUse = slugResolution.found ? slugResolution.slug : providerPage;
+
   const [provider, categories] = await Promise.all([
-    getProviderBySlug(providerPage, lang),
+    getProviderBySlug(slugToUse, lang),
     getCategories(lang),
   ]);
 

@@ -19,10 +19,12 @@ CREATE TABLE users (
     role TEXT NOT NULL CHECK (role IN ('client', 'provider')),
     locale TEXT NOT NULL DEFAULT 'en',
     country_code CHAR(2),
+    review_reply_email_enabled BOOLEAN NOT NULL DEFAULT TRUE,  -- Opt-in for review reply emails
     created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_users_role ON users(role);
+CREATE INDEX idx_users_review_reply_email ON users(review_reply_email_enabled);
 
 ---
 
@@ -31,9 +33,10 @@ CREATE INDEX idx_users_role ON users(role);
 CREATE TABLE providers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,
-    business_name TEXT NOT NULL,
+    business_name TEXT,
     description TEXT,
     slug TEXT UNIQUE NOT NULL,                -- URL slug, auto-generated from business_name
+    slug_change_count INTEGER NOT NULL DEFAULT 0,
     profile_image_url TEXT,                   -- served at /static/provider_images/
     rating NUMERIC(2,1) DEFAULT 0,
     verified BOOLEAN DEFAULT FALSE,
@@ -43,7 +46,6 @@ CREATE TABLE providers (
 
 CREATE INDEX idx_providers_rating ON providers(rating);
 CREATE INDEX idx_providers_status ON providers(availability_status);
-CREATE INDEX idx_providers_slug ON providers(slug);
 
 ### Slug Validation Rules
 - **Format**: 2-50 characters, lowercase letters, numbers, and hyphens only
@@ -68,6 +70,39 @@ CREATE TABLE provider_cities (
 );
 
 CREATE INDEX idx_provider_cities_city ON provider_cities(city_id);
+
+---
+
+## 3a. Provider Slug History
+
+CREATE TABLE provider_slug_history (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider_id UUID NOT NULL REFERENCES providers(id) ON DELETE CASCADE,
+    old_slug TEXT NOT NULL,
+    new_slug TEXT NOT NULL,
+    changed_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    ip_address INET,
+    user_agent TEXT
+);
+
+CREATE INDEX idx_provider_slug_history_provider_changed ON provider_slug_history(provider_id, changed_at);
+CREATE INDEX idx_provider_slug_history_old_slug ON provider_slug_history(old_slug);
+
+---
+
+## 3b. URL Redirects
+
+CREATE TABLE url_redirects (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider_id UUID NOT NULL REFERENCES providers(id) ON DELETE CASCADE,
+    old_slug TEXT NOT NULL,
+    new_slug TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    CONSTRAINT uq_url_redirects_provider_old_slug UNIQUE(provider_id, old_slug)
+);
+
+CREATE INDEX idx_url_redirects_old_slug_active ON url_redirects(old_slug, active);
 
 ---
 
@@ -268,7 +303,7 @@ CREATE INDEX idx_auth_rate_limits_created ON auth_rate_limits(created_at);
 
 ---
 
-## 15. Reviews
+## 15. Reviews (Closed Trust Conversation Model)
 
 CREATE TABLE reviews (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -277,18 +312,37 @@ CREATE TABLE reviews (
     lead_id UUID REFERENCES leads(id) ON DELETE SET NULL,
     rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
     comment TEXT,
+
+    -- Provider reply fields (closed trust conversation model)
+    provider_reply TEXT,                              -- Provider's single reply to review
+    provider_reply_at TIMESTAMP,                      -- When first reply was posted
+    provider_reply_edited_at TIMESTAMP,               -- Last edit timestamp
+    provider_reply_edit_count INTEGER NOT NULL DEFAULT 0,  -- Number of edits
+
     created_at TIMESTAMP DEFAULT NOW(),
     UNIQUE(lead_id)  -- one review per lead
 );
 
 CREATE INDEX idx_reviews_provider ON reviews(provider_id);
 CREATE INDEX idx_reviews_client ON reviews(client_id);
+CREATE INDEX idx_reviews_provider_reply_at ON reviews(provider_reply_at);
 
-### Notes
-- Rating is calculated dynamically as AVG(rating) from reviews table
-- One review per lead constraint prevents duplicate reviews
-- lead_id is nullable to allow reviews without a specific lead
-- Ratings are integers from 1 to 5 stars
+### Product Rules
+- **Client review is the starting message** - Always the first message in conversation
+- **Provider has exactly one reply per review** - Single reply, editable unlimited times
+- **Edited indicator** - Shown when provider_reply_edit_count > 0
+- **Conversation closes** - After provider reply, no further messages
+- **Email notification** - Sent to client on first provider reply only (if opted in)
+
+### Constraints
+- One review per lead (enforced by UNIQUE(lead_id))
+- Rating must be 1-5 stars
+- Only completed leads (status='done') can be reviewed
+- Client must own the lead being reviewed
+
+### Dynamic Fields
+- **provider.rating** calculated as AVG(reviews.rating)
+- **provider review_count** calculated as COUNT(reviews)
 
 ---
 

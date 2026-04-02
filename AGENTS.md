@@ -18,6 +18,6 @@ You are a senior full-stack developer working on Nevumo — a Turborepo monorepo
 - Financial calculations: use Decimal (Python), never floats
 
 ## i18n
-- 32 supported languages, default: English
+- 34 supported languages, default: English
 - Translations in PostgreSQL, cached in Redis
-- New keys must be generated for ALL 32 languages
+- New keys must be generated for ALL 34 languages

@@ -958,3 +958,128 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - Leads = core revenue
 - Avoid over-engineering
 - Build for scale, but start lean
+
+---
+
+## Review System (Closed Trust Conversation Model)
+
+### Overview
+
+The review system implements a **closed trust conversation model** that enables structured feedback between clients and providers while preventing abuse and maintaining simplicity.
+
+### Product Rules
+
+1. **Client review is the starting message** — Always the first message in the conversation
+2. **Provider has exactly one reply per review** — Single reply, editable unlimited times
+3. **Conversation closes after provider reply** — No further messages allowed
+4. **Email notifications on first reply only** — Edits do not trigger notifications
+
+### Architecture
+
+**Database Schema:**
+```
+reviews table:
+- provider_reply TEXT              -- Single reply, editable
+- provider_reply_at TIMESTAMP      -- First reply timestamp
+- provider_reply_edited_at TIMESTAMP -- Last edit timestamp  
+- provider_reply_edit_count INTEGER -- Edit counter for UI indicator
+```
+
+**Key Constraints:**
+- UNIQUE(lead_id) — One review per lead maximum
+- CHECK(rating >= 1 AND rating <= 5) — Valid star ratings only
+- Lead must have status='done' to be reviewable
+- Client must own the lead being reviewed
+
+### Trust Chain
+
+**Review Eligibility:**
+1. Lead must be completed (status='done')
+2. Client must be authenticated and own the lead
+3. Lead must have an assigned provider
+4. No existing review for this lead
+
+**Provider Reply Permissions:**
+1. Provider can only reply to reviews on their own profile
+2. Unlimited edits allowed after first reply
+3. Edit history tracked via edit_count + edited_at
+
+### Email Notification System
+
+**Trigger Conditions:**
+- First provider reply only (not on edits)
+- Client must have review_reply_email_enabled = TRUE (opted in)
+- Default is opted in for all users
+
+**Email Content:**
+- Subject: "{provider_name} responded to your review"
+- Body: Client's review + provider's reply + link to view
+- Footer: Link to manage email preferences
+
+**Implementation:**
+- Email service abstraction in `apps/api/services/email_service.py`
+- Configurable via SMTP or email API (placeholder for Phase 2)
+- Console logging in development mode
+
+### Frontend Integration
+
+**Client Dashboard:**
+- `/client/dashboard/jobs` — Completed jobs with "Write a review" CTA
+- `/client/dashboard/reviews` — Submitted reviews with provider replies
+- Email preferences toggle in reviews section
+
+**Provider Dashboard:**
+- `/provider/dashboard` — Shows "Latest Review" preview card with unreplied count
+- `/provider/dashboard/reviews` — Full review management with reply/edit
+- Sidebar shows unreplied review badge
+
+### Dynamic Rating Calculation
+
+**Provider Rating:**
+- Calculated as AVG(reviews.rating) in real-time
+- Updated automatically when reviews are created/modified
+- Stored in providers.rating for quick access
+
+**Review Count:**
+- Calculated as COUNT(reviews) per provider
+- Used in public provider profiles for trust signals
+
+### API Design
+
+**Client Endpoints:**
+- `GET /api/v1/client/reviews/eligible-leads` — List reviewable completed jobs
+- `POST /api/v1/client/reviews` — Submit a review
+- `GET /api/v1/client/reviews` — List submitted reviews
+- `GET /api/v1/client/reviews/preferences` — Get email preferences
+- `PATCH /api/v1/client/reviews/preferences` — Update email preferences
+
+**Provider Endpoints:**
+- `GET /api/v1/provider/reviews` — List all reviews
+- `GET /api/v1/provider/reviews/latest-preview` — Dashboard preview
+- `POST /api/v1/provider/reviews/{id}/reply` — First reply
+- `PATCH /api/v1/provider/reviews/{id}/reply` — Edit reply
+
+### i18n Support
+
+All review-related UI text is translatable via the translation system:
+- 34 supported languages
+- Translation keys in `apps/api/scripts/seed_review_translations.py`
+- Keys include: reviews_title, write_review, your_rating, provider_replied, etc.
+
+### Security Considerations
+
+- **Authorization:** All endpoints verify JWT + ownership
+- **Rate limiting:** Inherited from auth rate limiting
+- **Input validation:** Pydantic schemas enforce constraints
+- **XSS prevention:** All text content escaped in templates
+
+### Migration Path
+
+```bash
+# Run database migration
+cd apps/api
+alembic upgrade g6h7i8j9k0l1
+
+# Seed translation keys
+python scripts/seed_review_translations.py
+```

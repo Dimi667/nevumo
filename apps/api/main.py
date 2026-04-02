@@ -19,11 +19,13 @@ from routes import (
     auth_router,
     categories_router,
     cities_router,
+    client_router,
     providers_router,
     leads_router,
     events_router,
     page_events_router,
     provider_router,
+    reviews_router,
 )
 
 logging.basicConfig(
@@ -79,11 +81,13 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 app.include_router(auth_router)
 app.include_router(categories_router)
 app.include_router(cities_router)
+app.include_router(client_router)
 app.include_router(providers_router)
 app.include_router(leads_router)
 app.include_router(events_router)
 app.include_router(page_events_router)
 app.include_router(provider_router)
+app.include_router(reviews_router)
 
 # Serve uploaded provider images
 import os as _os

@@ -393,6 +393,54 @@ def seed():
             "response_time": "⏱ O prestador responde geralmente em 30 minutos",
             "button_text": "Solicitar serviço",
             "disclaimer": "Pedido gratuito • Sem compromisso"
+        },
+        "uk": {
+            "rating_label": "рейтинг",
+            "jobs_label": "завершені роботи",
+            "verified_label": "✓ Перевірений професіонал",
+            "phone_label": "Телефон",
+            "phone_placeholder": "напр. +380...",
+            "notes_label": "Нотатки",
+            "notes_placeholder": "Опишіть ваш запит (час, адрес, деталі)",
+            "response_time": "⏱ Постачальник зазвичай відповідає протягом 30 хвилин",
+            "button_text": "Замовити послугу",
+            "disclaimer": "Безкоштовний запит • Без зобов'язань"
+        },
+        "ru": {
+            "rating_label": "рейтинг",
+            "jobs_label": "выполненные работы",
+            "verified_label": "✓ Проверенный профессионал",
+            "phone_label": "Телефон",
+            "phone_placeholder": "напр. +7...",
+            "notes_label": "Заметки",
+            "notes_placeholder": "Опишите ваш запрос (время, адрес, детали)",
+            "response_time": "⏱ Поставщик обычно отвечает в течение 30 минут",
+            "button_text": "Заказать услугу",
+            "disclaimer": "Бесплатный запрос • Без обязательств"
+        },
+        "is": {
+            "rating_label": "einkunn",
+            "jobs_label": "lokað verkefni",
+            "verified_label": "✓ Staðfestur atvinnurekstur",
+            "phone_label": "Sími",
+            "phone_placeholder": "t.d. +354...",
+            "notes_label": "Athugasemdir",
+            "notes_placeholder": "Lýsið beiðni þína (tími, heimilisfang, nánar)",
+            "response_time": "⏱ Þjónustuveitandi svarar venjulega innan 30 mínútna",
+            "button_text": "Pækja þjónustu",
+            "disclaimer": "Ókeypis beiðni • Ábyrgðalaust"
+        },
+        "lb": {
+            "rating_label": "Bewertung",
+            "jobs_label": "fäerdeg Aufgaben",
+            "verified_label": "✓ Verifizéierte Beruffsberuffer",
+            "phone_label": "Telefon",
+            "phone_placeholder": "z.B. +352...",
+            "notes_label": "Notizen",
+            "notes_placeholder": "Beschreiwen Är Ufro (Zäit, Adress, Detailer)",
+            "response_time": "⏱ Ubidder reagéiert normalerweis bann 30 Minutten",
+            "button_text": "Service ufroen",
+            "disclaimer": "Käschent Ufro • oun Verflichtung"
         }
     }
 

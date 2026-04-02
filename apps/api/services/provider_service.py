@@ -911,7 +911,7 @@ def get_dashboard_stats(provider: Provider, db: Session) -> dict:
         "total_leads": total_leads,
         "new_leads": new_leads,
         "contacted_leads": contacted_leads,
-        "rating": float(provider.rating or 0),
+        "rating": get_provider_rating(provider.id, db),
         "verified": provider.verified,
         "availability_status": provider.availability_status,
     }

@@ -6,7 +6,7 @@ from sqlalchemy import (
     String, Text, ForeignKey, Integer, Boolean,
     Numeric, CheckConstraint, UniqueConstraint, Index
 )
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID as PG_UUID, JSONB, INET
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -32,9 +32,16 @@ class User(Base):
     role: Mapped[str] = mapped_column(String, nullable=False)
     locale: Mapped[str] = mapped_column(String, default="en")
     country_code: Mapped[Optional[str]] = mapped_column(String(2))
+    review_reply_email_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     provider: Mapped["Provider"] = relationship(back_populates="user", uselist=False)
+
+    __table_args__ = (
+        CheckConstraint("role IN ('client', 'provider')", name="ck_users_role"),
+        Index("idx_users_role", "role"),
+        Index("idx_users_review_reply_email", "review_reply_email_enabled"),
+    )
 
 
 # -------------------------
@@ -47,8 +54,11 @@ class Provider(Base):
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), unique=True)
 
-    business_name: Mapped[str] = mapped_column(String, nullable=False)
+    business_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     description: Mapped[Optional[str]] = mapped_column(Text)
+    slug: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    slug_change_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    profile_image_url: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     rating: Mapped[float] = mapped_column(Numeric(2, 1), default=0)
     verified: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -58,9 +68,22 @@ class Provider(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     user: Mapped["User"] = relationship(back_populates="provider")
-
     services: Mapped[List["Service"]] = relationship(back_populates="provider")
     cities: Mapped[List["ProviderCity"]] = relationship(back_populates="provider")
+    slug_history: Mapped[List["ProviderSlugHistory"]] = relationship(
+        back_populates="provider",
+        cascade="all, delete-orphan",
+        order_by="desc(ProviderSlugHistory.changed_at)",
+    )
+    redirects: Mapped[List["UrlRedirect"]] = relationship(
+        back_populates="provider",
+        cascade="all, delete-orphan",
+    )
+
+    __table_args__ = (
+        Index("idx_providers_rating", "rating"),
+        Index("idx_providers_status", "availability_status"),
+    )
 
 
 # -------------------------
@@ -100,6 +123,51 @@ class ProviderCity(Base):
     __table_args__ = (
         UniqueConstraint("provider_id", "city_id"),
         Index("idx_provider_cities_city", "city_id"),
+    )
+
+
+# -------------------------
+# Provider Slug History
+# -------------------------
+
+class ProviderSlugHistory(Base):
+    __tablename__ = "provider_slug_history"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    provider_id: Mapped[UUID] = mapped_column(ForeignKey("providers.id", ondelete="CASCADE"), nullable=False)
+    old_slug: Mapped[str] = mapped_column(String(255), nullable=False)
+    new_slug: Mapped[str] = mapped_column(String(255), nullable=False)
+    changed_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False)
+    ip_address: Mapped[Optional[str]] = mapped_column(INET, nullable=True)
+    user_agent: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    provider: Mapped["Provider"] = relationship(back_populates="slug_history")
+
+    __table_args__ = (
+        Index("idx_provider_slug_history_provider_changed", "provider_id", "changed_at"),
+        Index("idx_provider_slug_history_old_slug", "old_slug"),
+    )
+
+
+# -------------------------
+# URL Redirects
+# -------------------------
+
+class UrlRedirect(Base):
+    __tablename__ = "url_redirects"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    provider_id: Mapped[UUID] = mapped_column(ForeignKey("providers.id", ondelete="CASCADE"), nullable=False)
+    old_slug: Mapped[str] = mapped_column(String(255), nullable=False)
+    new_slug: Mapped[str] = mapped_column(String(255), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False)
+    active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+
+    provider: Mapped["Provider"] = relationship(back_populates="redirects")
+
+    __table_args__ = (
+        UniqueConstraint("provider_id", "old_slug", name="uq_url_redirects_provider_old_slug"),
+        Index("idx_url_redirects_old_slug_active", "old_slug", "active"),
     )
 
 
@@ -147,7 +215,6 @@ class Service(Base):
     description: Mapped[Optional[str]] = mapped_column(Text)
 
     price_type: Mapped[str] = mapped_column(String)
-    # price_type validation is in Pydantic (supports: fixed, hourly, request, per_sqm)
     base_price: Mapped[Optional[float]] = mapped_column(Numeric)
     currency: Mapped[str] = mapped_column(String, default="EUR")
 
@@ -236,6 +303,7 @@ class LeadMatch(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     __table_args__ = (
+        CheckConstraint("status IN ('invited', 'accepted', 'rejected')", name="ck_lead_matches_status"),
         UniqueConstraint("lead_id", "provider_id"),
         Index("idx_lead_matches_lead", "lead_id"),
     )
@@ -255,6 +323,10 @@ class Review(Base):
 
     rating: Mapped[int] = mapped_column(Integer, nullable=False)  # 1-5 stars
     comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    provider_reply: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    provider_reply_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    provider_reply_edited_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    provider_reply_edit_count: Mapped[int] = mapped_column(Integer, default=0)
 
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
@@ -262,6 +334,7 @@ class Review(Base):
         CheckConstraint("rating >= 1 AND rating <= 5", name="ck_reviews_rating_range"),
         Index("idx_reviews_provider", "provider_id"),
         Index("idx_reviews_client", "client_id"),
+        Index("idx_reviews_provider_reply_at", "provider_reply_at"),
         UniqueConstraint("lead_id", name="uq_reviews_lead"),
     )
 
@@ -296,12 +369,53 @@ class LeadEvent(Base):
     lead_id: Mapped[UUID] = mapped_column(ForeignKey("leads.id", ondelete="CASCADE"))
 
     event_type: Mapped[Optional[str]] = mapped_column(String)
-    metadata: Mapped[Optional[dict]] = mapped_column(JSONB)
+    event_metadata: Mapped[Optional[dict]] = mapped_column("metadata", JSONB)
 
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     __table_args__ = (
         Index("idx_lead_events_lead", "lead_id"),
+    )
+
+
+# -------------------------
+# Translations (i18n)
+# -------------------------
+
+class Translation(Base):
+    __tablename__ = "translations"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    lang: Mapped[str] = mapped_column(String, nullable=False)
+    key: Mapped[str] = mapped_column(String, nullable=False)
+    value: Mapped[str] = mapped_column(String)
+
+    __table_args__ = (
+        UniqueConstraint("lang", "key"),
+        Index("idx_translations_lang", "lang"),
+        Index("idx_translations_key", "key"),
+    )
+
+
+# -------------------------
+# Page Events (Tracking)
+# -------------------------
+
+class PageEvent(Base):
+    __tablename__ = "page_events"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    event_type: Mapped[str] = mapped_column(Text, nullable=False)
+    page: Mapped[str] = mapped_column(Text, nullable=False)
+    event_metadata: Mapped[Optional[dict]] = mapped_column("metadata", JSONB, default=dict)
+    ip: Mapped[Optional[str]] = mapped_column(Text)
+    user_agent: Mapped[Optional[str]] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("idx_page_events_type", "event_type"),
+        Index("idx_page_events_page", "page"),
+        Index("idx_page_events_created", "created_at"),
     )
 
 

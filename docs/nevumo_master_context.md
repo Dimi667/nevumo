@@ -141,15 +141,21 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
 - Auth backend — Phase A (6 endpoints, bcrypt, JWT, rate limiting)
 - Auth frontend — connected to real API (login, register, forgot, reset)
 - Provider Dashboard backend — 10 endpoints, JWT auth, lead status management, image upload, QR generation, onboarding support
-- Provider Dashboard frontend — all pages (Overview, Leads, Services, Analytics, QR Code, Profile, Settings)
+- Provider Dashboard frontend — all pages (Overview, Leads, Services, Analytics, QR Code, Profile, Settings, Reviews)
 - Provider onboarding — 2-step wizard (profile info → first service), completeness check with auto-redirect
 - Service CRUD — add/edit/delete with category, multi-city, price type, currency
-- Client Dashboard — minimal with role switch to provider
+- Client Dashboard — with reviews, completed jobs, and email preferences
 - DB: service_cities table (many-to-many service↔city), currency on services, per_sqm price type
-- SearchInput Component: Unified searchable select component (single/multi-select modes), replaces SearchableSelect/MultiSelect in Profile onboarding
+- SearchInput Component: Unified searchable select component (single/multi-select modes)
 - **URL Redirect System** — Complete slug change management with 301 redirects, SEO protection, loop prevention
 - **Slug Change Security** — Backend-controlled change limits (1 change after onboarding), frontend manipulation protection
 - **Automatic Redirect Resolution** — Seamless frontend URL updates, browser address bar synchronization
+- **Review System (Closed Trust Conversation Model)** — Complete review/rating system with:
+  - Client reviews for completed jobs
+  - Provider single reply (editable)
+  - Email notifications on first reply (with opt-out)
+  - Dashboard integration (provider reviews section, client reviews page)
+  - 34-language translation support
 
 ### 🔜 Next
 - Dashboard design polish (UI refinements across all pages)
@@ -157,15 +163,17 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
 - Email sending for reset password (Resend / SendGrid)
 - OAuth — Google + Facebook
 
-### Recent Fixes (March 2026)
-- **Optimized QR Code SVG generation** — Replaced path-based rendering with horizontal rect runs for smaller file size and better performance
-- Fixed API server startup issues by adding missing `SlugCheckResponse` schema
-- Added missing `Optional` import in auth routes
-- Resolved frontend 404 errors caused by API connectivity issues
-- Updated documentation to reflect slug validation schema changes
-- **Implemented complete redirect system with SEO-safe slug changes**
-- **Secured slug change limits against frontend manipulation**
-- **Added automatic redirect detection and URL updates in frontend**
+### Recent Changes (April 2026)
+- **Implemented Review/Rating System** — Closed trust conversation model:
+  - Database migration for provider reply fields and user email preferences
+  - Backend API endpoints for client and provider review flows
+  - Email notification service with opt-out mechanism
+  - Provider dashboard reviews section with reply/edit functionality
+  - Client dashboard completed jobs with review CTA
+  - Client email preferences toggle
+  - Translation keys for all 34 languages
+  - Updated documentation (api_contracts, db_schema, architecture)
+- **Rating card** on provider dashboard clearly labeled as "Overall Rating" from all client reviews
 
 ### 🔮 Future
 - AI lead matching

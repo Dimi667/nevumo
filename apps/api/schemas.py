@@ -516,3 +516,101 @@ class SlugCheckRequest(BaseModel):
 class SlugCheckResponse(BaseModel):
     success: bool = True
     data: dict
+
+
+# -------------------------
+# Reviews
+# -------------------------
+
+class ReviewCreateRequest(BaseModel):
+    lead_id: UUID
+    rating: int
+    comment: Optional[str] = None
+
+    @field_validator("rating")
+    @classmethod
+    def validate_rating(cls, v: int) -> int:
+        if v < 1 or v > 5:
+            raise ValueError("Rating must be between 1 and 5")
+        return v
+
+
+class ReviewCreateResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ProviderReplyRequest(BaseModel):
+    reply: str
+
+    @field_validator("reply")
+    @classmethod
+    def validate_reply(cls, v: str) -> str:
+        if not v or len(v.strip()) < 1:
+            raise ValueError("Reply cannot be empty")
+        if len(v) > 2000:
+            raise ValueError("Reply cannot exceed 2000 characters")
+        return v.strip()
+
+
+class ProviderReplyResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ReviewConversationItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: UUID
+    provider_id: UUID
+    client_id: UUID
+    lead_id: Optional[UUID] = None
+    rating: int
+    comment: Optional[str] = None
+    created_at: datetime
+
+    # Provider reply fields
+    provider_reply: Optional[str] = None
+    provider_reply_at: Optional[datetime] = None
+    provider_reply_edited_at: Optional[datetime] = None
+    provider_reply_edit_count: int = 0
+    is_reply_edited: bool = False
+
+    # Client info (for provider view)
+    client_name: Optional[str] = None
+
+    # Provider info (for client view)
+    provider_business_name: Optional[str] = None
+
+    # Lead info
+    lead_description: Optional[str] = None
+    lead_completed_at: Optional[datetime] = None
+
+
+class ReviewListResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ReviewEligibleLead(BaseModel):
+    id: UUID
+    description: Optional[str] = None
+    created_at: datetime
+    provider_id: UUID
+    provider_business_name: Optional[str] = None
+    has_review: bool = False
+
+
+class ReviewEligibleLeadsResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ReviewEmailPreferenceResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class ReviewLatestPreviewResponse(BaseModel):
+    success: bool = True
+    data: dict

@@ -6,6 +6,8 @@ import { useParams, useRouter } from 'next/navigation';
 import StatsCard from '@/components/dashboard/StatsCard';
 import type { DashboardResponse } from '@/types/provider';
 import { getProviderDashboard } from '@/lib/provider-api';
+import { getLatestReviewPreview } from '@/lib/review-api';
+import type { LatestReviewPreview } from '@/types/review';
 import { deriveOnboardingState, getHeroContent, CompactStepIndicator } from '@/lib/onboarding-utils';
 
 function LeadsIcon() {
@@ -61,13 +63,18 @@ export default function DashboardOverviewPage() {
   const base = `/${lang}/provider/dashboard`;
 
   const [data, setData] = useState<DashboardResponse | null>(null);
+  const [reviewPreview, setReviewPreview] = useState<LatestReviewPreview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getProviderDashboard()
-      .then(d => {
-        setData(d);
+    Promise.all([
+      getProviderDashboard(),
+      getLatestReviewPreview().catch(() => null), // Non-critical, don't fail if this errors
+    ])
+      .then(([dashboardData, reviewData]) => {
+        setData(dashboardData);
+        setReviewPreview(reviewData);
       })
       .catch((e: Error) => setError(e.message))
       .finally(() => setLoading(false));
@@ -289,6 +296,86 @@ export default function DashboardOverviewPage() {
           </div>
         )}
       </div>
+
+      {/* Reviews Preview - only show when onboarding is complete */}
+      {isOnboardingComplete && reviewPreview && reviewPreview.has_reviews && (
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-gray-800">Latest Review</h2>
+            <Link
+              href={`${base}/reviews`}
+              className="text-xs text-orange-500 hover:text-orange-600 font-medium transition-colors"
+            >
+              View All →
+            </Link>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-4">
+            <div className="flex items-start justify-between mb-2">
+              <div>
+                <span className="font-medium text-gray-900">
+                  {reviewPreview.latest_review?.client_name}
+                </span>
+                <div className="flex items-center gap-1 mt-1">
+                  {[...Array(5)].map((_, i) => (
+                    <svg
+                      key={i}
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill={i < (reviewPreview.latest_review?.rating || 0) ? '#fbbf24' : 'none'}
+                      stroke={i < (reviewPreview.latest_review?.rating || 0) ? 'none' : '#d1d5db'}
+                      strokeWidth="2"
+                    >
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  ))}
+                </div>
+              </div>
+              {!reviewPreview.latest_review?.has_reply && (
+                <span className="px-2 py-1 bg-orange-100 text-orange-600 text-xs font-medium rounded-full">
+                  Needs Reply
+                </span>
+              )}
+            </div>
+
+            {reviewPreview.latest_review?.comment_preview && (
+              <p className="text-sm text-gray-600 italic mb-3">
+                &ldquo;{reviewPreview.latest_review.comment_preview}&rdquo;
+              </p>
+            )}
+
+            <p className="text-xs text-gray-400">
+              {new Date(reviewPreview.latest_review?.created_at || '').toLocaleDateString()}
+            </p>
+          </div>
+
+          {reviewPreview.unreplied_count > 0 && (
+            <div className="mt-4 flex items-center justify-between bg-orange-50 rounded-lg p-3">
+              <span className="text-sm text-orange-700">
+                {reviewPreview.unreplied_count} review{reviewPreview.unreplied_count > 1 ? 's' : ''} waiting for your reply
+              </span>
+              <Link
+                href={`${base}/reviews`}
+                className="text-xs text-orange-600 hover:text-orange-700 font-medium"
+              >
+                Reply now →
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Empty state for reviews */}
+      {isOnboardingComplete && reviewPreview && !reviewPreview.has_reviews && (
+        <div className="bg-gray-50 rounded-xl border border-gray-200 p-5 text-center">
+          <div className="text-3xl mb-2">⭐</div>
+          <h3 className="text-sm font-medium text-gray-900">No reviews yet</h3>
+          <p className="text-xs text-gray-500 mt-1">
+            When clients review your services, they will appear here
+          </p>
+        </div>
+      )}
     </div>
   );
 }

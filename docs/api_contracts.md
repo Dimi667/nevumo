@@ -990,3 +990,407 @@ Auth errors (see Auth section for full list):
 - Webhooks (provider notifications)
 - GraphQL layer
 - AI matching endpoint
+
+---
+
+# 🔹 REVIEW SYSTEM API (Closed Trust Conversation Model)
+
+## Overview
+
+The review system implements a closed trust conversation model:
+- **Client review is the starting message**
+- **Provider has exactly one reply per review** (editable unlimited times)
+- **Conversation closes after provider reply** - no further messages
+- **Email notifications** - Sent to client on first provider reply only (if opted in)
+
+---
+
+## Client Endpoints (JWT Required)
+
+### GET /api/v1/client/reviews/eligible-leads
+
+**Purpose:** List completed leads that are eligible for review.
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "leads": [
+      {
+        "id": "uuid",
+        "description": "Need massage therapy for back pain",
+        "created_at": "2025-01-15T10:30:00",
+        "provider_id": "uuid",
+        "provider_business_name": "Maria Massage",
+        "has_review": false
+      }
+    ],
+    "count": 3
+  }
+}
+```
+
+---
+
+### POST /api/v1/client/reviews
+
+**Purpose:** Create a review for a completed lead.
+
+**Body:**
+```json
+{
+  "lead_id": "uuid",
+  "rating": 5,
+  "comment": "Excellent service, very professional!"
+}
+```
+
+**Rules:**
+- Client must own the lead
+- Lead must have status='done'
+- One review per lead only
+- Rating: 1-5 stars
+- Comment: optional, max 1000 chars
+
+**Response (201):**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "provider_id": "uuid",
+    "lead_id": "uuid",
+    "rating": 5,
+    "comment": "Excellent service, very professional!",
+    "created_at": "2025-04-02T14:30:00"
+  }
+}
+```
+
+**Errors:**
+- 404 LEAD_NOT_FOUND
+- 400 LEAD_NOT_COMPLETED - lead status is not 'done'
+- 403 NOT_YOUR_LEAD - client doesn't own this lead
+- 409 REVIEW_EXISTS - review already exists for this lead
+
+---
+
+### GET /api/v1/client/reviews
+
+**Purpose:** List all reviews submitted by the client.
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "id": "uuid",
+        "provider_id": "uuid",
+        "provider_business_name": "Maria Massage",
+        "lead_id": "uuid",
+        "lead_description": "Need massage therapy",
+        "rating": 5,
+        "comment": "Excellent service!",
+        "created_at": "2025-04-02T14:30:00",
+        "provider_reply": "Thank you for your kind words!",
+        "provider_reply_at": "2025-04-02T16:00:00",
+        "provider_reply_edited_at": null,
+        "provider_reply_edit_count": 0,
+        "is_reply_edited": false
+      }
+    ],
+    "total": 10,
+    "limit": 50,
+    "offset": 0
+  }
+}
+```
+
+---
+
+### GET /api/v1/client/reviews/preferences
+
+**Purpose:** Get email notification preferences.
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "review_reply_email_enabled": true,
+    "description": "Receive email notifications when providers reply to your reviews"
+  }
+}
+```
+
+---
+
+### PATCH /api/v1/client/reviews/preferences
+
+**Purpose:** Update email notification preferences.
+
+**Query Params:**
+- `review_reply_email_enabled` (boolean, required)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "review_reply_email_enabled": false
+  }
+}
+```
+
+---
+
+### GET /api/v1/client/reviews/can-review-provider/{provider_id}
+
+**Purpose:** Check if client can review a specific provider.
+
+**Response (can review):**
+```json
+{
+  "success": true,
+  "data": {
+    "can_review": true,
+    "eligible_leads": [
+      {
+        "id": "uuid",
+        "description": "Need massage therapy",
+        "created_at": "2025-01-15T10:30:00"
+      }
+    ]
+  }
+}
+```
+
+**Response (cannot review):**
+```json
+{
+  "success": true,
+  "data": {
+    "can_review": false,
+    "reason": "no_completed_jobs",
+    "message": "You can only review providers after completing a job with them"
+  }
+}
+```
+
+---
+
+## Provider Endpoints (JWT Required)
+
+### GET /api/v1/provider/reviews
+
+**Purpose:** List all review conversations for the provider.
+
+**Query Params:**
+- `limit` (int, default 50, max 100)
+- `offset` (int, default 0)
+- `unreplied_only` (boolean, default false)
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "id": "uuid",
+        "provider_id": "uuid",
+        "client_id": "uuid",
+        "client_name": "client_name",
+        "lead_id": "uuid",
+        "rating": 5,
+        "comment": "Great service!",
+        "created_at": "2025-04-02T14:30:00",
+        "provider_reply": "Thank you!",
+        "provider_reply_at": "2025-04-02T16:00:00",
+        "provider_reply_edited_at": null,
+        "provider_reply_edit_count": 0,
+        "is_reply_edited": false
+      }
+    ],
+    "total": 25,
+    "limit": 50,
+    "offset": 0
+  }
+}
+```
+
+---
+
+### GET /api/v1/provider/reviews/latest-preview
+
+**Purpose:** Get latest review preview for dashboard.
+
+**Response (has reviews):**
+```json
+{
+  "success": true,
+  "data": {
+    "has_reviews": true,
+    "latest_review": {
+      "id": "uuid",
+      "client_name": "client_name",
+      "rating": 5,
+      "comment_preview": "Excellent service...",
+      "has_reply": false,
+      "created_at": "2025-04-02T14:30:00",
+      "unreplied_count": 3
+    },
+    "unreplied_count": 3
+  }
+}
+```
+
+**Response (no reviews):**
+```json
+{
+  "success": true,
+  "data": {
+    "has_reviews": false,
+    "unreplied_count": 0
+  }
+}
+```
+
+---
+
+### POST /api/v1/provider/reviews/{review_id}/reply
+
+**Purpose:** Add first reply to a client review.
+
+**Body:**
+```json
+{
+  "reply": "Thank you for your review!"
+}
+```
+
+**Rules:**
+- Provider can only reply to their own reviews
+- Only one reply per review (use PATCH for edits)
+- Triggers email notification to client on first reply (if opted in)
+- Max 2000 characters
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "provider_reply": "Thank you for your review!",
+    "provider_reply_at": "2025-04-02T16:00:00",
+    "provider_reply_edited_at": null,
+    "provider_reply_edit_count": 0,
+    "is_reply_edited": false
+  }
+}
+```
+
+**Errors:**
+- 404 REVIEW_NOT_FOUND - review doesn't exist or not owned by provider
+
+---
+
+### PATCH /api/v1/provider/reviews/{review_id}/reply
+
+**Purpose:** Edit existing reply (unlimited edits allowed).
+
+**Body:**
+```json
+{
+  "reply": "Updated: Thank you very much for your kind review!"
+}
+```
+
+**Rules:**
+- Can edit unlimited times
+- Does NOT trigger email notification (only first reply sends email)
+- Max 2000 characters
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "provider_reply": "Updated: Thank you very much!",
+    "provider_reply_at": "2025-04-02T16:00:00",
+    "provider_reply_edited_at": "2025-04-02T17:00:00",
+    "provider_reply_edit_count": 1,
+    "is_reply_edited": true
+  }
+}
+```
+
+---
+
+## Review System Error Codes
+
+| Code | Status | Description |
+|------|--------|-------------|
+| LEAD_NOT_FOUND | 404 | Lead doesn't exist |
+| LEAD_NOT_COMPLETED | 400 | Lead status is not 'done' |
+| NOT_YOUR_LEAD | 403 | Client doesn't own this lead |
+| REVIEW_EXISTS | 409 | Review already exists for this lead |
+| REVIEW_NOT_FOUND | 404 | Review doesn't exist or provider doesn't own it |
+| INVALID_RATING | 422 | Rating must be 1-5 |
+| INVALID_REPLY | 422 | Reply cannot be empty or exceeds 2000 chars |
+
+---
+
+## Email Notification Behavior
+
+### Provider Reply Notifications
+
+**Trigger:** First provider reply only
+
+**Recipient:** Client who submitted the review
+
+**Condition:** Only sent if `user.review_reply_email_enabled = true` (opted in)
+
+**Content:**
+- Subject: "{provider_name} responded to your review"
+- Body includes: client review, provider reply, link to view reviews
+- Footer: Link to manage email preferences
+
+**Opt-out:** Client can disable in dashboard settings (`/api/v1/client/reviews/preferences`)
+
+### Edit Notifications
+
+**No emails sent** when provider edits an existing reply. Only the first reply triggers notification.
+
+---
+
+## Frontend Integration
+
+### Client Dashboard
+- `/client/dashboard/jobs` - List completed jobs with "Write a review" CTA
+- `/client/dashboard/reviews` - List submitted reviews with provider replies
+- Email preferences toggle in reviews section
+
+### Provider Dashboard
+- `/provider/dashboard` - Shows "Latest Review" preview card
+- `/provider/dashboard/reviews` - Full review management with reply/edit functionality
+- Unreplied review count badge in sidebar
+
+---
+
+## Migration Required
+
+Run the following to enable the review system:
+
+```bash
+# Run database migration
+cd apps/api
+alembic upgrade g6h7i8j9k0l1
+
+# Seed translation keys
+python scripts/seed_review_translations.py
+```

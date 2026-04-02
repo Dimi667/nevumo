@@ -1,5 +1,67 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
+// ─── Auth token helper ─────────────────────────────────────────────────────
+
+function getAuthToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    return localStorage.getItem('nevumo_auth_token');
+  } catch {
+    return null;
+  }
+}
+
+// ─── Authenticated API client ───────────────────────────────────────────────
+
+async function authFetch<T>(path: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
+  const token = getAuthToken();
+  const fullUrl = `${API_BASE}${path}`;
+
+  const res = await fetch(fullUrl, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
+  });
+
+  const json = await res.json();
+  return json as ApiResponse<T>;
+}
+
+export const api = {
+  async get<T>(path: string): Promise<ApiSuccess<T>> {
+    const response = await authFetch<T>(path, { method: 'GET' });
+    if (!response.success) {
+      throw new ApiError(response.error.code, response.error.message);
+    }
+    return response;
+  },
+
+  async post<T>(path: string, body: Record<string, unknown>): Promise<ApiSuccess<T>> {
+    const response = await authFetch<T>(path, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    if (!response.success) {
+      throw new ApiError(response.error.code, response.error.message);
+    }
+    return response;
+  },
+
+  async patch<T>(path: string, body?: Record<string, unknown>): Promise<ApiSuccess<T>> {
+    const response = await authFetch<T>(path, {
+      method: 'PATCH',
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (!response.success) {
+      throw new ApiError(response.error.code, response.error.message);
+    }
+    return response;
+  },
+};
+
 // ─── Response envelope ───────────────────────────────────────────────────────
 
 export interface ApiSuccess<T> {
@@ -71,6 +133,7 @@ export interface ProviderDetail {
   jobs_completed: number;
   review_count: number;
   translations: Record<string, string>;
+  canonical_path?: string | null;
 }
 
 export interface CategoryOut {
@@ -177,6 +240,20 @@ export async function getCities(country: string): Promise<CityOut[]> {
   }
 }
 
+export async function getCityBySlug(slug: string): Promise<CityOut | null> {
+  try {
+    const res = await fetch(
+      `${API_BASE}/api/v1/cities/${encodeURIComponent(slug)}`,
+      { next: { revalidate: 3600 } },
+    );
+    if (!res.ok) return null;
+    const json: ApiResponse<CityOut> = await res.json();
+    return json.success ? json.data : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function createLead(input: LeadCreateInput): Promise<LeadCreateResult | null> {
   try {
     const res = await fetch(`${API_BASE}/api/v1/leads`, {
@@ -205,5 +282,17 @@ export async function trackEvent(
     });
   } catch {
     // silently fail
+  }
+}
+
+export async function getProviderById(providerId: string): Promise<ProviderDetail | null> {
+  try {
+    const url = new URL(`${API_BASE}/api/v1/providers/id/${encodeURIComponent(providerId)}`);
+    const res = await fetch(url.toString(), { cache: 'no-store' });
+    if (!res.ok) return null;
+    const json: ApiResponse<ProviderDetail> = await res.json();
+    return json.success ? json.data : null;
+  } catch {
+    return null;
   }
 }
