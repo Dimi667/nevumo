@@ -3,7 +3,7 @@ from decimal import Decimal
 from typing import Optional, List, Dict
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 # -------------------------
@@ -84,6 +84,13 @@ class ProviderListResponse(BaseModel):
     data: List[ProviderListItem]
 
 
+class LatestLeadPreview(BaseModel):
+    client_name: str
+    city_name: str
+    created_at: datetime
+    client_image_url: Optional[str] = None
+
+
 class ProviderDetail(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -100,10 +107,14 @@ class ProviderDetail(BaseModel):
     services: List[ServiceOut] = []
     jobs_completed: int = 0
     review_count: int = 0
+    leads_received: int = 0
+    city_leads: int = 0
     translations: Dict[str, str] = {}
     canonical_path: Optional[str] = None
     redirect_path: Optional[str] = None
     redirect_status: Optional[int] = None
+    latest_lead_preview: Optional[LatestLeadPreview] = None
+    latest_review: Optional["LatestReviewPreview"] = None
 
     @field_validator("rating", mode="before")
     @classmethod
@@ -483,6 +494,71 @@ class ProviderLeadsResponse(BaseModel):
     data: dict
 
 
+class ClientLeadsQueryParams(BaseModel):
+    status: str = "all"
+    limit: int = Field(default=50, ge=1)
+    offset: int = Field(default=0, ge=0)
+
+    @field_validator("status")
+    @classmethod
+    def validate_status(cls, v: str) -> str:
+        if v not in ("all", "active", "done", "rejected"):
+            raise ValueError("status must be all, active, done, or rejected")
+        return v
+
+
+class ClientDashboardStats(BaseModel):
+    active_leads: int
+    completed_leads: int
+    reviews_written: int
+
+
+class ClientDashboardRecentLead(BaseModel):
+    id: UUID
+    category_slug: str
+    category_name: str
+    city: str
+    provider_business_name: Optional[str] = None
+    status: str
+    created_at: datetime
+
+
+class ClientDashboardData(BaseModel):
+    stats: ClientDashboardStats
+    recent_leads: List[ClientDashboardRecentLead]
+
+
+class ClientDashboardResponse(BaseModel):
+    success: bool = True
+    data: ClientDashboardData
+
+
+class ClientLeadListItem(BaseModel):
+    id: UUID
+    category_slug: str
+    category_name: str
+    city: str
+    city_slug: str
+    provider_id: Optional[UUID] = None
+    provider_business_name: Optional[str] = None
+    provider_slug: Optional[str] = None
+    status: str
+    description: Optional[str] = None
+    source: Optional[str] = None
+    created_at: datetime
+    has_review: bool
+
+
+class ClientLeadsData(BaseModel):
+    items: List[ClientLeadListItem]
+    total: int
+
+
+class ClientLeadsResponse(BaseModel):
+    success: bool = True
+    data: ClientLeadsData
+
+
 class QRCodeResponse(BaseModel):
     success: bool = True
     data: dict
@@ -614,3 +690,13 @@ class ReviewEmailPreferenceResponse(BaseModel):
 class ReviewLatestPreviewResponse(BaseModel):
     success: bool = True
     data: dict
+
+
+class LatestReviewPreview(BaseModel):
+    """Public preview of latest review for social proof widget."""
+    model_config = ConfigDict(from_attributes=True)
+
+    client_name: str
+    rating: int
+    comment_preview: Optional[str] = None
+    created_at: datetime

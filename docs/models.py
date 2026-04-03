@@ -27,6 +27,7 @@ class User(Base):
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    name: Mapped[Optional[str]] = mapped_column(String, nullable=True)  # Canonical display name, never derived from email
     password_hash: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     role: Mapped[str] = mapped_column(String, nullable=False)
@@ -258,7 +259,7 @@ class Lead(Base):
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
 
-    client_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("users.id"))
+    client_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("users.id"))  # Null for anonymous public leads; populated for authenticated submissions
     provider_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("providers.id"))
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
@@ -318,11 +319,11 @@ class Review(Base):
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
     provider_id: Mapped[UUID] = mapped_column(ForeignKey("providers.id", ondelete="CASCADE"))
-    client_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    client_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))  # Review identity resolves through User.name or fallback Client
     lead_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("leads.id", ondelete="SET NULL"), nullable=True)
 
     rating: Mapped[int] = mapped_column(Integer, nullable=False)  # 1-5 stars
-    comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # Self-review is blocked in service logic using Provider.user_id ownership checks
     provider_reply: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     provider_reply_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
     provider_reply_edited_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)

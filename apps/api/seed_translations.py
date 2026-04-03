@@ -11,9 +11,9 @@ def seed():
     init_db()
 
     # 1. Добавяне/Обновяване на данните за Мария Петрова
-    maria = db.query(Provider).filter_by(name="Maria Petrova").first()
+    maria = db.query(Provider).filter_by(business_name="Maria Petrova").first()
     if not maria:
-        maria = Provider(name="Maria Petrova")
+        maria = Provider(business_name="Maria Petrova")
         db.add(maria)
     
     maria.job_title = "job_title_massage" # Използваме ключ за превод вместо твърд низ
@@ -38,8 +38,9 @@ def seed():
             "response_time": "⏱ Доставчикът обикновено отговаря до 30 минути",
             "button_text": "Заяви услуга",
             "disclaimer": "Безплатна заявка • Без ангажимент",
-            "success_title": "✓ Изпратено успешно!",
+            "success_title": "✓ Заявката е изпратена!",
             "success_message": "Ще се свържем с вас скоро.",
+            "success_message_received": " получи заявката ти и ще се свърже с теб по телефона.",
             "new_request_button": "Нова заявка"
         },
         "en": {
@@ -54,8 +55,9 @@ def seed():
             "response_time": "⏱ Provider usually responds within 30 minutes",
             "button_text": "Request Service",
             "disclaimer": "Free request • No obligation",
-            "success_title": "✓ Successfully sent!",
+            "success_title": "✓ Request sent!",
             "success_message": "We will contact you soon.",
+            "success_message_received": " received your request and will contact you by phone.",
             "new_request_button": "New Request"
         },
         "sr": {
@@ -68,7 +70,9 @@ def seed():
             "notes_placeholder": "Opišite svoj zahtev (vreme, adresa, detalji)",
             "response_time": "⏱ Pružalac obično odgovara u roku od 30 minuta",
             "button_text": "Zakažite uslugu",
-            "disclaimer": "Besplatan zahtev • Bez obaveza"
+            "disclaimer": "Besplatan zahtev • Bez obaveza",
+            "success_title": "✓ Zahtev je poslat!",
+            "success_message_received": " je zaprimio/la vaš zahtjev i kontaktiraće vas telefonom."
         },
         "mk": {
             "rating_label": "рејтинг",
@@ -80,7 +84,9 @@ def seed():
             "notes_placeholder": "Опишете го вашето барање (време, адреса, детали)",
             "response_time": "⏱ Пружателот обично одговара во рок од 30 минути",
             "button_text": "Закажи услуга",
-            "disclaimer": "Бесплатно барање • Без обврска"
+            "disclaimer": "Бесплатно барање • Без обврска",
+            "success_title": "✓ Барањето е испратено!",
+            "success_message_received": " го прими вашето барање и ќе ве контактира преку телефон."
         },
         "tr": {
             "rating_label": "puan",
@@ -92,7 +98,9 @@ def seed():
             "notes_placeholder": "Talebinizi açıklayın (zaman, adres, detaylar)",
             "response_time": "⏱ Sağlayıcı genellikle 30 dakika içinde yanıt verir",
             "button_text": "Hizmet Talep Et",
-            "disclaimer": "Ücretsiz talep • Yükümlülük yok"
+            "disclaimer": "Ücretsiz talep • Yükümlülük yok",
+            "success_title": "✓ İstek gönderildi!",
+            "success_message_received": " talebinizi aldı, sizinle telefonla iletişime geçecek."
         },
         "da": {
             "rating_label": "bedømmelse",
@@ -104,7 +112,9 @@ def seed():
             "notes_placeholder": "Beskriv din anmodning (tid, adresse, detaljer)",
             "response_time": "⏱ Udbyderen svarer normalt inden for 30 minutter",
             "button_text": "Bestil service",
-            "disclaimer": "Gratis anmodning • Ingen forpligtelse"
+            "disclaimer": "Gratis anmodning • Ingen forpligtelse",
+            "success_title": "✓ Anmodningen er sendt!",
+            "success_message_received": " har modtaget din anmodning og vil kontakte dig via telefon."
         },
         "no": {
             "rating_label": "vurdering",
@@ -116,7 +126,9 @@ def seed():
             "notes_placeholder": "Beskriv forespørselen din (tid, adresse, detaljer)",
             "response_time": "⏱ Leverandøren svarer vanligvis innen 30 minutter",
             "button_text": "Be om tjeneste",
-            "disclaimer": "Gratis forespørsel • Ingen forpliktelse"
+            "disclaimer": "Gratis forespørsel • Ingen forpliktelse",
+            "success_title": "✓ Forespørsel sendt!",
+            "success_message_received": " har mottatt din forespørsel og vil kontakte deg per telefon.",
         },
         "de": {
             "rating_label": "Bewertung",
@@ -128,7 +140,9 @@ def seed():
             "notes_placeholder": "Beschreiben Sie Ihre Anfrage (Zeit, Adresse, Details)",
             "response_time": "⏱ Anbieter antwortet in der Regel innerhalb von 30 Minuten",
             "button_text": "Dienstleistung anfordern",
-            "disclaimer": "Kostenlose Anfrage • Unverbindlich"
+            "disclaimer": "Kostenlose Anfrage • Unverbindlich",
+            "success_title": "✓ Anfrage gesendet!",
+            "success_message_received": " hat Ihre Anfrage erhalten und wird Sie telefonisch kontaktieren.",
         },
         "fr": {
             "rating_label": "note",
@@ -140,7 +154,9 @@ def seed():
             "notes_placeholder": "Décrivez votre demande (heure, adresse, détails)",
             "response_time": "⏱ Le prestataire répond généralement sous 30 minutes",
             "button_text": "Demander un service",
-            "disclaimer": "Demande gratuite • Sans engagement"
+            "disclaimer": "Demande gratuite • Sans engagement",
+            "success_title": "✓ Demande envoyée !",
+            "success_message_received": " a reçu votre demande et vous contactera par téléphone.",
         },
         "it": {
             "rating_label": "valutazione",
@@ -152,7 +168,9 @@ def seed():
             "notes_placeholder": "Descrivi la tua richiesta (orario, indirizzo, dettagli)",
             "response_time": "⏱ Il fornitore risponde solitamente entro 30 minuti",
             "button_text": "Richiedi servizio",
-            "disclaimer": "Richiesta gratuita • Senza impegno"
+            "disclaimer": "Richiesta gratuita • Senza impegno",
+            "success_title": "✓ Richiesta inviata!",
+            "success_message_received": " ha ricevuto la tua richiesta e ti contatterà telefonicamente.",
         },
         "es": {
             "rating_label": "calificación",
@@ -164,7 +182,9 @@ def seed():
             "notes_placeholder": "Describa su solicitud (hora, dirección, detalles)",
             "response_time": "⏱ El proveedor suele responder en 30 minutos",
             "button_text": "Solicitar servicio",
-            "disclaimer": "Solicitud gratuita • Sin compromiso"
+            "disclaimer": "Solicitud gratuita • Sin compromiso",
+            "success_title": "✓ ¡Solicitud enviada!",
+            "success_message_received": " recibió su solicitud y le contactará por teléfono.",
         },
         "pt": {
             "rating_label": "avaliação",
@@ -176,7 +196,9 @@ def seed():
             "notes_placeholder": "Descreva o seu pedido (hora, morada, detalhes)",
             "response_time": "⏱ O provedor costuma responder em 30 minutos",
             "button_text": "Solicitar serviço",
-            "disclaimer": "Pedido gratuito • Sem compromisso"
+            "disclaimer": "Pedido gratuito • Sem compromisso",
+            "success_title": "✓ Solicitação enviada!",
+            "success_message_received": " recebeu sua solicitação e entrará em contato por telefone."
         },
         "nl": {
             "rating_label": "beoordeling",
@@ -188,7 +210,9 @@ def seed():
             "notes_placeholder": "Beschrijf je verzoek (tijd, adres, details)",
             "response_time": "⏱ Aanbieder reageert meestal binnen 30 minuten",
             "button_text": "Service aanvragen",
-            "disclaimer": "Gratis aanvraag • Geen verplichting"
+            "disclaimer": "Gratis aanvraag • Geen verplichting",
+            "success_title": "✓ Aanvraag verzonden!",
+            "success_message_received": " heeft uw aanvraag ontvangen en neemt telefonisch contact op.",
         },
         "pl": {
             "rating_label": "ocena",
@@ -200,7 +224,9 @@ def seed():
             "notes_placeholder": "Opisz swoją prośbę (czas, adres, szczegóły)",
             "response_time": "⏱ Dostawca zazwyczaj odpowiada w ciągu 30 minut",
             "button_text": "Zamów usługę",
-            "disclaimer": "Bezpłatne zapytanie • Bez zobowiązań"
+            "disclaimer": "Bezpłatne zapytanie • Bez zobowiązań",
+            "success_title": "✓ Prośba została wysłana!",
+            "success_message_received": " otrzymał(a) Twoje zgłoszenie i skontaktuje się telefonicznie."
         },
         "cs": {
             "rating_label": "hodnocení",
@@ -212,7 +238,9 @@ def seed():
             "notes_placeholder": "Popište svůj požadavek (čas, adresa, podrobnosti)",
             "response_time": "⏱ Poskytovatel obvykle odpovídá do 30 minut",
             "button_text": "Objednat službu",
-            "disclaimer": "Bezplatná žádost • Bez závazků"
+            "disclaimer": "Bezplatná žádost • Bez závazků",
+            "success_title": "✓ Žádost byla odeslána!",
+            "success_message_received": " přijal(a) vaši žádost a kontaktuje vás telefonicky."
         },
         "sk": {
             "rating_label": "hodnotenie",
@@ -224,7 +252,9 @@ def seed():
             "notes_placeholder": "Popíšte svoju požiadavku (čas, adresa, podrobnosti)",
             "response_time": "⏱ Poskytovateľ zvyčajne odpovedá do 30 minút",
             "button_text": "Objednať službu",
-            "disclaimer": "Bezplatná žiadosť • Bez záväzkov"
+            "disclaimer": "Bezplatná žiadosť • Bez záväzkov",
+            "success_title": "✓ Žiadosť bola odoslaná!",
+            "success_message_received": " prijal(a) vašu žiadosť a bude vás kontaktovať telefonicky."
         },
         "hu": {
             "rating_label": "értékelés",
@@ -236,7 +266,9 @@ def seed():
             "notes_placeholder": "Írja le kérését (időpont, cím, részletek)",
             "response_time": "⏱ A szolgáltató általában 30 percen belül válaszol",
             "button_text": "Szolgáltatás igénylése",
-            "disclaimer": "Ingyenes kérés • Kötelezettség nélkül"
+            "disclaimer": "Ingyenes kérés • Kötelezettség nélkül",
+            "success_title": "✓ Kérés elküldve!",
+            "success_message_received": " megkapta a kérését, és telefonon felveszi Önnel a kapcsolatot."
         },
         "ro": {
             "rating_label": "evaluare",
@@ -248,7 +280,9 @@ def seed():
             "notes_placeholder": "Descrieți cererea (ora, adresa, detalii)",
             "response_time": "⏱ Furnizorul răspunde de obicei în 30 de minute",
             "button_text": "Solicită serviciu",
-            "disclaimer": "Cerere gratuită • Fără obligații"
+            "disclaimer": "Cerere gratuită • Fără obligații",
+            "success_title": "✓ Cererea a fost trimisă!",
+            "success_message_received": " a primit cererea dumneavoastră și vă va contacta telefonic."
         },
         "sv": {
             "rating_label": "betyg",
@@ -260,7 +294,9 @@ def seed():
             "notes_placeholder": "Beskriv din förfrågan (tid, adresse, detaljer)",
             "response_time": "⏱ Leverantören svarar vanligtvis inom 30 minuter",
             "button_text": "Beställ tjänst",
-            "disclaimer": "Gratis förfrågan • Inga förpliktelser"
+            "disclaimer": "Gratis förfrågan • Inga förpliktelser",
+            "success_title": "✓ Begäran har skickats!",
+            "success_message_received": " har tagit emot din begäran och kontaktar dig per telefon."
         },
         "fi": {
             "rating_label": "arvio",
@@ -272,7 +308,9 @@ def seed():
             "notes_placeholder": "Kuvaile pyyntösi (aika, osoite, tiedot)",
             "response_time": "⏱ Palveluntarjoaja vastaa yleensä 30 minuutissa",
             "button_text": "Pyydä palvelua",
-            "disclaimer": "Ilmainen pyyntö • Ei sitoumusta"
+            "disclaimer": "Ilmainen pyyntö • Ei sitoumusta",
+            "success_title": "✓ Pyyntö lähetetty!",
+            "success_message_received": " on vastaanottanut pyyntösi ja ottaa sinuun yhteyttä puhelimitse."
         },
         "et": {
             "rating_label": "hinnang",
@@ -284,7 +322,9 @@ def seed():
             "notes_placeholder": "Kirjeldage oma soovi (aeg, aadress, üksikasjad)",
             "response_time": "⏱ Pakkuja vastab tavaliselt 30 minuti jooksul",
             "button_text": "Telli teenus",
-            "disclaimer": "Tasuta päring • Ilma kohustuseta"
+            "disclaimer": "Tasuta päring • Ilma kohustuseta",
+            "success_title": "✓ Päring on saadetud!",
+            "success_message_received": " sai teie päringu kätte ja võtab teiega ühendust telefoni teel."
         },
         "lv": {
             "rating_label": "vērtējums",
@@ -296,7 +336,9 @@ def seed():
             "notes_placeholder": "Aprakstiet savu pieprasījumu (laiks, adrese, detaļas)",
             "response_time": "⏱ Pakalpojuma sniedzējs parasti atbild 30 minūšu laikā",
             "button_text": "Pieteikties pakalpojumam",
-            "disclaimer": "Bezmaksas pieprasījums • Bez saistībām"
+            "disclaimer": "Bezmaksas pieprasījums • Bez saistībām",
+            "success_title": "✓ Pieprasījums nosūtīts!",
+            "success_message_received": " saņēma jūsu pieprasījumu un sazināsies ar jums pa tālruni."
         },
         "lt": {
             "rating_label": "įvertinimas",
@@ -308,7 +350,9 @@ def seed():
             "notes_placeholder": "Aprašykite savo užklausą (laikas, adresas, detalės)",
             "response_time": "⏱ Teikėjas paprastai atsako per 30 minučių",
             "button_text": "Užsakyti paslaugą",
-            "disclaimer": "Nemokama užklausa • Be įsipareigojimų"
+            "disclaimer": "Nemokama užklausa • Be įsipareigojimų",
+            "success_title": "✓ Užklausa išsiųsta!",
+            "success_message_received": " gavo jūsų užklausą ir susisieks su jumis telefonu."
         },
         "sl": {
             "rating_label": "ocena",
@@ -320,7 +364,9 @@ def seed():
             "notes_placeholder": "Opišite svojo zahtevo (čas, naslov, podrobnosti)",
             "response_time": "⏱ Ponudnik običajno odgovori v 30 minutah",
             "button_text": "Naroči storitev",
-            "disclaimer": "Brezplačna zahteva • Brez obveznosti"
+            "disclaimer": "Brezplačna zahteva • Brez obveznosti",
+            "success_title": "✓ Zahtevek je poslan!",
+            "success_message_received": " je prejel(a) vaš zahtevek in vas bo kontaktiral(a) po telefonu."
         },
         "hr": {
             "rating_label": "ocjena",
@@ -332,7 +378,9 @@ def seed():
             "notes_placeholder": "Opišite svoj zahtjev (vrijeme, adresa, detalji)",
             "response_time": "⏱ Pružatelj obično odgovara u roku od 30 minuta",
             "button_text": "Zatražite uslugu",
-            "disclaimer": "Besplatan upit • Bez obaveza"
+            "disclaimer": "Besplatan upit • Bez obaveza",
+            "success_title": "✓ Zahtjev je poslan!",
+            "success_message_received": " je zaprimio/la vaš zahtjev i kontaktirat će vas telefonom."
         },
         "el": {
             "rating_label": "βαθμολογία",
@@ -344,7 +392,9 @@ def seed():
             "notes_placeholder": "Περιγράψτε το αίτημά σας (ώρα, διεύθυνση, λεπτομέρειες)",
             "response_time": "⏱ Ο πάροχος απαντά συνήθως εντός 30 λεπτών",
             "button_text": "Ζητήστε υπηρεσία",
-            "disclaimer": "Δωρεάν αίτημα • Χωρίς υποχρέωση"
+            "disclaimer": "Δωρεάν αίτημα • Χωρίς υποχρέωση",
+            "success_title": "✓ Το αίτημα εστάλη!",
+            "success_message_received": " έλαβε το αίτημά σας και θα επικοινωνήσει μαζί σας τηλεφωνικά."
         },
         "ga": {
             "rating_label": "rátáil",
@@ -356,7 +406,9 @@ def seed():
             "notes_placeholder": "Déan cur síos ar d'iarratas (am, seoladh, sonraí)",
             "response_time": "⏱ Freagraíonn an soláthraí de ghnáth laistigh de 30 nóiméad",
             "button_text": "Iarr seirbhís",
-            "disclaimer": "Iarratas saor in aisce • Gan oibleagáid"
+            "disclaimer": "Iarratas saor in aisce • Gan oibleagáid",
+            "success_title": "✓ Iarratas seolta!",
+            "success_message_received": " a fuair d'iarratas agus déanfaimid teagmháil leat ar an bhfón."
         },
         "mt": {
             "rating_label": "klassifikazzjoni",
@@ -368,7 +420,9 @@ def seed():
             "notes_placeholder": "Iddeskrivi t-talba tiegħek (ħin, indirizz, dettalji)",
             "response_time": "⏱ Il-fornitur normalment iwieġeb fi żmien 30 minuta",
             "button_text": "Itlob servizz",
-            "disclaimer": "Talba b'xejn • L-ebda obbligu"
+            "disclaimer": "Talba b'xejn • L-ebda obbligu",
+            "success_title": "✓ It-talba ntbagħtet!",
+            "success_message_received": " irċieva t-talba tiegħek u se jikkuntattjak bit-telefown."
         },
         "sq": {
             "rating_label": "rating",
@@ -380,7 +434,9 @@ def seed():
             "notes_placeholder": "p.sh. më telefononi pas orës 14:00...",
             "response_time": "⏱ Zakonisht përgjigjet brenda 30 minutave",
             "button_text": "Kërko shërbim",
-            "disclaimer": "Kërkesë falas • Pa obligim"
+            "disclaimer": "Kërkesë falas • Pa obligim",
+            "success_title": "✓ Kërkesa u dërgua!",
+            "success_message_received": " e mori kërkesën tuaj dhe do t'ju kontaktojë në telefon."
         },
         "pt-PT": {
             "rating_label": "avaliação",
@@ -392,7 +448,9 @@ def seed():
             "notes_placeholder": "Descreva o seu pedido (hora, morada, detalhes)",
             "response_time": "⏱ O prestador responde geralmente em 30 minutos",
             "button_text": "Solicitar serviço",
-            "disclaimer": "Pedido gratuito • Sem compromisso"
+            "disclaimer": "Pedido gratuito • Sem compromisso",
+            "success_title": "✓ Pedido enviado!",
+            "success_message_received": " recebeu o seu pedido e entrará em contacto por telefone."
         },
         "uk": {
             "rating_label": "рейтинг",
@@ -404,7 +462,9 @@ def seed():
             "notes_placeholder": "Опишіть ваш запит (час, адрес, деталі)",
             "response_time": "⏱ Постачальник зазвичай відповідає протягом 30 хвилин",
             "button_text": "Замовити послугу",
-            "disclaimer": "Безкоштовний запит • Без зобов'язань"
+            "disclaimer": "Безкоштовний запит • Без зобов'язань",
+            "success_title": "✓ Запит надіслано!",
+            "success_message_received": " отримав(ла) вашу заявку і зв'яжеться з вами по телефону."
         },
         "ru": {
             "rating_label": "рейтинг",
@@ -416,7 +476,9 @@ def seed():
             "notes_placeholder": "Опишите ваш запрос (время, адрес, детали)",
             "response_time": "⏱ Поставщик обычно отвечает в течение 30 минут",
             "button_text": "Заказать услугу",
-            "disclaimer": "Бесплатный запрос • Без обязательств"
+            "disclaimer": "Бесплатный запрос • Без обязательств",
+            "success_title": "✓ Запрос отправлен!",
+            "success_message_received": " получил(а) вашу заявку и свяжется с вами по телефону."
         },
         "is": {
             "rating_label": "einkunn",
@@ -428,7 +490,9 @@ def seed():
             "notes_placeholder": "Lýsið beiðni þína (tími, heimilisfang, nánar)",
             "response_time": "⏱ Þjónustuveitandi svarar venjulega innan 30 mínútna",
             "button_text": "Pækja þjónustu",
-            "disclaimer": "Ókeypis beiðni • Ábyrgðalaust"
+            "disclaimer": "Ókeypis beiðni • Ábyrgðalaust",
+            "success_title": "✓ Beiðni send!",
+            "success_message_received": " hefur móttekið beiðni þína og mun hafa samband í síma."
         },
         "lb": {
             "rating_label": "Bewertung",
@@ -440,7 +504,9 @@ def seed():
             "notes_placeholder": "Beschreiwen Är Ufro (Zäit, Adress, Detailer)",
             "response_time": "⏱ Ubidder reagéiert normalerweis bann 30 Minutten",
             "button_text": "Service ufroen",
-            "disclaimer": "Käschent Ufro • oun Verflichtung"
+            "disclaimer": "Käschent Ufro • oun Verflichtung",
+            "success_title": "✓ Demande geschéckt!",
+            "success_message_received": " huet Är Demande kritt a kontaktéiert Iech iwwer Telefon."
         }
     }
 

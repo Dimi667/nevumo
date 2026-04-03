@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
-from dependencies import get_db
+from dependencies import get_db, get_optional_current_user
 from exceptions import (
     INVALID_PHONE,
     CATEGORY_NOT_FOUND,
@@ -19,6 +19,7 @@ from models import (
     Provider,
     Service,
     ProviderCity,
+    User,
 )
 from schemas import (
     LeadCreate,
@@ -32,6 +33,7 @@ router = APIRouter(prefix="/api/v1", tags=["leads"])
 async def create_lead(
     payload: LeadCreate,
     request: Request,
+    current_user: User | None = Depends(get_optional_current_user),
     db: Session = Depends(get_db),
 ) -> LeadCreatedResponse:
     phone = payload.phone.strip()
@@ -64,6 +66,7 @@ async def create_lead(
         raise RATE_LIMIT_EXCEEDED
 
     lead = Lead(
+        client_id=current_user.id if current_user else None,
         category_id=category.id,
         city_id=location.id,
         provider_id=provider_id,

@@ -1,5 +1,27 @@
 import { api } from './api';
-import type { ProviderReviewItem, ReviewListResponse, LatestReviewPreview } from '@/types/review';
+import type {
+  ClientReviewListResponse,
+  EmailPreferences,
+  EligibleLead,
+  LatestReviewPreview,
+  ProviderReviewItem,
+  ReviewEligibilityResponse,
+  ReviewListResponse,
+} from '@/types/review';
+
+interface CreatedReview {
+  id: string;
+  provider_id: string;
+  lead_id: string;
+  rating: number;
+  comment?: string;
+  created_at: string;
+}
+
+interface EligibleLeadsResponse {
+  leads: EligibleLead[];
+  count: number;
+}
 
 interface GetReviewsOptions {
   limit?: number;
@@ -15,12 +37,12 @@ export async function getProviderReviews(
   if (options.offset) params.set('offset', options.offset.toString());
   if (options.unrepliedOnly) params.set('unreplied_only', 'true');
 
-  const response = await api.get(`/api/v1/provider/reviews?${params.toString()}`);
+  const response = await api.get<ReviewListResponse>(`/api/v1/provider/reviews?${params.toString()}`);
   return response.data;
 }
 
 export async function getLatestReviewPreview(): Promise<LatestReviewPreview> {
-  const response = await api.get('/api/v1/provider/reviews/latest-preview');
+  const response = await api.get<LatestReviewPreview>('/api/v1/provider/reviews/latest-preview');
   return response.data;
 }
 
@@ -28,7 +50,7 @@ export async function addReviewReply(
   reviewId: string,
   reply: string
 ): Promise<ProviderReviewItem> {
-  const response = await api.post(`/api/v1/provider/reviews/${reviewId}/reply`, {
+  const response = await api.post<ProviderReviewItem>(`/api/v1/provider/reviews/${reviewId}/reply`, {
     reply,
   });
   return response.data;
@@ -38,15 +60,15 @@ export async function updateReviewReply(
   reviewId: string,
   reply: string
 ): Promise<ProviderReviewItem> {
-  const response = await api.patch(`/api/v1/provider/reviews/${reviewId}/reply`, {
+  const response = await api.patch<ProviderReviewItem>(`/api/v1/provider/reviews/${reviewId}/reply`, {
     reply,
   });
   return response.data;
 }
 
 // Client API functions
-export async function getEligibleLeadsForReview() {
-  const response = await api.get('/api/v1/client/reviews/eligible-leads');
+export async function getEligibleLeadsForReview(): Promise<EligibleLeadsResponse> {
+  const response = await api.get<EligibleLeadsResponse>('/api/v1/client/reviews/eligible-leads');
   return response.data;
 }
 
@@ -54,8 +76,8 @@ export async function createReview(
   leadId: string,
   rating: number,
   comment?: string
-) {
-  const response = await api.post('/api/v1/client/reviews', {
+): Promise<CreatedReview> {
+  const response = await api.post<CreatedReview>('/api/v1/client/reviews', {
     lead_id: leadId,
     rating,
     comment,
@@ -63,27 +85,27 @@ export async function createReview(
   return response.data;
 }
 
-export async function getClientReviews() {
-  const response = await api.get('/api/v1/client/reviews');
+export async function getClientReviews(): Promise<ClientReviewListResponse> {
+  const response = await api.get<ClientReviewListResponse>('/api/v1/client/reviews');
   return response.data;
 }
 
-export async function getClientEmailPreferences() {
-  const response = await api.get('/api/v1/client/reviews/preferences');
+export async function getClientEmailPreferences(): Promise<EmailPreferences> {
+  const response = await api.get<EmailPreferences>('/api/v1/client/reviews/preferences');
   return response.data;
 }
 
 export async function updateClientEmailPreferences(
   reviewReplyEmailEnabled: boolean
-) {
-  const response = await api.patch(
+): Promise<EmailPreferences> {
+  const response = await api.patch<EmailPreferences>(
     `/api/v1/client/reviews/preferences?review_reply_email_enabled=${reviewReplyEmailEnabled}`
   );
   return response.data;
 }
 
-export async function canReviewProvider(providerId: string) {
-  const response = await api.get(
+export async function canReviewProvider(providerId: string): Promise<ReviewEligibilityResponse> {
+  const response = await api.get<ReviewEligibilityResponse>(
     `/api/v1/client/reviews/can-review-provider/${providerId}`
   );
   return response.data;

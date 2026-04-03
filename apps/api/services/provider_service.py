@@ -8,7 +8,7 @@ import re
 from datetime import datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
-from typing import Optional, TYPE_CHECKING, List
+from typing import Optional, TYPE_CHECKING, List, Dict, Any
 from uuid import UUID
 
 if TYPE_CHECKING:
@@ -35,6 +35,7 @@ from models import (
     Review,
     Service,
     ServiceCity,
+    User,
     UrlRedirect,
 )
 
@@ -83,6 +84,64 @@ def get_provider_review_count(provider_id: UUID, db: Session) -> int:
         or 0
     )
     return int(count)
+
+
+def get_provider_leads_received(provider_id: UUID, db: Session) -> int:
+    count = (
+        db.query(func.count(Lead.id))
+        .filter(Lead.provider_id == provider_id)
+        .scalar()
+        or 0
+    )
+    return int(count)
+
+
+def get_city_leads_count(city_id: int, db: Session) -> int:
+    count = (
+        db.query(func.count(Lead.id))
+        .filter(Lead.city_id == city_id)
+        .scalar()
+        or 0
+    )
+    return int(count)
+
+
+def _get_public_client_name(client_name: Optional[str]) -> str:
+    if client_name and client_name.strip():
+        return client_name.strip()
+    return "Client"
+
+
+def get_public_latest_lead_preview(
+    provider_id: UUID,
+    db: Session,
+) -> Optional[Dict[str, Any]]:
+    result = (
+        db.query(
+            Lead,
+            User.name.label("client_name"),
+            Location.city.label("city_name"),
+        )
+        .outerjoin(User, Lead.client_id == User.id)
+        .join(Location, Lead.city_id == Location.id)
+        .filter(Lead.provider_id == provider_id)
+        .order_by(Lead.created_at.desc())
+        .first()
+    )
+
+    if not result:
+        return None
+
+    lead = result[0]
+    client_name = result[1]
+    city_name = result[2]
+
+    return {
+        "client_name": _get_public_client_name(client_name),
+        "city_name": city_name,
+        "created_at": lead.created_at,
+        "client_image_url": None,
+    }
 
 
 # ---------------------------------------------------------------------------

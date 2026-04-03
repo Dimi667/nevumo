@@ -37,6 +37,7 @@ def get_redis() -> Optional[redis_lib.Redis]:
 
 
 _bearer = HTTPBearer()
+_optional_bearer = HTTPBearer(auto_error=False)
 
 
 def get_current_user(
@@ -54,6 +55,28 @@ def get_current_user(
     user = db.query(User).filter(User.id == user_id, User.is_active == True).first()  # noqa: E712
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found or inactive")
+
+    return user
+
+
+def get_optional_current_user(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_optional_bearer),
+    db: Session = Depends(get_db),
+) -> Optional["User"]:
+    from models import User  # local import to avoid circular
+
+    if credentials is None:
+        return None
+
+    token = credentials.credentials
+    payload = decode_jwt(token)
+    if not payload:
+        return None
+
+    user_id = payload.get("sub")
+    user = db.query(User).filter(User.id == user_id, User.is_active == True).first()  # noqa: E712
+    if not user:
+        return None
 
     return user
 

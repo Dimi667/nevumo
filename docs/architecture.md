@@ -117,6 +117,8 @@ Location трябва да бъде нормализирана:
 - source
 - created_at
 
+`client_id` remains nullable for anonymous public submissions and is populated automatically when the same public flow is used with a valid authenticated JWT.
+
 ---
 
 ### Lead Status Lifecycle
@@ -456,6 +458,35 @@ Track:
 - SSR (ultra-fast)
 - mobile-first (QR usage)
 - minimal friction (2 fields max)
+- public provider payload now carries widget-specific trust metadata: `leads_received`, `city_leads`, `latest_lead_preview`, `latest_review`
+
+### Widget Trust Sections
+
+The embed widget uses **two independent trust sections** above the CTA.
+
+**Top section** resolves in this order:
+- `rating > 0` → show `⭐ rating • jobs completed`
+- `rating = 0 && jobs_completed > 0` → show centered `jobs completed`
+- `rating = 0 && jobs_completed = 0 && leads_received > 0` → show recent request card from `latest_lead_preview`
+- fallback → show `New · No reviews yet`
+
+**Bottom section** resolves independently:
+- `review_count > 0` → show `latest_review`
+- `review_count = 0 && city_leads > 0` → show city-demand card
+- fallback → show low-friction checklist (`Free request`, `No registration`, `Direct contact`)
+
+### Recent Request Preview
+
+- Source: latest direct lead where `lead.provider_id = provider.id`
+- Fields exposed publicly: `client_name`, `city_name`, `created_at`, `client_image_url`
+- `client_name` uses `users.name` or falls back to `Client`
+- `client_image_url` is currently always `null` because the public client model has no avatar field
+
+### City Demand Signal
+
+- `city_leads` is computed from all leads in the requested `city_slug`
+- This is city-wide demand, not category-filtered demand
+- The frontend uses route city context so embed and full page fetch the same provider payload shape
 
 ---
 
@@ -804,7 +835,6 @@ Returned in dashboard response as profile.is_complete + profile.missing_fields[]
 ### JWT Auth Chain
 get_current_user (HTTPBearer → JWT decode → User lookup) → get_current_provider (User → Provider)
 Both in dependencies.py alongside existing get_db/get_redis.
-
 ### Provider Dashboard Frontend (COMPLETE)
 
 Layout: Sidebar (logo + nav links + "НАМЕРИ УСЛУГА" CTA) + TopBar with user info.
@@ -833,7 +863,14 @@ Layout: Sidebar (logo + nav links + "НАМЕРИ УСЛУГА" CTA) + TopBar wi
 **Settings** — Account info display, Availability status toggle (Active/Busy/Offline), Public URL slug display, "Switch to Client" button, Logout button.
 
 #### Client Dashboard
-Minimal dashboard with "ПРЕДЛАГАЙ УСЛУГИ" button that triggers role switch to provider.
+Client dashboard now mirrors the provider dashboard shell under `/[lang]/client/dashboard/*`, but uses client-specific routes, guards, and actions.
+
+- **Layout** — Client-only guard based on JWT presence plus `role='client'`, dedicated sidebar with `Overview`, `My Requests`, `Reviews`, `Settings`, orange `НАМЕРИ УСЛУГА` CTA to `/${lang}`, and top bar showing the authenticated email.
+- **Route entry** — Base route `/[lang]/client/dashboard` immediately redirects to `/overview`.
+- **Overview** — `GET /api/v1/client/dashboard` drives 3 KPI cards (`active_leads`, `completed_leads`, `reviews_written`) plus recent lead cards with marketplace/provider distinction and grouped status badges.
+- **My Requests** — `GET /api/v1/client/leads` powers status tabs (`all`, `active`, `done`, `rejected`), card rows, and inline review submission only when `status='done'`, `has_review=false`, and a provider is assigned.
+- **Reviews** — `GET /api/v1/client/reviews` powers the "Написани" tab; `GET /api/v1/client/reviews/eligible-leads` powers the "Чакащи ревю" tab, with frontend filtering on `has_review=false` for the pending-review UX. Provider replies are rendered as expandable sections.
+- **Settings** — Read-only email, reset-password link, review reply email toggle (same backend preference as Reviews), `Стани доставчик` role switch, and logout.
 
 #### Role Switching
 Provider ↔ Client switching works. Updates user role via API and redirects to appropriate dashboard.
@@ -973,6 +1010,8 @@ The review system implements a **closed trust conversation model** that enables 
 2. **Provider has exactly one reply per review** — Single reply, editable unlimited times
 3. **Conversation closes after provider reply** — No further messages allowed
 4. **Email notifications on first reply only** — Edits do not trigger notifications
+5. **Canonical client identity only** — Review UI uses `users.name` or `Client`, never email-derived names
+6. **Self-review is forbidden** — Ownership of the target provider profile is checked in the backend service layer
 
 ### Architecture
 
@@ -990,6 +1029,7 @@ reviews table:
 - CHECK(rating >= 1 AND rating <= 5) — Valid star ratings only
 - Lead must have status='done' to be reviewable
 - Client must own the lead being reviewed
+- Provider profile owner cannot review their own provider record, even after role switching
 
 ### Trust Chain
 
@@ -998,6 +1038,7 @@ reviews table:
 2. Client must be authenticated and own the lead
 3. Lead must have an assigned provider
 4. No existing review for this lead
+5. Provider.user_id must be different from the authenticated client user id
 
 **Provider Reply Permissions:**
 1. Provider can only reply to reviews on their own profile
@@ -1072,14 +1113,14 @@ All review-related UI text is translatable via the translation system:
 - **Rate limiting:** Inherited from auth rate limiting
 - **Input validation:** Pydantic schemas enforce constraints
 - **XSS prevention:** All text content escaped in templates
+- **Mode switching safety:** Active role switching UX stays intact, but review authorization is enforced by ownership checks rather than relying only on the current role string
 
 ### Migration Path
 
 ```bash
 # Run database migration
 cd apps/api
-alembic upgrade g6h7i8j9k0l1
+alembic upgrade i8j9k0l1m2n3
 
 # Seed translation keys
 python scripts/seed_review_translations.py
-```

@@ -98,24 +98,25 @@ async def register(
     user = User(
         email=body.email,
         password_hash=hash_password(body.password),
-        role="provider",
+        role=body.role,
         is_active=True,
     )
     db.add(user)
     db.flush()  # assign user.id before creating Provider
 
-    # Create provider with draft slug (not based on email) and email as placeholder business_name
-    # The actual slug and business name will be set during onboarding step 1
-    draft_slug = f"draft{token_hex(6)}"  # e.g., drafta3f7b2d8e1c5
-    provider = Provider(
-        user_id=user.id,
-        business_name=body.email,  # Placeholder to indicate onboarding needed
-        slug=draft_slug,
-        rating=0,
-        verified=False,
-        availability_status="active",
-    )
-    db.add(provider)
+    if body.role == "provider":
+        # Create provider with draft slug (not based on email) and email as placeholder business_name
+        # The actual slug and business name will be set during onboarding step 1
+        draft_slug = f"draft{token_hex(6)}"  # e.g., drafta3f7b2d8e1c5
+        provider = Provider(
+            user_id=user.id,
+            business_name=body.email,  # Placeholder to indicate onboarding needed
+            slug=draft_slug,
+            rating=0,
+            verified=False,
+            availability_status="active",
+        )
+        db.add(provider)
     
     db.refresh(user)
 

@@ -14,6 +14,7 @@
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT UNIQUE NOT NULL,
+    name TEXT,                               -- Canonical display name (optional, never derived from email)
     password_hash TEXT,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     role TEXT NOT NULL CHECK (role IN ('client', 'provider')),
@@ -215,6 +216,10 @@ CREATE INDEX idx_leads_provider ON leads(provider_id);
 CREATE INDEX idx_leads_status ON leads(status);
 CREATE INDEX idx_leads_created_at ON leads(created_at);
 
+### Runtime Semantics
+- `client_id` is nullable because public lead creation supports anonymous requests
+- When the same public endpoint is called with a valid authenticated JWT, `client_id` is populated with the current user id
+
 ---
 
 ## 9. Lead Matches
@@ -333,12 +338,14 @@ CREATE INDEX idx_reviews_provider_reply_at ON reviews(provider_reply_at);
 - **Edited indicator** - Shown when provider_reply_edit_count > 0
 - **Conversation closes** - After provider reply, no further messages
 - **Email notification** - Sent to client on first provider reply only (if opted in)
+- **Canonical client display name** - Review surfaces use `users.name` when available, otherwise `Client`
 
 ### Constraints
 - One review per lead (enforced by UNIQUE(lead_id))
 - Rating must be 1-5 stars
 - Only completed leads (status='done') can be reviewed
 - Client must own the lead being reviewed
+- Provider.user_id must differ from the reviewing client id (self-review is blocked at service layer)
 
 ### Dynamic Fields
 - **provider.rating** calculated as AVG(reviews.rating)

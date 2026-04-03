@@ -1,6 +1,6 @@
 """Client review endpoints (auth required)."""
 
-from typing import Optional
+from typing import Annotated, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
@@ -9,12 +9,16 @@ from sqlalchemy.orm import Session
 from dependencies import get_current_user, get_db
 from models import User
 from schemas import (
+    ClientDashboardResponse,
+    ClientLeadsQueryParams,
+    ClientLeadsResponse,
     ReviewCreateRequest,
     ReviewCreateResponse,
     ReviewEligibleLeadsResponse,
     ReviewEmailPreferenceResponse,
     ReviewListResponse,
 )
+from services.client_service import get_client_dashboard, get_client_leads, require_client_user
 from services.review_service import (
     get_eligible_leads_for_review,
     create_review,
@@ -36,6 +40,33 @@ def _require_client_role(current_user: User) -> User:
             detail="This endpoint is only for client accounts"
         )
     return current_user
+
+
+@router.get("/dashboard", response_model=ClientDashboardResponse)
+def get_dashboard(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> ClientDashboardResponse:
+    user = require_client_user(current_user)
+    result = get_client_dashboard(user.id, db)
+    return ClientDashboardResponse(data=result)
+
+
+@router.get("/leads", response_model=ClientLeadsResponse)
+def list_client_leads(
+    params: Annotated[ClientLeadsQueryParams, Query()],
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> ClientLeadsResponse:
+    user = require_client_user(current_user)
+    result = get_client_leads(
+        user.id,
+        db,
+        status=params.status,
+        limit=params.limit,
+        offset=params.offset,
+    )
+    return ClientLeadsResponse(data=result)
 
 
 @router.get("/reviews/eligible-leads", response_model=ReviewEligibleLeadsResponse)

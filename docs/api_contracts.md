@@ -645,6 +645,7 @@ Deletes the service and cascades to `service_cities`.
 
 ### Query Params
 - lang: optional, default 'en' (supports all 32 languages)
+- city_slug: optional, enables city-specific widget stats like `city_leads`
 
 ### Response
 
@@ -671,6 +672,20 @@ Deletes the service and cascades to `service_cities`.
     ],
     "jobs_completed": 120,
     "review_count": 45,
+    "leads_received": 128,
+    "city_leads": 1240,
+    "latest_lead_preview": {
+      "client_name": "Anna",
+      "city_name": "Sofia",
+      "created_at": "2025-04-02T14:30:00",
+      "client_image_url": null
+    },
+    "latest_review": {
+      "client_name": "Ivan Petrov",
+      "rating": 5,
+      "comment_preview": "Excellent service, very professional!",
+      "created_at": "2025-04-01T10:30:00"
+    },
     "translations": {
       "verified_label": "✓ Verified professional",
       "rating_label": "rating",
@@ -684,7 +699,14 @@ Deletes the service and cascades to `service_cities`.
       "disclaimer": "Free request • No obligation",
       "success_title": "✓ Successfully sent!",
       "success_message": "We will contact you soon.",
-      "new_request_button": "New Request"
+      "new_request_button": "New Request",
+      "new_badge": "New",
+      "no_reviews_yet": "No reviews yet",
+      "recent_request_label": "{name} from {city} requested recently",
+      "city_leads_label": "{count} requests for {category} in {city} this year",
+      "free_request_no_obligation": "Free request, no obligation",
+      "no_registration": "No registration",
+      "direct_contact_with_provider": "Direct contact with the provider"
     }
   }
 }
@@ -693,9 +715,18 @@ Deletes the service and cascades to `service_cities`.
 - **rating** is calculated dynamically as AVG(reviews.rating) from reviews table
 - **jobs_completed** is calculated from leads.status='done' + lead_matches.status='done'
 - **review_count** is the total number of reviews for this provider
+- **leads_received** is the total number of direct leads received by this provider
+- **city_leads** is the total number of leads created in the requested `city_slug`; omitted context returns `0`
+- **latest_lead_preview** contains the most recent lead preview-safe data for widget fallback states
+- **latest_lead_preview.client_name** uses `users.name` when available and falls back to `Client`; no email local-part leakage
+- **latest_lead_preview.client_image_url** is currently nullable and returns `null` because the public user model has no client avatar field
+- **latest_review** contains the most recent review for this provider; `comment_preview` may be `null`
+- **latest_review.client_name** uses `users.name` when available and falls back to `Client`; email local-parts are never exposed
 - **translations** contains widget-specific translations for the requested language
 - **slug_change_count** indicates remaining URL changes (0 = 1 change allowed, 1 = locked)
-- If rating = 0 and jobs_completed = 0, these fields are still returned but UI should hide them
+- The embed widget treats the top and bottom trust sections independently:
+  - top: `rating` → `jobs_completed` → `latest_lead_preview` → `new_badge/no_reviews_yet`
+  - bottom: `latest_review` → `city_leads` → checklist translations
 - All 32 supported languages are available (see i18n.py for full list)
 
 ---
@@ -766,11 +797,17 @@ Check if a slug redirects to another slug without following the redirect. Used b
 
 ### Logic
 
+- If request includes a valid `Authorization: Bearer <jwt>` header:
+  → `lead.client_id` is linked to the authenticated user
+
 - If provider_slug:
   → direct lead (provider_id set)
 
 - If no provider:
   → marketplace lead (matching triggered)
+
+- If request is anonymous:
+  → `lead.client_id` remains null and the lead cannot be used for authenticated review ownership
 
 ---
 
@@ -1002,14 +1039,116 @@ The review system implements a closed trust conversation model:
 - **Provider has exactly one reply per review** (editable unlimited times)
 - **Conversation closes after provider reply** - no further messages
 - **Email notifications** - Sent to client on first provider reply only (if opted in)
+- **Client display name privacy** - Review surfaces use `users.name` or `Client`, never email-derived names
 
 ---
 
 ## Client Endpoints (JWT Required)
 
+### GET /api/v1/client/dashboard
+
+**Purpose:** Return overview KPI stats and the latest 3 client-owned leads for the authenticated client dashboard.
+
+**Rules:**
+- Requires `Authorization: Bearer <JWT>`
+- User must have `role='client'`
+- `active_leads` maps to DB statuses: `created`, `pending_match`, `matched`, `contacted`
+- `completed_leads` maps to DB status: `done`
+- `reviews_written` counts rows in `reviews` where `reviews.client_id = current_user.id`
+- `category_name` uses `category_translations.lang='en'` with fallback to `categories.slug`
+- `provider_business_name` is `null` when the lead has no assigned provider
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "stats": {
+      "active_leads": 4,
+      "completed_leads": 2,
+      "reviews_written": 1
+    },
+    "recent_leads": [
+      {
+        "id": "uuid",
+        "category_slug": "massage",
+        "category_name": "Massage",
+        "city": "Sofia",
+        "provider_business_name": "Maria Massage",
+        "status": "contacted",
+        "created_at": "2025-01-15T10:30:00"
+      }
+    ]
+  }
+}
+```
+
+**Errors:**
+- 403 NOT_A_CLIENT
+
+---
+
+### GET /api/v1/client/leads
+
+**Purpose:** List the authenticated client's leads with dashboard-friendly filters and review state.
+
+**Query Params:**
+- `status` (`all` | `active` | `done` | `rejected`, default `all`)
+- `limit` (int, default `50`, max `100`)
+- `offset` (int, default `0`)
+
+**Status mapping:**
+- `active` → `created`, `pending_match`, `matched`, `contacted`
+- `done` → `done`
+- `rejected` → `rejected`, `expired`, `cancelled`
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "id": "uuid",
+        "category_slug": "massage",
+        "category_name": "Massage",
+        "city": "Sofia",
+        "city_slug": "sofia",
+        "provider_id": "uuid",
+        "provider_business_name": "Maria Massage",
+        "provider_slug": "maria-massage",
+        "status": "contacted",
+        "description": "Need massage therapy",
+        "source": "seo",
+        "created_at": "2025-01-15T10:30:00",
+        "has_review": false
+      }
+    ],
+    "total": 24
+  }
+}
+```
+
+**Notes:**
+- Results are ordered by `created_at DESC`
+- `total` is the real count after filters, before pagination
+- `has_review` is `true` when a review exists for the exact `lead_id`
+- Provider fields are nullable for unmatched leads
+- Client dashboard review CTAs should only be shown when `status='done'`, `has_review=false`, and `provider_id` is not null
+
+**Errors:**
+- 403 NOT_A_CLIENT
+
+---
+
 ### GET /api/v1/client/reviews/eligible-leads
 
-**Purpose:** List completed leads that are eligible for review.
+**Purpose:** List completed leads owned by the authenticated client that can appear in the review flow.
+
+**Rules:**
+- Requires a lead with `lead.client_id = current_user.id`
+- Excludes completed leads pointing to a provider profile owned by the same user
+- Frontend pending-review views should use `has_review=false` when rendering "Чакащи ревю"
 
 **Response:**
 ```json
@@ -1049,6 +1188,7 @@ The review system implements a closed trust conversation model:
 **Rules:**
 - Client must own the lead
 - Lead must have status='done'
+- Client cannot review their own provider profile
 - One review per lead only
 - Rating: 1-5 stars
 - Comment: optional, max 1000 chars
@@ -1072,6 +1212,7 @@ The review system implements a closed trust conversation model:
 - 404 LEAD_NOT_FOUND
 - 400 LEAD_NOT_COMPLETED - lead status is not 'done'
 - 403 NOT_YOUR_LEAD - client doesn't own this lead
+- 403 SELF_REVIEW_NOT_ALLOWED - client owns the target provider profile
 - 409 REVIEW_EXISTS - review already exists for this lead
 
 ---
@@ -1140,7 +1281,8 @@ The review system implements a closed trust conversation model:
 {
   "success": true,
   "data": {
-    "review_reply_email_enabled": false
+    "review_reply_email_enabled": false,
+    "description": "Receive email notifications when providers reply to your reviews"
   }
 }
 ```
@@ -1174,11 +1316,13 @@ The review system implements a closed trust conversation model:
   "success": true,
   "data": {
     "can_review": false,
-    "reason": "no_completed_jobs",
-    "message": "You can only review providers after completing a job with them"
+    "reason": "self_review_not_allowed",
+    "message": "You cannot review your own provider profile"
   }
 }
 ```
+
+`reason` can currently be `no_completed_jobs`, `already_reviewed`, or `self_review_not_allowed`.
 
 ---
 
@@ -1203,7 +1347,7 @@ The review system implements a closed trust conversation model:
         "id": "uuid",
         "provider_id": "uuid",
         "client_id": "uuid",
-        "client_name": "client_name",
+        "client_name": "Maria",
         "lead_id": "uuid",
         "rating": 5,
         "comment": "Great service!",
@@ -1221,6 +1365,8 @@ The review system implements a closed trust conversation model:
   }
 }
 ```
+
+`client_name` is always the canonical review display name: `users.name` when present, otherwise `Client`.
 
 ---
 
@@ -1338,6 +1484,7 @@ The review system implements a closed trust conversation model:
 | LEAD_NOT_FOUND | 404 | Lead doesn't exist |
 | LEAD_NOT_COMPLETED | 400 | Lead status is not 'done' |
 | NOT_YOUR_LEAD | 403 | Client doesn't own this lead |
+| SELF_REVIEW_NOT_ALLOWED | 403 | Client attempted to review their own provider profile |
 | REVIEW_EXISTS | 409 | Review already exists for this lead |
 | REVIEW_NOT_FOUND | 404 | Review doesn't exist or provider doesn't own it |
 | INVALID_RATING | 422 | Rating must be 1-5 |

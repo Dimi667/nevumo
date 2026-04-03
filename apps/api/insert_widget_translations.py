@@ -22,8 +22,9 @@ def insert_widget_translations():
             "response_time": "⏱ Доставчикът обикновено отговаря до 30 минути",
             "button_text": "Заяви услуга",
             "disclaimer": "Безплатна заявка • Без ангажимент",
-            "success_title": "✓ Изпратено успешно!",
+            "success_title": "✓ Заявката е изпратена!",
             "success_message": "Ще се свържем с вас скоро.",
+            "success_message_received": " получи заявката ти и ще се свърже с теб по телефона.",
             "new_request_button": "Нова заявка"
         },
         "en": {
@@ -37,8 +38,9 @@ def insert_widget_translations():
             "response_time": "⏱ Provider usually responds within 30 minutes",
             "button_text": "Request Service",
             "disclaimer": "Free request • No obligation",
-            "success_title": "✓ Successfully sent!",
+            "success_title": "✓ Request sent!",
             "success_message": "We will contact you soon.",
+            "success_message_received": " received your request and will contact you by phone.",
             "new_request_button": "New Request"
         },
         "uk": {
@@ -52,8 +54,9 @@ def insert_widget_translations():
             "response_time": "⏱ Постачальник зазвичай відповідає протягом 30 хвилин",
             "button_text": "Замовити послугу",
             "disclaimer": "Безкоштовний запит • Без зобов'язань",
-            "success_title": "✓ Успішно надіслано!",
+            "success_title": "✓ Запит надіслано!",
             "success_message": "Ми зв'яжемося з вами найближчим часом.",
+            "success_message_received": " отримав(ла) вашу заявку і зв'яжеться з вами по телефону.",
             "new_request_button": "Новий запит"
         },
         "ru": {
@@ -67,8 +70,9 @@ def insert_widget_translations():
             "response_time": "⏱ Поставщик обычно отвечает в течение 30 минут",
             "button_text": "Заказать услугу",
             "disclaimer": "Бесплатный запрос • Без обязательств",
-            "success_title": "✓ Успешно отправлено!",
+            "success_title": "✓ Запрос отправлен!",
             "success_message": "Мы свяжемся с вами в ближайшее время.",
+            "success_message_received": " получил(а) вашу заявку и свяжется с вами по телефону.",
             "new_request_button": "Новый запрос"
         },
         "is": {
@@ -82,8 +86,9 @@ def insert_widget_translations():
             "response_time": "⏱ Þjónustuveitandi svarar venjulega innan 30 mínútna",
             "button_text": "Pækja þjónustu",
             "disclaimer": "Ókeypis beiðni • Ábyrgðalaust",
-            "success_title": "✓ Sent árangursríkt!",
+            "success_title": "✓ Beiðni send!",
             "success_message": "Við höldum símast við þín fljótt.",
+            "success_message_received": " hefur móttekið beiðni þína og mun hafa samband í síma.",
             "new_request_button": "Ný beiðni"
         },
         "lb": {
@@ -97,8 +102,9 @@ def insert_widget_translations():
             "response_time": "⏱ Ubidder reagéiert normalerweis bann 30 Minutten",
             "button_text": "Service ufroen",
             "disclaimer": "Käschent Ufro • oun Verflichtung",
-            "success_title": "✓ erfollegräicht geschéckt!",
+            "success_title": "✓ Demande geschéckt!",
             "success_message": "Mir kontaktéieren Iech séier.",
+            "success_message_received": " huet Är Demande kritt a kontaktéiert Iech iwwer Telefon.",
             "new_request_button": "Nei Ufro"
         }
     }
@@ -129,8 +135,9 @@ def insert_widget_translations():
                 "response_time": "⏱ Poskytovatel obvykle odpoví do 30 minut",
                 "button_text": "Objednat službu",
                 "disclaimer": "Bezplatná žádost • Bez závazků",
-                "success_title": "✓ Úspěšně odesláno!",
+                "success_title": "✓ Úspěšně odeslána!",
                 "success_message": "Brzy vás kontaktujeme.",
+                "success_message_received": " přijal(a) vaši žádost a kontaktuje vás telefonicky.",
                 "new_request_button": "Nová žádost"
             }
         elif lang == 'da':
@@ -145,8 +152,9 @@ def insert_widget_translations():
                 "response_time": "⏱ Udbyder svarer normalt inden for 30 minutter",
                 "button_text": "Bestil service",
                 "disclaimer": "Gratis anmodning • Ingen forpligtelse",
-                "success_title": "✓ Sendt med succes!",
+                "success_title": "✓ Anmodningen er sendt!",
                 "success_message": "Vi kontakter dig snart.",
+                "success_message_received": " har modtaget din anmodning og vil kontakte dig via telefon.",
                 "new_request_button": "Ny anmodning"
             }
         # Add more languages as needed...

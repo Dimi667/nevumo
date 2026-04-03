@@ -64,7 +64,7 @@ def get_dashboard(
     db: Session = Depends(get_db),
 ) -> ProviderDashboardResponse:
     stats = get_dashboard_stats(provider, db)
-    profile = get_provider_profile(provider)
+    profile = get_provider_profile(provider, db)
     is_complete, missing = check_onboarding_complete(db, provider.id)
     profile["is_complete"] = is_complete
     profile["missing_fields"] = missing

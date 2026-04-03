@@ -7,10 +7,16 @@ from uuid import UUID
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from exceptions import NevumoException
-from models import Review, Lead, User, Provider, LeadMatch
+from exceptions import NevumoException, SELF_REVIEW_NOT_ALLOWED
+from models import Review, Lead, User, Provider
 from services.email_service import email_service
 from services.provider_service import get_provider_rating
+
+
+def _get_review_display_name(client_name: Optional[str]) -> str:
+    if client_name and client_name.strip():
+        return client_name.strip()
+    return "Client"
 
 
 def get_eligible_leads_for_review(
@@ -36,7 +42,8 @@ def get_eligible_leads_for_review(
         .outerjoin(Review, Review.lead_id == Lead.id)
         .filter(
             Lead.client_id == client_id,
-            Lead.status == "done"
+            Lead.status == "done",
+            Provider.user_id != client_id,
         )
         .order_by(Lead.created_at.desc())
         .limit(limit)
@@ -103,6 +110,13 @@ def create_review(
             "Cannot review a lead without an assigned provider"
         )
 
+    provider = db.query(Provider).filter(Provider.id == lead.provider_id).first()
+    if not provider:
+        raise NevumoException(404, "PROVIDER_NOT_FOUND", "Provider not found")
+
+    if provider.user_id == client_id:
+        raise SELF_REVIEW_NOT_ALLOWED
+
     # Check for existing review (one review per lead)
     existing = db.query(Review).filter(Review.lead_id == lead_id).first()
     if existing:
@@ -152,7 +166,7 @@ def get_provider_reviews(
     """
     query = db.query(
         Review,
-        User.email.label('client_email')
+        User.name.label('client_name')
     ).join(
         User, Review.client_id == User.id
     ).filter(
@@ -173,13 +187,13 @@ def get_provider_reviews(
     items = []
     for row in reviews:
         review = row[0]
-        client_email = row[1]
+        client_name = row[1]
 
         items.append({
             "id": review.id,
             "provider_id": review.provider_id,
             "client_id": review.client_id,
-            "client_name": client_email.split('@')[0] if client_email else "Client",
+            "client_name": _get_review_display_name(client_name),
             "lead_id": review.lead_id,
             "rating": review.rating,
             "comment": review.comment,
@@ -199,6 +213,41 @@ def get_provider_reviews(
     }
 
 
+def get_public_latest_review_preview(
+    provider_id: UUID,
+    db: Session
+) -> Optional[Dict[str, Any]]:
+    """Get the latest public review for social proof widget.
+    
+    Returns preview-safe fields only: client_name, rating, comment_preview, created_at.
+    """
+    result = db.query(
+        Review,
+        User.name.label('client_name')
+    ).join(
+        User, Review.client_id == User.id
+    ).filter(
+        Review.provider_id == provider_id
+    ).order_by(
+        Review.created_at.desc()
+    ).first()
+
+    if not result:
+        return None
+
+    review = result[0]
+    client_name = result[1]
+
+    display_name = _get_review_display_name(client_name)
+
+    return {
+        "client_name": display_name,
+        "rating": review.rating,
+        "comment_preview": _truncate_text(review.comment, 120),
+        "created_at": review.created_at,
+    }
+
+
 def get_latest_review_preview(
     provider_id: UUID,
     db: Session
@@ -206,7 +255,7 @@ def get_latest_review_preview(
     """Get the latest review conversation for dashboard preview."""
     result = db.query(
         Review,
-        User.email.label('client_email')
+        User.name.label('client_name')
     ).join(
         User, Review.client_id == User.id
     ).filter(
@@ -219,7 +268,9 @@ def get_latest_review_preview(
         return None
 
     review = result[0]
-    client_email = result[1]
+    client_name = result[1]
+
+    display_name = _get_review_display_name(client_name)
 
     # Count unreplied reviews
     unreplied_count = db.query(Review).filter(
@@ -229,7 +280,7 @@ def get_latest_review_preview(
 
     return {
         "id": review.id,
-        "client_name": client_email.split('@')[0] if client_email else "Client",
+        "client_name": display_name,
         "rating": review.rating,
         "comment_preview": _truncate_text(review.comment, 100),
         "has_reply": review.provider_reply is not None,
@@ -400,6 +451,14 @@ def can_client_review_provider(
     - At least one completed lead with this provider
     - No existing review for any lead with this provider
     """
+    provider = db.query(Provider).filter(Provider.id == provider_id).first()
+    if provider and provider.user_id == client_id:
+        return {
+            "can_review": False,
+            "reason": "self_review_not_allowed",
+            "message": "You cannot review your own provider profile",
+        }
+
     # Get completed leads with this provider
     completed_leads = db.query(Lead).filter(
         Lead.client_id == client_id,

@@ -17,13 +17,19 @@ from schemas import (
     ProviderDetail,
     ProviderDetailResponse,
     ServiceOut,
+    LatestLeadPreview,
+    LatestReviewPreview,
 )
 from services.provider_service import (
+    get_city_leads_count,
+    get_provider_leads_received,
+    get_public_latest_lead_preview,
     get_provider_rating,
     get_provider_jobs_completed,
     get_provider_review_count,
     resolve_provider_slug_safe,
 )
+from services.review_service import get_public_latest_review_preview
 
 router = APIRouter(prefix="/api/v1", tags=["providers"])
 
@@ -90,6 +96,7 @@ async def list_providers(
 async def get_provider(
     provider_slug: str,
     lang: str = Query("en", min_length=2, max_length=5),
+    city_slug: Optional[str] = Query(None),
     db: Session = Depends(get_db),
 ) -> ProviderDetailResponse:
     # Use safe resolution to prevent redirect loops
@@ -108,6 +115,13 @@ async def get_provider(
     rating = get_provider_rating(provider.id, db)
     jobs_completed = get_provider_jobs_completed(provider.id, db)
     review_count = get_provider_review_count(provider.id, db)
+    leads_received = get_provider_leads_received(provider.id, db)
+    latest_lead_preview_data = get_public_latest_lead_preview(provider.id, db)
+    city_leads = 0
+    if city_slug:
+        location = db.query(Location).filter(Location.slug == city_slug).first()
+        if location:
+            city_leads = get_city_leads_count(location.id, db)
 
     # Get widget translations
     all_translations = fetch_translations(db, lang)
@@ -115,7 +129,10 @@ async def get_provider(
         'verified_label', 'rating_label', 'jobs_label', 'phone_label',
         'phone_placeholder', 'notes_label', 'notes_placeholder',
         'response_time', 'button_text', 'disclaimer', 'success_title',
-        'success_message', 'new_request_button'
+        'success_message', 'success_message_received', 'new_request_button',
+        'new_badge', 'no_reviews_yet', 'recent_request_label', 'city_leads_label',
+        'free_request_no_obligation', 'no_registration',
+        'direct_contact_with_provider'
     ]
     translations = {k: all_translations.get(k, k) for k in widget_keys}
 
@@ -135,6 +152,26 @@ async def get_provider(
             )
         )
 
+    # Get latest review for social proof widget (optional, only if exists)
+    latest_review_data = get_public_latest_review_preview(provider.id, db)
+    latest_review = None
+    if latest_review_data:
+        latest_review = LatestReviewPreview(
+            client_name=latest_review_data["client_name"],
+            rating=latest_review_data["rating"],
+            comment_preview=latest_review_data["comment_preview"],
+            created_at=latest_review_data["created_at"],
+        )
+
+    latest_lead_preview = None
+    if latest_lead_preview_data:
+        latest_lead_preview = LatestLeadPreview(
+            client_name=latest_lead_preview_data["client_name"],
+            city_name=latest_lead_preview_data["city_name"],
+            created_at=latest_lead_preview_data["created_at"],
+            client_image_url=latest_lead_preview_data["client_image_url"],
+        )
+
     detail = ProviderDetail(
         id=provider.id,
         business_name=provider.business_name,
@@ -149,7 +186,11 @@ async def get_provider(
         services=service_items,
         jobs_completed=jobs_completed,
         review_count=review_count,
+        leads_received=leads_received,
+        city_leads=city_leads,
         translations=translations,
+        latest_lead_preview=latest_lead_preview,
+        latest_review=latest_review,
     )
 
     return ProviderDetailResponse(data=detail)

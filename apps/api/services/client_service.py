@@ -1,0 +1,166 @@
+from typing import Any
+from uuid import UUID
+
+from sqlalchemy import and_, func
+from sqlalchemy.orm import Session, aliased
+
+from exceptions import NevumoException
+from models import Category, CategoryTranslation, Lead, Location, Provider, Review, User
+
+ACTIVE_LEAD_STATUSES: tuple[str, ...] = ("created", "pending_match", "matched", "contacted")
+REJECTED_LEAD_STATUSES: tuple[str, ...] = ("rejected", "expired", "cancelled")
+
+
+def require_client_user(current_user: User) -> User:
+    if current_user.role != "client":
+        raise NevumoException(403, "NOT_A_CLIENT", "This endpoint is only for client accounts")
+    return current_user
+
+
+def _apply_status_filter(query: Any, status: str) -> Any:
+    if status == "active":
+        return query.filter(Lead.status.in_(ACTIVE_LEAD_STATUSES))
+    if status == "done":
+        return query.filter(Lead.status == "done")
+    if status == "rejected":
+        return query.filter(Lead.status.in_(REJECTED_LEAD_STATUSES))
+    return query
+
+
+def get_client_dashboard(client_id: UUID, db: Session) -> dict[str, Any]:
+    active_leads = int(
+        db.query(func.count(Lead.id))
+        .filter(Lead.client_id == client_id, Lead.status.in_(ACTIVE_LEAD_STATUSES))
+        .scalar()
+        or 0
+    )
+    completed_leads = int(
+        db.query(func.count(Lead.id))
+        .filter(Lead.client_id == client_id, Lead.status == "done")
+        .scalar()
+        or 0
+    )
+    reviews_written = int(
+        db.query(func.count(Review.id))
+        .filter(Review.client_id == client_id)
+        .scalar()
+        or 0
+    )
+
+    provider_user = aliased(User)
+    recent_rows = (
+        db.query(
+            Lead.id.label("id"),
+            Category.slug.label("category_slug"),
+            func.coalesce(CategoryTranslation.name, Category.slug).label("category_name"),
+            Location.city.label("city"),
+            Provider.business_name.label("provider_business_name"),
+            Lead.status.label("status"),
+            Lead.created_at.label("created_at"),
+        )
+        .join(Category, Lead.category_id == Category.id)
+        .outerjoin(
+            CategoryTranslation,
+            and_(CategoryTranslation.category_id == Category.id, CategoryTranslation.lang == "en"),
+        )
+        .join(Location, Lead.city_id == Location.id)
+        .outerjoin(Provider, Lead.provider_id == Provider.id)
+        .outerjoin(provider_user, Provider.user_id == provider_user.id)
+        .filter(Lead.client_id == client_id)
+        .order_by(Lead.created_at.desc())
+        .limit(3)
+        .all()
+    )
+
+    recent_leads = [
+        {
+            "id": row.id,
+            "category_slug": row.category_slug,
+            "category_name": row.category_name,
+            "city": row.city,
+            "provider_business_name": row.provider_business_name,
+            "status": row.status,
+            "created_at": row.created_at,
+        }
+        for row in recent_rows
+    ]
+
+    return {
+        "stats": {
+            "active_leads": active_leads,
+            "completed_leads": completed_leads,
+            "reviews_written": reviews_written,
+        },
+        "recent_leads": recent_leads,
+    }
+
+
+def get_client_leads(
+    client_id: UUID,
+    db: Session,
+    status: str = "all",
+    limit: int = 50,
+    offset: int = 0,
+) -> dict[str, Any]:
+    total_query = db.query(func.count(Lead.id)).filter(Lead.client_id == client_id)
+    total_query = _apply_status_filter(total_query, status)
+    total = int(total_query.scalar() or 0)
+
+    provider_user = aliased(User)
+    has_review_subquery = db.query(Review.id).filter(Review.lead_id == Lead.id).exists()
+
+    leads_query = (
+        db.query(
+            Lead.id.label("id"),
+            Category.slug.label("category_slug"),
+            func.coalesce(CategoryTranslation.name, Category.slug).label("category_name"),
+            Location.city.label("city"),
+            Location.slug.label("city_slug"),
+            Provider.id.label("provider_id"),
+            Provider.business_name.label("provider_business_name"),
+            Provider.slug.label("provider_slug"),
+            Lead.status.label("status"),
+            Lead.description.label("description"),
+            Lead.source.label("source"),
+            Lead.created_at.label("created_at"),
+            has_review_subquery.label("has_review"),
+        )
+        .join(Category, Lead.category_id == Category.id)
+        .outerjoin(
+            CategoryTranslation,
+            and_(CategoryTranslation.category_id == Category.id, CategoryTranslation.lang == "en"),
+        )
+        .join(Location, Lead.city_id == Location.id)
+        .outerjoin(Provider, Lead.provider_id == Provider.id)
+        .outerjoin(provider_user, Provider.user_id == provider_user.id)
+        .filter(Lead.client_id == client_id)
+    )
+    leads_query = _apply_status_filter(leads_query, status)
+
+    rows = (
+        leads_query.order_by(Lead.created_at.desc())
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
+
+    items = [
+        {
+            "id": row.id,
+            "category_slug": row.category_slug,
+            "category_name": row.category_name,
+            "city": row.city,
+            "city_slug": row.city_slug,
+            "provider_id": row.provider_id,
+            "provider_business_name": row.provider_business_name,
+            "provider_slug": row.provider_slug,
+            "status": row.status,
+            "description": row.description,
+            "source": row.source,
+            "created_at": row.created_at,
+            "has_review": bool(row.has_review),
+        }
+        for row in rows
+    ]
+
+    return {"items": items, "total": total}

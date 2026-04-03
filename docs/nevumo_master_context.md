@@ -144,7 +144,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
 - Provider Dashboard frontend — all pages (Overview, Leads, Services, Analytics, QR Code, Profile, Settings, Reviews)
 - Provider onboarding — 2-step wizard (profile info → first service), completeness check with auto-redirect
 - Service CRUD — add/edit/delete with category, multi-city, price type, currency
-- Client Dashboard — with reviews, completed jobs, and email preferences
+- Client Dashboard — frontend + backend complete with guarded sidebar/topbar layout, Overview, My Requests, Reviews, Settings, inline review submission, review reply toggle preferences, role switch, and logout
 - DB: service_cities table (many-to-many service↔city), currency on services, per_sqm price type
 - SearchInput Component: Unified searchable select component (single/multi-select modes)
 - **URL Redirect System** — Complete slug change management with 301 redirects, SEO protection, loop prevention
@@ -154,8 +154,11 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
   - Client reviews for completed jobs
   - Provider single reply (editable)
   - Email notifications on first reply (with opt-out)
-  - Dashboard integration (provider reviews section, client reviews page)
-  - 34-language translation support
+  - Provider dashboard reviews section with reply/edit functionality
+  - Client dashboard completed jobs with review CTA
+  - Client email preferences toggle
+  - Translation keys for all 34 languages
+- **Rating card** on provider dashboard clearly labeled as "Overall Rating" from all client reviews
 
 ### 🔜 Next
 - Dashboard design polish (UI refinements across all pages)
@@ -173,7 +176,24 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
   - Client email preferences toggle
   - Translation keys for all 34 languages
   - Updated documentation (api_contracts, db_schema, architecture)
+- **Social Proof + Multi-Role Review Restore** — Root-cause fix and review hardening:
+  - Applied `users.name` migration (`i8j9k0l1m2n3`) to restore embed/social-proof and authenticated dashboard queries
+  - Provider dashboard route now loads provider profile through the correct `get_provider_profile(provider, db)` contract
+  - Review surfaces now use canonical `users.name` display names with `Client` fallback, never email-derived names
+  - Backend review eligibility, can-review checks, and create-review flow now block self-reviews via `Provider.user_id == client_id`
+  - Public `POST /api/v1/leads` now links authenticated submissions to `lead.client_id`, enabling real review eligibility for logged-in users
 - **Rating card** on provider dashboard clearly labeled as "Overall Rating" from all client reviews
+- **Client Dashboard Backend Expansion** — Added authenticated `/api/v1/client/dashboard` and `/api/v1/client/leads` endpoints:
+  - Dashboard overview now returns `active_leads`, `completed_leads`, `reviews_written`, and latest 3 leads for the current client
+  - Leads inbox now supports `all|active|done|rejected` filters, provider metadata, English category fallback, and `has_review`
+  - `main.py` already included the shared `client_router`, so no new router wiring was needed beyond extending `routes/client.py`
+- **Client Dashboard Frontend** — Implemented provider-style client shell and pages:
+  - New guarded layout at `/[lang]/client/dashboard/*` with dedicated sidebar/topbar, active nav state, email in topbar, and orange `НАМЕРИ УСЛУГА` CTA
+  - `apps/web/lib/client-api.ts` adds strict typed wrappers for dashboard, leads, reviews, eligible leads, review submission, and review preferences
+  - Overview page renders KPI cards + recent leads hero/empty state
+  - My Requests page renders status tabs, lead cards, and inline review submission for completed provider-linked jobs without reviews
+  - Reviews page now splits into `Написани` and `Чакащи ревю`, with collapsible provider replies and the shared review-reply email toggle
+  - Settings page now contains readonly email, reset-password link, `Стани доставчик`, and logout
 
 ### 🔮 Future
 - AI lead matching

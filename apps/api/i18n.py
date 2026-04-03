@@ -44,6 +44,32 @@ SUPPORTED_LANGUAGES = (
 
 DEFAULT_PROVIDER_CATEGORY_KEY = "provider_category_general"
 MASSAGE_PROVIDER_CATEGORY_KEY = "provider_category_massage"
+WIDGET_EMBED_TRANSLATION_DEFAULTS_EN = {
+    "new_badge": "New",
+    "no_reviews_yet": "No reviews yet",
+    "recent_request_label": "{name} from {city} requested recently",
+    "city_leads_label": "{count} requests for {category} in {city} this year",
+    "free_request_no_obligation": "Free request, no obligation",
+    "no_registration": "No registration",
+    "direct_contact_with_provider": "Direct contact with the provider",
+}
+WIDGET_EMBED_TRANSLATION_DEFAULTS_BG = {
+    "new_badge": "Нов",
+    "no_reviews_yet": "Все още няма отзиви",
+    "recent_request_label": "{name} от {city} направи заявка наскоро",
+    "city_leads_label": "{count} заявки за {category} в {city} тази година",
+    "free_request_no_obligation": "Безплатна заявка, без ангажимент",
+    "no_registration": "Без регистрация",
+    "direct_contact_with_provider": "Директен контакт с провайдера",
+}
+WIDGET_EMBED_TRANSLATION_DEFAULTS = {
+    lang: dict(WIDGET_EMBED_TRANSLATION_DEFAULTS_EN)
+    for lang in SUPPORTED_LANGUAGES
+}
+WIDGET_EMBED_TRANSLATION_DEFAULTS["bg"] = {
+    **WIDGET_EMBED_TRANSLATION_DEFAULTS_EN,
+    **WIDGET_EMBED_TRANSLATION_DEFAULTS_BG,
+}
 
 DEFAULT_PROVIDER_CATEGORY_TRANSLATIONS = {
     "bg": "Obshti uslugi",
@@ -112,6 +138,14 @@ MASSAGE_PROVIDER_CATEGORY_TRANSLATIONS = {
 }
 
 
+def get_widget_translation_defaults(lang: str) -> Dict[str, str]:
+    normalized_lang = normalize_language(lang)
+    return WIDGET_EMBED_TRANSLATION_DEFAULTS.get(
+        normalized_lang,
+        WIDGET_EMBED_TRANSLATION_DEFAULTS_EN,
+    )
+
+
 def fetch_translations(db: Session, lang: str) -> Dict[str, str]:
     lang = normalize_language(lang)
     en_translations = db.query(Translation).filter(Translation.lang == DEFAULT_LANGUAGE).all()
@@ -120,6 +154,9 @@ def fetch_translations(db: Session, lang: str) -> Dict[str, str]:
     translations_dict = {translation.key: translation.value for translation in en_translations}
     for translation in target_translations:
         translations_dict[translation.key] = translation.value
+
+    for key, value in get_widget_translation_defaults(lang).items():
+        translations_dict.setdefault(key, value)
 
     return translations_dict
 

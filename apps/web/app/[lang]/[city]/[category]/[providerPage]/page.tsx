@@ -29,10 +29,10 @@ export async function generateMetadata(props: { params: Promise<ProviderRoutePar
     const slugResolution = await resolveSlug(providerPage);
     
     // Use the resolved slug for provider lookup (if found), otherwise fallback to original
-    const slugToUse = slugResolution.found ? slugResolution.slug : providerPage;
+    const slugToUse = slugResolution.found && slugResolution.slug ? slugResolution.slug : providerPage;
     
     const [provider, categories] = await Promise.all([
-      getProviderBySlug(slugToUse, lang),
+      getProviderBySlug(slugToUse, lang, city),
       getCategories(lang),
     ]);
     if (!provider) return { title: 'Nevumo' };
@@ -81,10 +81,10 @@ export default async function Page(props: {
   }
 
   // Use the resolved slug consistently for provider lookups
-  const slugToUse = slugResolution.found ? slugResolution.slug : providerPage;
+  const slugToUse = slugResolution.found && slugResolution.slug ? slugResolution.slug : providerPage;
 
   const [provider, categories] = await Promise.all([
-    getProviderBySlug(slugToUse, lang),
+    getProviderBySlug(slugToUse, lang, city),
     getCategories(lang),
   ]);
 

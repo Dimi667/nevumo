@@ -121,6 +121,20 @@ export interface ServiceOut {
   base_price: number | null;
 }
 
+export interface LatestReviewPreview {
+  client_name: string;
+  rating: number;
+  comment_preview: string | null;
+  created_at: string;
+}
+
+export interface LatestLeadPreview {
+  client_name: string;
+  city_name: string;
+  created_at: string;
+  client_image_url: string | null;
+}
+
 export interface ProviderDetail {
   id: string;
   business_name: string;
@@ -132,8 +146,12 @@ export interface ProviderDetail {
   services: ServiceOut[];
   jobs_completed: number;
   review_count: number;
+  leads_received: number;
+  city_leads: number;
   translations: Record<string, string>;
   canonical_path?: string | null;
+  latest_lead_preview?: LatestLeadPreview | null;
+  latest_review?: LatestReviewPreview | null;
 }
 
 export interface CategoryOut {
@@ -183,9 +201,15 @@ export async function getProviders(
   }
 }
 
-export async function getProviderBySlug(slug: string, lang: string = 'en'): Promise<ProviderDetail | null> {
+export async function getProviderBySlug(
+  slug: string,
+  lang: string = 'en',
+  citySlug?: string,
+): Promise<ProviderDetail | null> {
   try {
-    const response = await fetch(`${API_BASE}/api/v1/providers/${slug}?lang=${lang}`);
+    const params = new URLSearchParams({ lang });
+    if (citySlug) params.set('city_slug', citySlug);
+    const response = await fetch(`${API_BASE}/api/v1/providers/${slug}?${params.toString()}`);
     if (!response.ok) {
       if (response.status === 404) return null;
       throw new Error(`HTTP ${response.status}`);
@@ -256,9 +280,13 @@ export async function getCityBySlug(slug: string): Promise<CityOut | null> {
 
 export async function createLead(input: LeadCreateInput): Promise<LeadCreateResult | null> {
   try {
+    const token = getAuthToken();
     const res = await fetch(`${API_BASE}/api/v1/leads`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify(input),
     });
     if (!res.ok) return null;
