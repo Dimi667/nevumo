@@ -878,18 +878,42 @@ Check if a slug redirects to another slug without following the redirect. Used b
 
 ### Query Params
 
-- `lang` (required, 2-5 chars)
-- `namespace` (required, 1-50 chars)
+- `lang` is required and validated as a query param with `min_length=2`, `max_length=5`.
+- `namespace` is required and validated as a query param with `min_length=1`, `max_length=50`.
+
+### Request Example
+
+```http
+GET /api/v1/translations?lang=pl&namespace=homepage
+```
 
 ### Behavior
 
-- Returns all translation keys for the requested namespace
-- Translation records are stored in DB as `namespace.key`
-- Response strips the namespace prefix and returns a flat object
-- Redis cache key: `translations:{lang}:{namespace}` with 1 hour TTL
-- If no keys are found for the requested language and `lang != en`, the endpoint falls back to English
+- Reads from the `translations` table
+- Backend queries records where `Translation.lang == lang` and `Translation.key LIKE '{namespace}.%'`
+- Keys are transformed from DB format `namespace.key` into response format `key`
+- Example: `homepage.hero_title` in DB becomes `hero_title` in the API response
+- Redis is used as a namespaced cache layer when available
+- Cache key format: `translations:{lang}:{namespace}`
+- Cache TTL: `3600` seconds (1 hour)
+- Cached payloads are stored as serialized JSON objects
+- If the requested language returns no rows and `lang != 'en'`, the backend performs a second query for English rows
+- Fallback chain is: requested language → `en` → empty object
+- Empty results are returned successfully as `{}`
+- Current implementation only writes to Redis when the result is non-empty
 
-### Response
+### Response Format
+
+```json
+{
+  "success": true,
+  "data": {
+    "key": "value"
+  }
+}
+```
+
+### Response Example
 
 ```json
 {
@@ -909,6 +933,11 @@ Check if a slug redirects to another slug without following the redirect. Used b
   "data": {}
 }
 ```
+
+### Errors
+- `200 OK` — translations found, English fallback used, or namespace resolves to an empty object
+- `422 VALIDATION_ERROR` — FastAPI query validation fails when `lang` or `namespace` is missing or outside the allowed length constraints
+- No custom application error codes are currently defined for this endpoint
 
 ---
 

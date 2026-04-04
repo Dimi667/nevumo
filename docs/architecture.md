@@ -245,241 +245,122 @@ Used for:
 ### 🔹 PostgreSQL (Primary DB)
 - relational data
 - leads, users, providers
-
 ### 🔹 Redis
-- translations cache
-- session/cache layer
-- hot queries
+ - translations cache
+ - session/cache layer
+ - hot queries
+ 
+ ### Namespaced Translations Endpoint
+ - Public endpoint: `GET /api/v1/translations?lang={lang}&namespace={namespace}`
+ - Reads from the `translations` table where records are stored as `namespace.key`
+ - Returns a flat JSON object without the namespace prefix so frontend consumers can access keys directly
+ - Redis caches payloads by language and namespace for 1 hour using `translations:{lang}:{namespace}`
+ - When a requested language has no rows for a namespace, the backend falls back to `en` before returning an empty payload
 
-### Namespaced Translations Endpoint
-- Public endpoint: `GET /api/v1/translations?lang={lang}&namespace={namespace}`
-- Reads from the `translations` table where records are stored as `namespace.key`
-- Returns a flat JSON object without the namespace prefix so frontend consumers can access keys directly
-- Redis caches payloads by language and namespace for 1 hour using `translations:{lang}:{namespace}`
-- When a requested language has no rows for a namespace, the backend falls back to `en` before returning an empty payload
+### Translation System Architecture
+- **Source of truth**: PostgreSQL `translations` table
+- Translation content is stored as `namespace.key` rows, for example `homepage.hero_title` and `category.form_btn`
+- The database is the authoritative content layer for UI copy across homepage, category pages, reviews, and future market surfaces
+- Backend translation reads are namespace-scoped, which keeps payloads small and frontend usage simple
 
----
+### Redis Namespaced Translation Cache
+- Cache key pattern: `translations:{lang}:{namespace}`
+- TTL: 1 hour (`3600` seconds)
+- Cache sits in front of DB reads for hot public UI namespaces
+- Cache is language-aware and namespace-aware, so homepage/category payloads do not invalidate each other
+- Current implementation caches non-empty payloads only
 
-## Scaling Strategy
+### Frontend Translation Fetching
+- Shared utility: `apps/web/lib/ui-translations.ts`
+- `fetchTranslations(lang, namespace)` is the single frontend entry point for public UI namespace translations
+- Runs in SSR/server contexts for metadata generation and page rendering
+- Normalizes unsupported languages to `en` before calling the API
+- Uses environment-aware fetch caching:
+  - development: `cache: 'no-store'`
+  - production: Next.js `revalidate: 3600`
+- Consumers use `t(dict, key, fallback)` to keep rendering resilient when keys are missing
 
-### Phase 1 (0–10k users)
-- Single PostgreSQL instance
-- Redis caching
-- Basic indexing
+### Translation Fallback Chain
+- Requested language is attempted first
+- If the namespace has no rows for that language, backend falls back to `en`
+- If English also has no rows, the endpoint returns an empty object
+- Frontend can additionally supply local fallback strings through `t()` for critical UI rendering
 
-### Phase 2 (10k–100k users)
-- Read replicas
-- Query optimization
-- Background jobs (Celery / RQ)
-
-### Phase 3 (100k+ users, multi-country)
-
-#### 🔥 KEY DECISION: Region-aware architecture
-
-Partition by:
-- country
-- or region
-
-Options:
-1. Single DB + partitioning  
-2. Multi-DB per region (EU, US, etc.)
-
----
-
-## API Design
-
-- REST (FastAPI)
-
-Future:
-- GraphQL (optional)
-
----
-
+### Market Scaling Principle
+- New market launch should require **DB seeding only**, not new translation-fetching code paths
+- Homepage/category/review pages consume the same namespaced translation endpoint regardless of market
+- Operational rule: adding a new market means inserting translation rows for that locale and namespace set, with zero application logic changes
+ 
+ ---
+ 
 ## Frontend Architecture
-
 - Next.js App Router
 - Server Components for SEO pages
 - Client components for interactions
 
----
+### Homepage Architecture (Provider-First Acquisition)
+- Route: `apps/web/app/[lang]/page.tsx`
+- Homepage is provider-first: it is designed primarily to convert service providers into registrations, not to browse providers
+- Rendering strategy is SSR so hero copy, metadata, and translated acquisition content are available on first response
+- Metadata is generated server-side from the `homepage` namespace translations
+- Main CTA drives to `/${lang}/auth`
+- Top navigation includes a secondary service-seeker escape hatch to a real marketplace route
+
+### Homepage Content System
+- Homepage copy is fully DB-driven through the `homepage` namespace
+- The hero uses split keys (`hero_prefix`, `hero_suffix`) plus a rotating category component in the middle
+- Social proof, trust bullets, step copy, category-card labels, activity feed copy, footer links, and CTA copy all read from the same namespace
+- This keeps homepage localization operationally simple: content edits can be made in DB without changing React code
+
+### Rotating Categories Decision
+- `RotatingCategory` is the only client component in the homepage hero path
+- Rotation values come from the DB key `homepage.rotating_categories` as a comma-separated list
+- Server component loads the translated string, splits it into categories, then passes the array to the client component
+- Rotation interval is 3 seconds with a short fade transition
+- Architectural goal: keep the page mostly SSR while isolating animation to a tiny client island
+
+### Category Page Architecture (Client-First Conversion, SEO-Stable Routing)
+- Route: `apps/web/app/[lang]/[city]/[category]/page.tsx`
+- Category pages are SEO landing pages with a strong conversion layer for clients requesting a service
+- Page shell, metadata, provider list, trust bar, SEO body copy, and related links are server-rendered
+- Conversion interaction is centered around the lead form and in-page CTA anchors
+- The page is "client-first" in product intent: the main user action is sending a request, while provider join CTAs are secondary
+
+### Category Slug Mapping Decision
+- Public localized route slugs are intentionally decoupled from backend canonical category slugs
+- Example mapping in current implementation:
+  - `masaz` → `massage`
+  - `sprzatanie` → `cleaning`
+  - `hydraulik` → `plumbing`
+- This preserves localized, SEO-friendly URLs while keeping backend API contracts stable and canonical
+- The same mapping also drives translation key selection (`massage`, `cleaning`, `plumbing`) for category-specific copy
+
+### Category Page Data Composition
+- Provider list comes from `getProviders(categorySlug, citySlug, lang)`
+- Each visible provider is then enriched with `getProviderBySlug(...)` for extra trust fields such as description, jobs completed, and latest lead preview timestamp
+- Trust bar combines dynamic provider count and rating with translated category copy
+- SEO body sections and FAQ content are rendered from translation keys keyed by mapped category type
+- Lead form remains in a sticky sidebar on large screens for persistent conversion visibility
+
+### Category Page SEO Decisions
+- `generateMetadata()` uses category translations to produce localized title/description per route
+- `generateHreflangAlternates()` is used for language alternates on both homepage and category routes
+- FAQ structured data is rendered through JSON-LD for richer search appearance
+- Related internal links are category-aware to strengthen crawl paths between major service pages
+- Long-form SEO text is still rendered in the main page response, not lazy-loaded, to preserve crawlability
 
 ## SEO Architecture (CRITICAL)
 
-### URL Structure (ACTUAL)
-
-- /{lang}/{city}/{category}
-- /{lang}/{city}/{category}/{providerSlug}
-
-Examples:
-- /en/sofia/massage
-- /en/sofia/massage/maria-petrova
-
----
-
 ### Strategy:
 - programmatic SEO
-- localized content (32 languages)
+- localized content (34 languages)
 - SSR for indexing
-
----
-
-## Monetization Strategy
-
-Primary:
-- pay-per-lead
-
-Future:
-- subscriptions (providers)
-- featured listings
-- ads
-
----
-
-## What NOT to build early
-
-❌ Booking system  
-❌ Payments  
-❌ Complex chat  
-❌ Advanced reviews system  
-
----
-
-## Future Extensions
-
-- AI lead matching
-- Auto-translation
-- Smart pricing suggestions
-- Provider ranking algorithm
-
----
 
 ## Embedded Lead Widget (CRITICAL GROWTH COMPONENT)
 
 Nevumo предоставя **embeddable lead widget**, който providers могат да използват извън платформата.
 
----
-
-### Purpose
-
-- Capture leads извън Nevumo (external traffic)
-- Increase provider adoption
-- Enable viral growth via providers
-
----
-
-### Entry Points
-
-#### 1. Direct URL (Primary)
-
-/{lang}/{city}/{category}/{providerSlug}
-
----
-
-#### 2. Embeddable Widget (iframe / script)
-
-URL Format with embed mode:
-
-<iframe src="https://nevumo.com/en/sofia/massage/maria-petrova?embed=1" />
-
-The `?embed=1` query parameter triggers widget mode:
-- Minimal layout (no Services section)
-- Sticky CTA button on mobile
-- Dynamic stats (rating, jobs_completed) - hidden if 0
-- Verified professional badge (if verified=true)
-- Full i18n support (32 languages via ?lang= param)
-
----
-
-#### 3. QR Code (Offline → Online)
-
-QR encodes: `/{lang}/{city}/{category}/{providerSlug}?embed=1`
-
-Opens provider lead page in widget mode (minimal, mobile-optimized).
-
-Used for:
-- business cards
-- flyers
-- physical locations
-
-QR codes are generated via `/api/v1/provider/qr-code` endpoint as base64 PNG.
-
----
-
-### Provider Ownership
-
-Each provider има:
-
-- unique public URL
-- embeddable widget URL
-
-This URL acts as:
-
-- lead entry point
-- tracking identifier
-- provider funnel
-
-This is a core part of provider acquisition strategy.
-
----
-
-### UX Flow
-
-1. User opens widget / page  
-2. Sees provider info + trust signals  
-3. Submits request  
-
-→ lead is created  
-→ assigned to provider  
-
----
-
-### Lead Handling Logic
-
-If lead is created via provider page:
-
-- lead.provider_id = конкретния provider  
-- НЕ се изпраща към други providers (default)
-
-Optional (future):
-- fallback matching ако provider не отговори  
-
----
-
-### Data Tracking (IMPORTANT)
-
-Track:
-
-- source: seo | direct | widget | qr
-- provider_id
-- conversion rate per provider
-- external vs internal traffic
-
----
-
-### Technical Notes
-
-- SSR (ultra-fast)
-- mobile-first (QR usage)
-- minimal friction (2 fields max)
-- public provider payload now carries widget-specific trust metadata: `leads_received`, `city_leads`, `latest_lead_preview`, `latest_review`
-
-### Widget Trust Sections
-
-The embed widget uses **two independent trust sections** above the CTA.
-
-**Top section** resolves in this order:
-- `rating > 0` → show `⭐ rating • jobs completed`
-- `rating = 0 && jobs_completed > 0` → show centered `jobs completed`
-- `rating = 0 && jobs_completed = 0 && leads_received > 0` → show recent request card from `latest_lead_preview`
-- fallback → show `New · No reviews yet`
-
-**Bottom section** resolves independently:
-- `review_count > 0` → show `latest_review`
-- `review_count = 0 && city_leads > 0` → show city-demand card
-- fallback → show low-friction checklist (`Free request`, `No registration`, `Direct contact`)
-
 ### Recent Request Preview
-
 - Source: latest direct lead where `lead.provider_id = provider.id`
 - Fields exposed publicly: `client_name`, `city_name`, `created_at`, `client_image_url`
 - `client_name` uses `users.name` or falls back to `Client`
