@@ -3,6 +3,7 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { getProviderBySlug, getProviders } from '@/lib/api';
 import { generateHreflangAlternates } from '@/lib/seo';
+import { fetchTranslations, t } from '@/lib/ui-translations';
 import { JsonLd } from '@/components/JsonLd';
 import LeadForm from '@/components/category/LeadForm';
 
@@ -11,6 +12,7 @@ interface PageProps {
 }
 
 type CategoryKey = 'masaz' | 'sprzatanie' | 'hydraulik';
+type TranslationCategoryKey = 'cleaning' | 'plumbing' | 'massage';
 type ApiCategorySlug = 'massage' | 'cleaning' | 'plumbing';
 
 interface CategoryContent {
@@ -38,6 +40,34 @@ interface EnrichedProvider {
   latestLeadPreviewCreatedAt: string | null;
 }
 
+interface ProviderCardTexts {
+  defaultDescription: string;
+  jobsCompleted: string;
+  lastRequest: string;
+  directContact: string;
+  sendRequest: string;
+}
+
+const categorySlugMap: Record<string, string> = {
+  masaz: 'massage',
+  sprzatanie: 'cleaning',
+  hydraulik: 'plumbing',
+};
+
+const categoryKeyMap: Record<string, TranslationCategoryKey> = {
+  masaz: 'massage',
+  sprzatanie: 'cleaning',
+  hydraulik: 'plumbing',
+};
+
+function getApiSlug(category: string): ApiCategorySlug {
+  return (categorySlugMap[category] ?? category) as ApiCategorySlug;
+}
+
+function getCategoryTranslationKey(category: string): TranslationCategoryKey {
+  return categoryKeyMap[category] ?? 'cleaning';
+}
+
 function getInitials(name: string): string {
   return name
     .split(' ')
@@ -50,9 +80,11 @@ function getInitials(name: string): string {
 function ProviderCard({
   provider,
   href,
+  texts,
 }: {
   provider: EnrichedProvider;
   href: string;
+  texts: ProviderCardTexts;
 }) {
   const latestLeadTime = provider.latestLeadPreviewCreatedAt
     ? formatRelativeTime(provider.latestLeadPreviewCreatedAt)
@@ -90,22 +122,22 @@ function ProviderCard({
           )}
 
           <p className="mt-3 line-clamp-2 text-sm leading-6 text-gray-600">
-            {provider.description ?? 'Sprawdzony specjalista dostępny w Warszawie. Wyślij krótkie zapytanie i poczekaj na kontakt.'}
+            {provider.description ?? texts.defaultDescription}
           </p>
 
           <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
             {provider.jobsCompleted > 0 && (
               <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✔ {provider.jobsCompleted} wykonanych zleceń
+                ✔ {provider.jobsCompleted} {texts.jobsCompleted}
               </span>
             )}
             {latestLeadTime && (
               <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✔ Ostatnie zapytanie: {latestLeadTime}
+                ✔ {texts.lastRequest}: {latestLeadTime}
               </span>
             )}
             <span className="rounded-full bg-gray-50 px-3 py-1.5">
-              ✔ Bezpośredni kontakt
+              ✔ {texts.directContact}
             </span>
           </div>
 
@@ -113,7 +145,7 @@ function ProviderCard({
             href="#lead-form"
             className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
           >
-            Wyślij zapytanie
+            {texts.sendRequest}
           </a>
         </div>
       </div>
@@ -124,115 +156,115 @@ function ProviderCard({
 const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
   masaz: {
     apiSlug: 'massage',
-    displayName: 'masaż',
-    heading: 'Masaż w Warszawie',
+    displayName: 'massage',
+    heading: 'Massage in Warsaw',
     subtitle:
-      'Znajdź sprawdzonych masażystów w Warszawie. Bezpłatne zapytanie, bez zobowiązań.',
-    metadataTitle: 'Masaż w Warszawie — znajdź specjalistę | Nevumo',
+      'Find trusted massage specialists in Warsaw. Free request, no obligation.',
+    metadataTitle: 'Massage in Warsaw | Nevumo',
     metadataDescription:
-      'Znajdź sprawdzonych masażystów w Warszawie. Bezpłatne zapytanie, bez zobowiązań. Odpowiedź nawet w 30 minut.',
-    seoTitle: 'Masaż w Warszawie — co warto wiedzieć?',
+      'Find trusted massage specialists in Warsaw. Free request, no obligation. Reply in as little as 30 minutes.',
+    seoTitle: 'Massage in Warsaw — what is worth knowing?',
     seoParagraphs: [
-      'Warszawa oferuje szeroki wybór profesjonalnych masażystów. Niezależnie od tego, czy szukasz masażu relaksacyjnego, sportowego czy terapeutycznego, na Nevumo znajdziesz sprawdzonych specjalistów w swojej okolicy.',
-      'Sprawdź opinie poprzednich klientów, doświadczenie specjalisty oraz zakres oferowanych usług. Dobry masażysta dostosuje technikę do Twoich potrzeb.',
-      'Ceny masażu w Warszawie zaczynają się od około 100 zł za godzinę. Koszt zależy od rodzaju masażu, doświadczenia specjalisty i lokalizacji.',
+      'Warsaw offers a wide selection of professional massage specialists. Whether you are looking for relaxing, sports, or therapeutic massage, Nevumo helps you find trusted professionals nearby.',
+      'Check previous client reviews, specialist experience, and the scope of services offered. A good massage specialist will adapt the technique to your needs.',
+      'Massage prices in Warsaw start from around 100 PLN per hour. The final cost depends on the type of massage, the specialist’s experience, and location.',
     ],
-    seoQuestions: ['Jak wybrać masażystę?', 'Ile kosztuje masaż w Warszawie?'],
+    seoQuestions: ['How to choose a massage specialist?', 'How much does massage cost in Warsaw?'],
     relatedLinks: [
-      { href: '/pl/warszawa/sprzatanie', label: 'Sprzątanie w Warszawie' },
-      { href: '/pl/warszawa/hydraulik', label: 'Hydraulik w Warszawie' },
+      { href: '/pl/warszawa/sprzatanie', label: 'Cleaning in Warsaw' },
+      { href: '/pl/warszawa/hydraulik', label: 'Plumbing in Warsaw' },
     ],
     faq: [
       {
-        question: 'Jak znaleźć masażystę w Warszawie?',
+        question: 'How to find a massage specialist in Warsaw?',
         answer:
-          'Na Nevumo możesz bezpłatnie wysłać zapytanie do sprawdzonych masażystów w Warszawie i otrzymać odpowiedź nawet w 30 minut.',
+          'On Nevumo you can send a free request to trusted massage specialists in Warsaw and receive a response in as little as 30 minutes.',
       },
       {
-        question: 'Ile kosztuje masaż w Warszawie?',
+        question: 'How much does massage cost in Warsaw?',
         answer:
-          'Ceny masażu w Warszawie zaczynają się od około 100 zł za godzinę, w zależności od rodzaju masażu i doświadczenia specjalisty.',
+          'Massage prices in Warsaw start from around 100 PLN per hour, depending on the type of massage and specialist experience.',
       },
       {
-        question: 'Czy zapytanie jest bezpłatne?',
+        question: 'Is the request free?',
         answer:
-          'Tak, wysłanie zapytania przez Nevumo jest całkowicie bezpłatne i bez zobowiązań.',
+          'Yes, sending a request through Nevumo is completely free and without obligation.',
       },
     ],
   },
   sprzatanie: {
     apiSlug: 'cleaning',
-    displayName: 'sprzątanie',
-    heading: 'Sprzątanie w Warszawie',
+    displayName: 'cleaning',
+    heading: 'Cleaning in Warsaw',
     subtitle:
-      'Znajdź sprawdzonych specjalistów od sprzątania w Warszawie. Bezpłatne zapytanie, bez zobowiązań.',
-    metadataTitle: 'Sprzątanie w Warszawie — znajdź specjalistę | Nevumo',
+      'Find trusted cleaning specialists in Warsaw. Free request, no obligation.',
+    metadataTitle: 'Cleaning in Warsaw | Nevumo',
     metadataDescription:
-      'Znajdź sprawdzone firmy sprzątające w Warszawie. Bezpłatne zapytanie, bez zobowiązań.',
-    seoTitle: 'Sprzątanie w Warszawie — co warto wiedzieć?',
+      'Find trusted cleaning companies in Warsaw. Free request, no obligation.',
+    seoTitle: 'Cleaning in Warsaw — what is worth knowing?',
     seoParagraphs: [
-      'Profesjonalne firmy sprzątające w Warszawie oferują kompleksowe usługi dla domów, mieszkań i biur. Na Nevumo znajdziesz sprawdzonych specjalistów dostępnych na terenie całej Warszawy.',
-      'Zwróć uwagę na opinie klientów, zakres usług oraz elastyczność terminów. Najlepsze firmy oferują stałą współpracę z rabatem.',
-      'Standardowe sprzątanie mieszkania w Warszawie kosztuje od 150 do 300 zł, w zależności od metrażu i zakresu prac.',
+      'Professional cleaning companies in Warsaw offer comprehensive services for homes, apartments, and offices. On Nevumo you can find trusted specialists available across the city.',
+      'Pay attention to customer reviews, scope of services, and scheduling flexibility. The best companies often offer recurring service discounts.',
+      'Standard apartment cleaning in Warsaw usually costs from 150 to 300 PLN, depending on size and scope of work.',
     ],
-    seoQuestions: ['Jak wybrać firmę sprzątającą?', 'Ile kosztuje sprzątanie w Warszawie?'],
+    seoQuestions: ['How to choose a cleaning company?', 'How much does cleaning cost in Warsaw?'],
     relatedLinks: [
-      { href: '/pl/warszawa/masaz', label: 'Masaż w Warszawie' },
-      { href: '/pl/warszawa/hydraulik', label: 'Hydraulik w Warszawie' },
+      { href: '/pl/warszawa/masaz', label: 'Massage in Warsaw' },
+      { href: '/pl/warszawa/hydraulik', label: 'Plumbing in Warsaw' },
     ],
     faq: [
       {
-        question: 'Jak znaleźć firmę sprzątającą w Warszawie?',
+        question: 'How to find a cleaning company in Warsaw?',
         answer:
-          'Na Nevumo możesz bezpłatnie wysłać zapytanie do sprawdzonych firm sprzątających w Warszawie i szybko otrzymać odpowiedzi od dostępnych specjalistów.',
+          'On Nevumo you can send a free request to trusted cleaning companies in Warsaw and quickly receive responses from available specialists.',
       },
       {
-        question: 'Ile kosztuje sprzątanie w Warszawie?',
+        question: 'How much does cleaning cost in Warsaw?',
         answer:
-          'Standardowe sprzątanie mieszkania w Warszawie kosztuje zwykle od 150 do 300 zł, zależnie od metrażu i zakresu usług.',
+          'Standard apartment cleaning in Warsaw usually costs from 150 to 300 PLN, depending on size and scope of services.',
       },
       {
-        question: 'Czy zapytanie jest bezpłatne?',
+        question: 'Is the request free?',
         answer:
-          'Tak, wysłanie zapytania przez Nevumo jest całkowicie bezpłatne i bez zobowiązań.',
+          'Yes, sending a request through Nevumo is completely free and without obligation.',
       },
     ],
   },
   hydraulik: {
     apiSlug: 'plumbing',
-    displayName: 'hydraulik',
-    heading: 'Hydraulik w Warszawie',
+    displayName: 'plumbing',
+    heading: 'Plumbing in Warsaw',
     subtitle:
-      'Znajdź sprawdzonego hydraulika w Warszawie. Bezpłatne zapytanie, bez zobowiązań.',
-    metadataTitle: 'Hydraulik w Warszawie — znajdź specjalistę | Nevumo',
+      'Find a trusted plumber in Warsaw. Free request, no obligation.',
+    metadataTitle: 'Plumbing in Warsaw | Nevumo',
     metadataDescription:
-      'Znajdź sprawdzonego hydraulika w Warszawie. Szybka odpowiedź, bezpłatne zapytanie.',
-    seoTitle: 'Hydraulik w Warszawie — co warto wiedzieć?',
+      'Find a trusted plumber in Warsaw. Fast response, free request.',
+    seoTitle: 'Plumbing in Warsaw — what is worth knowing?',
     seoParagraphs: [
-      'Awaria hydrauliczna wymaga szybkiej reakcji. Na Nevumo znajdziesz sprawdzonych hydraulików w Warszawie, dostępnych nawet w trybie pilnym. Bezpłatne zapytanie, szybka odpowiedź.',
-      'Hydraulika wzywamy przy awariach instalacji wodnej, cieknących kranach, zatkanej kanalizacji oraz podczas remontu łazienki lub kuchni.',
-      'Stawki hydraulików w Warszawie zaczynają się od 100-150 zł za roboczogodzinę. Cena zależy od rodzaju awarii i czasu realizacji.',
+      'Plumbing issues require a fast response. On Nevumo you can find trusted plumbers in Warsaw, including urgent availability. Free request, quick response.',
+      'You usually call a plumber for water system failures, leaking taps, blocked drains, or bathroom and kitchen renovation work.',
+      'Plumber rates in Warsaw usually start from 100 to 150 PLN per hour. The final price depends on the type of issue and response time.',
     ],
-    seoQuestions: ['Kiedy wezwać hydraulika?', 'Ile kosztuje hydraulik w Warszawie?'],
+    seoQuestions: ['When should you call a plumber?', 'How much does a plumber cost in Warsaw?'],
     relatedLinks: [
-      { href: '/pl/warszawa/masaz', label: 'Masaż w Warszawie' },
-      { href: '/pl/warszawa/sprzatanie', label: 'Sprzątanie w Warszawie' },
+      { href: '/pl/warszawa/masaz', label: 'Massage in Warsaw' },
+      { href: '/pl/warszawa/sprzatanie', label: 'Cleaning in Warsaw' },
     ],
     faq: [
       {
-        question: 'Jak znaleźć hydraulika w Warszawie?',
+        question: 'How to find a plumber in Warsaw?',
         answer:
-          'Na Nevumo możesz bezpłatnie wysłać zapytanie do sprawdzonych hydraulików w Warszawie i otrzymać odpowiedź nawet w krótkim czasie.',
+          'On Nevumo you can send a free request to trusted plumbers in Warsaw and receive a response quickly.',
       },
       {
-        question: 'Ile kosztuje hydraulik w Warszawie?',
+        question: 'How much does a plumber cost in Warsaw?',
         answer:
-          'Stawki hydraulików w Warszawie zaczynają się zwykle od 100-150 zł za roboczogodzinę, zależnie od rodzaju awarii i terminu realizacji.',
+          'Plumber rates in Warsaw usually start from 100 to 150 PLN per hour, depending on the type of issue and response time.',
       },
       {
-        question: 'Czy zapytanie jest bezpłatne?',
+        question: 'Is the request free?',
         answer:
-          'Tak, wysłanie zapytania przez Nevumo jest całkowicie bezpłatne i bez zobowiązań.',
+          'Yes, sending a request through Nevumo is completely free and without obligation.',
       },
     ],
   },
@@ -275,18 +307,21 @@ function buildFaqJsonLd(content: CategoryContent): Record<string, unknown> {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { city, category } = await params;
-  const content = getCategoryContent(category);
+  const { lang, city, category } = await params;
+  const categoryT = await fetchTranslations(lang, 'category');
+  const catKey = getCategoryTranslationKey(category);
+  const title = `${t(categoryT, `h1_${catKey}`, 'Services in Warsaw')} | Nevumo`;
+  const description = t(categoryT, `subtitle_${catKey}`, '');
 
   return {
-    title: content.metadataTitle,
-    description: content.metadataDescription,
+    title,
+    description,
     alternates: {
       languages: generateHreflangAlternates(`/${city}/${category}`),
     },
     openGraph: {
-      title: content.metadataTitle,
-      description: content.metadataDescription,
+      title,
+      description,
     },
   };
 }
@@ -329,14 +364,45 @@ async function getEnrichedProviders(
 export default async function CategoryPage({ params }: PageProps) {
   const { lang, city, category } = await params;
   const content = getCategoryContent(category);
+  const categoryT = await fetchTranslations(lang, 'category');
+  const homepageT = await fetchTranslations(lang, 'homepage');
+  const apiSlug = getApiSlug(category);
+  const catKey = getCategoryTranslationKey(category);
+  const heading = t(categoryT, `h1_${catKey}`, 'Services in Warsaw');
+  const subtitle = t(categoryT, `subtitle_${catKey}`, '');
+  const catNameKey = `cat_${catKey}_name` as const;
+  const categoryName = t(homepageT, catNameKey, catKey);
+  const providerCardTexts: ProviderCardTexts = {
+    defaultDescription: t(categoryT, 'provider_desc_fallback', 'Trusted specialist available in Warsaw. Send a short request and wait for contact.'),
+    jobsCompleted: t(categoryT, 'provider_jobs_completed', 'completed jobs'),
+    lastRequest: t(categoryT, 'provider_last_request', 'Last request'),
+    directContact: t(categoryT, 'provider_direct_contact', 'Direct contact'),
+    sendRequest: t(categoryT, 'form_btn', 'Send request'),
+  };
 
-  const { providers, allCount, averageRating } = await getEnrichedProviders(lang, city, content.apiSlug);
+  const relatedLinksByCategory: Record<CategoryKey, Array<{ href: string; label: string }>> = {
+    masaz: [
+      { href: `/${lang}/${city}/sprzatanie`, label: t(categoryT, 'h1_cleaning', 'Cleaning in Warsaw') },
+      { href: `/${lang}/${city}/hydraulik`, label: t(categoryT, 'h1_plumbing', 'Plumbing in Warsaw') },
+    ],
+    sprzatanie: [
+      { href: `/${lang}/${city}/masaz`, label: t(categoryT, 'h1_massage', 'Massage in Warsaw') },
+      { href: `/${lang}/${city}/hydraulik`, label: t(categoryT, 'h1_plumbing', 'Plumbing in Warsaw') },
+    ],
+    hydraulik: [
+      { href: `/${lang}/${city}/masaz`, label: t(categoryT, 'h1_massage', 'Massage in Warsaw') },
+      { href: `/${lang}/${city}/sprzatanie`, label: t(categoryT, 'h1_cleaning', 'Cleaning in Warsaw') },
+    ],
+  };
+  const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.sprzatanie;
+
+  const { providers, allCount, averageRating } = await getEnrichedProviders(lang, city, apiSlug);
   const visibleProviders = providers.slice(0, 20);
   const hiddenProviders = providers.slice(20);
   const hiddenCount = hiddenProviders.length;
-  const trustSpecialistsText = allCount > 0 ? `${allCount} specjalistów` : '14 specjalistów';
-  const trustRatingText = `${averageRating.toFixed(1)} ocena`;
-  const trustLeadsText = '120 zapytań w tym miesiącu';
+  const trustSpecialistsText = `${allCount > 0 ? allCount : 14} ${t(categoryT, 'trust_specialists', 'specialists')}`;
+  const trustRatingText = `${averageRating.toFixed(1)} ${t(categoryT, 'trust_rating', 'rating')}`;
+  const trustLeadsText = `120 ${t(categoryT, 'trust_requests', 'requests this month')}`;
   const faqJsonLd = buildFaqJsonLd(content);
 
   return (
@@ -349,7 +415,7 @@ export default async function CategoryPage({ params }: PageProps) {
               <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
             </Link>
             <Link href={`/${lang}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
-              Zostań specjalistą
+              {t(categoryT, 'nav_link', 'Become a specialist')}
             </Link>
           </div>
         </header>
@@ -357,10 +423,10 @@ export default async function CategoryPage({ params }: PageProps) {
         <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
           <section className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              {content.heading}
+              {heading}
             </h1>
             <p className="mt-3 max-w-3xl text-base text-gray-600 sm:text-lg">
-              {content.subtitle}
+              {subtitle}
             </p>
             <div className="mt-5 inline-flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full bg-gray-50 px-4 py-3 text-sm text-gray-700">
               <span>{trustSpecialistsText}</span>
@@ -378,7 +444,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-orange-400">
                   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
-                Średni czas odpowiedzi: ~30 min
+                {t(categoryT, 'trust_response', 'Avg. response: ~30 min')}
               </span>
             </div>
           </section>
@@ -388,24 +454,24 @@ export default async function CategoryPage({ params }: PageProps) {
               {providers.length === 0 ? (
                 <div className="rounded-xl border border-gray-100 bg-white px-6 py-12 text-center shadow-sm">
                   <p className="text-base font-medium text-gray-700">
-                    Pierwsi specjaliści już dołączają. Sprawdź ponownie jutro.
+                    {t(categoryT, 'empty_state', 'First specialists are joining.')}
                   </p>
                 </div>
               ) : (
                 <>
                   {visibleProviders.map((provider) => {
                     const providerHref = `/${lang}/${city}/${category}/${provider.slug}`;
-                    return <ProviderCard key={provider.id} provider={provider} href={providerHref} />;
+                    return <ProviderCard key={provider.id} provider={provider} href={providerHref} texts={providerCardTexts} />;
                   })}
                   {hiddenCount > 0 && (
                     <details className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
                       <summary className="cursor-pointer list-none text-center text-sm font-semibold text-orange-600">
-                        Pokaż więcej
+                        {t(categoryT, 'show_more', 'Show more')}
                       </summary>
                       <div className="mt-4 space-y-4">
                         {hiddenProviders.map((provider) => {
                           const providerHref = `/${lang}/${city}/${category}/${provider.slug}`;
-                          return <ProviderCard key={provider.id} provider={provider} href={providerHref} />;
+                          return <ProviderCard key={provider.id} provider={provider} href={providerHref} texts={providerCardTexts} />;
                         })}
                       </div>
                     </details>
@@ -413,20 +479,20 @@ export default async function CategoryPage({ params }: PageProps) {
                 </>
               )}
               <section className="mt-8 rounded-xl bg-gray-50 p-6 sm:p-8">
-                <h2 className="text-2xl font-bold text-gray-900">{content.seoTitle}</h2>
-                <p className="mt-4 text-base leading-7 text-gray-700">{content.seoParagraphs[0]}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{content.seoQuestions[0]}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{content.seoParagraphs[1]}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{content.seoQuestions[1]}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{content.seoParagraphs[2]}</p>
+                <h2 className="text-2xl font-bold text-gray-900">{t(categoryT, `seo_${catKey}_h2`, '')}</h2>
+                <p className="mt-4 text-base leading-7 text-gray-700">{t(categoryT, `seo_${catKey}_p1`, '')}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{t(categoryT, `seo_${catKey}_h3_1`, '')}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{t(categoryT, `seo_${catKey}_p2`, '')}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{t(categoryT, `seo_${catKey}_h3_2`, '')}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{t(categoryT, `seo_${catKey}_p3`, '')}</p>
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-gray-700">
-                  <span>Sprawdź również:</span>
-                  {content.relatedLinks.map((link, index) => (
+                  <span>{t(categoryT, 'also_check', 'See also:')}</span>
+                  {relatedLinks.map((link, index) => (
                     <span key={link.href}>
                       <Link href={link.href} className="font-medium text-orange-600 underline underline-offset-2">
                         {link.label}
                       </Link>
-                      {index < content.relatedLinks.length - 1 ? <span className="ml-2 text-gray-400">•</span> : null}
+                      {index < relatedLinks.length - 1 ? <span className="ml-2 text-gray-400">•</span> : null}
                     </span>
                   ))}
                 </div>
@@ -435,19 +501,30 @@ export default async function CategoryPage({ params }: PageProps) {
 
             <aside className="lg:sticky lg:top-6">
               <div id="lead-form" className="rounded-xl border border-orange-100 bg-white p-6 shadow-lg">
-                <h2 className="text-xl font-bold text-gray-900">Wyślij zapytanie</h2>
-                <p className="mt-1 text-sm text-gray-500">Bezpłatnie • Bez zobowiązań</p>
-                <div className="mt-5">
-                  <LeadForm categorySlug={content.apiSlug} citySlug="warszawa" />
-                </div>
+                <LeadForm
+                  categorySlug={apiSlug}
+                  citySlug={city}
+                  title={t(categoryT, 'form_title', 'Send a request')}
+                  subtitle={t(categoryT, 'form_subtitle', 'Free • No obligation')}
+                  phonePlaceholder={t(categoryT, 'form_phone', 'Your phone number')}
+                  descPlaceholder={t(categoryT, 'form_desc', 'Describe what you need (optional)')}
+                  buttonText={t(categoryT, 'form_btn', 'Send request')}
+                  trustItems={[
+                    t(categoryT, 'form_trust_1', 'Free'),
+                    t(categoryT, 'form_trust_2', 'No obligation'),
+                    t(categoryT, 'form_trust_3', 'Reply within 30 min'),
+                  ]}
+                />
               </div>
             </aside>
           </section>
 
           <section className="mt-12 rounded-xl bg-gray-50 border-t border-gray-200 px-6 py-8 text-center">
-            <p className="text-sm text-gray-500">Oferujesz {content.displayName} w Warszawie?</p>
+            <p className="text-sm text-gray-500">
+              {t(categoryT, 'provider_cta_prefix', 'Do you offer')} {categoryName} {t(categoryT, 'provider_cta_suffix', 'in Warsaw?')}
+            </p>
             <Link href={`/${lang}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
-              Dołącz za darmo →
+              {t(categoryT, 'provider_cta_link', 'Join for free →')}
             </Link>
           </section>
         </main>

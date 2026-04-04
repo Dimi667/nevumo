@@ -7,10 +7,25 @@ type CategorySlug = 'massage' | 'cleaning' | 'plumbing';
 
 interface LeadFormProps {
   categorySlug: CategorySlug;
-  citySlug?: string;
+  citySlug: string;
+  title?: string;
+  subtitle?: string;
+  phonePlaceholder?: string;
+  descPlaceholder?: string;
+  buttonText?: string;
+  trustItems?: string[];
 }
 
-export default function LeadForm({ categorySlug, citySlug = 'warszawa' }: LeadFormProps) {
+export default function LeadForm({
+  categorySlug,
+  citySlug,
+  title,
+  subtitle,
+  phonePlaceholder,
+  descPlaceholder,
+  buttonText,
+  trustItems,
+}: LeadFormProps) {
   const [phone, setPhone] = useState('');
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,6 +34,12 @@ export default function LeadForm({ categorySlug, citySlug = 'warszawa' }: LeadFo
   const phoneInputId = useId();
   const descriptionId = useId();
   const phoneInputRef = useRef<HTMLInputElement | null>(null);
+  const resolvedTitle = title ?? 'Send a request';
+  const resolvedSubtitle = subtitle ?? 'Free • No obligation';
+  const resolvedPhonePlaceholder = phonePlaceholder ?? 'Your phone number';
+  const resolvedDescPlaceholder = descPlaceholder ?? 'Describe what you need (optional)';
+  const resolvedButtonText = buttonText ?? 'Send request';
+  const resolvedTrustItems = trustItems ?? ['Free', 'No obligation', 'Reply within 30 min'];
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,8 +82,8 @@ export default function LeadForm({ categorySlug, citySlug = 'warszawa' }: LeadFo
         <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-2xl text-green-600">
           ✓
         </div>
-        <p className="text-lg font-bold text-gray-900">Zapytanie wysłane!</p>
-        <p className="mt-2 text-sm text-gray-500">Specjaliści skontaktują się z Tobą wkrótce.</p>
+        <p className="text-lg font-bold text-gray-900">Request sent!</p>
+        <p className="mt-2 text-sm text-gray-500">Specialists will contact you soon.</p>
       </div>
     );
   }
@@ -70,8 +91,13 @@ export default function LeadForm({ categorySlug, citySlug = 'warszawa' }: LeadFo
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
+        <h2 className="text-xl font-bold text-gray-900">{resolvedTitle}</h2>
+        <p className="mt-1 text-sm text-gray-500">{resolvedSubtitle}</p>
+      </div>
+
+      <div>
         <label htmlFor={phoneInputId} className="sr-only">
-          Twój numer telefonu
+          {resolvedPhonePlaceholder}
         </label>
         <input
           id={phoneInputId}
@@ -82,14 +108,14 @@ export default function LeadForm({ categorySlug, citySlug = 'warszawa' }: LeadFo
           required
           value={phone}
           onChange={(event) => setPhone(event.target.value)}
-          placeholder="Twój numer telefonu"
+          placeholder={resolvedPhonePlaceholder}
           className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
         />
       </div>
 
       <div>
         <label htmlFor={descriptionId} className="sr-only">
-          Opisz czego potrzebujesz
+          {resolvedDescPlaceholder}
         </label>
         <textarea
           id={descriptionId}
@@ -97,7 +123,7 @@ export default function LeadForm({ categorySlug, citySlug = 'warszawa' }: LeadFo
           rows={3}
           value={description}
           onChange={(event) => setDescription(event.target.value)}
-          placeholder="Opisz czego potrzebujesz (opcjonalnie)"
+          placeholder={resolvedDescPlaceholder}
           className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
         />
       </div>
@@ -107,19 +133,19 @@ export default function LeadForm({ categorySlug, citySlug = 'warszawa' }: LeadFo
         disabled={isSubmitting}
         className="w-full rounded-xl bg-orange-500 px-4 py-3.5 text-base font-semibold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
       >
-        {isSubmitting ? 'Wysyłanie...' : '🔵 Wyślij zapytanie'}
+        {isSubmitting ? 'Sending...' : resolvedButtonText}
       </button>
 
       {hasError && (
         <p className="text-sm text-red-600">
-          Coś poszło nie tak. Spróbuj ponownie.
+          Something went wrong. Please try again.
         </p>
       )}
 
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-gray-500">
-        <span>✓ Bezpłatne</span>
-        <span>✓ Bez zobowiązań</span>
-        <span>✓ Odpowiedź nawet w 30 min</span>
+        {resolvedTrustItems.map((item) => (
+          <span key={item}>✓ {item}</span>
+        ))}
       </div>
     </form>
   );

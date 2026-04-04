@@ -14,7 +14,7 @@ export async function fetchTranslations(
   try {
     const res = await fetch(
       `http://localhost:8000/api/v1/translations?lang=${resolvedLang}&namespace=${namespace}`,
-      { next: { revalidate: 3600 } }
+      { cache: 'no-store' }
     );
     if (!res.ok) throw new Error('Failed to fetch translations');
     const json = (await res.json()) as { data?: TranslationDict };
