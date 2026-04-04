@@ -27,14 +27,16 @@ class User(Base):
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
     email: Mapped[str] = mapped_column(String, unique=True, nullable=False)
-    name: Mapped[Optional[str]] = mapped_column(String, nullable=True)  # Canonical display name, never derived from email
+    name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     password_hash: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     role: Mapped[str] = mapped_column(String, nullable=False)
     locale: Mapped[str] = mapped_column(String, default="en")
     country_code: Mapped[Optional[str]] = mapped_column(String(2))
-    review_reply_email_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    # Email notification preferences
+    review_reply_email_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
 
     provider: Mapped["Provider"] = relationship(back_populates="user", uselist=False)
 
@@ -259,7 +261,7 @@ class Lead(Base):
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
 
-    client_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("users.id"))  # Null for anonymous public leads; populated for authenticated submissions
+    client_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("users.id"))
     provider_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("providers.id"))
 
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
@@ -319,11 +321,13 @@ class Review(Base):
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
     provider_id: Mapped[UUID] = mapped_column(ForeignKey("providers.id", ondelete="CASCADE"))
-    client_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))  # Review identity resolves through User.name or fallback Client
+    client_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
     lead_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("leads.id", ondelete="SET NULL"), nullable=True)
 
     rating: Mapped[int] = mapped_column(Integer, nullable=False)  # 1-5 stars
-    comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # Self-review is blocked in service logic using Provider.user_id ownership checks
+    comment: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    # Provider reply fields (closed trust conversation model)
     provider_reply: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     provider_reply_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
     provider_reply_edited_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
@@ -380,6 +384,22 @@ class LeadEvent(Base):
 
 
 # -------------------------
+# Rate Limit (Anti-Spam)
+# -------------------------
+
+class LeadRateLimit(Base):
+    __tablename__ = "lead_rate_limits"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    ip: Mapped[str] = mapped_column(String)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("idx_rate_limits_ip", "ip"),
+    )
+
+
+# -------------------------
 # Translations (i18n)
 # -------------------------
 
@@ -421,23 +441,7 @@ class PageEvent(Base):
 
 
 # -------------------------
-# Rate Limit (Anti-Spam)
-# -------------------------
-
-class LeadRateLimit(Base):
-    __tablename__ = "lead_rate_limits"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    ip: Mapped[str] = mapped_column(String)
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-
-    __table_args__ = (
-        Index("idx_rate_limits_ip", "ip"),
-    )
-
-
-# -------------------------
-# Password Reset Tokens (Auth)
+# Password Reset Tokens
 # -------------------------
 
 class PasswordResetToken(Base):
@@ -446,10 +450,8 @@ class PasswordResetToken(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     token_hash: Mapped[str] = mapped_column(String, nullable=False, unique=True)
-    # SHA-256 of the raw token. Raw token is sent in email; only hash is stored.
     expires_at: Mapped[datetime] = mapped_column(nullable=False)
     used_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
-    # None = unused; set to datetime on first use (one-time token)
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     __table_args__ = (
@@ -468,7 +470,6 @@ class AuthRateLimit(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     ip: Mapped[str] = mapped_column(String, nullable=False)
     action: Mapped[str] = mapped_column(String, nullable=False)
-    # action: 'register' | 'login' | 'forgot' | 'reset'
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     __table_args__ = (

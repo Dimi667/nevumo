@@ -115,6 +115,11 @@ CREATE TABLE categories (
     parent_id INT REFERENCES categories(id)
 );
 
+-- Current seeded categories (April 4, 2026):
+-- cleaning (34 translations)
+-- plumbing (34 translations) 
+-- massage (34 translations)
+
 ---
 
 ## 5. Category Translations
@@ -144,6 +149,7 @@ CREATE TABLE locations (
 -- Current data includes:
 -- BG (Bulgaria) - Sofia (EUR as of March 2026)
 -- RS (Serbia) - Belgrade (RSD)
+-- PL (Poland) - Warszawa (PLN) - seeded April 4, 2026 (slug=warszawa, lat=52.2297, lng=21.0122)
 
 CREATE INDEX idx_locations_country ON locations(country_code);
 
@@ -308,7 +314,36 @@ CREATE INDEX idx_auth_rate_limits_created ON auth_rate_limits(created_at);
 
 ---
 
-## 15. Reviews (Closed Trust Conversation Model)
+## 15. Translations (i18n)
+
+CREATE TABLE translations (
+    id SERIAL PRIMARY KEY,
+    lang TEXT NOT NULL,
+    key TEXT NOT NULL,
+    value TEXT,
+    UNIQUE(lang, key)
+);
+
+CREATE INDEX idx_translations_lang ON translations(lang);
+CREATE INDEX idx_translations_key ON translations(key);
+
+### Storage Format
+- **namespace.key pattern**: Keys are stored as `namespace.key` (e.g., `homepage.title`, `category.cleaning`)
+- **Namespace separation**: Different feature areas use different namespaces for organization
+
+### Current Seeded Data (April 4, 2026)
+- **homepage namespace**: 45 keys × 34 languages = 1,530 rows
+- **category namespace**: 42 UI keys × 34 languages + 18 SEO keys (pl/bg/en only) = 1,428 + 54 = 1,482 rows
+- **Total rows**: 2,278+ translations across all namespaces
+
+### Redis Caching
+- **Cache key pattern**: `translations:{lang}:{namespace}`
+- **Example**: `translations:en:homepage` caches all English homepage translations
+- **TTL**: Configurable expiration for automatic refresh
+
+---
+
+## 16. Reviews (Closed Trust Conversation Model)
 
 CREATE TABLE reviews (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
