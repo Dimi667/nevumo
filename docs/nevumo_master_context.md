@@ -83,8 +83,8 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Codex CLI ги записва в PostgreSQL
 - Redis кешира преводите
 
-### Supported languages (32):
-bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, pl, pt, pt-PT, ro, sk, sl, sq, sr, sv, tr
+### Supported languages (34):
+bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, pl, pt, pt-PT, ro, sk, sl, sq, sr, sv, tr, uk
 
 - Default language: en
 
@@ -159,14 +159,41 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, it, lt, lv, mk, mt, nl, no, 
   - Client email preferences toggle
   - Translation keys for all 34 languages
 - **Rating card** on provider dashboard clearly labeled as "Overall Rating" from all client reviews
+- **Warsaw Launch Data Seeded** — Complete Warsaw marketplace setup:
+  - City: Warszawa (PL) with coordinates 52.2297, 21.0122
+  - Categories: cleaning, plumbing, massage
+  - Translations: 34 languages for all categories
+  - Seed script: apps/api/scripts/seed_warsaw_launch.py (idempotent)
 
 ### 🔜 Next
+- ✅ Homepage (Warsaw, provider-first)
+- ✅ Category page (client-first, SEO)
+- ✅ Warsaw launch data seeding
+- 🔜 Register first real providers in Warsaw
+- 🔜 Monetization: Featured placement (month 6)
 - Dashboard design polish (UI refinements across all pages)
 - UX simplification: auto-currency from city, conditional price field
 - Email sending for reset password (Resend / SendGrid)
 - OAuth — Google + Facebook
 
 ### Recent Changes (April 2026)
+- **Homepage Implementation (Warsaw)** — Provider-first landing page:
+  - Polish content with SSR optimization
+  - Rotating hero section with provider testimonials
+  - Category cards with icons and counts
+  - Live activity feed showing recent requests
+  - Mobile-responsive design with Tailwind CSS
+- **Category Page Implementation** — Client-first service discovery:
+  - Server-side rendering for SEO optimization
+  - Two-column layout with lead form and provider listings
+  - SEO text blocks for content marketing
+  - FAQ schema markup for search visibility
+  - Internal linking structure for navigation
+- **Warsaw Launch** — Complete marketplace initialization:
+  - 1 city: Warszawa (PL)
+  - 3 categories: cleaning, plumbing, massage
+  - 34 language translations for all categories
+  - Idempotent seed script for safe re-running
 - **Implemented Review/Rating System** — Closed trust conversation model:
   - Database migration for provider reply fields and user email preferences
   - Backend API endpoints for client and provider review flows
