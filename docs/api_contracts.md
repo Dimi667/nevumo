@@ -871,11 +871,48 @@ Check if a slug redirects to another slug without following the redirect. Used b
 
 ---
 
-# 🔹 INTERNAL / MATCHING (BACKGROUND)
+## 6. Get Namespaced Translations
+
+### GET
+/api/v1/translations?lang=en&namespace=homepage
+
+### Query Params
+
+- `lang` (required, 2-5 chars)
+- `namespace` (required, 1-50 chars)
+
+### Behavior
+
+- Returns all translation keys for the requested namespace
+- Translation records are stored in DB as `namespace.key`
+- Response strips the namespace prefix and returns a flat object
+- Redis cache key: `translations:{lang}:{namespace}` with 1 hour TTL
+- If no keys are found for the requested language and `lang != en`, the endpoint falls back to English
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "hero_title": "Find trusted providers",
+    "hero_subtitle": "Compare local services"
+  }
+}
+```
+
+### Empty Response Example
+
+```json
+{
+  "success": true,
+  "data": {}
+}
+```
 
 ---
 
-## 6. Match Providers to Lead
+## 7. Match Providers to Lead
 
 ### Triggered automatically after lead creation
 
@@ -896,13 +933,13 @@ Pseudo-flow:
 
 ---
 
-## 7. Get Provider Leads — MOVED
+## 8. Get Provider Leads — MOVED
 
 See `GET /api/v1/provider/leads` in the Provider Dashboard section above.
 
 ---
 
-## 8. Update Lead Status — MOVED
+## 9. Update Lead Status — MOVED
 
 ### PATCH
 /api/v1/provider/leads/{id}
@@ -919,7 +956,7 @@ See `GET /api/v1/provider/leads` in the Provider Dashboard section above.
 
 ---
 
-## 9. Track Event
+## 10. Track Event
 
 ### POST
 /api/v1/events

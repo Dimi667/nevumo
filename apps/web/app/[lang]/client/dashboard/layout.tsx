@@ -4,7 +4,8 @@ import { use, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { getAuthToken, getAuthUser } from '@/lib/auth-store';
+import { getAuthToken, getAuthUser, clearAuth, saveAuth } from '@/lib/auth-store';
+import { switchRole } from '@/lib/provider-api';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -57,9 +58,17 @@ interface NavItem {
 interface ClientDashboardTopBarProps {
   email: string | null;
   onMenuClick: () => void;
+  lang: string;
 }
 
-function ClientDashboardTopBar({ email, onMenuClick }: ClientDashboardTopBarProps) {
+function ClientDashboardTopBar({ email, onMenuClick, lang }: ClientDashboardTopBarProps) {
+  const router = useRouter();
+
+  function handleLogout() {
+    clearAuth();
+    router.push(`/${lang}/auth`);
+  }
+
   return (
     <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 flex-shrink-0">
       <div className="flex items-center gap-3 min-w-0">
@@ -83,6 +92,17 @@ function ClientDashboardTopBar({ email, onMenuClick }: ClientDashboardTopBarProp
             {email}
           </span>
         )}
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span className="hidden sm:inline">Logout</span>
+        </button>
       </div>
     </header>
   );
@@ -94,6 +114,8 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const [switchingRole, setSwitchingRole] = useState(false);
+  const [switchError, setSwitchError] = useState<string | null>(null);
   const base = `/${lang}/client/dashboard`;
   const user = getAuthUser();
 
@@ -166,21 +188,68 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
             </Link>
           );
         })}
+
+        {/* НАМЕРИ УСЛУГА бутон след Settings */}
+        <div className="pt-6 border-t border-gray-200 pb-6">
+          <Link
+            href={`/${lang}`}
+            onClick={() => setSidebarOpen(false)}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-xs font-bold tracking-widest uppercase transition-colors bg-orange-500 hover:bg-orange-600 text-white"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            НАМЕРИ УСЛУГА
+          </Link>
+        </div>
+
+        {/* Стани доставчик секция */}
+        <div className="pt-6 border-t border-gray-200 pb-6">
+          <p className="text-sm text-gray-500 mb-5">
+            Предлагай услуги и получавай клиенти!
+          </p>
+          <button
+            onClick={async () => {
+              setSwitchingRole(true);
+              setSwitchError(null);
+              try {
+                const result = await switchRole('provider');
+                saveAuth(result.token, result.user);
+                router.push(`/${lang}/provider/dashboard`);
+              } catch (e: unknown) {
+                setSwitchError(e instanceof Error ? e.message : 'Неуспешна смяна на роля.');
+                setSwitchingRole(false);
+              }
+              setSidebarOpen(false);
+            }}
+            disabled={switchingRole}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-xs font-bold tracking-widest uppercase transition-colors bg-gray-900 hover:bg-gray-700 disabled:opacity-50 text-white"
+          >
+            {switchingRole ? 'Превключване...' : 'Стани доставчик'}
+          </button>
+          {switchError && (
+            <p className="px-3 mt-2 text-xs text-red-600">{switchError}</p>
+          )}
+        </div>
       </nav>
 
       {/* Logout */}
       <div className="p-3 border-t border-gray-100">
-        <Link
-          href={`/${lang}`}
-          onClick={() => setSidebarOpen(false)}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-xs font-bold tracking-widest uppercase transition-colors bg-orange-500 hover:bg-orange-600 text-white"
+        <button
+          onClick={() => {
+            clearAuth();
+            router.push(`/${lang}/auth`);
+          }}
+          className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
-          НАМЕРИ УСЛУГА
-        </Link>
+          Logout
+        </button>
       </div>
     </div>
   );
@@ -221,6 +290,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
         <ClientDashboardTopBar
           email={user?.email ?? null}
           onMenuClick={() => setSidebarOpen(true)}
+          lang={lang}
         />
 
         <main className="flex-1 p-4 md:p-6 overflow-auto">

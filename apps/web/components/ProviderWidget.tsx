@@ -180,6 +180,10 @@ export default function ProviderWidget({
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [cityInfo, setCityInfo] = useState<CityOut | null>(null);
   const [phoneValue, setPhoneValue] = useState('');
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [showAllServices, setShowAllServices] = useState(false);
+  const [isAutoFilled, setIsAutoFilled] = useState(false);
+  const [descriptionValue, setDescriptionValue] = useState('');
   const locale = (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
   const cityName = cityInfo?.name ?? citySlug;
   const jobsLabel = t.jobs_label || 'jobs completed';
@@ -205,6 +209,38 @@ export default function ProviderWidget({
     t.no_registration || 'No registration',
     t.direct_contact_with_provider || 'Direct contact with the provider',
   ];
+
+  // Filter services by current category
+  const filteredServices = provider.services.filter(service => service.category_slug === categorySlug);
+  
+  // Show max 3 services by default
+  const displayedServices = showAllServices ? filteredServices : filteredServices.slice(0, 3);
+  
+  // Handle service tag click
+  const handleServiceClick = (serviceId: string, serviceTitle: string) => {
+    if (selectedService === serviceId) {
+      // Deselect if already selected
+      setSelectedService(null);
+      if (isAutoFilled) {
+        setDescriptionValue('');
+        setIsAutoFilled(false);
+      }
+    } else {
+      // Select new service
+      setSelectedService(serviceId);
+      // Auto-fill description if empty or was previously auto-filled
+      if (descriptionValue.trim() === '' || isAutoFilled) {
+        setDescriptionValue(serviceTitle);
+        setIsAutoFilled(true);
+      }
+    }
+  };
+  
+  // Handle manual textarea input
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescriptionValue(e.target.value);
+    setIsAutoFilled(false); // Mark as manually entered
+  };
 
   useEffect(() => {
     const fetchCityInfo = async () => {
@@ -245,7 +281,7 @@ export default function ProviderWidget({
         city_slug: citySlug,
         provider_slug: provider.slug,
         phone: formData.get('phone') as string,
-        description: (formData.get('description') as string) || undefined,
+        description: descriptionValue || undefined,
         source: 'widget',
       });
       if (result) setSubmitted(true);
@@ -270,7 +306,15 @@ export default function ProviderWidget({
           {provider.business_name}{t.success_message_received || ' received your request and will contact you by phone.'}
         </p>
         <button
-          onClick={() => setSubmitted(false)}
+          onClick={() => {
+            setSubmitted(false);
+            setSelectedService(null);
+            setShowAllServices(false);
+            setIsAutoFilled(false);
+            setDescriptionValue('');
+            setPhoneValue('');
+            setPhoneError(null);
+          }}
           className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors text-base px-6"
         >
           {t.new_request_button || 'New Request'}
@@ -360,6 +404,40 @@ export default function ProviderWidget({
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Service Tags */}
+          {filteredServices.length > 0 && (
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">
+                {t.choose_service || (locale === 'bg' ? 'Избери услуга:' : 'Choose a service:')}
+              </label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {displayedServices.map((service) => (
+                  <button
+                    key={service.id}
+                    type="button"
+                    onClick={() => handleServiceClick(service.id, service.title)}
+                    className={`px-3 py-1 rounded-full border text-sm transition-colors ${
+                      selectedService === service.id
+                        ? 'bg-orange-500 text-white border-orange-500'
+                        : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                    }`}
+                  >
+                    {service.title}
+                  </button>
+                ))}
+              </div>
+              {!showAllServices && filteredServices.length > 3 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllServices(true)}
+                  className="text-sm text-orange-500 hover:text-orange-600 font-medium"
+                >
+                  Виж всички →
+                </button>
+              )}
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-1">
               {t.phone_label || 'Phone'}
@@ -386,6 +464,8 @@ export default function ProviderWidget({
             <textarea
               name="description"
               rows={3}
+              value={descriptionValue}
+              onChange={handleDescriptionChange}
               placeholder={
                 t.notes_placeholder ||
                 'Describe your request (time, address, details)'

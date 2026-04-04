@@ -119,6 +119,7 @@ export interface ServiceOut {
   description: string | null;
   price_type: string;
   base_price: number | null;
+  category_slug: string | null;
 }
 
 export interface LatestReviewPreview {

@@ -251,6 +251,13 @@ Used for:
 - session/cache layer
 - hot queries
 
+### Namespaced Translations Endpoint
+- Public endpoint: `GET /api/v1/translations?lang={lang}&namespace={namespace}`
+- Reads from the `translations` table where records are stored as `namespace.key`
+- Returns a flat JSON object without the namespace prefix so frontend consumers can access keys directly
+- Redis caches payloads by language and namespace for 1 hour using `translations:{lang}:{namespace}`
+- When a requested language has no rows for a namespace, the backend falls back to `en` before returning an empty payload
+
 ---
 
 ## Scaling Strategy
@@ -260,14 +267,10 @@ Used for:
 - Redis caching
 - Basic indexing
 
----
-
 ### Phase 2 (10k–100k users)
 - Read replicas
 - Query optimization
 - Background jobs (Celery / RQ)
-
----
 
 ### Phase 3 (100k+ users, multi-country)
 
