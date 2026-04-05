@@ -207,6 +207,15 @@ Later upgrades:
 - response time
 - AI matching
 
+### Retro-Matching (Provider Registration)
+When a provider adds their first service, the system automatically runs retro-matching:
+- Queries all leads with status 'created' or 'pending_match' matching the service category + cities
+- Bulk inserts LeadMatch rows (status: 'invited') for each unmatched lead
+- Updates matched lead statuses from 'created' to 'pending_match'
+- Triggered from POST /api/v1/provider/services after successful service creation
+- Errors are caught and logged — service creation response is never blocked
+- Returns retro_matched_leads count in service creation response
+
 ---
 
 ## Lead Quality & Anti-Spam

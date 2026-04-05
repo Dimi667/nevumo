@@ -271,7 +271,8 @@ def create_service(
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ):
-    from services.provider_service import _serialize_service
+    from services.provider_service import _serialize_service, retro_match_provider
+    
     service = add_service(
         db,
         provider.id,
@@ -283,7 +284,26 @@ def create_service(
         body.base_price,
         body.currency,
     )
-    return {"success": True, "data": _serialize_service(service, db)}
+    
+    # Perform retroactive matching for the new service
+    retro_matched_leads = 0
+    try:
+        retro_matched_leads = retro_match_provider(
+            provider.id, 
+            service.category_id, 
+            body.city_ids, 
+            db
+        )
+    except Exception as e:
+        # Log error but don't fail the service creation
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Retro matching failed for provider {provider.id}: {e}")
+    
+    response_data = _serialize_service(service, db)
+    response_data["retro_matched_leads"] = retro_matched_leads
+    
+    return {"success": True, "data": response_data}
 
 
 @router.put("/services/{service_id}")

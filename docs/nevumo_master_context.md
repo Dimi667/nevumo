@@ -146,6 +146,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Retro-matching** — при добавяне на първа услуга, новият доставчик автоматично получава всички съществуващи необработени заявки (status: created / pending_match) за същата категория + град. Имплементирано в `apps/api/services/provider_service.py` (функция `retro_match_provider`) и извиквано от `POST /api/v1/provider/services` в `apps/api/routes/provider.py`. Отговорът на endpoint-а съдържа `retro_matched_leads: int`.
 - SEO infrastructure (robots, sitemap, JSON-LD, hreflang, OG tags)
 - Provider listing + detail pages
 - Lead form (LeadForm component)

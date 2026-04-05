@@ -1453,3 +1453,83 @@ def generate_enhanced_qr_code_svg(
 
     # Сглобяваме всичко в един финален низ
     return header + qr_group + logo_group + text_group + footer
+
+
+# ---------------------------------------------------------------------------
+# Retro Matching
+# ---------------------------------------------------------------------------
+
+
+def retro_match_provider(
+    provider_id: UUID,
+    category_id: int,
+    city_ids: List[int],
+    db: Session
+) -> int:
+    """Create retroactive matches for a provider's first service.
+    
+    Finds existing leads that match the provider's new service category and cities,
+    creates LeadMatch records, and updates lead statuses.
+    
+    Args:
+        provider_id: Provider UUID to create matches for
+        category_id: Service category ID to match against
+        city_ids: List of city IDs where the provider offers the service
+        db: Database session (must be the same session used by caller)
+        
+    Returns:
+        Number of newly created matches (int)
+    """
+    from sqlalchemy import and_, not_, or_
+    
+    # Find matching leads that:
+    # - Have the same category_id
+    # - Are in one of the provider's cities
+    # - Have status 'created' or 'pending_match'
+    # - Are not already matched to this provider
+    matching_leads = (
+        db.query(Lead.id)
+        .filter(
+            and_(
+                Lead.category_id == category_id,
+                Lead.city_id.in_(city_ids),
+                Lead.status.in_(["created", "pending_match"]),
+                not_(
+                    Lead.id.in_(
+                        db.query(LeadMatch.lead_id)
+                        .filter(LeadMatch.provider_id == provider_id)
+                    )
+                )
+            )
+        )
+        .all()
+    )
+    
+    if not matching_leads:
+        return 0
+    
+    # Extract lead IDs
+    lead_ids = [lead.id for lead in matching_leads]
+    
+    # Bulk insert LeadMatch records
+    lead_matches_to_create = [
+        {"lead_id": lead_id, "provider_id": provider_id, "status": "invited"}
+        for lead_id in lead_ids
+    ]
+    
+    db.bulk_insert_mappings(LeadMatch, lead_matches_to_create)
+    
+    # Update lead statuses to 'pending_match' if they are still 'created'
+    (
+        db.query(Lead)
+        .filter(
+            and_(
+                Lead.id.in_(lead_ids),
+                Lead.status == "created"
+            )
+        )
+        .update({"status": "pending_match"}, synchronize_session=False)
+    )
+    
+    db.commit()
+    return len(lead_ids)

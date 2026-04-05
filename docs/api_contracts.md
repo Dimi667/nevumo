@@ -500,10 +500,12 @@ Creating a service also upserts those cities into `provider_cities` (for lead ma
     "description": "...",
     "price_type": "fixed",
     "base_price": 50.0,
-    "currency": "EUR"
+    "currency": "EUR",
+    "retro_matched_leads": 3
   }
 }
 ```
+- **retro_matched_leads**: number of existing unprocessed leads that were automatically matched to this provider upon service creation. Returns 0 if no matches or if retro-matching encountered an error.
 
 ### Errors
 - 404 CATEGORY_NOT_FOUND — invalid category_id
