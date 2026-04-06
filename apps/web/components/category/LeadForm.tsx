@@ -83,7 +83,7 @@ export default function LeadForm({
     event.preventDefault();
 
     if (isPrefixOnlyPhone || !isPhoneValid) {
-      setPhoneError('Enter a valid phone number');
+      setPhoneError(translations['error_phone_invalid'] || 'Enter a valid phone number');
       setHasError(false);
       return;
     }
@@ -204,27 +204,27 @@ export default function LeadForm({
 
         {/* Heading */}
         <h3 className="text-xl font-bold text-gray-900">
-          Запитването е изпратено!
+          {translations['success_title'] || 'Request sent!'}
         </h3>
 
         {/* Subtext */}
-        <p className="mt-2 text-sm text-gray-500">
-          Специалисти в {cityName} ще се свържат с вас.
+        <p className="mt-2 mb-4 text-sm text-gray-500">
+          {(translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace('{cityName}', cityName)}
         </p>
 
         {/* Separator */}
-        <div className="border-t border-gray-200 my-4 w-full"></div>
+        <div className="border-t border-gray-200 my-6 w-full"></div>
 
         {/* Track your request section */}
-        <p className="text-sm font-medium text-gray-700 mb-3">
-          Want to track your request?
+        <p className="mt-2 text-sm font-medium text-gray-700 mb-3">
+          {translations['success_track_title'] || 'Want to track your request?'}
         </p>
 
         {/* Bullet points */}
         <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left inline-block">
-          <li>• See who responded</li>
-          <li>• Manage your requests</li>
-          <li>• Get notifications</li>
+          <li>• {translations['success_bullet_responses'] || 'See who responded'}</li>
+          <li>• {translations['success_bullet_manage'] || 'Manage your requests'}</li>
+          <li>• {translations['success_bullet_notifications'] || 'Get notifications'}</li>
         </ul>
 
         {/* Primary CTA */}
@@ -232,12 +232,12 @@ export default function LeadForm({
           onClick={handleContinueWithEmail}
           className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600"
         >
-          Continue with email →
+          {translations['success_cta_email'] || 'Continue with email →'}
         </button>
 
         {/* Free text */}
         <p className="mt-2 text-xs text-gray-400">
-          Free · No registration required
+          {translations['success_free_label'] || 'Free · No registration required'}
         </p>
 
         {/* Skip link */}
@@ -245,7 +245,7 @@ export default function LeadForm({
           onClick={handleNoThanks}
           className="mt-4 text-sm text-gray-500 underline hover:text-gray-700"
         >
-          No thanks
+          {translations['success_skip_link'] || 'No thanks'}
         </button>
       </div>
     );
@@ -261,7 +261,7 @@ export default function LeadForm({
           onClick={handleBackToSent}
           className="mb-6 text-sm text-gray-500 hover:text-gray-700 flex items-center"
         >
-          ← Back
+          {translations['email_back_link'] || '← Back'}
         </button>
 
         {/* Email form */}
@@ -271,14 +271,14 @@ export default function LeadForm({
               htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Your email address
+              {translations['email_label'] || 'Your email address'}
             </label>
             <input
               type="email"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
+              placeholder={translations['email_placeholder'] || 'your@email.com'}
               autoFocus
               className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
             />
@@ -289,13 +289,13 @@ export default function LeadForm({
             disabled={!emailValid || isEmailSubmitting}
             className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
           >
-            {isEmailSubmitting ? 'Continue →' : 'Continue →'}
+            {isEmailSubmitting ? (translations['email_cta_continue'] || 'Continue →') : (translations['email_cta_continue'] || 'Continue →')}
           </button>
         </form>
 
         {/* Free text */}
         <p className="mt-3 text-center text-xs text-gray-400">
-          Free · No registration required
+          {translations['success_free_label'] || 'Free · No registration required'}
         </p>
 
         {/* Skip link */}
@@ -303,7 +303,7 @@ export default function LeadForm({
           onClick={handleNoThanks}
           className="mt-4 text-center text-sm text-gray-500 underline hover:text-gray-700"
         >
-          No thanks
+          {translations['success_skip_link'] || 'No thanks'}
         </button>
       </div>
     );
@@ -399,15 +399,15 @@ export default function LeadForm({
       {/* Error Message */}
       {hasError && (
         <p className="text-sm text-red-600">
-          Something went wrong. Please try again.
+          {translations['error_generic'] || 'Something went wrong. Please try again.'}
         </p>
       )}
 
       {/* Trust Signals */}
       <div className="mt-3 space-y-1 text-center">
         <p className="text-sm text-gray-500">
-          {translations['form_free'] ?? '✓ Free'}{' '}
-          {translations['form_no_obligation'] ?? '✓ No obligation'}
+          ✓ {translations['form_trust_1'] ?? 'Free'} •
+          ✓ {translations['form_trust_2'] ?? 'No obligation'}
         </p>
         <p className="text-sm text-gray-500">
           ✓ {translations['trust_multiple'] ?? 'Your request will be sent to multiple providers'}
