@@ -146,6 +146,16 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Category Page Lead Form Redesign** — Converted LeadForm to marketplace broadcast model:
+  - Pioneer framing banner when no providers: "Be the first to request this service in your area" / "Providers joining Nevumo will see your request and contact you"
+  - How it works 3-step section (DB-backed translations)
+  - Service chips from existing provider services + "Not sure" chip with solid border
+  - Conditional textarea expands after chip selection, pre-fills with chip value
+  - "Get offers" CTA replacing old "Submit request"
+  - Trust signals: Free, No obligation, Sent to multiple providers, Response 30 min
+  - Mobile sticky CTA button: md:hidden, isFormInView logic, shows when form is out of viewport in either direction
+  - globals.css: overflow-x:clip fixes position:fixed on mobile (overflow:hidden auto browser quirk)
+  - 15 new translation keys in category namespace × 34 languages = 510 new DB rows
 - **Retro-matching** — при добавяне на първа услуга, новият доставчик автоматично получава всички съществуващи необработени заявки (status: created / pending_match) за същата категория + град. Имплементирано в `apps/api/services/provider_service.py` (функция `retro_match_provider`) и извиквано от `POST /api/v1/provider/services` в `apps/api/routes/provider.py`. Отговорът на endpoint-а съдържа `retro_matched_leads: int`.
 - SEO infrastructure (robots, sitemap, JSON-LD, hreflang, OG tags)
 - Provider listing + detail pages
