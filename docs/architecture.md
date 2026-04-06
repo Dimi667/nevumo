@@ -334,6 +334,8 @@ Used for:
 - Page shell, metadata, provider list, trust bar, SEO body copy, and related links are server-rendered
 - Conversion interaction is centered around the lead form and in-page CTA anchors
 - The page is "client-first" in product intent: the main user action is sending a request, while provider join CTAs are secondary
+- Mobile sticky CTA behavior is handled by `CategoryPageClient` + `StickyLeadFormButton`, which target the mobile form wrapper through `id="lead-form-anchor"`
+- The sticky CTA is rendered as a fixed client component that starts hidden with `translateY(100%)`, stays hidden while the mobile form anchor is intersecting, and slides in with `translateY(0)` only after the form wrapper leaves the viewport on mobile
 
 ### Category Slug Mapping Decision
 - Public localized route slugs are intentionally decoupled from backend canonical category slugs

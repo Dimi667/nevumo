@@ -6,6 +6,7 @@ import { generateHreflangAlternates } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { JsonLd } from '@/components/JsonLd';
 import LeadForm from '@/components/category/LeadForm';
+import CategoryPageClient from '@/components/category/CategoryPageClient';
 
 interface PageProps {
   params: Promise<{ lang: string; city: string; category: string }>;
@@ -398,6 +399,24 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const { providers, allCount, averageRating } = await getEnrichedProviders(lang, city, apiSlug);
   
+  // Extract unique service titles from providers for chips
+  const services = Array.from(
+    new Set(
+      providers
+        .flatMap(provider => {
+          // Extract service titles from provider data if available
+          // For now, we'll use a basic approach - this might need adjustment based on actual provider data structure
+          return provider.description && provider.description.length > 0
+            ? [provider.description.split('.')[0].trim()] // Use first sentence as service title
+            : [];
+        })
+        .filter(title => title.length > 0 && title.length < 50) // Filter for reasonable length
+    )
+  ).map((title, index) => ({
+    id: `service-${index}`,
+    title
+  })).slice(0, 8); // Limit to 8 services
+  
   const CITY_COUNTRY_MAP: Record<string, string> = {
     'warszawa': 'PL',
     'sofia': 'BG',
@@ -430,7 +449,7 @@ export default async function CategoryPage({ params }: PageProps) {
           </div>
         </header>
 
-        <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+        <main className="max-w-6xl mx-auto px-4 py-8">
           <section className="mb-8">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               {heading}
@@ -459,13 +478,19 @@ export default async function CategoryPage({ params }: PageProps) {
             </div>
           </section>
 
-          <section className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
-            <div className="space-y-4">
+          <div className="flex flex-col lg:flex-row gap-8">
+            <div className="flex-1 min-w-0">
+              <section className="space-y-4">
               {providers.length === 0 ? (
                 <div className="rounded-xl border border-gray-100 bg-white px-6 py-12 text-center shadow-sm">
-                  <p className="text-base font-medium text-gray-700">
-                    {t(categoryT, 'empty_state', 'First specialists are joining.')}
-                  </p>
+                  <div className="border-l-4 border-orange-400 pl-4 py-2 mb-4 text-left inline-block">
+                    <p className="font-semibold text-gray-800 text-sm">
+                      {t(categoryT, 'no_providers_title', 'Be the first to request this service in your area')}
+                    </p>
+                    <p className="text-sm text-gray-500 mt-0.5">
+                      {t(categoryT, 'no_providers_subtitle', 'Providers joining Nevumo will see your request and contact you')}
+                    </p>
+                  </div>
                 </div>
               ) : (
                 <>
@@ -488,6 +513,18 @@ export default async function CategoryPage({ params }: PageProps) {
                   )}
                 </>
               )}
+
+              {/* Mobile Lead Form and Sticky Button */}
+              <CategoryPageClient
+                translations={categoryT}
+                categorySlug={apiSlug}
+                citySlug={city}
+                lang={lang}
+                services={services}
+                cityCountryCode={cityCountryCode}
+                stickyButtonLabel={t(categoryT, 'sticky_btn', 'Get offers — Free')}
+              />
+
               <section className="mt-8 rounded-xl bg-gray-50 p-6 sm:p-8">
                 <h2 className="text-2xl font-bold text-gray-900">{t(categoryT, `seo_${catKey}_h2`, '')}</h2>
                 <p className="mt-4 text-base leading-7 text-gray-700">{t(categoryT, `seo_${catKey}_p1`, '')}</p>
@@ -507,28 +544,25 @@ export default async function CategoryPage({ params }: PageProps) {
                   ))}
                 </div>
               </section>
+              </section>
             </div>
 
-            <aside className="lg:sticky lg:top-6">
-              <div id="lead-form" className="rounded-xl border border-orange-100 bg-white p-6 shadow-lg">
-                <LeadForm
-                  categorySlug={apiSlug}
-                  citySlug={city}
-                  countryCode={cityCountryCode}
-                  title={t(categoryT, 'form_title', 'Send a request')}
-                  subtitle={t(categoryT, 'form_subtitle', 'Free • No obligation')}
-                  phonePlaceholder={t(categoryT, 'form_phone', 'Your phone number')}
-                  descPlaceholder={t(categoryT, 'form_desc', 'Describe what you need (optional)')}
-                  buttonText={t(categoryT, 'form_btn', 'Send request')}
-                  trustItems={[
-                    t(categoryT, 'form_trust_1', 'Free'),
-                    t(categoryT, 'form_trust_2', 'No obligation'),
-                    t(categoryT, 'form_trust_3', 'Reply within 30 min'),
-                  ]}
-                />
+            <div className="hidden lg:block w-full lg:w-80 xl:w-96 shrink-0">
+              <div className="sticky top-6">
+                <div id="lead-form" className="rounded-xl border border-orange-100 bg-white p-6 shadow-lg">
+                  <LeadForm
+                    translations={categoryT}
+                    categorySlug={apiSlug}
+                    citySlug={city}
+                    lang={lang}
+                    services={services}
+                    countryCode={cityCountryCode}
+                    title={t(categoryT, 'form_btn', 'Get offers')}
+                  />
+                </div>
               </div>
-            </aside>
-          </section>
+            </div>
+          </div>
 
           <section className="mt-12 rounded-xl bg-gray-50 border-t border-gray-200 px-6 py-8 text-center">
             <p className="text-sm text-gray-500">
