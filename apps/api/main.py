@@ -3,6 +3,7 @@ import json
 import logging
 import os
 
+from apscheduler.schedulers.background import BackgroundScheduler
 from fastapi import FastAPI, Depends, Response, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,6 +15,7 @@ from dependencies import get_db, get_redis
 from exceptions import NevumoException
 from i18n import fetch_translations
 from fastapi.staticfiles import StaticFiles
+from jobs.send_magic_links import process_pending_magic_links
 
 from routes import (
     auth_router,
@@ -38,6 +40,31 @@ logging.basicConfig(
 app = FastAPI(title="Nevumo API")
 
 init_db()
+
+# Initialize APScheduler
+scheduler = BackgroundScheduler()
+
+@app.on_event("startup")
+def start_scheduler():
+    def run_job():
+        db = next(get_db())
+        try:
+            count = process_pending_magic_links(db)
+            if count > 0:
+                print(f"[Scheduler] Sent {count} magic links")
+        except Exception as e:
+            print(f"[Scheduler] Error: {e}")
+        finally:
+            db.close()
+
+    scheduler.add_job(run_job, 'interval', minutes=5)
+    scheduler.start()
+    print("[Scheduler] Magic link job started (every 5 minutes)")
+
+@app.on_event("shutdown")
+def stop_scheduler():
+    scheduler.shutdown()
+    print("[Scheduler] Stopped")
 
 origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
 

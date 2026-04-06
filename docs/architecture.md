@@ -978,6 +978,156 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 
 ---
 
+## Lead Capture → Account Linking Flow
+
+### Overview
+
+A three-phase system that converts anonymous lead submissions into authenticated client accounts with full lead ownership history. This bridges the gap between high-conversion anonymous submission and account-based features (lead tracking, reviews, notifications).
+
+### Phase 1: Success Screen with Email Capture (Frontend)
+
+**Location:** `apps/web/components/category/LeadForm.tsx`
+
+**Flow:**
+1. User submits lead form (phone + description + category/city)
+2. Backend creates lead, returns lead_id
+3. Frontend shows two-step success screen:
+   - **Step 1:** "Запитването е изпратено!" + "Want to track your request?"
+     - "Continue with email →" button
+     - "No thanks" skip button (resets form to initial state)
+   - **Step 2:** Email input form
+4. On email submit:
+   - POST to `/api/v1/leads/{lead_id}/claim-email`
+   - Save to localStorage: `nevumo_pending_claim` = `{ lead_id, email, phone, submitted_at }`
+   - Redirect to `/{lang}/auth?email={email}&intent=client`
+
+**Rate Limit Handling:**
+- If lead submission returns 429 RATE_LIMIT_EXCEEDED, still show Step 1 success screen
+- User can still claim the lead even if rate limited (lead was created)
+
+### Phase 2: Pending Lead Claims (Backend)
+
+**Table:** `pending_lead_claims`
+
+**Purpose:** Store intent to claim anonymous leads until user authenticates.
+
+**Key Fields:**
+- `lead_id` — FK to leads table (CASCADE DELETE)
+- `email` — Primary matching key for account linking
+- `phone` — Secondary matching key for account linking
+- `claimed` — Boolean, set to TRUE when linked to a user
+- `claimed_at` — Timestamp of successful linking
+- `magic_link_sent` — Boolean, set when delayed magic link is sent
+- `expires_at` — 7 days from creation (TTL for claim validity)
+
+**Idempotent Registration:**
+```
+POST /api/v1/leads/{lead_id}/claim-email
+Body: { email, phone? }
+```
+- Creates new claim or refreshes existing claim's `created_at` and `expires_at`
+- No authentication required
+
+**Auth Hooks:**
+- `link_pending_claims(user_id, email, phone, db)` in `auth_service.py`
+- Called in BOTH `/register` and `/login` after successful authentication
+- Finds all unclaimed claims matching email OR phone
+- Updates `leads.client_id` to the new/logged-in user
+- Marks matching claims as `claimed=TRUE` with `claimed_at` timestamp
+- Wrapped in try/except — never blocks auth flow
+
+### Phase 3: Magic Link Authentication (Backend + Frontend)
+
+**Table:** `magic_link_tokens`
+
+**Purpose:** Enable passwordless account creation and authentication for users who claimed leads but haven't set passwords.
+
+**Background Job:** `apps/api/jobs/send_magic_links.py`
+
+**Schedule:** Every 5 minutes via APScheduler
+
+**Query Logic:**
+```sql
+SELECT * FROM pending_lead_claims 
+WHERE claimed = FALSE 
+  AND magic_link_sent = FALSE
+  AND expires_at > NOW()
+  AND created_at <= NOW() - INTERVAL '30 minutes'
+```
+
+**Job Actions:**
+1. For each eligible claim:
+   - Generate raw token: `secrets.token_urlsafe(32)`
+   - Store SHA-256 hash in `magic_link_tokens` table
+   - Set `expires_at` to 48 hours from creation
+   - Console log the magic link: `{APP_URL}/en/auth/magic?token={raw_token}`
+   - Mark claim as `magic_link_sent=TRUE`
+
+**Frontend Magic Link Handler:**
+
+**Location:** `apps/web/app/[lang]/auth/magic/page.tsx` + `MagicLinkClient.tsx`
+
+**Flow:**
+1. Page loads, reads `?token=` from URL
+2. Shows loading state while validating
+3. POST to `/api/v1/auth/magic-link` with token
+4. On success:
+   - `saveAuth(token, user)` to localStorage
+   - Redirect to `/client/dashboard`
+5. On error (expired/invalid/used):
+   - Show Bulgarian error message
+   - CTA button to `/auth` for manual login
+
+**API Endpoint:** `POST /api/v1/auth/magic-link`
+
+**Response (Success):**
+```json
+{
+  "success": true,
+  "data": {
+    "token": "JWT",
+    "user": { "id": "uuid", "email": "...", "role": "client" }
+  }
+}
+```
+
+**Error Codes:**
+- `TOKEN_INVALID` — token hash not found in DB
+- `TOKEN_EXPIRED` — token past expires_at timestamp
+- `TOKEN_USED` — token already has used_at timestamp
+
+### Security Considerations
+
+1. **Timing Attack Prevention:** Magic links sent after 30-minute delay to prevent real-time email interception attacks
+2. **Short TTL:** Magic tokens expire in 48 hours (vs 30 min for password reset)
+3. **One-Time Use:** Tokens marked as used after first successful auth
+4. **Hash Storage:** Raw token never stored in DB — SHA-256 hash only
+5. **Claim Expiration:** Unclaimed leads expire after 7 days
+6. **No Enumeration:** Magic link endpoint returns generic errors (same timing for invalid/expired/used)
+
+### Data Flow Summary
+
+```
+Anonymous User                          Authenticated User
+     │                                         │
+     ▼                                         ▼
+┌─────────────┐      ┌──────────────────┐     ┌──────────────┐
+│ Submit Lead │─────▶│ pending_lead_    │────▶│ Client       │
+│ (phone)     │      │ claims (email)   │     │ Dashboard    │
+└─────────────┘      └──────────────────┘     └──────────────┘
+                            │
+              ┌─────────────┴─────────────┐
+              ▼                           ▼
+     ┌────────────────┐      ┌──────────────────┐
+     │ Immediate:       │      │ Delayed (30min): │
+     │ Register/Login   │      │ Magic Link Email │
+     │ → link_pending_  │      │ → magic_link_    │
+     │   claims()       │      │   tokens table   │
+     └────────────────┘      └──────────────────┘
+```
+
+---
+
 ## Key Principles
 
 - Keep backend simple

@@ -10,7 +10,7 @@ from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
 from config import settings
-from models import AuthRateLimit
+from models import AuthRateLimit, PendingLeadClaim, Lead
 
 logger = logging.getLogger(__name__)
 
@@ -89,3 +89,52 @@ def check_rate_limit(db: Session, ip: str, action: str) -> bool:
 def record_rate_limit(db: Session, ip: str, action: str) -> None:
     db.add(AuthRateLimit(ip=ip, action=action))
     db.commit()
+
+
+def link_pending_claims(user_id: UUID, email: str, phone: Optional[str], db: Session) -> int:
+    """
+    Called after successful register or login.
+    Links any pending_lead_claims matching email OR phone to the user.
+    Returns count of linked leads.
+    """
+    try:
+        # Find all pending_lead_claims where:
+        # - (email = user.email OR phone = user.phone)
+        # - claimed = False
+        # - expires_at > NOW()
+        query = db.query(PendingLeadClaim).filter(
+            PendingLeadClaim.claimed == False,
+            PendingLeadClaim.expires_at > datetime.utcnow()
+        )
+        
+        if email:
+            query = query.filter(PendingLeadClaim.email == email)
+        elif phone:
+            query = query.filter(PendingLeadClaim.phone == phone)
+        else:
+            return 0
+        
+        pending_claims = query.all()
+        linked_count = 0
+        
+        for claim in pending_claims:
+            # UPDATE leads SET client_id = user_id WHERE id = claim.lead_id AND client_id IS NULL
+            updated = db.query(Lead).filter(
+                Lead.id == claim.lead_id,
+                Lead.client_id.is_(None)
+            ).update({"client_id": user_id})
+            
+            if updated:
+                # UPDATE pending_lead_claims SET claimed = True, claimed_at = NOW()
+                claim.claimed = True
+                claim.claimed_at = datetime.utcnow()
+                linked_count += 1
+        
+        if linked_count > 0:
+            db.commit()
+        
+        return linked_count
+    except Exception as e:
+        logger.error(f"Error linking pending claims for user {user_id}: {e}")
+        db.rollback()
+        return 0

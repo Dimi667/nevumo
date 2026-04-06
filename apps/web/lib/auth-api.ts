@@ -50,6 +50,10 @@ export function resetPassword(token: string, password: string): Promise<AuthResu
   return apiPost<AuthResult>("/api/v1/auth/reset-password", { token, password });
 }
 
+export function magicLinkAuth(token: string): Promise<AuthResult> {
+  return apiPost<AuthResult>("/api/v1/auth/magic-link", { token });
+}
+
 export async function checkRegistrationSlugAvailability(
   slug: string,
   citySlug?: string,

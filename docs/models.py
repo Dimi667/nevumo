@@ -465,6 +465,53 @@ class PasswordResetToken(Base):
 
 
 # -------------------------
+# Pending Lead Claims
+# -------------------------
+
+class PendingLeadClaim(Base):
+    __tablename__ = "pending_lead_claims"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    lead_id: Mapped[UUID] = mapped_column(ForeignKey("leads.id", ondelete="CASCADE"), nullable=False)
+    email: Mapped[str] = mapped_column(Text, nullable=False)
+    phone: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    claimed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    claimed_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    magic_link_sent: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    magic_link_sent_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    expires_at: Mapped[datetime] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False)
+
+    __table_args__ = (
+        Index("idx_pending_claims_lead", "lead_id"),
+        Index("idx_pending_claims_email", "email"),
+        Index("idx_pending_claims_claimed", "claimed"),
+        Index("idx_pending_claims_expires", "expires_at"),
+    )
+
+
+# -------------------------
+# Magic Link Tokens
+# -------------------------
+
+class MagicLinkToken(Base):
+    __tablename__ = "magic_link_tokens"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    email: Mapped[str] = mapped_column(Text, nullable=False)
+    lead_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("leads.id", ondelete="SET NULL"), nullable=True)
+    token_hash: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
+    expires_at: Mapped[datetime] = mapped_column(nullable=False)
+    used_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False)
+
+    __table_args__ = (
+        Index("idx_magic_tokens_hash", "token_hash"),
+        Index("idx_magic_tokens_email", "email"),
+    )
+
+
+# -------------------------
 # Auth Rate Limits
 # -------------------------
 

@@ -9,11 +9,13 @@ from exceptions import (
     CITY_NOT_FOUND,
     PROVIDER_NOT_FOUND,
     RATE_LIMIT_EXCEEDED,
+    LEAD_NOT_FOUND,
 )
 from models import (
     Lead,
     LeadMatch,
     LeadRateLimit,
+    PendingLeadClaim,
     Category,
     Location,
     Provider,
@@ -24,6 +26,8 @@ from models import (
 from schemas import (
     LeadCreate,
     LeadCreatedResponse,
+    LeadClaimEmailRequest,
+    LeadClaimEmailResponse,
 )
 
 router = APIRouter(prefix="/api/v1", tags=["leads"])
@@ -106,3 +110,46 @@ async def create_lead(
     db.refresh(lead)
 
     return LeadCreatedResponse(data={"lead_id": str(lead.id)})
+
+
+@router.post("/leads/{lead_id}/claim-email", response_model=LeadClaimEmailResponse)
+async def claim_lead_email(
+    lead_id: str,
+    payload: LeadClaimEmailRequest,
+    db: Session = Depends(get_db),
+) -> LeadClaimEmailResponse:
+    # Check if lead exists
+    lead = db.query(Lead).filter(Lead.id == lead_id).first()
+    if not lead:
+        raise LEAD_NOT_FOUND
+    
+    # If lead already has client_id, return success immediately (already claimed)
+    if lead.client_id:
+        return LeadClaimEmailResponse(data={"message": "Claim registered"})
+    
+    # Check if pending claim exists for this lead_id + email
+    existing_claim = db.query(PendingLeadClaim).filter(
+        PendingLeadClaim.lead_id == lead_id,
+        PendingLeadClaim.email == payload.email
+    ).first()
+    
+    if existing_claim:
+        if existing_claim.claimed:
+            # Already claimed, return success (idempotent)
+            return LeadClaimEmailResponse(data={"message": "Claim registered"})
+        else:
+            # Update expires_at = NOW() + 7 days
+            existing_claim.expires_at = datetime.utcnow() + timedelta(days=7)
+            db.commit()
+            return LeadClaimEmailResponse(data={"message": "Claim registered"})
+    else:
+        # Insert new row, expires_at = NOW() + 7 days
+        new_claim = PendingLeadClaim(
+            lead_id=lead_id,
+            email=payload.email,
+            phone=payload.phone,
+            expires_at=datetime.utcnow() + timedelta(days=7)
+        )
+        db.add(new_claim)
+        db.commit()
+        return LeadClaimEmailResponse(data={"message": "Claim registered"})

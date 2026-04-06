@@ -38,6 +38,10 @@ export default function LeadForm({
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [selectedChip, setSelectedChip] = useState<string | null>(null);
   const [showTextarea, setShowTextarea] = useState(false);
+  const [leadId, setLeadId] = useState<string | null>(null);
+  const [successStep, setSuccessStep] = useState<'sent' | 'email'>('sent');
+  const [email, setEmail] = useState('');
+  const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const { phone: savedPhone, savePhone, loading } = usePhone();
   const phonePrefix = getPhonePrefix(countryCode);
   const phoneDigitsCount = phoneValue.replace(/\D/g, '').length;
@@ -103,30 +107,204 @@ export default function LeadForm({
         return;
       }
 
+      // Check for API error response
+      if ('success' in result && !result.success) {
+        if (result.error?.code === 'RATE_LIMIT_EXCEEDED') {
+          // User already submitted before, show success screen
+          setIsSuccess(true);
+          setSuccessStep('sent');
+        } else {
+          console.error('Lead submission error:', result.error?.code, result.error?.message);
+          setHasError(true);
+        }
+        return;
+      }
+
+      setLeadId(result.lead_id);
       setIsSuccess(true);
+      setSuccessStep('sent');
       setDescription('');
       setSelectedChip(null);
       setShowTextarea(false);
-      setPhoneValue('');
+      // Don't clear phoneValue yet - we need it for the pending_claim
       // Save phone on successful submit
       if (phoneValue.replace(/\D/g, '').length >= 7) {
         savePhone(phoneValue.trim());
       }
-    } catch {
+    } catch (error) {
+      console.error('Lead submission failed:', error);
       setHasError(true);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (isSuccess) {
+  // Get city display name - capitalize first letter if only slug available
+  const cityName = citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
+
+  const handleContinueWithEmail = () => {
+    setSuccessStep('email');
+  };
+
+  const handleBackToSent = () => {
+    setSuccessStep('sent');
+    setEmail('');
+  };
+
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isValidEmail(email) || !leadId) return;
+
+    setIsEmailSubmitting(true);
+
+    // Save to localStorage
+    const pendingClaim = {
+      lead_id: leadId,
+      email: email,
+      phone: phoneValue,
+      submitted_at: Date.now(),
+    };
+    localStorage.setItem('nevumo_pending_claim', JSON.stringify(pendingClaim));
+
+    // Get lang from URL
+    const currentLang = window.location.pathname.split('/')[1] || 'en';
+
+    // Redirect to auth
+    const redirectUrl = `/${currentLang}/auth?email=${encodeURIComponent(email)}&intent=client`;
+    window.location.href = redirectUrl;
+  };
+
+  const handleNoThanks = () => {
+    // Reset form to initial state
+    setIsSuccess(false);
+    setSuccessStep('sent');
+    setLeadId(null);
+    setEmail('');
+    setPhoneValue('');
+    setIsEmailSubmitting(false);
+    setHasError(false);
+    setDescription('');
+    setSelectedChip(null);
+    setShowTextarea(false);
+    setPhoneError(null);
+  };
+
+  if (isSuccess && successStep === 'sent') {
     return (
-      <div className="flex flex-col items-center justify-center py-8 text-center">
-        <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-2xl text-green-600">
+      <div className="flex flex-col items-center justify-center py-8 text-center px-4">
+        {/* Large green checkmark */}
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-600">
           ✓
         </div>
-        <p className="text-lg font-bold text-gray-900">Request sent!</p>
-        <p className="mt-2 text-sm text-gray-500">Specialists will contact you soon.</p>
+
+        {/* Heading */}
+        <h3 className="text-xl font-bold text-gray-900">
+          Запитването е изпратено!
+        </h3>
+
+        {/* Subtext */}
+        <p className="mt-2 text-sm text-gray-500">
+          Специалисти в {cityName} ще се свържат с вас.
+        </p>
+
+        {/* Separator */}
+        <div className="border-t border-gray-200 my-4 w-full"></div>
+
+        {/* Track your request section */}
+        <p className="text-sm font-medium text-gray-700 mb-3">
+          Want to track your request?
+        </p>
+
+        {/* Bullet points */}
+        <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left inline-block">
+          <li>• See who responded</li>
+          <li>• Manage your requests</li>
+          <li>• Get notifications</li>
+        </ul>
+
+        {/* Primary CTA */}
+        <button
+          onClick={handleContinueWithEmail}
+          className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600"
+        >
+          Continue with email →
+        </button>
+
+        {/* Free text */}
+        <p className="mt-2 text-xs text-gray-400">
+          Free · No registration required
+        </p>
+
+        {/* Skip link */}
+        <button
+          onClick={handleNoThanks}
+          className="mt-4 text-sm text-gray-500 underline hover:text-gray-700"
+        >
+          No thanks
+        </button>
+      </div>
+    );
+  }
+
+  if (isSuccess && successStep === 'email') {
+    const emailValid = isValidEmail(email);
+
+    return (
+      <div className="flex flex-col py-8 px-4">
+        {/* Back link */}
+        <button
+          onClick={handleBackToSent}
+          className="mb-6 text-sm text-gray-500 hover:text-gray-700 flex items-center"
+        >
+          ← Back
+        </button>
+
+        {/* Email form */}
+        <form onSubmit={handleEmailSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Your email address
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="your@email.com"
+              autoFocus
+              className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={!emailValid || isEmailSubmitting}
+            className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
+          >
+            {isEmailSubmitting ? 'Continue →' : 'Continue →'}
+          </button>
+        </form>
+
+        {/* Free text */}
+        <p className="mt-3 text-center text-xs text-gray-400">
+          Free · No registration required
+        </p>
+
+        {/* Skip link */}
+        <button
+          onClick={handleNoThanks}
+          className="mt-4 text-center text-sm text-gray-500 underline hover:text-gray-700"
+        >
+          No thanks
+        </button>
       </div>
     );
   }

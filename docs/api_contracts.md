@@ -191,6 +191,27 @@ GET /api/v1/auth/register/slug/check?slug=devs&city_slug=sofia&category_slug=mas
 
 ---
 
+## POST /api/v1/auth/magic-link
+
+### Body
+{ "token": "raw_token_from_url" }
+
+### Response — auto-login (returns JWT)
+{ "success": true, "data": { "token": "JWT", "user": { "id": "uuid", "email": "...", "role": "client" } } }
+
+### Description
+- Authenticates user via magic link token
+- Creates passwordless account if user doesn't exist
+- Links pending lead claims to user
+- Marks token as used after successful authentication
+
+### Errors
+- 400 TOKEN_INVALID
+- 400 TOKEN_EXPIRED  
+- 400 TOKEN_USED
+
+---
+
 ## Auth Error Codes
 
 | Code | Status | Meaning |
@@ -852,6 +873,48 @@ Check if a slug redirects to another slug without following the redirect. Used b
     "lead_id": "uuid"
   }
 }
+
+---
+
+## 3.1. Register Lead Claim Email
+
+### POST
+/api/v1/leads/{lead_id}/claim-email
+
+**Purpose:** Register email for claiming an anonymous lead. Called after successful lead submission when user wants to track their request.
+
+### Body
+```json
+{
+  "email": "user@example.com",
+  "phone": "+48 123 456 789"
+}
+```
+
+**Fields:**
+- `email` (required) — Email address to associate with the lead
+- `phone` (optional) — Phone number from the lead form, persisted for matching
+
+### Response (201)
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Claim registered"
+  }
+}
+```
+
+### Behavior
+- Creates or refreshes a pending_lead_claims record
+- Idempotent — calling multiple times with same lead_id + email updates the existing claim
+- `expires_at` is set to 7 days from creation
+- Magic link will be sent after 30-minute delay via background job
+- No authentication required — can be called immediately after anonymous lead submission
+
+### Errors
+- 404 LEAD_NOT_FOUND — lead doesn't exist
+- 422 VALIDATION_ERROR — invalid email format
 
 ---
 

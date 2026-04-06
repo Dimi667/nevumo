@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from config import settings
 from dependencies import get_db, get_current_user
-from models import PasswordResetToken, Provider, User
+from models import MagicLinkToken, PasswordResetToken, Provider, User
 from schemas import (
     AuthTokenResponse,
     CheckEmailRequest,
@@ -16,6 +16,7 @@ from schemas import (
     ForgotPasswordRequest,
     ForgotPasswordResponse,
     LoginRequest,
+    MagicLinkRequest,
     RegisterRequest,
     ResetPasswordRequest,
     ResetPasswordResponse,
@@ -31,6 +32,7 @@ from services.auth_service import (
     get_dummy_hash,
     hash_password,
     hash_token,
+    link_pending_claims,
     record_rate_limit,
     send_reset_email,
     verify_password,
@@ -122,6 +124,13 @@ async def register(
 
     record_rate_limit(db, ip, "register")
 
+    # Link any pending claims after successful registration
+    try:
+        link_pending_claims(user.id, user.email, user.phone, db)
+    except Exception:
+        # Auth must NEVER fail due to claim linking errors
+        pass
+
     token = create_jwt(user.id, user.email, user.role)
     return AuthTokenResponse(data={
         "token": token,
@@ -155,6 +164,13 @@ async def login(
         return JSONResponse(status_code=403, content={"success": False, "error": {"code": "ACCOUNT_DISABLED", "message": "This account has been disabled"}})
 
     record_rate_limit(db, ip, "login")
+
+    # Link any pending claims after successful login
+    try:
+        link_pending_claims(user.id, user.email, user.phone, db)
+    except Exception:
+        # Auth must NEVER fail due to claim linking errors
+        pass
 
     token = create_jwt(user.id, user.email, user.role)
     return AuthTokenResponse(data={
@@ -300,4 +316,68 @@ async def switch_role(
             "role": body.role,
             "locale": current_user.locale,
         },
+    })
+
+
+@router.post("/magic-link", response_model=AuthTokenResponse)
+async def magic_link_auth(
+    body: MagicLinkRequest,
+    db: Session = Depends(get_db),
+) -> AuthTokenResponse:
+    import hashlib
+    
+    # Hash token
+    token_hash = hashlib.sha256(body.token.encode()).hexdigest()
+    
+    # Look up token
+    token_record = db.query(MagicLinkToken).filter(MagicLinkToken.token_hash == token_hash).first()
+    
+    if not token_record:
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "error": {"code": "TOKEN_INVALID", "message": "Invalid magic link token"}}
+        )
+    
+    if token_record.expires_at < datetime.utcnow():
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "error": {"code": "TOKEN_EXPIRED", "message": "Magic link has expired"}}
+        )
+    
+    if token_record.used_at is not None:
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "error": {"code": "TOKEN_USED", "message": "Magic link has already been used"}}
+        )
+    
+    # Get or create user
+    user = db.query(User).filter(User.email == token_record.email).first()
+    if not user:
+        user = User(
+            email=token_record.email,
+            role='client',
+            locale='en',
+            is_active=True,
+            password_hash=None  # passwordless account
+        )
+        db.add(user)
+        db.flush()
+    
+    # Mark token as used
+    token_record.used_at = datetime.utcnow()
+    
+    # Link pending claims
+    try:
+        link_pending_claims(user.id, user.email, user.phone, db)
+    except Exception:
+        # Auth must NEVER fail due to claim linking errors
+        pass
+    
+    db.commit()
+    
+    # Create JWT
+    token = create_jwt(user.id, user.email, user.role)
+    return AuthTokenResponse(data={
+        "token": token,
+        "user": {"id": str(user.id), "email": user.email, "role": user.role},
     })

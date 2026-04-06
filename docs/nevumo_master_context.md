@@ -35,6 +35,8 @@ Nevumo е уеб платформа за marketplace на услуги.
 - python-slugify (URL slug generation)
 - qrcode[pil] (QR code generation for provider growth tools)
 - python-multipart (file upload support)
+- apscheduler>=3.10.0 (background jobs for magic link delivery)
+- tzlocal>=3.0 (timezone support for APScheduler)
 
 ### Database & Caching
 - PostgreSQL (nevumo_leads)
@@ -226,6 +228,24 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - countryCode wired in: category pages, provider pages, 
     ProviderWidget, provider/client dashboard settings
   - GDPR: Legitimate Interest basis, Privacy Policy update pending
+- **Lead Form Success Screen with Email Capture** — Post-submission two-step success flow:
+  - Step 1: Shows success message + "Want to track your request?" with Continue/Skip CTAs
+  - Step 2: Email input captures lead claim intent, saves to localStorage (nevumo_pending_claim)
+  - Rate limit exceeded (429) shows success screen instead of error
+  - Redirects to /{lang}/auth?email=...&intent=client for account creation
+- **Pending Lead Claims System** — Anonymous lead → account linking bridge:
+  - Table: pending_lead_claims (lead_id, email, phone, claimed, expires_at, magic_link_sent)
+  - Endpoint: POST /api/v1/leads/{lead_id}/claim-email (no auth required)
+  - Auth hooks: link_pending_claims() called in /register and /login
+  - Links claims matching email OR phone to the authenticated user
+  - Updates leads.client_id and marks claims as claimed
+- **Magic Link System** — Passwordless authentication for lead claimers:
+  - Table: magic_link_tokens (email, lead_id, token_hash, expires_at, used_at)
+  - Background job: apps/api/jobs/send_magic_links.py runs every 5 minutes via APScheduler
+  - Sends delayed magic links 30 min after claim registration (configurable)
+  - Endpoint: POST /api/v1/auth/magic-link validates token, creates passwordless account
+  - Frontend: /[lang]/auth/magic/page.tsx handles token validation + auto-login
+  - Import path fix: apps/api/jobs/send_magic_links.py uses relative imports (from models import ..., from config import ...) — NOT absolute paths (from apps.api.models import ...) because uvicorn runs from inside apps/api/
 
 ### 🔜 Next
 - Register first real providers in Warsaw for the 3 seeded launch categories

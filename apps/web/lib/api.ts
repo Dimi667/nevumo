@@ -279,7 +279,7 @@ export async function getCityBySlug(slug: string): Promise<CityOut | null> {
   }
 }
 
-export async function createLead(input: LeadCreateInput): Promise<LeadCreateResult | null> {
+export async function createLead(input: LeadCreateInput): Promise<LeadCreateResult | { success: false; error: { code: string; message: string } } | null> {
   try {
     const token = getAuthToken();
     const res = await fetch(`${API_BASE}/api/v1/leads`, {
@@ -290,9 +290,11 @@ export async function createLead(input: LeadCreateInput): Promise<LeadCreateResu
       },
       body: JSON.stringify(input),
     });
-    if (!res.ok) return null;
     const json: ApiResponse<LeadCreateResult> = await res.json();
-    return json.success ? json.data : null;
+    if (!json.success) {
+      return { success: false, error: json.error };
+    }
+    return json.data;
   } catch {
     return null;
   }

@@ -321,13 +321,17 @@ class ResetPasswordRequest(BaseModel):
     @classmethod
     def validate_password(cls, v: str) -> str:
         if len(v) < 8:
-            raise ValueError("Password must be at least 8 characters")
+            raise ValueError("Password must be at least 8 characters long")
         return v
 
 
 class ResetPasswordResponse(BaseModel):
     success: bool = True
     data: dict
+
+
+class MagicLinkRequest(BaseModel):
+    token: str
 
 
 class SwitchRoleRequest(BaseModel):
@@ -485,6 +489,20 @@ class LeadStatusUpdateRequest(BaseModel):
 
 
 class LeadStatusUpdateResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+# -------------------------
+# Lead Claim Email
+# -------------------------
+
+class LeadClaimEmailRequest(BaseModel):
+    email: str
+    phone: Optional[str] = None
+
+
+class LeadClaimEmailResponse(BaseModel):
     success: bool = True
     data: dict
 

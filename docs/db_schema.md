@@ -302,7 +302,46 @@ CREATE INDEX idx_reset_tokens_user ON password_reset_tokens(user_id);
 
 ---
 
-## 14. Auth Rate Limits
+## 14. Pending Lead Claims
+
+CREATE TABLE pending_lead_claims (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    lead_id UUID NOT NULL REFERENCES leads(id) ON DELETE CASCADE,
+    email TEXT NOT NULL,
+    phone TEXT,                               -- optional phone from lead claim form
+    claimed BOOLEAN NOT NULL DEFAULT FALSE,
+    claimed_at TIMESTAMP,                     -- set when user claims the lead
+    magic_link_sent BOOLEAN NOT NULL DEFAULT FALSE,
+    magic_link_sent_at TIMESTAMP,             -- set when delayed magic link is sent
+    expires_at TIMESTAMP NOT NULL,           -- claim expiration (e.g., 7 days)
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_pending_claims_lead ON pending_lead_claims(lead_id);
+CREATE INDEX idx_pending_claims_email ON pending_lead_claims(email);
+CREATE INDEX idx_pending_claims_claimed ON pending_lead_claims(claimed);
+CREATE INDEX idx_pending_claims_expires ON pending_lead_claims(expires_at);
+
+---
+
+## 15. Magic Link Tokens
+
+CREATE TABLE magic_link_tokens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL,
+    lead_id UUID REFERENCES leads(id) ON DELETE SET NULL,
+    token_hash TEXT NOT NULL UNIQUE,          -- SHA-256 of raw token; raw token is sent in email
+    expires_at TIMESTAMP NOT NULL,            -- token expiration (e.g., 48 hours)
+    used_at TIMESTAMP,                        -- set when token is successfully used
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_magic_tokens_hash ON magic_link_tokens(token_hash);
+CREATE INDEX idx_magic_tokens_email ON magic_link_tokens(email);
+
+---
+
+## 16. Auth Rate Limits
 
 CREATE TABLE auth_rate_limits (
     id SERIAL PRIMARY KEY,
@@ -316,7 +355,7 @@ CREATE INDEX idx_auth_rate_limits_created ON auth_rate_limits(created_at);
 
 ---
 
-## 15. Translations (i18n)
+## 17. Translations (i18n)
 
 CREATE TABLE translations (
     id SERIAL PRIMARY KEY,
