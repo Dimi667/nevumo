@@ -105,6 +105,22 @@ export function validatePhone(phone: string, countryCode?: string): { isValid: b
   };
 }
 
+export function getPhonePrefix(countryCode?: string): string {
+  const prefixes: Record<string, string> = {
+    PL: '+48 ', BG: '+359 ', RO: '+40 ', RS: '+381 ',
+    DE: '+49 ', FR: '+33 ', IT: '+39 ', ES: '+34 ',
+    CZ: '+420 ', HU: '+36 ', SK: '+421 ', HR: '+385 ',
+    GR: '+30 ', TR: '+90 ', UA: '+380 ', RU: '+7 ',
+    NL: '+31 ', BE: '+32 ', AT: '+43 ', CH: '+41 ',
+    SE: '+46 ', NO: '+47 ', DK: '+45 ', FI: '+358 ',
+    PT: '+351 ', GB: '+44 ', IE: '+353 ', IS: '+354 ',
+    LT: '+370 ', LV: '+371 ', EE: '+372 ', SI: '+386 ',
+    MK: '+389 ', AL: '+355 ', MT: '+356 ', LU: '+352 ',
+  };
+
+  return countryCode ? (prefixes[countryCode] ?? '+') : '+';
+}
+
 export function getPhonePlaceholder(countryCode?: string): string {
   if (countryCode && COUNTRY_PHONE_CODES[countryCode as keyof typeof COUNTRY_PHONE_CODES]) {
     const code = COUNTRY_PHONE_CODES[countryCode as keyof typeof COUNTRY_PHONE_CODES];

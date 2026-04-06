@@ -208,6 +208,37 @@ GET /api/v1/auth/register/slug/check?slug=devs&city_slug=sofia&category_slug=mas
 
 ---
 
+## 🔹 USER PROFILE ENDPOINTS (JWT Required)
+
+### GET /api/v1/user/profile
+Returns authenticated user profile including phone.
+Response:
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "name": "Maria",
+    "phone": "+48 123 456 789",
+    "country_code": "PL",
+    "role": "provider"
+  }
+}
+
+### PATCH /api/v1/user/profile
+Updates user profile fields.
+Body (all optional):
+{
+  "phone": "+48 123 456 789",  // empty string clears phone
+  "name": "Maria"
+}
+Validation: phone must match ^[+\d][\d\s\(\)\-]{5,18}$ or be empty string
+Response: same shape as GET
+Errors:
+  422 INVALID_PHONE — phone format invalid
+
+---
+
 # 🔹 PROVIDER DASHBOARD ENDPOINTS (JWT Required)
 
 All endpoints require `Authorization: Bearer <JWT>` header.
@@ -1391,6 +1422,71 @@ The review system implements a closed trust conversation model:
 ```
 
 `reason` can currently be `no_completed_jobs`, `already_reviewed`, or `self_review_not_allowed`.
+
+---
+
+# 🔹 USER PROFILE ENDPOINTS (JWT Required)
+
+All endpoints require `Authorization: Bearer <JWT>` header.
+
+---
+
+## GET /api/v1/user/profile
+
+**Purpose:** Get current user's profile information.
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "phone": "+48 123 456 789",
+    "country_code": "PL",
+    "role": "provider"
+  }
+}
+```
+
+---
+
+## PATCH /api/v1/user/profile
+
+**Purpose:** Update current user's profile information.
+
+**Body:**
+```json
+{
+  "phone": "+48 123 456 789",
+  "name": "John Doe"
+}
+```
+
+All fields are optional. Empty string `""` for phone will clear the field.
+
+**Phone Validation:**
+- Must match regex: `^[+\d][\d\s\(\)\-]{5,18}$`
+- Examples: `+48 123 456 789`, `+1 (555) 123-4567`, `+359888123456`
+
+**Response:**
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "phone": "+48 123 456 789",
+    "country_code": "PL",
+    "role": "provider"
+  }
+}
+```
+
+**Errors:**
+- 422 INVALID_PHONE - Phone number format is invalid
 
 ---
 

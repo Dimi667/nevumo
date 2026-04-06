@@ -1,34 +1,54 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createLead } from '@/lib/api';
+import { usePhone } from '@/hooks/usePhone';
+import PhoneInput from '@/components/ui/PhoneInput';
 
 interface Props {
   categorySlug: string;
   citySlug: string;
   providerSlug: string;
+  countryCode?: string;
 }
 
-export default function LeadForm({ categorySlug, citySlug, providerSlug }: Props) {
+export default function LeadForm({ categorySlug, citySlug, providerSlug, countryCode }: Props) {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [phoneValue, setPhoneValue] = useState('');
+  const { phone: savedPhone, savePhone, loading: phoneLoading } = usePhone();
+
+  useEffect(() => {
+    if (savedPhone && !phoneValue) {
+      setPhoneValue(savedPhone);
+    }
+  }, [savedPhone]);
+
+  const handleChange = (value: string) => {
+    setPhoneValue(value);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     setError(false);
-    const formData = new FormData(e.currentTarget);
+    
     try {
       const result = await createLead({
         category_slug: categorySlug,
         city_slug: citySlug,
         provider_slug: providerSlug,
-        phone: formData.get('phone') as string,
-        description: (formData.get('description') as string) || undefined,
+        phone: phoneValue,
+        description: (e.currentTarget.description as HTMLTextAreaElement)?.value || undefined,
         source: 'seo',
       });
-      if (result) setSubmitted(true);
-      else setError(true);
+      if (result) {
+        setSubmitted(true);
+        // Save phone on successful submit
+        savePhone(phoneValue);
+      } else {
+        setError(true);
+      }
     } catch {
       setError(true);
     } finally {
@@ -50,16 +70,13 @@ export default function LeadForm({ categorySlug, citySlug, providerSlug }: Props
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-sm font-bold text-gray-700 mb-1">Phone</label>
-        <input
-          name="phone"
-          type="tel"
-          required
-          placeholder="+359 888 123 456"
-          className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm"
-        />
-      </div>
+      <PhoneInput
+        value={phoneValue}
+        onChange={handleChange}
+        countryCode={countryCode}
+        label="Phone"
+        required
+      />
 
       <div>
         <label className="block text-sm font-bold text-gray-700 mb-1">Notes</label>

@@ -3,6 +3,7 @@ export interface UserInfo {
   email: string;
   role: string;
   locale: string;
+  country_code?: string;
 }
 
 export interface AuthResult {

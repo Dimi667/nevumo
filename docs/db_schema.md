@@ -15,6 +15,7 @@ CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email TEXT UNIQUE NOT NULL,
     name TEXT,                               -- Canonical display name (optional, never derived from email)
+    phone TEXT,                              -- optional, E.164 format, persisted for UX convenience
     password_hash TEXT,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
     role TEXT NOT NULL CHECK (role IN ('client', 'provider')),
@@ -26,6 +27,7 @@ CREATE TABLE users (
 
 CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_users_review_reply_email ON users(review_reply_email_enabled);
+CREATE INDEX idx_users_phone ON users(phone) WHERE phone IS NOT NULL;
 
 ---
 

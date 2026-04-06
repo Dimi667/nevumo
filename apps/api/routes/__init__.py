@@ -8,6 +8,7 @@ from .events import router as events_router
 from .page_events import router as page_events_router
 from .provider import router as provider_router
 from .reviews import router as reviews_router
+from .user import router as user_router
 
 __all__ = [
     "auth_router",
@@ -20,4 +21,5 @@ __all__ = [
     "page_events_router",
     "provider_router",
     "reviews_router",
+    "user_router",
 ]

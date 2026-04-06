@@ -397,6 +397,16 @@ export default async function CategoryPage({ params }: PageProps) {
   const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.sprzatanie;
 
   const { providers, allCount, averageRating } = await getEnrichedProviders(lang, city, apiSlug);
+  
+  const CITY_COUNTRY_MAP: Record<string, string> = {
+    'warszawa': 'PL',
+    'sofia': 'BG',
+    'belgrade': 'RS',
+    'prague': 'CZ',
+    'athens': 'GR',
+  };
+  
+  const cityCountryCode = CITY_COUNTRY_MAP[city] ?? 'PL';
   const visibleProviders = providers.slice(0, 20);
   const hiddenProviders = providers.slice(20);
   const hiddenCount = hiddenProviders.length;
@@ -504,6 +514,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <LeadForm
                   categorySlug={apiSlug}
                   citySlug={city}
+                  countryCode={cityCountryCode}
                   title={t(categoryT, 'form_title', 'Send a request')}
                   subtitle={t(categoryT, 'form_subtitle', 'Free • No obligation')}
                   phonePlaceholder={t(categoryT, 'form_phone', 'Your phone number')}

@@ -9,7 +9,7 @@ class NevumoException(HTTPException):
         super().__init__(status_code=status_code, detail=message)
 
 
-INVALID_PHONE = NevumoException(422, "INVALID_PHONE", "Phone number is required and must not be empty")
+INVALID_PHONE = NevumoException(422, "INVALID_PHONE", "Invalid phone number format")
 CATEGORY_NOT_FOUND = NevumoException(404, "CATEGORY_NOT_FOUND", "Category not found")
 CITY_NOT_FOUND = NevumoException(404, "CITY_NOT_FOUND", "City not found")
 PROVIDER_NOT_FOUND = NevumoException(404, "PROVIDER_NOT_FOUND", "Provider not found")

@@ -37,6 +37,9 @@ class User(Base):
 
     # Email notification preferences
     review_reply_email_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    
+    # Phone number (optional)
+    phone: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     provider: Mapped["Provider"] = relationship(back_populates="user", uselist=False)
 
@@ -44,6 +47,7 @@ class User(Base):
         CheckConstraint("role IN ('client', 'provider')", name="ck_users_role"),
         Index("idx_users_role", "role"),
         Index("idx_users_review_reply_email", "review_reply_email_enabled"),
+        Index("idx_users_phone", "phone"),
     )
 
 

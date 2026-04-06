@@ -12,6 +12,8 @@ import {
 } from '@/lib/provider-api';
 import type { AvailabilityStatus, ProviderProfile } from '@/types/provider';
 import { getSlugValidationError, sanitizeSlug } from '@/lib/slug-utils';
+import { usePhone } from '@/hooks/usePhone';
+import PhoneInput from '@/components/ui/PhoneInput';
 
 const AVAILABILITY_OPTIONS: { value: AvailabilityStatus; label: string }[] = [
   { value: 'active', label: 'Active' },
@@ -38,7 +40,11 @@ export default function SettingsPage() {
   const [slugSuggestions, setSlugSuggestions] = useState<string[]>([]);
   const [savingSlug, setSavingSlug] = useState(false);
   const [slugSaved, setSlugSaved] = useState(false);
+  const [phoneValue, setPhoneValue] = useState('');
+  const [savingPhone, setSavingPhone] = useState(false);
+  const [phoneSaved, setPhoneSaved] = useState(false);
   const slugCheckRequestRef = useRef(0);
+  const { phone: savedPhone, savePhone } = usePhone();
 
   const [switchingRole, setSwitchingRole] = useState(false);
   const [switchError, setSwitchError] = useState<string | null>(null);
@@ -56,6 +62,12 @@ export default function SettingsPage() {
       .catch(() => { /* non-fatal, settings still usable */ })
       .finally(() => setLoadingProfile(false));
   }, []);
+
+  useEffect(() => {
+    if (savedPhone && !phoneValue) {
+      setPhoneValue(savedPhone);
+    }
+  }, [savedPhone, phoneValue]);
 
   async function runSlugCheck(candidate: string): Promise<boolean> {
     const trimmed = candidate.trim();
@@ -201,6 +213,23 @@ export default function SettingsPage() {
     }
   }
 
+  async function handleSavePhone() {
+    if (savingPhone) return;
+
+    setSavingPhone(true);
+    setPhoneSaved(false);
+    
+    try {
+      await savePhone(phoneValue);
+      setPhoneSaved(true);
+      setTimeout(() => setPhoneSaved(false), 3000);
+    } catch {
+      // Silent fail - usePhone hook handles errors internally
+    } finally {
+      setSavingPhone(false);
+    }
+  }
+
   async function handleSwitchToClient() {
     setSwitchingRole(true);
     setSwitchError(null);
@@ -247,6 +276,26 @@ export default function SettingsPage() {
         <div>
           <p className="text-xs text-gray-500">Role</p>
           <p className="text-sm text-gray-900 mt-0.5 capitalize">{user?.role ?? '—'}</p>
+        </div>
+        <div className="space-y-2">
+          <PhoneInput
+            value={phoneValue}
+            onChange={setPhoneValue}
+            countryCode={user?.country_code ?? 'BG'}
+            label="Phone"
+            className="pt-2"
+          />
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleSavePhone}
+              disabled={savingPhone}
+              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              {savingPhone ? 'Saving…' : 'Save Phone'}
+            </button>
+            {phoneSaved && <span className="text-xs text-green-600 font-medium">Saved!</span>}
+          </div>
         </div>
       </div>
 

@@ -6,6 +6,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { clearAuth, getAuthToken, getAuthUser, saveAuth } from '@/lib/auth-store';
 import { getReviewPreferences, updateReviewPreferences, type ReviewPreferences } from '@/lib/client-api';
 import { switchRole } from '@/lib/provider-api';
+import { usePhone } from '@/hooks/usePhone';
+import PhoneInput from '@/components/ui/PhoneInput';
 
 export default function ClientSettingsPage() {
   const router = useRouter();
@@ -19,6 +21,10 @@ export default function ClientSettingsPage() {
   const [switchingRole, setSwitchingRole] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [switchError, setSwitchError] = useState<string | null>(null);
+  const [phoneValue, setPhoneValue] = useState('');
+  const [savingPhone, setSavingPhone] = useState(false);
+  const [phoneSaved, setPhoneSaved] = useState(false);
+  const { phone: savedPhone, savePhone } = usePhone();
 
   useEffect(() => {
     async function loadPreferences() {
@@ -35,6 +41,7 @@ export default function ClientSettingsPage() {
         setError(null);
         const response = await getReviewPreferences(token);
         setPreferences(response);
+        setPhoneValue(savedPhone || '');
       } catch (e: unknown) {
         setError(e instanceof Error ? e.message : 'Неуспешно зареждане на настройките.');
       } finally {
@@ -43,7 +50,7 @@ export default function ClientSettingsPage() {
     }
 
     void loadPreferences();
-  }, []);
+  }, [savedPhone]);
 
   async function handleTogglePreference() {
     const token = getAuthToken();
@@ -76,6 +83,23 @@ export default function ClientSettingsPage() {
     } catch (e: unknown) {
       setSwitchError(e instanceof Error ? e.message : 'Неуспешна смяна на роля.');
       setSwitchingRole(false);
+    }
+  }
+
+  async function handleSavePhone() {
+    if (savingPhone) return;
+
+    setSavingPhone(true);
+    setPhoneSaved(false);
+    
+    try {
+      await savePhone(phoneValue);
+      setPhoneSaved(true);
+      setTimeout(() => setPhoneSaved(false), 3000);
+    } catch {
+      // Silent fail - usePhone hook handles errors internally
+    } finally {
+      setSavingPhone(false);
     }
   }
 
@@ -118,6 +142,26 @@ export default function ClientSettingsPage() {
             value={user?.email ?? ''}
             className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm text-gray-700 focus:outline-none"
           />
+        </div>
+        <div className="space-y-2">
+          <PhoneInput
+            value={phoneValue}
+            onChange={setPhoneValue}
+            countryCode={user?.country_code ?? 'BG'}
+            label="Phone"
+            className="pt-2"
+          />
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleSavePhone}
+              disabled={savingPhone}
+              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+            >
+              {savingPhone ? 'Saving…' : 'Save Phone'}
+            </button>
+            {phoneSaved && <span className="text-xs text-green-600 font-medium">Saved!</span>}
+          </div>
         </div>
       </div>
 

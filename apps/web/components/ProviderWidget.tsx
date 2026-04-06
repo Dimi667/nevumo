@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { createLead, type ProviderDetail, getCityBySlug, type CityOut } from '@/lib/api';
-import { validatePhone, getPhonePlaceholder } from '@/lib/phoneUtils';
+import { usePhone } from '@/hooks/usePhone';
+import PhoneInput from '@/components/ui/PhoneInput';
+import { getPhonePrefix } from '@/lib/phoneUtils';
 
 interface ProviderWidgetProps {
   provider: ProviderDetail;
   categoryName: string;
   categorySlug: string;
   citySlug: string;
+  countryCode?: string;
 }
 
 // Helper for compact relative time
@@ -172,19 +175,39 @@ export default function ProviderWidget({
   categoryName,
   categorySlug,
   citySlug,
+  countryCode,
 }: ProviderWidgetProps) {
   const t = provider.translations;
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
-  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [cityInfo, setCityInfo] = useState<CityOut | null>(null);
   const [phoneValue, setPhoneValue] = useState('');
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [showAllServices, setShowAllServices] = useState(false);
   const [isAutoFilled, setIsAutoFilled] = useState(false);
   const [descriptionValue, setDescriptionValue] = useState('');
+  const { phone: savedPhone, savePhone, loading: phoneLoading } = usePhone();
   const locale = (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
+  const phonePrefix = getPhonePrefix(cityInfo?.country_code);
+  const phoneDigitsCount = phoneValue.replace(/\D/g, '').length;
+  const isPhoneValid = phoneDigitsCount >= 7;
+  const isPrefixOnlyPhone = phoneValue.trim() === phonePrefix.trim();
+
+  useEffect(() => {
+    if (savedPhone && (!phoneValue || phoneValue.trim() === phonePrefix.trim())) {
+      setPhoneValue(savedPhone);
+    }
+  }, [phonePrefix, phoneValue, savedPhone]);
+
+  const handleChange = (value: string) => {
+    setPhoneValue(value);
+
+    if (phoneError) {
+      setPhoneError(null);
+    }
+  };
   const cityName = cityInfo?.name ?? citySlug;
   const jobsLabel = t.jobs_label || 'jobs completed';
   const cityLeadsText = formatTranslation(
@@ -250,42 +273,37 @@ export default function ProviderWidget({
     fetchCityInfo();
   }, [citySlug]);
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPhoneValue(value);
-    
-    if (value.trim().length > 0) {
-      const validation = validatePhone(value, cityInfo?.country_code);
-      setPhoneError(validation.isValid ? null : validation.error ?? null);
-    } else {
-      setPhoneError(null);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Validate phone before submission
-    const validation = validatePhone(phoneValue, cityInfo?.country_code);
-    if (!validation.isValid) {
-      setPhoneError(validation.error ?? null);
+
+    if (isPrefixOnlyPhone || !isPhoneValid) {
+      setPhoneError(locale === 'bg' ? 'Въведи валиден телефонен номер' : 'Enter a valid phone number');
+      setError(false);
       return;
     }
     
     setLoading(true);
     setError(false);
-    const formData = new FormData(e.currentTarget);
+    setPhoneError(null);
+    
     try {
       const result = await createLead({
         category_slug: categorySlug,
         city_slug: citySlug,
         provider_slug: provider.slug,
-        phone: formData.get('phone') as string,
+        phone: phoneValue.trim(),
         description: descriptionValue || undefined,
         source: 'widget',
       });
-      if (result) setSubmitted(true);
-      else setError(true);
+      if (result) {
+        setSubmitted(true);
+        // Save phone on successful submit
+        if (phoneValue.replace(/\D/g, '').length >= 7) {
+          savePhone(phoneValue.trim());
+        }
+      } else {
+        setError(true);
+      }
     } catch {
       setError(true);
     } finally {
@@ -313,7 +331,6 @@ export default function ProviderWidget({
             setIsAutoFilled(false);
             setDescriptionValue('');
             setPhoneValue('');
-            setPhoneError(null);
           }}
           className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors text-base px-6"
         >
@@ -438,24 +455,15 @@ export default function ProviderWidget({
             </div>
           )}
 
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-1">
-              {t.phone_label || 'Phone'}
-            </label>
-            <input
-              name="phone"
-              type="tel"
-              required
-              value={phoneValue}
-              onChange={handlePhoneChange}
-              placeholder={getPhonePlaceholder(cityInfo?.country_code)}
-              className={`w-full border rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-base ${
-                phoneError 
-                  ? 'border-red-300 focus:ring-red-400' 
-                  : 'border-gray-300'
-              }`}
-            />
-          </div>
+          <PhoneInput
+            value={phoneValue}
+            onChange={handleChange}
+            countryCode={countryCode ?? cityInfo?.country_code}
+            error={phoneError}
+            errorMessage={locale === 'bg' ? 'Въведи валиден телефонен номер' : 'Enter a valid phone number'}
+            label={t.phone_label || 'Phone'}
+            required
+          />
 
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-1">
@@ -484,12 +492,6 @@ export default function ProviderWidget({
             <CityDemandBlock text={cityLeadsText} />
           ) : (
             <ChecklistBlock items={checklistItems} />
-          )}
-
-          {phoneError && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              {phoneError}
-            </p>
           )}
 
           {error && (

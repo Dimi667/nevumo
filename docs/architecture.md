@@ -356,7 +356,68 @@ Used for:
 - `generateHreflangAlternates()` is used for language alternates on both homepage and category routes
 - FAQ structured data is rendered through JSON-LD for richer search appearance
 - Related internal links are category-aware to strengthen crawl paths between major service pages
-- Long-form SEO text is still rendered in the main page response, not lazy-loaded, to preserve crawlability
+- Long-form SEO text is still rendered in the main page response, not lazy-loaded, to preserve crawlability---
+
+## Global Phone Field System
+
+### Overview
+Phone is collected contextually at point of need, never during 
+registration or onboarding. This preserves conversion rates.
+
+### Storage Strategy
+- Anonymous users: localStorage key `nevumo_phone` 
+- Authenticated users: users.phone column in DB (source of truth)
+- On login: if DB phone is null and localStorage has phone → 
+  background sync to DB
+- On submit: savePhone() writes to localStorage + DB (if logged in)
+
+### Auto-prefix by Country
+- PhoneInput auto-prefills with country code on mount
+- Source: CITY_COUNTRY_MAP in page components
+- User can freely edit/replace the prefix
+- On blur: restores prefix if field is completely empty
+
+### CITY_COUNTRY_MAP (current)
+warszawa → PL (+48)
+sofia → BG (+359)
+belgrade → RS (+381)
+prague → CZ (+420)
+athens → GR (+30)
+Adding new city: add entry to CITY_COUNTRY_MAP in:
+  - apps/web/app/[lang]/[city]/[category]/page.tsx
+  - apps/web/app/[lang]/[city]/[category]/[providerPage]/page.tsx
+
+### Soft Validation
+- Validates on blur and on submit only (never aggressive)
+- Valid: total digits >= 7
+- Error: simple message below input
+- savePhone() only called when digits >= 7
+
+### Components
+- PhoneInput: apps/web/components/ui/PhoneInput.tsx
+  - Fully controlled, no internal state
+  - Props: value, onChange, countryCode, error, onValidChange, 
+    errorMessage, label, placeholder, required
+- usePhone hook: apps/web/hooks/usePhone.ts
+  - Manages sync between localStorage and DB
+  - Returns: { phone, savePhone, clearPhone, loading }
+
+### Where Phone Appears
+| Location | countryCode source | Required |
+|----------|--------------------|----------|
+| Category page LeadForm | CITY_COUNTRY_MAP | YES |
+| Provider page LeadForm | CITY_COUNTRY_MAP | YES |
+| ProviderWidget | prop + cityInfo | YES |
+| Provider dashboard Settings | user.country_code | NO |
+| Client dashboard Settings | user.country_code | NO |
+
+### Privacy & GDPR
+- Legal basis: Legitimate Interest (Art. 6(1)(f))
+- Phone stored locally for user convenience, not for Nevumo's benefit
+- Must be mentioned in Privacy Policy and Cookie/Storage Banner
+- User can clear phone from Settings at any time
+
+---
 
 ## SEO Architecture (CRITICAL)
 

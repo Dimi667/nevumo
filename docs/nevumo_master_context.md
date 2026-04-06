@@ -207,6 +207,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Selecting a service tag to auto-fill the description
   - Expand-to-show-all services flow
 - **Frontend API Shape Alignment** — `apps/web/lib/api.ts` `ServiceOut` now exposes `category_slug` for category-aware UI filtering
+- **Global Phone Field System** — Complete phone persistence and UX:
+  - users.phone column added (migration p1q2r3s4t5u6)
+  - GET/PATCH /api/v1/user/profile endpoints
+  - usePhone hook: sync between localStorage and DB
+  - PhoneInput component: auto-prefix by country, soft validation
+  - Auto-fill for anonymous (localStorage) and logged-in (DB) users
+  - countryCode wired in: category pages, provider pages, 
+    ProviderWidget, provider/client dashboard settings
+  - GDPR: Legitimate Interest basis, Privacy Policy update pending
 
 ### 🔜 Next
 - Register first real providers in Warsaw for the 3 seeded launch categories
@@ -221,6 +230,8 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - UX simplification: auto-currency from city, conditional price field
 - Email sending for reset password (Resend / SendGrid)
 - OAuth — Google + Facebook
+- Privacy Policy + Cookie/Storage Banner 
+  (must mention phone localStorage storage)
 
 ### Recent Changes (April 2026)
 - **April 4 Strategic Decisions — Warsaw launch operating model**

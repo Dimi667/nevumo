@@ -5,6 +5,14 @@ import ProviderWidget from '@/components/ProviderWidget';
 import { generateHreflangAlternates, generateLocalBusinessJsonLd } from '@/lib/seo';
 import { JsonLd } from '@/components/JsonLd';
 
+const CITY_COUNTRY_MAP: Record<string, string> = {
+  warszawa: 'PL',
+  sofia: 'BG',
+  belgrade: 'RS',
+  prague: 'CZ',
+  athens: 'GR',
+};
+
 type ProviderRouteParams = {
   lang: string;
   city: string;
@@ -91,6 +99,7 @@ export default async function Page(props: {
   if (!provider) return notFound();
 
   const categoryName = categories.find((c) => c.slug === category)?.name ?? category;
+  const cityCountryCode = CITY_COUNTRY_MAP[city] ?? 'BG';
 
   // Embed mode - render widget only
   if (isEmbed) {
@@ -102,6 +111,7 @@ export default async function Page(props: {
             categoryName={categoryName}
             categorySlug={category}
             citySlug={city}
+            countryCode={cityCountryCode}
           />
         </div>
       </div>
@@ -188,6 +198,7 @@ export default async function Page(props: {
               categorySlug={category}
               citySlug={city}
               providerSlug={provider.slug}
+              countryCode={cityCountryCode}
             />
             <p className="text-xs text-gray-400 text-center mt-4">
               Free request · No obligation
