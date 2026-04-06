@@ -360,6 +360,40 @@ Used for:
 - Related internal links are category-aware to strengthen crawl paths between major service pages
 - Long-form SEO text is still rendered in the main page response, not lazy-loaded, to preserve crawlability---
 
+## Category Page Lead Form (Broadcast Model)
+
+### LeadForm Component
+- Location: apps/web/components/category/LeadForm.tsx
+- Model: marketplace broadcast (one request → multiple providers)
+- No provider pre-selected on category pages
+- Chips sourced from existing provider service titles in the category
+- "Not sure" chip always present as fallback
+- Textarea hidden by default, expands after chip selection
+- Chip value pre-fills textarea (user can edit freely)
+- Submit includes selectedChip as description fallback if textarea empty
+- Trust signals: Free, No obligation, Sent to multiple providers, Response 30min
+
+### Pioneer Framing Banner
+- Shown when: services prop is empty or undefined (no providers yet)
+- Location: apps/web/app/[lang]/[city]/[category]/page.tsx
+- Translation keys: category.no_providers_title, category.no_providers_subtitle
+- Replaces old "Check back tomorrow" empty state text
+
+### Mobile Sticky CTA Button
+- Component: apps/web/components/category/StickyLeadFormButton.tsx
+- Visibility: md:hidden (hidden on desktop, shown on mobile only)
+- Logic: shows when form is NOT in viewport (above OR below)
+- Uses isFormInView check: rect.top < window.innerHeight && rect.bottom > 0
+- Targets: id="lead-form-anchor" on mobile form wrapper
+- Scroll: smoothly scrolls to form on click
+- Style: full-width orange button with white container and border-top
+
+### CSS Fix: overflow-x:clip
+- File: apps/web/app/globals.css
+- Changed overflow-x:hidden to overflow-x:clip on html, body
+- Reason: overflow-x:hidden causes browser to set overflow-y:auto on body
+  making body a scroll container which breaks position:fixed on mobile
+
 ## Global Phone Field System
 
 ### Overview

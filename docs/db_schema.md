@@ -336,6 +336,11 @@ CREATE INDEX idx_translations_key ON translations(key);
 ### Current Seeded Data (April 4, 2026)
 - **homepage namespace**: 45 keys × 34 languages = 1,530 rows
 - **category namespace**: 42 UI keys × 34 languages + 18 SEO keys (pl/bg/en only) = 1,428 + 54 = 1,482 rows
+- **category form keys (April 2026)**: 15 new keys × 34 languages = 510 rows
+  Keys added: no_providers_title, no_providers_subtitle, form_subtext,
+  how_it_works_label, how_step_1, how_step_2, how_step_3, what_need_label,
+  chip_not_sure, details_label, details_placeholder, get_offers_btn,
+  trust_multiple, trust_response, sticky_btn
 - **Total rows**: 2,278+ translations across all namespaces
 
 ### Redis Caching
