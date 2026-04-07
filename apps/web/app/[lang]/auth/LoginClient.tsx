@@ -2,6 +2,7 @@
 // TODO: i18n
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { trackPageEvent } from "@/lib/tracking";
 import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
 import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@/lib/auth-api";
@@ -134,6 +135,8 @@ interface LoginClientProps {
 }
 
 export default function LoginClient({ lang, initialRole }: LoginClientProps) {
+  const searchParams = useSearchParams();
+  const claimToken = searchParams.get('claim');
   const [state, setState] = useState<AuthState>({
     step: 'initial',
     email: '',
@@ -147,7 +150,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
     intent: null,
   });
 
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const [authDict, setAuthDict] = useState<Record<string, string>>({});
 
   const isEmailValid = EMAIL_RE.test(state.email);
 
@@ -165,8 +168,10 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
   // On mount: restore intent + email, fire auth_view event
   useEffect(() => {
     const stored = getStoredIntent();
-    const resolvedIntent: 'client' | 'provider' | null =
-      stored.intent === 'client' || stored.intent === 'provider'
+    // Claim token forces provider intent
+    const resolvedIntent: 'client' | 'provider' | null = claimToken
+      ? 'provider'
+      : stored.intent === 'client' || stored.intent === 'provider'
         ? stored.intent
         : initialRole === 'provider'
         ? 'provider'
@@ -179,12 +184,20 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Autofocus password when step changes to login or register
+  // Fetch auth namespace translations
   useEffect(() => {
-    if (state.step === 'login' || state.step === 'register') {
-      passwordRef.current?.focus();
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/translations?lang=${lang}&namespace=auth`)
+      .then(r => r.json())
+      .then(json => { if (json.success) setAuthDict(json.data) })
+      .catch(() => {})
+  }, [lang]);
+
+  // Store claim token on mount
+  useEffect(() => {
+    if (claimToken) {
+      sessionStorage.setItem('nevumo_claim_token', claimToken);
     }
-  }, [state.step]);
+  }, [claimToken]);
 
   // -------------------------------------------------------------------------
   // Handlers
@@ -224,6 +237,32 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
       sessionStorage.removeItem(SESSION_EMAIL_KEY);
       clearStoredIntent();
       setState(s => ({ ...s, loading: false }));
+
+      // Handle pending claim if exists
+      const pendingClaimToken = sessionStorage.getItem('nevumo_claim_token');
+      if (pendingClaimToken) {
+        try {
+          const claimRes = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/providers/claim`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${result.token}`
+              },
+              body: JSON.stringify({ claim_token: pendingClaimToken })
+            }
+          );
+          sessionStorage.removeItem('nevumo_claim_token');
+          if (claimRes.ok) {
+            window.location.href = `/${lang}/provider/dashboard/profile`;
+            return;
+          }
+        } catch {
+          sessionStorage.removeItem('nevumo_claim_token');
+        }
+      }
+
       const role = result.user.role;
       window.location.href = role === 'provider' ? `/${lang}/provider/dashboard` : `/${lang}`;
     } catch (err) {
@@ -257,6 +296,32 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
       sessionStorage.removeItem(SESSION_EMAIL_KEY);
       clearStoredIntent();
       setState(s => ({ ...s, loading: false, registerSuccess: true }));
+
+      // Handle pending claim if exists
+      const pendingClaimToken = sessionStorage.getItem('nevumo_claim_token');
+      if (pendingClaimToken) {
+        try {
+          const claimRes = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/providers/claim`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${result.token}`
+              },
+              body: JSON.stringify({ claim_token: pendingClaimToken })
+            }
+          );
+          sessionStorage.removeItem('nevumo_claim_token');
+          if (claimRes.ok) {
+            window.location.href = `/${lang}/provider/dashboard/profile`;
+            return;
+          }
+        } catch {
+          sessionStorage.removeItem('nevumo_claim_token');
+        }
+      }
+
       const redirectPath = result.user.role === 'provider'
         ? `/${lang}/provider/dashboard/profile`
         : `/${lang}/client/dashboard`;
@@ -356,14 +421,20 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
         {/* ---- INITIAL STEP ---- */}
         {state.step === 'initial' && (
           <>
-            {/* Intent-based header */}
+            {/* Intent-based header (or claim-specific when claim token present) */}
             <div className="mb-6 text-center">
               <h1 className="text-[20px] font-bold text-[#171717] leading-tight">
-                {state.intent === 'provider'
+                {claimToken
+                  ? authDict['claim_headline'] || "Claim your profile on Nevumo"
+                  : state.intent === 'provider'
                   ? 'Започни да получаваш клиенти'
                   : 'Намери услуга за минути'}
               </h1>
-              {state.intent !== 'provider' && (
+              {claimToken ? (
+                <p className="text-sm text-gray-500 mt-1">
+                  {authDict['claim_subtitle'] || "Register for free and manage your clients"}
+                </p>
+              ) : state.intent !== 'provider' && (
                 <p className="text-sm text-gray-500 mt-1">Безплатно • Без ангажимент</p>
               )}
             </div>
@@ -371,7 +442,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
             {/* Social buttons */}
             <p className="text-center text-xs mb-2 transition-colors"
                style={{ color: state.socialToast ? '#f97316' : '#6b7280' }}>
-              {state.socialToast ?? 'Бърз вход без парола'}
+              {state.socialToast ?? (authDict['quick_login_label'] || "Quick login without password")}
             </p>
             <div className="flex flex-col gap-[10px]">
               <button
@@ -379,21 +450,21 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
                 className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <GoogleIcon />
-                Вход с Google
+                {authDict['google_btn'] || "Sign in with Google"}
               </button>
               <button
                 onClick={() => handleSocialClick('facebook')}
                 className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <FacebookIcon />
-                Вход с Facebook
+                {authDict['facebook_btn'] || "Sign in with Facebook"}
               </button>
             </div>
 
             {/* Divider */}
             <div className="flex items-center gap-3 my-5">
               <div className="flex-1 h-px bg-gray-200" />
-              <span className="text-xs text-gray-400">или с имейл</span>
+              <span className="text-xs text-gray-400">{authDict['or_with_email'] || "or with email"}</span>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
 
@@ -413,7 +484,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
             {primaryBtn(
               !isEmailValid || state.loading,
               state.loading,
-              'Продължи',
+              claimToken ? (authDict['claim_cta_btn'] || "Claim profile") : (authDict['continue_btn'] || "Continue"),
               'Проверка...',
               handleCheckEmail
             )}
@@ -479,7 +550,18 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
             {backBtn}
             {emailPill}
 
-            <p className="text-xs text-gray-600 mb-3">Ще създадем акаунт автоматично</p>
+            {claimToken ? (
+              <>
+                <h2 className="text-[17px] font-bold text-[#171717] mb-1">
+                  {authDict['claim_headline'] || "Claim your profile on Nevumo"}
+                </h2>
+                <p className="text-sm text-gray-500 mb-3">
+                  {authDict['claim_subtitle'] || "Register for free and manage your clients"}
+                </p>
+              </>
+            ) : (
+              <p className="text-xs text-gray-600 mb-3">Ще създадем акаунт автоматично</p>
+            )}
 
             <form onSubmit={e => { e.preventDefault(); handleRegister(); }}>
               <input type="email" name="email" value={state.email} readOnly autoComplete="username" onChange={() => {}} style={{ position: 'absolute', opacity: 0, height: 0, width: 0, overflow: 'hidden' }} />
@@ -515,7 +597,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
                 className={`w-full py-2.5 rounded-lg text-base font-semibold text-white transition-colors mt-4
                   ${state.password.length > 0 && !state.loading ? 'bg-orange-500 hover:bg-orange-600 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}
               >
-                {state.loading ? 'Създаване...' : 'Продължи'}
+                {state.loading ? 'Създаване...' : claimToken ? (authDict['claim_cta_btn'] || "Claim profile") : (authDict['continue_btn'] || "Continue")}
               </button>
             </form>
 
