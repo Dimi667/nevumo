@@ -104,6 +104,7 @@ class ProviderDetail(BaseModel):
     verified: bool
     availability_status: str
     created_at: datetime
+    is_claimed: bool = False
     services: List[ServiceOut] = []
     jobs_completed: int = 0
     review_count: int = 0
@@ -718,3 +719,7 @@ class LatestReviewPreview(BaseModel):
     rating: int
     comment_preview: Optional[str] = None
     created_at: datetime
+
+
+class ClaimProviderRequest(BaseModel):
+    claim_token: str

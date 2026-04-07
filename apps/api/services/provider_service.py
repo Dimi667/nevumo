@@ -5,6 +5,7 @@ import html
 import io
 import os
 import re
+import secrets
 from datetime import datetime, timedelta
 from decimal import Decimal
 from pathlib import Path
@@ -1533,3 +1534,59 @@ def retro_match_provider(
     
     db.commit()
     return len(lead_ids)
+
+
+# ---------------------------------------------------------------------------
+# Claim functionality
+# ---------------------------------------------------------------------------
+
+
+def generate_claim_token(db: Session) -> str:
+    """Generate a unique claim token."""
+    for attempt in range(5):
+        token = secrets.token_urlsafe(32)
+        existing = db.query(Provider).filter(Provider.claim_token == token).first()
+        if not existing:
+            return token
+    raise RuntimeError("Failed to generate unique claim token after 5 attempts")
+
+
+def claim_provider(claim_token: str, user: "User", db: Session) -> Provider:
+    """Claim a provider using a claim token."""
+    provider = db.query(Provider).filter(Provider.claim_token == claim_token).first()
+    if not provider:
+        from fastapi import HTTPException
+        raise HTTPException(
+            404, 
+            detail={"code": "CLAIM_TOKEN_NOT_FOUND", "message": "Claim token not found"}
+        )
+    
+    if provider.is_claimed:
+        from fastapi import HTTPException
+        raise HTTPException(
+            409, 
+            detail={"code": "ALREADY_CLAIMED", "message": "This profile has already been claimed"}
+        )
+    
+    existing_user_provider = db.query(Provider).filter(Provider.user_id == user.id).first()
+    if existing_user_provider:
+        from fastapi import HTTPException
+        raise HTTPException(
+            409, 
+            detail={"code": "USER_ALREADY_HAS_PROVIDER", "message": "Your account already has a provider profile"}
+        )
+    
+    provider.user_id = user.id
+    provider.is_claimed = True
+    provider.claim_token = None
+    db.commit()
+    db.refresh(provider)
+    return provider
+
+
+def get_provider_by_claim_token(token: str, db: Session) -> Optional[Provider]:
+    """Get provider by claim token if not claimed."""
+    return db.query(Provider).filter(
+        Provider.claim_token == token, 
+        Provider.is_claimed == False
+    ).first()
