@@ -31,6 +31,7 @@ from routes import (
     user_router,
 )
 from routes.translations import router as translations_router
+from routes.price_range import router as price_range_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -119,6 +120,7 @@ app.include_router(provider_router)
 app.include_router(reviews_router)
 app.include_router(user_router)
 app.include_router(translations_router, prefix="/api/v1")
+app.include_router(price_range_router, prefix="/api/v1")
 
 # Serve uploaded provider images
 import os as _os

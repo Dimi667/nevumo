@@ -184,6 +184,15 @@ export interface LeadCreateResult {
   lead_id: string;
 }
 
+// ─── Price Range Types ─────────────────────────────────────────────────────
+
+export interface PriceRangeData {
+  min: number;
+  max: number;
+  currency: string;
+  provider_count: number;
+}
+
 // ─── API functions ────────────────────────────────────────────────────────────
 
 export async function getProviders(
@@ -322,6 +331,26 @@ export async function getProviderById(providerId: string): Promise<ProviderDetai
     const res = await fetch(url.toString(), { cache: 'no-store' });
     if (!res.ok) return null;
     const json: ApiResponse<ProviderDetail> = await res.json();
+    return json.success ? json.data : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function getPriceRange(
+  categorySlug: string,
+  citySlug: string,
+): Promise<PriceRangeData | null> {
+  try {
+    const isDev = process.env.NODE_ENV === 'development';
+    const fetchOptions: RequestInit = isDev
+      ? { cache: 'no-store' }
+      : { next: { revalidate: 3600 } };
+
+    const params = new URLSearchParams({ category_slug: categorySlug, city_slug: citySlug });
+    const res = await fetch(`${API_BASE}/api/v1/price-range?${params}`, fetchOptions);
+    if (!res.ok) return null;
+    const json: ApiResponse<PriceRangeData | null> = await res.json();
     return json.success ? json.data : null;
   } catch {
     return null;

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { getProviderBySlug, getProviders } from '@/lib/api';
+import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData } from '@/lib/api';
 import { generateHreflangAlternates } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { JsonLd } from '@/components/JsonLd';
@@ -168,9 +168,9 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
     seoParagraphs: [
       'Warsaw offers a wide selection of professional massage specialists. Whether you are looking for relaxing, sports, or therapeutic massage, Nevumo helps you find trusted professionals nearby.',
       'Check previous client reviews, specialist experience, and the scope of services offered. A good massage specialist will adapt the technique to your needs.',
-      'Massage prices in Warsaw start from around 100 PLN per hour. The final cost depends on the type of massage, the specialist’s experience, and location.',
+      '',
     ],
-    seoQuestions: ['How to choose a massage specialist?', 'How much does massage cost in Warsaw?'],
+    seoQuestions: ['How to choose a massage specialist?', ''],
     relatedLinks: [
       { href: '/pl/warszawa/sprzatanie', label: 'Cleaning in Warsaw' },
       { href: '/pl/warszawa/hydraulik', label: 'Plumbing in Warsaw' },
@@ -183,8 +183,7 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
       },
       {
         question: 'How much does massage cost in Warsaw?',
-        answer:
-          'Massage prices in Warsaw start from around 100 PLN per hour, depending on the type of massage and specialist experience.',
+        answer: '',
       },
       {
         question: 'Is the request free?',
@@ -206,7 +205,7 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
     seoParagraphs: [
       'Professional cleaning companies in Warsaw offer comprehensive services for homes, apartments, and offices. On Nevumo you can find trusted specialists available across the city.',
       'Pay attention to customer reviews, scope of services, and scheduling flexibility. The best companies often offer recurring service discounts.',
-      'Standard apartment cleaning in Warsaw usually costs from 150 to 300 PLN, depending on size and scope of work.',
+      '',
     ],
     seoQuestions: ['How to choose a cleaning company?', 'How much does cleaning cost in Warsaw?'],
     relatedLinks: [
@@ -221,8 +220,7 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
       },
       {
         question: 'How much does cleaning cost in Warsaw?',
-        answer:
-          'Standard apartment cleaning in Warsaw usually costs from 150 to 300 PLN, depending on size and scope of services.',
+        answer: '',
       },
       {
         question: 'Is the request free?',
@@ -244,7 +242,7 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
     seoParagraphs: [
       'Plumbing issues require a fast response. On Nevumo you can find trusted plumbers in Warsaw, including urgent availability. Free request, quick response.',
       'You usually call a plumber for water system failures, leaking taps, blocked drains, or bathroom and kitchen renovation work.',
-      'Plumber rates in Warsaw usually start from 100 to 150 PLN per hour. The final price depends on the type of issue and response time.',
+      '',
     ],
     seoQuestions: ['When should you call a plumber?', 'How much does a plumber cost in Warsaw?'],
     relatedLinks: [
@@ -259,8 +257,7 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
       },
       {
         question: 'How much does a plumber cost in Warsaw?',
-        answer:
-          'Plumber rates in Warsaw usually start from 100 to 150 PLN per hour, depending on the type of issue and response time.',
+        answer: '',
       },
       {
         question: 'Is the request free?',
@@ -292,11 +289,56 @@ function formatRelativeTime(dateString: string): string {
   return `${diffDays} dni temu`;
 }
 
-function buildFaqJsonLd(content: CategoryContent): Record<string, unknown> {
+// Helper function to get price text based on price data and translations
+function getPriceText(
+  priceData: PriceRangeData | null,
+  translations: Record<string, string>,
+  key_prefix: 'price_text' | 'price_faq' | 'price_meta',
+  fallback: string = '',
+): string {
+  if (priceData === null) {
+    return t(translations, `${key_prefix}_none`, fallback);
+  }
+
+  if (priceData.min === priceData.max) {
+    const template = t(translations, `${key_prefix}_single`, fallback);
+    return template
+      .replace('{price}', String(priceData.min))
+      .replace('{currency}', priceData.currency);
+  }
+
+  const template = t(translations, `${key_prefix}_range`, fallback);
+  return template
+    .replace('{min}', String(priceData.min))
+    .replace('{max}', String(priceData.max))
+    .replace('{currency}', priceData.currency);
+}
+
+function buildFaqJsonLd(
+  content: CategoryContent,
+  priceData: PriceRangeData | null,
+  translations: Record<string, string>,
+): Record<string, unknown> {
+  // Find the price question and replace its answer with price_faq text
+  const priceQuestionKeywords = ['kosztu', 'price', 'cost', 'cena'];
+  const updatedFaq = content.faq.map((item) => {
+    const isPriceQuestion = priceQuestionKeywords.some(keyword =>
+      item.question.toLowerCase().includes(keyword.toLowerCase()),
+    );
+    if (isPriceQuestion && priceData !== null) {
+      const priceFaqText = getPriceText(priceData, translations, 'price_faq', item.answer);
+      return {
+        ...item,
+        answer: priceFaqText,
+      };
+    }
+    return item;
+  });
+
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: content.faq.map((item) => ({
+    mainEntity: updatedFaq.map((item) => ({
       '@type': 'Question',
       name: item.question,
       acceptedAnswer: {
@@ -312,7 +354,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const categoryT = await fetchTranslations(lang, 'category');
   const catKey = getCategoryTranslationKey(category);
   const title = `${t(categoryT, `h1_${catKey}`, 'Services in Warsaw')} | Nevumo`;
-  const description = t(categoryT, `subtitle_${catKey}`, '');
+  const baseDescription = t(categoryT, `subtitle_${catKey}`, '');
+  
+  // Fetch price range for metadata
+  const apiSlug = getApiSlug(category);
+  const priceData = await getPriceRange(apiSlug, city);
+  const priceMetaText = getPriceText(priceData, categoryT, 'price_meta', '');
+  const description = priceMetaText ? `${baseDescription} ${priceMetaText}` : baseDescription;
 
   return {
     title,
@@ -398,6 +446,8 @@ export default async function CategoryPage({ params }: PageProps) {
   const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.sprzatanie;
 
   const { providers, allCount, averageRating } = await getEnrichedProviders(lang, city, apiSlug);
+  const priceData = await getPriceRange(apiSlug, city);
+  const priceText = getPriceText(priceData, categoryT, 'price_text', '');
   
   // Extract unique service titles from providers for chips
   const services = Array.from(
@@ -432,7 +482,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const trustSpecialistsText = `${allCount > 0 ? allCount : 14} ${t(categoryT, 'trust_specialists', 'specialists')}`;
   const trustRatingText = `${averageRating.toFixed(1)} ${t(categoryT, 'trust_rating', 'rating')}`;
   const trustLeadsText = `120 ${t(categoryT, 'trust_requests', 'requests this month')}`;
-  const faqJsonLd = buildFaqJsonLd(content);
+  const faqJsonLd = buildFaqJsonLd(content, priceData, categoryT);
 
   return (
     <>
@@ -532,6 +582,9 @@ export default async function CategoryPage({ params }: PageProps) {
                 <p className="mt-3 text-base leading-7 text-gray-700">{t(categoryT, `seo_${catKey}_p2`, '')}</p>
                 <h3 className="mt-6 text-xl font-semibold text-gray-900">{t(categoryT, `seo_${catKey}_h3_2`, '')}</h3>
                 <p className="mt-3 text-base leading-7 text-gray-700">{t(categoryT, `seo_${catKey}_p3`, '')}</p>
+                {priceText && (
+                  <p className="mt-4 text-base leading-7 text-gray-700">{priceText}</p>
+                )}
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-gray-700">
                   <span>{t(categoryT, 'also_check', 'See also:')}</span>
                   {relatedLinks.map((link, index) => (
