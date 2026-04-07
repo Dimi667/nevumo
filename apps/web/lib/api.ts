@@ -153,6 +153,7 @@ export interface ProviderDetail {
   canonical_path?: string | null;
   latest_lead_preview?: LatestLeadPreview | null;
   latest_review?: LatestReviewPreview | null;
+  is_claimed: boolean;
 }
 
 export interface CategoryOut {
@@ -219,7 +220,7 @@ export async function getProviderBySlug(
   try {
     const params = new URLSearchParams({ lang });
     if (citySlug) params.set('city_slug', citySlug);
-    const response = await fetch(`${API_BASE}/api/v1/providers/${slug}?${params.toString()}`);
+    const response = await fetch(`${API_BASE}/api/v1/providers/${slug}?${params.toString()}`, { cache: 'no-store' });
     if (!response.ok) {
       if (response.status === 404) return null;
       throw new Error(`HTTP ${response.status}`);

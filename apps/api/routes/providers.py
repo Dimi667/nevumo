@@ -9,7 +9,6 @@ import redis as redis_lib
 from config import settings
 from dependencies import get_db, get_redis
 from exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
-from i18n import fetch_translations
 from models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation
 from schemas import (
     ProviderListItem,
@@ -31,6 +30,33 @@ from services.provider_service import (
     get_provider_by_claim_token,
 )
 from services.review_service import get_public_latest_review_preview
+
+
+def get_widget_translations(lang: str, db: Session) -> dict:
+    from models import Translation
+    
+    supported_langs = ["bg","cs","da","de","el","en","es","et","fi","fr","ga","hr","hu","is","it","lb","lt","lv","mk","mt","nl","no","pl","pt","pt-PT","ro","ru","sk","sl","sq","sr","sv","tr","uk"]
+    
+    # Normalize unsupported langs to 'en'
+    if lang not in supported_langs:
+        lang = "en"
+    
+    # Query DB for widget namespace
+    rows = db.query(Translation).filter(
+        Translation.lang == lang,
+        Translation.key.like("widget.%")
+    ).all()
+    
+    # If no rows found, fallback to English
+    if not rows:
+        rows = db.query(Translation).filter(
+            Translation.lang == "en",
+            Translation.key.like("widget.%")
+        ).all()
+    
+    # Strip "widget." prefix from keys
+    return {row.key.replace("widget.", "", 1): row.value for row in rows}
+
 
 router = APIRouter(prefix="/api/v1", tags=["providers"])
 
@@ -174,18 +200,8 @@ async def get_provider(
         if location:
             city_leads = get_city_leads_count(location.id, db)
 
-    # Get widget translations
-    all_translations = fetch_translations(db, lang)
-    widget_keys = [
-        'verified_label', 'rating_label', 'jobs_label', 'phone_label',
-        'phone_placeholder', 'notes_label', 'notes_placeholder',
-        'response_time', 'button_text', 'disclaimer', 'success_title',
-        'success_message', 'success_message_received', 'new_request_button',
-        'new_badge', 'no_reviews_yet', 'recent_request_label', 'city_leads_label',
-        'free_request_no_obligation', 'no_registration',
-        'direct_contact_with_provider'
-    ]
-    translations = {k: all_translations.get(k, k) for k in widget_keys}
+    # Get widget translations from DB
+    translations = get_widget_translations(lang, db)
 
     services = db.query(Service).filter(Service.provider_id == provider.id).all()
 

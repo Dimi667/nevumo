@@ -35,7 +35,7 @@ CREATE INDEX idx_users_phone ON users(phone) WHERE phone IS NOT NULL;
 
 CREATE TABLE providers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    user_id UUID UNIQUE REFERENCES users(id) ON DELETE CASCADE,  -- NULL for unclaimed profiles
     business_name TEXT,
     description TEXT,
     slug TEXT UNIQUE NOT NULL,                -- URL slug, auto-generated from business_name
@@ -44,11 +44,16 @@ CREATE TABLE providers (
     rating NUMERIC(2,1) DEFAULT 0,
     verified BOOLEAN DEFAULT FALSE,
     availability_status TEXT DEFAULT 'active',
+    is_claimed BOOLEAN NOT NULL DEFAULT TRUE, -- FALSE for unclaimed (scraped/auto-created) profiles
+    claim_token TEXT UNIQUE,                  -- Magic token for claiming unclaimed profiles
+    data_source TEXT NOT NULL DEFAULT 'manual', -- 'manual', 'scraped', 'imported', etc.
     created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_providers_rating ON providers(rating);
 CREATE INDEX idx_providers_status ON providers(availability_status);
+CREATE INDEX idx_providers_is_claimed ON providers(is_claimed);
+CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token) WHERE claim_token IS NOT NULL;
 
 ### Slug Validation Rules
 - **Format**: 2-50 characters, lowercase letters, numbers, and hyphens only
@@ -380,6 +385,7 @@ CREATE INDEX idx_translations_key ON translations(key);
   how_it_works_label, how_step_1, how_step_2, how_step_3, what_need_label,
   chip_not_sure, details_label, details_placeholder, get_offers_btn,
   trust_multiple, trust_response, sticky_btn
+- **widget namespace**: 23 keys × 34 languages = 782 rows
 - **Total rows**: 2,278+ translations across all namespaces
 
 ### Redis Caching

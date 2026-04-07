@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 import { getProviderBySlug, getCategories, resolveSlug } from '@/lib/api';
-import LeadForm from '@/components/LeadForm';
 import ProviderWidget from '@/components/ProviderWidget';
+import ClaimProfileBanner from '@/components/ClaimProfileBanner';
 import { generateHreflangAlternates, generateLocalBusinessJsonLd } from '@/lib/seo';
 import { JsonLd } from '@/components/JsonLd';
 
@@ -20,8 +20,8 @@ type ProviderRouteParams = {
   providerPage: string;
 };
 
-function formatPrice(price: number | null, priceType: string): string {
-  if (priceType === 'request' || price === null) return 'Price on request';
+function formatPrice(price: number | null, priceType: string, translations?: { services_label?: string; price_on_request?: string }): string {
+  if (priceType === 'request' || price === null) return translations?.price_on_request || 'Price on request';
   if (priceType === 'hourly') return `${price} лв./h`;
   return `${price} лв.`;
 }
@@ -122,11 +122,15 @@ export default async function Page(props: {
   return (
     <>
       <JsonLd data={generateLocalBusinessJsonLd(provider, category, city)} />
-    <div className="min-h-screen bg-gray-50 py-6 px-4">
-      <div className="max-w-md mx-auto">
+      <div className="min-h-screen bg-gray-50 py-6 px-4">
+        <div className="max-w-md mx-auto">
+          {/* Claim profile banner for unclaimed providers */}
+          {provider.is_claimed === false && lang === 'pl' && (
+            <ClaimProfileBanner businessName={provider.business_name} lang={lang} />
+          )}
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden pb-24 md:pb-0">
+          {/* Card */}
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden pb-24 md:pb-0">
 
           {/* Logo bar */}
           <div className="px-6 pt-5 pb-2 text-center">
@@ -169,7 +173,7 @@ export default async function Page(props: {
           {provider.services.length > 0 && (
             <div className="px-6 py-5 border-b border-gray-100">
               <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">
-                Services
+                {provider.translations?.services_label || 'Services'}
               </h2>
               <ul className="space-y-3">
                 {provider.services.map((service) => (
@@ -179,7 +183,7 @@ export default async function Page(props: {
                         {service.title}
                       </span>
                       <span className="text-sm font-bold text-gray-700 whitespace-nowrap flex-shrink-0">
-                        {formatPrice(service.base_price, service.price_type)}
+                        {formatPrice(service.base_price, service.price_type, provider.translations)}
                       </span>
                     </div>
                     {service.description && (
@@ -193,16 +197,13 @@ export default async function Page(props: {
 
           {/* Request form */}
           <div className="px-6 py-5">
-            <h2 className="text-base font-bold text-gray-900 mb-4">Request Service</h2>
-            <LeadForm
+            <ProviderWidget
+              provider={provider}
+              categoryName={categoryName}
               categorySlug={category}
               citySlug={city}
-              providerSlug={provider.slug}
               countryCode={cityCountryCode}
             />
-            <p className="text-xs text-gray-400 text-center mt-4">
-              Free request · No obligation
-            </p>
           </div>
 
         </div>

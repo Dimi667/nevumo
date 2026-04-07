@@ -278,6 +278,13 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Endpoint: POST /api/v1/auth/magic-link validates token, creates passwordless account
   - Frontend: /[lang]/auth/magic/page.tsx handles token validation + auto-login
   - Import path fix: apps/api/jobs/send_magic_links.py uses relative imports (from models import ..., from config import ...) — NOT absolute paths (from apps.api.models import ...) because uvicorn runs from inside apps/api/
+- **Widget Translation System (provider detail pages)** — Full language consistency for provider widget across all 34 languages:
+  - New `widget` namespace in `translations` table: 23 keys × 34 languages = 782 rows
+  - Seed script: `apps/api/scripts/seed_widget_translations.py` (idempotent)
+  - Backend: `GET /api/v1/providers/{slug}` now fetches widget translations from DB via `get_widget_translations(lang, db)` in `apps/api/routes/providers.py`
+  - Frontend: `apps/web/components/ProviderWidget.tsx` — all hardcoded English strings replaced with `t.*` from `provider.translations`; `'use client'` directive confirmed
+  - Frontend: `apps/web/lib/api.ts` `getProviderBySlug` — `lang` param now passed to API; `cache: 'no-store'` added
+  - Keys: verified_label, rating_label, jobs_label, phone_label, phone_placeholder, notes_label, notes_placeholder, response_time, button_text, disclaimer, success_title, success_message, success_message_received, new_request_button, new_badge, no_reviews_yet, recent_request_label, city_leads_label, free_request_no_obligation, no_registration, direct_contact_with_provider, services_label, price_on_request
 
 ### Recent Changes (April 2026)
 - **April 4 Strategic Decisions — Warsaw launch operating model**

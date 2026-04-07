@@ -178,6 +178,13 @@ export default function ProviderWidget({
   countryCode,
 }: ProviderWidgetProps) {
   const t = provider.translations;
+  console.log('[ProviderWidget DEBUG]', { 
+    hasTranslations: !!provider.translations,
+    translationsType: typeof provider.translations,
+    translationKeys: Object.keys(provider.translations || {}),
+    buttonText: provider.translations?.button_text,
+    providerSlug: provider.slug
+  });
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
@@ -425,7 +432,7 @@ export default function ProviderWidget({
           {filteredServices.length > 0 && (
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">
-                {t.choose_service || (locale === 'bg' ? 'Избери услуга:' : 'Choose a service:')}
+                {t.services_label || 'Services'}
               </label>
               <div className="flex flex-wrap gap-2 mb-2">
                 {displayedServices.map((service) => (
@@ -449,7 +456,7 @@ export default function ProviderWidget({
                   onClick={() => setShowAllServices(true)}
                   className="text-sm text-orange-500 hover:text-orange-600 font-medium"
                 >
-                  Виж всички →
+                  {t.view_all_services || 'View all'} →
                 </button>
               )}
             </div>
@@ -496,7 +503,7 @@ export default function ProviderWidget({
 
           {error && (
             <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              Something went wrong. Please try again.
+              {t.error_message || 'Something went wrong. Please try again.'}
             </p>
           )}
 
@@ -507,7 +514,7 @@ export default function ProviderWidget({
               disabled={loading}
               className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
             >
-              {loading ? 'Sending...' : t.button_text || 'Request Service'}
+              {loading ? (t.sending_button || 'Sending...') : t.button_text || 'Request Service'}
             </button>
           </div>
         </form>

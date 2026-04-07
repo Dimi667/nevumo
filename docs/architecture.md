@@ -299,6 +299,14 @@ Used for:
 - New market launch should require **DB seeding only**, not new translation-fetching code paths
 - Homepage/category/review pages consume the same namespaced translation endpoint regardless of market
 - Operational rule: adding a new market means inserting translation rows for that locale and namespace set, with zero application logic changes
+
+### Widget Translation Namespace
+- All provider widget UI strings are stored in the `widget` namespace of the `translations` table
+- Keys follow the pattern `widget.key_name` (e.g., `widget.button_text`, `widget.phone_label`)
+- Backend serves them via `get_widget_translations(lang, db)` in `apps/api/routes/providers.py`
+- Frontend `ProviderWidget` receives them as `provider.translations` prop and accesses via `const t = provider.translations`
+- Fallback: if requested lang has no widget rows, falls back to English
+- Total keys: 23 per language
  
  ---
  
