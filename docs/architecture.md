@@ -394,6 +394,31 @@ Used for:
 - Reason: overflow-x:hidden causes browser to set overflow-y:auto on body
   making body a scroll container which breaks position:fixed on mobile
 
+## Provider Description Auto-Translation
+
+### Overview
+Provider descriptions are automatically translated into all 34 supported languages when saved via PATCH /api/v1/provider/profile. Translations are stored in the provider_translations table and served by the public provider detail endpoint based on the lang query parameter.
+
+### Translation Service
+- Provider: Langbly API (https://api.langbly.com/language/translate/v2)
+- API Key: stored in apps/api/services/translation_service.py
+- Format: POST { "q": text, "target": lang } with Authorization: Bearer header
+- Timeout: 30 seconds per request
+
+### Fallback Strategy
+- If Langbly returns 429 (monthly limit exhausted): stores original text with auto_translated=False
+- If request times out or errors: same fallback behavior
+- Daily retry job at 03:00 re-attempts all auto_translated=False rows
+- Provider page always serves best available translation, falls back to original
+
+### Database
+Table: provider_translations
+- provider_id + field + lang = unique constraint
+- field = "description" (extensible to "business_name" etc.)
+- auto_translated = False means original text stored as fallback, pending retry
+
+---
+
 ## Global Phone Field System
 
 ### Overview

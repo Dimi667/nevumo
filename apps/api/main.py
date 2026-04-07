@@ -16,6 +16,7 @@ from exceptions import NevumoException
 from i18n import fetch_translations
 from fastapi.staticfiles import StaticFiles
 from jobs.send_magic_links import process_pending_magic_links
+from jobs.retry_translations import retry_failed_translations
 
 from routes import (
     auth_router,
@@ -58,9 +59,26 @@ def start_scheduler():
         finally:
             db.close()
 
+    def run_retry_translations():
+        db = next(get_db())
+        try:
+            retry_failed_translations(db)
+        except Exception as e:
+            print(f"[Scheduler] Retry translations error: {e}")
+        finally:
+            db.close()
+
     scheduler.add_job(run_job, 'interval', minutes=5)
+    scheduler.add_job(
+        lambda: retry_failed_translations(next(get_db())),
+        'cron',
+        hour=3,
+        minute=0,
+        id='retry_translations'
+    )
     scheduler.start()
     print("[Scheduler] Magic link job started (every 5 minutes)")
+    print("[Scheduler] Retry translations job started (daily at 03:00)")
 
 @app.on_event("shutdown")
 def stop_scheduler():

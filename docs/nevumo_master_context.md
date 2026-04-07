@@ -148,6 +148,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Provider Description Auto-Translation (Langbly)** — Automatic translation of provider descriptions into all 34 languages:
+  - New table: `provider_translations` (provider_id, field, lang, value, auto_translated)
+  - Migration: `apps/api/alembic/versions/t1u2v3w4x5y6_add_provider_translations.py` 
+  - Translation service: `apps/api/services/translation_service.py` (Langbly API, endpoint: https://api.langbly.com/language/translate/v2)
+  - PATCH /api/v1/provider/profile now auto-translates description on save
+  - GET /api/v1/providers/{slug}?lang={lang} now serves translated description from DB
+  - Fallback: if Langbly returns 429 or times out, original text stored with auto_translated=False
+  - Retry job: `apps/api/jobs/retry_translations.py` runs daily at 03:00 via APScheduler
+  - Langbly free tier: 500K chars/month, no credit card required, ~98 providers/month capacity
 - **Dynamic Price Range System** — Fully automated price display across all category pages:
   - New backend endpoint GET /api/v1/price-range?category_slug=X&city_slug=Y
     returns { min, max, currency, provider_count } or null, Redis cached TTL 3600
@@ -269,22 +278,6 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Endpoint: POST /api/v1/auth/magic-link validates token, creates passwordless account
   - Frontend: /[lang]/auth/magic/page.tsx handles token validation + auto-login
   - Import path fix: apps/api/jobs/send_magic_links.py uses relative imports (from models import ..., from config import ...) — NOT absolute paths (from apps.api.models import ...) because uvicorn runs from inside apps/api/
-
-### 🔜 Next
-- Register first real providers in Warsaw for the 3 seeded launch categories
-- Validate live SEO indexing/performance for `/[lang]/warszawa/{category}` pages across priority languages
-- Replace placeholder social-proof/activity numbers with real marketplace data once supply is live
-- Decide whether homepage/category translation source of truth remains DB-only or also gets script-level auditing/tests
-- Monetization sequencing remains:
-  - Phase now: free acquisition + lead volume validation
-  - Primary business model: pay-per-lead
-  - Later experiment: featured placement after initial liquidity
-- Dashboard design polish (UI refinements across all pages)
-- UX simplification: auto-currency from city, conditional price field
-- Email sending for reset password (Resend / SendGrid)
-- OAuth — Google + Facebook
-- Privacy Policy + Cookie/Storage Banner 
-  (must mention phone localStorage storage)
 
 ### Recent Changes (April 2026)
 - **April 4 Strategic Decisions — Warsaw launch operating model**

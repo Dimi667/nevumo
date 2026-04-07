@@ -59,7 +59,7 @@ class Provider(Base):
     __tablename__ = "providers"
 
     id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
-    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), unique=True)
+    user_id: Mapped[Optional[UUID]] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), unique=True, nullable=True)
 
     business_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     description: Mapped[Optional[str]] = mapped_column(Text)
@@ -73,6 +73,11 @@ class Provider(Base):
     availability_status: Mapped[str] = mapped_column(String, default="active")
 
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+
+    # Claimed profile fields
+    is_claimed: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    claim_token: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, unique=True)
+    data_source: Mapped[str] = mapped_column(String(20), default="manual", nullable=False)
 
     user: Mapped["User"] = relationship(back_populates="provider")
     services: Mapped[List["Service"]] = relationship(back_populates="provider")
@@ -90,6 +95,27 @@ class Provider(Base):
     __table_args__ = (
         Index("idx_providers_rating", "rating"),
         Index("idx_providers_status", "availability_status"),
+        Index("idx_providers_is_claimed", "is_claimed"),
+        Index("idx_providers_claim_token", "claim_token"),
+    )
+
+
+class ProviderTranslation(Base):
+    __tablename__ = "provider_translations"
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    provider_id: Mapped[UUID] = mapped_column(ForeignKey("providers.id", ondelete="CASCADE"), nullable=False)
+    field: Mapped[str] = mapped_column(String, nullable=False)
+    lang: Mapped[str] = mapped_column(String, nullable=False)
+    value: Mapped[str] = mapped_column(String, nullable=False)
+    auto_translated: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    source_lang: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    __table_args__ = (
+        UniqueConstraint("provider_id", "field", "lang"),
+        Index("idx_provider_translations_provider", "provider_id"),
+        Index("idx_provider_translations_lang", "lang"),
+        Index("idx_provider_translations_auto", "auto_translated"),
     )
 
 

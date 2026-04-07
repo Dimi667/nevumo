@@ -10,7 +10,7 @@ from config import settings
 from dependencies import get_db, get_redis
 from exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
 from i18n import fetch_translations
-from models import Provider, Service, Category, Location, ProviderCity
+from models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation
 from schemas import (
     ProviderListItem,
     ProviderListResponse,
@@ -28,6 +28,7 @@ from services.provider_service import (
     get_provider_jobs_completed,
     get_provider_review_count,
     resolve_provider_slug_safe,
+    get_provider_by_claim_token,
 )
 from services.review_service import get_public_latest_review_preview
 
@@ -92,6 +93,56 @@ async def list_providers(
     return ProviderListResponse(data=data)
 
 
+@router.get("/providers/by-claim-token/{token}")
+async def get_provider_by_claim_token_endpoint(
+    token: str,
+    db: Session = Depends(get_db),
+) -> dict:
+    """Get provider by claim token (public endpoint)."""
+    provider = get_provider_by_claim_token(token, db)
+    if not provider:
+        return {
+            "success": False,
+            "error": {
+                "code": "NOT_FOUND", 
+                "message": "Token not found or already claimed"
+            }
+        }
+    
+    # Get first city name
+    first_city_row = (
+        db.query(ProviderCity)
+        .filter(ProviderCity.provider_id == provider.id)
+        .first()
+    )
+    city_name = None
+    if first_city_row:
+        city = db.query(Location).filter(Location.id == first_city_row.city_id).first()
+        city_name = city.city if city else None
+    
+    # Get first service category slug
+    first_service = (
+        db.query(Service)
+        .filter(Service.provider_id == provider.id)
+        .first()
+    )
+    category_slug = None
+    if first_service:
+        category = db.query(Category).filter(Category.id == first_service.category_id).first()
+        category_slug = category.slug if category else None
+    
+    return {
+        "success": True,
+        "data": {
+            "business_name": provider.business_name,
+            "slug": provider.slug,
+            "is_claimed": provider.is_claimed,
+            "city_name": city_name,
+            "category_slug": category_slug
+        }
+    }
+
+
 @router.get("/providers/{provider_slug}", response_model=ProviderDetailResponse)
 async def get_provider(
     provider_slug: str,
@@ -141,10 +192,30 @@ async def get_provider(
     service_items = []
     for s in services:
         cat = db.query(Category).filter(Category.id == s.category_id).first()
+        
+        # For scraped providers, localize service title from CategoryTranslation
+        service_title = s.title
+        if provider.data_source == "scraped":
+            # Try requested language first
+            ct = db.query(CategoryTranslation).filter(
+                CategoryTranslation.category_id == s.category_id,
+                CategoryTranslation.lang == lang
+            ).first()
+            if ct:
+                service_title = ct.name
+            else:
+                # Fall back to English
+                ct_en = db.query(CategoryTranslation).filter(
+                    CategoryTranslation.category_id == s.category_id,
+                    CategoryTranslation.lang == "en"
+                ).first()
+                if ct_en:
+                    service_title = ct_en.name
+        
         service_items.append(
             ServiceOut(
                 id=s.id,
-                title=s.title,
+                title=service_title,
                 description=s.description,
                 price_type=s.price_type,
                 base_price=s.base_price,
@@ -172,10 +243,22 @@ async def get_provider(
             client_image_url=latest_lead_preview_data["client_image_url"],
         )
 
+    # Get translated description if available
+    translation = db.query(ProviderTranslation).filter_by(
+        provider_id=provider.id,
+        field="description",
+        lang=lang
+    ).first()
+
+    if translation:
+        description = translation.value
+    else:
+        description = provider.description
+
     detail = ProviderDetail(
         id=provider.id,
         business_name=provider.business_name,
-        description=provider.description,
+        description=description,
         slug=provider.slug,
         slug_change_count=provider.slug_change_count,
         profile_image_url=provider.profile_image_url,
@@ -183,6 +266,7 @@ async def get_provider(
         verified=provider.verified,
         availability_status=provider.availability_status,
         created_at=provider.created_at,
+        is_claimed=provider.is_claimed or False,
         services=service_items,
         jobs_completed=jobs_completed,
         review_count=review_count,

@@ -6,10 +6,11 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFil
 from sqlalchemy.orm import Session
 
 from config import settings
-from dependencies import get_current_provider, get_db
-from models import Provider
+from dependencies import get_current_provider, get_db, get_current_user
+from models import Provider, User
 from schemas import (
     AddCityRequest,
+    ClaimProviderRequest,
     CreateServiceRequest,
     LeadStatusUpdateRequest,
     LeadStatusUpdateResponse,
@@ -32,6 +33,7 @@ from services.provider_service import (
     build_qr_public_url,
     change_lead_status,
     check_onboarding_complete,
+    claim_provider,
     delete_service,
     generate_qr_code_base64,
     generate_enhanced_qr_code_base64,
@@ -127,6 +129,21 @@ def update_profile(
         print("BACKEND: Building response data...")
         response_data = get_provider_profile(updated, db)
         print(f"BACKEND: Response data built successfully")
+        
+        # Trigger translation for description if updated
+        try:
+            if getattr(body, 'description', None) and body.description.strip():
+                from services.translation_service import translate_and_store
+                translate_and_store(
+                    provider_id=provider.id,
+                    field="description",
+                    text=body.description.strip(),
+                    db=db
+                )
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Translation failed silently: {e}")
+        
         print("=" * 50)
         return ProviderProfileUpdateResponse(data=response_data)
     except Exception as e:
@@ -468,3 +485,26 @@ def get_provider_analytics(
 ) -> dict:
     data = get_analytics(provider, db, period_days=period)
     return {"success": True, "data": data}
+
+
+# -------------------------
+# Claim functionality
+# -------------------------
+
+
+@router.post("/claim")
+def claim_provider_endpoint(
+    body: ClaimProviderRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    """Claim a provider profile using a claim token."""
+    provider = claim_provider(body.claim_token, current_user, db)
+    return {
+        "success": True,
+        "data": {
+            "provider_id": str(provider.id),
+            "slug": provider.slug,
+            "message": "Profile claimed successfully"
+        }
+    }
