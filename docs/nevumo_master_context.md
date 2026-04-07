@@ -94,7 +94,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `43` homepage keys per language
   - `24` category-page keys per language
   - `67` total UI keys per language
-  - `2,278` rows in `translations` for homepage/category namespaces across 34 languages
+  - `2,788` rows in `translations` for homepage/category namespaces across 34 languages
 
 ---
 
@@ -148,6 +148,20 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Dynamic Price Range System** — Fully automated price display across all category pages:
+  - New backend endpoint GET /api/v1/price-range?category_slug=X&city_slug=Y
+    returns { min, max, currency, provider_count } or null, Redis cached TTL 3600
+  - 3 display states: 0 providers → price_text_none, 1 provider → price_text_single,
+    2+ providers → price_text_range
+  - Applied in 4 SEO places: meta description, FAQ JSON-LD schema, SEO body paragraph
+  - 9 translation keys × 34 languages = 306 rows seeded in translations table
+    (namespace: category, keys: price_text_none/single/range, price_faq_none/single/range,
+    price_meta_none/single/range)
+  - Hardcoded price paragraphs removed from seo_cleaning_p3, seo_plumbing_p3,
+    seo_massage_p3 (cleared to empty string for all languages)
+  - SEO copy updated: seo_cleaning_h3_1, seo_cleaning_p1, seo_cleaning_p2
+    now use 'specialist' instead of 'company/firm' across all 34 languages
+    (102 rows upserted via update_cleaning_seo_translations.py)
 - **Category Page Lead Form Redesign** — Converted LeadForm to marketplace broadcast model:
   - Pioneer framing banner when no providers: "Be the first to request this service in your area" / "Providers joining Nevumo will see your request and contact you"
   - How it works 3-step section (DB-backed translations)
@@ -233,6 +247,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Step 2: Email input captures lead claim intent, saves to localStorage (nevumo_pending_claim)
   - Rate limit exceeded (429) shows success screen instead of error
   - Redirects to /{lang}/auth?email=...&intent=client for account creation
+  - All success screen strings are fully translated in 34 languages 
+    via category namespace (15 new keys: success_title, success_subtitle,
+    success_track_title, success_bullet_responses, success_bullet_manage,
+    success_bullet_notifications, success_cta_email, success_free_label,
+    success_skip_link, email_back_link, email_label, email_placeholder,
+    email_cta_continue, error_phone_invalid, error_generic)
+  - Trust signal keys fixed: form_free→form_trust_1, 
+    form_no_obligation→form_trust_2
+  - Seed script: apps/api/scripts/seed_success_screen_translations.py
 - **Pending Lead Claims System** — Anonymous lead → account linking bridge:
   - Table: pending_lead_claims (lead_id, email, phone, claimed, expires_at, magic_link_sent)
   - Endpoint: POST /api/v1/leads/{lead_id}/claim-email (no auth required)
@@ -284,7 +307,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - Script: `apps/api/scripts/seed_ui_translations.py`
     - Namespace model stored in `translations` table as `namespace.key`
     - Exact final key counts per language: `43` homepage keys + `24` category keys = `67`
-    - Exact seeded/upserted UI translation rows across all supported languages: `2,278`
+    - Exact seeded/upserted UI translation rows across all supported languages: `2,788`
   - **Language set expanded and normalized to 34 supported languages**:
     - `bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, nl, no, pl, pt, pt-PT, ro, ru, sk, sl, sq, sr, sv, tr, uk`
 
@@ -390,6 +413,13 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - My Requests page renders status tabs, lead cards, and inline review submission for completed provider-linked jobs without reviews
   - Reviews page now splits into `Написани` and `Чакащи ревю`, with collapsible provider replies and the shared review-reply email toggle
   - Settings page now contains readonly email, reset-password link, `Стани доставчик`, and logout
+- **Dynamic Price Range** — Real-time pricing from provider services:
+  - New `GET /api/v1/price-range?category_slug=X&city_slug=Y` endpoint
+  - Queries MIN/MAX base_price from services with valid prices (excludes 'request' price_type)
+  - Returns currency based on city's country_code (PL→PLN, BG→EUR, RS→RSD, CZ→CZK, GR→EUR)
+  - Redis caching with TTL 3600s (key: `price_range:{category}:{city}`)
+  - Frontend integration in category page: metadata, FAQ schema, SEO paragraph
+  - Translation keys for price display: `price_text_none/single/range`, `price_faq_none/single/range`, `price_meta_none/single/range`
 
 ### 🔮 Future
 - AI lead matching

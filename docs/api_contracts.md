@@ -967,7 +967,43 @@ Check if a slug redirects to another slug without following the redirect. Used b
 
 ---
 
-## 6. Get Namespaced Translations
+## 5.1. Get Price Range
+
+### GET
+/api/v1/price-range
+
+### Query Params
+- category_slug (required)
+- city_slug (required)
+
+### Response (providers with prices exist):
+```json
+{
+  "success": true,
+  "data": {
+    "min": 150,
+    "max": 300,
+    "currency": "PLN",
+    "provider_count": 5
+  }
+}
+```
+
+### Response (no providers or no prices):
+```json
+{
+  "success": true,
+  "data": null
+}
+```
+
+### Notes
+- Queries MIN/MAX base_price from services joined with service_cities and locations
+- Excludes services with price_type='request' and null base_price
+- Currency auto-detected from city country_code (PL→PLN, BG→EUR, RS→RSD, CZ→CZK, GR→EUR)
+- Redis cached: key 'price_range:{category_slug}:{city_slug}', TTL 3600s
+
+---
 
 ### GET
 /api/v1/translations?lang=en&namespace=homepage
