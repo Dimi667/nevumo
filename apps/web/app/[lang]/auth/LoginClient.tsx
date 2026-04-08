@@ -152,6 +152,8 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
 
   const [authDict, setAuthDict] = useState<Record<string, string>>({});
 
+  const passwordRef = useRef<HTMLInputElement>(null);
+
   const isEmailValid = EMAIL_RE.test(state.email);
 
   // On mount: redirect if already authenticated
@@ -264,7 +266,9 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
       }
 
       const role = result.user.role;
-      window.location.href = role === 'provider' ? `/${lang}/provider/dashboard` : `/${lang}`;
+      window.location.href = role === 'provider'
+        ? `/${lang}/provider/dashboard`
+        : `/${lang}/client/dashboard`;
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'INVALID_CREDENTIALS' || err.message.includes('Invalid credentials')) {
