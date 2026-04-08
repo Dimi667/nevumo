@@ -236,6 +236,7 @@ async def get_provider(
                 price_type=s.price_type,
                 base_price=s.base_price,
                 category_slug=cat.slug if cat else None,
+                currency=s.currency,
             )
         )
 

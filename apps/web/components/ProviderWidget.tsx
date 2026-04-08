@@ -73,6 +73,12 @@ function formatTranslation(template: string, replacements: Record<string, string
   );
 }
 
+function formatServicePrice(price: number | null, priceType: string, currency: string, translations?: { price_on_request?: string }): string {
+  if (priceType === 'request' || price === null) return translations?.price_on_request || 'Cena do uzgodnienia';
+  if (priceType === 'hourly') return `${price} ${currency}/h`;
+  return `${price} ${currency}`;
+}
+
 function RecentRequestBlock({
   latestLeadPreview,
   locale,
@@ -420,6 +426,34 @@ export default function ProviderWidget({
           </span>
         )}
       </div>
+
+      {/* Services Section */}
+      {filteredServices.length > 0 && (
+        <div className="px-6 py-5 border-b border-gray-100">
+          <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">
+            {t.services_label || 'Услуги'}
+          </h2>
+          <ul className="space-y-3">
+            {filteredServices.map((service) => (
+              <li key={service.id} className="border-b border-gray-100 last:border-0">
+                <div className="pb-3">
+                  <div className="flex justify-between items-start gap-2">
+                    <span className="font-semibold text-gray-800 text-sm">
+                      {service.title}
+                    </span>
+                    <span className="text-sm font-bold text-gray-700 whitespace-nowrap flex-shrink-0">
+                      {formatServicePrice(service.base_price, service.price_type, service.currency, provider.translations)}
+                    </span>
+                  </div>
+                  {service.description && (
+                    <p className="text-xs text-gray-400 mt-0.5">{service.description}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Form */}
       <div className="px-6 py-6">

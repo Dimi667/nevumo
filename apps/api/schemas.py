@@ -51,6 +51,7 @@ class ServiceOut(BaseModel):
     price_type: Optional[str] = None
     base_price: Optional[float] = None
     category_slug: Optional[str] = None
+    currency: Optional[str] = "EUR"
 
     @field_validator("base_price", mode="before")
     @classmethod

@@ -22,7 +22,7 @@ def add_review():
     db = next(db_gen)
     
     try:
-        # ET LILI provider ID from the API response
+        # ET  provider ID from the API response
         provider_id = 'e725ef65-e0dc-48a4-9ae1-80ed1f82a32f'
         # Use the correct user ID as client
         client_id = 'a3e26995-c7f6-42ce-99d1-68dfad57d581'  # This is the user_id from the provider

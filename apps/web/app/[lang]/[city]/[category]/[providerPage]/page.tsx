@@ -129,84 +129,13 @@ export default async function Page(props: {
             <ClaimProfileBanner businessName={provider.business_name} lang={lang} />
           )}
 
-          {/* Card */}
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden pb-24 md:pb-0">
-
-          {/* Logo bar */}
-          <div className="px-6 pt-5 pb-2 text-center">
-            <span className="text-xl font-extrabold tracking-tight">
-              <span className="text-orange-500">N</span>evumo
-            </span>
-          </div>
-
-          {/* Avatar + name + description */}
-          <div className="px-6 pt-3 pb-5 text-center border-b border-gray-100">
-            <div className="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-3">
-              <span className="text-orange-600 text-3xl font-bold">
-                {getInitials(provider.business_name)}
-              </span>
-            </div>
-
-            <h1 className="text-xl font-bold text-gray-900 mb-1">
-              {provider.business_name}
-            </h1>
-
-            {provider.description && (
-              <p className="text-sm text-gray-500 mb-3">{provider.description}</p>
-            )}
-
-            <div className="flex items-center justify-center gap-3 flex-wrap">
-              {provider.rating > 0 && (
-                <span className="text-amber-500 font-semibold">
-                  ⭐ {provider.rating.toFixed(1)} {provider.translations?.rating_label || 'rating'}
-                </span>
-              )}
-              {provider.verified && (
-                <span className="inline-flex items-center gap-1 text-sm font-semibold text-green-700 bg-green-50 border border-green-200 px-3 py-1 rounded-full">
-                  ✓ {provider.translations?.verified_label || 'Verified professional'}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Services */}
-          {provider.services.length > 0 && (
-            <div className="px-6 py-5 border-b border-gray-100">
-              <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">
-                {provider.translations?.services_label || 'Services'}
-              </h2>
-              <ul className="space-y-3">
-                {provider.services.map((service) => (
-                  <li key={service.id}>
-                    <div className="flex justify-between items-start gap-2">
-                      <span className="font-semibold text-gray-800 text-sm">
-                        {service.title}
-                      </span>
-                      <span className="text-sm font-bold text-gray-700 whitespace-nowrap flex-shrink-0">
-                        {formatPrice(service.base_price, service.price_type, provider.translations)}
-                      </span>
-                    </div>
-                    {service.description && (
-                      <p className="text-xs text-gray-400 mt-0.5">{service.description}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Request form */}
-          <div className="px-6 py-5">
-            <ProviderWidget
-              provider={provider}
-              categoryName={categoryName}
-              categorySlug={category}
-              citySlug={city}
-              countryCode={cityCountryCode}
-            />
-          </div>
-
-        </div>
+          <ProviderWidget
+            provider={provider}
+            categoryName={categoryName}
+            categorySlug={category}
+            citySlug={city}
+            countryCode={cityCountryCode}
+          />
       </div>
     </div>
     </>

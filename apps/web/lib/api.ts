@@ -120,6 +120,7 @@ export interface ServiceOut {
   price_type: string;
   base_price: number | null;
   category_slug: string | null;
+  currency: string;
 }
 
 export interface LatestReviewPreview {
