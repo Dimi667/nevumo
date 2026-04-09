@@ -134,7 +134,7 @@ export default function AnalyticsPage() {
                       <div
                         className={`h-2 rounded-full transition-all duration-500 ${SOURCE_COLORS[src]}`}
                         style={{ width: `${pct}%` }}
-                      />
+                      ></div>
                     </div>
                   </div>
                 );

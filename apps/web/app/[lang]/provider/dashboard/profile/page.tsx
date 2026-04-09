@@ -140,7 +140,7 @@ function AvatarUpload({
         )}
       </div>
       <div>
-        <input ref={ref} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={onFileChange} />
+        <input ref={ref} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={onFileChange} aria-label="Upload profile photo" />
         <button
           type="button"
           onClick={() => ref.current?.click()}
@@ -1030,6 +1030,7 @@ export default function ProfilePage() {
                 value={step2.price_type}
                 onChange={e => setStep2(f => ({ ...f, price_type: e.target.value as PriceType }))}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 bg-white"
+                aria-label="Select price type"
               >
                 {getPriceTypes(dict).map(pt => (
                   <option key={pt.value} value={pt.value}>{pt.label}</option>
@@ -1117,6 +1118,7 @@ export default function ProfilePage() {
             value={editForm.business_name}
             onChange={e => setEditForm(f => ({ ...f, business_name: e.target.value }))}
             className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
+            aria-label="Business name"
           />
         </div>
 

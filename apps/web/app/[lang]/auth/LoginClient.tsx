@@ -444,8 +444,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
             </div>
 
             {/* Social buttons */}
-            <p className="text-center text-xs mb-2 transition-colors"
-               style={{ color: state.socialToast ? '#f97316' : '#6b7280' }}>
+            <p className={`text-center text-xs mb-2 transition-colors ${state.socialToast ? 'text-orange-500' : 'text-gray-500'}`}>
               {state.socialToast ?? (authDict['quick_login_label'] || "Quick login without password")}
             </p>
             <div className="flex flex-col gap-[10px]">
@@ -478,6 +477,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
               autoComplete="email"
               autoFocus
               placeholder="name@email.com"
+              aria-label="Email address"
               value={state.email}
               onChange={e => handleEmailChange(e.target.value)}
               onKeyDown={e => { if (e.key === 'Enter') handleCheckEmail(); }}
@@ -504,7 +504,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
             {emailPill}
 
             <form onSubmit={e => { e.preventDefault(); handleLogin(); }}>
-              <input type="email" name="email" value={state.email} readOnly autoComplete="username" onChange={() => {}} style={{ position: 'absolute', opacity: 0, height: 0, width: 0, overflow: 'hidden' }} />
+              <input type="email" name="email" value={state.email} readOnly autoComplete="username" onChange={() => {}} className="absolute opacity-0 h-0 w-0 overflow-hidden" aria-hidden="true" />
               <div className="flex flex-col gap-1">
                 <input
                   ref={passwordRef}
@@ -568,7 +568,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
             )}
 
             <form onSubmit={e => { e.preventDefault(); handleRegister(); }}>
-              <input type="email" name="email" value={state.email} readOnly autoComplete="username" onChange={() => {}} style={{ position: 'absolute', opacity: 0, height: 0, width: 0, overflow: 'hidden' }} />
+              <input type="email" name="email" value={state.email} readOnly autoComplete="username" onChange={() => {}} className="absolute opacity-0 h-0 w-0 overflow-hidden" aria-hidden="true" />
               <div className="relative mb-6">
                 <input
                   ref={passwordRef}
@@ -651,7 +651,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
       {/* Hidden iframe for browser password save trigger */}
       <iframe
         name="nevumo-auth-frame"
-        style={{ display: 'none', width: 0, height: 0, position: 'absolute' }}
+        className="hidden absolute w-0 h-0"
         tabIndex={-1}
         aria-hidden="true"
       />
