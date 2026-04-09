@@ -1,0 +1,52 @@
+Важна бележка за production:
+Когато качваш на реален сървър .env трябва да съдържа реалния домейн вместо localhost:
+CORS_ORIGINS=https://nevumo.com,https://www.nevumo.com
+
+--------------------------------------------------------
+СТАТИСТИКА ЗА PWA:
+Имаш две места:
+
+**1. PostgreSQL — детайлни данни в реално време**
+
+```sql
+SELECT 
+  event_type,
+  metadata->>'trigger' as trigger,
+  metadata->>'role' as role,
+  metadata->>'platform' as platform,
+  COUNT(*) as count
+FROM page_events 
+WHERE page = 'pwa'
+GROUP BY event_type, trigger, role, platform
+ORDER BY event_type;
+```
+
+Това ти показва точно колко промпта са показани, колко инсталации, колко откази — разбити по trigger, role и platform.
+
+**2. GA4 — визуален dashboard**
+
+Отиди на analytics.google.com → Events → търси `pwa_prompt_shown`, `pwa_install_accepted`, `pwa_installed`.
+
+---
+
+**Кой да ползваш кога:**
+
+| Нужда | Инструмент |
+|-------|-----------|
+| Бърза проверка | PostgreSQL query |
+| Conversion rate prompt→install | PostgreSQL |
+| Исторически тренд | GA4 |
+| Реално време | PostgreSQL |
+
+---
+
+**Практически:**
+
+Когато имаш реален трафик от мобилни потребители — веднъж седмично пускаш SQL query-то и гледаш:
+- Колко `pwa_prompt_shown` → колко `pwa_installed` = conversion rate
+- Кой trigger работи по-добре — `lead_submit` или `onboarding_complete`
+- Android vs iOS разлика
+
+Тези числа ще ти кажат кога е смисъл да инвестираш в Етап 2.
+
+-----------------------------------------------------

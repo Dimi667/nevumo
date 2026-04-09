@@ -47,6 +47,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  manifest: '/manifest.json',
+  themeColor: '#f97316',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Nevumo',
+  },
+  icons: {
+    apple: '/icons/icon-192x192.png',
+  },
 };
 
 export default async function RootLayout({

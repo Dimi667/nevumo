@@ -5,6 +5,7 @@ import { createLead } from '@/lib/api';
 import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getPhonePrefix } from '@/lib/phoneUtils';
+import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 
 interface ServiceOption {
   id: string;
@@ -42,6 +43,7 @@ export default function LeadForm({
   const [successStep, setSuccessStep] = useState<'sent' | 'email'>('sent');
   const [email, setEmail] = useState('');
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
+  const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const { phone: savedPhone, savePhone, loading } = usePhone();
   const phonePrefix = getPhonePrefix(countryCode);
   const phoneDigitsCount = phoneValue.replace(/\D/g, '').length;
@@ -131,6 +133,10 @@ export default function LeadForm({
       if (phoneValue.replace(/\D/g, '').length >= 7) {
         savePhone(phoneValue.trim());
       }
+      // Show PWA prompt after 2 seconds
+      setTimeout(() => {
+        setShowPWAPrompt(true);
+      }, 2000);
     } catch (error) {
       console.error('Lead submission failed:', error);
       setHasError(true);
@@ -247,6 +253,15 @@ export default function LeadForm({
         >
           {translations['success_skip_link'] || 'No thanks'}
         </button>
+
+        {/* PWA Install Prompt */}
+        {showPWAPrompt && (
+          <PWAInstallPrompt
+            trigger="lead_submit"
+            role="client"
+            onClose={() => setShowPWAPrompt(false)}
+          />
+        )}
       </div>
     );
   }

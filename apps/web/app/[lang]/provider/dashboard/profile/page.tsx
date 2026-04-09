@@ -15,6 +15,7 @@ import {
   getProviderDashboard,
 } from '@/lib/provider-api';
 import SearchInput from '@/components/dashboard/SearchInput';
+import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import { getSlugValidationError, sanitizeSlug, slugify } from '@/lib/slug-utils';
 import { deriveOnboardingState, getHeroContent, CompactStepIndicator, saveStep1Draft, loadStep1Draft, clearStep1Draft } from '@/lib/onboarding-utils';
@@ -289,6 +290,10 @@ export default function ProfilePage() {
 
   // Draft persistence
   const [providerId, setProviderId] = useState<string | null>(null);
+
+  // PWA Install Prompt
+  const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+  const hasShownPWAPromptRef = useRef(false);
 
   // Helper to persist current Step 1 state
   const persistStep1Draft = useCallback(() => {
@@ -658,15 +663,23 @@ export default function ProfilePage() {
 
       await createService(serviceData);
       setSaveSuccess(true);
-      
+
       // Clear draft on complete onboarding
       if (providerId) {
         clearStep1Draft(providerId);
       }
-      
+
+      // Show PWA install prompt after onboarding complete (only once per session)
+      if (!hasShownPWAPromptRef.current) {
+        hasShownPWAPromptRef.current = true;
+        setTimeout(() => {
+          setShowPWAPrompt(true);
+        }, 1500);
+      }
+
       // Force refresh of layout state by triggering custom event
       window.dispatchEvent(new CustomEvent('force-onboarding-refresh'));
-      
+
       // Navigate to dashboard which will trigger layout refresh
       setTimeout(() => {
         router.push(`/${lang}/provider/dashboard`);
@@ -1087,6 +1100,15 @@ export default function ProfilePage() {
               {t(dict, 'msg_finish_setup_to_start_getting_clients', 'Finish setup to start getting clients')}
             </p>
           </div>
+        )}
+
+        {/* PWA Install Prompt */}
+        {showPWAPrompt && (
+          <PWAInstallPrompt
+            trigger="onboarding_complete"
+            role="provider"
+            onClose={() => setShowPWAPrompt(false)}
+          />
         )}
       </div>
     );

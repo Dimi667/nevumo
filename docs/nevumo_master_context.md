@@ -288,6 +288,18 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Frontend: `apps/web/components/ProviderWidget.tsx` — all hardcoded English strings replaced with `t.*` from `provider.translations`; `'use client'` directive confirmed
   - Frontend: `apps/web/lib/api.ts` `getProviderBySlug` — `lang` param now passed to API; `cache: 'no-store'` added
   - Keys: verified_label, rating_label, jobs_label, phone_label, phone_placeholder, notes_label, notes_placeholder, response_time, button_text, disclaimer, success_title, success_message, success_message_received, new_request_button, new_badge, no_reviews_yet, recent_request_label, city_leads_label, free_request_no_obligation, no_registration, direct_contact_with_provider, services_label, price_on_request
+- **PWA Етап 1 — Install Prompt + Tracking** — Базова PWA инфраструктура и install prompt система:
+  - `apps/web/public/manifest.json` — Web App Manifest (name, icons, theme_color: #f97316, display: standalone)
+  - `apps/web/public/icons/icon-192x192.png` и `icon-512x512.png` — PWA иконки
+  - `apps/web/next.config.mjs` — next-pwa конфигурация (disabled в development)
+  - `apps/web/app/layout.tsx` — PWA meta тагове (manifest, theme-color, apple-mobile-web-app-*)
+  - `apps/web/hooks/usePWAInstall.ts` — Hook: beforeinstallprompt (Android), iOS detection, localStorage anti-spam (спира при 2 откази), canInstall/isIOS/showPrompt/handleDismiss/handleInstalled
+  - `apps/web/components/pwa/PWAInstallPrompt.tsx` — Компонент: Android bottom banner + iOS bottom sheet с 2-стъпкови инструкции, различно копие за client/provider роли
+  - Trigger точки: lead submit (2s delay) и provider onboarding completion (1.5s delay, useRef guard)
+  - localStorage keys: pwa_installed, pwa_prompt_dismissed_count
+  - Tracking: pwa_prompt_shown, pwa_install_accepted, pwa_install_dismissed, pwa_installed — всички през trackPageEvent() към page_events таблицата
+  - CORS fix: apps/api/.env добавен с CORS_ORIGINS, apps/api/main.py зарежда .env чрез load_dotenv()
+  - PWA prompt не се показва на desktop (очаквано) — активира се само на мобилен Chrome (Android) и Safari (iOS 16.4+)
 
 ### Recent Changes (April 2026)
 - **Provider Dashboard i18n Polish Translation Fix** — Complete remediation of Polish translations in provider dashboard:
@@ -437,3 +449,5 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Subscription / pay-per-lead billing
 - Multi-region DB partitioning
 - Advanced provider analytics
+- **PWA Етап 2** — Push notifications само за провайдери: нова таблица push_subscriptions, Web Push протокол, интеграция с lead creation flow. Старт след валидиране на PWA install adoption от page_events данни.
+- **PWA Етап 3** — Push notifications за клиенти: нотификация когато провайдер отговори на заявка.

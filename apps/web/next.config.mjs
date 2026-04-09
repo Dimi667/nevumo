@@ -1,7 +1,17 @@
+import nextPWA from 'next-pwa';
+
+const withPWA = nextPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@repo/ui"],
+  turbopack: {},
   images: {
     remotePatterns: [
       {
@@ -12,11 +22,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'i.pravatar.cc', // Добавихме го, защото снимката ти е от там
+        hostname: 'i.pravatar.cc',
         pathname: '/**',
       },
     ],
   },
 };
 
-export default nextConfig;
+export default withPWA(nextConfig);
