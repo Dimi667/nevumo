@@ -4,42 +4,49 @@ import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import LeadRow from '@/components/dashboard/LeadRow';
 import EmptyState from '@/components/dashboard/EmptyState';
+import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import type { Lead, LeadStatusQuery, LeadsResponse } from '@/types/provider';
 import { getProviderLeads, updateLeadStatus } from '@/lib/provider-api';
+import { t, type TranslationDict } from '@/lib/ui-translations';
 
 type PeriodOption = 'all' | '7' | '30' | '90';
 
-const STATUS_OPTIONS: { value: LeadStatusQuery; label: string }[] = [
-  { value: 'all', label: 'All' },
-  { value: 'new', label: 'New' },
-  { value: 'contacted', label: 'Contacted' },
-  { value: 'done', label: 'Done' },
-  { value: 'rejected', label: 'Rejected' },
-];
+function getStatusOptions(dict: TranslationDict): { value: LeadStatusQuery; label: string }[] {
+  return [
+    { value: 'all', label: t(dict, 'status_all', 'All') },
+    { value: 'new', label: t(dict, 'status_new', 'New') },
+    { value: 'contacted', label: t(dict, 'status_contacted', 'Contacted') },
+    { value: 'done', label: t(dict, 'status_done', 'Done') },
+    { value: 'rejected', label: t(dict, 'status_rejected', 'Rejected') },
+  ];
+}
 
-const PERIOD_OPTIONS: { value: PeriodOption; label: string }[] = [
-  { value: 'all', label: 'All time' },
-  { value: '7', label: 'Last 7 days' },
-  { value: '30', label: 'Last 30 days' },
-  { value: '90', label: 'Last 90 days' },
-];
+function getPeriodOptions(dict: TranslationDict): { value: PeriodOption; label: string }[] {
+  return [
+    { value: 'all', label: t(dict, 'period_all_time', 'All time') },
+    { value: '7', label: t(dict, 'period_last_7_days', 'Last 7 days') },
+    { value: '30', label: t(dict, 'period_last_30_days', 'Last 30 days') },
+    { value: '90', label: t(dict, 'period_last_90_days', 'Last 90 days') },
+  ];
+}
 
-function getTitleAndSubtitle(status: LeadStatusQuery | null, total: number): { title: string; subtitle: string } {
+function getTitleAndSubtitle(status: LeadStatusQuery | null, total: number, dict: TranslationDict): { title: string; subtitle: string } {
   switch (status) {
     case 'new':
-      return { title: 'New leads', subtitle: `${total} total` };
+      return { title: t(dict, 'label_new_leads', 'New leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
     case 'contacted':
-      return { title: 'Contacted leads', subtitle: `${total} total` };
+      return { title: t(dict, 'label_contacted_leads', 'Contacted leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
     case 'done':
-      return { title: 'Done leads', subtitle: `${total} total` };
+      return { title: t(dict, 'label_done_leads', 'Done leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
     case 'rejected':
-      return { title: 'Rejected leads', subtitle: `${total} total` };
+      return { title: t(dict, 'label_rejected_leads', 'Rejected leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
     default:
-      return { title: 'Leads', subtitle: `${total} total` };
+      return { title: t(dict, 'nav_leads', 'Leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
   }
 }
 
 export default function LeadsPage() {
+  const { dict } = useDashboardI18n();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -188,7 +195,7 @@ export default function LeadsPage() {
     }
   }
 
-  const { title, subtitle } = getTitleAndSubtitle(status, total);
+  const { title, subtitle } = getTitleAndSubtitle(status, total, dict);
 
   if (loading) {
     return (
@@ -201,7 +208,7 @@ export default function LeadsPage() {
   if (error) {
     return (
       <div className="bg-red-50 text-red-700 rounded-xl p-4 text-sm">
-        Failed to load leads: {error}
+        {t(dict, 'msg_failed_load_leads', 'Failed to load leads')}: {error}
       </div>
     );
   }
@@ -218,9 +225,9 @@ export default function LeadsPage() {
         <div className="flex flex-wrap gap-4">
           {/* Status filter */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-gray-500">Status</label>
+            <label className="text-xs font-medium text-gray-500">{t(dict, 'label_status', 'Status')}</label>
             <div className="flex flex-wrap gap-2">
-              {STATUS_OPTIONS.map((opt) => (
+              {getStatusOptions(dict).map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => handleStatusChange(opt.value)}
@@ -238,14 +245,14 @@ export default function LeadsPage() {
 
           {/* Period filter */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-gray-500">Period</label>
+            <label className="text-xs font-medium text-gray-500">{t(dict, 'label_period', 'Period')}</label>
             <select
               value={period}
               onChange={(e) => handlePeriodChange(e.target.value as PeriodOption)}
-              aria-label="Select period filter"
+              aria-label={t(dict, 'aria_select_period_filter', 'Select period filter')}
               className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
             >
-              {PERIOD_OPTIONS.map((opt) => (
+              {getPeriodOptions(dict).map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
                 </option>
@@ -255,14 +262,14 @@ export default function LeadsPage() {
 
           {/* Date range */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-gray-500">Date range</label>
+            <label className="text-xs font-medium text-gray-500">{t(dict, 'label_date_range', 'Date range')}</label>
             <div className="flex items-center gap-2">
               <input
                 type="date"
                 value={dateFrom}
                 onChange={(e) => handleDateFromChange(e.target.value)}
                 className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                placeholder="From"
+                placeholder={t(dict, 'placeholder_from', 'From')}
               />
               <span className="text-gray-400">-</span>
               <input
@@ -270,7 +277,7 @@ export default function LeadsPage() {
                 value={dateTo}
                 onChange={(e) => handleDateToChange(e.target.value)}
                 className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                placeholder="To"
+                placeholder={t(dict, 'placeholder_to', 'To')}
               />
             </div>
           </div>
@@ -279,8 +286,8 @@ export default function LeadsPage() {
 
       {leads.length === 0 ? (
         <EmptyState
-          title="No leads found"
-          description="Try adjusting your filters or check back later."
+          title={t(dict, 'msg_no_leads_found', 'No leads found')}
+          description={t(dict, 'msg_adjust_filters', 'Try adjusting your filters or check back later.')}
         />
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -288,12 +295,12 @@ export default function LeadsPage() {
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">Date</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">Phone</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">Description</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">Source</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">Status</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">Actions</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_date', 'Date')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_phone', 'Phone')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{t(dict, 'label_description', 'Description')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_source', 'Source')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_status', 'Status')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_actions', 'Actions')}</th>
                 </tr>
               </thead>
               <tbody>

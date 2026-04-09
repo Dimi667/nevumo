@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
+import { t } from '@/lib/ui-translations';
 
 interface Option {
   value: string;
@@ -20,6 +22,7 @@ export default function SearchableSelect({
   onChange,
   placeholder,
 }: SearchableSelectProps) {
+  const { dict } = useDashboardI18n();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -80,7 +83,7 @@ export default function SearchableSelect({
           value={query}
           onChange={e => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Type to search…"
+          placeholder={t(dict, 'placeholder_type_to_search', 'Type to search…')}
           className="w-full px-3 py-2 text-sm border border-orange-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white"
         />
       ) : (
@@ -111,7 +114,7 @@ export default function SearchableSelect({
       {open && (
         <div className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-52 overflow-y-auto">
           {filtered.length === 0 ? (
-            <p className="px-3 py-2 text-sm text-gray-400">No results</p>
+            <p className="px-3 py-2 text-sm text-gray-400">{t(dict, 'msg_no_results', 'No results')}</p>
           ) : (
             filtered.map(opt => (
               <button

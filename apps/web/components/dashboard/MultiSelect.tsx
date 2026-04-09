@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
+import { t } from '@/lib/ui-translations';
 
 interface Option {
   value: string;
@@ -15,6 +17,7 @@ interface MultiSelectProps {
 }
 
 export default function MultiSelect({ options, values, onChange, placeholder }: MultiSelectProps) {
+  const { dict } = useDashboardI18n();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -57,10 +60,7 @@ export default function MultiSelect({ options, values, onChange, placeholder }: 
     <div ref={containerRef} className="relative">
       {/* Trigger */}
       <div
-        role="button"
-        tabIndex={0}
         onClick={() => setOpen(v => !v)}
-        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') setOpen(v => !v); }}
         className={`w-full min-h-[38px] px-3 py-2 text-sm border rounded-lg bg-white flex flex-wrap gap-1.5 items-center cursor-pointer transition-colors ${
           open ? 'border-orange-400 ring-2 ring-orange-300' : 'border-gray-300 hover:border-gray-400'
         }`}
@@ -78,26 +78,35 @@ export default function MultiSelect({ options, values, onChange, placeholder }: 
                 type="button"
                 onMouseDown={e => { e.preventDefault(); remove(opt.value, e); }}
                 className="hover:text-orange-900 leading-none"
-                aria-label={`Remove ${opt.label}`}
+                aria-label={`${t(dict, 'aria_remove_item', 'Remove')} ${opt.label}`}
               >
                 ×
               </button>
             </span>
           ))
         )}
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="text-gray-400 ml-auto flex-shrink-0"
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(v => !v);
+          }}
+          aria-label={t(dict, 'aria_open_menu', 'Open menu')}
+          className="ml-auto flex-shrink-0 text-gray-400 hover:text-gray-600"
         >
-          <polyline points={open ? '18 15 12 9 6 15' : '6 9 12 15 18 9'} />
-        </svg>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points={open ? '18 15 12 9 6 15' : '6 9 12 15 18 9'} />
+          </svg>
+        </button>
       </div>
 
       {/* Dropdown */}
@@ -110,13 +119,13 @@ export default function MultiSelect({ options, values, onChange, placeholder }: 
               value={query}
               onChange={e => setQuery(e.target.value)}
               onKeyDown={e => e.key === 'Escape' && setOpen(false)}
-              placeholder="Type to search…"
+              placeholder={t(dict, 'placeholder_type_to_search', 'Type to search…')}
               className="w-full px-2 py-1 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-300 focus:border-orange-400"
             />
           </div>
           <div className="max-h-48 overflow-y-auto">
             {filtered.length === 0 ? (
-              <p className="px-3 py-2 text-sm text-gray-400">No results</p>
+              <p className="px-3 py-2 text-sm text-gray-400">{t(dict, 'msg_no_results', 'No results')}</p>
             ) : (
               filtered.map(opt => {
                 const selected = values.includes(opt.value);

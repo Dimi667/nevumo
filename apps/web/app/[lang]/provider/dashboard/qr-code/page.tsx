@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { getEnhancedQRCode, downloadEnhancedQRSVG } from '@/lib/provider-api';
+import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
+import { t } from '@/lib/ui-translations';
 
 interface QRData {
   public_url: string;
@@ -48,6 +50,8 @@ const SUPPORTED_LANGUAGES = [
 ];
 
 export default function QRCodePage() {
+   const { dict } = useDashboardI18n();
+
   const [enhancedQr, setEnhancedQr] = useState<EnhancedQRData | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState('bg');
   const [loading, setLoading] = useState(false);
@@ -60,7 +64,7 @@ export default function QRCodePage() {
       const data = await getEnhancedQRCode(selectedLanguage);
       setEnhancedQr(data);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Failed to generate QR code');
+      setError(e instanceof Error ? e.message : t(dict, 'msg_failed_generate_qr', 'Failed to generate QR code'));
     } finally {
       setLoading(false);
     }
@@ -71,22 +75,22 @@ export default function QRCodePage() {
     try {
       await downloadEnhancedQRSVG(selectedLanguage, `nevumo-qr-${selectedLanguage}.svg`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to download QR code');
+      setError(e instanceof Error ? e.message : t(dict, 'msg_failed_download_qr', 'Failed to download QR code'));
     }
   }
 
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">QR Code</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Share your provider profile with a QR code</p>
+        <h1 className="text-xl font-bold text-gray-900">{t(dict, 'nav_qr_code', 'QR Code')}</h1>
+        <p className="text-sm text-gray-500 mt-0.5">{t(dict, 'qr_code_subtitle', 'Share your provider profile with a QR code')}</p>
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
         {/* Language Selection */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            QR Code Language
+            {t(dict, 'label_qr_code_language', 'QR Code Language')}
           </label>
           <select
             value={selectedLanguage}
@@ -100,14 +104,12 @@ export default function QRCodePage() {
             ))}
           </select>
           <p className="text-xs text-gray-500 mt-1">
-            The QR code text and slogan will be displayed in this language
+            {t(dict, 'msg_qr_language_description', 'The QR code text and slogan will be displayed in this language')}
           </p>
         </div>
 
         <p className="text-sm text-gray-600">
-          Share this QR code on your business cards, flyers, or at your location.
-          Clients scan it to reach your profile directly.
-          Enhanced QR codes include your business name and a call-to-action slogan.
+          {t(dict, 'msg_qr_share_description', 'Share this QR code on your business cards, flyers, or at your location. Clients scan it to reach your profile directly. Enhanced QR codes include your business name and a call-to-action slogan.')}
         </p>
 
         {!enhancedQr ? (
@@ -117,7 +119,7 @@ export default function QRCodePage() {
               disabled={loading}
               className="px-5 py-2.5 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-xl transition-colors"
             >
-              {loading ? 'Generating…' : 'Generate QR Code'}
+              {loading ? t(dict, 'msg_generating', 'Generating…') : t(dict, 'btn_generate_qr_code', 'Generate QR Code')}
             </button>
             {error && <p className="text-xs text-red-600">{error}</p>}
           </div>
@@ -136,17 +138,17 @@ export default function QRCodePage() {
 
             {/* Enhanced QR Info */}
             <div className="bg-orange-50 rounded-lg px-4 py-3">
-              <p className="text-xs text-orange-600 font-medium mb-1">Enhanced QR Code</p>
+              <p className="text-xs text-orange-600 font-medium mb-1">{t(dict, 'label_enhanced_qr_code', 'Enhanced QR Code')}</p>
               <p className="text-sm text-gray-700">
-                <span className="font-medium">Business:</span> {enhancedQr.business_name}<br/>
-                <span className="font-medium">Service:</span> {enhancedQr.service_name}<br/>
-                <span className="font-medium">Language:</span> {SUPPORTED_LANGUAGES.find(l => l.code === enhancedQr.language)?.name}
+                <span className="font-medium">{t(dict, 'label_business', 'Business')}:</span> {enhancedQr.business_name}<br/>
+                <span className="font-medium">{t(dict, 'nav_services', 'Service')}:</span> {enhancedQr.service_name}<br/>
+                <span className="font-medium">{t(dict, 'label_language', 'Language')}:</span> {SUPPORTED_LANGUAGES.find(l => l.code === enhancedQr.language)?.name}
               </p>
             </div>
 
             {/* URL */}
             <div className="bg-gray-50 rounded-lg px-4 py-3">
-              <p className="text-xs text-gray-500 mb-1">Your QR URL</p>
+              <p className="text-xs text-gray-500 mb-1">{t(dict, 'label_your_qr_url', 'Your QR URL')}</p>
               <a
                 href={enhancedQr.public_url}
                 target="_blank"
@@ -157,7 +159,7 @@ export default function QRCodePage() {
               </a>
             </div>
             <div className="bg-gray-50 rounded-lg px-4 py-3">
-              <p className="text-xs text-gray-500 mb-1">Canonical profile URL</p>
+              <p className="text-xs text-gray-500 mb-1">{t(dict, 'label_canonical_profile_url', 'Canonical profile URL')}</p>
               <a
                 href={enhancedQr.canonical_url}
                 target="_blank"
@@ -179,13 +181,13 @@ export default function QRCodePage() {
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
                 </svg>
-                Download
+                {t(dict, 'btn_download', 'Download')}
               </button>
               <button
                 onClick={() => setEnhancedQr(null)}
                 className="px-4 py-2 border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-medium rounded-lg transition-colors"
               >
-                Regenerate
+                {t(dict, 'btn_regenerate', 'Regenerate')}
               </button>
             </div>
           </div>

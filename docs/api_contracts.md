@@ -1013,10 +1013,17 @@ Check if a slug redirects to another slug without following the redirect. Used b
 - `lang` is required and validated as a query param with `min_length=2`, `max_length=5`.
 - `namespace` is required and validated as a query param with `min_length=1`, `max_length=50`.
 
+### Supported Namespaces
+
+- `homepage` - Homepage UI strings
+- `client_dashboard` - Client dashboard UI strings
+- `provider_dashboard` - Provider dashboard UI strings (339 keys, 34 languages)
+
 ### Request Example
 
 ```http
 GET /api/v1/translations?lang=pl&namespace=homepage
+GET /api/v1/translations?lang=bg&namespace=provider_dashboard
 ```
 
 ### Behavior
@@ -1029,8 +1036,8 @@ GET /api/v1/translations?lang=pl&namespace=homepage
 - Cache key format: `translations:{lang}:{namespace}`
 - Cache TTL: `3600` seconds (1 hour)
 - Cached payloads are stored as serialized JSON objects
-- If the requested language returns no rows and `lang != 'en'`, the backend performs a second query for English rows
-- Fallback chain is: requested language → `en` → empty object
+- Backend reads both requested language rows and English rows when `lang != 'en'`
+- Per-key fallback chain is: requested language key → English key → omitted from payload
 - Empty results are returned successfully as `{}`
 - Current implementation only writes to Redis when the result is non-empty
 

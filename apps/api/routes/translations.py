@@ -29,29 +29,23 @@ def get_translations(
     rows = (
         db.query(Translation)
         .filter(
-            Translation.lang == lang,
+            Translation.lang.in_([lang, "en"] if lang != "en" else ["en"]),
             Translation.key.like(f"{prefix}%"),
         )
         .all()
     )
 
-    result: dict[str, str] = {}
+    english_result: dict[str, str] = {}
+    localized_result: dict[str, str] = {}
     for row in rows:
         short_key = row.key[len(prefix):]
-        result[short_key] = row.value
+        if row.lang == "en":
+            english_result[short_key] = row.value
+        else:
+            localized_result[short_key] = row.value
 
-    if not result and lang != "en":
-        rows_en = (
-            db.query(Translation)
-            .filter(
-                Translation.lang == "en",
-                Translation.key.like(f"{prefix}%"),
-            )
-            .all()
-        )
-        for row in rows_en:
-            short_key = row.key[len(prefix):]
-            result[short_key] = row.value
+    result = english_result.copy()
+    result.update(localized_result)
 
     if redis_client and result:
         redis_client.setex(cache_key, 3600, json.dumps(result))

@@ -1,22 +1,27 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useParams } from 'next/navigation';
 import type { CategoryOut, CityOut } from '@/lib/api';
 import { getCategories, getCities } from '@/lib/api';
 import ServiceCard from '@/components/dashboard/ServiceCard';
 import SearchableSelect from '@/components/dashboard/SearchableSelect';
 import MultiSelect from '@/components/dashboard/MultiSelect';
+import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import type { Service, PriceType } from '@/types/provider';
 import { getProviderServices, createService, updateService, deleteService } from '@/lib/provider-api';
+import { t, type TranslationDict } from '@/lib/ui-translations';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const PRICE_TYPES: { value: PriceType; label: string }[] = [
-  { value: 'fixed', label: 'Fixed price' },
-  { value: 'hourly', label: 'Per hour' },
-  { value: 'request', label: 'Per request (quote)' },
-  { value: 'per_sqm', label: 'Per sq.m.' },
-];
+function getPriceTypes(dict: TranslationDict): { value: PriceType; label: string }[] {
+  return [
+    { value: 'fixed', label: t(dict, 'price_type_fixed', 'Fixed price') },
+    { value: 'hourly', label: t(dict, 'price_type_hourly', 'Per hour') },
+    { value: 'request', label: t(dict, 'price_type_request', 'Per request (quote)') },
+    { value: 'per_sqm', label: t(dict, 'price_type_per_sqm', 'Per sq.m.') },
+  ];
+}
 
 const CURRENCIES = ['EUR', 'USD', 'GBP', 'CHF', 'CZK', 'DKK', 'HUF', 'PLN', 'RON', 'SEK', 'NOK', 'TRY'];
 
@@ -70,20 +75,22 @@ function DeleteModal({
   onConfirm,
   onCancel,
   deleting,
+  dict,
 }: {
   service: Service;
   onConfirm: () => void;
   onCancel: () => void;
   deleting: boolean;
+  dict: TranslationDict;
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full mx-4 space-y-4">
-        <h3 className="text-base font-semibold text-gray-900">Delete service</h3>
+        <h3 className="text-base font-semibold text-gray-900">{t(dict, 'btn_delete_service', 'Delete service')}</h3>
         <p className="text-sm text-gray-500">
-          Are you sure you want to delete{' '}
+          {t(dict, 'msg_delete_confirm', 'Are you sure you want to delete')}{' '}
           <span className="font-medium text-gray-800">{service.title}</span>?
-          This action cannot be undone.
+          {t(dict, 'msg_delete_undo_warning', 'This action cannot be undone.')}
         </p>
         <div className="flex gap-3 pt-1">
           <button
@@ -91,14 +98,14 @@ function DeleteModal({
             disabled={deleting}
             className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
-            Cancel
+            {t(dict, 'btn_cancel', 'Cancel')}
           </button>
           <button
             onClick={onConfirm}
             disabled={deleting}
             className="flex-1 px-4 py-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            {deleting ? 'Deleting…' : 'Delete'}
+            {deleting ? t(dict, 'msg_deleting', 'Deleting…') : t(dict, 'btn_delete', 'Delete')}
           </button>
         </div>
       </div>
@@ -122,6 +129,7 @@ function ServiceForm({
   formError,
   onSave,
   onCancel,
+  dict,
 }: {
   mode: FormMode;
   form: ServiceForm;
@@ -136,23 +144,24 @@ function ServiceForm({
   formError: string | null;
   onSave: () => void;
   onCancel: () => void;
+  dict: TranslationDict;
 }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
       <h2 className="text-sm font-semibold text-gray-800">
-        {mode === 'new' ? 'New Service' : 'Edit Service'}
+        {mode === 'new' ? t(dict, 'btn_new_service', 'New Service') : t(dict, 'btn_edit_service', 'Edit Service')}
       </h2>
 
       {/* Title */}
       <div>
         <label className="block text-xs font-medium text-gray-700 mb-1">
-          Title <span className="text-red-400">*</span>
+          {t(dict, 'label_title', 'Title')} <span className="text-red-400">*</span>
         </label>
         <input
           type="text"
           value={form.title}
           onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-          placeholder="e.g. Apartment cleaning"
+          placeholder={t(dict, 'placeholder_service_title_example', 'e.g. Apartment cleaning')}
           className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 ${
             errors.title ? 'border-red-400' : 'border-gray-300'
           }`}
@@ -163,13 +172,13 @@ function ServiceForm({
       {/* Description */}
       <div>
         <label className="block text-xs font-medium text-gray-700 mb-1">
-          Description <span className="text-gray-400 font-normal">(optional)</span>
+          {t(dict, 'label_description', 'Description')} <span className="text-gray-400">({t(dict, 'label_optional', 'optional')})</span>
         </label>
         <textarea
           value={form.description}
           onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
           rows={2}
-          placeholder="Brief description…"
+          placeholder={t(dict, 'placeholder_description', 'Brief description…')}
           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 resize-none"
         />
       </div>
@@ -177,13 +186,13 @@ function ServiceForm({
       {/* Category */}
       <div>
         <label className="block text-xs font-medium text-gray-700 mb-1">
-          Category <span className="text-red-400">*</span>
+          {t(dict, 'label_category', 'Category')} <span className="text-red-400">*</span>
         </label>
         <SearchableSelect
           options={categoryOptions}
           value={form.category_slug}
           onChange={v => setForm(f => ({ ...f, category_slug: v }))}
-          placeholder="Select a category"
+          placeholder={t(dict, 'placeholder_select_category', 'Select a category')}
         />
         {errors.category_slug && <p className="text-xs text-red-500 mt-1">{errors.category_slug}</p>}
       </div>
@@ -191,7 +200,7 @@ function ServiceForm({
       {/* Cities */}
       <div>
         <label className="block text-xs font-medium text-gray-700 mb-1">
-          Cities <span className="text-red-400">*</span>
+          {t(dict, 'label_cities', 'Cities')} <span className="text-red-400">*</span>
         </label>
         <MultiSelect
           options={cityOptions}
@@ -208,21 +217,21 @@ function ServiceForm({
               }
             }
           }}
-          placeholder="Select cities where you offer this service"
+          placeholder={t(dict, 'placeholder_select_cities', 'Select cities where you offer this service')}
         />
         {errors.city_ids && <p className="text-xs text-red-500 mt-1">{errors.city_ids}</p>}
       </div>
 
       {/* Price type */}
       <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">Price type</label>
+        <label className="block text-xs font-medium text-gray-700 mb-1">{t(dict, 'label_price_type', 'Price type')}</label>
         <select
           value={form.price_type}
           onChange={e => setForm(f => ({ ...f, price_type: e.target.value as PriceType }))}
           className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 bg-white"
-          aria-label="Price type"
+          aria-label={t(dict, 'label_price_type', 'Price type')}
         >
-          {PRICE_TYPES.map(pt => (
+          {getPriceTypes(dict).map(pt => (
             <option key={pt.value} value={pt.value}>{pt.label}</option>
           ))}
         </select>
@@ -232,7 +241,8 @@ function ServiceForm({
       {form.price_type !== 'request' && (
         <div>
           <label className="block text-xs font-medium text-gray-700 mb-1">
-            Price in {detectedCurrency} <span className="text-gray-400 font-normal">(optional)</span>
+            {t(dict, 'label_price_in_currency', 'Price in {currency}').replace('{currency}', detectedCurrency)}{' '}
+            <span className="text-gray-400 font-normal">({t(dict, 'label_optional', 'optional')})</span>
           </label>
           <input
             type="number"
@@ -255,7 +265,7 @@ function ServiceForm({
           disabled={saving}
           className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
         >
-          {saving ? 'Saving…' : mode === 'new' ? 'Create Service' : 'Save Changes'}
+          {saving ? t(dict, 'msg_saving', 'Saving…') : (mode === 'new' ? t(dict, 'btn_create_service', 'Create Service') : t(dict, 'btn_save_changes', 'Save Changes'))}
         </button>
         <button
           type="button"
@@ -263,7 +273,7 @@ function ServiceForm({
           disabled={saving}
           className="px-4 py-2 border border-gray-300 text-gray-600 hover:bg-gray-100 text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
         >
-          Cancel
+          {t(dict, 'btn_cancel', 'Cancel')}
         </button>
       </div>
     </div>
@@ -273,6 +283,10 @@ function ServiceForm({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function ServicesPage() {
+  const params = useParams();
+  const lang = typeof params.lang === 'string' ? params.lang : 'en';
+  const { dict } = useDashboardI18n();
+
   const [services, setServices] = useState<Service[]>([]);
   const [categories, setCategories] = useState<CategoryOut[]>([]);
   const [cities, setCities] = useState<CityOut[]>([]);
@@ -297,7 +311,7 @@ export default function ServicesPage() {
   useEffect(() => {
     Promise.all([
       getProviderServices(),
-      getCategories('en'),
+      getCategories(lang),
       getCities('BG'),
       getCities('RS'),
     ])
@@ -308,7 +322,7 @@ export default function ServicesPage() {
       })
       .catch((e: Error) => setLoadError(e.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [lang]);
 
   function openNew() {
     setFormMode('new');
@@ -344,9 +358,9 @@ export default function ServicesPage() {
 
   function validate(): boolean {
     const errors: FormErrors = {};
-    if (!form.title.trim()) errors.title = 'Title is required';
-    if (!form.category_slug) errors.category_slug = 'Category is required';
-    if (form.city_ids.length === 0) errors.city_ids = 'At least one city is required';
+    if (!form.title.trim()) errors.title = t(dict, 'error_title_required', 'Title is required');
+    if (!form.category_slug) errors.category_slug = t(dict, 'error_category_required', 'Category is required');
+    if (form.city_ids.length === 0) errors.city_ids = t(dict, 'error_city_required', 'At least one city is required');
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   }
@@ -376,15 +390,15 @@ export default function ServicesPage() {
       if (formMode === 'new') {
         const created = await createService(payload);
         setServices(prev => [...prev, created]);
-        setToast('Service created successfully');
+        setToast(t(dict, 'msg_service_created', 'Service created successfully'));
       } else if (editingId) {
         const updated = await updateService(editingId, payload);
         setServices(prev => prev.map(s => s.id === editingId ? updated : s));
-        setToast('Service updated successfully');
+        setToast(t(dict, 'msg_service_updated', 'Service updated successfully'));
       }
       closeForm();
     } catch (e: unknown) {
-      setFormError(e instanceof Error ? e.message : 'Failed to save service');
+      setFormError(e instanceof Error ? e.message : t(dict, 'msg_failed_save_service', 'Failed to save service'));
     } finally {
       setSaving(false);
     }
@@ -396,10 +410,10 @@ export default function ServicesPage() {
     try {
       await deleteService(deleteTarget.id);
       setServices(prev => prev.filter(s => s.id !== deleteTarget.id));
-      setToast('Service deleted');
+      setToast(t(dict, 'msg_service_deleted', 'Service deleted'));
       setDeleteTarget(null);
     } catch (e: unknown) {
-      setToast(e instanceof Error ? e.message : 'Failed to delete service');
+      setToast(e instanceof Error ? e.message : t(dict, 'msg_failed_delete_service', 'Failed to delete service'));
       setDeleteTarget(null);
     } finally {
       setDeleting(false);
@@ -420,7 +434,7 @@ export default function ServicesPage() {
   if (loadError) {
     return (
       <div className="bg-red-50 text-red-700 rounded-xl p-4 text-sm">
-        Failed to load services: {loadError}
+        {t(dict, 'msg_failed_load_services', 'Failed to load services')}: {loadError}
       </div>
     );
   }
@@ -434,6 +448,7 @@ export default function ServicesPage() {
           onConfirm={handleDeleteConfirm}
           onCancel={() => setDeleteTarget(null)}
           deleting={deleting}
+          dict={dict}
         />
       )}
 
@@ -441,8 +456,10 @@ export default function ServicesPage() {
         {/* Header */}
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Services</h1>
-            <p className="text-sm text-gray-500 mt-0.5">{services.length} service{services.length !== 1 ? 's' : ''}</p>
+            <h1 className="text-xl font-bold text-gray-900">{t(dict, 'nav_services', 'Services')}</h1>
+            <p className="text-sm text-gray-500 mt-0.5">
+              {t(dict, 'msg_services_count', '{count} services').replace('{count}', String(services.length))}
+            </p>
           </div>
           {!showForm && (
             <button
@@ -452,7 +469,7 @@ export default function ServicesPage() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              Add Service
+              {t(dict, 'btn_add_service', 'Add Service')}
             </button>
           )}
         </div>
@@ -473,14 +490,15 @@ export default function ServicesPage() {
             formError={formError}
             onSave={handleSave}
             onCancel={closeForm}
+            dict={dict}
           />
         )}
 
         {/* Empty state */}
         {services.length === 0 && !showForm ? (
           <div className="bg-white rounded-xl border border-gray-200 p-10 text-center space-y-3">
-            <p className="text-sm font-medium text-gray-700">No services yet</p>
-            <p className="text-xs text-gray-400">Add the services you offer to start receiving leads.</p>
+            <p className="text-sm font-medium text-gray-700">{t(dict, 'msg_no_services_yet', 'No services yet')}</p>
+            <p className="text-xs text-gray-400">{t(dict, 'msg_add_services_desc', 'Add the services you offer to start receiving leads.')}</p>
             <button
               onClick={openNew}
               className="mt-2 inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
@@ -488,7 +506,7 @@ export default function ServicesPage() {
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              Add Service
+              {t(dict, 'btn_add_service', 'Add Service')}
             </button>
           </div>
         ) : (

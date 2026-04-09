@@ -2,6 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { clearAuth, getAuthUser } from '@/lib/auth-store';
+import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
+import { t } from '@/lib/ui-translations';
 
 interface DashboardTopBarProps {
   onMenuClick: () => void;
@@ -11,6 +13,7 @@ interface DashboardTopBarProps {
 export default function DashboardTopBar({ onMenuClick, lang }: DashboardTopBarProps) {
   const router = useRouter();
   const user = getAuthUser();
+  const { dict } = useDashboardI18n();
 
   function handleLogout() {
     clearAuth();
@@ -23,7 +26,7 @@ export default function DashboardTopBar({ onMenuClick, lang }: DashboardTopBarPr
       <button
         onClick={onMenuClick}
         className="md:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-        aria-label="Open menu"
+        aria-label={t(dict, 'aria_open_menu', 'Open menu')}
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <line x1="3" y1="12" x2="21" y2="12" />
@@ -51,7 +54,7 @@ export default function DashboardTopBar({ onMenuClick, lang }: DashboardTopBarPr
             <polyline points="16 17 21 12 16 7" />
             <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
-          <span className="hidden sm:inline">Logout</span>
+          <span className="hidden sm:inline">{t(dict, 'btn_log_out', 'Log out')}</span>
         </button>
       </div>
     </header>

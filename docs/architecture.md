@@ -264,7 +264,7 @@ Used for:
  - Reads from the `translations` table where records are stored as `namespace.key`
  - Returns a flat JSON object without the namespace prefix so frontend consumers can access keys directly
  - Redis caches payloads by language and namespace for 1 hour using `translations:{lang}:{namespace}`
- - When a requested language has no rows for a namespace, the backend falls back to `en` before returning an empty payload
+ - When a requested language is not `en`, the backend merges English rows with localized rows and returns localized keys first with per-key English fallback for anything missing
 
 ### Translation System Architecture
 - **Source of truth**: PostgreSQL `translations` table
@@ -288,6 +288,7 @@ Used for:
   - development: `cache: 'no-store'`
   - production: Next.js `revalidate: 3600`
 - Consumers use `t(dict, key, fallback)` to keep rendering resilient when keys are missing
+- Provider dashboard now centralizes `provider_dashboard` loading in `apps/web/lib/provider-dashboard-i18n.tsx`, with `DashboardI18nProvider` mounted in the dashboard layout so pages and shared dashboard components read one shared dictionary and locale-aware date formatter
 
 ### Translation Fallback Chain
 - Requested language is attempted first

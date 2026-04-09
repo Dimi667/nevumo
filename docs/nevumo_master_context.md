@@ -90,11 +90,13 @@ Nevumo е уеб платформа за marketplace на услуги.
 bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, nl, no, pl, pt, pt-PT, ro, ru, sk, sl, sq, sr, sv, tr, uk
 
 - Default language: en
-- UI translation seed status (April 4, 2026):
+- UI translation seed status (April 9, 2026):
   - `43` homepage keys per language
   - `24` category-page keys per language
   - `67` total UI keys per language
   - `2,788` rows in `translations` for homepage/category namespaces across 34 languages
+  - `339` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services)
+  - `11,526` rows in `translations` for provider_dashboard namespace across 34 languages
 
 ---
 
@@ -228,7 +230,8 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Backend file: `apps/api/routes/translations.py`
   - Router mounted in `apps/api/main.py`
   - Redis cache key pattern: `translations:{lang}:{namespace}` with 1 hour TTL
-  - English fallback when requested language has no rows for a namespace
+  - Per-key English fallback when requested language is missing part of a namespace payload
+- **Provider Dashboard i18n Hardening** — provider dashboard shell and pages now share one `provider_dashboard` dictionary via `DashboardI18nProvider`, use locale-aware category/date loading, and ship DB-backed translations for the remaining shared dashboard UI copy
 - **Verified UI Translation Coverage** — Homepage and category UI copy seeded for 34 languages:
   - Source script: `apps/api/scripts/seed_ui_translations.py`
   - Exact DB-backed UI key counts: `43` homepage + `24` category = `67` per language

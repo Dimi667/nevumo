@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { formatDashboardDate, useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import { getProviderReviews, addReviewReply, updateReviewReply } from '@/lib/review-api';
 import type { ProviderReviewItem } from '@/types/review';
+import { t } from '@/lib/ui-translations';
 
 export default function ProviderReviewsPage() {
-  const params = useParams();
-  const lang = typeof params.lang === 'string' ? params.lang : 'en';
+  const { dict, lang } = useDashboardI18n();
 
   const [reviews, setReviews] = useState<ProviderReviewItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ export default function ProviderReviewsPage() {
       });
       setReviews(data.items);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Failed to load reviews');
+      setError(e instanceof Error ? e.message : t(dict, 'msg_failed_load_reviews', 'Failed to load reviews'));
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export default function ProviderReviewsPage() {
       setEditReplyId(null);
       setReplyText('');
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Failed to submit reply');
+      setError(e instanceof Error ? e.message : t(dict, 'msg_failed_submit_reply', 'Failed to submit reply'));
     } finally {
       setSubmitting(false);
     }
@@ -92,9 +92,9 @@ export default function ProviderReviewsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Reviews</h1>
+        <h1 className="text-xl font-bold text-gray-900">{t(dict, 'nav_reviews', 'Reviews')}</h1>
         <p className="text-sm text-gray-500 mt-0.5">
-          Manage your client reviews and replies
+          {t(dict, 'reviews_subtitle', 'Manage your client reviews and replies')}
         </p>
       </div>
 
@@ -108,7 +108,7 @@ export default function ProviderReviewsPage() {
               : 'border-transparent text-gray-600 hover:text-gray-900'
           }`}
         >
-          All Reviews
+          {t(dict, 'label_all_reviews', 'All Reviews')}
           <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">
             {reviews.length}
           </span>
@@ -121,7 +121,7 @@ export default function ProviderReviewsPage() {
               : 'border-transparent text-gray-600 hover:text-gray-900'
           }`}
         >
-          Unreplied
+          {t(dict, 'label_unreplied', 'Unreplied')}
           {unrepliedCount > 0 && (
             <span className="ml-2 px-2 py-0.5 bg-orange-100 text-orange-600 text-xs rounded-full">
               {unrepliedCount}
@@ -141,9 +141,9 @@ export default function ProviderReviewsPage() {
         {reviews.length === 0 ? (
           <div className="bg-gray-50 rounded-xl p-8 text-center">
             <div className="text-4xl mb-3">⭐</div>
-            <h3 className="text-lg font-medium text-gray-900 mb-1">No reviews yet</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-1">{t(dict, 'msg_no_reviews_yet', 'No reviews yet')}</h3>
             <p className="text-sm text-gray-500">
-              When clients review your services, they will appear here.
+              {t(dict, 'msg_reviews_appear_here', 'When clients review your services, they will appear here.')}
             </p>
           </div>
         ) : (
@@ -160,7 +160,7 @@ export default function ProviderReviewsPage() {
                       {review.client_name}
                     </span>
                     <span className="text-xs text-gray-400">
-                      {new Date(review.created_at).toLocaleDateString()}
+                      {formatDashboardDate(review.created_at, lang)}
                     </span>
                   </div>
                   <div className="flex items-center gap-1 mt-1">
@@ -181,7 +181,7 @@ export default function ProviderReviewsPage() {
                 </div>
                 {!review.provider_reply && (
                   <span className="px-2 py-1 bg-orange-100 text-orange-600 text-xs font-medium rounded-full">
-                    Needs Reply
+                    {t(dict, 'label_needs_reply', 'Needs Reply')}
                   </span>
                 )}
               </div>
@@ -197,12 +197,12 @@ export default function ProviderReviewsPage() {
               {review.provider_reply ? (
                 <div className="bg-blue-50 rounded-lg p-3 border-l-4 border-blue-400">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-medium text-blue-600">Your Reply</span>
+                    <span className="text-xs font-medium text-blue-600">{t(dict, 'label_your_reply', 'Your Reply')}</span>
                     <div className="flex items-center gap-2">
                       {review.is_reply_edited && (
                         <span className="text-xs text-gray-500">
-                          Edited {review.provider_reply_edited_at
-                            ? new Date(review.provider_reply_edited_at).toLocaleDateString()
+                          {t(dict, 'label_edited', 'Edited')} {review.provider_reply_edited_at
+                            ? formatDashboardDate(review.provider_reply_edited_at, lang)
                             : ''}
                         </span>
                       )}
@@ -210,7 +210,7 @@ export default function ProviderReviewsPage() {
                         onClick={() => startEdit(review)}
                         className="text-xs text-blue-600 hover:text-blue-700 font-medium"
                       >
-                        Edit
+                        {t(dict, 'btn_edit', 'Edit')}
                       </button>
                     </div>
                   </div>
@@ -222,21 +222,21 @@ export default function ProviderReviewsPage() {
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows={3}
                         maxLength={2000}
-                        placeholder="Write your reply..."
+                        placeholder={t(dict, 'placeholder_write_reply', 'Write your reply...')}
                       />
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={cancelReply}
                           className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-800"
                         >
-                          Cancel
+                          {t(dict, 'btn_cancel', 'Cancel')}
                         </button>
                         <button
                           onClick={() => handleSubmitReply(review.id, true)}
                           disabled={submitting || !replyText.trim()}
                           className="px-3 py-1.5 bg-blue-500 text-white text-xs font-medium rounded-lg hover:bg-blue-600 disabled:opacity-50"
                         >
-                          {submitting ? 'Saving...' : 'Save Changes'}
+                          {submitting ? t(dict, 'msg_saving', 'Saving...') : t(dict, 'btn_save_changes', 'Save Changes')}
                         </button>
                       </div>
                     </div>
@@ -252,21 +252,21 @@ export default function ProviderReviewsPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                     rows={3}
                     maxLength={2000}
-                    placeholder="Write your reply to this review..."
+                    placeholder={t(dict, 'placeholder_write_reply_review', 'Write your reply to this review...')}
                   />
                   <div className="flex justify-end gap-2">
                     <button
                       onClick={cancelReply}
                       className="px-3 py-1.5 text-xs text-gray-600 hover:text-gray-800"
                     >
-                      Cancel
+                      {t(dict, 'btn_cancel', 'Cancel')}
                     </button>
                     <button
                       onClick={() => handleSubmitReply(review.id, false)}
                       disabled={submitting || !replyText.trim()}
                       className="px-3 py-1.5 bg-orange-500 text-white text-xs font-medium rounded-lg hover:bg-orange-600 disabled:opacity-50"
                     >
-                      {submitting ? 'Sending...' : 'Send Reply'}
+                      {submitting ? t(dict, 'msg_sending', 'Sending...') : t(dict, 'btn_send_reply', 'Send Reply')}
                     </button>
                   </div>
                 </div>
@@ -275,7 +275,7 @@ export default function ProviderReviewsPage() {
                   onClick={() => startReply(review.id)}
                   className="text-sm text-orange-500 hover:text-orange-600 font-medium"
                 >
-                  Reply to this review
+                  {t(dict, 'btn_reply_to_review', 'Reply to this review')}
                 </button>
               )}
             </div>

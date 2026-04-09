@@ -15,17 +15,21 @@ import {
   getProviderDashboard,
 } from '@/lib/provider-api';
 import SearchInput from '@/components/dashboard/SearchInput';
+import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import { getSlugValidationError, sanitizeSlug, slugify } from '@/lib/slug-utils';
 import { deriveOnboardingState, getHeroContent, CompactStepIndicator, saveStep1Draft, loadStep1Draft, clearStep1Draft } from '@/lib/onboarding-utils';
+import { t, type TranslationDict } from '@/lib/ui-translations';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const PRICE_TYPES: { value: PriceType; label: string }[] = [
-  { value: 'fixed', label: 'Fixed price' },
-  { value: 'hourly', label: 'Per hour' },
-  { value: 'request', label: 'Per request (quote)' },
-  { value: 'per_sqm', label: 'Per sq.m.' },
-];
+function getPriceTypes(dict: TranslationDict): { value: PriceType; label: string }[] {
+  return [
+    { value: 'fixed', label: t(dict, 'price_type_fixed', 'Fixed price') },
+    { value: 'hourly', label: t(dict, 'price_type_hourly', 'Per hour') },
+    { value: 'request', label: t(dict, 'price_type_request', 'Per request (quote)') },
+    { value: 'per_sqm', label: t(dict, 'price_type_per_sqm', 'Per sq.m.') },
+  ];
+}
 
 const CURRENCIES = ['EUR', 'USD', 'GBP', 'CHF', 'CZK', 'DKK', 'HUF', 'PLN', 'RON', 'SEK', 'NOK', 'TRY'];
 const MAX_SLUG_CHANGES = 1;
@@ -57,10 +61,12 @@ function AvatarUpload({
   imageUrl,
   uploading,
   onFileChange,
+  dict,
 }: {
   imageUrl: string | null;
   uploading: boolean;
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  dict: TranslationDict;
 }) {
   const ref = useRef<HTMLInputElement>(null);
   const [imageError, setImageError] = useState(false);
@@ -89,9 +95,10 @@ function AvatarUpload({
       }, 1000);
     } else {
       setImageError(true);
-      setErrorDetails(imageUrl?.startsWith('http') ? 
-        'Network error - check connection' : 
-        'Invalid image URL format'
+      setErrorDetails(
+        imageError && !navigator.onLine
+          ? t(dict, 'msg_network_error', 'Network error - check connection') 
+          : t(dict, 'msg_invalid_image_url', 'Invalid image URL format')
       );
     }
   };
@@ -120,7 +127,7 @@ function AvatarUpload({
         {imageUrl && !imageError ? (
           <img 
             src={retryCount > 0 ? getRetryUrl() : imageUrl} 
-            alt="Profile" 
+            alt={t(dict, 'label_profile', 'Profile')} 
             className="w-full h-full object-cover"
             onError={handleImageError}
             onLoad={handleImageLoad}
@@ -140,12 +147,12 @@ function AvatarUpload({
           disabled={uploading}
           className="px-3 py-1.5 border border-gray-300 text-gray-600 hover:bg-gray-100 text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
         >
-          {uploading ? 'Uploading…' : imageUrl ? 'Change photo' : 'Upload photo'}
+          {uploading ? t(dict, 'msg_uploading', 'Uploading…') : imageUrl ? t(dict, 'btn_change_photo', 'Change photo') : t(dict, 'btn_upload_photo', 'Upload photo')}
         </button>
-        <p className="text-xs text-gray-400 mt-0.5">JPG, PNG or WebP · max 5 MB</p>
+        <p className="text-xs text-gray-400 mt-0.5">{t(dict, 'msg_supported_image_formats', 'JPG, PNG or WebP · max 5 MB')}</p>
         {imageUrl && imageError && (
           <div className="mt-1">
-            <p className="text-xs text-red-500">Failed to load image</p>
+            <p className="text-xs text-red-500">{t(dict, 'msg_failed_load_image', 'Failed to load image')}</p>
             {errorDetails && (
               <p className="text-xs text-red-400 mt-0.5">{errorDetails}</p>
             )}
@@ -158,12 +165,12 @@ function AvatarUpload({
               }}
               className="text-xs text-orange-600 hover:text-orange-700 mt-0.5"
             >
-              Try again
+              {t(dict, 'btn_try_again', 'Try again')}
             </button>
           </div>
         )}
         {retryCount > 0 && !imageError && (
-          <p className="text-xs text-orange-600 mt-0.5">Retrying... ({retryCount}/3)</p>
+          <p className="text-xs text-orange-600 mt-0.5">{t(dict, 'msg_retrying', 'Retrying...')} ({retryCount}/3)</p>
         )}
       </div>
     </div>
@@ -174,12 +181,14 @@ function AvatarUpload({
 
 function StepIndicator({ 
   step, 
-  step1Valid,
-  step2Valid 
+  step1Valid, 
+  step2Valid,
+  dict
 }: { 
-  step: 1 | 2;
-  step1Valid?: boolean;
-  step2Valid?: boolean;
+  step: 1 | 2; 
+  step1Valid: boolean; 
+  step2Valid: boolean; 
+  dict: TranslationDict;
 }) {
   return (
     <div className="flex items-center gap-6">
@@ -197,7 +206,7 @@ function StepIndicator({
         <span className={`text-xs font-medium mt-2 ${
           step >= 1 ? 'text-gray-700' : 'text-gray-400'
         }`}>
-          Profile
+          {t(dict, 'label_profile_setup', 'Profile Setup')}
         </span>
       </div>
 
@@ -220,7 +229,7 @@ function StepIndicator({
         <span className={`text-xs font-medium mt-2 ${
           step === 2 ? 'text-gray-700' : 'text-gray-400'
         }`}>
-          Service
+          {t(dict, 'label_service', 'Service')}
         </span>
       </div>
     </div>
@@ -233,6 +242,7 @@ export default function ProfilePage() {
   const params = useParams();
   const router = useRouter();
   const lang = typeof params.lang === 'string' ? params.lang : 'en';
+  const { dict } = useDashboardI18n();
 
   // Load state
   const [profile, setProfile] = useState<ProviderProfile | null>(null);
@@ -302,7 +312,7 @@ export default function ProfilePage() {
   useEffect(() => {
     Promise.all([
       getProviderProfile(),
-      getCategories('en'),
+      getCategories(lang),
       getCities('BG'),
       getCities('RS'),
       getProviderDashboard(),
@@ -360,7 +370,7 @@ export default function ProfilePage() {
       })
       .catch((e: Error) => setLoadError(e.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [lang]);
 
   async function runStep1SlugCheck(candidate: string): Promise<boolean> {
     const trimmed = candidate.trim();
@@ -401,13 +411,13 @@ export default function ProfilePage() {
       }
 
       setStep1SlugAvailable(result.available);
-      setStep1SlugError(result.error ?? (result.available ? null : 'This URL is already taken'));
+      setStep1SlugError(result.error ?? (result.available ? null : t(dict, 'msg_url_taken', 'This URL is already taken')));
       setStep1SlugSuggestions(result.available ? [] : (result.suggestions ?? []));
       return result.available;
     } catch {
       if (slugCheckRequestRef.current === requestId) {
         setStep1SlugAvailable(null);
-        setStep1SlugError('Failed to check URL availability');
+        setStep1SlugError(t(dict, 'msg_failed_check_url', 'Failed to check URL availability'));
         setStep1SlugSuggestions([]);
       }
       return false;
@@ -454,7 +464,7 @@ export default function ProfilePage() {
     
     // Validate file size
     if (file.size > 5 * 1024 * 1024) {
-      const error = 'File size must be less than 5 MB';
+      const error = t(dict, 'msg_file_size_limit_5mb', 'File size must be less than 5 MB');
       console.error('AvatarUpload: Validation failed', { error, fileSize: file.size });
       alert(error);
       return;
@@ -462,7 +472,7 @@ export default function ProfilePage() {
     
     // Validate file type
     if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
-      const error = 'File must be JPG, PNG or WebP';
+      const error = t(dict, 'msg_file_type_jpg_png_webp', 'File must be JPG, PNG or WebP');
       console.error('AvatarUpload: Validation failed', { error, fileType: file.type });
       alert(error);
       return;
@@ -491,16 +501,16 @@ export default function ProfilePage() {
         timestamp: new Date().toISOString()
       });
       
-      let errorMessage = 'Failed to upload image. Please try again.';
+      let errorMessage = t(dict, 'msg_failed_upload_image', 'Failed to upload image. Please try again.');
       if (error instanceof Error) {
         if (error.message.includes('413')) {
-          errorMessage = 'File too large. Maximum size is 5 MB.';
+          errorMessage = t(dict, 'msg_file_too_large', 'File too large. Maximum size is 5 MB.');
         } else if (error.message.includes('422')) {
-          errorMessage = 'Invalid file format. Use JPG, PNG or WebP.';
+          errorMessage = t(dict, 'msg_invalid_file_format', 'Invalid file format. Use JPG, PNG or WebP.');
         } else if (error.message.includes('401')) {
-          errorMessage = 'Authentication error. Please log in again.';
+          errorMessage = t(dict, 'msg_authentication_error_login_again', 'Authentication error. Please log in again.');
         } else if (error.message.includes('429')) {
-          errorMessage = 'Too many upload attempts. Please wait a moment.';
+          errorMessage = t(dict, 'msg_too_many_upload_attempts', 'Too many upload attempts. Please wait a moment.');
         }
       }
       
@@ -522,7 +532,7 @@ export default function ProfilePage() {
   };
   const step1FieldErrors = {
     business_name: step1Touched.business_name && step1.business_name.trim().length < 2
-      ? 'Business name must be at least 2 characters'
+      ? t(dict, 'error_business_name_min_chars', 'Business name must be at least 2 characters')
       : undefined,
     slug: step1Touched.slug ? step1SlugError ?? undefined : undefined,
   };
@@ -599,7 +609,7 @@ export default function ProfilePage() {
         setStep1SlugSuggestions([]);
         return;
       }
-      setSaveError(e instanceof Error ? e.message : 'Failed to save profile');
+      setSaveError(e instanceof Error ? e.message : t(dict, 'msg_failed_save_profile', 'Failed to save profile'));
     } finally {
       console.log("FRONTEND: Finally block - setting saving to false");
       setSaving(false);
@@ -614,9 +624,9 @@ export default function ProfilePage() {
     city_ids: step2.city_ids.length > 0 && step2Touched.city_ids
   };
   const step2FieldErrors = {
-    title: step2Touched.title && !step2.title.trim() ? 'Title is required' : undefined,
-    category_slug: step2Touched.category_slug && !step2.category_slug ? 'Category is required' : undefined,
-    city_ids: step2Touched.city_ids && step2.city_ids.length === 0 ? 'At least one city is required' : undefined
+    title: step2Touched.title && !step2.title.trim() ? t(dict, 'error_title_required', 'Title is required') : undefined,
+    category_slug: step2Touched.category_slug && !step2.category_slug ? t(dict, 'error_category_required', 'Category is required') : undefined,
+    city_ids: step2Touched.city_ids && step2.city_ids.length === 0 ? t(dict, 'error_city_required', 'At least one city is required') : undefined
   };
 
   // ─── Step 2 submit ──────────────────────────────────────────────────────────
@@ -662,7 +672,7 @@ export default function ProfilePage() {
         router.push(`/${lang}/provider/dashboard`);
       }, 1000);
     } catch (e: unknown) {
-      setSaveError(e instanceof Error ? e.message : 'Failed to create service');
+      setSaveError(e instanceof Error ? e.message : t(dict, 'msg_failed_create_service', 'Failed to create service'));
       setSaving(false);
     }
   }
@@ -683,7 +693,7 @@ export default function ProfilePage() {
       setEditSuccess(true);
       setTimeout(() => setEditSuccess(false), 3000);
     } catch (e: unknown) {
-      setEditError(e instanceof Error ? e.message : 'Failed to save');
+      setEditError(e instanceof Error ? e.message : t(dict, 'msg_failed_save', 'Failed to save'));
     } finally {
       setEditSaving(false);
     }
@@ -708,7 +718,7 @@ export default function ProfilePage() {
   if (loadError && !profile) {
     return (
       <div className="bg-red-50 text-red-700 rounded-xl p-4 text-sm">
-        Failed to load profile: {loadError}
+        {t(dict, 'msg_failed_load_profile', 'Failed to load profile')}: {loadError}
       </div>
     );
   }
@@ -719,31 +729,31 @@ export default function ProfilePage() {
     return (
       <div className="max-w-lg mx-auto space-y-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Complete your profile</h1>
+          <h1 className="text-xl font-bold text-gray-900">{t(dict, 'label_complete_profile', 'Complete your profile')}</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            Start receiving client requests in minutes
+            {t(dict, 'msg_start_receiving', 'Start receiving client requests in minutes')}
           </p>
         </div>
 
-        <StepIndicator step={step} step1Valid={step1Valid} step2Valid={step2Valid} />
+        <StepIndicator step={step} step1Valid={step1Valid} step2Valid={step2Valid} dict={dict} />
 
         {/* ── Step 1: Profile ── */}
         {step === 1 && (
           <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
-            <h2 className="text-sm font-semibold text-gray-800">Profile Setup</h2>
+            <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_profile_setup', 'Profile Setup')}</h2>
 
             {/* Photo */}
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-2">
-                Profile photo <span className="text-gray-400 font-normal">(optional)</span>
+                {t(dict, 'label_profile_photo', 'Profile photo')} <span className="text-gray-400 font-normal">({t(dict, 'label_optional', 'optional')})</span>
               </label>
-              <AvatarUpload imageUrl={imageUrl} uploading={uploading} onFileChange={handleImageChange} />
+              <AvatarUpload imageUrl={imageUrl} uploading={uploading} onFileChange={handleImageChange} dict={dict} />
             </div>
 
             {/* Business name */}
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
-                Business name <span className="text-red-400">*</span>
+                {t(dict, 'label_business_name', 'Business name')} <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
@@ -767,7 +777,7 @@ export default function ProfilePage() {
                   setStep1SlugSuggestions([]);
                   setSaveError(null);
                 }}
-                placeholder="e.g. Sofia Plumbing Pro"
+                placeholder={t(dict, 'placeholder_business_name_example', 'e.g. Sofia Plumbing Pro')}
                 className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 ${
                   step1FieldErrors.business_name ? 'border-red-400' : 
                   step1FieldValid.business_name ? 'border-green-500' : 'border-gray-300'
@@ -781,7 +791,7 @@ export default function ProfilePage() {
             {/* Description */}
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
-                Description <span className="text-gray-400 font-normal">(optional)</span>
+                {t(dict, 'label_description', 'Description')} <span className="text-gray-400 font-normal">({t(dict, 'label_optional', 'optional')})</span>
               </label>
               <textarea
                 value={step1.description}
@@ -792,18 +802,18 @@ export default function ProfilePage() {
                   }
                 }}
                 rows={3}
-                placeholder="Describe your services, experience and what makes you different"
+                placeholder={t(dict, 'placeholder_business_description', 'Describe your services, experience and what makes you different')}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 resize-none"
               />
               <div className="text-xs text-gray-400 mt-1">
-                {step1.description.length}/At least 50 chars gets better results
+                {step1.description.length}/{t(dict, 'msg_50_chars_better', 'At least 50 chars gets better results')}
               </div>
             </div>
 
             {/* Public URL */}
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
-                Public URL <span className="text-red-400">*</span>
+                {t(dict, 'label_public_url', 'Public URL')} <span className="text-red-400">*</span>
               </label>
               <div className="flex items-center gap-2">
                 <input
@@ -821,7 +831,7 @@ export default function ProfilePage() {
                     setStep1SlugSuggestions([]);
                     setSaveError(null);
                   }}
-                  placeholder="your-business-name"
+                  placeholder={t(dict, 'placeholder_business_slug', 'your-business-name')}
                   readOnly={!step1SlugEditing}
                   className={`flex-1 px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 ${
                     step1FieldErrors.slug
@@ -836,7 +846,7 @@ export default function ProfilePage() {
                     type="button"
                     onClick={() => setStep1SlugEditing(true)}
                     className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
-                    title="Edit URL"
+                    title={t(dict, 'btn_edit_url', 'Edit URL')}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
@@ -845,22 +855,22 @@ export default function ProfilePage() {
                   </button>
                 )}
                 {step1SlugChecking && (
-                  <span className="text-xs text-gray-400 whitespace-nowrap">Checking...</span>
+                  <span className="text-xs text-gray-400 whitespace-nowrap">{t(dict, 'msg_checking', 'Checking...')}</span>
                 )}
                 {!step1SlugChecking && step1SlugAvailable === true && (
-                  <span className="text-xs text-green-600 whitespace-nowrap">Available</span>
+                  <span className="text-xs text-green-600 whitespace-nowrap">{t(dict, 'msg_available', 'Available')}</span>
                 )}
               </div>
 
               <p className="text-xs text-gray-500 mt-1 break-all">
-                nevumo.com/.../{step1.slug || 'your-business-name'}
+                nevumo.com/.../{step1.slug || t(dict, 'placeholder_business_slug', 'your-business-name')}
               </p>
               <p className="text-xs text-gray-500 mt-2">
-                URL changes remaining: {step1SlugChangesRemaining}/{MAX_SLUG_CHANGES}
+                {t(dict, 'msg_url_changes_remaining', 'URL changes remaining:')} {step1SlugChangesRemaining}/{MAX_SLUG_CHANGES}
               </p>
               <p className="text-xs text-orange-600 mt-2">
-                You can only change your URL once.<br />
-                Old links will continue working (redirected).
+                {t(dict, 'msg_url_change_warning', 'You can only change your URL once.')}<br />
+                {t(dict, 'msg_old_links_redirect', 'Old links will continue working (redirected).')}
               </p>
 
               {step1FieldErrors.slug && (
@@ -871,13 +881,13 @@ export default function ProfilePage() {
 
               {!step1FieldErrors.slug && step1SlugAvailable === false && (
                 <div className="mt-2 p-2 bg-red-50 rounded-lg">
-                  <p className="text-xs text-red-600">This URL is already taken</p>
+                  <p className="text-xs text-red-600">{t(dict, 'msg_url_taken', 'This URL is already taken')}</p>
                 </div>
               )}
 
               {step1SlugSuggestions.length > 0 && (
                 <div className="mt-2">
-                  <p className="text-xs text-gray-600 mb-1">Suggestions:</p>
+                  <p className="text-xs text-gray-600 mb-1">{t(dict, 'label_suggestions', 'Suggestions:')}</p>
                   <div className="flex flex-wrap gap-2">
                     {step1SlugSuggestions.map(suggestion => (
                       <button
@@ -912,7 +922,7 @@ export default function ProfilePage() {
                   disabled={saving || step1SlugChecking}
                   className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
                 >
-                  {saving ? 'Saving…' : 'Continue →'}
+                  {saving ? t(dict, 'msg_saving', 'Saving…') : t(dict, 'btn_continue', 'Continue →')}
                 </button>
                 <button
                   type="button"
@@ -931,11 +941,11 @@ export default function ProfilePage() {
                   }}
                   className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  Skip for now
+                  {t(dict, 'btn_skip_for_now', 'Skip for now')}
                 </button>
               </div>
               <p className="text-xs text-gray-400 mt-2 text-center">
-                Takes less than 1 minute
+                {t(dict, 'msg_takes_less_than_1_minute', 'Takes less than 1 minute')}
               </p>
             </div>
           </div>
@@ -944,12 +954,12 @@ export default function ProfilePage() {
         {/* ── Step 2: First Service ── */}
         {step === 2 && (
           <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
-            <h2 className="text-sm font-semibold text-gray-800">Add Your First Service</h2>
+            <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_add_first_service', 'Add Your First Service')}</h2>
 
             {/* Title */}
             <div>
               <label className="block text-xs font-medium text-gray-700 mb-1">
-                Service title <span className="text-red-400">*</span>
+                {t(dict, 'label_service_title', 'Service title')} <span className="text-red-400">*</span>
               </label>
               <input
                 type="text"
@@ -960,7 +970,7 @@ export default function ProfilePage() {
                     setStep2Touched(t => ({ ...t, title: true }));
                   }
                 }}
-                placeholder="e.g. Emergency pipe repair, Deep tissue massage (60 min)"
+                placeholder={t(dict, 'placeholder_service_title_example', 'e.g. Apartment cleaning')}
                 className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 ${
                   step2FieldErrors.title ? 'border-red-400' : 
                   step2FieldValid.title ? 'border-green-500' : 'border-gray-300'
@@ -981,7 +991,7 @@ export default function ProfilePage() {
                     setStep2Touched(t => ({ ...t, category_slug: true }));
                   }
                 }}
-                placeholder="Search or select a category"
+                placeholder={t(dict, 'placeholder_select_category', 'Select a category')}
                 error={step2FieldErrors.category_slug}
               />
             </div>
@@ -1008,20 +1018,20 @@ export default function ProfilePage() {
                     }
                   }
                 }}
-                placeholder="Select cities where you offer this service"
+                placeholder={t(dict, 'placeholder_select_cities', 'Select cities where you offer this service')}
                 error={step2FieldErrors.city_ids}
               />
             </div>
 
             {/* Price type */}
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Price type</label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">{t(dict, 'label_price_type', 'Price type')}</label>
               <select
                 value={step2.price_type}
                 onChange={e => setStep2(f => ({ ...f, price_type: e.target.value as PriceType }))}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 bg-white"
               >
-                {PRICE_TYPES.map(pt => (
+                {getPriceTypes(dict).map(pt => (
                   <option key={pt.value} value={pt.value}>{pt.label}</option>
                 ))}
               </select>
@@ -1031,7 +1041,8 @@ export default function ProfilePage() {
             {step2.price_type !== 'request' && (
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Price in {detectedCurrency} <span className="text-gray-400 font-normal">(optional)</span>
+                  {t(dict, 'label_price_in_currency', 'Price in {currency}').replace('{currency}', detectedCurrency)}{' '}
+                  <span className="text-gray-400 font-normal">({t(dict, 'label_optional', 'optional')})</span>
                 </label>
                 <input
                   type="number"
@@ -1049,7 +1060,7 @@ export default function ProfilePage() {
 
             {saveSuccess && (
               <div className="bg-green-50 text-green-700 text-sm p-2.5 rounded-lg text-center">
-                Setup complete! Redirecting…
+                {t(dict, 'msg_setup_complete_redirecting', 'Setup complete! Redirecting…')}
               </div>
             )}
 
@@ -1060,7 +1071,7 @@ export default function ProfilePage() {
                 disabled={saving}
                 className="text-sm text-gray-400 hover:text-gray-600 transition-colors disabled:opacity-50"
               >
-                ← Back
+                {t(dict, 'btn_back', '← Back')}
               </button>
               <button
                 type="button"
@@ -1068,11 +1079,11 @@ export default function ProfilePage() {
                 disabled={saving}
                 className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
               >
-                {saving ? 'Saving…' : 'Complete Setup'}
+                {saving ? t(dict, 'msg_saving', 'Saving…') : t(dict, 'btn_complete_setup', 'Complete Setup')}
               </button>
             </div>
             <p className="text-xs text-gray-400 mt-2 text-center">
-              Finish setup to start getting clients
+              {t(dict, 'msg_finish_setup_to_start_getting_clients', 'Finish setup to start getting clients')}
             </p>
           </div>
         )}
@@ -1085,22 +1096,22 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Profile</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Your public business profile</p>
+        <h1 className="text-xl font-bold text-gray-900">{t(dict, 'nav_profile', 'Profile')}</h1>
+        <p className="text-sm text-gray-500 mt-0.5">{t(dict, 'profile_subtitle', 'Your public business profile')}</p>
       </div>
 
       {/* Photo */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h2 className="text-sm font-semibold text-gray-800 mb-4">Profile photo</h2>
-        <AvatarUpload imageUrl={imageUrl} uploading={uploading} onFileChange={handleImageChange} />
+        <h2 className="text-sm font-semibold text-gray-800 mb-4">{t(dict, 'label_profile_photo', 'Profile photo')}</h2>
+        <AvatarUpload imageUrl={imageUrl} uploading={uploading} onFileChange={handleImageChange} dict={dict} />
       </div>
 
       {/* Details */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
-        <h2 className="text-sm font-semibold text-gray-800">Business details</h2>
+        <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_business_details', 'Business details')}</h2>
 
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Business name</label>
+          <label className="block text-xs font-medium text-gray-700 mb-1">{t(dict, 'label_business_name', 'Business name')}</label>
           <input
             type="text"
             value={editForm.business_name}
@@ -1110,12 +1121,12 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
+          <label className="block text-xs font-medium text-gray-700 mb-1">{t(dict, 'label_description', 'Description')}</label>
           <textarea
             value={editForm.description}
             onChange={e => setEditForm(f => ({ ...f, description: e.target.value }))}
             rows={4}
-            placeholder="Describe your business and services…"
+            placeholder={t(dict, 'placeholder_business_description', 'Describe your services, experience and what makes you different')}
             className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 resize-none"
           />
         </div>
@@ -1129,9 +1140,9 @@ export default function ProfilePage() {
             disabled={editSaving}
             className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            {editSaving ? 'Saving…' : 'Save changes'}
+            {editSaving ? t(dict, 'msg_saving', 'Saving…') : t(dict, 'btn_save_changes', 'Save changes')}
           </button>
-          {editSuccess && <span className="text-xs text-green-600 font-medium">Saved!</span>}
+          {editSuccess && <span className="text-xs text-green-600 font-medium">{t(dict, 'msg_saved', 'Saved!')}</span>}
         </div>
       </div>
     </div>

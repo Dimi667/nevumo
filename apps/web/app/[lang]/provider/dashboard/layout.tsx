@@ -4,6 +4,7 @@ import { use, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated, getAuthUser } from '@/lib/auth-store';
 import { getProviderDashboard } from '@/lib/provider-api';
+import { DashboardI18nProvider } from '@/lib/provider-dashboard-i18n';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
 
@@ -81,30 +82,32 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
   }
 
   return (
-    <div className={`min-h-screen bg-gray-50 ${isOnboarding ? 'flex justify-center' : 'flex'}`}>
-      {/* Hide sidebar completely during onboarding */}
-      {!isOnboarding && (
-        <DashboardSidebar
-          open={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-          lang={lang}
-        />
-      )}
-
-      <div className={`${isOnboarding ? 'w-full max-w-2xl mx-auto' : 'flex-1'} flex flex-col min-w-0`}>
-        {/* Hide top bar during onboarding to remove menu button */}
-        {!isOnboarding ? (
-          <DashboardTopBar
-            onMenuClick={() => setSidebarOpen(true)}
+    <DashboardI18nProvider lang={lang}>
+      <div className={`min-h-screen bg-gray-50 ${isOnboarding ? 'flex justify-center' : 'flex'}`}>
+        {/* Hide sidebar completely during onboarding */}
+        {!isOnboarding && (
+          <DashboardSidebar
+            open={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
             lang={lang}
           />
-        ) : (
-          <div className="h-16 flex-shrink-0" /> // Spacer to maintain layout
         )}
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
-          {children}
-        </main>
+
+        <div className={`${isOnboarding ? 'w-full max-w-2xl mx-auto' : 'flex-1'} flex flex-col min-w-0`}>
+          {/* Hide top bar during onboarding to remove menu button */}
+          {!isOnboarding ? (
+            <DashboardTopBar
+              onMenuClick={() => setSidebarOpen(true)}
+              lang={lang}
+            />
+          ) : (
+            <div className="h-16 flex-shrink-0" /> // Spacer to maintain layout
+          )}
+          <main className="flex-1 p-4 md:p-6 overflow-auto">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </DashboardI18nProvider>
   );
-}
+ }

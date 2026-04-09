@@ -11,6 +11,7 @@ import {
   type ClientLeadFilterStatus,
   type ClientLeadStatus,
 } from '@/lib/client-api';
+import { fetchTranslations, t, type TranslationDict } from '@/lib/ui-translations';
 
 type ReviewFormState = {
   rating: number;
@@ -18,10 +19,10 @@ type ReviewFormState = {
 };
 
 const TAB_OPTIONS: Array<{ value: ClientLeadFilterStatus; label: string }> = [
-  { value: 'all', label: 'Всички' },
-  { value: 'active', label: 'Активни' },
-  { value: 'done', label: 'Завършени' },
-  { value: 'rejected', label: 'Отказани' },
+  { value: 'all', label: 'status_all' },
+  { value: 'active', label: 'status_active' },
+  { value: 'done', label: 'status_completed' },
+  { value: 'rejected', label: 'status_rejected' },
 ];
 
 function Toast({ message, onDone }: { message: string; onDone: () => void }) {
@@ -89,23 +90,23 @@ function formatDate(value: string, locale: string): string {
   }
 }
 
-function getStatusMeta(status: ClientLeadStatus): { label: string; className: string } {
+function getStatusMeta(status: ClientLeadStatus, dict: TranslationDict): { label: string; className: string } {
   if (status === 'done') {
     return {
-      label: 'Завършена',
+      label: t(dict, 'status_completed', 'Completed'),
       className: 'bg-green-100 text-green-700',
     };
   }
 
   if (status === 'rejected' || status === 'expired' || status === 'cancelled') {
     return {
-      label: 'Отказана',
+      label: t(dict, 'status_rejected', 'Rejected'),
       className: 'bg-gray-100 text-gray-600',
     };
   }
 
   return {
-    label: 'Активна',
+    label: t(dict, 'status_active', 'Active'),
     className: 'bg-orange-100 text-orange-700',
   };
 }
@@ -123,6 +124,7 @@ export default function ClientRequestsPage() {
   const [reviewingLeadId, setReviewingLeadId] = useState<string | null>(null);
   const [reviewForm, setReviewForm] = useState<ReviewFormState>({ rating: 5, comment: '' });
   const [submitting, setSubmitting] = useState(false);
+  const [dict, setDict] = useState<TranslationDict>({});
 
   const clearToast = useCallback(() => setToast(null), []);
 
@@ -151,6 +153,15 @@ export default function ClientRequestsPage() {
   useEffect(() => {
     void loadLeads(activeTab);
   }, [activeTab, loadLeads]);
+
+  useEffect(() => {
+    async function loadTranslations() {
+      const translations = await fetchTranslations(lang, 'client_dashboard');
+      setDict(translations);
+    }
+
+    void loadTranslations();
+  }, [lang]);
 
   function openReviewForm(leadId: string) {
     setReviewingLeadId(leadId);
@@ -198,7 +209,7 @@ export default function ClientRequestsPage() {
       {toast && <Toast message={toast} onDone={clearToast} />}
       <div className="space-y-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">My Requests</h1>
+          <h1 className="text-xl font-bold text-gray-900">{t(dict, 'requests_title', 'My Requests')}</h1>
           <p className="text-sm text-gray-500 mt-0.5">{total} резултата</p>
         </div>
 
@@ -215,7 +226,7 @@ export default function ClientRequestsPage() {
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
-                {tab.label}
+                {t(dict, tab.label, tab.label)}
               </button>
             ))}
           </div>
@@ -229,21 +240,21 @@ export default function ClientRequestsPage() {
 
         {leads.length === 0 ? (
           <div className="bg-gray-50 rounded-xl border border-gray-200 p-8 text-center space-y-3">
-            <h2 className="text-lg font-medium text-gray-900">Няма намерени заявки</h2>
+            <h2 className="text-lg font-medium text-gray-900">{t(dict, 'requests_empty_title', 'No requests found')}</h2>
             <p className="text-sm text-gray-500">
-              Изпрати нова заявка и тя ще се появи тук.
+              {t(dict, 'requests_empty_desc', 'Send a new request and it will appear here.')}
             </p>
             <Link
               href={`/${lang}`}
               className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              Намери услуга
+              {t(dict, 'cta_find_service', 'Find Service')}
             </Link>
           </div>
         ) : (
           <div className="space-y-4">
             {leads.map((lead) => {
-              const statusMeta = getStatusMeta(lead.status);
+              const statusMeta = getStatusMeta(lead.status, dict);
 
               return (
                 <div key={lead.id} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
@@ -270,7 +281,7 @@ export default function ClientRequestsPage() {
                       {reviewingLeadId === lead.id ? (
                         <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-4">
                           <div className="space-y-2">
-                            <p className="text-sm font-medium text-gray-700">Оцени услугата</p>
+                            <p className="text-sm font-medium text-gray-700">{t(dict, 'btn_rate_service', 'Rate Service')}</p>
                             <StarRatingInput
                               value={reviewForm.rating}
                               onChange={(rating) => setReviewForm((current) => ({ ...current, rating }))}
@@ -278,7 +289,7 @@ export default function ClientRequestsPage() {
                           </div>
                           <div className="space-y-2">
                             <label className="block text-sm font-medium text-gray-700" htmlFor={`review-comment-${lead.id}`}>
-                              Коментар
+                              {t(dict, 'label_comment', 'Comment')}
                             </label>
                             <textarea
                               id={`review-comment-${lead.id}`}
@@ -290,7 +301,7 @@ export default function ClientRequestsPage() {
                               rows={4}
                               maxLength={1000}
                               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
-                              placeholder="Сподели впечатленията си от услугата"
+                              placeholder={t(dict, 'review_placeholder', 'Share your impressions...')}
                             />
                             <p className="text-xs text-gray-400">{reviewForm.comment.length}/1000</p>
                           </div>
@@ -300,7 +311,7 @@ export default function ClientRequestsPage() {
                               onClick={closeReviewForm}
                               className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
                             >
-                              Отказ
+                              {t(dict, 'btn_cancel', 'Cancel')}
                             </button>
                             <button
                               type="button"
@@ -308,7 +319,7 @@ export default function ClientRequestsPage() {
                               disabled={submitting}
                               className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
                             >
-                              {submitting ? 'Изпращане...' : 'Изпрати ревю'}
+                              {submitting ? t(dict, 'btn_submitting', 'Submitting...') : t(dict, 'btn_submit_review', 'Submit Review')}
                             </button>
                           </div>
                         </div>
@@ -318,7 +329,7 @@ export default function ClientRequestsPage() {
                           onClick={() => openReviewForm(lead.id)}
                           className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
                         >
-                          Напиши ревю
+                          {t(dict, 'btn_write_review', 'Write a Review')}
                         </button>
                       )}
                     </div>

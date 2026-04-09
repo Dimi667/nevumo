@@ -1,0 +1,3 @@
+Изчистване на Редис кеш:
+redis-cli KEYS "translations:*:client_dashboard" | xargs redis-cli DEL
+

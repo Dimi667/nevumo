@@ -386,7 +386,11 @@ CREATE INDEX idx_translations_key ON translations(key);
   chip_not_sure, details_label, details_placeholder, get_offers_btn,
   trust_multiple, trust_response, sticky_btn
 - **widget namespace**: 23 keys × 34 languages = 782 rows
-- **Total rows**: 2,278+ translations across all namespaces
+- **client_dashboard namespace**: Client dashboard UI strings
+- **provider_dashboard namespace**: 160 keys × 34 languages = 5,440 rows
+  Keys include: nav_overview, nav_analytics, nav_leads, nav_qr_code, nav_reviews,
+  nav_services, nav_settings, nav_profile, and all dashboard UI strings
+- **Total rows**: 8,000+ translations across all namespaces
 
 ### Redis Caching
 - **Cache key pattern**: `translations:{lang}:{namespace}`

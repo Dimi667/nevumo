@@ -14,6 +14,7 @@ import {
   type EligibleLead,
   type ReviewPreferences,
 } from '@/lib/client-api';
+import { fetchTranslations, t, type TranslationDict } from '@/lib/ui-translations';
 
 type ReviewsTab = 'written' | 'pending';
 
@@ -128,6 +129,7 @@ export default function ClientReviewsPage() {
   const [expandedReplies, setExpandedReplies] = useState<Record<string, boolean>>({});
   const [toast, setToast] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [dict, setDict] = useState<TranslationDict>({});
 
   const clearToast = useCallback(() => setToast(null), []);
 
@@ -216,6 +218,15 @@ export default function ClientReviewsPage() {
     void loadPendingLeads();
   }, [activeTab, loadPendingLeads, loadWrittenReviews]);
 
+  useEffect(() => {
+    async function loadTranslations() {
+      const translations = await fetchTranslations(lang, 'client_dashboard');
+      setDict(translations);
+    }
+
+    void loadTranslations();
+  }, [lang]);
+
   async function handleToggleEmailPreference() {
     const token = getAuthToken();
 
@@ -289,9 +300,9 @@ export default function ClientReviewsPage() {
       {toast && <Toast message={toast} onDone={clearToast} />}
       <div className="space-y-6">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Reviews</h1>
+          <h1 className="text-xl font-bold text-gray-900">{t(dict, 'reviews_title', 'Reviews')}</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            Написаните от теб ревюта и чакащите оценки
+            {t(dict, 'reviews_subtitle', 'Your written reviews and pending ratings')}
           </p>
         </div>
 
@@ -305,7 +316,7 @@ export default function ClientReviewsPage() {
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
-            Написани
+            {t(dict, 'tab_written', 'Written')}
             <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">
               {writtenReviews.length}
             </span>
@@ -319,7 +330,7 @@ export default function ClientReviewsPage() {
                 : 'border-transparent text-gray-600 hover:text-gray-900'
             }`}
           >
-            Чакащи ревю
+            {t(dict, 'tab_pending', 'Pending Review')}
             <span className="ml-2 px-2 py-0.5 bg-orange-100 text-orange-600 text-xs rounded-full">
               {pendingLeads.length}
             </span>
@@ -338,9 +349,9 @@ export default function ClientReviewsPage() {
             writtenReviews.length === 0 ? (
               <div className="bg-gray-50 rounded-xl p-8 text-center">
                 <div className="text-4xl mb-3">⭐</div>
-                <h3 className="text-lg font-medium text-gray-900 mb-1">Все още нямаш написани ревюта</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-1">{t(dict, 'empty_reviews_title', 'No reviews written yet')}</h3>
                 <p className="text-sm text-gray-500">
-                  Когато оцениш завършена услуга, ревюто ще се появи тук.
+                  {t(dict, 'empty_reviews_desc', 'When you rate a completed service...')}
                 </p>
               </div>
             ) : (
@@ -357,7 +368,7 @@ export default function ClientReviewsPage() {
                       <div>
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-medium text-gray-900">
-                            {review.provider_business_name || 'Доставчик'}
+                            {review.provider_business_name || t(dict, 'label_provider', 'Provider')}
                           </span>
                           <span className="text-xs text-gray-400">
                             {formatDate(review.created_at, lang)}
@@ -367,7 +378,7 @@ export default function ClientReviewsPage() {
                       </div>
                       {review.provider_reply && (
                         <span className="px-2 py-1 bg-green-100 text-green-600 text-xs font-medium rounded-full">
-                          Има отговор
+                          {t(dict, 'label_has_reply', 'Has Reply')}
                         </span>
                       )}
                     </div>
@@ -375,7 +386,7 @@ export default function ClientReviewsPage() {
                     {/* Lead info */}
                     {review.lead_description && (
                       <div className="text-xs text-gray-500 mb-3">
-                        Услуга: {review.lead_description}
+                        {t(dict, 'label_service', 'Service: ')}{review.lead_description}
                       </div>
                     )}
 
@@ -394,13 +405,13 @@ export default function ClientReviewsPage() {
                           onClick={() => toggleReply(review.id)}
                           className="text-sm text-orange-500 hover:text-orange-600 font-medium"
                         >
-                          {isReplyExpanded ? 'Скрий отговора от доставчика' : 'Отговор от доставчика'}
+                          {isReplyExpanded ? t(dict, 'label_hide_reply', 'Hide Provider Reply') : t(dict, 'label_provider_reply', 'Provider Reply')}
                         </button>
                         {isReplyExpanded && (
                           <div className="bg-orange-50 rounded-lg p-3 border-l-4 border-orange-300">
                             <div className="flex items-center gap-2 mb-2">
                               <span className="text-xs font-medium text-orange-700">
-                                Отговор от доставчика
+                                {t(dict, 'label_provider_reply', 'Provider Reply')}
                               </span>
                               {review.is_reply_edited && (
                                 <span className="text-xs text-gray-500">(редактиран)</span>
@@ -409,7 +420,7 @@ export default function ClientReviewsPage() {
                             <p className="text-sm text-gray-700">{review.provider_reply}</p>
                             {review.provider_reply_at && (
                               <p className="text-xs text-gray-500 mt-2">
-                                Отговорено на {formatDate(review.provider_reply_at, lang)}
+                                {t(dict, 'label_replied_on', 'Replied on ')}{formatDate(review.provider_reply_at, lang)}
                               </p>
                             )}
                           </div>
@@ -423,15 +434,15 @@ export default function ClientReviewsPage() {
           ) : pendingLeads.length === 0 ? (
             <div className="bg-gray-50 rounded-xl p-8 text-center space-y-3">
               <div className="text-4xl mb-1">📝</div>
-              <h3 className="text-lg font-medium text-gray-900">Нямаш чакащи ревюта</h3>
+              <h3 className="text-lg font-medium text-gray-900">{t(dict, 'empty_pending_title', 'No pending reviews')}</h3>
               <p className="text-sm text-gray-500">
-                Следващите завършени услуги, които не си оценил, ще се появят тук.
+                {t(dict, 'empty_pending_desc', 'Completed services you have not rated...')}
               </p>
               <Link
                 href={`/${lang}`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
               >
-                Намери услуга
+                {t(dict, 'cta_find_service', 'Find Service')}
               </Link>
             </div>
           ) : (
@@ -440,7 +451,7 @@ export default function ClientReviewsPage() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <h3 className="font-medium text-gray-900">
-                      {lead.provider_business_name || 'Доставчик'}
+                      {lead.provider_business_name || t(dict, 'label_provider', 'Provider')}
                     </h3>
                     <p className="text-sm text-gray-500 mt-1">{formatDate(lead.created_at, lang)}</p>
                   </div>
@@ -450,7 +461,7 @@ export default function ClientReviewsPage() {
                       onClick={() => openReviewForm(lead.id)}
                       className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
                     >
-                      Оцени
+                      {t(dict, 'btn_rate_service', 'Rate')}
                     </button>
                   )}
                 </div>
@@ -462,7 +473,7 @@ export default function ClientReviewsPage() {
                 {reviewForm.leadId === lead.id && (
                   <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-4">
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-700">Оценка</p>
+                      <p className="text-sm font-medium text-gray-700">{t(dict, 'label_rating', 'Rating')}</p>
                       <StarRatingInput
                         value={reviewForm.rating}
                         onChange={(rating) => setReviewForm((current) => ({ ...current, rating }))}
@@ -470,7 +481,7 @@ export default function ClientReviewsPage() {
                     </div>
                     <div className="space-y-2">
                       <label className="block text-sm font-medium text-gray-700" htmlFor={`pending-review-comment-${lead.id}`}>
-                        Коментар
+                        {t(dict, 'label_comment', 'Comment')}
                       </label>
                       <textarea
                         id={`pending-review-comment-${lead.id}`}
@@ -482,7 +493,7 @@ export default function ClientReviewsPage() {
                         rows={4}
                         maxLength={1000}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
-                        placeholder="Сподели впечатленията си от доставчика"
+                        placeholder={t(dict, 'review_placeholder', 'Share your impressions...')}
                       />
                       <p className="text-xs text-gray-400">{reviewForm.comment.length}/1000</p>
                     </div>
@@ -492,7 +503,7 @@ export default function ClientReviewsPage() {
                         onClick={closeReviewForm}
                         className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
                       >
-                        Отказ
+                        {t(dict, 'btn_cancel', 'Cancel')}
                       </button>
                       <button
                         type="button"
@@ -500,7 +511,7 @@ export default function ClientReviewsPage() {
                         disabled={submittingLeadId === lead.id}
                         className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
                       >
-                        {submittingLeadId === lead.id ? 'Изпращане...' : 'Изпрати ревю'}
+                        {submittingLeadId === lead.id ? t(dict, 'btn_submitting', 'Submitting...') : t(dict, 'btn_submit_review', 'Submit Review')}
                       </button>
                     </div>
                   </div>
@@ -514,7 +525,7 @@ export default function ClientReviewsPage() {
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h3 className="font-medium text-gray-900">Получавай имейл при отговор на ревю</h3>
+              <h3 className="font-medium text-gray-900">{t(dict, 'settings_email_notif', 'Receive email on review reply')}</h3>
               <p className="text-sm text-gray-500">
                 {preferences?.description ?? 'Ще получаваш известие, когато доставчик отговори на ревюто ти.'}
               </p>

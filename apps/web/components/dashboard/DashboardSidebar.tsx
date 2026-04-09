@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { saveAuth } from '@/lib/auth-store';
 import { switchRole } from '@/lib/provider-api';
+import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
+import { t } from '@/lib/ui-translations';
 
 interface NavItem {
   label: string;
@@ -96,20 +98,21 @@ interface DashboardSidebarProps {
 export default function DashboardSidebar({ open, onClose, lang }: DashboardSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const { dict } = useDashboardI18n();
   const base = `/${lang}/provider/dashboard`;
 
   const [switching, setSwitching] = useState(false);
   const [switchError, setSwitchError] = useState<string | null>(null);
 
   const navItems: NavItem[] = [
-    { label: 'Overview',  href: base,                  icon: <OverviewIcon /> },
-    { label: 'Leads',     href: `${base}/leads`,        icon: <LeadsIcon /> },
-    { label: 'Services',  href: `${base}/services`,     icon: <ServicesIcon /> },
-    { label: 'Analytics', href: `${base}/analytics`,    icon: <AnalyticsIcon /> },
-    { label: 'Reviews',   href: `${base}/reviews`,      icon: <ReviewsIcon /> },
-    { label: 'QR Code',   href: `${base}/qr-code`,      icon: <QrIcon /> },
-    { label: 'Profile',   href: `${base}/profile`,      icon: <ProfileIcon /> },
-    { label: 'Settings',  href: `${base}/settings`,     icon: <SettingsIcon /> },
+    { label: t(dict, 'nav_dashboard', 'Dashboard'), href: base, icon: <OverviewIcon /> },
+    { label: t(dict, 'nav_leads', 'Leads'), href: `${base}/leads`, icon: <LeadsIcon /> },
+    { label: t(dict, 'nav_services', 'Services'), href: `${base}/services`, icon: <ServicesIcon /> },
+    { label: t(dict, 'nav_analytics', 'Analytics'), href: `${base}/analytics`, icon: <AnalyticsIcon /> },
+    { label: t(dict, 'nav_reviews', 'Reviews'), href: `${base}/reviews`, icon: <ReviewsIcon /> },
+    { label: t(dict, 'nav_qr_code', 'QR Code'), href: `${base}/qr-code`, icon: <QrIcon /> },
+    { label: t(dict, 'nav_profile', 'Profile'), href: `${base}/profile`, icon: <ProfileIcon /> },
+    { label: t(dict, 'nav_settings', 'Settings'), href: `${base}/settings`, icon: <SettingsIcon /> },
   ];
 
   async function handleFindService() {
@@ -121,7 +124,7 @@ export default function DashboardSidebar({ open, onClose, lang }: DashboardSideb
       onClose();
       router.push(`/${lang}/client/dashboard`);
     } catch (e: unknown) {
-      setSwitchError(e instanceof Error ? e.message : 'Failed to switch role');
+      setSwitchError(e instanceof Error ? e.message : t(dict, 'msg_failed_switch_role', 'Failed to switch role'));
       setSwitching(false);
     }
   }
@@ -139,7 +142,7 @@ export default function DashboardSidebar({ open, onClose, lang }: DashboardSideb
             priority
             style={{ width: '120px', height: 'auto' }}
           />
-          <span className="text-xs text-gray-400 font-medium leading-none">Pro</span>
+          <span className="text-xs text-gray-400 font-medium leading-none">{t(dict, 'logo_pro', 'Pro')}</span>
         </Link>
       </div>
 
@@ -183,14 +186,14 @@ export default function DashboardSidebar({ open, onClose, lang }: DashboardSideb
             {switching ? (
               <>
                 <span className="w-3.5 h-3.5 border border-white border-t-transparent rounded-full animate-spin" />
-                Switching…
+                {t(dict, 'msg_switching', 'Switching…')}
               </>
             ) : (
               <>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
-                НАМЕРИ УСЛУГА
+                {t(dict, 'btn_find_service', 'Find Service')}
               </>
             )}
           </button>
@@ -218,6 +221,7 @@ export default function DashboardSidebar({ open, onClose, lang }: DashboardSideb
           <aside className="absolute left-0 top-0 h-full w-64 bg-white shadow-xl z-50">
             <button
               onClick={onClose}
+              aria-label={t(dict, 'aria_close_menu', 'Close menu')}
               className="absolute top-4 right-4 p-1 text-gray-400 hover:text-gray-600"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
