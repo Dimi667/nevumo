@@ -11,6 +11,7 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sqlalchemy import create_engine, text
+from seed_client_dashboard_translations import TRANSLATIONS as CLIENT_DASHBOARD_TRANSLATIONS
 
 NAMESPACE = "provider_dashboard"
 
@@ -3198,6 +3199,254 @@ TRANSLATIONS.update({
     "status_all": row_bg("All", "Всички"),
     "status_rejected": row_bg("Rejected", "Отхвърлен"),
 })
+
+SAME_NAMESPACE_ALIASES = {
+    "availability_busy": "status_busy",
+    "availability_offline": "status_offline",
+    "label_edit_public_slug": "settings_edit_slug",
+    "label_suggestions": "settings_suggestions",
+    "label_url_locked": "settings_url_locked",
+    "label_your_profile_link": "settings_profile_link",
+    "msg_add_city_category": "settings_seo_url",
+    "msg_availability_description": "settings_available_desc",
+    "msg_available": "settings_available",
+    "msg_checking": "settings_checking",
+    "msg_failed_check_url": "profile_failed_check",
+    "msg_need_help": "settings_contact_help",
+    "msg_old_links_redirect": "settings_old_links",
+    "msg_old_links_work": "settings_old_links_redirect",
+    "msg_profile_not_loaded": "settings_not_loaded",
+    "msg_switching": "settings_switching",
+    "msg_url_already_updated": "settings_url_updated",
+    "msg_url_change_limit": "settings_url_contact_support",
+    "msg_url_change_warning": "settings_url_once",
+    "msg_url_changes_remaining": "settings_url_remaining",
+    "msg_url_locked": "settings_url_locked",
+    "msg_url_taken": "profile_url_taken",
+    "placeholder_business_slug": "profile_slug_placeholder",
+}
+
+for target_key, source_key in SAME_NAMESPACE_ALIASES.items():
+    TRANSLATIONS[target_key] = dict(TRANSLATIONS[source_key])
+
+CLIENT_DASHBOARD_ALIASES = {
+    "btn_find_service": "nav_find_service",
+    "label_account": "section_account",
+    "label_account_role": "section_role",
+    "label_email": "label_email",
+    "label_phone": "label_phone",
+    "label_session": "section_session",
+    "msg_saved": "btn_saved",
+    "msg_saving": "btn_saving",
+    "nav_reviews": "nav_reviews",
+    "nav_settings": "nav_settings",
+}
+
+for target_key, source_key in CLIENT_DASHBOARD_ALIASES.items():
+    TRANSLATIONS[target_key] = dict(CLIENT_DASHBOARD_TRANSLATIONS[source_key])
+
+TRANSLATIONS["availability_active"] = row(
+    "Active", "Активен", "Aktivní", "Aktiv", "Aktiv", "Ενεργός",
+    "Activo", "Aktiivne", "Aktiivinen", "Actif", "Gníomhach",
+    "Aktivan", "Aktív", "Virkur", "Attivo", "Aktiv",
+    "Aktyvus", "Aktīvs", "Активен", "Attiv", "Actief", "Aktiv",
+    "Aktywny", "Ativo", "Ativo", "Activ", "Активный", "Aktívny",
+    "Aktiven", "Aktiv", "Активан", "Aktiv", "Aktif", "Активний",
+)
+
+TRANSLATIONS["label_availability"] = row(
+    "Availability", "Наличност", "Dostupnost", "Tilgængelighed", "Verfügbarkeit", "Διαθεσιμότητα",
+    "Disponibilidad", "Kättesaadavus", "Saatavuus", "Disponibilité", "Infhaighteacht",
+    "Dostupnost", "Elérhetőség", "Framboð", "Disponibilità", "Disponibilitéit",
+    "Prieinamumas", "Pieejamība", "Достапност", "Disponibbiltà", "Beschikbaarheid", "Tilgjengelighet",
+    "Dostępność", "Disponibilidade", "Disponibilidade", "Disponibilitate", "Доступность", "Dostupnosť",
+    "Razpoložljivost", "Disponueshmëria", "Доступност", "Tillgänglighet", "Müsaitlik", "Доступність",
+)
+
+TRANSLATIONS["label_role"] = row(
+    "Role", "Роля", "Role", "Rolle", "Rolle", "Ρόλος",
+    "Rol", "Roll", "Rooli", "Rôle", "Ról",
+    "Uloga", "Szerep", "Hlutverk", "Ruolo", "Roll",
+    "Vaidmuo", "Loma", "Улога", "Rwol", "Rol", "Rolle",
+    "Rola", "Função", "Função", "Rol", "Роль", "Rola",
+    "Vloga", "Roli", "Улога", "Roll", "Rol", "Роль",
+)
+
+TRANSLATIONS["msg_failed_save_url"] = row(
+    "Failed to save URL", "Неуспешно запазване на URL адреса", "Nepodařilo se uložit URL", "Kunne ikke gemme URL", "URL konnte nicht gespeichert werden", "Αποτυχία αποθήκευσης URL",
+    "No se pudo guardar la URL", "URL-i salvestamine ebaõnnestus", "URL-osoitteen tallentaminen epäonnistui", "Échec de l'enregistrement de l'URL", "Theip ar shábháil an URL",
+    "Spremanje URL-a nije uspjelo", "Az URL mentése nem sikerült", "Ekki tókst að vista vefslóðina", "Salvataggio dell'URL non riuscito", "URL konnt net gespäichert ginn",
+    "Nepavyko išsaugoti URL", "Neizdevās saglabāt URL", "Неуспешно зачувување на URL", "Ma setgħetx tiġi ssejvjata l-URL", "URL opslaan mislukt", "Kunne ikke lagre URL",
+    "Nie udało się zapisać adresu URL", "Falha ao guardar o URL", "Falha ao guardar o URL", "Salvarea URL-ului a eșuat", "Не удалось сохранить URL", "Nepodarilo sa uložiť URL",
+    "Shranjevanje URL-ja ni uspelo", "Ruajtja e URL-së dështoi", "Чување URL-а није успело", "Det gick inte att spara URL", "URL kaydedilemedi", "Не вдалося зберегти URL",
+)
+
+TRANSLATIONS["msg_failed_switch_role"] = row(
+    "Failed to switch role", "Неуспешна смяна на ролята", "Nepodařilo se přepnout roli", "Kunne ikke skifte rolle", "Rollenwechsel fehlgeschlagen", "Αποτυχία αλλαγής ρόλου",
+    "No se pudo cambiar el rol", "Rolli vahetamine ebaõnnestus", "Roolin vaihtaminen epäonnistui", "Échec du changement de rôle", "Theip ar athrú róil",
+    "Promjena uloge nije uspjela", "A szerepváltás nem sikerült", "Ekki tókst að skipta um hlutverk", "Cambio ruolo non riuscito", "Roll konnt net gewiesselt ginn",
+    "Nepavyko pakeisti vaidmens", "Neizdevās nomainīt lomu", "Неуспешно менување на улогата", "Ma setgħetx tinbidel ir-rwol", "Rol wisselen mislukt", "Kunne ikke bytte rolle",
+    "Nie udało się zmienić roli", "Falha ao mudar a função", "Falha ao mudar a função", "Schimbarea rolului a eșuat", "Не удалось сменить роль", "Nepodarilo sa zmeniť rolu",
+    "Preklop vloge ni uspel", "Ndryshimi i rolit dështoi", "Промена улоге није успела", "Det gick inte att byta roll", "Rol değiştirilemedi", "Не вдалося змінити роль",
+)
+
+TRANSLATIONS["msg_switch_role_description"] = {
+    lang: " ".join(
+        (
+            TRANSLATIONS["settings_current_provider"][lang],
+            TRANSLATIONS["settings_switch_desc"][lang],
+            TRANSLATIONS["settings_data_preserved"][lang],
+        )
+    )
+    for lang in LANGS
+}
+
+POLISH_OVERRIDES = {
+    "aria_close_menu": "Zamknij menu",
+    "aria_open_menu": "Otwórz menu",
+    "aria_remove_item": "Usuń",
+    "aria_select_period_filter": "Wybierz filtr okresu",
+    "availability_offline": "Niedostępny",
+    "btn_back": "← Wstecz",
+    "btn_cancel": "Anuluj",
+    "btn_change_photo": "Zmień zdjęcie",
+    "btn_complete_setup": "Dokończ konfigurację",
+    "btn_contact": "Skontaktuj",
+    "btn_continue": "Dalej →",
+    "btn_delete": "Usuń",
+    "btn_edit": "Edytuj",
+    "btn_edit_url": "Edytuj URL",
+    "btn_generate_qr_code": "Wygeneruj kod QR",
+    "btn_new_service": "Nowa usługa",
+    "btn_reject": "Odrzuć",
+    "btn_reply_to_review": "Odpowiedz na opinię",
+    "btn_send_reply": "Wyślij odpowiedź",
+    "btn_skip_for_now": "Pomiń na razie",
+    "btn_try_again": "Spróbuj ponownie",
+    "btn_upload_photo": "Prześlij zdjęcie",
+    "error_business_name_min_chars": "Nazwa firmy musi mieć co najmniej 2 znaki",
+    "error_category_required": "Kategoria jest wymagana",
+    "error_city_required": "Wybierz co najmniej jedno miasto",
+    "error_title_required": "Tytuł jest wymagany",
+    "label_add_first_service": "Dodaj pierwszą usługę",
+    "label_all_reviews": "Wszystkie opinie",
+    "label_business": "Firma",
+    "label_business_details": "Dane firmy",
+    "label_canonical_profile_url": "Kanoniczny URL profilu",
+    "label_complete_profile": "Uzupełnij profil",
+    "label_contacted_leads": "Skontaktowane zapytania",
+    "label_date": "Data",
+    "label_done_leads": "Zakończone zapytania",
+    "label_edited": "Edytowano",
+    "label_enhanced_qr_code": "Ulepszony kod QR",
+    "label_language": "Język",
+    "label_last_30_days": "Ostatnie 30 dni",
+    "label_last_x_days": "Ostatnie {p} dni",
+    "label_latest_review": "Najnowsza opinia",
+    "label_lead_sources": "Źródła zapytań",
+    "label_needs_reply": "Wymaga odpowiedzi",
+    "label_new_leads": "Nowe zapytania",
+    "label_optional": "opcjonalnie",
+    "label_price_in_currency": "Cena w {currency}",
+    "label_profile": "Profil",
+    "label_profile_photo": "Zdjęcie profilowe",
+    "label_profile_setup": "Konfiguracja profilu",
+    "label_qr_code_language": "Język kodu QR",
+    "label_rejected_leads": "Odrzucone zapytania",
+    "label_service": "Usługa",
+    "label_service_title": "Tytuł usługi",
+    "label_source_direct": "Bezpośrednio",
+    "label_source_other": "Inne",
+    "label_source_qr": "Kod QR",
+    "label_source_seo": "Pozycjonowanie SEO",
+    "label_source_widget": "Widżet",
+    "label_status": "Status",
+    "label_top_sources": "Główne źródła",
+    "label_total": "łącznie",
+    "label_unreplied": "Bez odpowiedzi",
+    "label_your_qr_url": "Twój URL kodu QR",
+    "msg_50_chars_better": "Co najmniej 50 znaków daje lepsze rezultaty",
+    "msg_add_service_unlock_analytics": "Dodaj usługę, aby odblokować analitykę",
+    "msg_add_services_desc": "Dodaj oferowane usługi, aby zacząć otrzymywać zapytania.",
+    "msg_analytics_appear_when_leads": "Analityka pojawi się, gdy zaczniesz otrzymywać zapytania.",
+    "msg_authentication_error_login_again": "Błąd uwierzytelniania. Zaloguj się ponownie.",
+    "msg_delete_confirm": "Czy na pewno chcesz usunąć",
+    "msg_delete_undo_warning": "Tej operacji nie można cofnąć.",
+    "msg_deleting": "Usuwanie…",
+    "msg_failed_create_service": "Nie udało się utworzyć usługi",
+    "msg_failed_delete_service": "Nie udało się usunąć usługi",
+    "msg_failed_download_qr": "Nie udało się pobrać kodu QR",
+    "msg_failed_generate_qr": "Nie udało się wygenerować kodu QR",
+    "msg_failed_load_analytics": "Nie udało się załadować analityki",
+    "msg_failed_load_dashboard": "Nie udało się załadować panelu",
+    "msg_failed_load_image": "Nie udało się załadować obrazu",
+    "msg_failed_load_leads": "Nie udało się załadować zapytań",
+    "msg_failed_load_profile": "Nie udało się załadować profilu",
+    "msg_failed_load_reviews": "Nie udało się załadować opinii",
+    "msg_failed_load_services": "Nie udało się załadować usług",
+    "msg_failed_save": "Nie udało się zapisać",
+    "msg_failed_save_profile": "Nie udało się zapisać profilu",
+    "msg_failed_save_service": "Nie udało się zapisać usługi",
+    "msg_failed_submit_reply": "Nie udało się wysłać odpowiedzi",
+    "msg_failed_upload_image": "Nie udało się przesłać obrazu. Spróbuj ponownie.",
+    "msg_file_size_limit_5mb": "Rozmiar pliku musi być mniejszy niż 5 MB",
+    "msg_file_too_large": "Plik jest za duży. Maksymalny rozmiar to 5 MB.",
+    "msg_file_type_jpg_png_webp": "Plik musi być w formacie JPG, PNG lub WebP",
+    "msg_finish_setup_to_start_getting_clients": "Dokończ konfigurację, aby zacząć pozyskiwać klientów",
+    "msg_generating": "Generowanie…",
+    "msg_invalid_file_format": "Nieprawidłowy format pliku. Użyj JPG, PNG lub WebP.",
+    "msg_invalid_image_url": "Nieprawidłowy format adresu URL obrazu",
+    "msg_network_error": "Błąd sieci — sprawdź połączenie",
+    "msg_no_data": "Brak danych",
+    "msg_no_leads_yet": "Brak zapytań",
+    "msg_no_results": "Brak wyników",
+    "msg_qr_language_description": "Tekst i slogan w kodzie QR będą wyświetlane w tym języku",
+    "msg_qr_share_description": "Udostępnij ten kod QR na wizytówkach, ulotkach lub w swojej lokalizacji. Klienci skanują go, aby przejść bezpośrednio do Twojego profilu. Ulepszone kody QR zawierają nazwę Twojej firmy i hasło zachęcające do działania.",
+    "msg_retrying": "Ponawianie...",
+    "msg_reviews_waiting_reply": "{count} opinii czeka na Twoją odpowiedź",
+    "msg_sending": "Wysyłanie…",
+    "msg_service_created": "Usługa została utworzona",
+    "msg_service_deleted": "Usługa została usunięta",
+    "msg_service_updated": "Usługa została zaktualizowana",
+    "msg_services_count": "Usług: {count}",
+    "msg_setup_complete_redirecting": "Konfiguracja zakończona! Przekierowywanie…",
+    "msg_start_receiving": "Zacznij otrzymywać zapytania od klientów w ciągu kilku minut",
+    "msg_supported_image_formats": "JPG, PNG lub WebP · maks. 5 MB",
+    "msg_takes_less_than_1_minute": "Zajmuje mniej niż minutę",
+    "msg_too_many_upload_attempts": "Zbyt wiele prób przesłania. Poczekaj chwilę.",
+    "msg_uploading": "Przesyłanie…",
+    "period_all_time": "Cały okres",
+    "period_last_30_days": "Ostatnie 30 dni",
+    "period_last_7_days": "Ostatnie 7 dni",
+    "period_last_90_days": "Ostatnie 90 dni",
+    "placeholder_business_description": "Opisz swoje usługi, doświadczenie i to, co Cię wyróżnia",
+    "placeholder_business_name_example": "np. Hydraulik Warszawa Pro",
+    "placeholder_description": "Krótki opis…",
+    "placeholder_from": "Od",
+    "placeholder_select_category": "Wybierz kategorię",
+    "placeholder_select_cities": "Wybierz miasta, w których oferujesz tę usługę",
+    "placeholder_service_title_example": "np. Sprzątanie mieszkania",
+    "placeholder_to": "Do",
+    "placeholder_type_to_search": "Wpisz, aby wyszukać…",
+    "placeholder_write_reply": "Napisz swoją odpowiedź...",
+    "placeholder_write_reply_review": "Napisz odpowiedź na tę opinię...",
+    "price_type_fixed": "Cena stała",
+    "price_type_hourly": "Za godzinę",
+    "price_type_per_sqm": "Za m²",
+    "price_type_request": "Na zapytanie (wycena)",
+    "stat_conversion_rate": "Współczynnik konwersji",
+    "stat_leads_contacted": "Skontaktowane zapytania",
+    "stat_leads_received": "Otrzymane zapytania",
+    "stat_new_leads": "Nowe zapytania",
+    "stat_rating": "Ocena",
+    "stat_total_leads": "Łącznie zapytań",
+    "status_all": "Wszystkie",
+    "status_offline": "Niedostępny",
+    "status_rejected": "Odrzucone",
+}
+
+for key, value in POLISH_OVERRIDES.items():
+    TRANSLATIONS[key]["pl"] = value
 
 def main():
     engine = create_engine("postgresql://nevumo:nevumo@localhost:5432/nevumo_leads")

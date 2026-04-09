@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { getAuthToken } from '@/lib/auth-store';
 import {
   getClientLeads,
@@ -113,9 +113,20 @@ function getStatusMeta(status: ClientLeadStatus, dict: TranslationDict): { label
 
 export default function ClientRequestsPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const lang = typeof params.lang === 'string' ? params.lang : 'en';
 
-  const [activeTab, setActiveTab] = useState<ClientLeadFilterStatus>('all');
+  const getInitialTab = useCallback((): ClientLeadFilterStatus => {
+    const statusFromUrl = searchParams.get('status');
+    const validStatuses: ClientLeadFilterStatus[] = ['all', 'active', 'done', 'rejected'];
+    if (statusFromUrl && validStatuses.includes(statusFromUrl as ClientLeadFilterStatus)) {
+      return statusFromUrl as ClientLeadFilterStatus;
+    }
+    return 'all';
+  }, [searchParams]);
+
+  const [activeTab, setActiveTab] = useState<ClientLeadFilterStatus>(getInitialTab);
   const [leads, setLeads] = useState<ClientLead[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -219,7 +230,16 @@ export default function ClientRequestsPage() {
               <button
                 key={tab.value}
                 type="button"
-                onClick={() => setActiveTab(tab.value)}
+                onClick={() => {
+                  setActiveTab(tab.value);
+                  const newParams = new URLSearchParams(searchParams.toString());
+                  if (tab.value === 'all') {
+                    newParams.delete('status');
+                  } else {
+                    newParams.set('status', tab.value);
+                  }
+                  router.replace(`/${lang}/client/dashboard/requests?${newParams.toString()}`, { scroll: false });
+                }}
                 className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
                   activeTab === tab.value
                     ? 'bg-orange-500 text-white'

@@ -461,7 +461,7 @@ export default function SettingsPage() {
         )}
       </div>
 
-      {/* Account Role */}
+      {/* Account Role - HIDDEN
       <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
         <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_account_role', 'Account Role')}</h2>
         <p className="text-sm text-gray-500">
@@ -478,6 +478,7 @@ export default function SettingsPage() {
           {switchingRole ? t(dict, 'msg_switching', 'Switching…') : t(dict, 'btn_switch_client', 'Switch to Client Account')}
         </button>
       </div>
+      */}
 
       {/* Logout */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">

@@ -308,8 +308,76 @@ Used for:
 - Frontend `ProviderWidget` receives them as `provider.translations` prop and accesses via `const t = provider.translations`
 - Fallback: if requested lang has no widget rows, falls back to English
 - Total keys: 23 per language
- 
- ---
+
+### Provider Dashboard i18n Architecture
+
+#### Overview
+The Provider Dashboard uses a dedicated `provider_dashboard` translation namespace with 339 keys across 34 languages. Translations are fetched once at the layout level via `DashboardI18nProvider` and shared across all dashboard pages and components.
+
+#### Frontend Flow
+1. Dashboard layout mounts `DashboardI18nProvider` from `apps/web/lib/provider-dashboard-i18n.tsx`
+2. Provider fetches translations for namespace `provider_dashboard` on load
+3. All pages and components consume translations via shared dictionary
+4. Translation keys use pattern `t(dict, key, fallback)` for resilient rendering
+
+#### Backend Source of Truth
+Translation seed data lives in `apps/api/scripts/seed_provider_dashboard_translations.py`:
+- `row(*values)` — full multilingual row with 34 language values
+- `row_bg(en, bg)` — Bulgarian/English dual with English fallback for other locales
+- `CLIENT_DASHBOARD_TRANSLATIONS` — alias reuse where client and provider share identical strings
+
+#### Polish Translation Fix (April 2026)
+
+**Failure Mode:**
+Many keys were seeded via `row_bg(...)` which returns Bulgarian for `bg` and English for all other locales. This caused Polish (`pl`) translations to incorrectly display English text instead of Polish.
+
+**Remediation Approach:**
+1. **DB-driven audit** — Extracted all `t(dict, key, fallback)` keys from affected dashboard pages/components
+2. **Comparison** — Queried `bg`, `pl`, and `en` values in the `translations` table
+3. **Identification** — Found keys where `pl` was missing or equal to `en` (indicating fallback)
+4. **Targeted fixes** applied in priority order:
+   - Same-namespace aliases where provider dashboard already had equivalent keys
+   - Client-dashboard alias reuse where appropriate (`CLIENT_DASHBOARD_TRANSLATIONS` import)
+   - Explicit multilingual `row(...)` overrides for keys needing full 34-language support
+   - Centralized `POLISH_OVERRIDES` block for remaining Polish-specific fixes
+
+**Operational Workflow:**
+```bash
+# 1. Reseed translations
+cd apps/api
+python scripts/seed_provider_dashboard_translations.py
+
+# 2. Clear Redis cache for provider_dashboard namespace
+redis-cli DEL "translations:pl:provider_dashboard"
+redis-cli KEYS "translations:*:provider_dashboard" | xargs redis-cli DEL
+
+# 3. Validate DB values and UI pages
+# - Check /pl/provider/dashboard
+# - Check /pl/provider/dashboard/leads
+# - Check /pl/provider/dashboard/services
+# - Check /pl/provider/dashboard/analytics
+# - Check /pl/provider/dashboard/reviews
+# - Check /pl/provider/dashboard/qr-code
+# - Check /pl/provider/dashboard/profile
+```
+
+**Branding Exception:**
+The key `logo_pro` must remain untranslated as `"Pro"` in all 34 locales. This is an intentional branding exception, not a bug.
+
+**Affected Sections:**
+- Overview / Panel
+- Leads
+- Services
+- Analytics
+- Reviews
+- QR Code
+- Profile
+- Settings / Sidebar (previously fixed and validated)
+
+**No Code Changes Required:**
+The fix is purely data-seeding + cache invalidation. No API contracts, database schema, or model changes were made.
+
+---
  
 ## Frontend Architecture
 - Next.js App Router

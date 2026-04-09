@@ -145,24 +145,39 @@ export default function ClientOverviewPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        <StatsCard
-          title={t(dict, 'stat_active_requests', 'Active Requests')}
-          value={stats?.active_leads ?? 0}
-          icon={<ActiveRequestsIcon />}
-          accent
-        />
-        <StatsCard
-          title={t(dict, 'stat_completed_services', 'Completed Services')}
-          value={stats?.completed_leads ?? 0}
-          icon={<CompletedServicesIcon />}
-          accent
-        />
-        <StatsCard
-          title={t(dict, 'stat_reviews', 'Reviews')}
-          value={stats?.reviews_written ?? 0}
-          icon={<ReviewsIcon />}
-          accent
-        />
+        <Link
+          href={`/${lang}/client/dashboard/requests?status=active`}
+          className="cursor-pointer hover:ring-2 hover:ring-orange-400 transition rounded-xl block"
+        >
+          <StatsCard
+            title={t(dict, 'stat_active_requests', 'Active Requests')}
+            value={stats?.active_leads ?? 0}
+            icon={<ActiveRequestsIcon />}
+            accent
+          />
+        </Link>
+        <Link
+          href={`/${lang}/client/dashboard/requests?status=done`}
+          className="cursor-pointer hover:ring-2 hover:ring-orange-400 transition rounded-xl block"
+        >
+          <StatsCard
+            title={t(dict, 'stat_completed_services', 'Completed Services')}
+            value={stats?.completed_leads ?? 0}
+            icon={<CompletedServicesIcon />}
+            accent
+          />
+        </Link>
+        <Link
+          href={`/${lang}/client/dashboard/reviews`}
+          className="cursor-pointer hover:ring-2 hover:ring-orange-400 transition rounded-xl block"
+        >
+          <StatsCard
+            title={t(dict, 'stat_reviews', 'Reviews')}
+            value={stats?.reviews_written ?? 0}
+            icon={<ReviewsIcon />}
+            accent
+          />
+        </Link>
       </div>
 
       {recentLeads.length === 0 ? (

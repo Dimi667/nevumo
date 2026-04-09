@@ -290,6 +290,14 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Keys: verified_label, rating_label, jobs_label, phone_label, phone_placeholder, notes_label, notes_placeholder, response_time, button_text, disclaimer, success_title, success_message, success_message_received, new_request_button, new_badge, no_reviews_yet, recent_request_label, city_leads_label, free_request_no_obligation, no_registration, direct_contact_with_provider, services_label, price_on_request
 
 ### Recent Changes (April 2026)
+- **Provider Dashboard i18n Polish Translation Fix** — Complete remediation of Polish translations in provider dashboard:
+  - Root cause: `row_bg(...)` seeding caused English fallback for non-Bulgarian locales
+  - Fix: Centralized `POLISH_OVERRIDES` block in `apps/api/scripts/seed_provider_dashboard_translations.py`
+  - Affected sections: Overview, Leads, Services, Analytics, Reviews, QR Code, Profile (Settings/Sidebar previously fixed)
+  - Operational workflow: reseed script → clear Redis cache (`translations:*:provider_dashboard`) → validate UI pages
+  - Branding exception: `logo_pro` remains untranslated as `"Pro"` in all 34 locales
+  - No API contract changes, no database schema changes, no model changes
+  - Validation required on: `/pl/provider/dashboard`, `/pl/provider/dashboard/leads`, `/pl/provider/dashboard/services`, `/pl/provider/dashboard/analytics`, `/pl/provider/dashboard/reviews`, `/pl/provider/dashboard/qr-code`, `/pl/provider/dashboard/profile`
 - **April 4 Strategic Decisions — Warsaw launch operating model**
   - **Categories**: launch scope is intentionally constrained to `cleaning`, `plumbing`, and `massage` to validate supply-demand fit before adding more verticals
   - **Homepage strategy**: homepage is provider-first and optimized for specialist acquisition, not for client browsing
