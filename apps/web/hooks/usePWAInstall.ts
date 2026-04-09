@@ -31,15 +31,26 @@ interface UsePWAInstallReturn {
 }
 
 export function usePWAInstall(): UsePWAInstallReturn {
-  const [canInstall, setCanInstall] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+  const [isIOS] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const ua = window.navigator.userAgent.toLowerCase();
+    return /iphone|ipad|ipod/.test(ua) && !(/crios/.test(ua));
+  });
+
+  const [canInstall, setCanInstall] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const ua = window.navigator.userAgent.toLowerCase();
+    const isIOSDevice = /iphone|ipad|ipod/.test(ua) && !(/crios/.test(ua));
+    const isInstalled = localStorage.getItem(STORAGE_KEYS.INSTALLED) === 'true';
+    const dismissCount = parseInt(localStorage.getItem(STORAGE_KEYS.DISMISS_COUNT) || '0', 10);
+    if (isInstalled || dismissCount >= 2) return false;
+    if (isIOSDevice && !window.matchMedia('(display-mode: standalone)').matches) return true;
+    return false;
+  });
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
-    // Проверка дали е iOS
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    const isIOSDevice = /iphone|ipad|ipod/.test(userAgent) && !(/crios/.test(userAgent));
-    setIsIOS(isIOSDevice);
+    // iOS проверката вече е направена в initial state
 
     // Проверка на localStorage
     const isInstalled = localStorage.getItem(STORAGE_KEYS.INSTALLED) === 'true';
@@ -67,7 +78,7 @@ export function usePWAInstall(): UsePWAInstallReturn {
     window.addEventListener('appinstalled', handleAppInstalled);
 
     // iOS: показваме prompt ако не е инсталирано
-    if (isIOSDevice && !window.matchMedia('(display-mode: standalone)').matches) {
+    if (isIOS && !window.matchMedia('(display-mode: standalone)').matches) {
       setCanInstall(true);
     }
 
