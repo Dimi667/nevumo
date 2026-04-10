@@ -11,9 +11,13 @@ export async function fetchTranslations(
   ];
   const resolvedLang = supportedLangs.includes(lang) ? lang : 'en';
 
+  const apiBase = typeof window === 'undefined'
+    ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
+    : '';
+
   try {
     const res = await fetch(
-      `/api/v1/translations?lang=${resolvedLang}&namespace=${namespace}`,
+      `${apiBase}/api/v1/translations?lang=${resolvedLang}&namespace=${namespace}`,
       process.env.NODE_ENV === 'development' 
         ? { cache: 'no-store' } 
         : { next: { revalidate: 3600 } }

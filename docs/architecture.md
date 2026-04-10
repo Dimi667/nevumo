@@ -301,6 +301,33 @@ Used for:
 - Homepage/category/review pages consume the same namespaced translation endpoint regardless of market
 - Operational rule: adding a new market means inserting translation rows for that locale and namespace set, with zero application logic changes
 
+### SSR Absolute URL Rule (CRITICAL)
+
+**Problem:** Next.js SSR runs `fetch()` calls on the server. Relative URLs like `/api/v1/...` fail silently server-side — the server has no base URL context. Result: all translation fetches return empty, page renders in English regardless of the URL language segment.
+
+**Mandatory pattern for every file that fetches from the API:**
+```typescript
+const API_BASE = typeof window === 'undefined'
+  ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
+  : '';
+```
+
+**Files where this is applied:**
+- `apps/web/lib/ui-translations.ts` 
+- `apps/web/lib/api.ts` 
+- `apps/web/lib/auth-api.ts` 
+- `apps/web/lib/provider-api.ts` 
+- `apps/web/lib/client-api.ts` 
+- `apps/web/lib/tracking.ts` 
+- `apps/web/lib/locales.ts` 
+
+**Rule for new files:** Any new lib file or SSR page that calls `fetch('/api/v1/...')` MUST use this pattern. Client components (`'use client'`) are exempt.
+
+**Production checklist:**
+- `NEXT_PUBLIC_API_URL` must point to the real backend URL in production `.env` 
+- Never hardcode `localhost` anywhere
+- Test every new SSR page from a second device on the same network before deploying
+
 ### Widget Translation Namespace
 - All provider widget UI strings are stored in the `widget` namespace of the `translations` table
 - Keys follow the pattern `widget.key_name` (e.g., `widget.button_text`, `widget.phone_label`)

@@ -14,7 +14,9 @@ import type {
   UpdateProfileInput,
 } from '@/types/provider';
 
-const API_BASE = '';
+const API_BASE = typeof window === 'undefined'
+  ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
+  : '';
 
 export class ProviderApiError extends Error {
   code: string;
