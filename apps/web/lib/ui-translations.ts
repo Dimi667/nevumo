@@ -13,7 +13,7 @@ export async function fetchTranslations(
 
   try {
     const res = await fetch(
-      `http://localhost:8000/api/v1/translations?lang=${resolvedLang}&namespace=${namespace}`,
+      `/api/v1/translations?lang=${resolvedLang}&namespace=${namespace}`,
       process.env.NODE_ENV === 'development' 
         ? { cache: 'no-store' } 
         : { next: { revalidate: 3600 } }

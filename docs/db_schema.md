@@ -387,7 +387,7 @@ CREATE INDEX idx_translations_key ON translations(key);
   trust_multiple, trust_response, sticky_btn
 - **widget namespace**: 23 keys × 34 languages = 782 rows
 - **client_dashboard namespace**: Client dashboard UI strings
-- **provider_dashboard namespace**: 160 keys × 34 languages = 5,440 rows
+- **provider_dashboard namespace**: 168 keys × 34 languages = 5,712 rows (includes 8 onboarding hero keys added April 10, 2026)
   Keys include: nav_overview, nav_analytics, nav_leads, nav_qr_code, nav_reviews,
   nav_services, nav_settings, nav_profile, and all dashboard UI strings
 - **Total rows**: 8,000+ translations across all namespaces

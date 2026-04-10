@@ -108,7 +108,7 @@ export default function DashboardOverviewPage() {
   // Derive onboarding state from missing_fields
   const onboardingState = deriveOnboardingState(profile?.missing_fields);
   const isOnboardingComplete = profile?.is_complete ?? true;
-  const heroContent = !isOnboardingComplete ? getHeroContent(onboardingState) : null;
+  const heroContent = !isOnboardingComplete ? getHeroContent(onboardingState, dict) : null;
 
   // Top sources for the preview (sorted desc, top 3)
   const sourceLabels = getSourceLabels(dict);
@@ -151,8 +151,8 @@ export default function DashboardOverviewPage() {
           </div>
           {/* Compact step indicator */}
           <CompactStepIndicator 
-            isProfileComplete={onboardingState.isProfileComplete}
-            isServiceComplete={onboardingState.isServiceComplete}
+            state={onboardingState}
+            dict={dict}
           />
         </div>
       )}

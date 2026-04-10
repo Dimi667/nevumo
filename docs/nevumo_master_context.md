@@ -300,8 +300,18 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Tracking: pwa_prompt_shown, pwa_install_accepted, pwa_install_dismissed, pwa_installed — всички през trackPageEvent() към page_events таблицата
   - CORS fix: apps/api/.env добавен с CORS_ORIGINS, apps/api/main.py зарежда .env чрез load_dotenv()
   - PWA prompt не се показва на desktop (очаквано) — активира се само на мобилен Chrome (Android) и Safari (iOS 16.4+)
+- **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
+  - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
+  - 272 new rows seeded via `apps/api/scripts/seed_onboarding_hero_translations.py` 
+  - `getHeroContent()` and `CompactStepIndicator` in `apps/web/lib/onboarding-utils.tsx` now accept `dict` param and use `t()` for all strings
+  - Dashboard page passes `dict` from `useDashboardI18n()` to both components
 
 ### Recent Changes (April 2026)
+- **April 10 — Onboarding Hero i18n + API routing fix**
+  - Onboarding hero banner fully translated in 34 languages via provider_dashboard namespace
+  - Frontend API_BASE changed from hardcoded `http://localhost:8000` to empty string `""` across all lib files (api.ts, auth-api.ts, client-api.ts, provider-api.ts, tracking.ts, ui-translations.ts, locales.ts)
+  - next.config.mjs rewrites added to proxy `/api/v1` requests to backend, enabling relative API paths
+  - `httpx` package added to .venv (required by translation_service.py)
 - **Provider Dashboard i18n Polish Translation Fix** — Complete remediation of Polish translations in provider dashboard:
   - Root cause: `row_bg(...)` seeding caused English fallback for non-Bulgarian locales
   - Fix: Centralized `POLISH_OVERRIDES` block in `apps/api/scripts/seed_provider_dashboard_translations.py`

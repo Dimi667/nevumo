@@ -3,6 +3,7 @@ import { generateHreflangAlternates } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import Image from 'next/image';
 import RotatingCategory from '@/components/homepage/RotatingCategory';
+import { AuthIntentButton } from './AuthIntentButton';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -74,12 +75,13 @@ export default async function Homepage({ params }: PageProps) {
             {t(homepageT, 'social_proof', '')}
           </div>
           
-          <a 
+          <AuthIntentButton
             href={`/${normalizedLang}/auth`}
+            intent="provider"
             className="bg-white text-orange-600 font-bold px-8 py-4 rounded-full hover:bg-orange-50 transition"
           >
             {t(homepageT, 'cta_hero', 'Start for free')}
-          </a>
+          </AuthIntentButton>
         </div>
       </section>
 
@@ -123,12 +125,13 @@ export default async function Homepage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-900">{t(homepageT, 'cat_cleaning_name', 'Cleaning')}</h3>
               <p className="text-gray-600 mb-6">{t(homepageT, 'cat_cleaning_leads', '26 requests this week')}</p>
-              <a 
+              <AuthIntentButton
                 href={`/${normalizedLang}/auth?category=cleaning`}
+                intent="provider"
                 className="btn-primary w-full text-sm whitespace-nowrap"
               >
                 {t(homepageT, 'cat_cta', 'I offer this service')}
-              </a>
+              </AuthIntentButton>
             </div>
             <div className="nevumo-card text-center">
               <div className="text-orange-500 mb-3">
@@ -136,12 +139,13 @@ export default async function Homepage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-900">{t(homepageT, 'cat_plumbing_name', 'Plumbing')}</h3>
               <p className="text-gray-600 mb-6">{t(homepageT, 'cat_plumbing_leads', '18 requests this week')}</p>
-              <a 
+              <AuthIntentButton
                 href={`/${normalizedLang}/auth?category=plumbing`}
+                intent="provider"
                 className="btn-primary w-full text-sm whitespace-nowrap"
               >
                 {t(homepageT, 'cat_cta', 'I offer this service')}
-              </a>
+              </AuthIntentButton>
             </div>
             <div className="nevumo-card text-center">
               <div className="text-orange-500 mb-3">
@@ -149,12 +153,13 @@ export default async function Homepage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-900">{t(homepageT, 'cat_massage_name', 'Massage')}</h3>
               <p className="text-gray-600 mb-6">{t(homepageT, 'cat_massage_leads', '14 requests this week')}</p>
-              <a 
+              <AuthIntentButton
                 href={`/${normalizedLang}/auth?category=massage`}
+                intent="provider"
                 className="btn-primary w-full text-sm whitespace-nowrap"
               >
                 {t(homepageT, 'cat_cta', 'I offer this service')}
-              </a>
+              </AuthIntentButton>
             </div>
           </div>
         </div>
@@ -222,12 +227,13 @@ export default async function Homepage({ params }: PageProps) {
       <section className="py-20 px-6 bg-gray-100" id="second-cta">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-8 text-gray-900">{t(homepageT, 'cta2_title', '')}</h2>
-          <a 
+          <AuthIntentButton
             href={`/${normalizedLang}/auth`}
+            intent="provider"
             className="btn-primary text-lg px-8 py-4 inline-block"
           >
             {t(homepageT, 'cta2_btn', '')}
-          </a>
+          </AuthIntentButton>
         </div>
       </section>
 
@@ -256,12 +262,13 @@ export default async function Homepage({ params }: PageProps) {
 
       {/* MOBILE STICKY CTA */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 transition-transform duration-300" id="mobile-sticky-cta">
-        <a 
+        <AuthIntentButton
           href={`/${normalizedLang}/auth`}
+          intent="provider"
           className="btn-primary w-full text-center block"
         >
           {t(homepageT, 'cta_hero', 'Start for free')}
-        </a>
+        </AuthIntentButton>
       </div>
 
       <script dangerouslySetInnerHTML={{

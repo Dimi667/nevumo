@@ -1,6 +1,6 @@
 import { ApiError, type ApiResponse } from '@/lib/api';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+const API_BASE = '';
 
 export type ClientLeadFilterStatus = 'all' | 'active' | 'done' | 'rejected';
 export type ClientLeadStatus = 'created' | 'pending_match' | 'matched' | 'contacted' | 'done' | 'rejected' | 'expired' | 'cancelled';

@@ -740,7 +740,7 @@ export default function ProfilePage() {
 
   if (isComplete === false) {
     return (
-      <div className="max-w-lg mx-auto space-y-6">
+      <div className="max-w-lg mx-auto space-y-6 pb-24 min-h-[calc(100vh+1px)]">
         <div>
           <h1 className="text-xl font-bold text-gray-900">{t(dict, 'label_complete_profile', 'Complete your profile')}</h1>
           <p className="text-sm text-gray-500 mt-0.5">

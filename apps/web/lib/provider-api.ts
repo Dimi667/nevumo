@@ -14,7 +14,7 @@ import type {
   UpdateProfileInput,
 } from '@/types/provider';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+const API_BASE = '';
 
 export class ProviderApiError extends Error {
   code: string;

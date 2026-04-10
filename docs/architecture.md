@@ -374,6 +374,9 @@ The key `logo_pro` must remain untranslated as `"Pro"` in all 34 locales. This i
 - Profile
 - Settings / Sidebar (previously fixed and validated)
 
+#### Onboarding Hero Banner i18n (April 10, 2026)
+The onboarding hero banner on the dashboard overview page is now fully DB-backed. All 8 strings (titles, descriptions, CTAs, step labels) are stored in the `provider_dashboard` namespace and served via the standard translations endpoint. `getHeroContent()` and `CompactStepIndicator` in `apps/web/lib/onboarding-utils.tsx` accept a `dict` parameter and use `t()` for rendering. The dashboard page passes `dict` from `useDashboardI18n()` to both components.
+
 **No Code Changes Required:**
 The fix is purely data-seeding + cache invalidation. No API contracts, database schema, or model changes were made.
 

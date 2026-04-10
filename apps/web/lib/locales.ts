@@ -122,7 +122,7 @@ export type TranslationDictionary = {
 };
 
 export async function getDictionary(lang: string): Promise<TranslationDictionary> {
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const API_BASE = '';
   const normalized = lang || 'bg';
   try {
     const response = await fetch(`${API_BASE}/translations/${normalized}`, {

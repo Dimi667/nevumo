@@ -83,7 +83,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
 
   return (
     <DashboardI18nProvider lang={lang}>
-      <div className={`min-h-screen bg-gray-50 ${isOnboarding ? 'flex justify-center' : 'flex'}`}>
+      <div className={isOnboarding ? 'bg-gray-50' : 'min-h-screen bg-gray-50 flex'}>
         {/* Hide sidebar completely during onboarding */}
         {!isOnboarding && (
           <DashboardSidebar
@@ -93,7 +93,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
           />
         )}
 
-        <div className={`${isOnboarding ? 'w-full max-w-2xl mx-auto' : 'flex-1'} flex flex-col min-w-0`}>
+        <div className={isOnboarding ? 'w-full max-w-2xl mx-auto' : 'flex-1 flex flex-col min-w-0'}>
           {/* Hide top bar during onboarding to remove menu button */}
           {!isOnboarding ? (
             <DashboardTopBar
@@ -103,7 +103,10 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
           ) : (
             <div className="h-16 flex-shrink-0" /> // Spacer to maintain layout
           )}
-          <main className="flex-1 p-4 md:p-6 overflow-auto">
+          <main
+            className={isOnboarding ? 'p-4 md:p-6 w-full' : 'flex-1 p-4 md:p-6 overflow-auto overscroll-contain'}
+            style={isOnboarding ? undefined : { WebkitOverflowScrolling: 'touch' }}
+          >
             {children}
           </main>
         </div>
