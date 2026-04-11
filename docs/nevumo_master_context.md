@@ -293,13 +293,17 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `apps/web/public/icons/icon-192x192.png` и `icon-512x512.png` — PWA иконки
   - `apps/web/next.config.mjs` — next-pwa конфигурация (disabled в development)
   - `apps/web/app/layout.tsx` — PWA meta тагове (manifest, theme-color, apple-mobile-web-app-*)
-  - `apps/web/hooks/usePWAInstall.ts` — Hook: beforeinstallprompt (Android), iOS detection, localStorage anti-spam (спира при 2 откази), canInstall/isIOS/showPrompt/handleDismiss/handleInstalled
+  - `apps/web/hooks/usePWAInstall.ts` — Hook: beforeinstallprompt (Android), iOS detection, localStorage anti-spam (спира при 2 отказа), canInstall/isIOS/showPrompt/handleDismiss/handleInstalled
   - `apps/web/components/pwa/PWAInstallPrompt.tsx` — Компонент: Android bottom banner + iOS bottom sheet с 2-стъпкови инструкции, различно копие за client/provider роли
   - Trigger точки: lead submit (2s delay) и provider onboarding completion (1.5s delay, useRef guard)
   - localStorage keys: pwa_installed, pwa_prompt_dismissed_count
   - Tracking: pwa_prompt_shown, pwa_install_accepted, pwa_install_dismissed, pwa_installed — всички през trackPageEvent() към page_events таблицата
   - CORS fix: apps/api/.env добавен с CORS_ORIGINS, apps/api/main.py зарежда .env чрез load_dotenv()
   - PWA prompt не се показва на desktop (очаквано) — активира се само на мобилен Chrome (Android) и Safari (iOS 16.4+)
+  - pwa namespace в translations таблицата: 6 ключа × 34 езика = 204 реда (install_title, client_subtitle, provider_subtitle, ios_step1, ios_step2, dismiss_button)
+  - PWAInstallPrompt компонентът зарежда преводи от DB via GET /api/v1/translations?lang={lang}&namespace=pwa
+  - lang prop се предава от layout.tsx (provider dashboard) и LeadForm.tsx (category pages)
+  - iOS bottom sheet: текстовете са центрирани, бутонът е sticky
 - **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
   - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
   - 272 new rows seeded via `apps/api/scripts/seed_onboarding_hero_translations.py` 

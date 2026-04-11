@@ -132,6 +132,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
               trigger="onboarding_complete"
               role="provider"
               onClose={() => setShowPWAPrompt(false)}
+              lang={lang}
             />
           )}
         </div>

@@ -260,6 +260,7 @@ export default function LeadForm({
             trigger="lead_submit"
             role="client"
             onClose={() => setShowPWAPrompt(false)}
+            lang={lang}
           />
         )}
       </div>

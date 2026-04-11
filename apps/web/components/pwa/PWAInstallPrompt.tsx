@@ -8,21 +8,38 @@ interface PWAInstallPromptProps {
   trigger: 'lead_submit' | 'onboarding_complete' | 'return_user';
   role: 'client' | 'provider';
   onClose: () => void;
+  lang?: string;
 }
 
-const COPY_TEXT = {
-  client: 'Следи заявките без да отваряш браузър',
-  provider: 'Виж нови заявки веднага',
-};
 
 export default function PWAInstallPrompt({
   trigger,
   role,
   onClose,
+  lang = 'en',
 }: PWAInstallPromptProps) {
   const { canInstall, isIOS, showPrompt, handleDismiss, handleInstalled } = usePWAInstall();
   const [hasTracked, setHasTracked] = useState(false);
+  const [dict, setDict] = useState<Record<string, string>>({});
   const platform = isIOS ? 'ios' : 'android';
+
+  // Fetch translations on mount
+  useEffect(() => {
+    fetch(`/api/v1/translations?lang=${lang}&namespace=pwa`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.success && data?.data && typeof data.data === 'object') {
+          setDict(data.data);
+        }
+      })
+      .catch(() => {
+        // Fallback to empty dict if fetch fails
+        setDict({});
+      });
+  }, [lang]);
+
+  // Translation helper
+  const t = (key: string, fallback: string) => dict[key] || fallback;
 
   // Track when prompt is shown
   useEffect(() => {
@@ -89,15 +106,19 @@ export default function PWAInstallPrompt({
   if (isIOS) {
     return (
       <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50">
-        <div className="w-full max-w-md rounded-t-2xl bg-white p-6 shadow-xl">
-          <div className="mb-4 flex items-center justify-between">
+        <div
+          className="w-full rounded-t-2xl bg-white shadow-xl"
+          style={{ padding: '20px 24px 32px', maxHeight: '80vh', overflowY: 'auto', textAlign: 'center' }}
+        >
+          <div className="mb-4 flex items-center justify-center relative">
             <h3 className="text-lg font-semibold text-gray-900">
-              Инсталирай Nevumo
+              {t('install_title', 'Install Nevumo')}
             </h3>
             <button
               onClick={handleDismissClick}
               className="text-gray-400 hover:text-gray-600"
               aria-label="Close"
+              style={{ position: 'absolute', right: 0 }}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18" />
@@ -106,32 +127,36 @@ export default function PWAInstallPrompt({
             </button>
           </div>
 
-          <p className="mb-6 text-sm text-gray-600">{COPY_TEXT[role]}</p>
+          <p className="mb-6 text-sm text-gray-600">
+            {role === 'client'
+              ? t('client_subtitle', 'Track requests without opening a browser')
+              : t('provider_subtitle', 'See new requests instantly')}
+          </p>
 
           <div className="mb-6 space-y-3">
             <p className="text-sm text-gray-700">
-              1. Натисни{' '}
+              1. {t('ios_step1', 'Tap Share in the bottom toolbar')}{' '}
               <span className="inline-flex items-center gap-1 font-medium text-orange-600">
-                Share
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
                   <polyline points="16 6 12 2 8 6" />
                   <line x1="12" y1="2" x2="12" y2="15" />
                 </svg>
-              </span>{' '}
-              в долната лента на браузъра
+              </span>
             </p>
             <p className="text-sm text-gray-700">
-              2. Избери &quot;Add to Home Screen&quot;
+              2. {t('ios_step2', 'Select "Add to Home Screen"')}
             </p>
           </div>
 
-          <button
-            onClick={handleInstallClick}
-            className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-semibold text-white transition hover:bg-orange-600"
-          >
-            Разбрах
-          </button>
+          <div style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', paddingTop: '12px' }}>
+            <button
+              onClick={handleDismissClick}
+              className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-semibold text-white transition hover:bg-orange-600"
+            >
+              {t('dismiss_button', 'Got it')}
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -142,8 +167,12 @@ export default function PWAInstallPrompt({
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white p-4 shadow-lg">
       <div className="mx-auto flex max-w-lg items-center justify-between gap-4">
         <div className="flex-1">
-          <p className="text-sm font-medium text-gray-900">{COPY_TEXT[role]}</p>
-          <p className="text-xs text-gray-500">Инсталирай приложението за по-бърз достъп</p>
+          <p className="text-sm font-medium text-gray-900">
+            {role === 'client'
+              ? t('client_subtitle', 'Track requests without opening a browser')
+              : t('provider_subtitle', 'See new requests instantly')}
+          </p>
+          <p className="text-xs text-gray-500">{t('install_title', 'Install Nevumo')}</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -151,7 +180,7 @@ export default function PWAInstallPrompt({
             onClick={handleInstallClick}
             className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-600"
           >
-            Инсталирай
+            {t('dismiss_button', 'Got it')}
           </button>
           <button
             onClick={handleDismissClick}
