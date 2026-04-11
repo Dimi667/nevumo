@@ -5,6 +5,7 @@ import { createLead, type ProviderDetail, getCityBySlug, type CityOut } from '@/
 import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getPhonePrefix } from '@/lib/phoneUtils';
+import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 
 interface ProviderWidgetProps {
   provider: ProviderDetail;
@@ -201,8 +202,10 @@ export default function ProviderWidget({
   const [showAllServices, setShowAllServices] = useState(false);
   const [isAutoFilled, setIsAutoFilled] = useState(false);
   const [descriptionValue, setDescriptionValue] = useState('');
+  const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const { phone: savedPhone, savePhone, loading: phoneLoading } = usePhone();
   const locale = (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
+  const lang = locale || 'en';
   const phonePrefix = getPhonePrefix(cityInfo?.country_code);
   const phoneDigitsCount = phoneValue.replace(/\D/g, '').length;
   const isPhoneValid = phoneDigitsCount >= 7;
@@ -314,6 +317,8 @@ export default function ProviderWidget({
         if (phoneValue.replace(/\D/g, '').length >= 7) {
           savePhone(phoneValue.trim());
         }
+        // Show PWA prompt after 2 seconds
+        setTimeout(() => { setShowPWAPrompt(true); }, 2000);
       } else {
         setError(true);
       }
@@ -349,6 +354,16 @@ export default function ProviderWidget({
         >
           {t.new_request_button || 'New Request'}
         </button>
+
+        {/* PWA Install Prompt */}
+        {showPWAPrompt && (
+          <PWAInstallPrompt
+            trigger="lead_submit"
+            role="client"
+            onClose={() => setShowPWAPrompt(false)}
+            lang={lang}
+          />
+        )}
       </div>
     );
   }

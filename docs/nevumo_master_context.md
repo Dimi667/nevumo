@@ -295,7 +295,11 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `apps/web/app/layout.tsx` — PWA meta тагове (manifest, theme-color, apple-mobile-web-app-*)
   - `apps/web/hooks/usePWAInstall.ts` — Hook: beforeinstallprompt (Android), iOS detection, localStorage anti-spam (спира при 2 отказа), canInstall/isIOS/showPrompt/handleDismiss/handleInstalled
   - `apps/web/components/pwa/PWAInstallPrompt.tsx` — Компонент: Android bottom banner + iOS bottom sheet с 2-стъпкови инструкции, различно копие за client/provider роли
-  - Trigger точки: lead submit (2s delay) и provider onboarding completion (1.5s delay, useRef guard)
+  - Trigger точки:
+    - Category page lead submit — LeadForm.tsx (2s delay)
+    - Provider onboarding completion — provider dashboard (1.5s delay, useRef guard)
+    - Provider page lead submit — ProviderWidget.tsx (2s delay)
+    - Embedded widget lead submit — ProviderWidget.tsx (2s delay)
   - localStorage keys: pwa_installed, pwa_prompt_dismissed_count
   - Tracking: pwa_prompt_shown, pwa_install_accepted, pwa_install_dismissed, pwa_installed — всички през trackPageEvent() към page_events таблицата
   - CORS fix: apps/api/.env добавен с CORS_ORIGINS, apps/api/main.py зарежда .env чрез load_dotenv()
