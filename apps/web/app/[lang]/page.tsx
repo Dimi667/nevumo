@@ -4,6 +4,7 @@ import { fetchTranslations, t } from '@/lib/ui-translations';
 import Image from 'next/image';
 import RotatingCategory from '@/components/homepage/RotatingCategory';
 import { AuthIntentButton } from './AuthIntentButton';
+import CategoryIntentButton from '@/components/homepage/CategoryIntentButton';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -125,13 +126,13 @@ export default async function Homepage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-900">{t(homepageT, 'cat_cleaning_name', 'Cleaning')}</h3>
               <p className="text-gray-600 mb-6">{t(homepageT, 'cat_cleaning_leads', '26 requests this week')}</p>
-              <AuthIntentButton
+              <CategoryIntentButton
                 href={`/${normalizedLang}/auth?category=cleaning`}
-                intent="provider"
+                category="cleaning"
                 className="btn-primary w-full text-sm whitespace-nowrap"
               >
                 {t(homepageT, 'cat_cta', 'I offer this service')}
-              </AuthIntentButton>
+              </CategoryIntentButton>
             </div>
             <div className="nevumo-card text-center">
               <div className="text-orange-500 mb-3">
@@ -139,13 +140,13 @@ export default async function Homepage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-900">{t(homepageT, 'cat_plumbing_name', 'Plumbing')}</h3>
               <p className="text-gray-600 mb-6">{t(homepageT, 'cat_plumbing_leads', '18 requests this week')}</p>
-              <AuthIntentButton
+              <CategoryIntentButton
                 href={`/${normalizedLang}/auth?category=plumbing`}
-                intent="provider"
+                category="plumbing"
                 className="btn-primary w-full text-sm whitespace-nowrap"
               >
                 {t(homepageT, 'cat_cta', 'I offer this service')}
-              </AuthIntentButton>
+              </CategoryIntentButton>
             </div>
             <div className="nevumo-card text-center">
               <div className="text-orange-500 mb-3">
@@ -153,13 +154,13 @@ export default async function Homepage({ params }: PageProps) {
               </div>
               <h3 className="text-xl font-semibold mb-2 text-gray-900">{t(homepageT, 'cat_massage_name', 'Massage')}</h3>
               <p className="text-gray-600 mb-6">{t(homepageT, 'cat_massage_leads', '14 requests this week')}</p>
-              <AuthIntentButton
+              <CategoryIntentButton
                 href={`/${normalizedLang}/auth?category=massage`}
-                intent="provider"
+                category="massage"
                 className="btn-primary w-full text-sm whitespace-nowrap"
               >
                 {t(homepageT, 'cat_cta', 'I offer this service')}
-              </AuthIntentButton>
+              </CategoryIntentButton>
             </div>
           </div>
         </div>

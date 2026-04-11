@@ -325,6 +325,17 @@ export default function ProfilePage() {
         setProfile(p);
         setCategories(cats);
         setCities([...bgCities, ...rsCities, ...plCities]);
+
+        // Pre-select category from localStorage if valid and not already selected
+        const categoryParam = localStorage.getItem('nevumo_selected_category');
+        if (categoryParam && cats.some(c => c.slug === categoryParam)) {
+          setStep2(f => {
+            if (f.category_slug === '') {
+              return { ...f, category_slug: categoryParam };
+            }
+            return f;
+          });
+        }
         setIsComplete(dashboard.profile.is_complete);
         setProviderId(dashboard.profile.id.toString());
         
@@ -667,6 +678,9 @@ export default function ProfilePage() {
       if (providerId) {
         clearStep1Draft(providerId);
       }
+
+      // Clear selected category from localStorage
+      localStorage.removeItem('nevumo_selected_category');
 
       // Show PWA install prompt after onboarding complete (only once per session)
       if (!hasShownPWAPromptRef.current) {
