@@ -987,7 +987,10 @@ Layout: Sidebar (logo + nav links + "НАМЕРИ УСЛУГА" CTA) + TopBar wi
 
 **Profile** — Two modes:
 - New provider (is_complete === false): 2-step onboarding wizard
-  - Step 1: Profile photo upload + Business name + Description
+  - Step 1: Profile photo upload + Company or personal name + Description
+    - **Label**: "Company or personal name" (universal for businesses and freelancers)
+    - **Placeholder**: "e.g. Maria's Massage Ltd or Maria Kowalska"
+    - **Note**: Texts come from provider_dashboard namespace in translations table
   - Step 2: Add First Service — Title, Category (select), **Cities (multi-select with SearchInput)**, Price Type (fixed/hourly/request/per_sqm), Price, Currency (auto-detected from first city)
   - **Progress indicator**: Step numbers turn green when required fields are valid (orange → green transition)
   - **Real-time inline validation**: Green border when valid, red border + error message when invalid, immediate feedback on typing

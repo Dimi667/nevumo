@@ -132,9 +132,11 @@ const SESSION_EMAIL_KEY = "nevumo_auth_email";
 interface LoginClientProps {
   lang: string;
   initialRole: string | null;
+  authDict: Record<string, string>;
 }
 
-export default function LoginClient({ lang, initialRole }: LoginClientProps) {
+export default function LoginClient({ lang, initialRole, authDict }: LoginClientProps) {
+  const t = (dict: Record<string, string>, key: string, fallback: string): string => dict[key] ?? fallback;
   const searchParams = useSearchParams();
   const claimToken = searchParams.get('claim');
   const [state, setState] = useState<AuthState>({
@@ -149,8 +151,6 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
     socialToast: null,
     intent: null,
   });
-
-  const [authDict, setAuthDict] = useState<Record<string, string>>({});
 
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -186,14 +186,6 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Fetch auth namespace translations
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/translations?lang=${lang}&namespace=auth`)
-      .then(r => r.json())
-      .then(json => { if (json.success) setAuthDict(json.data) })
-      .catch(() => {})
-  }, [lang]);
-
   // Store claim token on mount
   useEffect(() => {
     if (claimToken) {
@@ -224,7 +216,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
       trackPageEvent('auth_password_shown', 'auth', { step: nextStep });
       setState(s => ({ ...s, loading: false, step: nextStep, password: '' }));
     } catch {
-      setState(s => ({ ...s, loading: false, error: 'Възникна грешка. Опитай отново.' }));
+      setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
     }
   }
 
@@ -274,14 +266,14 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
         if (err.code === 'INVALID_CREDENTIALS' || err.message.includes('Invalid credentials')) {
           setState(s => ({ ...s, loading: false, error: 'invalid_password' }));
         } else if (err.code === 'RATE_LIMIT_EXCEEDED' || err.message.includes('Too many')) {
-          setState(s => ({ ...s, loading: false, error: 'Твърде много опити. Опитай по-късно.' }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_rate_limit', 'Too many attempts. Please try later.') }));
         } else if (err.code === 'ACCOUNT_DISABLED') {
-          setState(s => ({ ...s, loading: false, error: 'Акаунтът е деактивиран.' }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_account_disabled', 'Account is disabled.') }));
         } else {
-          setState(s => ({ ...s, loading: false, error: 'Възникна грешка. Опитай отново.' }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
         }
       } else {
-        setState(s => ({ ...s, loading: false, error: 'Възникна грешка. Опитай отново.' }));
+        setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
       }
     }
   }
@@ -333,14 +325,14 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'EMAIL_ALREADY_EXISTS' || err.message.includes('already registered')) {
-          setState(s => ({ ...s, loading: false, error: 'Този имейл вече е регистриран.' }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_email_exists', 'This email is already registered.') }));
         } else if (err.code === 'VALIDATION_ERROR') {
           setState(s => ({ ...s, loading: false, error: err.message }));
         } else {
-          setState(s => ({ ...s, loading: false, error: 'Възникна грешка. Опитай отново.' }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
         }
       } else {
-        setState(s => ({ ...s, loading: false, error: 'Възникна грешка. Опитай отново.' }));
+        setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
       }
     }
   }
@@ -368,7 +360,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
 
   function handleSocialClick(_provider: 'google' | 'facebook') {
     // TODO: integrate real OAuth
-    setState(s => ({ ...s, socialToast: 'Очаквайте скоро' }));
+    setState(s => ({ ...s, socialToast: t(authDict, 'coming_soon', 'Coming soon') }));
     setTimeout(() => setState(s => ({ ...s, socialToast: null })), 2000);
   }
 
@@ -404,7 +396,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
       onClick={handleBack}
       className="text-sm text-gray-500 hover:text-gray-700 mb-5 transition-colors"
     >
-      ← {state.step === 'forgot' ? 'Назад' : 'Назад'}
+      {t(authDict, 'back_btn', '← Back')}
     </button>
   );
 
@@ -431,15 +423,15 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
                 {claimToken
                   ? authDict['claim_headline'] || "Claim your profile on Nevumo"
                   : state.intent === 'provider'
-                  ? 'Започни да получаваш клиенти'
-                  : 'Намери услуга за минути'}
+                  ? t(authDict, 'hero_title_provider', 'Start getting clients')
+                  : t(authDict, 'hero_title_client', 'Find a service in minutes')}
               </h1>
               {claimToken ? (
                 <p className="text-sm text-gray-500 mt-1">
                   {authDict['claim_subtitle'] || "Register for free and manage your clients"}
                 </p>
               ) : state.intent !== 'provider' && (
-                <p className="text-sm text-gray-500 mt-1">Безплатно • Без ангажимент</p>
+                <p className="text-sm text-gray-500 mt-1">{t(authDict, 'hero_subtitle_client', 'Free • No obligation')}</p>
               )}
             </div>
 
@@ -489,7 +481,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
               !isEmailValid || state.loading,
               state.loading,
               claimToken ? (authDict['claim_cta_btn'] || "Claim profile") : (authDict['continue_btn'] || "Continue"),
-              'Проверка...',
+              t(authDict, 'checking_btn', 'Checking...'),
               handleCheckEmail
             )}
 
@@ -511,14 +503,14 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
                   type="password"
                   name="password"
                   autoComplete="current-password"
-                  placeholder="Парола"
+                  placeholder={t(authDict, 'password_placeholder_login', 'Password')}
                   value={state.password}
                   onChange={e => handlePasswordChange(e.target.value)}
                   className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400
                     ${state.error === 'invalid_password' ? 'border-red-400' : 'border-gray-300'}`}
                 />
                 {state.error === 'invalid_password' && (
-                  <p className="text-red-500 text-xs mt-0.5">Грешна парола</p>
+                  <p className="text-red-500 text-xs mt-0.5">{t(authDict, 'error_wrong_password', 'Wrong password')}</p>
                 )}
               </div>
 
@@ -528,7 +520,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
                   onClick={() => setState(s => ({ ...s, step: 'forgot', error: null }))}
                   className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
                 >
-                  Забравена парола?
+                  {t(authDict, 'forgot_password_link', 'Forgot password?')}
                 </button>
               </div>
 
@@ -540,7 +532,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
                     ? 'bg-orange-500 hover:bg-orange-600 cursor-pointer'
                     : 'bg-gray-400 opacity-50 cursor-not-allowed'}`}
               >
-                {state.loading ? 'Влизане...' : 'Вход'}
+                {state.loading ? t(authDict, 'logging_in_btn', 'Signing in...') : t(authDict, 'login_btn', 'Sign in')}
               </button>
             </form>
 
@@ -564,7 +556,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
                 </p>
               </>
             ) : (
-              <p className="text-xs text-gray-600 mb-3">Ще създадем акаунт автоматично</p>
+              <p className="text-xs text-gray-600 mb-3">{t(authDict, 'register_subtitle', "We'll create an account automatically")}</p>
             )}
 
             <form onSubmit={e => { e.preventDefault(); handleRegister(); }}>
@@ -575,7 +567,7 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
                   type={state.showPassword ? 'text' : 'password'}
                   name="password"
                   autoComplete="new-password"
-                  placeholder="Кликни тук за генериране на парола"
+                  placeholder={t(authDict, 'password_placeholder_register', 'Click to generate a password')}
                   value={state.password}
                   onChange={e => handlePasswordChange(e.target.value)}
                   onClick={() => {
@@ -601,13 +593,13 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
                 className={`w-full py-2.5 rounded-lg text-base font-semibold text-white transition-colors mt-4
                   ${state.password.length > 0 && !state.loading ? 'bg-orange-500 hover:bg-orange-600 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}
               >
-                {state.loading ? 'Създаване...' : claimToken ? (authDict['claim_cta_btn'] || "Claim profile") : (authDict['continue_btn'] || "Continue")}
+                {state.loading ? t(authDict, 'registering_btn', 'Creating...') : claimToken ? (authDict['claim_cta_btn'] || "Claim profile") : (authDict['continue_btn'] || "Continue")}
               </button>
             </form>
 
             {state.registerSuccess && (
               <div className="bg-green-50 text-green-700 text-sm p-2.5 rounded-lg text-center mt-3">
-                Акаунтът е създаден успешно
+                {t(authDict, 'register_success', 'Account created successfully')}
               </div>
             )}
 
@@ -621,8 +613,8 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
             {backBtn}
 
             <div className="mb-5">
-              <h2 className="text-[17px] font-bold text-[#171717]">Забравена парола</h2>
-              <p className="text-sm text-gray-500 mt-1">Ще изпратим линк за нова парола</p>
+              <h2 className="text-[17px] font-bold text-[#171717]">{t(authDict, 'forgot_title', 'Forgot password')}</h2>
+              <p className="text-sm text-gray-500 mt-1">{t(authDict, 'forgot_subtitle', "We'll send you a link for a new password")}</p>
             </div>
 
             {emailPill}
@@ -633,12 +625,12 @@ export default function LoginClient({ lang, initialRole }: LoginClientProps) {
               className={`w-full py-2.5 rounded-lg text-base font-semibold text-white bg-orange-500 transition-colors
                 ${(state.loading || state.forgotSuccess) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-orange-600'}`}
             >
-              {state.forgotSuccess ? 'Изпратено' : state.loading ? 'Изпращане...' : 'Изпрати линк'}
+              {state.forgotSuccess ? t(authDict, 'forgot_sent_btn', 'Sent') : state.loading ? t(authDict, 'sending_btn', 'Sending...') : t(authDict, 'forgot_send_btn', 'Send link')}
             </button>
 
             {state.forgotSuccess && (
               <div className="bg-green-50 text-green-700 text-sm p-2.5 rounded-lg text-center mt-3">
-                Провери имейла си
+                {t(authDict, 'forgot_check_email', 'Check your email')}
               </div>
             )}
 

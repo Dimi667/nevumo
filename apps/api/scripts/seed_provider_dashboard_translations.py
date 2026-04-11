@@ -622,7 +622,7 @@ TRANSLATIONS = {
     ),
 
     "label_business_name": row(
-        "Business name *", "Име на бизнеса *", "Název firmy *", "Virksomhedsnavn *", "Firmenname *", "Όνομα επιχείρησης *", "Nombre del negocio *", "Ettevõtte nimi *", "Yrityksen nimi *", "Nom de l'entreprise *", "Ainm gnó *", "Naziv tvrtke *", "Cégnév *", "Nafn fyrirtækis *", "Nome dell'attività *", "Numm vum Betrib *", "Verslo pavadinimas *", "Uzņēmuma nosaukums *", "Име на бизнис *", "Isem tan-negozju *", "Bedrijfsnaam *", "Firmanavn *", "Nazwa firmy *", "Nome do negócio *", "Nome do negócio *", "Numele afacerii *", "Название компании *", "Názov firmy *", "Naziv podjetja *", "Emri i biznesit *", "Назив фирме *", "Företagsnamn *", "İşletme adı *", "Назва компанії *",
+        "Company or personal name", "Име на фирма или лични имена", "Název společnosti nebo osobní jméno", "Virksomheds- eller personnavn", "Firmen- oder Personenname", "Όνομα εταιρείας ή προσωπικό όνομα", "Nombre de la empresa o personal", "Ettevõtte või isiku nimi", "Yrityksen tai henkilön nimi", "Nom de l'entreprise ou nom personnel", "Ainm cuideachta nó ainm pearsanta", "Naziv tvrtke ili osobno ime", "Cégnév vagy személyes név", "Nafn fyrirtækis eða einstaklings", "Nome della società o personale", "Firmen- oder Persounennumm", "Įmonės pavadinimas arba asmens vardas", "Uzņēmuma nosaukums vai personvārds", "Име на фирма или лично име", "Isem tal-kumpanija jew personali", "Bedrijfs- of persoonsnaam", "Firmanavn eller personnavn", "Nazwa firmy lub imię i nazwisko", "Nome da empresa ou pessoal", "Nome da empresa ou pessoal", "Numele companiei sau personal", "Название компании или личное имя", "Názov spoločnosti alebo osobné meno", "Ime podjetja ali osebno ime", "Emri i kompanisë ose emri personal", "Naziv kompanije ili lično ime", "Företagsnamn eller personnamn", "Şirket veya kişi adı", "Назва компанії або особисте ім'я",
     ),
     "label_description": row(
         "Description (optional)", "Описание (по избор)", "Popis (volitelné)", "Beskrivelse (valgfrit)", "Beschreibung (optional)", "Περιγραφή (προαιρετικό)", "Descripción (opcional)", "Kirjeldus (valikuline)", "Kuvaus (valinnainen)", "Description (facultatif)", "Cur síos (roghnach)", "Opis (nije obavezno)", "Leírás (opcionális)", "Lýsing (valfrjálst)", "Descrizione (facoltativa)", "Beschreiwung (optional)", "Aprašymas (neprivaloma)", "Apraksts (nav obligāti)", "Опис (опционално)", "Deskrizzjoni (mhux obbligatorja)", "Beschrijving (optioneel)", "Beskrivelse (valgfritt)", "Opis (opcjonalnie)", "Descrição (opcional)", "Descrição (opcional)", "Descriere (opțional)", "Описание (необязательно)", "Popis (voliteľné)", "Opis (neobvezno)", "Përshkrim (opsionale)", "Опис (опционо)", "Beskrivning (valfritt)", "Açıklama (isteğe bağlı)", "Опис (необов'язково)",
@@ -3175,7 +3175,9 @@ TRANSLATIONS.update({
     "period_last_7_days": row_bg("Last 7 days", "Последните 7 дни"),
     "period_last_90_days": row_bg("Last 90 days", "Последните 90 дни"),
     "placeholder_business_description": row_bg("Describe your services, experience and what makes you different", "Опишете услугите си, опита си и с какво се отличавате"),
-    "placeholder_business_name_example": row_bg("e.g. Sofia Plumbing Pro", "напр. ВиК услуги София Про"),
+    "placeholder_business_name_example": row(
+        "e.g. Maria's Massage Ltd or Maria Kowalska", "напр. Масажно студио Мария ЕООД или Мария Ковалска", "např. Maria's Massage s.r.o. nebo Maria Kowalska", "f.eks. Maria's Massage ApS eller Maria Kowalska", "z.B. Maria's Massage GmbH oder Maria Kowalska", "π.χ. Maria's Massage Ltd ή Maria Kowalska", "p. ej., Maria's Massage Ltd o Maria Kowalska", "nt Maria's Massage OÜ või Maria Kowalska", "esim. Maria's Massage Oy tai Maria Kowalska", "par ex. Maria's Massage SARL ou Maria Kowalska", "m.sh. Maria's Massage Ltd nó Maria Kowalska", "npr. Maria's Massage d.o.o. ili Maria Kowalska", "pl. Maria's Massage Kft. vagy Maria Kowalska", "t.d. Maria's Massage ehf. eða Maria Kowalska", "ad es. Maria's Massage S.r.l. o Maria Kowalska", "z. B. Maria's Massage SARL oder Maria Kowalska", "pvz., Maria's Massage UAB arba Maria Kowalska", "piem., Maria's Massage SIA vai Maria Kowalska", "напр. Масажно студио Марија ДООЕЛ или Марија Ковалска", "eż. Maria's Massage Ltd jew Maria Kowalska", "bijv. Maria's Massage B.V. of Maria Kowalska", "f.eks. Maria's Massage AS eller Maria Kowalska", "np. Maria's Massage Sp. z o.o. lub Maria Kowalska", "ex: Maria's Massage Ltda ou Maria Kowalska", "ex: Maria's Massage Lda ou Maria Kowalska", "de ex. Maria's Massage S.R.L. sau Maria Kowalska", "напр., ООО «Массаж Марии» или Мария Ковальска", "napr. Maria's Massage s.r.o. alebo Maria Kowalska", "npr. Maria's Massage d.o.o. ali Maria Kowalska", "p.sh. Maria's Massage sh.p.k. ose Maria Kowalska", "npr. Maria's Massage d.o.o. ili Marija Kovalska", "t.ex. Maria's Massage AB eller Maria Kowalska", "örn. Maria's Massage Ltd. Şti. veya Maria Kowalska", "напр., ТОВ «Масаж Марії» або Марія Ковальська",
+    ),
     "placeholder_business_slug": row_bg("your-business-name", "vasheto-ime-na-biznesa"),
     "placeholder_description": row_bg("Brief description…", "Кратко описание…"),
     "placeholder_from": row_bg("From", "От"),
@@ -3420,7 +3422,7 @@ POLISH_OVERRIDES = {
     "period_last_7_days": "Ostatnie 7 dni",
     "period_last_90_days": "Ostatnie 90 dni",
     "placeholder_business_description": "Opisz swoje usługi, doświadczenie i to, co Cię wyróżnia",
-    "placeholder_business_name_example": "np. Hydraulik Warszawa Pro",
+    "placeholder_business_name_example": "np. Maria's Massage Sp. z o.o. lub Maria Kowalska",
     "placeholder_description": "Krótki opis…",
     "placeholder_from": "Od",
     "placeholder_select_category": "Wybierz kategorię",

@@ -323,8 +323,20 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - getCities() updated with lang param
   - Provider dashboard fetches cities for BG + RS + PL with lang
   - Backend must run with --host 0.0.0.0 for SSR fetches to reach NEXT_PUBLIC_API_URL (network IP)
+- **Auth Page i18n (April 11, 2026)** — Пълна i18n на auth страницата:
+  - Seed script: apps/api/scripts/seed_auth_hero_translations.py обновен с 13 нови ключа
+  - Нови ключове: checking_btn, logging_in_btn, registering_btn, sending_btn, error_wrong_password, error_generic, error_rate_limit, error_account_disabled, error_email_exists, register_success, coming_soon, page_title, meta_description
+  - Общо: 27 ключа × 34 езика = 918 rows в translations таблицата (namespace: auth)
+  - apps/web/app/[lang]/auth/page.tsx: заменен static metadata export с async generateMetadata({ params }) която използва fetchTranslations(lang, 'auth') за динамичен title, description, og:title, og:description
+  - Claim state trigger: ?claim=1 URL параметър
+  - Тествани и потвърдени: всички 18 state-а × 3 езика (pl, en, bg) = 54 проверки — нито един проблем
 
 ### Recent Changes (April 2026)
+- **April 11 — Auth Page i18n**
+  - 13 нови ключа добавени в auth namespace seed скрипта (checking_btn, logging_in_btn, registering_btn, sending_btn, error_wrong_password, error_generic, error_rate_limit, error_account_disabled, error_email_exists, register_success, coming_soon, page_title, meta_description)
+  - Общо auth ключове: 27 × 34 езика = 918 rows
+  - generateMetadata() в auth/page.tsx вече генерира title и description динамично от DB
+  - Всички loading states, error messages, coming_soon тоаст са напълно преведени на 34 езика
 - **April 11 — Location Translations + Bug Fixes**
   - location_translations table added with 102 rows (3 cities × 34 languages)
   - locations.city_en column added
