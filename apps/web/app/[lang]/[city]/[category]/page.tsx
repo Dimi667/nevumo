@@ -142,12 +142,12 @@ function ProviderCard({
             </span>
           </div>
 
-          <a
-            href="#lead-form"
+          <Link
+            href={href}
             className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
           >
             {texts.sendRequest}
-          </a>
+          </Link>
         </div>
       </div>
     </article>

@@ -168,7 +168,8 @@ export interface CategoryOut {
 export interface CityOut {
   id: number;
   slug: string;
-  name: string;
+  city: string;
+  city_en: string;
   country_code: string;
   currency: string;
 }
@@ -264,10 +265,12 @@ export async function getCategories(lang: string): Promise<CategoryOut[]> {
   }
 }
 
-export async function getCities(country: string): Promise<CityOut[]> {
+export async function getCities(country: string, lang?: string): Promise<CityOut[]> {
   try {
+    const params = new URLSearchParams({ country });
+    if (lang) params.set('lang', lang);
     const res = await fetch(
-      `${API_BASE}/api/v1/cities?country=${encodeURIComponent(country)}`,
+      `${API_BASE}/api/v1/cities?${params.toString()}`,
       { next: { revalidate: 3600 } },
     );
     if (!res.ok) return [];

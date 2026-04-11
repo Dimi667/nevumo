@@ -305,8 +305,25 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - 272 new rows seeded via `apps/api/scripts/seed_onboarding_hero_translations.py` 
   - `getHeroContent()` and `CompactStepIndicator` in `apps/web/lib/onboarding-utils.tsx` now accept `dict` param and use `t()` for all strings
   - Dashboard page passes `dict` from `useDashboardI18n()` to both components
+- **Location Translations System** — Multilingual city name display (April 2026):
+  - New table: location_translations (location_id, lang, city_name) — 102 rows seeded
+  - locations.city_en added for English/admin fallback
+  - GET /api/v1/cities?lang={lang} returns translated city_name as `city` field
+  - Fallback chain: translated name → city_en → city
+  - Seed script: apps/api/scripts/seed_location_translations.py (idempotent)
+  - Frontend CityOut interface updated: city + city_en fields
+  - getCities() updated with lang param
+  - Provider dashboard fetches cities for BG + RS + PL with lang
+  - Backend must run with --host 0.0.0.0 for SSR fetches to reach NEXT_PUBLIC_API_URL (network IP)
 
 ### Recent Changes (April 2026)
+- **April 11 — Location Translations + Bug Fixes**
+  - location_translations table added with 102 rows (3 cities × 34 languages)
+  - locations.city_en column added
+  - cities API now lang-aware with translation fallback chain
+  - Provider dashboard layout.tsx: fixed null user redirect (was redirecting to client dashboard instead of auth)
+  - ProviderWidget.tsx: fixed cityInfo?.name → cityInfo?.city after CityOut schema update
+  - Backend startup: must use --host 0.0.0.0 for SSR to reach NEXT_PUBLIC_API_URL
 - **April 10 — Onboarding Hero i18n + API routing fix**
   - Onboarding hero banner fully translated in 34 languages via provider_dashboard namespace
   - Frontend API_BASE changed from hardcoded `http://localhost:8000` to empty string `""` across all lib files (api.ts, auth-api.ts, client-api.ts, provider-api.ts, tracking.ts, ui-translations.ts, locales.ts)

@@ -129,14 +129,34 @@ class Location(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     country_code: Mapped[str] = mapped_column(String(2), nullable=False)
     city: Mapped[str] = mapped_column(String, nullable=False)
+    city_en: Mapped[Optional[str]] = mapped_column(String, nullable=True)
     slug: Mapped[str] = mapped_column(String, nullable=False)
 
     lat: Mapped[Optional[float]] = mapped_column(Numeric)
     lng: Mapped[Optional[float]] = mapped_column(Numeric)
 
+    translations: Mapped[List["LocationTranslation"]] = relationship(back_populates="location")
+
     __table_args__ = (
         UniqueConstraint("country_code", "slug"),
         Index("idx_locations_country", "country_code"),
+    )
+
+
+class LocationTranslation(Base):
+    __tablename__ = "location_translations"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    location_id: Mapped[int] = mapped_column(ForeignKey("locations.id", ondelete="CASCADE"), nullable=False)
+    lang: Mapped[str] = mapped_column(String, nullable=False)
+    city_name: Mapped[str] = mapped_column(String, nullable=False)
+
+    location: Mapped["Location"] = relationship(back_populates="translations")
+
+    __table_args__ = (
+        UniqueConstraint("location_id", "lang"),
+        Index("idx_location_translations_location", "location_id"),
+        Index("idx_location_translations_lang", "lang"),
     )
 
 

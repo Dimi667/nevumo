@@ -147,6 +147,7 @@ CREATE TABLE locations (
     id SERIAL PRIMARY KEY,
     country_code CHAR(2) NOT NULL,
     city TEXT NOT NULL,
+    city_en TEXT,                             -- English city name for multilingual support
     slug TEXT NOT NULL,
     lat NUMERIC,
     lng NUMERIC,
@@ -159,6 +160,26 @@ CREATE TABLE locations (
 -- PL (Poland) - Warszawa (PLN) - seeded April 4, 2026 (slug=warszawa, lat=52.2297, lng=21.0122)
 
 CREATE INDEX idx_locations_country ON locations(country_code);
+
+---
+
+## 6a. Location Translations
+
+CREATE TABLE location_translations (
+    id SERIAL PRIMARY KEY,
+    location_id INT NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
+    lang TEXT NOT NULL,
+    city_name TEXT NOT NULL,
+    UNIQUE(location_id, lang)
+);
+
+CREATE INDEX idx_location_translations_location ON location_translations(location_id);
+CREATE INDEX idx_location_translations_lang ON location_translations(lang);
+
+### Seeded Data (April 2026)
+- 3 cities × 34 languages = 102 rows
+- Sofia (BG), Belgrade (RS), Warszawa (PL)
+- Seed script: apps/api/scripts/seed_location_translations.py
 
 ---
 

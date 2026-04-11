@@ -28,7 +28,8 @@ class CategoriesResponse(BaseModel):
 class CityOut(BaseModel):
     id: int
     slug: str
-    name: str
+    city: str
+    city_en: str
     country_code: str
     currency: str
 

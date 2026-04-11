@@ -106,6 +106,18 @@ Location трябва да бъде нормализирана:
 
 ---
 
+### Location Display Name System
+- `slug` — used for URL routing only, never changes (SEO-stable)
+- `city` — local official name stored in locations table (e.g., "Warszawa", "Beograd")
+- `city_en` — English name in locations.city_en, used as internal/admin fallback
+- `city_name` — translated display name from location_translations for UI rendering
+- GET /api/v1/cities?lang={lang}&country={country_code} returns translated city_name as `city` field
+- Fallback chain: location_translations.city_name → locations.city_en → locations.city
+- Adding a new city requires: 1) row in locations, 2) rows in location_translations for all 34 languages
+- Backend: apps/api/routes/cities.py uses LEFT OUTER JOIN on LocationTranslation
+
+---
+
 ### 6. Leads (🔥 CORE ENTITY)
 - id
 - client_id

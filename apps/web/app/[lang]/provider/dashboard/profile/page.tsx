@@ -15,7 +15,6 @@ import {
   getProviderDashboard,
 } from '@/lib/provider-api';
 import SearchInput from '@/components/dashboard/SearchInput';
-import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import { getSlugValidationError, sanitizeSlug, slugify } from '@/lib/slug-utils';
 import { deriveOnboardingState, getHeroContent, CompactStepIndicator, saveStep1Draft, loadStep1Draft, clearStep1Draft } from '@/lib/onboarding-utils';
@@ -292,7 +291,6 @@ export default function ProfilePage() {
   const [providerId, setProviderId] = useState<string | null>(null);
 
   // PWA Install Prompt
-  const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const hasShownPWAPromptRef = useRef(false);
 
   // Helper to persist current Step 1 state
@@ -318,14 +316,15 @@ export default function ProfilePage() {
     Promise.all([
       getProviderProfile(),
       getCategories(lang),
-      getCities('BG'),
-      getCities('RS'),
+      getCities('BG', lang),
+      getCities('RS', lang),
+      getCities('PL', lang),
       getProviderDashboard(),
     ])
-      .then(([p, cats, bgCities, rsCities, dashboard]) => {
+      .then(([p, cats, bgCities, rsCities, plCities, dashboard]) => {
         setProfile(p);
         setCategories(cats);
-        setCities([...bgCities, ...rsCities]);
+        setCities([...bgCities, ...rsCities, ...plCities]);
         setIsComplete(dashboard.profile.is_complete);
         setProviderId(dashboard.profile.id.toString());
         
@@ -672,9 +671,7 @@ export default function ProfilePage() {
       // Show PWA install prompt after onboarding complete (only once per session)
       if (!hasShownPWAPromptRef.current) {
         hasShownPWAPromptRef.current = true;
-        setTimeout(() => {
-          setShowPWAPrompt(true);
-        }, 1500);
+        window.dispatchEvent(new CustomEvent('nevumo:onboarding_complete'));
       }
 
       // Force refresh of layout state by triggering custom event
@@ -716,7 +713,7 @@ export default function ProfilePage() {
 
   const categoryOptions = categories.map(c => ({ value: c.slug, label: c.name }));
   // City options: value is the numeric id stringified for SearchableSelect
-  const cityOptions = cities.map(c => ({ value: String(c.id), label: c.name }));
+  const cityOptions = cities.map(c => ({ value: String(c.id), label: c.city }));
 
   // ─── Loading / error ────────────────────────────────────────────────────────
 
@@ -1102,14 +1099,6 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* PWA Install Prompt */}
-        {showPWAPrompt && (
-          <PWAInstallPrompt
-            trigger="onboarding_complete"
-            role="provider"
-            onClose={() => setShowPWAPrompt(false)}
-          />
-        )}
       </div>
     );
   }

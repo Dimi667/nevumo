@@ -9,7 +9,7 @@ import redis as redis_lib
 from config import settings
 from dependencies import get_db, get_redis
 from exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
-from models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation
+from models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation
 from schemas import (
     ProviderListItem,
     ProviderListResponse,
@@ -122,6 +122,7 @@ async def list_providers(
 @router.get("/providers/by-claim-token/{token}")
 async def get_provider_by_claim_token_endpoint(
     token: str,
+    lang: str = Query("en", min_length=2, max_length=5),
     db: Session = Depends(get_db),
 ) -> dict:
     """Get provider by claim token (public endpoint)."""
@@ -135,7 +136,7 @@ async def get_provider_by_claim_token_endpoint(
             }
         }
     
-    # Get first city name
+    # Get first city name with lang-aware lookup
     first_city_row = (
         db.query(ProviderCity)
         .filter(ProviderCity.provider_id == provider.id)
@@ -144,7 +145,14 @@ async def get_provider_by_claim_token_endpoint(
     city_name = None
     if first_city_row:
         city = db.query(Location).filter(Location.id == first_city_row.city_id).first()
-        city_name = city.city if city else None
+        if city:
+            # Get translated city name with fallback
+            translation = db.query(LocationTranslation).filter(
+                LocationTranslation.location_id == city.id,
+                LocationTranslation.lang == lang
+            ).first()
+            # Fallback: translation -> city_en -> city
+            city_name = translation.city_name if translation else (city.city_en if city.city_en else city.city)
     
     # Get first service category slug
     first_service = (

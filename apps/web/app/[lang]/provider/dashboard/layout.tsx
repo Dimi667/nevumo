@@ -7,6 +7,7 @@ import { getProviderDashboard } from '@/lib/provider-api';
 import { DashboardI18nProvider } from '@/lib/provider-dashboard-i18n';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
+import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const [isOnboarding, setIsOnboarding] = useState(false);
+  const [showPWAPrompt, setShowPWAPrompt] = useState(false);
 
   const checkOnboardingStatus = useCallback(async (forceRefresh = false) => {
     try {
@@ -45,7 +47,11 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
       return;
     }
     const user = getAuthUser();
-    if (user?.role !== 'provider') {
+    if (!user) {
+      router.replace(`/${lang}/auth`);
+      return;
+    }
+    if (user.role !== 'provider') {
       router.replace(`/${lang}/client/dashboard`);
       return;
     }
@@ -72,6 +78,18 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
       window.removeEventListener('force-onboarding-refresh', handleForceRefresh);
     };
   }, [checkOnboardingStatus]);
+
+  // Listen for onboarding complete to show PWA install prompt
+  useEffect(() => {
+    const handleOnboardingComplete = () => {
+      setTimeout(() => setShowPWAPrompt(true), 1500);
+    };
+
+    window.addEventListener('nevumo:onboarding_complete', handleOnboardingComplete);
+    return () => {
+      window.removeEventListener('nevumo:onboarding_complete', handleOnboardingComplete);
+    };
+  }, []);
 
   if (!ready) {
     return (
@@ -109,6 +127,13 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
           >
             {children}
           </main>
+          {showPWAPrompt && (
+            <PWAInstallPrompt
+              trigger="onboarding_complete"
+              role="provider"
+              onClose={() => setShowPWAPrompt(false)}
+            />
+          )}
         </div>
       </div>
     </DashboardI18nProvider>

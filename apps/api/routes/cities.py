@@ -7,7 +7,7 @@ import redis as redis_lib
 
 from constants import COUNTRY_CURRENCY_MAP, DEFAULT_CURRENCY
 from dependencies import get_db, get_redis
-from models import Location
+from models import Location, LocationTranslation
 from schemas import CitiesResponse, CityOut
 
 router = APIRouter(prefix="/api/v1", tags=["cities"])
@@ -16,10 +16,11 @@ router = APIRouter(prefix="/api/v1", tags=["cities"])
 @router.get("/cities", response_model=CitiesResponse)
 async def list_cities(
     country: str = Query("BG", min_length=2, max_length=2),
+    lang: str = Query("en", min_length=2, max_length=5),
     db: Session = Depends(get_db),
     redis_client: Optional[redis_lib.Redis] = Depends(get_redis),
 ) -> CitiesResponse:
-    cache_key = f"cities:{country}"
+    cache_key = f"cities:{country}:{lang}"
 
     if redis_client:
         cached = redis_client.get(cache_key)
@@ -29,21 +30,36 @@ async def list_cities(
 
     rows = (
         db.query(Location)
+        .outerjoin(LocationTranslation, (Location.id == LocationTranslation.location_id) & (LocationTranslation.lang == lang))
         .filter(Location.country_code == country)
         .order_by(Location.city)
         .all()
     )
 
-    data = [
-    CityOut(
-        id=loc.id, 
-        slug=loc.slug, 
-        name=loc.city,
-        country_code=loc.country_code,
-        currency=COUNTRY_CURRENCY_MAP.get(loc.country_code, DEFAULT_CURRENCY)
-    ) 
-    for loc in rows
-]
+    data = []
+    for loc in rows:
+        # Get translated city name with fallback
+        translated_name = None
+        if loc.translations:
+            for translation in loc.translations:
+                if translation.lang == lang:
+                    translated_name = translation.city_name
+                    break
+        
+        # Fallback: translation -> city_en -> city
+        city_display = translated_name if translated_name else (loc.city_en if loc.city_en else loc.city)
+        city_en_display = loc.city_en if loc.city_en else loc.city
+
+        data.append(
+            CityOut(
+                id=loc.id,
+                slug=loc.slug,
+                city=city_display,
+                city_en=city_en_display,
+                country_code=loc.country_code,
+                currency=COUNTRY_CURRENCY_MAP.get(loc.country_code, DEFAULT_CURRENCY)
+            )
+        )
 
     if redis_client and data:
         redis_client.setex(cache_key, 3600, json.dumps([d.model_dump() for d in data]))
@@ -54,10 +70,11 @@ async def list_cities(
 @router.get("/cities/{slug}", response_model=CityOut)
 async def get_city_by_slug(
     slug: str,
+    lang: str = Query("en", min_length=2, max_length=5),
     db: Session = Depends(get_db),
     redis_client: Optional[redis_lib.Redis] = Depends(get_redis),
 ) -> CityOut:
-    cache_key = f"city:{slug}"
+    cache_key = f"city:{slug}:{lang}"
 
     if redis_client:
         cached = redis_client.get(cache_key)
@@ -70,10 +87,21 @@ async def get_city_by_slug(
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="City not found")
 
+    # Get translated city name with fallback
+    translation = db.query(LocationTranslation).filter(
+        LocationTranslation.location_id == location.id,
+        LocationTranslation.lang == lang
+    ).first()
+
+    # Fallback: translation -> city_en -> city
+    city_display = translation.city_name if translation else (location.city_en if location.city_en else location.city)
+    city_en_display = location.city_en if location.city_en else location.city
+
     data = CityOut(
         id=location.id,
         slug=location.slug,
-        name=location.city,
+        city=city_display,
+        city_en=city_en_display,
         country_code=location.country_code,
         currency=COUNTRY_CURRENCY_MAP.get(location.country_code, DEFAULT_CURRENCY)
     )

@@ -941,7 +941,11 @@ Check if a slug redirects to another slug without following the redirect. Used b
 ## 5. Get Cities
 
 ### GET
-/api/v1/cities?country=BG
+/api/v1/cities?country=BG&lang=en
+
+### Query Params
+- `country` (required, 2-char ISO code)
+- `lang` (optional, default: "en") — Language code for translated city names
 
 ### Response
 
@@ -951,19 +955,26 @@ Check if a slug redirects to another slug without following the redirect. Used b
     {
       "id": 1,
       "slug": "sofia",
-      "name": "Sofia",
+      "city": "Sofia",
+      "city_en": "Sofia",
       "country_code": "BG",
       "currency": "EUR"
     },
     {
       "id": 2,
       "slug": "belgrade",
-      "name": "Belgrade",
+      "city": "Belgrade",
+      "city_en": "Belgrade",
       "country_code": "RS",
       "currency": "RSD"
     }
   ]
 }
+
+### Notes
+- `city` returns the translated name for the requested language, with fallback chain: translation.city_name → location.city_en → location.city
+- `city_en` always returns the English name (from location.city_en or location.city as fallback)
+- Translation lookup uses LEFT OUTER JOIN on location_translations table
 
 ---
 

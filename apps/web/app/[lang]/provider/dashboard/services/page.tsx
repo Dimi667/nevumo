@@ -312,13 +312,14 @@ export default function ServicesPage() {
     Promise.all([
       getProviderServices(),
       getCategories(lang),
-      getCities('BG'),
-      getCities('RS'),
+      getCities('BG', lang),
+      getCities('RS', lang),
+      getCities('PL', lang),
     ])
-      .then(([svcs, cats, bgCities, rsCities]) => {
+      .then(([svcs, cats, bgCities, rsCities, plCities]) => {
         setServices(svcs);
         setCategories(cats);
-        setCities([...bgCities, ...rsCities]);
+        setCities([...bgCities, ...rsCities, ...plCities]);
       })
       .catch((e: Error) => setLoadError(e.message))
       .finally(() => setLoading(false));
@@ -421,7 +422,7 @@ export default function ServicesPage() {
   }
 
   const categoryOptions = categories.map(c => ({ value: c.slug, label: c.name }));
-  const cityOptions = cities.map(c => ({ value: String(c.id), label: c.name }));
+  const cityOptions = cities.map(c => ({ value: String(c.id), label: c.city }));
 
   if (loading) {
     return (

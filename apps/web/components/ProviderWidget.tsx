@@ -221,7 +221,7 @@ export default function ProviderWidget({
       setPhoneError(null);
     }
   };
-  const cityName = cityInfo?.name ?? citySlug;
+  const cityName = cityInfo?.city ?? citySlug;
   const jobsLabel = t.jobs_label || 'jobs completed';
   const cityLeadsText = formatTranslation(
     t.city_leads_label || '{count} requests for {category} in {city} this year',
