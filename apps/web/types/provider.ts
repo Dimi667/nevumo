@@ -10,6 +10,7 @@ export interface Lead {
   status: LeadStatus;
   source: string | null;
   created_at: string;
+  provider_notes: string | null;
 }
 
 export interface ServiceCity {
@@ -110,6 +111,7 @@ export interface LeadsFilters {
   period?: 'all' | '7' | '30' | '90';
   date_from?: string;
   date_to?: string;
+  search?: string;
 }
 
 export interface LeadsResponse {

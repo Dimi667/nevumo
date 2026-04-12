@@ -102,6 +102,7 @@ export async function getProviderLeads(filters?: LeadsFilters): Promise<LeadsRes
   if (filters?.period) params.set('period', filters.period);
   if (filters?.date_from) params.set('date_from', filters.date_from);
   if (filters?.date_to) params.set('date_to', filters.date_to);
+  if (filters?.search) params.set('search', filters.search);
 
   const queryString = params.toString();
   const url = `/api/v1/provider/leads${queryString ? `?${queryString}` : ''}`;
@@ -116,6 +117,16 @@ export async function updateLeadStatus(
   return authFetch(`/api/v1/provider/leads/${leadId}`, {
     method: 'PATCH',
     body: JSON.stringify({ status }),
+  });
+}
+
+export async function updateLeadNotes(
+  leadId: string,
+  notes: string
+): Promise<{ lead_id: string; provider_notes: string | null }> {
+  return authFetch(`/api/v1/provider/leads/${leadId}/notes`, {
+    method: 'PATCH',
+    body: JSON.stringify({ provider_notes: notes }),
   });
 }
 

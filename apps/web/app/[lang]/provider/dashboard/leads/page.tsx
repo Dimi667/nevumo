@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import LeadRow from '@/components/dashboard/LeadRow';
+import LeadDetailModal from '@/components/dashboard/LeadDetailModal';
 import EmptyState from '@/components/dashboard/EmptyState';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import type { Lead, LeadStatusQuery, LeadsResponse } from '@/types/provider';
@@ -56,6 +57,7 @@ export default function LeadsPage() {
   const urlPeriod = (searchParams.get('period') as PeriodOption) || 'all';
   const urlDateFrom = searchParams.get('date_from') || '';
   const urlDateTo = searchParams.get('date_to') || '';
+  const urlSearch = searchParams.get('search') || '';
 
   const [leads, setLeads] = useState<Lead[]>([]);
   const [total, setTotal] = useState(0);
@@ -67,6 +69,18 @@ export default function LeadsPage() {
   const [period, setPeriod] = useState<PeriodOption>(urlPeriod);
   const [dateFrom, setDateFrom] = useState(urlDateFrom);
   const [dateTo, setDateTo] = useState(urlDateTo);
+  const [search, setSearch] = useState(urlSearch);
+
+  // Local input state for search (not synced with URL, debounced)
+  const [searchInput, setSearchInput] = useState(urlSearch);
+  const [isSearching, setIsSearching] = useState(false);
+
+  // Modal state
+  const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Debounce ref for search
+  const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sync local state with URL changes
   useEffect(() => {
@@ -74,28 +88,34 @@ export default function LeadsPage() {
     setPeriod(urlPeriod);
     setDateFrom(urlDateFrom);
     setDateTo(urlDateTo);
-  }, [urlStatus, urlPeriod, urlDateFrom, urlDateTo]);
+    setSearch(urlSearch);
+  }, [urlStatus, urlPeriod, urlDateFrom, urlDateTo, urlSearch]);
 
   // Fetch leads when filters change
   useEffect(() => {
     setLoading(true);
+    setIsSearching(true);
     getProviderLeads({
       status: status === 'all' ? undefined : status,
       period: period === 'all' ? undefined : period,
       date_from: dateFrom || undefined,
       date_to: dateTo || undefined,
+      search: search || undefined,
     })
       .then((data: LeadsResponse) => {
         setLeads(data.leads);
         setTotal(data.total);
       })
       .catch((e: Error) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, [status, period, dateFrom, dateTo]);
+      .finally(() => {
+        setLoading(false);
+        setIsSearching(false);
+      });
+  }, [status, period, dateFrom, dateTo, search]);
 
   // Update URL when filters change (without triggering reload)
   const updateUrlParams = useCallback(
-    (updates: Partial<{ status: LeadStatusQuery; period: PeriodOption; date_from: string; date_to: string }>) => {
+    (updates: Partial<{ status: LeadStatusQuery; period: PeriodOption; date_from: string; date_to: string; search: string }>) => {
       const params = new URLSearchParams(searchParams.toString());
 
       if (updates.status !== undefined) {
@@ -127,6 +147,14 @@ export default function LeadsPage() {
           params.set('date_to', updates.date_to);
         } else {
           params.delete('date_to');
+        }
+      }
+
+      if (updates.search !== undefined) {
+        if (updates.search) {
+          params.set('search', updates.search);
+        } else {
+          params.delete('search');
         }
       }
 
@@ -174,6 +202,51 @@ export default function LeadsPage() {
     }
   };
 
+  // Handle search input with debounce
+  const handleSearchChange = (value: string) => {
+    setSearchInput(value);
+
+    // Clear previous debounce timer
+    if (searchDebounceRef.current) {
+      clearTimeout(searchDebounceRef.current);
+    }
+
+    // Set new debounce timer (500ms)
+    searchDebounceRef.current = setTimeout(() => {
+      setSearch(value);
+      updateUrlParams({ search: value });
+    }, 500);
+  };
+
+  // Sync searchInput when URL changes (e.g., back button, initial load)
+  useEffect(() => {
+    setSearchInput(urlSearch);
+  }, [urlSearch]);
+
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      if (searchDebounceRef.current) {
+        clearTimeout(searchDebounceRef.current);
+      }
+    };
+  }, []);
+
+  // Modal handlers
+  const handleViewLead = (lead: Lead) => {
+    setSelectedLead(lead);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedLead(null);
+  };
+
+  const handleNotesSaved = (leadId: string, notes: string | null) => {
+    setLeads(prev => prev.map(l => l.id === leadId ? { ...l, provider_notes: notes } : l));
+  };
+
   async function handleContact(id: string) {
     const lead = leads.find(l => l.id === id);
     if (!lead) return;
@@ -197,7 +270,8 @@ export default function LeadsPage() {
 
   const { title, subtitle } = getTitleAndSubtitle(status, total, dict);
 
-  if (loading) {
+  // Handle initial loading state (first load only)
+  if (loading && leads.length === 0) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
@@ -222,7 +296,42 @@ export default function LeadsPage() {
 
       {/* Filters */}
       <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
-        <div className="flex flex-wrap gap-4">
+        {/* Search bar */}
+        <div className="w-full">
+          <label className="text-xs font-medium text-gray-500 mb-1.5 block">{t(dict, 'label_search', 'Search')}</label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg className="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </div>
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              placeholder={t(dict, 'placeholder_search_leads', 'Search name, email, phone, description or notes...')}
+              className="w-full pl-10 pr-10 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+            />
+            {isSearching ? (
+              <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+              </div>
+            ) : searchInput && (
+              <button
+                onClick={() => handleSearchChange('')}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-start gap-6">
           {/* Status filter */}
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-medium text-gray-500">{t(dict, 'label_status', 'Status')}</label>
@@ -231,7 +340,7 @@ export default function LeadsPage() {
                 <button
                   key={opt.value}
                   onClick={() => handleStatusChange(opt.value)}
-                  className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                  className={`px-3 py-1.5 text-sm rounded-lg transition-colors h-[34px] ${
                     status === opt.value
                       ? 'bg-orange-500 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -250,7 +359,7 @@ export default function LeadsPage() {
               value={period}
               onChange={(e) => handlePeriodChange(e.target.value as PeriodOption)}
               aria-label={t(dict, 'aria_select_period_filter', 'Select period filter')}
-              className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
             >
               {getPeriodOptions(dict).map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -268,7 +377,7 @@ export default function LeadsPage() {
                 type="date"
                 value={dateFrom}
                 onChange={(e) => handleDateFromChange(e.target.value)}
-                className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
                 placeholder={t(dict, 'placeholder_from', 'From')}
               />
               <span className="text-gray-400">-</span>
@@ -276,7 +385,7 @@ export default function LeadsPage() {
                 type="date"
                 value={dateTo}
                 onChange={(e) => handleDateToChange(e.target.value)}
-                className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
                 placeholder={t(dict, 'placeholder_to', 'To')}
               />
             </div>
@@ -299,6 +408,7 @@ export default function LeadsPage() {
                   <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_phone', 'Phone')}</th>
                   <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{t(dict, 'label_description', 'Description')}</th>
                   <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_source', 'Source')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_notes', 'Notes')}</th>
                   <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_status', 'Status')}</th>
                   <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_actions', 'Actions')}</th>
                 </tr>
@@ -310,6 +420,7 @@ export default function LeadsPage() {
                     lead={lead}
                     onContact={handleContact}
                     onReject={handleReject}
+                    onView={handleViewLead}
                   />
                 ))}
               </tbody>
@@ -317,6 +428,14 @@ export default function LeadsPage() {
           </div>
         </div>
       )}
+
+      {/* Lead Detail Modal */}
+      <LeadDetailModal
+        lead={selectedLead}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onNotesSaved={handleNotesSaved}
+      />
     </div>
   );
 }

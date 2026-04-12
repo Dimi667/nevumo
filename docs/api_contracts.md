@@ -328,6 +328,7 @@ When `is_complete` is `false`, `missing_fields` contains the specific items need
 | `period` | string | `all` | Preset period: `all`, `7`, `30`, `90` (days) |
 | `date_from` | string | - | Custom start date (YYYY-MM-DD), overrides `period` |
 | `date_to` | string | - | Custom end date (YYYY-MM-DD), overrides `period` |
+| `search` | string | - | Search query for case-insensitive partial match across: client_name, client_email, client_phone, description, provider_notes |
 
 ### Response
 ```json
@@ -341,6 +342,7 @@ When `is_complete` is `false`, `missing_fields` contains the specific items need
         "description": "...",
         "status": "created",
         "source": "seo",
+        "provider_notes": "...",
         "created_at": "2025-01-15T10:30:00"
       }
     ],
@@ -372,6 +374,27 @@ Allowed values: `contacted` | `done` | `rejected`
 ### Errors
 - 400 INVALID_STATUS_TRANSITION — invalid state change
 - 404 LEAD_NOT_FOUND — lead doesn't exist or provider doesn't own it
+
+---
+
+## PATCH /api/v1/provider/leads/{lead_id}/notes
+
+### Body
+```json
+{ "provider_notes": "Client prefers morning appointments" }
+```
+
+### Response
+```json
+{ "success": true, "data": { "lead_id": "uuid", "provider_notes": "Client prefers morning appointments" } }
+```
+
+### Errors
+- 404 LEAD_NOT_FOUND — lead doesn't exist or provider doesn't own it
+
+### Notes
+- Strictly verifies that the requesting provider owns the lead
+- `provider_notes` is optional and can be set to `null` to clear
 
 ---
 

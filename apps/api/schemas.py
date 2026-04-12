@@ -162,6 +162,7 @@ class LeadOut(BaseModel):
     description: Optional[str] = None
     budget: Optional[Decimal] = None
     status: str
+    provider_notes: Optional[str] = None
     created_at: datetime
 
 
@@ -492,6 +493,15 @@ class LeadStatusUpdateRequest(BaseModel):
 
 
 class LeadStatusUpdateResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
+class LeadProviderNotesUpdateRequest(BaseModel):
+    provider_notes: Optional[str] = None
+
+
+class LeadProviderNotesUpdateResponse(BaseModel):
     success: bool = True
     data: dict
 

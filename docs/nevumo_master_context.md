@@ -330,6 +330,20 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - apps/web/app/[lang]/auth/page.tsx: заменен static metadata export с async generateMetadata({ params }) която използва fetchTranslations(lang, 'auth') за динамичен title, description, og:title, og:description
   - Claim state trigger: ?claim=1 URL параметър
   - Тествани и потвърдени: всички 18 state-а × 3 езика (pl, en, bg) = 54 проверки — нито един проблем
+- **Provider Dashboard Lead Search Enhancement** — Enhanced search capabilities across 5 fields:
+  - New search parameter in GET /api/v1/provider/leads endpoint
+  - Searches across: client_name, client_email, client_phone, description, provider_notes
+  - Case-insensitive partial matching
+  - Frontend UI: Search input with placeholder "Search name, email, phone, description or notes..."
+  - i18n keys: label_search, placeholder_search_leads
+- **Provider Notes Feature** — Private notes for providers on leads (COMPLETE):
+  - New field: leads.provider_notes (TEXT, nullable) added via migration q1r2s3t4u5v6
+  - New endpoint: PATCH /api/v1/provider/leads/{lead_id}/notes
+  - Frontend: LeadDetailModal component with private notes textarea
+  - Debounced auto-save (500ms) + blur save
+  - i18n key: label_private_notes
+  - Notes are provider-private and not visible to clients
+  - Full module complete: DB schema, API endpoint, UI components, documentation synchronized
 
 ### Recent Changes (April 2026)
 - **April 11 — Auth Page i18n**

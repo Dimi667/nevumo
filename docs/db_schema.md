@@ -241,6 +241,8 @@ CREATE TABLE leads (
     -- CHECK constraint (added via migration c3d4e5f6a7b8):
     -- CHECK (status IN ('created', 'pending_match', 'matched', 'contacted', 'done', 'expired', 'cancelled', 'rejected'))
 
+    provider_notes TEXT,  -- Provider's private notes about the lead (added via migration q1r2s3t4u5v6)
+
     created_at TIMESTAMP DEFAULT NOW()
 );
 

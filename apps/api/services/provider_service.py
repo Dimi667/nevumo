@@ -988,6 +988,7 @@ def get_provider_leads(
     period: str = "all",
     date_from: Optional[str] = None,
     date_to: Optional[str] = None,
+    search: Optional[str] = None,
     limit: int = 50,
 ) -> dict:
     """Return filtered leads for the provider with total count.
@@ -1000,14 +1001,17 @@ def get_provider_leads(
         period: Preset period filter (all, 7, 30, 90 days)
         date_from: Custom start date (YYYY-MM-DD), overrides period if set
         date_to: Custom end date (YYYY-MM-DD), overrides period if set
+        search: Search query for case-insensitive partial match across
+                client_name, client_email, client_phone, description, provider_notes
         limit: Maximum number of leads to return
 
     Returns:
         Dict with 'leads' list and 'total' count
     """
     from datetime import datetime, timedelta
+    from sqlalchemy import or_
 
-    query = db.query(Lead).filter(Lead.provider_id == provider.id)
+    query = db.query(Lead).outerjoin(User, Lead.client_id == User.id).filter(Lead.provider_id == provider.id)
 
     # Status filter
     if status == "new":
@@ -1036,6 +1040,19 @@ def get_provider_leads(
         since = datetime.utcnow() - timedelta(days=days)
         query = query.filter(Lead.created_at >= since)
 
+    # Search filter: case-insensitive partial match across 5 fields
+    if search and search.strip():
+        search_pattern = f"%{search.strip()}%"
+        query = query.filter(
+            or_(
+                User.name.ilike(search_pattern),
+                User.email.ilike(search_pattern),
+                User.phone.ilike(search_pattern),
+                Lead.description.ilike(search_pattern),
+                Lead.provider_notes.ilike(search_pattern),
+            )
+        )
+
     # Get total count before applying limit
     total = query.count()
 
@@ -1051,6 +1068,7 @@ def get_provider_leads(
                 "description": lead.description,
                 "status": lead.status,
                 "source": lead.source,
+                "provider_notes": lead.provider_notes,
                 "created_at": lead.created_at.isoformat(),
             }
         )

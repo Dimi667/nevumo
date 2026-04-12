@@ -977,7 +977,18 @@ Layout: Sidebar (logo + nav links + "НАМЕРИ УСЛУГА" CTA) + TopBar wi
 
 **Overview** — Stats cards (total leads, new leads, accepted matches, rating, verified status, availability). "Last 30 days" analytics preview section. Auto-redirect to Profile page if is_complete === false (forces onboarding).
 
-**Leads** — Table with lead data (phone, description, status, source, date). Filter tabs by status (All, New, Contacted, Done, Rejected). Empty state when no leads.
+**Leads** — Table with lead data (phone, description, source, notes, status, date). Filter tabs by status (All, New, Contacted, Done, Rejected). Empty state when no leads. Notes column shows first 40 characters with sticky note icon (📝) for quick preview. Search uses debounced local state (500ms delay) with subtle inline loading spinner; table data persists while loading to prevent UI flicker.
+
+**LeadDetailModal** — Modal component for viewing and editing individual lead details:
+- Opens when clicking any lead row
+- Displays full lead information: phone, description, source, status, created_at
+- **Private Notes Section**: Textarea for provider_notes field (provider-private, not visible to clients)
+- Notes saved via PATCH /api/v1/provider/leads/{lead_id}/notes with debounced 500ms delay
+- Auto-saves on blur (when textarea loses focus)
+- Shows loading spinner while saving
+- Notes are persisted to leads.provider_notes column in database
+- Translation key: label_private_notes (provider_dashboard namespace)
+- Search functionality: searches across client_name, client_email, client_phone, description, and provider_notes fields with case-insensitive partial matching
 
 **Services** — Grid of service cards showing: title, category, cities (as badges), price + currency, price_type. "Add Service" button. Each card has Edit and Delete buttons. Delete triggers confirmation dialog → DELETE endpoint. Add → empty "New Service" form. Edit → pre-filled "Edit Service" form. Empty state when no services.
 

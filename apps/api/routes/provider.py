@@ -14,6 +14,8 @@ from schemas import (
     CreateServiceRequest,
     LeadStatusUpdateRequest,
     LeadStatusUpdateResponse,
+    LeadProviderNotesUpdateRequest,
+    LeadProviderNotesUpdateResponse,
     ProviderDashboardResponse,
     ProviderSlugHistoryResponse,
     ProviderLeadsResponse,
@@ -243,6 +245,7 @@ def list_leads(
     period: str = Query(default="all", pattern="^(all|7|30|90)$"),
     date_from: Optional[str] = Query(default=None, alias="date_from"),
     date_to: Optional[str] = Query(default=None, alias="date_to"),
+    search: Optional[str] = Query(default=None),
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ) -> ProviderLeadsResponse:
@@ -253,6 +256,7 @@ def list_leads(
         period=period,
         date_from=date_from,
         date_to=date_to,
+        search=search,
     )
     return ProviderLeadsResponse(data=result)
 
@@ -266,6 +270,33 @@ def update_lead_status(
 ) -> LeadStatusUpdateResponse:
     result = change_lead_status(db, lead_id, provider.id, body.status)
     return LeadStatusUpdateResponse(data=result)
+
+
+@router.patch("/leads/{lead_id}/notes", response_model=LeadProviderNotesUpdateResponse)
+def update_lead_provider_notes(
+    lead_id: str,
+    body: LeadProviderNotesUpdateRequest,
+    provider: Provider = Depends(get_current_provider),
+    db: Session = Depends(get_db),
+) -> LeadProviderNotesUpdateResponse:
+    from models import Lead
+    
+    lead = (
+        db.query(Lead)
+        .filter(Lead.id == lead_id, Lead.provider_id == provider.id)
+        .first()
+    )
+    
+    if not lead:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lead not found or you don't have access to this lead"
+        )
+    
+    lead.provider_notes = body.provider_notes
+    db.commit()
+    
+    return LeadProviderNotesUpdateResponse(data={"lead_id": lead_id, "provider_notes": body.provider_notes})
 
 
 # -------------------------
