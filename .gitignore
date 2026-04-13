@@ -61,3 +61,4 @@ env/
 # Secrets
 *.key
 secrets/
+apps/api/uploads/provider_images/*
