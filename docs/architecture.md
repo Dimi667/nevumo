@@ -956,8 +956,19 @@ Provider is complete when ALL are true:
 
 Returned in dashboard response as profile.is_complete + profile.missing_fields[].
 
-### Image Storage
-- Phase 1: Local filesystem at uploads/provider_images/{provider_id}.{ext}
+### Image Processing Pipeline
+
+**Supported Input Formats:**
+- JPEG, PNG, WebP, HEIC, HEIF (iPhone formats)
+
+**Processing Steps:**
+1. **Format Conversion**: All images automatically converted to WebP format for optimization
+2. **Resize**: Images larger than 1200px are resized proportionally to max 1200px width/height
+3. **Quality**: WebP quality set to 85% for optimal balance between quality and file size
+4. **HEIC/HEIF Support**: iPhone formats are converted to WebP using pillow-heif library
+
+**Storage:**
+- Phase 1: Local filesystem at uploads/provider_images/{provider_id}.webp
 - Served via FastAPI StaticFiles mount at /static/provider_images
 - Storage abstraction (save_provider_image in provider_service.py) ready for S3/R2 migration
 

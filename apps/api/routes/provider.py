@@ -209,24 +209,31 @@ async def upload_profile_image(
     file: UploadFile,
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
+    request: Request = None,
 ):
-    allowed = {"image/jpeg", "image/png", "image/webp"}
-    if file.content_type not in allowed:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Only JPEG, PNG, and WebP images are allowed",
-        )
-
+    # Derive base URL from request for dynamic URL generation
+    base_url = str(request.base_url) if request else None
+    
+    allowed = {"image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"}
+    # Also check by filename extension if content_type is missing or generic
     content = await file.read()
+    
+    if file.content_type not in allowed:
+        filename_lower = (file.filename or "").lower()
+        is_heic_by_ext = filename_lower.endswith('.heic') or filename_lower.endswith('.heif')
+        if not is_heic_by_ext:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Only JPEG, PNG, WebP, HEIC, and HEIF images are allowed",
+            )
+
     if len(content) > 5 * 1024 * 1024:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="File size must be under 5 MB",
         )
 
-    ext_map = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp"}
-    ext = ext_map[file.content_type]
-    url = save_provider_image(provider.id, content, ext)
+    url = save_provider_image(provider.id, content, file.content_type, base_url)
 
     provider.profile_image_url = url
     db.commit()

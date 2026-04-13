@@ -190,7 +190,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Event tracking (GA4 + custom DB)
 - Auth backend — Phase A (6 endpoints, bcrypt, JWT, rate limiting)
 - Auth frontend — connected to real API (login, register, forgot, reset)
-- Provider Dashboard backend — 10 endpoints, JWT auth, lead status management, image upload, QR generation, onboarding support
+- Provider Dashboard backend — 10 endpoints, JWT auth, lead status management, image upload (HEIC/HEIF → WebP conversion, max 1200px resize, 85% quality), QR generation, onboarding support
 - Provider Dashboard frontend — all pages (Overview, Leads, Services, Analytics, QR Code, Profile, Settings, Reviews)
 - Provider onboarding — 2-step wizard (profile info → first service), completeness check with auto-redirect
 - Service CRUD — add/edit/delete with category, multi-city, price type, currency

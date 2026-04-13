@@ -16,10 +16,14 @@ if TYPE_CHECKING:
     from models import User
 
 import qrcode
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
+from pillow_heif import register_heif_opener
 from slugify import slugify
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+
+# Register HEIF opener to support HEIC/HEIF formats
+register_heif_opener()
 
 from exceptions import NevumoException
 from constants import COUNTRY_CURRENCY_MAP, DEFAULT_CURRENCY
@@ -157,17 +161,50 @@ def get_static_files_base_url() -> str:
     return os.getenv("STATIC_FILES_BASE_URL", "http://localhost:8000")
 
 
-def save_provider_image(provider_id: UUID, content: bytes, ext: str) -> str:
-    """Save image to local filesystem. Returns full URL.
+def save_provider_image(provider_id: UUID, content: bytes, content_type: str, base_url: str | None = None) -> str:
+    """Save and optimize image to local filesystem. Returns full URL.
+    Converts all images to WebP format with max 1200px resolution and 85% quality.
+    
+    Args:
+        provider_id: Provider UUID
+        content: Image bytes
+        content_type: MIME type from upload
+        base_url: Optional base URL (defaults to settings.STATIC_FILES_BASE_URL)
+    
     TODO: Replace with S3/R2 upload when migrating cloud storage."""
     UPLOAD_BASE.mkdir(parents=True, exist_ok=True)
-    filename = f"{provider_id}.{ext}"
-    filepath = UPLOAD_BASE / filename
-    filepath.write_bytes(content)
     
-    # Return full URL for proper cross-origin loading
-    base_url = get_static_files_base_url().rstrip('/')
-    return f"{base_url}/static/provider_images/{filename}"
+    # Open image from bytes
+    img = Image.open(io.BytesIO(content))
+    
+    # Convert RGBA to RGB if necessary (WebP supports RGBA but we want consistency)
+    if img.mode in ('RGBA', 'LA', 'P'):
+        img = img.convert('RGB')
+    
+    # Resize if larger than 1200px on the longest side (maintain aspect ratio)
+    max_dimension = 1200
+    width, height = img.size
+    if max(width, height) > max_dimension:
+        if width > height:
+            new_width = max_dimension
+            new_height = int(height * (max_dimension / width))
+        else:
+            new_height = max_dimension
+            new_width = int(width * (max_dimension / height))
+        img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+    
+    # Save as WebP with 85% quality
+    filename = f"{provider_id}.webp"
+    filepath = UPLOAD_BASE / filename
+    img.save(filepath, 'WEBP', quality=85, method=6)
+    
+    # Use provided base_url, or fall back to settings, or use localhost as last resort
+    if base_url is None:
+        from config import settings
+        base_url = settings.STATIC_FILES_BASE_URL or "http://localhost:8000"
+    
+    # Return full URL
+    return f"{base_url.rstrip('/')}/static/provider_images/{filename}"
 
 
 def get_image_url(provider_id: UUID, ext: str) -> str:

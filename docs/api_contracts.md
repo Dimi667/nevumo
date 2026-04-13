@@ -409,7 +409,7 @@ Allowed values: `contacted` | `done` | `rejected`
     "business_name": "Maria Massage",
     "description": "...",
     "slug": "maria-massage",
-    "profile_image_url": "/static/provider_images/uuid.jpg",
+    "profile_image_url": "/static/provider_images/uuid.webp",
     "rating": 4.8,
     "verified": true,
     "availability_status": "active",
@@ -504,14 +504,19 @@ Taken slugs are filtered out. Maximum 5 suggestions returned.
 ## POST /api/v1/provider/profile/image
 
 ### Body
-`multipart/form-data`, field: `file` (jpeg/png/webp, max 5MB)
+`multipart/form-data`, field: `file` (jpeg/png/webp/heic/heif, max 5MB)
 
 ### Response
 ```json
-{ "success": true, "data": { "image_url": "http://localhost:8000/static/provider_images/uuid.jpg" } }
+{ "success": true, "data": { "image_url": "http://localhost:8000/static/provider_images/uuid.webp" } }
 ```
 
-**Note**: Returns full URL to support cross-origin loading and future cloud storage migration.
+**Note**: 
+- Returns full URL to support cross-origin loading and future cloud storage migration.
+- All images are automatically converted to WebP format for optimization.
+- Images larger than 1200px are resized proportionally to max 1200px.
+- HEIC/HEIF formats (iPhone) are supported and converted to WebP.
+- WebP quality is set to 85% for optimal balance between quality and file size.
 
 ---
 
@@ -734,7 +739,7 @@ Deletes the service and cascades to `service_cities`.
     "description": "...",
     "slug": "maria-petrova",
     "slug_change_count": 0,
-    "profile_image_url": "/static/provider_images/uuid.jpg",
+    "profile_image_url": "/static/provider_images/uuid.webp",
     "rating": 4.9,
     "verified": true,
     "availability_status": "active",

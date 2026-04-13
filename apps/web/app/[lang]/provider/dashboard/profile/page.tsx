@@ -140,7 +140,7 @@ function AvatarUpload({
         )}
       </div>
       <div>
-        <input ref={ref} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={onFileChange} aria-label="Upload profile photo" />
+        <input ref={ref} type="file" accept=".heic,.heif,image/heic,image/heif,image/jpeg,image/png,image/webp" className="hidden" onChange={onFileChange} aria-label="Upload profile photo" />
         <button
           type="button"
           onClick={() => ref.current?.click()}
@@ -149,7 +149,7 @@ function AvatarUpload({
         >
           {uploading ? t(dict, 'msg_uploading', 'Uploading…') : imageUrl ? t(dict, 'btn_change_photo', 'Change photo') : t(dict, 'btn_upload_photo', 'Upload photo')}
         </button>
-        <p className="text-xs text-gray-400 mt-0.5">{t(dict, 'msg_supported_image_formats', 'JPG, PNG or WebP · max 5 MB')}</p>
+        <p className="text-xs text-gray-400 mt-0.5">{t(dict, 'msg_supported_image_formats', 'JPG, PNG, WebP, HEIC · max 5 MB')}</p>
         {imageUrl && imageError && (
           <div className="mt-1">
             <p className="text-xs text-red-500">{t(dict, 'msg_failed_load_image', 'Failed to load image')}</p>
@@ -470,25 +470,21 @@ export default function ProfilePage() {
     const file = e.target.files?.[0];
     if (!file) return;
     
-    console.log('AvatarUpload: Starting image upload', {
-      fileName: file.name,
-      fileSize: file.size,
-      fileType: file.type,
-      timestamp: new Date().toISOString()
-    });
-    
     // Validate file size
     if (file.size > 5 * 1024 * 1024) {
       const error = t(dict, 'msg_file_size_limit_5mb', 'File size must be less than 5 MB');
-      console.error('AvatarUpload: Validation failed', { error, fileSize: file.size });
       alert(error);
       return;
     }
     
     // Validate file type
-    if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
-      const error = t(dict, 'msg_file_type_jpg_png_webp', 'File must be JPG, PNG or WebP');
-      console.error('AvatarUpload: Validation failed', { error, fileType: file.type });
+    // Some mobile browsers don't send MIME type for HEIC files, so check by extension as fallback
+    const fileName = file.name.toLowerCase();
+    const fileExtension = fileName.slice(fileName.lastIndexOf('.'));
+    const isHeicByExtension = fileExtension === '.heic' || fileExtension === '.heif';
+    
+    if (!file.type.match(/^image\/(jpeg|png|webp|heic|heif)$/) && !isHeicByExtension) {
+      const error = t(dict, 'msg_file_type_jpg_png_webp_heic', 'File must be JPG, PNG, WebP, or HEIC');
       alert(error);
       return;
     }
@@ -498,10 +494,6 @@ export default function ProfilePage() {
     
     try {
       const result = await uploadProviderImage(file);
-      console.log('AvatarUpload: Upload successful', {
-        result,
-        timestamp: new Date().toISOString()
-      });
       
       // The backend now returns full URLs, so no need for cache busting
       // but we'll add it anyway for extra safety
@@ -521,7 +513,7 @@ export default function ProfilePage() {
         if (error.message.includes('413')) {
           errorMessage = t(dict, 'msg_file_too_large', 'File too large. Maximum size is 5 MB.');
         } else if (error.message.includes('422')) {
-          errorMessage = t(dict, 'msg_invalid_file_format', 'Invalid file format. Use JPG, PNG or WebP.');
+          errorMessage = t(dict, 'msg_invalid_file_format', 'Invalid file format. Use JPG, PNG, WebP, or HEIC.');
         } else if (error.message.includes('401')) {
           errorMessage = t(dict, 'msg_authentication_error_login_again', 'Authentication error. Please log in again.');
         } else if (error.message.includes('429')) {

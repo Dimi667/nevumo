@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     # App base URL (used for reset email links)
     APP_URL: str = "http://localhost:3000"
 
+    # Static files base URL (used for image URLs)
+    # If not set, will be derived dynamically from request
+    STATIC_FILES_BASE_URL: str | None = None
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 
