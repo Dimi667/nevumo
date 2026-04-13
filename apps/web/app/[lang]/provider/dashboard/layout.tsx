@@ -122,8 +122,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
             <div className="h-16 flex-shrink-0" /> // Spacer to maintain layout
           )}
           <main
-            className={isOnboarding ? 'p-4 md:p-6 w-full' : 'flex-1 p-4 md:p-6 overflow-auto overscroll-contain'}
-            style={isOnboarding ? undefined : { WebkitOverflowScrolling: 'touch' }}
+            className={isOnboarding ? 'p-4 md:p-6 w-full' : 'flex-1 p-4 md:p-6 overflow-auto overscroll-contain [webkit-overflow-scrolling:touch]'}
           >
             {children}
           </main>

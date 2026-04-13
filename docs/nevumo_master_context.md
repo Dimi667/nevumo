@@ -346,6 +346,10 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Full module complete: DB schema, API endpoint, UI components, documentation synchronized
 
 ### Recent Changes (April 2026)
+- **April 13 — UI Cleanup & Accessibility Improvements**
+  - Removed inline styles in Dashboard section in favor of Tailwind 4 utility classes
+  - Improved button accessibility standards across Dashboard components
+  - Standardized styling approach for better maintainability and consistency
 - **April 11 — Auth Page i18n**
   - 13 нови ключа добавени в auth namespace seed скрипта (checking_btn, logging_in_btn, registering_btn, sending_btn, error_wrong_password, error_generic, error_rate_limit, error_account_disabled, error_email_exists, register_success, coming_soon, page_title, meta_description)
   - Общо auth ключове: 27 × 34 езика = 918 rows

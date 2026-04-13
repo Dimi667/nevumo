@@ -375,8 +375,7 @@ export default function ProviderWidget({
         <img 
           src="/Nevumo_logo.svg" 
           alt="Nevumo" 
-          className="mx-auto opacity-70 mb-4"
-          style={{ height: '28px' }}
+          className="mx-auto opacity-70 mb-4 h-7"
         />
       </div>
 

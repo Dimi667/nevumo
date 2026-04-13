@@ -107,8 +107,7 @@ export default function PWAInstallPrompt({
     return (
       <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50">
         <div
-          className="w-full rounded-t-2xl bg-white shadow-xl"
-          style={{ padding: '20px 24px 32px', maxHeight: '80vh', overflowY: 'auto', textAlign: 'center' }}
+          className="w-full rounded-t-2xl bg-white shadow-xl py-5 px-6 pb-8 max-h-[80vh] overflow-y-auto text-center"
         >
           <div className="mb-4 flex items-center justify-center relative">
             <h3 className="text-lg font-semibold text-gray-900">
@@ -116,9 +115,8 @@ export default function PWAInstallPrompt({
             </h3>
             <button
               onClick={handleDismissClick}
-              className="text-gray-400 hover:text-gray-600"
+              className="absolute right-0 text-gray-400 hover:text-gray-600"
               aria-label="Close"
-              style={{ position: 'absolute', right: 0 }}
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18" />
@@ -149,7 +147,7 @@ export default function PWAInstallPrompt({
             </p>
           </div>
 
-          <div style={{ position: 'sticky', bottom: 0, backgroundColor: 'white', paddingTop: '12px' }}>
+          <div className="sticky bottom-0 bg-white pt-3">
             <button
               onClick={handleDismissClick}
               className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-semibold text-white transition hover:bg-orange-600"

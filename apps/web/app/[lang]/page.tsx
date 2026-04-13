@@ -49,7 +49,7 @@ export default async function Homepage({ params }: PageProps) {
       </nav>
 
       {/* HERO SECTION */}
-      <section style={{ background: 'linear-gradient(135deg, #fb923c 0%, #c2410c 100%)' }} className="py-24 px-4 text-center">
+      <section className="py-24 px-4 text-center bg-gradient-to-br from-orange-400 to-orange-700">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             {t(homepageT, 'hero_prefix', 'Get clients for')}{' '}
