@@ -302,7 +302,36 @@ async def switch_role(
 
     if body.role == "provider":
         from services.provider_service import get_or_create_provider
-        get_or_create_provider(current_user, db)
+        from secrets import token_hex
+        
+        # Check if provider already exists
+        from models import Provider
+        existing_provider = db.query(Provider).filter(Provider.user_id == current_user.id).first()
+        
+        if existing_provider:
+            # Provider already exists, no need to create
+            pass
+        elif body.business_name and body.preferred_slug:
+            # User provided business_name and slug, create provider with those values
+            get_or_create_provider(
+                current_user,
+                db,
+                preferred_slug=body.preferred_slug,
+                business_name=body.business_name,
+            )
+        else:
+            # No provider exists and no business_name/slug provided - create draft provider
+            # This matches the registration flow for provider role
+            draft_slug = f"draft{token_hex(6)}"
+            provider = Provider(
+                user_id=current_user.id,
+                business_name=current_user.email,  # Placeholder to indicate onboarding needed
+                slug=draft_slug,
+                rating=0,
+                verified=False,
+                availability_status="active",
+            )
+            db.add(provider)
 
     current_user.role = body.role
     db.commit()

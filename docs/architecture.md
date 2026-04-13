@@ -847,8 +847,39 @@ When a provider fills Step 1 fields (business name, slug, description) and click
 ### Security Considerations
 
 - Draft is per-provider scoped (key: `onboarding_step1_draft_{providerId}`)
-- Draft is stored in sessionStorage (cleared when tab closes, not shared across tabs)
-- Safety check ensures loaded draft matches current providerId before use
+
+---
+
+## Role Switch Redirect Logic (April 2026)
+
+### Overview
+When a user switches their role from Client to Provider via POST /api/v1/auth/switch-role, the frontend redirects them to the main Provider Dashboard (`/provider/dashboard`) instead of the Profile page. This change ensures a smoother transition and leverages the existing Onboarding Banner for profile completion guidance.
+
+### Implementation Details
+
+**Backend** (`apps/api/routes/auth.py`):
+- The `switch-role` endpoint accepts optional `business_name` and `preferred_slug` parameters
+- When switching to provider with these parameters: creates provider record with those values (if provider doesn't exist)
+- When switching to provider without these parameters: creates draft provider with temporary slug and email as placeholder business_name
+- When provider already exists: only updates user role
+
+**Frontend** (`apps/web/lib/provider-api.ts`):
+- `switchRole()` function accepts optional `businessName` and `preferredSlug` parameters
+- These are passed to the backend when provided
+
+**Redirect Behavior**:
+- Client dashboard settings page (`apps/web/app/[lang]/client/dashboard/settings/page.tsx`): redirects to `/${lang}/provider/dashboard` after successful switch
+- Client dashboard layout (`apps/web/app/[lang]/client/dashboard/layout.tsx`): redirects to `/${lang}/provider/dashboard` after successful switch
+- Provider dashboard settings page (`apps/web/app/[lang]/provider/dashboard/settings/page.tsx`): redirects to `/${lang}/` when switching back to client
+
+### Onboarding Banner Integration
+- After switching to provider, the user lands on the main Dashboard
+- If onboarding is incomplete, the Onboarding Banner automatically appears with dynamic content based on `missing_fields`
+- The banner guides users through profile completion without requiring a separate redirect to the Profile page
+- This provides a cohesive user experience with clear next steps
+
+### Translation Keys
+New i18n keys for the onboarding banner have been added to the Bulgarian and English translation files in the `provider_dashboard` namespace. These keys support the dynamic hero content, step indicators, and CTAs displayed during the onboarding process.
 
 ---
 
@@ -1033,6 +1064,18 @@ Client dashboard now mirrors the provider dashboard shell under `/[lang]/client/
 
 #### Role Switching
 Provider ↔ Client switching works. Updates user role via API and redirects to appropriate dashboard.
+
+**Client → Provider Flow:**
+- When switching to provider without business_name/preferred_slug: creates draft provider record with temporary slug (draft{token}) and email as placeholder business_name, then redirects to `/provider/dashboard/profile` for onboarding
+- When switching to provider with business_name/preferred_slug: creates provider record with those values (if provider doesn't exist)
+- When provider already exists: only updates user role
+- Frontend calls `switchRole('provider')` from client dashboard sidebar and settings page
+- After successful switch, user is redirected to `/provider/dashboard/profile` to complete onboarding
+
+**Provider → Client Flow:**
+- Updates user role to client
+- Redirects to `/client/dashboard/overview`
+- Provider record remains intact (user can switch back)
 
 #### Service Form Architecture
 - Service creation/edit includes: title, category_id, city_ids[], description, price_type, base_price, currency

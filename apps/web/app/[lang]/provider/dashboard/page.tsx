@@ -129,6 +129,8 @@ export default function DashboardOverviewPage() {
       </div>
 
       {/* Incomplete onboarding hero banner */}
+      {/* TODO: Consider adding a specific welcome message for draft mode:
+           "Добре дошли! Вашият профил е в режим "Чернова". Попълнете детайлите в секция Профил, за да бъдете видими за клиенти." */}
       {!isOnboardingComplete && heroContent && (
         <div className="bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6 space-y-4 max-w-2xl mx-auto">
           <div className="text-center">

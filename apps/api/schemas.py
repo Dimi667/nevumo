@@ -340,6 +340,8 @@ class MagicLinkRequest(BaseModel):
 
 class SwitchRoleRequest(BaseModel):
     role: str
+    business_name: Optional[str] = None
+    preferred_slug: Optional[str] = None
 
     @field_validator("role")
     @classmethod

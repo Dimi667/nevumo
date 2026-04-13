@@ -309,10 +309,16 @@ export async function getProviderAnalytics(period: 7 | 30): Promise<AnalyticsDat
 // ---------------------------------------------------------------------------
 
 export async function switchRole(
-  role: 'provider' | 'client'
+  role: 'provider' | 'client',
+  businessName?: string,
+  preferredSlug?: string
 ): Promise<{ token: string; user: UserInfo }> {
+  const body: any = { role };
+  if (businessName) body.business_name = businessName;
+  if (preferredSlug) body.preferred_slug = preferredSlug;
+  
   return authFetch<{ token: string; user: UserInfo }>('/api/v1/auth/switch-role', {
     method: 'POST',
-    body: JSON.stringify({ role }),
+    body: JSON.stringify(body),
   });
 }

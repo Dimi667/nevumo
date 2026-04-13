@@ -212,6 +212,38 @@ GET /api/v1/auth/register/slug/check?slug=devs&city_slug=sofia&category_slug=mas
 
 ---
 
+## POST /api/v1/auth/switch-role
+
+### Body
+```json
+{
+  "role": "provider | client",
+  "business_name": "optional - business name when switching to provider",
+  "preferred_slug": "optional - preferred slug when switching to provider"
+}
+```
+
+### Response
+```json
+{ "success": true, "data": { "token": "JWT", "user": { "id": "uuid", "email": "...", "role": "provider" } } }
+```
+
+### Description
+- Switches user role between client and provider
+- When switching to provider without business_name/preferred_slug: creates draft provider record with temporary slug and email as placeholder business_name, then redirects to onboarding
+- When switching to provider with business_name/preferred_slug: creates provider record with those values (if provider doesn't exist)
+- When provider already exists: only updates user role
+- After successful switch, user is redirected to appropriate dashboard (provider → /provider/dashboard, client → /client/dashboard)
+- For provider role, the main Dashboard utilizes the existing Onboarding Banner for profile completion guidance
+
+### Errors
+- 400 ALREADY_IN_ROLE — User is already in the target role
+- 400 MISSING_SLUG — Slug required when creating provider with specific values
+- 400 MISSING_BUSINESS_NAME — Business name required when creating provider with specific values
+- 409 SLUG_TAKEN — Slug already in use (returns `extra_data.suggestions`)
+
+---
+
 ## Auth Error Codes
 
 | Code | Status | Meaning |
