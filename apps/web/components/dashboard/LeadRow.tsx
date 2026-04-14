@@ -2,7 +2,6 @@
 
 import StatusBadge from './StatusBadge';
 import { formatDashboardDate, useDashboardI18n } from '@/lib/provider-dashboard-i18n';
-import { t } from '@/lib/ui-translations';
 import type { Lead } from '@/types/provider';
 
 interface LeadRowProps {
@@ -12,25 +11,25 @@ interface LeadRowProps {
   onView?: (lead: Lead) => void;
 }
 
-function getSourceLabel(source: string, dict: Record<string, string>): string {
+function getSourceLabel(source: string, t: (key: string, fallback?: string) => string): string {
   switch (source) {
     case 'seo':
-      return t(dict, 'label_source_seo', 'SEO');
+      return t('label_source_seo', 'SEO');
     case 'widget':
-      return t(dict, 'label_source_widget', 'Widget');
+      return t('label_source_widget', 'Widget');
     case 'qr':
-      return t(dict, 'label_source_qr', 'QR Code');
+      return t('label_source_qr', 'QR Code');
     case 'direct':
-      return t(dict, 'label_source_direct', 'Direct');
+      return t('label_source_direct', 'Direct');
     case 'other':
-      return t(dict, 'label_source_other', 'Other');
+      return t('label_source_other', 'Other');
     default:
       return source;
   }
 }
 
 export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowProps) {
-  const { dict, lang } = useDashboardI18n();
+  const { t, lang } = useDashboardI18n();
   const isTerminal = lead.status === 'done' || lead.status === 'rejected';
   const isContacted = lead.status === 'contacted';
 
@@ -53,7 +52,7 @@ export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowPr
         <p className="truncate">{lead.description ?? '—'}</p>
       </td>
       <td className="px-4 py-3 text-sm text-gray-500 whitespace-nowrap">
-        {lead.source ? getSourceLabel(lead.source, dict) : '—'}
+        {lead.source ? getSourceLabel(lead.source, t) : '—'}
       </td>
       <td className="px-4 py-3 text-sm text-gray-600 max-w-xs">
         {lead.provider_notes ? (
@@ -77,7 +76,7 @@ export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowPr
               onView?.(lead);
             }}
             className="px-3 py-1 text-xs font-medium bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
-            title={t(dict, 'btn_view', 'View')}
+            title={t('btn_view', 'View')}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
@@ -95,7 +94,7 @@ export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowPr
                   }}
                   className="px-3 py-1 text-xs font-medium bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
                 >
-                  {t(dict, 'btn_contact', 'Contact')}
+                  {t('btn_contact', 'Contact')}
                 </button>
               )}
               {isContacted && (
@@ -106,7 +105,7 @@ export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowPr
                   }}
                   className="px-3 py-1 text-xs font-medium bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
                 >
-                  {t(dict, 'status_done', 'Done')}
+                  {t('status_done', 'Done')}
                 </button>
               )}
               <button
@@ -116,7 +115,7 @@ export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowPr
                 }}
                 className="px-3 py-1 text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                {t(dict, 'btn_reject', 'Reject')}
+                {t('btn_reject', 'Reject')}
               </button>
             </>
           )}

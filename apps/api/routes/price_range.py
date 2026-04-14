@@ -7,8 +7,8 @@ from sqlalchemy.orm import Session
 import redis as redis_lib
 from sqlalchemy import func
 
-from dependencies import get_db, get_redis
-from models import Service, ServiceCity, Location, Category
+from apps.api.dependencies import get_db, get_redis
+from apps.api.models import Service, ServiceCity, Location, Category
 
 router = APIRouter(tags=["price-range"])
 

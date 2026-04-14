@@ -10,7 +10,7 @@ import {
   type ClientDashboardData,
   type ClientLeadStatus,
 } from '@/lib/client-api';
-import { fetchTranslations, t, type TranslationDict } from '@/lib/ui-translations';
+import { useTranslation } from '@/lib/use-translation';
 
 function ActiveRequestsIcon() {
   return (
@@ -54,23 +54,23 @@ function formatDate(value: string, locale: string): string {
   }
 }
 
-function getStatusMeta(status: ClientLeadStatus, dict: TranslationDict): { label: string; className: string } {
+function getStatusMeta(status: ClientLeadStatus, t: (key: string, fallback?: string) => string): { label: string; className: string } {
   if (status === 'done') {
     return {
-      label: t(dict, 'status_completed', 'Completed'),
+      label: t('status_completed', 'Completed'),
       className: 'bg-green-100 text-green-700',
     };
   }
 
   if (status === 'rejected' || status === 'expired' || status === 'cancelled') {
     return {
-      label: t(dict, 'status_rejected', 'Rejected'),
+      label: t('status_rejected', 'Rejected'),
       className: 'bg-gray-100 text-gray-600',
     };
   }
 
   return {
-    label: t(dict, 'status_active', 'Active'),
+    label: t('status_active', 'Active'),
     className: 'bg-orange-100 text-orange-700',
   };
 }
@@ -82,7 +82,7 @@ export default function ClientOverviewPage() {
   const [data, setData] = useState<ClientDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [dict, setDict] = useState<TranslationDict>({});
+  const { t } = useTranslation('client_dashboard', lang);
 
   useEffect(() => {
     async function loadDashboard() {
@@ -109,14 +109,6 @@ export default function ClientOverviewPage() {
     void loadDashboard();
   }, []);
 
-  useEffect(() => {
-    async function loadTranslations() {
-      const translations = await fetchTranslations(lang, 'client_dashboard');
-      setDict(translations);
-    }
-
-    void loadTranslations();
-  }, [lang]);
 
   if (loading) {
     return (
@@ -140,8 +132,8 @@ export default function ClientOverviewPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">{t(dict, 'overview_title', 'Overview')}</h1>
-        <p className="text-sm text-gray-500 mt-0.5">{t(dict, 'overview_subtitle', 'Overview of your requests and reviews')}</p>
+        <h1 className="text-xl font-bold text-gray-900">{t('overview_title', 'Overview')}</h1>
+        <p className="text-sm text-gray-500 mt-0.5">{t('overview_subtitle', 'Overview of your requests and reviews')}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -150,7 +142,7 @@ export default function ClientOverviewPage() {
           className="cursor-pointer hover:ring-2 hover:ring-orange-400 transition rounded-xl block"
         >
           <StatsCard
-            title={t(dict, 'stat_active_requests', 'Active Requests')}
+            title={t('stat_active_requests', 'Active Requests')}
             value={stats?.active_leads ?? 0}
             icon={<ActiveRequestsIcon />}
             accent
@@ -161,7 +153,7 @@ export default function ClientOverviewPage() {
           className="cursor-pointer hover:ring-2 hover:ring-orange-400 transition rounded-xl block"
         >
           <StatsCard
-            title={t(dict, 'stat_completed_services', 'Completed Services')}
+            title={t('stat_completed_services', 'Completed Services')}
             value={stats?.completed_leads ?? 0}
             icon={<CompletedServicesIcon />}
             accent
@@ -172,7 +164,7 @@ export default function ClientOverviewPage() {
           className="cursor-pointer hover:ring-2 hover:ring-orange-400 transition rounded-xl block"
         >
           <StatsCard
-            title={t(dict, 'stat_reviews', 'Reviews')}
+            title={t('stat_reviews', 'Reviews')}
             value={stats?.reviews_written ?? 0}
             icon={<ReviewsIcon />}
             accent
@@ -183,27 +175,24 @@ export default function ClientOverviewPage() {
       {recentLeads.length === 0 ? (
         <div className="bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6 md:p-8 text-center space-y-4">
           <div className="space-y-1.5">
-            <h2 className="text-xl font-bold text-gray-900">{t(dict, 'empty_requests_title', 'No requests yet')}</h2>
-            <p className="text-sm text-gray-600 max-w-xl mx-auto">
-              {t(dict, 'empty_requests_desc', 'Browse available services...')}
-            </p>
+            <p className="text-sm text-gray-500">{t('msg_no_recent_requests', 'No recent requests yet.')}</p>
           </div>
           <Link
             href={`/${lang}`}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            {t(dict, 'cta_find_service', 'Find Service')}
+            {t('cta_find_service', 'Find Service')}
           </Link>
         </div>
       ) : (
         <div className="space-y-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">{t(dict, 'recent_title', 'Recent Requests')}</h2>
-            <p className="text-sm text-gray-500 mt-0.5">{t(dict, 'recent_subtitle', 'Your latest activity in Nevumo')}</p>
+            <h2 className="text-sm font-semibold text-gray-900">{t('recent_requests_title', 'Recent Requests')}</h2>
+            <p className="text-sm text-gray-500 mt-0.5">{t('recent_subtitle', 'Your latest activity in Nevumo')}</p>
           </div>
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
             {recentLeads.map((lead) => {
-              const statusMeta = getStatusMeta(lead.status, dict);
+              const statusMeta = getStatusMeta(lead.status, t);
 
               return (
                 <div key={lead.id} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
@@ -217,13 +206,13 @@ export default function ClientOverviewPage() {
                     </span>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t(dict, 'label_provider', 'Provider')}</p>
+                    <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t('label_provider', 'Provider')}</p>
                     <p className="text-sm text-gray-700">
-                      {lead.provider_business_name || t(dict, 'label_marketplace', 'Marketplace Request')}
+                      {lead.provider_business_name || t('label_marketplace', 'Marketplace Request')}
                     </p>
                   </div>
                   <div className="space-y-1">
-                    <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t(dict, 'label_date', 'Date')}</p>
+                    <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t('label_date', 'Date')}</p>
                     <p className="text-sm text-gray-700">{formatDate(lead.created_at, lang)}</p>
                   </div>
                 </div>

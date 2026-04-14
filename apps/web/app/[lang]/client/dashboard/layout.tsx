@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { getAuthToken, getAuthUser, clearAuth, saveAuth } from '@/lib/auth-store';
 import { switchRole } from '@/lib/provider-api';
-import { fetchTranslations, t, type TranslationDict } from '@/lib/ui-translations';
+import { useTranslation } from '@/lib/use-translation';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -60,11 +60,11 @@ interface ClientDashboardTopBarProps {
   email: string | null;
   onMenuClick: () => void;
   lang: string;
-  dict: TranslationDict;
 }
 
-function ClientDashboardTopBar({ email, onMenuClick, lang, dict }: ClientDashboardTopBarProps) {
+function ClientDashboardTopBar({ email, onMenuClick, lang }: ClientDashboardTopBarProps) {
   const router = useRouter();
+  const { t } = useTranslation('client_dashboard', lang);
 
   function handleLogout() {
     clearAuth();
@@ -72,20 +72,20 @@ function ClientDashboardTopBar({ email, onMenuClick, lang, dict }: ClientDashboa
   }
 
   return (
-    <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 flex-shrink-0">
-      <div className="flex items-center gap-3 min-w-0">
+    <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200">
+      <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="md:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+          className="md:hidden p-2 text-gray-600 hover:text-gray-900"
           aria-label="Open menu"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <line x1="3" y1="12" x2="21" y2="12" />
             <line x1="3" y1="6" x2="21" y2="6" />
             <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </button>
-        <h1 className="font-medium text-gray-900">{t(dict, 'nav_client_dashboard', 'Client Dashboard')}</h1>
+        <h1 className="text-lg font-semibold text-gray-900">{t('nav_client_dashboard', 'Client Dashboard')}</h1>
       </div>
 
       <div className="flex items-center gap-3">
@@ -103,7 +103,7 @@ function ClientDashboardTopBar({ email, onMenuClick, lang, dict }: ClientDashboa
             <polyline points="16 17 21 12 16 7" />
             <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
-          <span className="hidden sm:inline">{t(dict, 'nav_logout', 'Logout')}</span>
+          <span className="hidden sm:inline">{t('nav_logout', 'Logout')}</span>
         </button>
       </div>
     </header>
@@ -118,15 +118,15 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
   const [ready, setReady] = useState(false);
   const [switchingRole, setSwitchingRole] = useState(false);
   const [switchError, setSwitchError] = useState<string | null>(null);
-  const [dict, setDict] = useState<TranslationDict>({});
+  const { t, isLoading } = useTranslation('client_dashboard', lang);
   const base = `/${lang}/client/dashboard`;
   const user = getAuthUser();
 
   const navItems: NavItem[] = [
-    { label: t(dict, 'nav_overview', 'Overview'), href: `${base}/overview`, icon: <OverviewIcon /> },
-    { label: t(dict, 'nav_requests', 'My Requests'), href: `${base}/requests`, icon: <RequestsIcon /> },
-    { label: t(dict, 'nav_reviews', 'Reviews'), href: `${base}/reviews`, icon: <ReviewsIcon /> },
-    { label: t(dict, 'nav_settings', 'Settings'), href: `${base}/settings`, icon: <SettingsIcon /> },
+    { label: t('nav_overview', 'Overview'), href: `${base}/overview`, icon: <OverviewIcon /> },
+    { label: t('nav_requests', 'My Requests'), href: `${base}/requests`, icon: <RequestsIcon /> },
+    { label: t('nav_reviews', 'Reviews'), href: `${base}/reviews`, icon: <ReviewsIcon /> },
+    { label: t('nav_settings', 'Settings'), href: `${base}/settings`, icon: <SettingsIcon /> },
   ];
 
   useEffect(() => {
@@ -141,16 +141,8 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
     setReady(true);
   }, [lang, router]);
 
-  useEffect(() => {
-    async function loadTranslations() {
-      const translations = await fetchTranslations(lang, 'client_dashboard');
-      setDict(translations);
-    }
 
-    void loadTranslations();
-  }, [lang]);
-
-  if (!ready) {
+  if (!ready || isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
@@ -212,14 +204,14 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
               <circle cx="11" cy="11" r="8" />
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
-            {t(dict, 'nav_find_service', 'Find Service')}
+            {t('nav_find_service', 'Find Service')}
           </Link>
         </div>
 
         {/* Стани доставчик секция */}
         <div className="pt-6 border-t border-gray-200 pb-6">
           <p className="text-sm text-gray-500 mb-5">
-            {t(dict, 'nav_provider_pitch', 'Offer services and get clients!')}
+            {t('nav_provider_pitch', 'Offer services and get clients!')}
           </p>
           <button
             onClick={async () => {
@@ -238,7 +230,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
             disabled={switchingRole}
             className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-xs font-bold tracking-widest uppercase transition-colors bg-gray-900 hover:bg-gray-700 disabled:opacity-50 text-white"
           >
-            {switchingRole ? t(dict, 'nav_switching', 'Switching...') : t(dict, 'nav_become_provider', 'Become a Provider')}
+            {switchingRole ? t('nav_switching', 'Switching...') : t('nav_become_provider', 'Become a Provider')}
           </button>
           {switchError && (
             <p className="px-3 mt-2 text-xs text-red-600">{switchError}</p>
@@ -260,7 +252,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
             <polyline points="16 17 21 12 16 7" />
             <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
-          {t(dict, 'nav_logout', 'Logout')}
+          {t('nav_logout', 'Logout')}
         </button>
       </div>
     </div>
@@ -303,7 +295,6 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
           email={user?.email ?? null}
           onMenuClick={() => setSidebarOpen(true)}
           lang={lang}
-          dict={dict}
         />
 
         <main className="flex-1 p-4 md:p-6 overflow-auto">

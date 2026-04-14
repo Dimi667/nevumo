@@ -1,5 +1,4 @@
 import React from 'react';
-import { t } from '@/lib/ui-translations';
 
 // ─── Step 1 Draft Persistence (sessionStorage) ───────────────────────────────
 
@@ -121,30 +120,30 @@ export interface HeroContent {
   ctaLabel: string;
 }
 
-export function getHeroContent(state: OnboardingState, dict: Record<string, string>): HeroContent {
+export function getHeroContent(state: OnboardingState, t: (key: string, fallback?: string) => string): HeroContent {
   if (state.missingProfile) {
     // Step 1 incomplete - user skipped without entering business name
     return {
-      headline: t(dict, 'onboarding_hero_2steps_title', "You're 2 steps away from getting clients"),
-      description: t(dict, 'onboarding_hero_2steps_desc', 'Complete your profile to start receiving requests'),
-      ctaLabel: t(dict, 'onboarding_hero_2steps_cta', 'Complete your profile'),
+      headline: t('onboarding_hero_2steps_title', "You're 2 steps away from getting clients"),
+      description: t('onboarding_hero_2steps_desc', 'Complete your profile to start receiving requests'),
+      ctaLabel: t('onboarding_hero_2steps_cta', 'Complete your profile'),
     };
   }
   
   if (state.missingService) {
     // Profile complete, service missing
     return {
-      headline: t(dict, 'onboarding_hero_1step_title', "You're 1 step away from getting clients"),
-      description: t(dict, 'onboarding_hero_1step_desc', 'Add your first service to start receiving requests'),
-      ctaLabel: t(dict, 'onboarding_hero_1step_cta', 'Add your first service'),
+      headline: t('onboarding_hero_1step_title', "You're 1 step away from getting clients"),
+      description: t('onboarding_hero_1step_desc', 'Add your first service to start receiving requests'),
+      ctaLabel: t('onboarding_hero_1step_cta', 'Add your first service'),
     };
   }
   
   // Should not reach here if called correctly (only when incomplete)
   return {
-    headline: t(dict, 'onboarding_hero_2steps_title', "You're 2 steps away from getting clients"),
-    description: t(dict, 'onboarding_hero_2steps_desc', 'Complete your profile to start receiving requests'),
-    ctaLabel: t(dict, 'onboarding_hero_2steps_cta', 'Complete your profile'),
+    headline: t('onboarding_hero_2steps_title', "You're 2 steps away from getting clients"),
+    description: t('onboarding_hero_2steps_desc', 'Complete your profile to start receiving requests'),
+    ctaLabel: t('onboarding_hero_2steps_cta', 'Complete your profile'),
   };
 }
 
@@ -216,12 +215,12 @@ export function StepIndicator({
 // Compact step indicator for hero footer
 export interface CompactStepIndicatorProps {
   state: import('./onboarding-utils').OnboardingState;
-  dict: Record<string, string>;
+  t: (key: string, fallback?: string) => string;
 }
 
 export function CompactStepIndicator({ 
   state,
-  dict
+  t
 }: CompactStepIndicatorProps) {
   const { isProfileComplete, isServiceComplete } = state;
   return (
@@ -238,7 +237,7 @@ export function CompactStepIndicator({
           ) : '1'}
         </div>
         <span className={`text-xs ${isProfileComplete ? 'text-gray-600' : 'text-orange-600 font-medium'}`}>
-          {t(dict, 'onboarding_step_profile', 'Profile')}
+          {t('onboarding_step_profile', 'Profile')}
         </span>
       </div>
 
@@ -265,7 +264,7 @@ export function CompactStepIndicator({
             ? 'text-orange-600 font-medium' 
             : 'text-gray-400'
         }`}>
-          {t(dict, 'onboarding_step_service', 'Service')}
+          {t('onboarding_step_service', 'Service')}
         </span>
       </div>
     </div>

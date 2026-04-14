@@ -4,16 +4,11 @@ Script to add Belgrade, Serbia to the database for testing Eurozone transition.
 This script inserts Belgrade into the locations table with country_code 'RS'.
 """
 
-import sys
-import os
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
-# Add the parent directory to the path so we can import app modules
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from dependencies import get_db
-from models import Location
+from apps.api.dependencies import get_db, get_redis
+from apps.api.models import Location
 
 def add_belgrade():
     """Add Belgrade, Serbia to the locations table."""
@@ -55,7 +50,6 @@ def add_belgrade():
         
         # Clear Redis cache for Serbian cities if Redis is available
         try:
-            from dependencies import get_redis
             redis_client = next(get_redis())
             if redis_client:
                 redis_client.delete("cities:RS")

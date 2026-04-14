@@ -4,12 +4,8 @@ Seed location translations for Sofia, Belgrade, and Warsaw in all 34 languages.
 Uses INSERT ... ON CONFLICT for idempotent upserts.
 """
 
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from sqlalchemy import text
-from database import SessionLocal
+from apps.api.database import SessionLocal
 
 TRANSLATIONS = {
     "sofia": {

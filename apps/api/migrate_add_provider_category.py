@@ -1,7 +1,7 @@
 from sqlalchemy import inspect, text
 
-from database import engine
-from i18n import DEFAULT_PROVIDER_CATEGORY_KEY
+from apps.api.database import engine
+from apps.api.i18n import DEFAULT_PROVIDER_CATEGORY_KEY
 
 
 def migrate() -> None:

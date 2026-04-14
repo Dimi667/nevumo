@@ -4,8 +4,8 @@ from uuid import UUID
 from sqlalchemy import and_, func
 from sqlalchemy.orm import Session, aliased
 
-from exceptions import NevumoException
-from models import Category, CategoryTranslation, Lead, Location, Provider, Review, User
+from apps.api.exceptions import NevumoException
+from apps.api.models import Category, CategoryTranslation, Lead, Location, Provider, Review, User
 
 ACTIVE_LEAD_STATUSES: tuple[str, ...] = ("created", "pending_match", "matched", "contacted")
 REJECTED_LEAD_STATUSES: tuple[str, ...] = ("rejected", "expired", "cancelled")

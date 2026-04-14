@@ -6,11 +6,11 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 import redis as redis_lib
 
-from config import settings
-from dependencies import get_db, get_redis
-from exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
-from models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation
-from schemas import (
+from apps.api.config import settings
+from apps.api.dependencies import get_db, get_redis
+from apps.api.exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
+from apps.api.models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation
+from apps.api.schemas import (
     ProviderListItem,
     ProviderListResponse,
     ProviderDetail,
@@ -19,7 +19,7 @@ from schemas import (
     LatestLeadPreview,
     LatestReviewPreview,
 )
-from services.provider_service import (
+from apps.api.services.provider_service import (
     get_city_leads_count,
     get_provider_leads_received,
     get_public_latest_lead_preview,
@@ -29,11 +29,11 @@ from services.provider_service import (
     resolve_provider_slug_safe,
     get_provider_by_claim_token,
 )
-from services.review_service import get_public_latest_review_preview
+from apps.api.services.review_service import get_public_latest_review_preview
 
 
 def get_widget_translations(lang: str, db: Session) -> dict:
-    from models import Translation
+    from apps.api.models import Translation
     
     supported_langs = ["bg","cs","da","de","el","en","es","et","fi","fr","ga","hr","hu","is","it","lb","lt","lv","mk","mt","nl","no","pl","pt","pt-PT","ro","ru","sk","sl","sq","sr","sv","tr","uk"]
     

@@ -3,18 +3,13 @@
 Script to add 5 new leads for testing status changes from New to Done.
 """
 
-import sys
-import os
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from datetime import datetime
 import uuid
 
-# Add the parent directory to the path so we can import app modules
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from dependencies import get_db
-from models import User, Provider, Location, Category
+from apps.api.dependencies import get_db
+from apps.api.models import User, Provider, Location, Category
 
 def add_test_leads():
     """Add 5 new leads for testing."""

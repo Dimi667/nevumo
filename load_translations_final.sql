@@ -1,0 +1,22 @@
+INSERT INTO translations (key, lang, value) VALUES
+('provider_dashboard.stat_total_leads', 'bg', 'Общо запитвания'),
+('provider_dashboard.stat_new_leads', 'bg', 'Нови запитвания'),
+('provider_dashboard.stat_leads_contacted', 'bg', 'Осъществен контакт'),
+('provider_dashboard.stat_rating', 'bg', 'Рейтинг'),
+('provider_dashboard.status_all', 'bg', 'Всички'),
+('provider_dashboard.status_new', 'bg', 'Нови'),
+('provider_dashboard.status_contacted', 'bg', 'В процес'),
+('provider_dashboard.status_done', 'bg', 'Завършени'),
+('provider_dashboard.status_rejected', 'bg', 'Отказани'),
+('provider_dashboard.no_leads_title', 'bg', 'Все още нямате запитвания'),
+('provider_dashboard.no_leads_subtitle', 'bg', 'Вашите услуги ще се появят скоро пред клиенти'),
+('provider_dashboard.lead_card_view', 'bg', 'Виж детайли'),
+('provider_dashboard.lead_card_contact', 'bg', 'Свържи се'),
+('provider_dashboard.settings_title', 'bg', 'Настройки на профила'),
+('provider_dashboard.settings_save', 'bg', 'Запази промените'),
+('label_phone', 'bg', 'Телефонен номер'),
+('label_description', 'bg', 'Описание на услугите'),
+('success_update', 'bg', 'Промените бяха запазени успешно'),
+('nav_dashboard', 'bg', 'Табло'),
+('nav_settings', 'bg', 'Настройки')
+ON CONFLICT (key, lang) DO UPDATE SET value = EXCLUDED.value;

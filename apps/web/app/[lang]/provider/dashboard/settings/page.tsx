@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { clearAuth, getAuthUser, saveAuth } from '@/lib/auth-store';
 import {
   ProviderApiError,
@@ -15,13 +15,12 @@ import { getSlugValidationError, sanitizeSlug } from '@/lib/slug-utils';
 import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
-import { t, type TranslationDict } from '@/lib/ui-translations';
 
-function getAvailabilityOptions(dict: TranslationDict): { value: AvailabilityStatus; label: string }[] {
+function getAvailabilityOptions(t: (key: string, fallback?: string) => string): { value: AvailabilityStatus; label: string }[] {
   return [
-    { value: 'active', label: t(dict, 'availability_active', 'Active') },
-    { value: 'busy', label: t(dict, 'availability_busy', 'Busy') },
-    { value: 'offline', label: t(dict, 'availability_offline', 'Offline') },
+    { value: 'active', label: t('availability_active', 'Active') },
+    { value: 'busy', label: t('availability_busy', 'Busy') },
+    { value: 'offline', label: t('availability_offline', 'Offline') },
   ];
 }
 
@@ -30,9 +29,7 @@ const MAX_SLUG_CHANGES = 1;
 
 export default function SettingsPage() {
   const router = useRouter();
-  const params = useParams();
-  const lang = typeof params.lang === 'string' ? params.lang : 'en';
-  const { dict } = useDashboardI18n();
+  const { t, lang } = useDashboardI18n();
   const user = getAuthUser();
 
   const [profile, setProfile] = useState<ProviderProfile | null>(null);
@@ -104,7 +101,7 @@ export default function SettingsPage() {
 
     if (!canEditSlug) {
       setSlugAvailable(false);
-      setSlugError(t(dict, 'msg_url_change_limit', 'URL can only be changed once. Contact support for assistance.'));
+      setSlugError(t('msg_url_change_limit', 'URL can only be changed once. Contact support for assistance.'));
       setSlugSuggestions([]);
       setSlugChecking(false);
       return false;
@@ -125,13 +122,13 @@ export default function SettingsPage() {
       }
 
       setSlugAvailable(result.available);
-      setSlugError(result.error ?? (result.available ? null : t(dict, 'msg_url_taken', 'This URL is already taken')));
+      setSlugError(result.error ?? (result.available ? null : t('msg_url_taken', 'This URL is already taken')));
       setSlugSuggestions(result.available ? [] : (result.suggestions ?? []));
       return result.available;
     } catch {
       if (slugCheckRequestRef.current === requestId) {
         setSlugAvailable(null);
-        setSlugError(t(dict, 'msg_failed_check_url', 'Failed to check URL availability'));
+        setSlugError(t('msg_failed_check_url', 'Failed to check URL availability'));
         setSlugSuggestions([]);
       }
       return false;
@@ -210,7 +207,7 @@ export default function SettingsPage() {
         setSlugError(e.message);
         setSlugSuggestions([]);
       } else {
-        setSlugError(e instanceof Error ? e.message : t(dict, 'msg_failed_save_url', 'Failed to save URL'));
+        setSlugError(e instanceof Error ? e.message : t('msg_failed_save_url', 'Failed to save URL'));
         setSlugSuggestions([]);
       }
     } finally {
@@ -243,7 +240,7 @@ export default function SettingsPage() {
       saveAuth(result.token, result.user);
       router.push(`/${lang}/`);
     } catch (e: unknown) {
-      setSwitchError(e instanceof Error ? e.message : t(dict, 'msg_failed_switch_role', 'Failed to switch role'));
+      setSwitchError(e instanceof Error ? e.message : t('msg_failed_switch_role', 'Failed to switch role'));
       setSwitchingRole(false);
     }
   }
@@ -267,19 +264,19 @@ export default function SettingsPage() {
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">{t(dict, 'nav_settings', 'Settings')}</h1>
-        <p className="text-sm text-gray-500 mt-0.5">{t(dict, 'settings_subtitle', 'Account and preferences')}</p>
+        <h1 className="text-xl font-bold text-gray-900">{t('nav_settings', 'Settings')}</h1>
+        <p className="text-sm text-gray-500 mt-0.5">{t('settings_subtitle', 'Account and preferences')}</p>
       </div>
 
       {/* Account info */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
-        <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_account', 'Account')}</h2>
+        <h2 className="text-sm font-semibold text-gray-800">{t('label_account', 'Account')}</h2>
         <div>
-          <p className="text-xs text-gray-500">{t(dict, 'label_email', 'Email')}</p>
+          <p className="text-xs text-gray-500">{t('label_email', 'Email')}</p>
           <p className="text-sm text-gray-900 mt-0.5">{user?.email ?? '—'}</p>
         </div>
         <div>
-          <p className="text-xs text-gray-500">{t(dict, 'label_role', 'Role')}</p>
+          <p className="text-xs text-gray-500">{t('label_role', 'Role')}</p>
           <p className="text-sm text-gray-900 mt-0.5 capitalize">{user?.role ?? '—'}</p>
         </div>
         <div className="space-y-2">
@@ -287,7 +284,7 @@ export default function SettingsPage() {
             value={phoneValue}
             onChange={setPhoneValue}
             countryCode={user?.country_code ?? 'BG'}
-            label={t(dict, 'label_phone', 'Phone')}
+            label={t('label_phone', 'Phone')}
             className="pt-2"
           />
           <div className="flex items-center gap-3">
@@ -297,22 +294,22 @@ export default function SettingsPage() {
               disabled={savingPhone}
               className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              {savingPhone ? t(dict, 'msg_saving', 'Saving…') : t(dict, 'btn_save_phone', 'Save Phone')}
+              {savingPhone ? t('msg_saving', 'Saving…') : t('btn_save_phone', 'Save Phone')}
             </button>
-            {phoneSaved && <span className="text-xs text-green-600 font-medium">{t(dict, 'msg_saved', 'Saved!')}</span>}
+            {phoneSaved && <span className="text-xs text-green-600 font-medium">{t('msg_saved', 'Saved!')}</span>}
           </div>
         </div>
       </div>
 
       {/* Availability */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
-        <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_availability', 'Availability')}</h2>
+        <h2 className="text-sm font-semibold text-gray-800">{t('label_availability', 'Availability')}</h2>
         <p className="text-xs text-gray-500">
-          {t(dict, 'msg_availability_description', 'Controls whether you appear as available to new clients.')}
+          {t('msg_availability_description', 'Controls whether you appear as available to new clients.')}
         </p>
         {loadingProfile ? (
           <div className="flex gap-2">
-            {getAvailabilityOptions(dict).map(opt => (
+            {getAvailabilityOptions(t).map(opt => (
               <div key={opt.value} className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm text-gray-300 bg-gray-50">
                 {opt.label}
               </div>
@@ -320,7 +317,7 @@ export default function SettingsPage() {
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            {getAvailabilityOptions(dict).map(opt => {
+            {getAvailabilityOptions(t).map(opt => {
               const isActive = profile?.availability_status === opt.value;
               return (
                 <button
@@ -346,22 +343,22 @@ export default function SettingsPage() {
 
       {/* Public URL */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
-        <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_public_url', 'Public URL')}</h2>
+        <h2 className="text-sm font-semibold text-gray-800">{t('label_public_url', 'Public URL')}</h2>
         {loadingProfile ? (
           <div className="h-8 bg-gray-100 rounded-lg animate-pulse" />
         ) : publicUrl ? (
           <>
             <div className="bg-gray-50 rounded-lg px-3 py-2.5 border border-gray-200">
-              <p className="text-xs text-gray-500 mb-0.5">{t(dict, 'label_your_profile_link', 'Your profile link')}</p>
+              <p className="text-xs text-gray-500 mb-0.5">{t('label_your_profile_link', 'Your profile link')}</p>
               <p className="text-sm font-mono text-gray-800 break-all">{publicUrl}</p>
             </div>
             {slugChangesRemaining > 0 ? (
               <div className="space-y-2">
-                <label className="block text-xs text-gray-500">{t(dict, 'label_edit_public_slug', 'Edit public slug')}</label>
-                <p className="text-xs text-gray-500">{t(dict, 'msg_url_changes_remaining', 'URL changes remaining:')} {slugChangesRemaining}/{MAX_SLUG_CHANGES}</p>
+                <label className="block text-xs text-gray-500">{t('label_edit_public_slug', 'Edit public slug')}</label>
+                <p className="text-xs text-gray-500">{t('msg_url_changes_remaining', 'URL changes remaining:')} {slugChangesRemaining}/{MAX_SLUG_CHANGES}</p>
                 <p className="text-xs text-orange-600 mt-2">
-                  {t(dict, 'msg_url_change_warning', 'You can only change your URL once.')}<br />
-                  {t(dict, 'msg_old_links_redirect', 'Old links will continue working (redirected).')}
+                  {t('msg_url_change_warning', 'You can only change your URL once.')}<br />
+                  {t('msg_old_links_redirect', 'Old links will continue working (redirected).')}
                 </p>
                 {canEditSlug ? (
                   <div className="flex items-center gap-2">
@@ -375,7 +372,7 @@ export default function SettingsPage() {
                         setSlugSuggestions([]);
                         setSlugAvailable(null);
                       }}
-                      placeholder={t(dict, 'placeholder_business_slug', 'your-business-name')}
+                      placeholder={t('placeholder_business_slug', 'your-business-name')}
                       className={`flex-1 px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400 ${
                         slugError
                           ? 'border-red-400'
@@ -384,13 +381,13 @@ export default function SettingsPage() {
                           : 'border-gray-300'
                       }`}
                     />
-                    {slugChecking && <span className="text-xs text-gray-400 whitespace-nowrap">{t(dict, 'msg_checking', 'Checking...')}</span>}
-                    {!slugChecking && slugAvailable === true && <span className="text-xs text-green-600 whitespace-nowrap">{t(dict, 'msg_available', 'Available')}</span>}
+                    {slugChecking && <span className="text-xs text-gray-400 whitespace-nowrap">{t('msg_checking', 'Checking...')}</span>}
+                    {!slugChecking && slugAvailable === true && <span className="text-xs text-green-600 whitespace-nowrap">{t('msg_available', 'Available')}</span>}
                   </div>
                 ) : (
                   <div className="rounded-lg border border-orange-200 bg-orange-50 px-3 py-2">
                     <p className="text-xs text-orange-700">
-                      {t(dict, 'msg_url_locked', 'URL can only be changed once. Contact support for assistance.')}
+                      {t('msg_url_locked', 'URL can only be changed once. Contact support for assistance.')}
                     </p>
                   </div>
                 )}
@@ -401,7 +398,7 @@ export default function SettingsPage() {
                 )}
                 {slugSuggestions.length > 0 && (
                   <div>
-                    <p className="text-xs text-gray-600 mb-1">{t(dict, 'label_suggestions', 'Suggestions:')}</p>
+                    <p className="text-xs text-gray-600 mb-1">{t('label_suggestions', 'Suggestions:')}</p>
                     <div className="flex flex-wrap gap-2">
                       {slugSuggestions.map(suggestion => (
                         <button
@@ -430,42 +427,42 @@ export default function SettingsPage() {
                       disabled={savingSlug || slugChecking || !slugInput.trim() || slugInput.trim() === profile?.slug}
                       className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
                     >
-                      {savingSlug ? t(dict, 'msg_saving', 'Saving…') : t(dict, 'btn_save_url', 'Save URL')}
+                      {savingSlug ? t('msg_saving', 'Saving…') : t('btn_save_url', 'Save URL')}
                     </button>
-                    {slugSaved && <span className="text-xs text-green-600 font-medium">{t(dict, 'msg_saved', 'Saved!')}</span>}
+                    {slugSaved && <span className="text-xs text-green-600 font-medium">{t('msg_saved', 'Saved!')}</span>}
                   </div>
                 ) : null}
               </div>
             ) : (
               <div className="space-y-3">
                 <div className="rounded-lg border border-orange-200 bg-orange-50 px-3 py-3">
-                  <p className="text-sm font-medium text-orange-800 mb-2">{t(dict, 'label_url_locked', 'URL locked')}</p>
+                  <p className="text-sm font-medium text-orange-800 mb-2">{t('label_url_locked', 'URL locked')}</p>
                   <p className="text-xs text-orange-700">
-                    {t(dict, 'msg_url_already_updated', 'Your public URL has already been updated.')}<br />
-                    {t(dict, 'msg_old_links_work', 'Old links continue to work via redirects.')}
+                    {t('msg_url_already_updated', 'Your public URL has already been updated.')}<br />
+                    {t('msg_old_links_work', 'Old links continue to work via redirects.')}
                   </p>
                 </div>
                 <p className="text-xs text-gray-600">
-                  {t(dict, 'msg_need_help', 'Need help? Contact support.')}
+                  {t('msg_need_help', 'Need help? Contact support.')}
                 </p>
               </div>
             )}
             {!profile?.current_city || !profile?.current_category ? (
               <p className="text-xs text-orange-600">
-                {t(dict, 'msg_add_city_category', 'Add a city and category in your Profile to get a full SEO URL.')}
+                {t('msg_add_city_category', 'Add a city and category in your Profile to get a full SEO URL.')}
               </p>
             ) : null}
           </>
         ) : (
-          <p className="text-sm text-gray-400">{t(dict, 'msg_profile_not_loaded', 'Profile not loaded.')}</p>
+          <p className="text-sm text-gray-400">{t('msg_profile_not_loaded', 'Profile not loaded.')}</p>
         )}
       </div>
 
       {/* Account Role - HIDDEN
       <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
-        <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_account_role', 'Account Role')}</h2>
+        <h2 className="text-sm font-semibold text-gray-800">{t('label_account_role', 'Account Role')}</h2>
         <p className="text-sm text-gray-500">
-          {t(dict, 'msg_switch_role_description', 'You are currently a Provider. Switching to a client account will allow you to browse services and submit requests. Your provider profile and data will be preserved.')}
+          {t('msg_switch_role_description', 'You are currently a Provider. Switching to a client account will allow you to browse services and submit requests. Your provider profile and data will be preserved.')}
         </p>
         {switchError && (
           <p className="text-xs text-red-600">{switchError}</p>
@@ -475,14 +472,14 @@ export default function SettingsPage() {
           disabled={switchingRole}
           className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-50 text-sm font-medium rounded-lg transition-colors"
         >
-          {switchingRole ? t(dict, 'msg_switching', 'Switching…') : t(dict, 'btn_switch_client', 'Switch to Client Account')}
+          {switchingRole ? t('msg_switching', 'Switching…') : t('btn_switch_client', 'Switch to Client Account')}
         </button>
       </div>
       */}
 
       {/* Logout */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_session', 'Session')}</h2>
+        <h2 className="text-sm font-semibold text-gray-800">{t('label_session', 'Session')}</h2>
         <button
           onClick={handleLogout}
           className="flex items-center gap-2 px-4 py-2 border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium rounded-lg transition-colors"
@@ -492,7 +489,7 @@ export default function SettingsPage() {
             <polyline points="16 17 21 12 16 7" />
             <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
-          {t(dict, 'btn_log_out', 'Log out')}
+          {t('btn_log_out', 'Log out')}
         </button>
       </div>
     </div>

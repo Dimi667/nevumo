@@ -6,10 +6,6 @@ Namespace: provider_dashboard
 Languages: 34
 """
 
-import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from sqlalchemy import create_engine, text
 
 NAMESPACE = "provider_dashboard"

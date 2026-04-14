@@ -37,6 +37,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 - python-multipart (file upload support)
 - apscheduler>=3.10.0 (background jobs for magic link delivery)
 - tzlocal>=3.0 (timezone support for APScheduler)
+- Backend packaging/runtime: absolute `apps.api.*` imports with module-based startup/scripts
 
 ### Database & Caching
 - PostgreSQL (nevumo_leads)
@@ -150,6 +151,27 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Major Architectural Overhaul (April 14, 2026)** — Unified the project into a high-performance monorepo:
+  - **New Monorepo Structure**: Unified root managed by Turborepo, decoupling `apps/api` and `apps/web` while sharing a consistent environment.
+  - **Docker Strategy**: Implemented multi-stage builds and root `docker-compose.yml` orchestration for `nevumo-api`, `nevumo-web`, `nevumo-postgres`, and `nevumo-redis`.
+  - **Path Logic**: Relocated backend virtual environment to `apps/api/.venv` and standardized absolute imports (`apps.api.*`).
+  - **SQLAlchemy Fix**: Centralized `Base` in `apps/api/database.py` and ensured all models are imported to prevent 'table not found' errors.
+  - **Next.js Metadata**: Fixed dynamic page titles using the Metadata API in `layout.tsx`.
+  - **Namespaced Translations**: Standardized translation key prefixing (e.g., `provider_dashboard.*`) and documented Redis flush requirements.
+  - **Documentation**: Finalized `README.md` and `docs/ARCHITECTURE.md` as the single source of truth for the new structure.
+- **API Encoding & Middleware Hardening (April 14, 2026)** — Fixed Mojibake (double-encoding) and middleware redirection issues:
+  - Added `UnescapedJSONResponse` as default response class in `apps/api/main.py` to ensure `charset=utf-8` and `ensure_ascii=False` globally.
+  - Updated `apps/web/middleware.ts` to exclude all `/api/` paths from language redirection logic.
+  - Updated `apps/web/next.config.mjs` to proxy all `/api/*` and `/:lang/api/*` routes to the backend, supporting paths without `/v1/` prefix.
+  - Hardened Redis caching in `translations`, `categories`, and `cities` routes with `ensure_ascii=False`.
+  - Verified `DATABASE_URL` uses `client_encoding=utf8`.
+- **Phase 3 Absolute-Import Migration** — Backend import/package alignment completed across `apps/api`:
+  - Added `apps/api/pyproject.toml` for package definition
+  - Converted backend imports to absolute `apps.api.*` paths across routes, services, jobs, scripts, tests, and Alembic env
+  - Removed remaining manual `sys.path` hacks from scripts/tests
+  - Verified module-based script execution with `python3 -m apps.api.scripts.seed_ui_translations`
+  - Runtime startup path verified with `python3 -m uvicorn apps.api.main:app` up to dependency loading
+  - Docker runtime aligned to repo-root `PYTHONPATH` with `uvicorn apps.api.main:app`
 - **Provider Description Auto-Translation (Langbly)** — Automatic translation of provider descriptions into all 34 languages:
   - New table: `provider_translations` (provider_id, field, lang, value, auto_translated)
   - Migration: `apps/api/alembic/versions/t1u2v3w4x5y6_add_provider_translations.py` 

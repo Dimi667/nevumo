@@ -11,16 +11,29 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
+from typing import Any
 
-from database import init_db
-from dependencies import get_db, get_redis
-from exceptions import NevumoException
-from i18n import fetch_translations
+class UnescapedJSONResponse(JSONResponse):
+    media_type = "application/json; charset=utf-8"
+
+    def render(self, content: Any) -> bytes:
+        return json.dumps(
+            content,
+            ensure_ascii=False,
+            allow_nan=False,
+            indent=None,
+            separators=(",", ":"),
+        ).encode("utf-8")
+
+from apps.api.database import init_db
+from apps.api.dependencies import get_db, get_redis
+from apps.api.exceptions import NevumoException
+from apps.api.i18n import fetch_translations
 from fastapi.staticfiles import StaticFiles
-from jobs.send_magic_links import process_pending_magic_links
-from jobs.retry_translations import retry_failed_translations
+from apps.api.jobs.retry_translations import retry_failed_translations
+from apps.api.jobs.send_magic_links import process_pending_magic_links
 
-from routes import (
+from apps.api.routes import (
     auth_router,
     categories_router,
     cities_router,
@@ -33,15 +46,15 @@ from routes import (
     reviews_router,
     user_router,
 )
-from routes.translations import router as translations_router
-from routes.price_range import router as price_range_router
+from apps.api.routes.price_range import router as price_range_router
+from apps.api.routes.translations import router as translations_router
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)s %(name)s: %(message)s",
 )
 
-app = FastAPI(title="Nevumo API")
+app = FastAPI(title="Nevumo API", default_response_class=UnescapedJSONResponse)
 
 init_db()
 
@@ -99,26 +112,26 @@ app.add_middleware(
 
 
 @app.exception_handler(NevumoException)
-async def nevumo_exception_handler(request: Request, exc: NevumoException) -> JSONResponse:
+async def nevumo_exception_handler(request: Request, exc: NevumoException) -> UnescapedJSONResponse:
     content: dict = {
         "success": False,
         "error": {"code": exc.code, "message": exc.message},
     }
     if exc.extra_data:
         content["data"] = exc.extra_data
-    return JSONResponse(
+    return UnescapedJSONResponse(
         status_code=exc.status_code,
         content=content,
     )
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+async def validation_exception_handler(request: Request, exc: RequestValidationError) -> UnescapedJSONResponse:
     errors = exc.errors()
     first = errors[0] if errors else {}
     field = ".".join(str(loc) for loc in first.get("loc", [])[1:]) if first.get("loc") else "unknown"
     message = first.get("msg", "Validation error")
-    return JSONResponse(
+    return UnescapedJSONResponse(
         status_code=422,
         content={
             "success": False,

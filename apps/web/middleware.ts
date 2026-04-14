@@ -15,6 +15,13 @@ const STATIC_EXT_PATTERN = /\.(svg|png|jpg|jpeg|ico|css|js|txt|xml|json)$/i;
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  console.log("[Middleware] pathname:", pathname);
+
+  // Exclude API routes from middleware logic
+  if (pathname.startsWith("/api/") || /^\/[a-z]{2,5}\/api\//.test(pathname)) {
+    return NextResponse.next();
+  }
+
   if (STATIC_EXT_PATTERN.test(pathname)) {
     return NextResponse.next();
   }

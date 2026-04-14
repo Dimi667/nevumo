@@ -3,15 +3,10 @@
 Script to fix the password hash for the test provider ET ЛИЛИ.
 """
 
-import sys
-import os
 import bcrypt
 
-# Add the parent directory to the path so we can import app modules
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from dependencies import get_db
-from models import User
+from apps.api.dependencies import get_db
+from apps.api.models import User
 
 def fix_password():
     """Update the password hash for lili@test.bg with proper bcrypt hash."""

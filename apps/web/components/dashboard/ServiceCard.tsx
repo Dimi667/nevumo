@@ -1,7 +1,6 @@
 'use client';
 
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
-import { t } from '@/lib/ui-translations';
 import type { Service } from '@/types/provider';
 
 interface ServiceCardProps {
@@ -11,13 +10,13 @@ interface ServiceCardProps {
 }
 
 export default function ServiceCard({ service, onEdit, onDelete }: ServiceCardProps) {
-  const { dict } = useDashboardI18n();
+  const { t } = useDashboardI18n();
 
   const priceTypeLabels: Record<string, string> = {
-    fixed: t(dict, 'price_type_fixed', 'Fixed price'),
-    hourly: t(dict, 'price_type_hourly', 'Per hour'),
-    request: t(dict, 'price_type_request', 'Per request (quote)'),
-    per_sqm: t(dict, 'price_type_per_sqm', 'Per sq.m.'),
+    fixed: t('price_type_fixed', 'Fixed price'),
+    hourly: t('price_type_hourly', 'Per hour'),
+    request: t('price_type_request', 'Per request (quote)'),
+    per_sqm: t('price_type_per_sqm', 'Per sq.m.'),
   };
 
   return (
@@ -63,7 +62,7 @@ export default function ServiceCard({ service, onEdit, onDelete }: ServiceCardPr
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
           </svg>
-          {t(dict, 'btn_edit', 'Edit')}
+          {t('btn_edit', 'Edit')}
         </button>
         <button
           onClick={() => onDelete(service)}
@@ -75,7 +74,7 @@ export default function ServiceCard({ service, onEdit, onDelete }: ServiceCardPr
             <path d="M10 11v6M14 11v6" />
             <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
           </svg>
-          {t(dict, 'btn_delete', 'Delete')}
+          {t('btn_delete', 'Delete')}
         </button>
       </div>
     </div>

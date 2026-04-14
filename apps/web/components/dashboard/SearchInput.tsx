@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
-import { t } from '@/lib/ui-translations';
 
 interface Option {
   value: string;
@@ -32,7 +31,7 @@ export default function SearchInput({
   required,
   error,
 }: SearchInputProps) {
-  const { dict } = useDashboardI18n();
+  const { t } = useDashboardI18n();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -124,7 +123,7 @@ export default function SearchInput({
           value={query}
           onChange={e => setQuery(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={t(dict, 'placeholder_type_to_search', 'Type to search…')}
+          placeholder={t('placeholder_type_to_search', 'Type to search…')}
           className="w-full px-3 py-2 text-sm border border-orange-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white"
         />
       );
@@ -151,7 +150,7 @@ export default function SearchInput({
                   type="button"
                   onMouseDown={e => { e.preventDefault(); removeMulti(opt.value, e); }}
                   className="hover:text-orange-900 leading-none"
-                  aria-label={`${t(dict, 'aria_remove_item', 'Remove')} ${opt.label}`}
+                  aria-label={`${t('aria_remove_item', 'Remove')} ${opt.label}`}
                 >
                   ×
                 </button>
@@ -164,7 +163,7 @@ export default function SearchInput({
               e.stopPropagation();
               setOpen(v => !v);
             }}
-            aria-label={t(dict, 'aria_open_menu', 'Open menu')}
+            aria-label={t('aria_open_menu', 'Open menu')}
             className="ml-auto flex-shrink-0 text-gray-400 hover:text-gray-600"
           >
             <svg
@@ -227,7 +226,7 @@ export default function SearchInput({
       {open && (
         <div className="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-52 overflow-y-auto">
           {filtered.length === 0 ? (
-            <p className="px-3 py-2 text-sm text-gray-400">{t(dict, 'msg_no_results', 'No results')}</p>
+            <p className="px-3 py-2 text-sm text-gray-400">{t('msg_no_results', 'No results')}</p>
           ) : (
             filtered.map(opt => {
               const selected = selectedValues.includes(opt.value);

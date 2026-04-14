@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 import redis as redis_lib
 
-from dependencies import get_db, get_redis
-from models import Category, CategoryTranslation
-from schemas import CategoriesResponse, CategoryOut
+from apps.api.dependencies import get_db, get_redis
+from apps.api.models import Category, CategoryTranslation
+from apps.api.schemas import CategoriesResponse, CategoryOut
 
 router = APIRouter(prefix="/api/v1", tags=["categories"])
 
@@ -37,6 +37,6 @@ async def list_categories(
     data = [CategoryOut(id=id, slug=slug, name=name) for id, slug, name in rows]
 
     if redis_client and data:
-        redis_client.setex(cache_key, 3600, json.dumps([d.model_dump() for d in data]))
+        redis_client.setex(cache_key, 3600, json.dumps([d.model_dump() for d in data], ensure_ascii=False))
 
     return CategoriesResponse(data=data)

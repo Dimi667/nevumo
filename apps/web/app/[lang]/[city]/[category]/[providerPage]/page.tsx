@@ -35,10 +35,10 @@ export async function generateMetadata(props: { params: Promise<ProviderRoutePar
   try {
     // Resolve slug to get the canonical slug (but don't redirect here - no access to searchParams)
     const slugResolution = await resolveSlug(providerPage);
-    
+
     // Use the resolved slug for provider lookup (if found), otherwise fallback to original
     const slugToUse = slugResolution.found && slugResolution.slug ? slugResolution.slug : providerPage;
-    
+
     const [provider, categories] = await Promise.all([
       getProviderBySlug(slugToUse, lang, city),
       getCategories(lang),
@@ -60,6 +60,14 @@ export async function generateMetadata(props: { params: Promise<ProviderRoutePar
   } catch {
     return { title: 'Nevumo' };
   }
+}
+
+export function generateViewport() {
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    viewportFit: 'cover',
+  };
 }
 
 export default async function Page(props: {

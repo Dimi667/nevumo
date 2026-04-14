@@ -5,8 +5,8 @@ from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from models import Review, User, Provider
-from config import settings
+from apps.api.config import settings
+from apps.api.models import Review, User, Provider
 
 
 class EmailService:

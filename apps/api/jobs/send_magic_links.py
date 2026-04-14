@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 import secrets
 import hashlib
-from models import PendingLeadClaim, MagicLinkToken
-from config import settings
+from apps.api.config import settings
+from apps.api.models import PendingLeadClaim, MagicLinkToken
 
 def process_pending_magic_links(db: Session) -> int:
     """

@@ -1,0 +1,101 @@
+{
+  "users": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "providers": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "services": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "leads": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "reviews": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "categories": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "locations": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "provider_translations": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "provider_cities": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "provider_slug_history": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "service_cities": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "category_translations": {
+    "missing_count": 2,
+    "inserted_count": 0
+  },
+  "location_translations": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "lead_matches": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "lead_rate_limits": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "lead_events": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "url_redirects": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "auth_rate_limits": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "magic_link_tokens": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "password_reset_tokens": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "pending_lead_claims": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "page_events": {
+    "missing_count": 1780,
+    "inserted_count": 1780
+  },
+  "messages": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "alembic_version": {
+    "missing_count": 0,
+    "inserted_count": 0
+  },
+  "translations": {
+    "inserted_count": 0
+  }
+}

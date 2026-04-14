@@ -1,7 +1,7 @@
 from typing import Dict, Iterable, Tuple
 
-from database import SessionLocal
-from models import Translation
+from apps.api.database import SessionLocal
+from apps.api.models import Translation
 
 TranslationEntry = Tuple[str, str, str]
 

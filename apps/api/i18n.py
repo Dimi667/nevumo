@@ -2,7 +2,7 @@ from typing import Dict
 
 from sqlalchemy.orm import Session
 
-from models import Translation
+from apps.api.models import Translation
 
 DEFAULT_LANGUAGE = "en"
 SUPPORTED_LANGUAGES = (

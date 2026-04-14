@@ -23,7 +23,6 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  viewport: 'width=device-width, initial-scale=1, viewport-fit=cover',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com'),
   title: {
     default: 'Nevumo',
@@ -48,7 +47,6 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   manifest: '/manifest.json',
-  themeColor: '#f97316',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -58,6 +56,15 @@ export const metadata: Metadata = {
     apple: '/icons/icon-192x192.png',
   },
 };
+
+export function generateViewport() {
+  return {
+    width: 'device-width',
+    initialScale: 1,
+    viewportFit: 'cover',
+    themeColor: '#f97316',
+  };
+}
 
 export default async function RootLayout({
   children,

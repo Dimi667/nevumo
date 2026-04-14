@@ -9,8 +9,8 @@ import bcrypt as _bcrypt
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
-from config import settings
-from models import AuthRateLimit, PendingLeadClaim, Lead
+from apps.api.config import settings
+from apps.api.models import AuthRateLimit, PendingLeadClaim, Lead
 
 logger = logging.getLogger(__name__)
 

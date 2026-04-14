@@ -8,7 +8,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - nevumo_pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -33,7 +33,9 @@ services:
       retries: 5
 
   api:
-    build: ./apps/api
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
     container_name: nevumo-api
     restart: always
     ports:
@@ -44,12 +46,19 @@ services:
       redis:
         condition: service_healthy
     env_file: .env
+    environment:
+      - PYTHONPATH=/workspace
+      - DATABASE_URL=postgresql://nevumo:nevumo@nevumo-postgres:5432/nevumo_leads
+      - REDIS_HOST=nevumo-redis
+    working_dir: /workspace/apps/api
     volumes:
-      - ./apps/api:/app
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+      - ./:/workspace
+    command: uvicorn apps.api.main:app --host 0.0.0.0 --port 8000 --reload
 
   web:
-    build: ./apps/web
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
     container_name: nevumo-web
     restart: always
     ports:
@@ -57,10 +66,13 @@ services:
     depends_on:
       - api
     env_file: .env
+    environment:
+      - NEXT_PUBLIC_API_URL=http://nevumo-api:8000
+    working_dir: /workspace/apps/web
     volumes:
-      - ./apps/web:/app
-      - /app/node_modules
-    command: npm run dev
+      - ./:/workspace
+      - /workspace/node_modules
+    command: npm run dev -- --hostname 0.0.0.0 --port 3000
 
 volumes:
   nevumo_pgdata:

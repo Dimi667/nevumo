@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from dependencies import get_current_user, get_db
-from exceptions import INVALID_PHONE
+from apps.api.dependencies import get_current_user, get_db
+from apps.api.exceptions import INVALID_PHONE
 
 router = APIRouter(prefix="/api/v1/user", tags=["user"])
 

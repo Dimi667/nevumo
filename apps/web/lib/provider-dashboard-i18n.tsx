@@ -3,15 +3,12 @@
 import {
   createContext,
   useContext,
-  useEffect,
-  useMemo,
-  useState,
   type ReactNode,
 } from 'react';
-import { fetchTranslations, type TranslationDict } from '@/lib/ui-translations';
+import { useTranslation } from './use-translation';
 
 interface DashboardI18nContextValue {
-  dict: TranslationDict;
+  t: (key: string, fallback?: string) => string;
   lang: string;
 }
 
@@ -23,29 +20,12 @@ interface DashboardI18nProviderProps {
 const DashboardI18nContext = createContext<DashboardI18nContextValue | null>(null);
 
 export function DashboardI18nProvider({ children, lang }: DashboardI18nProviderProps) {
-  const [dict, setDict] = useState<TranslationDict>({});
+  const { t, isLoading } = useTranslation('provider_dashboard', lang);
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadTranslations(): Promise<void> {
-      const translations = await fetchTranslations(lang, 'provider_dashboard');
-      if (!cancelled) {
-        setDict(translations);
-      }
-    }
-
-    void loadTranslations();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [lang]);
-
-  const value = useMemo(
-    () => ({ dict, lang }),
-    [dict, lang],
-  );
+  const value = {
+    t,
+    lang,
+  };
 
   return (
     <DashboardI18nContext.Provider value={value}>

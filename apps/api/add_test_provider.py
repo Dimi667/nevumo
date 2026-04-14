@@ -3,18 +3,13 @@
 Script to add a test provider (ET ЛИЛИ) to the database for testing purposes.
 """
 
-import sys
-import os
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from datetime import datetime
 import uuid
 
-# Add the parent directory to the path so we can import app modules
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from dependencies import get_db
-from models import User, Provider, Service, Location, Category, ProviderCity, ServiceCity
+from apps.api.dependencies import get_db, get_redis
+from apps.api.models import User, Provider, Service, Location, Category, ProviderCity, ServiceCity
 
 def add_test_provider():
     """Add ET ЛИЛИ test provider to the database."""
@@ -122,7 +117,6 @@ def add_test_provider():
         
         # Clear Redis cache if available
         try:
-            from dependencies import get_redis
             redis_client = next(get_redis())
             if redis_client:
                 redis_client.delete("providers:sofia")

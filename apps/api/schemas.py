@@ -603,7 +603,7 @@ class EnhancedQRCodeRequest(BaseModel):
     @field_validator("language")
     @classmethod
     def validate_language(cls, v: str) -> str:
-        from i18n import SUPPORTED_LANGUAGES
+        from apps.api.i18n import SUPPORTED_LANGUAGES
         if v not in SUPPORTED_LANGUAGES:
             raise ValueError(f"Language must be one of: {', '.join(SUPPORTED_LANGUAGES)}")
         return v

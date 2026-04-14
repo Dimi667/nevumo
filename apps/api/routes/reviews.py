@@ -6,15 +6,15 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
-from dependencies import get_current_provider, get_db
-from models import Provider
-from schemas import (
+from apps.api.dependencies import get_current_provider, get_db
+from apps.api.models import Provider
+from apps.api.schemas import (
     ProviderReplyRequest,
     ProviderReplyResponse,
     ReviewLatestPreviewResponse,
     ReviewListResponse,
 )
-from services.review_service import (
+from apps.api.services.review_service import (
     get_provider_reviews,
     get_latest_review_preview,
     add_provider_reply,

@@ -1,7 +1,7 @@
 import logging
 from sqlalchemy.orm import Session
-from models import ProviderTranslation
-from services.translation_service import translate_text, SUPPORTED_LANGS
+from apps.api.models import ProviderTranslation
+from apps.api.services.translation_service import translate_text, SUPPORTED_LANGS
 
 logger = logging.getLogger(__name__)
 

@@ -7,7 +7,7 @@ from sqlalchemy import pool
 from alembic import context
 
 # Import all models so they register with Base.metadata
-from models import (
+from apps.api.models import (
     Base,
     User,
     Provider,

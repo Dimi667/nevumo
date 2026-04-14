@@ -16,21 +16,28 @@ A multilingual services marketplace platform where providers publish services an
 
 ## Monorepo Structure
 
+The project is structured as a unified monorepo using **Turborepo**. This ensures a clean decoupling between the frontend and backend while maintaining a consistent development environment.
+
 ```
 nevumo/
 ├── apps/
 │   ├── web/          # Next.js frontend (port 3000)
 │   ├── api/          # FastAPI backend (port 8000)
-│   └── docs/         # Next.js docs app
+│   └── docs/         # Documentation app (Next.js)
 ├── packages/
 │   ├── ui/                  # Shared React component library
-│   ├── eslint-config/       # Shared ESLint config
-│   └── typescript-config/   # Shared tsconfig
-├── docs/                    # Architecture & context docs
-├── docker-compose.yml       # PostgreSQL + Redis
-├── turbo.json
-└── package.json
+│   ├── eslint-config/       # Shared ESLint configuration
+│   └── typescript-config/   # Shared TypeScript configuration
+├── docs/                    # Architectural & context documentation
+├── docker-compose.yml       # Root orchestration for all services
+├── turbo.json               # Turborepo configuration
+└── package.json             # Root dependencies & scripts
 ```
+
+### Path Logic & Environment
+- **Unified Root**: All development and orchestration (Docker, Turborepo) happens from the root.
+- **Backend Venv**: The virtual environment is strictly located at `apps/api/.venv`. All local execution should point to this path.
+- **Decoupled Apps**: `apps/api` and `apps/web` are independent but share the same root context for Docker builds to resolve shared packages.
 
 ## Prerequisites
 
@@ -66,8 +73,8 @@ docker-compose up -d
 
 ```sh
 cd apps/api
-python -m venv venv
-source venv/bin/activate   # Windows: venv\Scripts\activate
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -88,6 +95,56 @@ npm run dev --filter=web
 # Backend only
 cd apps/api && uvicorn main:app --reload --port 8000
 ```
+
+## Docker & Containerization
+
+The project uses a centralized Docker Compose orchestration from the root.
+
+### Optimized Dockerfiles
+We use multi-stage builds to:
+- Reduce final image size.
+- Improve build speed via layer caching.
+- Ensure production-ready security.
+
+### Orchestration
+The root `docker-compose.yml` manages:
+- **nevumo-api**: FastAPI backend.
+- **nevumo-web**: Next.js frontend.
+- **nevumo-postgres**: PostgreSQL database.
+- **nevumo-redis**: Redis cache.
+
+### Local Development (Hot-Reload)
+Volumes are mapped from the root to the `/workspace` directory inside containers. This ensures that changes made locally are immediately reflected inside the containers (Hot-Reloading).
+
+```sh
+docker-compose up -d
+```
+
+## Common Commands (Cheat Sheet)
+
+### Database & Migrations
+| Task | Command |
+|------|---------|
+| **Run Migrations** | `docker exec -it nevumo-api alembic upgrade head` |
+| **Generate Migration** | `docker exec -it nevumo-api alembic revision --autogenerate -m "description"` |
+| **Access DB Shell** | `docker exec -it nevumo-postgres psql -U nevumo -d nevumo_leads` |
+
+### Cache Management
+| Task | Command |
+|------|---------|
+| **Clear Redis Cache** | `docker exec nevumo-redis redis-cli FLUSHALL` |
+
+### Backend Development
+| Task | Command |
+|------|---------|
+| **Activate Venv** | `source apps/api/.venv/bin/activate` |
+| **Run API Locally** | `python -m apps.api.main` (from root) |
+| **Run Scripts** | `python -m apps.api.scripts.seed_ui_translations` |
+
+### Frontend Development
+| Task | Command |
+|------|---------|
+| **Next.js Logs** | `docker logs -f nevumo-web` |
 
 ## Supported Languages
 

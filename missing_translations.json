@@ -1,0 +1,1246 @@
+[
+  {
+    "Full_Key": "Got it",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "Install Nevumo",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "See new requests instantly",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "Tap Share in the bottom toolbar",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "Track requests without opening a browser",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "aria_close_menu",
+    "Original_English_Text": "Close menu"
+  },
+  {
+    "Full_Key": "aria_open_menu",
+    "Original_English_Text": "Open menu"
+  },
+  {
+    "Full_Key": "aria_remove_item",
+    "Original_English_Text": "Remove"
+  },
+  {
+    "Full_Key": "auth.auth",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "auth.login",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "auth.magic-link",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "auth.reset-password",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "availability_active",
+    "Original_English_Text": "Active"
+  },
+  {
+    "Full_Key": "availability_busy",
+    "Original_English_Text": "Busy"
+  },
+  {
+    "Full_Key": "availability_offline",
+    "Original_English_Text": "Offline"
+  },
+  {
+    "Full_Key": "btn_contact",
+    "Original_English_Text": "Contact"
+  },
+  {
+    "Full_Key": "btn_delete",
+    "Original_English_Text": "Delete"
+  },
+  {
+    "Full_Key": "btn_edit",
+    "Original_English_Text": "Edit"
+  },
+  {
+    "Full_Key": "btn_find_service",
+    "Original_English_Text": "Find Service"
+  },
+  {
+    "Full_Key": "btn_log_out",
+    "Original_English_Text": "Log out"
+  },
+  {
+    "Full_Key": "btn_reject",
+    "Original_English_Text": "Reject"
+  },
+  {
+    "Full_Key": "btn_save_notes",
+    "Original_English_Text": "Save Notes"
+  },
+  {
+    "Full_Key": "btn_view",
+    "Original_English_Text": "View"
+  },
+  {
+    "Full_Key": "client_dashboard.active",
+    "Original_English_Text": "'done', 'rejected'];\n    if (statusFromUrl && validStatuses.includes(statusFromUrl as ClientLeadFilterStatus"
+  },
+  {
+    "Full_Key": "client_dashboard.client_dashboard",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "homepage.also_check",
+    "Original_English_Text": "See also:"
+  },
+  {
+    "Full_Key": "homepage.category",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "homepage.form_btn",
+    "Original_English_Text": "Send request"
+  },
+  {
+    "Full_Key": "homepage.h1_cleaning",
+    "Original_English_Text": "Cleaning in Warsaw"
+  },
+  {
+    "Full_Key": "homepage.h1_massage",
+    "Original_English_Text": "Massage in Warsaw"
+  },
+  {
+    "Full_Key": "homepage.h1_plumbing",
+    "Original_English_Text": "Plumbing in Warsaw"
+  },
+  {
+    "Full_Key": "homepage.no_providers_subtitle",
+    "Original_English_Text": "Providers joining Nevumo will see your request and contact you"
+  },
+  {
+    "Full_Key": "homepage.no_providers_title",
+    "Original_English_Text": "Be the first to request this service in your area"
+  },
+  {
+    "Full_Key": "homepage.provider_cta_link",
+    "Original_English_Text": "Join for free →"
+  },
+  {
+    "Full_Key": "homepage.provider_cta_prefix",
+    "Original_English_Text": "Do you offer"
+  },
+  {
+    "Full_Key": "homepage.provider_cta_suffix",
+    "Original_English_Text": "in Warsaw?"
+  },
+  {
+    "Full_Key": "homepage.provider_desc_fallback",
+    "Original_English_Text": "Trusted specialist available in Warsaw. Send a short request and wait for contact."
+  },
+  {
+    "Full_Key": "homepage.provider_direct_contact",
+    "Original_English_Text": "Direct contact"
+  },
+  {
+    "Full_Key": "homepage.provider_jobs_completed",
+    "Original_English_Text": "completed jobs"
+  },
+  {
+    "Full_Key": "homepage.provider_last_request",
+    "Original_English_Text": "Last request"
+  },
+  {
+    "Full_Key": "homepage.show_more",
+    "Original_English_Text": "Show more"
+  },
+  {
+    "Full_Key": "homepage.sticky_btn",
+    "Original_English_Text": "Get offers — Free"
+  },
+  {
+    "Full_Key": "homepage.trust_rating",
+    "Original_English_Text": "rating"
+  },
+  {
+    "Full_Key": "homepage.trust_requests",
+    "Original_English_Text": "requests this month"
+  },
+  {
+    "Full_Key": "homepage.trust_response",
+    "Original_English_Text": "Avg. response: ~30 min"
+  },
+  {
+    "Full_Key": "homepage.trust_specialists",
+    "Original_English_Text": "specialists"
+  },
+  {
+    "Full_Key": "label_client_message",
+    "Original_English_Text": "CLIENT MESSAGE"
+  },
+  {
+    "Full_Key": "label_date",
+    "Original_English_Text": "Date"
+  },
+  {
+    "Full_Key": "label_notes_privacy_disclaimer",
+    "Original_English_Text": "These notes are only visible to you and will not be shared with the client."
+  },
+  {
+    "Full_Key": "label_phone",
+    "Original_English_Text": "Phone"
+  },
+  {
+    "Full_Key": "label_private_notes",
+    "Original_English_Text": "Private Notes"
+  },
+  {
+    "Full_Key": "label_source",
+    "Original_English_Text": "Source"
+  },
+  {
+    "Full_Key": "label_source_direct",
+    "Original_English_Text": "Direct"
+  },
+  {
+    "Full_Key": "label_source_other",
+    "Original_English_Text": "Other"
+  },
+  {
+    "Full_Key": "label_source_qr",
+    "Original_English_Text": "QR Code"
+  },
+  {
+    "Full_Key": "label_source_seo",
+    "Original_English_Text": "SEO"
+  },
+  {
+    "Full_Key": "label_source_widget",
+    "Original_English_Text": "Widget"
+  },
+  {
+    "Full_Key": "label_status",
+    "Original_English_Text": "Status"
+  },
+  {
+    "Full_Key": "lead_detail_title",
+    "Original_English_Text": "Lead Details"
+  },
+  {
+    "Full_Key": "login",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "logo_pro",
+    "Original_English_Text": "Pro"
+  },
+  {
+    "Full_Key": "msg_failed_switch_role",
+    "Original_English_Text": "Failed to switch role"
+  },
+  {
+    "Full_Key": "msg_no_description",
+    "Original_English_Text": "No description provided"
+  },
+  {
+    "Full_Key": "msg_no_results",
+    "Original_English_Text": "No results"
+  },
+  {
+    "Full_Key": "msg_notes_save_failed",
+    "Original_English_Text": "Failed to save notes"
+  },
+  {
+    "Full_Key": "msg_notes_saved",
+    "Original_English_Text": "Notes saved successfully"
+  },
+  {
+    "Full_Key": "msg_saving",
+    "Original_English_Text": "Saving..."
+  },
+  {
+    "Full_Key": "msg_switching",
+    "Original_English_Text": "Switching…"
+  },
+  {
+    "Full_Key": "nav_analytics",
+    "Original_English_Text": "Analytics"
+  },
+  {
+    "Full_Key": "nav_dashboard",
+    "Original_English_Text": "Dashboard"
+  },
+  {
+    "Full_Key": "nav_leads",
+    "Original_English_Text": "Leads"
+  },
+  {
+    "Full_Key": "nav_profile",
+    "Original_English_Text": "Profile"
+  },
+  {
+    "Full_Key": "nav_qr_code",
+    "Original_English_Text": "QR Code"
+  },
+  {
+    "Full_Key": "nav_reviews",
+    "Original_English_Text": "Reviews"
+  },
+  {
+    "Full_Key": "nav_services",
+    "Original_English_Text": "Services"
+  },
+  {
+    "Full_Key": "nav_settings",
+    "Original_English_Text": "Settings"
+  },
+  {
+    "Full_Key": "placeholder_private_notes",
+    "Original_English_Text": "Write your private notes here..."
+  },
+  {
+    "Full_Key": "placeholder_type_to_search",
+    "Original_English_Text": "Type to search…"
+  },
+  {
+    "Full_Key": "price_type_fixed",
+    "Original_English_Text": "Fixed price"
+  },
+  {
+    "Full_Key": "price_type_hourly",
+    "Original_English_Text": "Per hour"
+  },
+  {
+    "Full_Key": "price_type_per_sqm",
+    "Original_English_Text": "Per sq.m."
+  },
+  {
+    "Full_Key": "price_type_request",
+    "Original_English_Text": "Per request (quote)"
+  },
+  {
+    "Full_Key": "provider_dashboard.analytics_subtitle",
+    "Original_English_Text": "Lead performance overview"
+  },
+  {
+    "Full_Key": "provider_dashboard.aria_select_period_filter",
+    "Original_English_Text": "Select period filter"
+  },
+  {
+    "Full_Key": "provider_dashboard.availability_active",
+    "Original_English_Text": "Active"
+  },
+  {
+    "Full_Key": "provider_dashboard.availability_busy",
+    "Original_English_Text": "Busy"
+  },
+  {
+    "Full_Key": "provider_dashboard.availability_offline",
+    "Original_English_Text": "Offline"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_add_service",
+    "Original_English_Text": "Add Service"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_back",
+    "Original_English_Text": "← Back"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_cancel",
+    "Original_English_Text": "Cancel"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_change_photo",
+    "Original_English_Text": "Change photo"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_complete_setup",
+    "Original_English_Text": "Complete Setup"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_continue",
+    "Original_English_Text": "Continue →"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_create_service",
+    "Original_English_Text": "Create Service"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_delete",
+    "Original_English_Text": "Delete"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_delete_service",
+    "Original_English_Text": "Delete service"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_download",
+    "Original_English_Text": "Download"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_edit",
+    "Original_English_Text": "Edit"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_edit_service",
+    "Original_English_Text": "Edit Service"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_edit_url",
+    "Original_English_Text": "Edit URL"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_generate_qr_code",
+    "Original_English_Text": "Generate QR Code"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_log_out",
+    "Original_English_Text": "Log out"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_new_service",
+    "Original_English_Text": "New Service"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_regenerate",
+    "Original_English_Text": "Regenerate"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_reply_now",
+    "Original_English_Text": "Reply now →"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_reply_to_review",
+    "Original_English_Text": "Reply to this review"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_save_changes",
+    "Original_English_Text": "Save changes"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_save_phone",
+    "Original_English_Text": "Save Phone"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_save_url",
+    "Original_English_Text": "Save URL"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_send_reply",
+    "Original_English_Text": "Send Reply"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_skip_for_now",
+    "Original_English_Text": "Skip for now"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_switch_client",
+    "Original_English_Text": "Switch to Client Account"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_try_again",
+    "Original_English_Text": "Try again"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_upload_photo",
+    "Original_English_Text": "Upload photo"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_view_all",
+    "Original_English_Text": "View All →"
+  },
+  {
+    "Full_Key": "provider_dashboard.btn_view_analytics",
+    "Original_English_Text": "View Analytics →"
+  },
+  {
+    "Full_Key": "provider_dashboard.clear_search",
+    "Original_English_Text": "Clear search"
+  },
+  {
+    "Full_Key": "provider_dashboard.error_business_name_min_chars",
+    "Original_English_Text": "Business name must be at least 2 characters"
+  },
+  {
+    "Full_Key": "provider_dashboard.error_category_required",
+    "Original_English_Text": "Category is required"
+  },
+  {
+    "Full_Key": "provider_dashboard.error_city_required",
+    "Original_English_Text": "At least one city is required"
+  },
+  {
+    "Full_Key": "provider_dashboard.error_title_required",
+    "Original_English_Text": "Title is required"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_account",
+    "Original_English_Text": "Account"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_account_role",
+    "Original_English_Text": "Account Role"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_actions",
+    "Original_English_Text": "Actions"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_add_first_service",
+    "Original_English_Text": "Add Your First Service"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_all_reviews",
+    "Original_English_Text": "All Reviews"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_availability",
+    "Original_English_Text": "Availability"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_business",
+    "Original_English_Text": "Business"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_business_details",
+    "Original_English_Text": "Business details"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_business_name",
+    "Original_English_Text": "Business name"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_canonical_profile_url",
+    "Original_English_Text": "Canonical profile URL"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_category",
+    "Original_English_Text": "Category"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_cities",
+    "Original_English_Text": "Cities"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_complete_profile",
+    "Original_English_Text": "Complete your profile"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_contacted_leads",
+    "Original_English_Text": "Contacted leads"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_date",
+    "Original_English_Text": "Date"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_date_range",
+    "Original_English_Text": "Date range"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_description",
+    "Original_English_Text": "Description"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_done_leads",
+    "Original_English_Text": "Done leads"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_edit_public_slug",
+    "Original_English_Text": "Edit public slug"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_edited",
+    "Original_English_Text": "Edited"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_email",
+    "Original_English_Text": "Email"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_enhanced_qr_code",
+    "Original_English_Text": "Enhanced QR Code"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_language",
+    "Original_English_Text": "Language"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_last_30_days",
+    "Original_English_Text": "Last 30 days"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_last_x_days",
+    "Original_English_Text": "Last {p} days"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_latest_review",
+    "Original_English_Text": "Latest Review"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_lead_sources",
+    "Original_English_Text": "Lead Sources"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_needs_reply",
+    "Original_English_Text": "Needs Reply"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_new_leads",
+    "Original_English_Text": "New leads"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_notes",
+    "Original_English_Text": "Notes"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_optional",
+    "Original_English_Text": "optional"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_period",
+    "Original_English_Text": "Period"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_phone",
+    "Original_English_Text": "Phone"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_price_in_currency",
+    "Original_English_Text": "Price in {currency}"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_price_type",
+    "Original_English_Text": "Price type"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_profile",
+    "Original_English_Text": "Profile"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_profile_photo",
+    "Original_English_Text": "Profile photo"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_profile_setup",
+    "Original_English_Text": "Profile Setup"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_public_url",
+    "Original_English_Text": "Public URL"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_qr_code_language",
+    "Original_English_Text": "QR Code Language"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_rejected_leads",
+    "Original_English_Text": "Rejected leads"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_role",
+    "Original_English_Text": "Role"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_search",
+    "Original_English_Text": "Search"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_service",
+    "Original_English_Text": "Service"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_service_title",
+    "Original_English_Text": "Service title"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_session",
+    "Original_English_Text": "Session"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_source",
+    "Original_English_Text": "Source"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_source_direct",
+    "Original_English_Text": "Direct"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_source_other",
+    "Original_English_Text": "Other"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_source_qr",
+    "Original_English_Text": "QR Code"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_source_seo",
+    "Original_English_Text": "SEO"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_source_widget",
+    "Original_English_Text": "Widget"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_status",
+    "Original_English_Text": "Status"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_suggestions",
+    "Original_English_Text": "Suggestions:"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_title",
+    "Original_English_Text": "Title"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_top_sources",
+    "Original_English_Text": "Top sources"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_total",
+    "Original_English_Text": "total"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_unreplied",
+    "Original_English_Text": "Unreplied"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_url_locked",
+    "Original_English_Text": "URL locked"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_your_profile_link",
+    "Original_English_Text": "Your profile link"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_your_qr_url",
+    "Original_English_Text": "Your QR URL"
+  },
+  {
+    "Full_Key": "provider_dashboard.label_your_reply",
+    "Original_English_Text": "Your Reply"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_50_chars_better",
+    "Original_English_Text": "At least 50 chars gets better results"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_add_city_category",
+    "Original_English_Text": "Add a city and category in your Profile to get a full SEO URL."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_add_service_unlock",
+    "Original_English_Text": "Add a service to unlock"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_add_service_unlock_analytics",
+    "Original_English_Text": "Add a service to unlock analytics"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_add_services_desc",
+    "Original_English_Text": "Add the services you offer to start receiving leads."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_adjust_filters",
+    "Original_English_Text": "Try adjusting your filters or check back later."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_analytics_appear_when_leads",
+    "Original_English_Text": "Analytics will appear once you start receiving leads."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_authentication_error_login_again",
+    "Original_English_Text": "Authentication error. Please log in again."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_availability_description",
+    "Original_English_Text": "Controls whether you appear as available to new clients."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_available",
+    "Original_English_Text": "Available"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_checking",
+    "Original_English_Text": "Checking..."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_delete_confirm",
+    "Original_English_Text": "Are you sure you want to delete"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_delete_undo_warning",
+    "Original_English_Text": "This action cannot be undone."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_deleting",
+    "Original_English_Text": "Deleting…"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_check_url",
+    "Original_English_Text": "Failed to check URL availability"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_create_service",
+    "Original_English_Text": "Failed to create service"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_delete_service",
+    "Original_English_Text": "Failed to delete service"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_download_qr",
+    "Original_English_Text": "Failed to download QR code"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_generate_qr",
+    "Original_English_Text": "Failed to generate QR code"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_load_analytics",
+    "Original_English_Text": "Failed to load analytics"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_load_dashboard",
+    "Original_English_Text": "Failed to load dashboard"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_load_image",
+    "Original_English_Text": "Failed to load image"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_load_leads",
+    "Original_English_Text": "Failed to load leads"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_load_profile",
+    "Original_English_Text": "Failed to load profile"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_load_reviews",
+    "Original_English_Text": "Failed to load reviews"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_load_services",
+    "Original_English_Text": "Failed to load services"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_save",
+    "Original_English_Text": "Failed to save"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_save_profile",
+    "Original_English_Text": "Failed to save profile"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_save_service",
+    "Original_English_Text": "Failed to save service"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_save_url",
+    "Original_English_Text": "Failed to save URL"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_submit_reply",
+    "Original_English_Text": "Failed to submit reply"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_switch_role",
+    "Original_English_Text": "Failed to switch role"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_failed_upload_image",
+    "Original_English_Text": "Failed to upload image. Please try again."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_file_size_limit_5mb",
+    "Original_English_Text": "File size must be less than 5 MB"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_file_too_large",
+    "Original_English_Text": "File too large. Maximum size is 5 MB."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_file_type_jpg_png_webp_heic",
+    "Original_English_Text": "File must be JPG, PNG, WebP, or HEIC"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_finish_setup_to_start_getting_clients",
+    "Original_English_Text": "Finish setup to start getting clients"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_generating",
+    "Original_English_Text": "Generating…"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_invalid_file_format",
+    "Original_English_Text": "Invalid file format. Use JPG, PNG, WebP, or HEIC."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_invalid_image_url",
+    "Original_English_Text": "Invalid image URL format"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_need_help",
+    "Original_English_Text": "Need help? Contact support."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_network_error",
+    "Original_English_Text": "Network error - check connection"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_no_data",
+    "Original_English_Text": "No data"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_no_leads_30_days",
+    "Original_English_Text": "No leads yet in the last 30 days."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_no_leads_found",
+    "Original_English_Text": "No leads found"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_no_leads_yet",
+    "Original_English_Text": "No leads yet"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_no_reviews_yet",
+    "Original_English_Text": "No reviews yet"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_no_services_yet",
+    "Original_English_Text": "No services yet"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_old_links_redirect",
+    "Original_English_Text": "Old links will continue working (redirected)."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_old_links_work",
+    "Original_English_Text": "Old links continue to work via redirects."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_profile_not_loaded",
+    "Original_English_Text": "Profile not loaded."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_qr_language_description",
+    "Original_English_Text": "The QR code text and slogan will be displayed in this language"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_qr_share_description",
+    "Original_English_Text": "Share this QR code on your business cards, flyers, or at your location. Clients scan it to reach your profile directly. Enhanced QR codes include your business name and a call-to-action slogan."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_retrying",
+    "Original_English_Text": "Retrying..."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_reviews_appear_here",
+    "Original_English_Text": "When clients review your services, they will appear here"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_reviews_waiting_reply",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_saved",
+    "Original_English_Text": "Saved!"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_saving",
+    "Original_English_Text": "Saving…"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_sending",
+    "Original_English_Text": "Sending..."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_service_created",
+    "Original_English_Text": "Service created successfully"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_service_deleted",
+    "Original_English_Text": "Service deleted"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_service_updated",
+    "Original_English_Text": "Service updated successfully"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_services_count",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_setup_complete_redirecting",
+    "Original_English_Text": "Setup complete! Redirecting…"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_start_receiving",
+    "Original_English_Text": "Start receiving client requests in minutes"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_supported_image_formats",
+    "Original_English_Text": "JPG, PNG, WebP, HEIC · max 5 MB"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_switch_role_description",
+    "Original_English_Text": "You are currently a Provider. Switching to a client account will allow you to browse services and submit requests. Your provider profile and data will be preserved."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_switching",
+    "Original_English_Text": "Switching…"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_takes_less_than_1_minute",
+    "Original_English_Text": "Takes less than 1 minute"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_too_many_upload_attempts",
+    "Original_English_Text": "Too many upload attempts. Please wait a moment."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_uploading",
+    "Original_English_Text": "Uploading…"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_url_already_updated",
+    "Original_English_Text": "Your public URL has already been updated."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_url_change_limit",
+    "Original_English_Text": "URL can only be changed once. Contact support for assistance."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_url_change_warning",
+    "Original_English_Text": "You can only change your URL once."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_url_changes_remaining",
+    "Original_English_Text": "URL changes remaining:"
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_url_locked",
+    "Original_English_Text": "URL can only be changed once. Contact support for assistance."
+  },
+  {
+    "Full_Key": "provider_dashboard.msg_url_taken",
+    "Original_English_Text": "This URL is already taken"
+  },
+  {
+    "Full_Key": "provider_dashboard.nav_analytics",
+    "Original_English_Text": "Analytics"
+  },
+  {
+    "Full_Key": "provider_dashboard.nav_dashboard",
+    "Original_English_Text": "Dashboard"
+  },
+  {
+    "Full_Key": "provider_dashboard.nav_leads",
+    "Original_English_Text": "Leads"
+  },
+  {
+    "Full_Key": "provider_dashboard.nav_profile",
+    "Original_English_Text": "Profile"
+  },
+  {
+    "Full_Key": "provider_dashboard.nav_qr_code",
+    "Original_English_Text": "QR Code"
+  },
+  {
+    "Full_Key": "provider_dashboard.nav_reviews",
+    "Original_English_Text": "Reviews"
+  },
+  {
+    "Full_Key": "provider_dashboard.nav_services",
+    "Original_English_Text": "Service"
+  },
+  {
+    "Full_Key": "provider_dashboard.nav_settings",
+    "Original_English_Text": "Settings"
+  },
+  {
+    "Full_Key": "provider_dashboard.overview_subtitle",
+    "Original_English_Text": "Overview of your business"
+  },
+  {
+    "Full_Key": "provider_dashboard.period_all_time",
+    "Original_English_Text": "All time"
+  },
+  {
+    "Full_Key": "provider_dashboard.period_last_30_days",
+    "Original_English_Text": "Last 30 days"
+  },
+  {
+    "Full_Key": "provider_dashboard.period_last_7_days",
+    "Original_English_Text": "Last 7 days"
+  },
+  {
+    "Full_Key": "provider_dashboard.period_last_90_days",
+    "Original_English_Text": "Last 90 days"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_business_description",
+    "Original_English_Text": "Describe your services, experience and what makes you different"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_business_name_example",
+    "Original_English_Text": "e.g. Sofia Plumbing Pro"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_business_slug",
+    "Original_English_Text": "your-business-name"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_description",
+    "Original_English_Text": "Brief description…"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_from",
+    "Original_English_Text": "From"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_search_leads",
+    "Original_English_Text": "Search name, email, phone, description or notes..."
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_select_category",
+    "Original_English_Text": "Select a category"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_select_cities",
+    "Original_English_Text": "Select cities where you offer this service"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_service_title_example",
+    "Original_English_Text": "e.g. Apartment cleaning"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_to",
+    "Original_English_Text": "To"
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_write_reply",
+    "Original_English_Text": "Write your reply..."
+  },
+  {
+    "Full_Key": "provider_dashboard.placeholder_write_reply_review",
+    "Original_English_Text": "Write your reply to this review..."
+  },
+  {
+    "Full_Key": "provider_dashboard.price_type_fixed",
+    "Original_English_Text": "Fixed price"
+  },
+  {
+    "Full_Key": "provider_dashboard.price_type_hourly",
+    "Original_English_Text": "Per hour"
+  },
+  {
+    "Full_Key": "provider_dashboard.price_type_per_sqm",
+    "Original_English_Text": "Per sq.m."
+  },
+  {
+    "Full_Key": "provider_dashboard.price_type_request",
+    "Original_English_Text": "Per request (quote)"
+  },
+  {
+    "Full_Key": "provider_dashboard.profile_subtitle",
+    "Original_English_Text": "Your public business profile"
+  },
+  {
+    "Full_Key": "provider_dashboard.qr_code_subtitle",
+    "Original_English_Text": "Share your provider profile with a QR code"
+  },
+  {
+    "Full_Key": "provider_dashboard.rejected",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "provider_dashboard.reviews_subtitle",
+    "Original_English_Text": "Manage your client reviews and replies"
+  },
+  {
+    "Full_Key": "provider_dashboard.settings_subtitle",
+    "Original_English_Text": "Account and preferences"
+  },
+  {
+    "Full_Key": "provider_dashboard.stat_conversion_rate",
+    "Original_English_Text": "Conversion Rate"
+  },
+  {
+    "Full_Key": "provider_dashboard.stat_leads_contacted",
+    "Original_English_Text": "Leads contacted"
+  },
+  {
+    "Full_Key": "provider_dashboard.stat_leads_received",
+    "Original_English_Text": "Leads received"
+  },
+  {
+    "Full_Key": "provider_dashboard.stat_new_leads",
+    "Original_English_Text": "New Leads"
+  },
+  {
+    "Full_Key": "provider_dashboard.stat_rating",
+    "Original_English_Text": "Rating"
+  },
+  {
+    "Full_Key": "provider_dashboard.stat_total_leads",
+    "Original_English_Text": "Total Leads"
+  },
+  {
+    "Full_Key": "provider_dashboard.status_all",
+    "Original_English_Text": "All"
+  },
+  {
+    "Full_Key": "provider_dashboard.status_awaiting_action",
+    "Original_English_Text": "Awaiting action"
+  },
+  {
+    "Full_Key": "provider_dashboard.status_contacted",
+    "Original_English_Text": "Contacted"
+  },
+  {
+    "Full_Key": "provider_dashboard.status_done",
+    "Original_English_Text": "Done"
+  },
+  {
+    "Full_Key": "provider_dashboard.status_new",
+    "Original_English_Text": "New"
+  },
+  {
+    "Full_Key": "provider_dashboard.status_rejected",
+    "Original_English_Text": "Rejected"
+  },
+  {
+    "Full_Key": "pwa",
+    "Original_English_Text": ""
+  },
+  {
+    "Full_Key": "status_contacted",
+    "Original_English_Text": "Contacted"
+  },
+  {
+    "Full_Key": "status_done",
+    "Original_English_Text": "Done"
+  },
+  {
+    "Full_Key": "status_new",
+    "Original_English_Text": "New"
+  },
+  {
+    "Full_Key": "status_rejected",
+    "Original_English_Text": "Rejected"
+  }
+]

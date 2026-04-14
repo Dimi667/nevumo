@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
-import { t } from '@/lib/ui-translations';
 
 interface Option {
   value: string;
@@ -17,7 +16,7 @@ interface MultiSelectProps {
 }
 
 export default function MultiSelect({ options, values, onChange, placeholder }: MultiSelectProps) {
-  const { dict } = useDashboardI18n();
+  const { t } = useDashboardI18n();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -78,7 +77,7 @@ export default function MultiSelect({ options, values, onChange, placeholder }: 
                 type="button"
                 onMouseDown={e => { e.preventDefault(); remove(opt.value, e); }}
                 className="hover:text-orange-900 leading-none"
-                aria-label={`${t(dict, 'aria_remove_item', 'Remove')} ${opt.label}`}
+                aria-label={`${t('aria_remove_item', 'Remove')} ${opt.label}`}
               >
                 ×
               </button>
@@ -91,7 +90,7 @@ export default function MultiSelect({ options, values, onChange, placeholder }: 
             e.stopPropagation();
             setOpen(v => !v);
           }}
-          aria-label={t(dict, 'aria_open_menu', 'Open menu')}
+          aria-label={t('aria_open_menu', 'Open menu')}
           className="ml-auto flex-shrink-0 text-gray-400 hover:text-gray-600"
         >
           <svg
@@ -119,13 +118,13 @@ export default function MultiSelect({ options, values, onChange, placeholder }: 
               value={query}
               onChange={e => setQuery(e.target.value)}
               onKeyDown={e => e.key === 'Escape' && setOpen(false)}
-              placeholder={t(dict, 'placeholder_type_to_search', 'Type to search…')}
+              placeholder={t('placeholder_type_to_search', 'Type to search…')}
               className="w-full px-2 py-1 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-300 focus:border-orange-400"
             />
           </div>
           <div className="max-h-48 overflow-y-auto">
             {filtered.length === 0 ? (
-              <p className="px-3 py-2 text-sm text-gray-400">{t(dict, 'msg_no_results', 'No results')}</p>
+              <p className="px-3 py-2 text-sm text-gray-400">{t('msg_no_results', 'No results')}</p>
             ) : (
               filtered.map(opt => {
                 const selected = values.includes(opt.value);

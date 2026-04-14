@@ -9,11 +9,9 @@ import sys
 import os
 from typing import Optional
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import (
+from apps.api.database import SessionLocal
+from apps.api.models import (
     Provider,
     ProviderCity,
     Service,
@@ -22,7 +20,7 @@ from models import (
     Category,
     CategoryTranslation,
 )
-from services.provider_service import generate_provider_slug, is_slug_taken, generate_claim_token
+from apps.api.services.provider_service import generate_provider_slug, is_slug_taken, generate_claim_token
 
 
 COUNTRY_CURRENCY = {

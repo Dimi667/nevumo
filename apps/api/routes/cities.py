@@ -5,10 +5,10 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 import redis as redis_lib
 
-from constants import COUNTRY_CURRENCY_MAP, DEFAULT_CURRENCY
-from dependencies import get_db, get_redis
-from models import Location, LocationTranslation
-from schemas import CitiesResponse, CityOut
+from apps.api.constants import COUNTRY_CURRENCY_MAP, DEFAULT_CURRENCY
+from apps.api.dependencies import get_db, get_redis
+from apps.api.models import Location, LocationTranslation
+from apps.api.schemas import CitiesResponse, CityOut
 
 router = APIRouter(prefix="/api/v1", tags=["cities"])
 
@@ -62,7 +62,7 @@ async def list_cities(
         )
 
     if redis_client and data:
-        redis_client.setex(cache_key, 3600, json.dumps([d.model_dump() for d in data]))
+        redis_client.setex(cache_key, 3600, json.dumps([d.model_dump() for d in data], ensure_ascii=False))
 
     return CitiesResponse(data=data)
 
@@ -107,6 +107,6 @@ async def get_city_by_slug(
     )
 
     if redis_client:
-        redis_client.setex(cache_key, 3600, json.dumps(data.model_dump()))
+        redis_client.setex(cache_key, 3600, json.dumps(data.model_dump(), ensure_ascii=False))
 
     return data

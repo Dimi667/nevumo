@@ -3,12 +3,7 @@
 Script to clear Redis cache for cities after currency updates.
 """
 
-import sys
-import os
 import redis
-
-# Add the parent directory to the path so we can import app modules
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 def clear_cities_cache():
     """Clear Redis cache for all cities."""

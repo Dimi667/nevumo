@@ -6,12 +6,9 @@ Keys: 72 | Languages: 34
 Run: python scripts/seed_client_dashboard_translations.py
 """
 
-import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sqlalchemy import create_engine, text
-import os
 
 NAMESPACE = "client_dashboard"
 

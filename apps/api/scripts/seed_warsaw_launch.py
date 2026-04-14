@@ -5,12 +5,8 @@ Inserts Warsaw city, categories, and translations into PostgreSQL.
 Fully idempotent - safe to run multiple times.
 """
 
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from sqlalchemy import text
-from database import SessionLocal
+from apps.api.database import SessionLocal
 
 def main():
     db = SessionLocal()

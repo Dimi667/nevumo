@@ -1,17 +1,11 @@
-import sys
 import unittest
-from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 from uuid import uuid4
 
-ROOT = Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
-from exceptions import NevumoException
-from models import ProviderSlugHistory, UrlRedirect
-from services.provider_service import update_provider_profile, validate_slug
+from apps.api.exceptions import NevumoException
+from apps.api.models import ProviderSlugHistory, UrlRedirect
+from apps.api.services.provider_service import update_provider_profile, validate_slug
 
 
 class SlugManagementTests(unittest.TestCase):

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
-from dependencies import get_db
-from models import PageEvent
-from schemas import PageEventCreate
+from apps.api.dependencies import get_db
+from apps.api.models import PageEvent
+from apps.api.schemas import PageEventCreate
 
 router = APIRouter(prefix="/api/v1", tags=["page-events"])
 

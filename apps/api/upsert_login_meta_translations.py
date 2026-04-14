@@ -4,8 +4,8 @@ from typing import Dict
 
 import redis
 
-from database import SessionLocal, init_db
-from i18n import SUPPORTED_LANGUAGES, upsert_translation_values
+from apps.api.database import SessionLocal, init_db
+from apps.api.i18n import SUPPORTED_LANGUAGES, upsert_translation_values
 
 
 LOGIN_META_TRANSLATIONS: Dict[str, Dict[str, str]] = {

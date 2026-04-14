@@ -8,46 +8,45 @@ import EmptyState from '@/components/dashboard/EmptyState';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import type { Lead, LeadStatusQuery, LeadsResponse } from '@/types/provider';
 import { getProviderLeads, updateLeadStatus } from '@/lib/provider-api';
-import { t, type TranslationDict } from '@/lib/ui-translations';
 
 type PeriodOption = 'all' | '7' | '30' | '90';
 
-function getStatusOptions(dict: TranslationDict): { value: LeadStatusQuery; label: string }[] {
+function getStatusOptions(t: (key: string, fallback?: string) => string): { value: LeadStatusQuery; label: string }[] {
   return [
-    { value: 'all', label: t(dict, 'status_all', 'All') },
-    { value: 'new', label: t(dict, 'status_new', 'New') },
-    { value: 'contacted', label: t(dict, 'status_contacted', 'Contacted') },
-    { value: 'done', label: t(dict, 'status_done', 'Done') },
-    { value: 'rejected', label: t(dict, 'status_rejected', 'Rejected') },
+    { value: 'all', label: t('status_all', 'All') },
+    { value: 'new', label: t('status_new', 'New') },
+    { value: 'contacted', label: t('status_contacted', 'Contacted') },
+    { value: 'done', label: t('status_done', 'Done') },
+    { value: 'rejected', label: t('status_rejected', 'Rejected') },
   ];
 }
 
-function getPeriodOptions(dict: TranslationDict): { value: PeriodOption; label: string }[] {
+function getPeriodOptions(t: (key: string, fallback?: string) => string): { value: PeriodOption; label: string }[] {
   return [
-    { value: 'all', label: t(dict, 'period_all_time', 'All time') },
-    { value: '7', label: t(dict, 'period_last_7_days', 'Last 7 days') },
-    { value: '30', label: t(dict, 'period_last_30_days', 'Last 30 days') },
-    { value: '90', label: t(dict, 'period_last_90_days', 'Last 90 days') },
+    { value: 'all', label: t('period_all_time', 'All time') },
+    { value: '7', label: t('period_last_7_days', 'Last 7 days') },
+    { value: '30', label: t('period_last_30_days', 'Last 30 days') },
+    { value: '90', label: t('period_last_90_days', 'Last 90 days') },
   ];
 }
 
-function getTitleAndSubtitle(status: LeadStatusQuery | null, total: number, dict: TranslationDict): { title: string; subtitle: string } {
+function getTitleAndSubtitle(status: LeadStatusQuery | null, total: number, t: (key: string, fallback?: string) => string): { title: string; subtitle: string } {
   switch (status) {
     case 'new':
-      return { title: t(dict, 'label_new_leads', 'New leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
+      return { title: t('label_new_leads', 'New leads'), subtitle: `${total} ${t('label_total', 'total')}` };
     case 'contacted':
-      return { title: t(dict, 'label_contacted_leads', 'Contacted leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
+      return { title: t('label_contacted_leads', 'Contacted leads'), subtitle: `${total} ${t('label_total', 'total')}` };
     case 'done':
-      return { title: t(dict, 'label_done_leads', 'Done leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
+      return { title: t('label_done_leads', 'Done leads'), subtitle: `${total} ${t('label_total', 'total')}` };
     case 'rejected':
-      return { title: t(dict, 'label_rejected_leads', 'Rejected leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
+      return { title: t('label_rejected_leads', 'Rejected leads'), subtitle: `${total} ${t('label_total', 'total')}` };
     default:
-      return { title: t(dict, 'nav_leads', 'Leads'), subtitle: `${total} ${t(dict, 'label_total', 'total')}` };
+      return { title: t('nav_leads', 'Leads'), subtitle: `${total} ${t('label_total', 'total')}` };
   }
 }
 
 export default function LeadsPage() {
-  const { dict } = useDashboardI18n();
+  const { t, lang } = useDashboardI18n();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -74,6 +73,12 @@ export default function LeadsPage() {
   // Local input state for search (not synced with URL, debounced)
   const [searchInput, setSearchInput] = useState(urlSearch);
   const [isSearching, setIsSearching] = useState(false);
+
+  // Update document title when translations are loaded
+  useEffect(() => {
+    const title = t('nav_leads', 'Leads');
+    document.title = `${title} - Nevumo`;
+  }, [t]);
 
   // Modal state
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
@@ -268,7 +273,7 @@ export default function LeadsPage() {
     }
   }
 
-  const { title, subtitle } = getTitleAndSubtitle(status, total, dict);
+  const { title, subtitle } = getTitleAndSubtitle(status, total, t);
 
   // Handle initial loading state (first load only)
   if (loading && leads.length === 0) {
@@ -282,7 +287,7 @@ export default function LeadsPage() {
   if (error) {
     return (
       <div className="bg-red-50 text-red-700 rounded-xl p-4 text-sm">
-        {t(dict, 'msg_failed_load_leads', 'Failed to load leads')}: {error}
+        {t('msg_failed_load_leads', 'Failed to load leads')}: {error}
       </div>
     );
   }
@@ -298,7 +303,7 @@ export default function LeadsPage() {
       <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
         {/* Search bar */}
         <div className="w-full">
-          <label className="text-xs font-medium text-gray-500 mb-1.5 block">{t(dict, 'label_search', 'Search')}</label>
+          <label className="text-xs font-medium text-gray-500 mb-1.5 block">{t('label_search', 'Search')}</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg className="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -310,7 +315,7 @@ export default function LeadsPage() {
               type="text"
               value={searchInput}
               onChange={(e) => handleSearchChange(e.target.value)}
-              placeholder={t(dict, 'placeholder_search_leads', 'Search name, email, phone, description or notes...')}
+              placeholder={t('placeholder_search_leads', 'Search name, email, phone, description or notes...')}
               className="w-full pl-10 pr-10 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
             />
             {isSearching ? (
@@ -321,7 +326,7 @@ export default function LeadsPage() {
               <button
                 onClick={() => handleSearchChange('')}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-                aria-label={t(dict, 'clear_search', 'Clear search')}
+                aria-label={t('clear_search', 'Clear search')}
               >
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18" />
@@ -335,9 +340,9 @@ export default function LeadsPage() {
         <div className="flex flex-wrap items-start gap-6">
           {/* Status filter */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-gray-500">{t(dict, 'label_status', 'Status')}</label>
+            <label className="text-xs font-medium text-gray-500">{t('label_status', 'Status')}</label>
             <div className="flex flex-wrap gap-2">
-              {getStatusOptions(dict).map((opt) => (
+              {getStatusOptions(t).map((opt) => (
                 <button
                   key={opt.value}
                   onClick={() => handleStatusChange(opt.value)}
@@ -355,14 +360,14 @@ export default function LeadsPage() {
 
           {/* Period filter */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-gray-500">{t(dict, 'label_period', 'Period')}</label>
+            <label className="text-xs font-medium text-gray-500">{t('label_period', 'Period')}</label>
             <select
               value={period}
               onChange={(e) => handlePeriodChange(e.target.value as PeriodOption)}
-              aria-label={t(dict, 'aria_select_period_filter', 'Select period filter')}
+              aria-label={t('aria_select_period_filter', 'Select period filter')}
               className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
             >
-              {getPeriodOptions(dict).map((opt) => (
+              {getPeriodOptions(t).map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
                 </option>
@@ -372,14 +377,14 @@ export default function LeadsPage() {
 
           {/* Date range */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-gray-500">{t(dict, 'label_date_range', 'Date range')}</label>
+            <label className="text-xs font-medium text-gray-500">{t('label_date_range', 'Date range')}</label>
             <div className="flex items-center gap-2">
               <input
                 type="date"
                 value={dateFrom}
                 onChange={(e) => handleDateFromChange(e.target.value)}
                 className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
-                placeholder={t(dict, 'placeholder_from', 'From')}
+                placeholder={t('placeholder_from', 'From')}
               />
               <span className="text-gray-400">-</span>
               <input
@@ -387,7 +392,7 @@ export default function LeadsPage() {
                 value={dateTo}
                 onChange={(e) => handleDateToChange(e.target.value)}
                 className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
-                placeholder={t(dict, 'placeholder_to', 'To')}
+                placeholder={t('placeholder_to', 'To')}
               />
             </div>
           </div>
@@ -396,8 +401,8 @@ export default function LeadsPage() {
 
       {leads.length === 0 ? (
         <EmptyState
-          title={t(dict, 'msg_no_leads_found', 'No leads found')}
-          description={t(dict, 'msg_adjust_filters', 'Try adjusting your filters or check back later.')}
+          title={t('msg_no_leads_found', 'No leads found')}
+          description={t('msg_adjust_filters', 'Try adjusting your filters or check back later.')}
         />
       ) : (
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -405,13 +410,13 @@ export default function LeadsPage() {
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_date', 'Date')}</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_phone', 'Phone')}</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{t(dict, 'label_description', 'Description')}</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_source', 'Source')}</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_notes', 'Notes')}</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_status', 'Status')}</th>
-                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t(dict, 'label_actions', 'Actions')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t('label_date', 'Date')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t('label_phone', 'Phone')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide">{t('label_description', 'Description')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t('label_source', 'Source')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t('label_notes', 'Notes')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t('label_status', 'Status')}</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-500 uppercase tracking-wide whitespace-nowrap">{t('label_actions', 'Actions')}</th>
                 </tr>
               </thead>
               <tbody>

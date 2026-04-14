@@ -2,11 +2,11 @@ import json
 from typing import Optional
 
 import redis as redis_lib
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy.orm import Session
 
-from dependencies import get_db, get_redis
-from models import Translation
+from apps.api.dependencies import get_db, get_redis
+from apps.api.models import Translation
 
 router = APIRouter(tags=["translations"])
 
@@ -17,13 +17,16 @@ def get_translations(
     namespace: str = Query(..., min_length=1, max_length=50),
     db: Session = Depends(get_db),
     redis_client: Optional[redis_lib.Redis] = Depends(get_redis),
-) -> dict[str, object]:
+) -> Response:
     cache_key = f"translations:{lang}:{namespace}"
 
     if redis_client:
         cached = redis_client.get(cache_key)
         if cached:
-            return {"success": True, "data": json.loads(cached)}
+            return Response(
+                content=cached,
+                media_type="application/json; charset=utf-8",
+            )
 
     prefix = f"{namespace}."
     rows = (
@@ -35,19 +38,20 @@ def get_translations(
         .all()
     )
 
-    english_result: dict[str, str] = {}
-    localized_result: dict[str, str] = {}
+    result: dict[str, str] = {}
     for row in rows:
-        short_key = row.key[len(prefix):]
-        if row.lang == "en":
-            english_result[short_key] = row.value
-        else:
-            localized_result[short_key] = row.value
+        if row.lang == "en" and row.key not in result:
+            result[row.key] = row.value
+        elif row.lang != "en":
+            result[row.key] = row.value
 
-    result = english_result.copy()
-    result.update(localized_result)
+    response_data = {"success": True, "data": result}
+    json_content = json.dumps(response_data, ensure_ascii=False)
 
     if redis_client and result:
-        redis_client.setex(cache_key, 3600, json.dumps(result))
+        redis_client.setex(cache_key, 3600, json_content)
 
-    return {"success": True, "data": result}
+    return Response(
+        content=json_content,
+        media_type="application/json; charset=utf-8",
+    )

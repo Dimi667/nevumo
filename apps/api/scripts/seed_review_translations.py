@@ -5,14 +5,8 @@ Run this script to add all necessary translation keys for the review/rating syst
 to the database for all 34 supported languages.
 """
 
-import sys
-import os
-
-# Add parent directory to path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from database import SessionLocal
-from i18n import SUPPORTED_LANGUAGES, upsert_translation_values
+from apps.api.database import SessionLocal
+from apps.api.i18n import SUPPORTED_LANGUAGES, upsert_translation_values
 
 
 # Translation keys for the review system

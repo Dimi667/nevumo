@@ -19,12 +19,14 @@ echo "Redis ready"
 
 echo "Running database migrations..."
 cd apps/api
+export PYTHONPATH=$(pwd)
 pip install -r requirements.txt -q
 alembic upgrade head
 cd ../..
 
 echo "Starting API on port 8000..."
 cd apps/api
+export PYTHONPATH=$(pwd)
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload &
 API_PID=$!
 cd ../..

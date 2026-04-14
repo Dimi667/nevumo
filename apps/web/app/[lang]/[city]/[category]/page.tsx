@@ -457,7 +457,7 @@ export default async function CategoryPage({ params }: PageProps) {
           // Extract service titles from provider data if available
           // For now, we'll use a basic approach - this might need adjustment based on actual provider data structure
           return provider.description && provider.description.length > 0
-            ? [provider.description.split('.')[0].trim()] // Use first sentence as service title
+            ? [provider.description.split('.')[0]?.trim() || ''] // Use first sentence as service title
             : [];
         })
         .filter(title => title.length > 0 && title.length < 50) // Filter for reasonable length
@@ -494,7 +494,7 @@ export default async function CategoryPage({ params }: PageProps) {
               <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
             </Link>
             <Link href={`/${lang}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
-              {t(categoryT, 'nav_link', 'Become a specialist')}
+              {t(homepageT, 'homepage.nav_link', 'Become a specialist')}
             </Link>
           </div>
         </header>

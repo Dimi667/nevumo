@@ -2,7 +2,7 @@ import logging
 import httpx
 from typing import Optional
 from sqlalchemy.orm import Session
-from models import ProviderTranslation
+from apps.api.models import ProviderTranslation
 from uuid import UUID
 
 logger = logging.getLogger(__name__)

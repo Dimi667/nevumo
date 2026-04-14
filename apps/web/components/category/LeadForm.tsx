@@ -122,16 +122,18 @@ export default function LeadForm({
         return;
       }
 
-      setLeadId(result.lead_id);
-      setIsSuccess(true);
-      setSuccessStep('sent');
-      setDescription('');
-      setSelectedChip(null);
-      setShowTextarea(false);
-      // Don't clear phoneValue yet - we need it for the pending_claim
-      // Save phone on successful submit
-      if (phoneValue.replace(/\D/g, '').length >= 7) {
-        savePhone(phoneValue.trim());
+      if ('lead_id' in result) {
+        setLeadId(result.lead_id);
+        setIsSuccess(true);
+        setSuccessStep('sent');
+        setDescription('');
+        setSelectedChip(null);
+        setShowTextarea(false);
+        // Don't clear phoneValue yet - we need it for the pending_claim
+        // Save phone on successful submit
+        if (phoneValue.replace(/\D/g, '').length >= 7) {
+          savePhone(phoneValue.trim());
+        }
       }
       // Show PWA prompt after 2 seconds
       setTimeout(() => {

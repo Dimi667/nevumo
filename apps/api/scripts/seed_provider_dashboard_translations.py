@@ -2,16 +2,14 @@
 """
 Seed provider dashboard translations.
 Namespace: provider_dashboard
-Keys: 339 | Languages: 34
+Keys: 341 | Languages: 34
 Run: python scripts/seed_provider_dashboard_translations.py
 """
 
-import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sqlalchemy import create_engine, text
-from seed_client_dashboard_translations import TRANSLATIONS as CLIENT_DASHBOARD_TRANSLATIONS
+from apps.api.scripts.seed_client_dashboard_translations import TRANSLATIONS as CLIENT_DASHBOARD_TRANSLATIONS
 
 NAMESPACE = "provider_dashboard"
 
@@ -72,6 +70,27 @@ TRANSLATIONS = {
         "Профіль",
     ),
     "nav_qr_code": row(
+        "QR Code", "QR код", "QR kód", "QR-kode", "QR-Code", "QR Code",
+        "Código QR", "QR-kood", "QR-koodi", "QR Code", "QR Code", "QR kod",
+        "QR-kód", "QR-kóði", "QR Code", "QR Code", "QR kodas", "QR kods",
+        "QR код", "QR Code", "QR-code", "QR-kode", "Kod QR", "QR Code",
+        "QR Code", "Cod QR", "QR-код", "QR kód", "QR koda", "Kod QR",
+        "QR код", "QR-kod", "QR Kod", "QR-код",
+    ),
+    "aria_qr_language": row(
+        "Select QR code language", "Изберете език на QR кода", "Vyberte jazyk QR kódu", "Vælg QR-kodesprog",
+        "QR-Code-Sprache auswählen", "Επιλέξτε γλώσσα QR κώδικα", "Seleccionar idioma del código QR",
+        "Valige QR-koodi keel", "Valitse QR-koodin kieli", "Sélectionner la langue du code QR",
+        "Roghnaigh teanga an chóid QR", "Odaberite jezik QR koda", "QR-kód nyelvének kiválasztása",
+        "Veldu QR-kóða tungumál", "Seleziona lingua codice QR", "QR Code Sprooch auswielën",
+        "Pasirinkite QR kodo kalbą", "Atlasiet QR koda valodu", "Изберете јазик на QR кодот",
+        "Agħżel il-lingwa tal-kodiċi QR", "Selecteer QR-code taal", "Velg QR-kodespråk",
+        "Wybierz język kodu QR", "Selecione o idioma do código QR", "Seleccione o idioma do código QR",
+        "Selectați limba codului QR", "Выберите язык QR-кода", "Vyberte jazyk QR kódu",
+        "Izberite jezik QR kode", "Zgjidhni gjuhën e kodit QR", "Изаберите језик QR кода",
+        "Välj QR-kodspråk", "QR kod dilini seçin", "Виберіть мову QR-коду",
+    ),
+    "alt_qr_code": row(
         "QR Code", "QR код", "QR kód", "QR-kode", "QR-Code", "QR Code",
         "Código QR", "QR-kood", "QR-koodi", "QR Code", "QR Code", "QR kod",
         "QR-kód", "QR-kóði", "QR Code", "QR Code", "QR kodas", "QR kods",
@@ -3306,6 +3325,7 @@ TRANSLATIONS["msg_switch_role_description"] = {
 POLISH_OVERRIDES = {
     "aria_close_menu": "Zamknij menu",
     "aria_open_menu": "Otwórz menu",
+    "aria_qr_language": "Wybierz język kodu QR",
     "aria_remove_item": "Usuń",
     "aria_select_period_filter": "Wybierz filtr okresu",
     "availability_offline": "Niedostępny",
@@ -3451,7 +3471,8 @@ for key, value in POLISH_OVERRIDES.items():
     TRANSLATIONS[key]["pl"] = value
 
 def main():
-    engine = create_engine("postgresql://nevumo:nevumo@localhost:5432/nevumo_leads")
+    database_url = os.getenv("DATABASE_URL", "postgresql://nevumo:nevumo@localhost:5432/nevumo_leads")
+    engine = create_engine(database_url)
 
     # Delete existing translations for this namespace
     with engine.connect() as conn:

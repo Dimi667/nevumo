@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
-from dependencies import get_db, get_optional_current_user
-from exceptions import (
+from apps.api.dependencies import get_db, get_optional_current_user
+from apps.api.exceptions import (
     INVALID_PHONE,
     CATEGORY_NOT_FOUND,
     CITY_NOT_FOUND,
@@ -11,7 +11,7 @@ from exceptions import (
     RATE_LIMIT_EXCEEDED,
     LEAD_NOT_FOUND,
 )
-from models import (
+from apps.api.models import (
     Lead,
     LeadMatch,
     LeadRateLimit,
@@ -23,7 +23,7 @@ from models import (
     ProviderCity,
     User,
 )
-from schemas import (
+from apps.api.schemas import (
     LeadCreate,
     LeadCreatedResponse,
     LeadClaimEmailRequest,

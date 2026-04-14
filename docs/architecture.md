@@ -1,11 +1,65 @@
 # Nevumo Architecture Decisions
 
+## 2026 Architectural Overhaul
+
+This document reflects the major architectural optimization performed in April 2026, which unified the project into a high-performance monorepo.
+
+### 1. New Monorepo Structure & Path Logic
+- **Unified Root**: The project is now a clean monorepo managed by **Turborepo**.
+- **Path Optimization**: `apps/api` and `apps/web` are decoupled but share a consistent environment. All shared logic is moved to `packages/*`.
+- **Venv Relocation**: The backend virtual environment is strictly at `/Users/dimitardimitrov/nevumo/apps/api/.venv`. All local execution (scripts, uvicorn) should point there.
+
+### 2. Docker & Containerization Strategy
+- **Optimized Dockerfiles**: Implemented multi-stage builds (Build-stage + Run-stage) to minimize image size and maximize build speed.
+- **Docker Compose Orchestration**: The root `docker-compose.yml` manages `nevumo-api`, `nevumo-web`, `nevumo-postgres`, and `nevumo-redis`.
+- **Volume Mapping**: Local development uses volume mapping (`./:/workspace`) to ensure hot-reload works correctly across the monorepo.
+
+### 3. SQLAlchemy & Models (The 'Base' Fix)
+- **Centralized Base**: All SQLAlchemy models now inherit from a single `Base` defined in `apps/api/database.py`.
+- **Explicit Imports**: To prevent 'table not found' errors during migrations or `docker exec` sessions, all models are explicitly imported into `database.py`.
+- **SessionLocal Standardization**: `SessionLocal` usage is standardized for both the API and CLI commands to ensure consistent transaction management.
+
+### 4. Next.js & UI (Metadata + i18n)
+- **Metadata API Fix**: Fixed page titles (Browser Tabs) in `layout.tsx` to properly use the Next.js Metadata API, ensuring SEO-friendly and dynamic titles.
+- **Namespaced Translations**: All translation keys MUST be prefixed with their namespace (e.g., `provider_dashboard.title`).
+- **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.
+
+---
+
 ## Core Marketplace Model
 
 Nevumo използва **Hybrid Marketplace Model**:
 
 1. **Listing-based discovery (SEO-driven)**
 2. **Lead-based conversion (primary monetization)**
+
+---
+
+## Backend Package Runtime Layout
+
+- Backend Python imports are standardized to absolute package paths under `apps.api.*`
+- `apps/api/pyproject.toml` defines the backend package for the Phase 3 packaging migration
+- Local runtime from repo root uses module entrypoints like `python3 -m uvicorn apps.api.main:app`
+- Standalone scripts now run as modules, for example `python3 -m apps.api.scripts.seed_ui_translations`
+- Docker runtime must expose the monorepo root on `PYTHONPATH` so the top-level `apps` package is importable
+- Current container alignment uses:
+  - `PYTHONPATH=/workspace`
+  - `working_dir=/workspace/apps/api`
+  - `uvicorn apps.api.main:app`
+  - repo-root bind mount (`./:/workspace`) in local compose development
+
+---
+
+## Frontend Workspace Runtime Layout
+
+- Frontend Docker compose development now uses the monorepo root as the `web` build context, matching the `api` service pattern
+- The `web` container installs dependencies from the root workspace so npm can resolve local packages from `packages/*` and sibling workspaces from `apps/*`
+- Current container alignment uses:
+  - `context: .`
+  - `dockerfile: apps/web/Dockerfile`
+  - `working_dir=/workspace/apps/web`
+  - repo-root bind mount (`./:/workspace`) in local compose development
+  - Next dev server bound to `0.0.0.0:3000` inside the container
 
 ---
 
@@ -355,9 +409,11 @@ The Provider Dashboard uses a dedicated `provider_dashboard` translation namespa
 
 #### Frontend Flow
 1. Dashboard layout mounts `DashboardI18nProvider` from `apps/web/lib/provider-dashboard-i18n.tsx`
-2. Provider fetches translations for namespace `provider_dashboard` on load
-3. All pages and components consume translations via shared dictionary
-4. Translation keys use pattern `t(dict, key, fallback)` for resilient rendering
+2. Provider fetches translations for namespace `provider_dashboard` on load using `useTranslation('provider_dashboard', lang)`
+3. The hook returns a scoped `t` function that automatically prefixes keys with the namespace
+4. All pages and components consume translations via `useDashboardI18n()` which provides `{ t, lang }`
+5. Translation calls use pattern `t(key, fallback)` for resilient rendering (no dict parameter needed)
+6. The scoped `t` function internally constructs the full key as `provider_dashboard.{key}`
 
 #### Backend Source of Truth
 Translation seed data lives in `apps/api/scripts/seed_provider_dashboard_translations.py`:

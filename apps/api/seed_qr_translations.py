@@ -4,16 +4,9 @@ Seed QR slogan translations for all 32 supported languages.
 Run this script to add QR slogan translations to the database.
 """
 
-import sys
-import os
-from pathlib import Path
-
-# Add the parent directory to the path so we can import from the app
-sys.path.append(str(Path(__file__).parent))
-
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from i18n import upsert_translation_values
+from apps.api.database import SessionLocal
+from apps.api.i18n import upsert_translation_values
 
 # QR slogan translations for all 32 supported languages
 QR_SLOGAN_TRANSLATIONS = {

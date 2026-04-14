@@ -7,10 +7,10 @@ from uuid import UUID
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from exceptions import NevumoException, SELF_REVIEW_NOT_ALLOWED
-from models import Review, Lead, User, Provider
-from services.email_service import email_service
-from services.provider_service import get_provider_rating
+from apps.api.exceptions import NevumoException, SELF_REVIEW_NOT_ALLOWED
+from apps.api.models import Review, Lead, User, Provider
+from apps.api.services.email_service import email_service
+from apps.api.services.provider_service import get_provider_rating
 
 
 def _get_review_display_name(client_name: Optional[str]) -> str:

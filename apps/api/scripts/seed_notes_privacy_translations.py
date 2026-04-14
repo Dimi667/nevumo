@@ -5,9 +5,7 @@ Uses simple translations table structure (key format: provider_dashboard.key_nam
 Run: python scripts/seed_notes_privacy_translations_v2.py
 """
 
-import sys
 import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv

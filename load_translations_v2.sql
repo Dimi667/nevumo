@@ -1,0 +1,22 @@
+INSERT INTO translations (key, lang, value) VALUES
+('auth.login', 'bg', 'Вход'),
+('auth.register', 'bg', 'Регистрация'),
+('auth.email_label', 'bg', 'Имейл адрес'),
+('auth.password_label', 'bg', 'Парола'),
+('auth.forgot_password', 'bg', 'Забравена парола?'),
+('auth.login_btn', 'bg', 'Влез в профила'),
+('auth.magic_link_sent', 'bg', 'Връзката за вход е изпратена на имейла ви'),
+('client_dashboard.title', 'bg', 'Моите запитвания'),
+('client_dashboard.no_requests', 'bg', 'Все още нямате изпратени запитвания'),
+('client_dashboard.status_new', 'bg', 'Ново'),
+('client_dashboard.status_contacted', 'bg', 'Осъществен контакт'),
+('client_dashboard.status_rejected', 'bg', 'Отказано'),
+('client_dashboard.status_done', 'bg', 'Завършено'),
+('client_dashboard.back_to_site', 'bg', 'Обратно към сайта'),
+('label_status', 'bg', 'Статус'),
+('label_category', 'bg', 'Категория'),
+('label_location', 'bg', 'Местоположение'),
+('error_required', 'bg', 'Полето е задължително'),
+('error_invalid_email', 'bg', 'Невалиден имейл формат'),
+('error_server', 'bg', 'Възникна грешка на сървъра. Моля, опитайте по-късно.')
+ON CONFLICT (key, lang) DO UPDATE SET value = EXCLUDED.value;

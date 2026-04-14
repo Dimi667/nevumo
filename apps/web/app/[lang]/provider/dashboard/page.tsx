@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import StatsCard from '@/components/dashboard/StatsCard';
 import { formatDashboardDate, useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import type { DashboardResponse } from '@/types/provider';
@@ -10,7 +10,6 @@ import { getProviderDashboard } from '@/lib/provider-api';
 import { getLatestReviewPreview } from '@/lib/review-api';
 import type { LatestReviewPreview } from '@/types/review';
 import { deriveOnboardingState, getHeroContent, CompactStepIndicator } from '@/lib/onboarding-utils';
-import { t, type TranslationDict } from '@/lib/ui-translations';
 
 function LeadsIcon() {
   return (
@@ -47,12 +46,12 @@ function CheckIcon() {
   );
 }
 
-function getSourceLabels(dict: TranslationDict): Record<string, string> {
+function getSourceLabels(t: (key: string, fallback?: string) => string): Record<string, string> {
   return {
-    seo: t(dict, 'label_source_seo', 'SEO'),
-    widget: t(dict, 'label_source_widget', 'Widget'),
-    qr: t(dict, 'label_source_qr', 'QR Code'),
-    direct: t(dict, 'label_source_direct', 'Direct'),
+    seo: t('label_source_seo', 'SEO'),
+    widget: t('label_source_widget', 'Widget'),
+    qr: t('label_source_qr', 'QR Code'),
+    direct: t('label_source_direct', 'Direct'),
   };
 }
 
@@ -61,10 +60,8 @@ const MOTIVATIONAL_RATING = '5.0';
 const MOTIVATIONAL_CONTACTED = 137;
 
 export default function DashboardOverviewPage() {
-  const params = useParams();
   const router = useRouter();
-  const lang = typeof params.lang === 'string' ? params.lang : 'en';
-  const { dict } = useDashboardI18n();
+  const { t, lang } = useDashboardI18n();
   const base = `/${lang}/provider/dashboard`;
 
   const [data, setData] = useState<DashboardResponse | null>(null);
@@ -85,6 +82,12 @@ export default function DashboardOverviewPage() {
       .finally(() => setLoading(false));
   }, [lang, router]);
 
+  // Update document title when translations are loaded
+  useEffect(() => {
+    const title = t('nav_dashboard', 'Dashboard');
+    document.title = `${title} - Nevumo`;
+  }, [t]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -96,7 +99,7 @@ export default function DashboardOverviewPage() {
   if (error) {
     return (
       <div className="bg-red-50 text-red-700 rounded-xl p-4 text-sm">
-        {t(dict, 'msg_failed_load_dashboard', 'Failed to load dashboard')}: {error}
+        {t('msg_failed_load_dashboard', 'Failed to load dashboard')}: {error}
       </div>
     );
   }
@@ -108,10 +111,10 @@ export default function DashboardOverviewPage() {
   // Derive onboarding state from missing_fields
   const onboardingState = deriveOnboardingState(profile?.missing_fields);
   const isOnboardingComplete = profile?.is_complete ?? true;
-  const heroContent = !isOnboardingComplete ? getHeroContent(onboardingState, dict) : null;
+  const heroContent = !isOnboardingComplete ? getHeroContent(onboardingState, t) : null;
 
   // Top sources for the preview (sorted desc, top 3)
-  const sourceLabels = getSourceLabels(dict);
+  const sourceLabels = getSourceLabels(t);
   const topSources = analytics
     ? Object.entries(analytics.sources)
         .sort(([, a], [, b]) => b - a)
@@ -123,9 +126,9 @@ export default function DashboardOverviewPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-xl font-bold text-gray-900">
-          {profile?.business_name ?? t(dict, 'nav_dashboard', 'Dashboard')}
+          {profile?.business_name ?? t('nav_dashboard', 'Dashboard')}
         </h1>
-        <p className="text-sm text-gray-500 mt-0.5">{t(dict, 'overview_subtitle', 'Overview of your business')}</p>
+        <p className="text-sm text-gray-500 mt-0.5">{t('overview_subtitle', 'Overview of your business')}</p>
       </div>
 
       {/* Incomplete onboarding hero banner */}
@@ -154,7 +157,7 @@ export default function DashboardOverviewPage() {
           {/* Compact step indicator */}
           <CompactStepIndicator 
             state={onboardingState}
-            dict={dict}
+            t={t}
           />
         </div>
       )}
@@ -168,12 +171,12 @@ export default function DashboardOverviewPage() {
                    onClick={() => router.push(`${base}/profile`)}>
                 <div className="text-center">
                   <div className="text-2xl mb-1">🔒</div>
-                  <p className="text-xs text-gray-600 font-medium">{t(dict, 'msg_add_service_unlock', 'Add a service to unlock')}</p>
+                  <p className="text-xs text-gray-600 font-medium">{t('msg_add_service_unlock', 'Add a service to unlock')}</p>
                 </div>
               </div>
             )}
             <StatsCard
-              title={t(dict, 'stat_total_leads', 'Total Leads')}
+              title={t('stat_total_leads', 'Total Leads')}
               value={stats?.total_leads ?? 0}
               icon={<LeadsIcon />}
             />
@@ -188,14 +191,14 @@ export default function DashboardOverviewPage() {
                    onClick={() => router.push(`${base}/profile`)}>
                 <div className="text-center">
                   <div className="text-2xl mb-1">🔒</div>
-                  <p className="text-xs text-gray-600 font-medium">{t(dict, 'msg_add_service_unlock', 'Add a service to unlock')}</p>
+                  <p className="text-xs text-gray-600 font-medium">{t('msg_add_service_unlock', 'Add a service to unlock')}</p>
                 </div>
               </div>
             )}
             <StatsCard
-              title={t(dict, 'stat_new_leads', 'New Leads')}
+              title={t('stat_new_leads', 'New Leads')}
               value={stats?.new_leads ?? 0}
-              description={t(dict, 'status_awaiting_action', 'Awaiting action')}
+              description={t('status_awaiting_action', 'Awaiting action')}
               icon={<NewLeadsIcon />}
               accent
             />
@@ -210,14 +213,14 @@ export default function DashboardOverviewPage() {
                    onClick={() => router.push(`${base}/profile`)}>
                 <div className="text-center">
                   <div className="text-2xl mb-1">🔒</div>
-                  <p className="text-xs text-gray-600 font-medium">{t(dict, 'msg_add_service_unlock', 'Add a service to unlock')}</p>
+                  <p className="text-xs text-gray-600 font-medium">{t('msg_add_service_unlock', 'Add a service to unlock')}</p>
                 </div>
               </div>
             )}
             <StatsCard
-              title={t(dict, 'status_contacted', 'Contacted')}
+              title={t('status_contacted', 'Contacted')}
               value={isOnboardingComplete ? (stats?.contacted_leads ?? 0) : MOTIVATIONAL_CONTACTED}
-              description={t(dict, 'stat_leads_contacted', 'Leads contacted')}
+              description={t('stat_leads_contacted', 'Leads contacted')}
               icon={<CheckIcon />}
             />
           </div>
@@ -230,12 +233,12 @@ export default function DashboardOverviewPage() {
                  onClick={() => router.push(`${base}/profile`)}>
               <div className="text-center">
                 <div className="text-2xl mb-1">🔒</div>
-                <p className="text-xs text-gray-600 font-medium">{t(dict, 'msg_add_service_unlock', 'Add a service to unlock')}</p>
+                <p className="text-xs text-gray-600 font-medium">{t('msg_add_service_unlock', 'Add a service to unlock')}</p>
               </div>
             </div>
           )}
           <StatsCard
-            title={t(dict, 'stat_rating', 'Rating')}
+            title={t('stat_rating', 'Rating')}
             value={isOnboardingComplete 
               ? (stats?.rating !== undefined && stats.rating !== null ? stats.rating.toFixed(1) : '—')
               : MOTIVATIONAL_RATING
@@ -254,40 +257,40 @@ export default function DashboardOverviewPage() {
                onClick={() => router.push(`${base}/profile`)}>
             <div className="text-center">
               <div className="text-3xl mb-2">🔒</div>
-              <p className="text-sm text-gray-600 font-medium">{t(dict, 'msg_add_service_unlock_analytics', 'Add a service to unlock analytics')}</p>
+              <p className="text-sm text-gray-600 font-medium">{t('msg_add_service_unlock_analytics', 'Add a service to unlock analytics')}</p>
             </div>
           </div>
         )}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_last_30_days', 'Last 30 days')}</h2>
+          <h2 className="text-sm font-semibold text-gray-800">{t('label_last_30_days', 'Last 30 days')}</h2>
           {isOnboardingComplete && (
             <Link
               href={`${base}/analytics`}
               className="text-xs text-orange-500 hover:text-orange-600 font-medium transition-colors"
             >
-              {t(dict, 'btn_view_analytics', 'View Analytics →')}
+              {t('btn_view_analytics', 'View Analytics →')}
             </Link>
           )}
         </div>
 
         {analytics && analytics.total_leads === 0 ? (
-          <p className="text-sm text-gray-400">{t(dict, 'msg_no_leads_30_days', 'No leads yet in the last 30 days.')}</p>
+          <p className="text-sm text-gray-400">{t('msg_no_leads_30_days', 'No leads yet in the last 30 days.')}</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <p className="text-xs text-gray-500">{t(dict, 'stat_leads_received', 'Leads received')}</p>
+              <p className="text-xs text-gray-500">{t('stat_leads_received', 'Leads received')}</p>
               <p className="text-2xl font-bold text-gray-900 mt-0.5">
                 {analytics?.total_leads ?? 0}
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">{t(dict, 'stat_leads_contacted', 'Leads contacted')}</p>
+              <p className="text-xs text-gray-500">{t('stat_leads_contacted', 'Leads contacted')}</p>
               <p className="text-2xl font-bold text-gray-900 mt-0.5">
                 {analytics?.contacted_leads ?? 0}
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 mb-1.5">{t(dict, 'label_top_sources', 'Top sources')}</p>
+              <p className="text-xs text-gray-500 mb-1.5">{t('label_top_sources', 'Top sources')}</p>
               {topSources.length > 0 ? (
                 <div className="space-y-1">
                   {topSources.map(([src, count]) => (
@@ -298,7 +301,7 @@ export default function DashboardOverviewPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-xs text-gray-400">{t(dict, 'msg_no_data', 'No data')}</p>
+                <p className="text-xs text-gray-400">{t('msg_no_data', 'No data')}</p>
               )}
             </div>
           </div>
@@ -309,12 +312,12 @@ export default function DashboardOverviewPage() {
       {isOnboardingComplete && reviewPreview && reviewPreview.has_reviews && (
         <div className="bg-white rounded-xl border border-gray-200 p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-semibold text-gray-800">{t(dict, 'label_latest_review', 'Latest Review')}</h2>
+            <h2 className="text-sm font-semibold text-gray-800">{t('label_latest_review', 'Latest Review')}</h2>
             <Link
               href={`${base}/reviews`}
               className="text-xs text-orange-500 hover:text-orange-600 font-medium transition-colors"
             >
-              {t(dict, 'btn_view_all', 'View All →')}
+              {t('btn_view_all', 'View All →')}
             </Link>
           </div>
 
@@ -342,7 +345,7 @@ export default function DashboardOverviewPage() {
               </div>
               {!reviewPreview.latest_review?.has_reply && (
                 <span className="px-2 py-1 bg-orange-100 text-orange-600 text-xs font-medium rounded-full">
-                  {t(dict, 'label_needs_reply', 'Needs Reply')}
+                  {t('label_needs_reply', 'Needs Reply')}
                 </span>
               )}
             </div>
@@ -361,13 +364,13 @@ export default function DashboardOverviewPage() {
           {reviewPreview.unreplied_count > 0 && (
             <div className="mt-4 flex items-center justify-between bg-orange-50 rounded-lg p-3">
               <span className="text-sm text-orange-700">
-                {t(dict, 'msg_reviews_waiting_reply', '{count} reviews waiting for your reply').replace('{count}', String(reviewPreview.unreplied_count))}
+                {t('msg_reviews_waiting_reply', '{count} reviews waiting for your reply').replace('{count}', String(reviewPreview.unreplied_count))}
               </span>
               <Link
                 href={`${base}/reviews`}
                 className="text-xs text-orange-600 hover:text-orange-700 font-medium"
               >
-                {t(dict, 'btn_reply_now', 'Reply now →')}
+                {t('btn_reply_now', 'Reply now →')}
               </Link>
             </div>
           )}
@@ -378,9 +381,9 @@ export default function DashboardOverviewPage() {
       {isOnboardingComplete && reviewPreview && !reviewPreview.has_reviews && (
         <div className="bg-gray-50 rounded-xl border border-gray-200 p-5 text-center">
           <div className="text-3xl mb-2">⭐</div>
-          <h3 className="text-sm font-medium text-gray-900">{t(dict, 'msg_no_reviews_yet', 'No reviews yet')}</h3>
+          <h3 className="text-sm font-medium text-gray-900">{t('msg_no_reviews_yet', 'No reviews yet')}</h3>
           <p className="text-xs text-gray-500 mt-1">
-            {t(dict, 'msg_reviews_appear_here', 'When clients review your services, they will appear here')}
+            {t('msg_reviews_appear_here', 'When clients review your services, they will appear here')}
           </p>
         </div>
       )}

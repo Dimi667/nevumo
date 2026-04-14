@@ -6,9 +6,9 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
-from dependencies import get_current_user, get_db
-from models import User
-from schemas import (
+from apps.api.dependencies import get_current_user, get_db
+from apps.api.models import User
+from apps.api.schemas import (
     ClientDashboardResponse,
     ClientLeadsQueryParams,
     ClientLeadsResponse,
@@ -18,8 +18,8 @@ from schemas import (
     ReviewEmailPreferenceResponse,
     ReviewListResponse,
 )
-from services.client_service import get_client_dashboard, get_client_leads, require_client_user
-from services.review_service import (
+from apps.api.services.client_service import get_client_dashboard, get_client_leads, require_client_user
+from apps.api.services.review_service import (
     get_eligible_leads_for_review,
     create_review,
     get_client_reviews,

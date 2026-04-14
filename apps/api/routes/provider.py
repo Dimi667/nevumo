@@ -5,10 +5,10 @@ from typing import Union, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, status, Response
 from sqlalchemy.orm import Session
 
-from config import settings
-from dependencies import get_current_provider, get_db, get_current_user
-from models import Provider, User
-from schemas import (
+from apps.api.config import settings
+from apps.api.dependencies import get_current_provider, get_db, get_current_user
+from apps.api.models import Provider, User
+from apps.api.schemas import (
     AddCityRequest,
     ClaimProviderRequest,
     CreateServiceRequest,
@@ -27,8 +27,8 @@ from schemas import (
     UpdateServiceRequest,
     ErrorResponse,
 )
-from services import provider_service
-from services.provider_service import (
+from apps.api.services import provider_service
+from apps.api.services.provider_service import (
     add_city,
     add_service,
     build_public_url,
@@ -135,7 +135,7 @@ def update_profile(
         # Trigger translation for description if updated
         try:
             if getattr(body, 'description', None) and body.description.strip():
-                from services.translation_service import translate_and_store
+                from apps.api.services.translation_service import translate_and_store
                 translate_and_store(
                     provider_id=provider.id,
                     field="description",
@@ -286,7 +286,7 @@ def update_lead_provider_notes(
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ) -> LeadProviderNotesUpdateResponse:
-    from models import Lead
+    from apps.api.models import Lead
     
     lead = (
         db.query(Lead)
@@ -326,7 +326,7 @@ def create_service(
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ):
-    from services.provider_service import _serialize_service, retro_match_provider
+    from apps.api.services.provider_service import _serialize_service, retro_match_provider
     
     service = add_service(
         db,
@@ -368,7 +368,7 @@ def update_service_endpoint(
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ):
-    from services.provider_service import _serialize_service
+    from apps.api.services.provider_service import _serialize_service
     service = update_service(
         db,
         service_id,

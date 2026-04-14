@@ -4,15 +4,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import type { AnalyticsData } from '@/types/provider';
 import { getProviderAnalytics } from '@/lib/provider-api';
-import { t, type TranslationDict } from '@/lib/ui-translations';
 
-function getSourceLabels(dict: TranslationDict): Record<string, string> {
+function getSourceLabels(t: (key: string, fallback?: string) => string): Record<string, string> {
   return {
-    seo: t(dict, 'label_source_seo', 'SEO'),
-    widget: t(dict, 'label_source_widget', 'Widget'),
-    qr: t(dict, 'label_source_qr', 'QR Code'),
-    direct: t(dict, 'label_source_direct', 'Direct'),
-    other: t(dict, 'label_source_other', 'Other'),
+    seo: t('label_source_seo', 'SEO'),
+    widget: t('label_source_widget', 'Widget'),
+    qr: t('label_source_qr', 'QR Code'),
+    direct: t('label_source_direct', 'Direct'),
+    other: t('label_source_other', 'Other'),
   };
 }
 
@@ -27,7 +26,7 @@ const SOURCE_COLORS: Record<string, string> = {
 type Period = 7 | 30;
 
 export default function AnalyticsPage() {
-   const { dict } = useDashboardI18n();
+   const { t, lang } = useDashboardI18n();
 
   const [period, setPeriod] = useState<Period>(30);
   const [data, setData] = useState<AnalyticsData | null>(null);
@@ -47,7 +46,13 @@ export default function AnalyticsPage() {
     fetchData(period);
   }, [fetchData, period]);
 
-  const sourceLabels = getSourceLabels(dict);
+  // Update document title when translations are loaded
+  useEffect(() => {
+    const title = t('nav_analytics', 'Analytics');
+    document.title = `${title} - Nevumo`;
+  }, [t]);
+
+  const sourceLabels = getSourceLabels(t);
   const maxSourceCount = data
     ? Math.max(...Object.values(data.sources), 1)
     : 1;
@@ -56,8 +61,8 @@ export default function AnalyticsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">{t(dict, 'nav_analytics', 'Analytics')}</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{t(dict, 'analytics_subtitle', 'Lead performance overview')}</p>
+          <h1 className="text-xl font-bold text-gray-900">{t('nav_analytics', 'Analytics')}</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{t('analytics_subtitle', 'Lead performance overview')}</p>
         </div>
 
         {/* Period toggle */}
@@ -72,7 +77,7 @@ export default function AnalyticsPage() {
                   : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              {t(dict, 'label_last_x_days', 'Last {p} days').replace('{p}', String(p))}
+              {t('label_last_x_days', 'Last {p} days').replace('{p}', String(p))}
             </button>
           ))}
         </div>
@@ -84,7 +89,7 @@ export default function AnalyticsPage() {
         </div>
       ) : error ? (
         <div className="bg-red-50 text-red-700 rounded-xl p-4 text-sm">
-          {t(dict, 'msg_failed_load_analytics', 'Failed to load analytics')}: {error}
+          {t('msg_failed_load_analytics', 'Failed to load analytics')}: {error}
         </div>
       ) : data?.total_leads === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
@@ -94,9 +99,9 @@ export default function AnalyticsPage() {
               <line x1="6" y1="20" x2="6" y2="14" />
             </svg>
           </div>
-          <h3 className="text-base font-semibold text-gray-800 mb-1">{t(dict, 'msg_no_leads_yet', 'No leads yet')}</h3>
+          <h3 className="text-base font-semibold text-gray-800 mb-1">{t('msg_no_leads_yet', 'No leads yet')}</h3>
           <p className="text-sm text-gray-500 max-w-xs mx-auto">
-            {t(dict, 'msg_analytics_appear_when_leads', 'Analytics will appear once you start receiving leads.')}
+            {t('msg_analytics_appear_when_leads', 'Analytics will appear once you start receiving leads.')}
           </p>
         </div>
       ) : (
@@ -104,22 +109,22 @@ export default function AnalyticsPage() {
           {/* KPI cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">{t(dict, 'stat_leads_received', 'Leads Received')}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">{t('stat_leads_received', 'Leads Received')}</p>
               <p className="text-3xl font-bold text-gray-900 mt-2">{data?.total_leads ?? 0}</p>
             </div>
             <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">{t(dict, 'stat_leads_contacted', 'Leads Contacted')}</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">{t('stat_leads_contacted', 'Leads Contacted')}</p>
               <p className="text-3xl font-bold text-gray-900 mt-2">{data?.contacted_leads ?? 0}</p>
             </div>
             <div className="bg-white rounded-xl border border-orange-100 bg-orange-50 p-5">
-              <p className="text-xs text-orange-600 uppercase tracking-wide font-medium">{t(dict, 'stat_conversion_rate', 'Conversion Rate')}</p>
+              <p className="text-xs text-orange-600 uppercase tracking-wide font-medium">{t('stat_conversion_rate', 'Conversion Rate')}</p>
               <p className="text-3xl font-bold text-orange-600 mt-2">{data?.conversion_rate ?? 0}%</p>
             </div>
           </div>
 
           {/* Lead sources breakdown */}
           <div className="bg-white rounded-xl border border-gray-200 p-5">
-            <h2 className="text-sm font-semibold text-gray-800 mb-5">{t(dict, 'label_lead_sources', 'Lead Sources')}</h2>
+            <h2 className="text-sm font-semibold text-gray-800 mb-5">{t('label_lead_sources', 'Lead Sources')}</h2>
             <div className="space-y-4">
               {(['seo', 'widget', 'qr', 'direct', 'other'] as const).map(src => {
                 const count = data?.sources[src] ?? 0;

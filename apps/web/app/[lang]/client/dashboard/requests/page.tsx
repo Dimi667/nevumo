@@ -11,7 +11,7 @@ import {
   type ClientLeadFilterStatus,
   type ClientLeadStatus,
 } from '@/lib/client-api';
-import { fetchTranslations, t, type TranslationDict } from '@/lib/ui-translations';
+import { useTranslation } from '@/lib/use-translation';
 
 type ReviewFormState = {
   rating: number;
@@ -90,23 +90,23 @@ function formatDate(value: string, locale: string): string {
   }
 }
 
-function getStatusMeta(status: ClientLeadStatus, dict: TranslationDict): { label: string; className: string } {
+function getStatusMeta(status: ClientLeadStatus, t: (key: string, fallback?: string) => string): { label: string; className: string } {
   if (status === 'done') {
     return {
-      label: t(dict, 'status_completed', 'Completed'),
+      label: t('status_completed', 'Completed'),
       className: 'bg-green-100 text-green-700',
     };
   }
 
   if (status === 'rejected' || status === 'expired' || status === 'cancelled') {
     return {
-      label: t(dict, 'status_rejected', 'Rejected'),
+      label: t('status_rejected', 'Rejected'),
       className: 'bg-gray-100 text-gray-600',
     };
   }
 
   return {
-    label: t(dict, 'status_active', 'Active'),
+    label: t('status_active', 'Active'),
     className: 'bg-orange-100 text-orange-700',
   };
 }
@@ -135,7 +135,7 @@ export default function ClientRequestsPage() {
   const [reviewingLeadId, setReviewingLeadId] = useState<string | null>(null);
   const [reviewForm, setReviewForm] = useState<ReviewFormState>({ rating: 5, comment: '' });
   const [submitting, setSubmitting] = useState(false);
-  const [dict, setDict] = useState<TranslationDict>({});
+  const { t } = useTranslation('client_dashboard', lang);
 
   const clearToast = useCallback(() => setToast(null), []);
 
@@ -165,14 +165,6 @@ export default function ClientRequestsPage() {
     void loadLeads(activeTab);
   }, [activeTab, loadLeads]);
 
-  useEffect(() => {
-    async function loadTranslations() {
-      const translations = await fetchTranslations(lang, 'client_dashboard');
-      setDict(translations);
-    }
-
-    void loadTranslations();
-  }, [lang]);
 
   function openReviewForm(leadId: string) {
     setReviewingLeadId(leadId);
@@ -198,168 +190,159 @@ export default function ClientRequestsPage() {
       setError(null);
       await submitReview(token, leadId, reviewForm.rating, reviewForm.comment);
       closeReviewForm();
-      setToast('Ревюто беше изпратено успешно.');
-      await loadLeads(activeTab);
+      setToast(t('review_submitted', 'Review submitted successfully'));
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Неуспешно изпращане на ревю.');
+      setError(e instanceof Error ? e.message : 'Неуспешно изпращане на отзив.');
     } finally {
       setSubmitting(false);
     }
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <div className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
   return (
-    <>
+    <div className="space-y-6">
       {toast && <Toast message={toast} onDone={clearToast} />}
-      <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">{t(dict, 'requests_title', 'My Requests')}</h1>
+          <h1 className="text-lg font-semibold text-gray-900">{t('requests_title', 'My Requests')}</h1>
           <p className="text-sm text-gray-500 mt-0.5">{total} резултата</p>
         </div>
-
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="flex flex-wrap gap-2">
-            {TAB_OPTIONS.map((tab) => (
-              <button
-                key={tab.value}
-                type="button"
-                onClick={() => {
-                  setActiveTab(tab.value);
-                  const newParams = new URLSearchParams(searchParams.toString());
-                  if (tab.value === 'all') {
-                    newParams.delete('status');
-                  } else {
-                    newParams.set('status', tab.value);
-                  }
-                  router.replace(`/${lang}/client/dashboard/requests?${newParams.toString()}`, { scroll: false });
-                }}
-                className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                  activeTab === tab.value
-                    ? 'bg-orange-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {t(dict, tab.label, tab.label)}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {error && (
-          <div className="bg-red-50 text-red-700 rounded-xl p-4 text-sm">
-            {error}
-          </div>
-        )}
-
-        {leads.length === 0 ? (
-          <div className="bg-gray-50 rounded-xl border border-gray-200 p-8 text-center space-y-3">
-            <h2 className="text-lg font-medium text-gray-900">{t(dict, 'requests_empty_title', 'No requests found')}</h2>
-            <p className="text-sm text-gray-500">
-              {t(dict, 'requests_empty_desc', 'Send a new request and it will appear here.')}
-            </p>
-            <Link
-              href={`/${lang}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
-            >
-              {t(dict, 'cta_find_service', 'Find Service')}
-            </Link>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {leads.map((lead) => {
-              const statusMeta = getStatusMeta(lead.status, dict);
-
-              return (
-                <div key={lead.id} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="space-y-1.5">
-                      <h2 className="text-base font-semibold text-gray-900">
-                        {lead.category_name}
-                      </h2>
-                      <p className="text-sm text-gray-500">{lead.city}</p>
-                      <p className="text-sm text-gray-700">
-                        {lead.provider_business_name || 'Marketplace'}
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-start gap-2 lg:items-end">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusMeta.className}`}>
-                        {statusMeta.label}
-                      </span>
-                      <span className="text-sm text-gray-500">{formatDate(lead.created_at, lang)}</span>
-                    </div>
-                  </div>
-
-                  {(lead.status === 'done' && !lead.has_review && lead.provider_id !== null) && (
-                    <div className="space-y-3">
-                      {reviewingLeadId === lead.id ? (
-                        <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-4">
-                          <div className="space-y-2">
-                            <p className="text-sm font-medium text-gray-700">{t(dict, 'btn_rate_service', 'Rate Service')}</p>
-                            <StarRatingInput
-                              value={reviewForm.rating}
-                              onChange={(rating) => setReviewForm((current) => ({ ...current, rating }))}
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700" htmlFor={`review-comment-${lead.id}`}>
-                              {t(dict, 'label_comment', 'Comment')}
-                            </label>
-                            <textarea
-                              id={`review-comment-${lead.id}`}
-                              value={reviewForm.comment}
-                              onChange={(event) => setReviewForm((current) => ({
-                                ...current,
-                                comment: event.target.value,
-                              }))}
-                              rows={4}
-                              maxLength={1000}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
-                              placeholder={t(dict, 'review_placeholder', 'Share your impressions...')}
-                            />
-                            <p className="text-xs text-gray-400">{reviewForm.comment.length}/1000</p>
-                          </div>
-                          <div className="flex justify-end gap-2">
-                            <button
-                              type="button"
-                              onClick={closeReviewForm}
-                              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
-                            >
-                              {t(dict, 'btn_cancel', 'Cancel')}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleSubmitReview(lead.id)}
-                              disabled={submitting}
-                              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
-                            >
-                              {submitting ? t(dict, 'btn_submitting', 'Submitting...') : t(dict, 'btn_submit_review', 'Submit Review')}
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => openReviewForm(lead.id)}
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
-                        >
-                          {t(dict, 'btn_write_review', 'Write a Review')}
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
       </div>
-    </>
+
+      <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="flex flex-wrap gap-2">
+          {TAB_OPTIONS.map((tab) => (
+            <button
+              key={tab.value}
+              type="button"
+              onClick={() => {
+                setActiveTab(tab.value);
+                const newParams = new URLSearchParams(searchParams.toString());
+                if (tab.value === 'all') {
+                  newParams.delete('status');
+                } else {
+                  newParams.set('status', tab.value);
+                }
+                router.replace(`/${lang}/client/dashboard/requests?${newParams.toString()}`, { scroll: false });
+              }}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                activeTab === tab.value
+                  ? 'bg-orange-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {t(tab.label, tab.label)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {error && (
+        <div className="bg-red-50 text-red-700 rounded-xl p-4 text-sm">
+          {error}
+        </div>
+      )}
+
+      {leads.length === 0 ? (
+        <div className="bg-gray-50 rounded-xl border border-gray-200 p-8 text-center space-y-3">
+          <h2 className="text-lg font-medium text-gray-900">{t('requests_empty_title', 'No requests found')}</h2>
+          <p className="text-sm text-gray-500">
+            {t('requests_empty_desc', 'Send a new request and it will appear here.')}
+          </p>
+          <Link
+            href={`/${lang}`}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
+          >
+            {t('cta_find_service', 'Find Service')}
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {leads.map((lead) => {
+            const statusMeta = getStatusMeta(lead.status, t);
+
+            return (
+              <div key={lead.id} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="space-y-1.5">
+                    <h2 className="text-base font-semibold text-gray-900">
+                      {lead.category_name}
+                    </h2>
+                    <p className="text-sm text-gray-500">{lead.city}</p>
+                    <p className="text-sm text-gray-700">
+                      {lead.provider_business_name || 'Marketplace'}
+                    </p>
+                  </div>
+                  <div className="flex flex-col items-start gap-2 lg:items-end">
+                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusMeta.className}`}>
+                      {statusMeta.label}
+                    </span>
+                    <span className="text-sm text-gray-500">{formatDate(lead.created_at, lang)}</span>
+                  </div>
+                </div>
+
+                {(lead.status === 'done' && !lead.has_review && lead.provider_id !== null) && (
+                  <div className="space-y-3">
+                    {reviewingLeadId === lead.id ? (
+                      <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-4">
+                        <div className="space-y-2">
+                          <p className="text-sm font-medium text-gray-700">{t('btn_rate_service', 'Rate Service')}</p>
+                          <StarRatingInput
+                            value={reviewForm.rating}
+                            onChange={(rating) => setReviewForm((current) => ({ ...current, rating }))}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="block text-sm font-medium text-gray-700" htmlFor={`review-comment-${lead.id}`}>
+                            {t('label_comment', 'Comment')}
+                          </label>
+                          <textarea
+                            id={`review-comment-${lead.id}`}
+                            value={reviewForm.comment}
+                            onChange={(event) => setReviewForm((current) => ({
+                              ...current,
+                              comment: event.target.value,
+                            }))}
+                            rows={4}
+                            maxLength={1000}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
+                            placeholder={t('review_placeholder', 'Share your impressions...')}
+                          />
+                          <p className="text-xs text-gray-400">{reviewForm.comment.length}/1000</p>
+                        </div>
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={closeReviewForm}
+                            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                          >
+                            {t('btn_cancel', 'Cancel')}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleSubmitReview(lead.id)}
+                            disabled={submitting}
+                            className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+                          >
+                            {submitting ? t('btn_submitting', 'Submitting…') : t('btn_submit', 'Submit')} Review
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => openReviewForm(lead.id)}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
+                      >
+                        {t('btn_write_review', 'Write a Review')}
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }

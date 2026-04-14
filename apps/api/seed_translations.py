@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-from database import SessionLocal, init_db
-from models import Translation, Provider
-from i18n import (
+from apps.api.database import SessionLocal, init_db
+from apps.api.i18n import (
     MASSAGE_PROVIDER_CATEGORY_KEY,
     provider_category_seed_data,
 )
+from apps.api.models import Translation, Provider
 
 def seed():
     db = SessionLocal()

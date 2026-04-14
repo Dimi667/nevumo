@@ -1,0 +1,622 @@
+Key,Source Code Default,DB English,DB Bulgarian,Status
+homepage.activity_1,,Krzysztof from Warsaw is looking for cleaning,Кристоф от Варшава търси почистване,No default in code
+homepage.activity_1_time,,8 min ago,преди 8 мин,No default in code
+homepage.activity_2,,Anna from Warsaw is looking for massage,Анна от Варшава търси масаж,No default in code
+homepage.activity_2_time,,1 hour ago,преди 1 час,No default in code
+homepage.activity_3,,Marek from Warsaw is looking for plumbing,Марек от Варшава търси водопроводчик,No default in code
+homepage.activity_3_time,,3 hours ago,преди 3 часа,No default in code
+homepage.activity_title,Recent requests,Recent requests,Последни заявки,OK
+category.also_check,See also:,See also:,Виж също:,OK
+provider_dashboard.analytics_appear_leads,,Analytics will appear once you start receiving leads.,"Анализите ще се появят, след като започнете да получавате запитвания.",Not used in code
+provider_dashboard.analytics_conversion_rate,,Conversion Rate,Процент на конверсия,Not used in code
+provider_dashboard.analytics_lead_sources,,Lead Sources,Източници на запитвания,Not used in code
+provider_dashboard.analytics_leads_contacted,,Leads Contacted,Свързани запитвания,Not used in code
+provider_dashboard.analytics_leads_received,,Leads Received,Получени запитвания,Not used in code
+provider_dashboard.analytics_no_data,,No data,Няма данни,Not used in code
+provider_dashboard.analytics_subtitle,Lead performance overview,Lead performance overview,Преглед на ефективността на запитванията,OK
+aria_close,Close,,,Missing in DB (EN)
+provider_dashboard.aria_close_menu,Close menu,Close menu,Затвори менюто,OK
+provider_dashboard.aria_open_menu,Open menu,Open menu,Отвори менюто,OK
+provider_dashboard.aria_remove_item,Remove,Remove,Премахни,OK
+provider_dashboard.aria_select_period_filter,Select period filter,Select period filter,Избери филтър по период,OK
+provider_dashboard.availability_active,Active,Active,Активен,OK
+provider_dashboard.availability_busy,Busy,Busy,Зает,OK
+provider_dashboard.availability_offline,Offline,Offline,Офлайн,OK
+auth.back_btn,← Back,← Back,← Назад,OK
+provider_dashboard.btn_add_service,Add Service,Add Service,Добави услуга,OK
+provider_dashboard.btn_back,← Back,← Back,← Назад,OK
+provider_dashboard.btn_cancel,Cancel,Cancel,Отказ,OK
+client_dashboard.btn_change_password,Change Password,Change Password,Смени парола,OK
+provider_dashboard.btn_change_photo,Change photo,Change photo,Смени снимката,OK
+btn_close,Close,,,Missing in DB (EN)
+provider_dashboard.btn_complete_setup,Complete Setup,Complete Setup,Завърши настройката,OK
+provider_dashboard.btn_contact,Contact,Contact,Свържи се,OK
+provider_dashboard.btn_continue,Continue →,Continue →,Продължи →,OK
+provider_dashboard.btn_create_service,Create Service,Create Service,Създай услуга,OK
+provider_dashboard.btn_delete,Delete,Delete,Изтрий,OK
+provider_dashboard.btn_delete_service,Delete service,Delete service,Изтрий услуга,OK
+provider_dashboard.btn_download,Download,Download,Изтегли,OK
+provider_dashboard.btn_edit,Edit,Edit,Редактирай,OK
+provider_dashboard.btn_edit_service,Edit Service,Edit Service,Редактирай услуга,OK
+provider_dashboard.btn_edit_url,Edit URL,Edit URL,Редактирай URL,OK
+provider_dashboard.btn_find_service,Find Service,Find Service,Намери услуга,OK
+provider_dashboard.btn_generate_qr_code,Generate QR Code,Generate QR Code,Генерирай QR код,OK
+provider_dashboard.btn_log_out,Log out,Log out,Изход,OK
+provider_dashboard.btn_new_service,New Service,New Service,Нова услуга,OK
+client_dashboard.btn_rate_service,Rate Service,Rate Service,Оцени услугата,OK
+provider_dashboard.btn_regenerate,Regenerate,Regenerate,Генерирай отново,OK
+provider_dashboard.btn_reject,Reject,Reject,Отхвърли,OK
+provider_dashboard.btn_reply_now,Reply now →,Reply now →,Отговорете сега →,OK
+provider_dashboard.btn_reply_to_review,Reply to this review,Reply to Review,Отговори на отзива,OK
+provider_dashboard.btn_save_changes,Save changes,Save Changes,Запази промените,OK
+btn_save_notes,Save Notes,,,Missing in DB (EN)
+provider_dashboard.btn_save_phone,Save Phone,Save Phone,Запази телефон,OK
+provider_dashboard.btn_save_url,Save URL,Save URL,Запази URL,OK
+client_dashboard.btn_saved,Saved!,Saved!,Запазено!,OK
+client_dashboard.btn_saving,Saving…,Saving…,Запазване…,OK
+provider_dashboard.btn_send_reply,Send Reply,Send Reply,Изпрати отговор,OK
+provider_dashboard.btn_skip_for_now,Skip for now,Skip for now,Пропусни засега,OK
+client_dashboard.btn_submit_review,Submit Review,Submit Review,Изпрати ревю,OK
+client_dashboard.btn_submitting,Submitting...,Submitting...,Изпращане...,OK
+provider_dashboard.btn_switch_client,Switch to Client Account,Switch to Client Account,Превключи към клиентски акаунт,OK
+provider_dashboard.btn_try_again,Try again,Try again,Опитай отново,OK
+provider_dashboard.btn_upload_photo,Upload photo,Upload photo,Качи снимка,OK
+btn_view,View,,,Missing in DB (EN)
+provider_dashboard.btn_view_all,View All →,View All →,Виж всички →,OK
+provider_dashboard.btn_view_analytics,View Analytics →,View Analytics →,Вижте анализите →,OK
+client_dashboard.btn_write_review,Write a Review,Write a Review,Напиши ревю,OK
+button_text,,Request Service,Заяви услуга,Not used in code
+homepage.cat_cleaning_leads,26 requests this week,26 requests this week,26 заявки тази седмица,OK
+homepage.cat_cleaning_name,Cleaning,Cleaning,Почистване,OK
+homepage.cat_cta,I offer this service,I offer this service,Предлагам тази услуга,OK
+homepage.cat_massage_leads,14 requests this week,14 requests this week,14 заявки тази седмица,OK
+homepage.cat_massage_name,Massage,Massage,Масаж,OK
+homepage.cat_plumbing_leads,18 requests this week,18 requests this week,18 заявки тази седмица,OK
+homepage.cat_plumbing_name,Plumbing,Plumbing,Водопроводчик,OK
+auth.checking_btn,Checking...,Checking...,Проверка...,OK
+category.chip_not_sure,,Not sure,Не съм сигурен,Not used in code
+widget.city_leads_label,,{count} requests for {category} in {city} this year,{count} заявки за {category} в {city} тази година,Not used in code
+auth.claim_cta_btn,,Claim profile,Вземи профила,No default in code
+auth.claim_headline,,Claim your profile on Nevumo,Вземи своя профил в Nevumo,No default in code
+auth.claim_subtitle,,Register for free and manage your clients,Регистрирай се безплатно и управлявай клиентите си,No default in code
+clear_search,Clear search,,,Missing in DB (EN)
+pwa.client_subtitle,,Track requests without opening a browser,Следи заявките без да отваряш браузър,Not used in code
+auth.coming_soon,Coming soon,Coming soon,Очаквайте скоро,OK
+auth.continue_btn,,Continue,Продължи,No default in code
+homepage.cta2_btn,,Create free profile,Създай безплатен профил,No default in code
+homepage.cta2_title,,Ready for new clients?,Готов ли си за нови клиенти?,No default in code
+client_dashboard.cta_find_service,Find Service,Find Service,Намери услуга,OK
+homepage.cta_hero,Start for free,Start for free,Започни безплатно,OK
+category.details_label,,Add details (optional),Добави детайли (по избор),Not used in code
+category.details_placeholder,,"Describe your request — time, address, specific requirements...","Опиши заявката си — час, адрес, специфични изисквания...",Not used in code
+widget.direct_contact_with_provider,,Direct contact with the provider,Директен контакт с доставчика,Not used in code
+disclaimer,,Free request • No obligation,Безплатна заявка • Без ангажимент,Not used in code
+pwa.dismiss_button,,Got it,Разбрах,Not used in code
+category.email_back_link,,← Back,← Назад,Not used in code
+category.email_cta_continue,,Continue →,Продължи →,Not used in code
+category.email_label,,Your email address,Вашият имейл адрес,Not used in code
+category.email_placeholder,,your@email.com,you@example.com,Not used in code
+client_dashboard.empty_pending_desc,Completed services you have not rated...,Completed services you haven't rated yet will appear here.,"Следващите завършени услуги, които не си оценил, ще се появят тук.",OK
+client_dashboard.empty_pending_title,No pending reviews,No pending reviews,Нямаш чакащи ревюта,OK
+client_dashboard.empty_requests_desc,Browse available services...,Browse available services and send your first request to a suitable provider.,Разгледай наличните услуги и изпрати първата си заявка към подходящ доставчик.,OK
+client_dashboard.empty_requests_title,No requests yet,No requests yet,Все още нямаш заявки,OK
+client_dashboard.empty_reviews_desc,When you rate a completed service...,"When you rate a completed service, the review will appear here.","Когато оцениш завършена услуга, ревюто ще се появи тук.",OK
+client_dashboard.empty_reviews_title,No reviews written yet,No reviews written yet,Все още нямаш написани ревюта,OK
+category.empty_state,,First specialists are joining. Check again tomorrow.,Първите специалисти вече се присъединяват. Провери отново утре.,Not used in code
+auth.error_account_disabled,Account is disabled.,Account is disabled.,Акаунтът е деактивиран.,OK
+provider_dashboard.error_business_name_min_chars,Business name must be at least 2 characters,Business name must be at least 2 characters,Името на бизнеса трябва да е поне 2 символа,OK
+provider_dashboard.error_category_required,Category is required,Category is required,Категорията е задължителна,OK
+provider_dashboard.error_city_required,At least one city is required,At least one city is required,Изберете поне един град,OK
+auth.error_email_exists,This email is already registered.,This email is already registered.,Този имейл вече е регистриран.,OK
+auth.error_generic,An error occurred. Please try again.,An error occurred. Please try again.,Възникна грешка. Опитай отново.,OK
+client_dashboard.error_load_failed,,Failed to load data.,Неуспешно зареждане.,Not used in code
+client_dashboard.error_no_session,,No active session.,Липсва активна сесия.,Not used in code
+category.error_phone_invalid,,Enter a valid phone number,Моля въведете валиден телефонен номер,Not used in code
+auth.error_rate_limit,Too many attempts. Please try later.,Too many attempts. Please try later.,Твърде много опити. Опитай по-късно.,OK
+client_dashboard.error_review_submit,,Failed to submit review.,Неуспешно изпращане на ревю.,Not used in code
+provider_dashboard.error_title_required,Title is required,Title is required,Заглавието е задължително,OK
+auth.error_wrong_password,Wrong password,Wrong password,Грешна парола,OK
+auth.facebook_btn,,Sign in with Facebook,Вход с Facebook,No default in code
+homepage.footer_link_cleaning,,Cleaning in Warsaw,Почистване във Варшава,No default in code
+homepage.footer_link_massage,,Massage in Warsaw,Масаж във Варшава,No default in code
+homepage.footer_link_plumbing,,Plumbing in Warsaw,Водопроводчик във Варшава,No default in code
+homepage.footer_popular,,Popular: Massage • Cleaning • Plumbing,Популярни: Масаж • Почистване • Водопроводчик,No default in code
+homepage.footer_title,,Looking for a service in Warsaw?,Търсиш услуга във Варшава?,No default in code
+auth.forgot_check_email,Check your email,Check your email,Провери имейла си,OK
+auth.forgot_password_link,Forgot password?,Forgot password?,Забравена парола?,OK
+auth.forgot_send_btn,Send link,Send link,Изпрати линк,OK
+auth.forgot_sent_btn,Sent,Sent,Изпратено,OK
+auth.forgot_subtitle,,We'll send you a link for a new password,Ще изпратим линк за нова парола,Not used in code
+auth.forgot_title,Forgot password,Forgot password,Забравена парола,OK
+category.form_btn,Send request,Send request,Изпрати заявка,OK
+category.form_desc,,Describe what you need (optional),Опиши какво търсиш (по желание),Not used in code
+category.form_phone,,Your phone number,Твоят телефонен номер,Not used in code
+category.form_subtext,,Send one request and receive offers from available providers,Изпрати една заявка и получи оферти от наличните специалисти,Not used in code
+category.form_subtitle,,Free • No obligation,Безплатно • Без ангажимент,Not used in code
+category.form_title,,Send a request,Изпрати заявка,Not used in code
+category.form_trust_1,,Free,Безплатно,Not used in code
+category.form_trust_2,,No obligation,Без ангажимент,Not used in code
+category.form_trust_3,,Reply within 30 min,Отговор до 30 мин,Not used in code
+widget.free_request_no_obligation,,"Free request, no obligation","Безплатна заявка, без ангажимент",Not used in code
+category.get_offers_btn,,Get offers,Получи оферти,Not used in code
+auth.google_btn,,Sign in with Google,Вход с Google,No default in code
+category.h1_cleaning,Cleaning in Warsaw,Cleaning in Warsaw,Почистване във Варшава,OK
+category.h1_massage,Massage in Warsaw,Massage in Warsaw,Масаж във Варшава,OK
+category.h1_plumbing,Plumbing in Warsaw,Plumbing in Warsaw,Водопроводчик във Варшава,OK
+homepage.hero_prefix,Get clients for,Get clients for,Намирай клиенти за,OK
+homepage.hero_subtitle,Free. No commission. Direct contact.,Free. No commission. Direct contact.,Безплатно. Без комисион. Директен контакт.,OK
+auth.hero_subtitle_client,Free • No obligation,Free • No obligation,Безплатно • Без ангажимент,OK
+homepage.hero_suffix,in Warsaw,in Warsaw,във Варшава,OK
+auth.hero_title_client,Find a service in minutes,Find a service in minutes,Намери услуга за минути,OK
+auth.hero_title_provider,Start getting clients,Start getting clients,Започни да получаваш клиенти,OK
+category.how_it_works_label,,How it works,Как работи,Not used in code
+category.how_step_1,,Describe what you need,Опиши нуждата си,Not used in code
+category.how_step_2,,Providers contact you,Специалистите те контактуват,Not used in code
+category.how_step_3,,Choose the best offer,Избери най-добрата оферта,Not used in code
+homepage.how_title,How it works,How it works,Как работи,OK
+pwa.install_title,,Install Nevumo,Инсталирай Nevumo,Not used in code
+pwa.ios_step1,,Tap Share in the bottom toolbar,Натисни Share в долната лента на браузъра,Not used in code
+pwa.ios_step2,,"Select ""Add to Home Screen""","Избери ""Add to Home Screen""",Not used in code
+jobs_label,,jobs completed,завършени поръчки,Not used in code
+login.findService.label,,Find a service,Намери услуга,Not used in code
+provider_dashboard.label_account,Account,Account,Акаунт,OK
+provider_dashboard.label_account_role,Account Role,Account Role,Роля на акаунта,OK
+provider_dashboard.label_actions,Actions,Actions,Действия,OK
+provider_dashboard.label_add_first_service,Add Your First Service,Add Your First Service,Добавете първата си услуга,OK
+provider_dashboard.label_all_reviews,All Reviews,All reviews,Всички отзиви,OK
+provider_dashboard.label_availability,Availability,Availability,Наличност,OK
+provider_dashboard.label_business,Business,Business,Бизнес,OK
+provider_dashboard.label_business_details,Business details,Business details,Детайли за бизнеса,OK
+provider_dashboard.label_business_name,Business name,Company or personal name,Име на фирма или лични имена,OK
+provider_dashboard.label_canonical_profile_url,Canonical profile URL,Canonical profile URL,Каноничен URL на профила,OK
+provider_dashboard.label_category,Category,Category *,Категория *,OK
+provider_dashboard.label_cities,Cities,Cities *,Градове *,OK
+label_client_message,CLIENT MESSAGE,,,Missing in DB (EN)
+client_dashboard.label_comment,Comment,Comment,Коментар,OK
+provider_dashboard.label_complete_profile,Complete your profile,Complete your profile,Завършете профила си,OK
+provider_dashboard.label_contacted_leads,Contacted leads,Contacted leads,Свързани запитвания,OK
+provider_dashboard.label_date,Date,Date,Дата,OK
+provider_dashboard.label_date_range,Date range,Date range,Диапазон от дати,OK
+provider_dashboard.label_description,Description,Description (optional),Описание (по избор),OK
+provider_dashboard.label_done_leads,Done leads,Done leads,Завършени запитвания,OK
+provider_dashboard.label_edit_public_slug,Edit public slug,Edit public slug,Редактирай публичния slug,OK
+provider_dashboard.label_edited,Edited,Edited,Редактирано,OK
+provider_dashboard.label_email,Email,Email,Имейл,OK
+provider_dashboard.label_enhanced_qr_code,Enhanced QR Code,Enhanced QR Code,Подобрен QR код,OK
+provider_dashboard.label_from,,From,От,Not used in code
+client_dashboard.label_has_reply,Has Reply,Has Reply,Има отговор,OK
+client_dashboard.label_hide_reply,Hide Provider Reply,Hide Provider Reply,Скрий отговора от доставчика,OK
+provider_dashboard.label_language,Language,Language,Език,OK
+provider_dashboard.label_last_30_days,Last 30 days,Last 30 days,Последните 30 дни,OK
+provider_dashboard.label_last_x_days,Last {p} days,Last {p} days,Последните {p} дни,OK
+provider_dashboard.label_latest_review,Latest Review,Latest Review,Последен отзив,OK
+provider_dashboard.label_lead_sources,Lead Sources,Lead Sources,Източници на запитвания,OK
+client_dashboard.label_marketplace,Marketplace Request,Marketplace Request,Marketplace заявка,OK
+provider_dashboard.label_needs_reply,Needs Reply,Needs Reply,Нуждае се от отговор,OK
+provider_dashboard.label_new_leads,New leads,New Leads,Нови запитвания,OK
+provider_dashboard.label_notes,Notes,Notes,Бележки,OK
+provider_dashboard.label_notes_privacy_disclaimer,These notes are only visible to you and will not be shared with the client.,These notes are only visible to you and will not be shared with the client.,Тези бележки са видими само за Вас и няма да бъдат споделяни с клиента.,OK
+provider_dashboard.label_optional,optional,optional,по желание,OK
+provider_dashboard.label_period,Period,Period,Период,OK
+provider_dashboard.label_phone,Phone,Phone,Телефон,OK
+provider_dashboard.label_price_currency,,Price in {currency} (optional),Цена в {currency} (по избор),Not used in code
+provider_dashboard.label_price_in_currency,Price in {currency},Price in {currency},Цена в {currency},OK
+provider_dashboard.label_price_type,Price type,Price type,Тип цена,OK
+label_private_notes,Private Notes,,,Missing in DB (EN)
+provider_dashboard.label_profile,Profile,Profile,Профил,OK
+provider_dashboard.label_profile_photo,Profile photo,Profile photo,Профилна снимка,OK
+provider_dashboard.label_profile_setup,Profile Setup,Profile Setup,Настройка на профила,OK
+client_dashboard.label_provider,Provider,Provider,Доставчик,OK
+client_dashboard.label_provider_reply,Provider Reply,Provider Reply,Отговор от доставчика,OK
+provider_dashboard.label_public_url,Public URL,Public URL *,Публичен URL *,OK
+provider_dashboard.label_qr_code_language,QR Code Language,QR Code Language,Език на QR кода,OK
+client_dashboard.label_rating,Rating,Rating,Оценка,OK
+provider_dashboard.label_rejected_leads,Rejected leads,Rejected leads,Отхвърлени запитвания,OK
+client_dashboard.label_replied_on,Replied on ,Replied on ,Отговорено на ,OK
+provider_dashboard.label_role,Role,Role,Роля,OK
+provider_dashboard.label_search,Search,Search,Търсене,OK
+client_dashboard.label_service,Service: ,Service: ,Услуга,OK
+provider_dashboard.label_service_title,Service title,Service title,Заглавие на услугата,OK
+provider_dashboard.label_session,Session,Session,Сесия,OK
+provider_dashboard.label_source,Source,Source,Източник,OK
+provider_dashboard.label_source_direct,Direct,Direct,Директно,OK
+provider_dashboard.label_source_other,Other,Other,Други,OK
+provider_dashboard.label_source_qr,QR Code,QR Code,QR код,OK
+provider_dashboard.label_source_seo,SEO,SEO,SEO,English in BG column
+provider_dashboard.label_source_widget,Widget,Widget,Уиджет,OK
+provider_dashboard.label_status,Status,Status,Статус,OK
+provider_dashboard.label_suggestions,Suggestions:,Suggestions:,Предложения:,OK
+provider_dashboard.label_title,Title,Title *,Заглавие *,OK
+provider_dashboard.label_to,,To,До,Not used in code
+provider_dashboard.label_top_sources,Top sources,Top sources,Топ източници,OK
+provider_dashboard.label_total,total,total,общо,OK
+provider_dashboard.label_unreplied,Unreplied,Unreplied,Без отговор,OK
+provider_dashboard.label_url_locked,URL locked,URL locked,URL заключен,OK
+provider_dashboard.label_your_profile_link,Your profile link,Your profile link,Вашият линк към профила,OK
+provider_dashboard.label_your_qr_url,Your QR URL,Your QR URL,Вашият QR URL,OK
+provider_dashboard.label_your_reply,Your Reply,Your Reply,Вашият отговор,OK
+lead_detail_title,Lead Details,,,Missing in DB (EN)
+provider_dashboard.leads_subtitle,,View and manage your incoming client requests,Преглеждайте и управлявайте входящите клиентски запитвания,Not used in code
+left,commentLeft,,,Missing in DB (EN)
+auth.logging_in_btn,Signing in...,Signing in...,Влизане...,OK
+login:featureFree,,Free registration,Безплатна регистрация,Not used in code
+login:featureTime,,Takes less than 1 minute,Отнема под 1 минута,Not used in code
+login:footerNote,,You can search and offer services with one account,Можеш да търсиш и да предлагаш услуги с един акаунт,Not used in code
+login:heading,,Find or offer a service!,Намери или предложи услуга!,Not used in code
+login:metaDescription,,Discover and book services or start offering yours on Nevumo. Free registration and quick start for clients and providers.,Открий и резервирай услуги или започни да предлагаш своите в Nevumo. Безплатна регистрация и бърз старт за клиенти и доставчици.,Not used in code
+login:metaTitle,,Nevumo – Find services or start offering services,Nevumo – Намери услуги или започни да предлагаш услуги,Not used in code
+auth.login_btn,Sign in,Sign in,Вход,OK
+provider_dashboard.logo_pro,Pro,Pro,Pro,English in BG column
+homepage.meta_description,Free registration. No commission.,Free registration. No commission. Direct contact with clients.,Безплатна регистрация. Без комисион. Директен контакт с клиентите.,OK
+homepage.meta_title,Get clients for your services | Nevumo,Get clients for your services in Warsaw | Nevumo,Намирай клиенти за услугите си във Варшава | Nevumo,OK
+provider_dashboard.msg_50_chars_better,At least 50 chars gets better results,At least 50 chars gets better results,Поне 50 символа носят по-добри резултати,OK
+provider_dashboard.msg_add_city_category,Add a city and category in your Profile to get a full SEO URL.,Add a city and category in your Profile to get a full SEO URL.,"Добавете град и категория в профила си, за да получите пълен SEO URL.",OK
+provider_dashboard.msg_add_service_unlock,Add a service to unlock,Add a service to unlock,"Добавете услуга, за да отключите",OK
+provider_dashboard.msg_add_service_unlock_analytics,Add a service to unlock analytics,Add a service to unlock analytics,"Добавете услуга, за да отключите анализите",OK
+provider_dashboard.msg_add_services_desc,Add the services you offer to start receiving leads.,Add the services you offer to start receiving leads.,"Добавете услугите, които предлагате, за да започнете да получавате запитвания.",OK
+provider_dashboard.msg_add_services_leads,,Add the services you offer to start receiving leads.,"Добавете услугите, които предлагате, за да започнете да получавате запитвания.",Not used in code
+provider_dashboard.msg_adjust_filters,Try adjusting your filters or check back later.,Try adjusting your filters or check back later.,Опитайте да промените филтрите си или проверете по-късно.,OK
+provider_dashboard.msg_analytics_appear_when_leads,Analytics will appear once you start receiving leads.,Analytics will appear once you start receiving leads.,"Анализите ще се появят, след като започнете да получавате запитвания.",OK
+provider_dashboard.msg_authentication_error_login_again,Authentication error. Please log in again.,Authentication error. Please log in again.,"Грешка при удостоверяване. Моля, влезте отново.",OK
+provider_dashboard.msg_availability_description,Controls whether you appear as available to new clients.,Controls whether you appear as available to new clients.,Определя дали се показвате като достъпни за нови клиенти.,OK
+provider_dashboard.msg_available,Available,Available,Наличен,OK
+provider_dashboard.msg_checking,Checking...,Checking...,Проверка...,OK
+provider_dashboard.msg_delete_confirm,Are you sure you want to delete,Are you sure you want to delete,"Сигурни ли сте, че искате да изтриете",OK
+provider_dashboard.msg_delete_undo_warning,This action cannot be undone.,This action cannot be undone.,Това действие не може да бъде отменено.,OK
+provider_dashboard.msg_deleting,Deleting…,Deleting…,Изтриване…,OK
+provider_dashboard.msg_failed_check_url,Failed to check URL availability,Failed to check URL availability,Неуспешна проверка на наличността на URL,OK
+provider_dashboard.msg_failed_create_service,Failed to create service,Failed to create service,Неуспешно създаване на услуга,OK
+provider_dashboard.msg_failed_delete_service,Failed to delete service,Failed to delete service,Неуспешно изтриване на услугата,OK
+provider_dashboard.msg_failed_download_qr,Failed to download QR code,Failed to download QR code,Неуспешно изтегляне на QR кода,OK
+provider_dashboard.msg_failed_generate_qr,Failed to generate QR code,Failed to generate QR code,Неуспешно генериране на QR код,OK
+provider_dashboard.msg_failed_load_analytics,Failed to load analytics,Failed to load analytics,Неуспешно зареждане на анализите,OK
+provider_dashboard.msg_failed_load_dashboard,Failed to load dashboard,Failed to load dashboard,Неуспешно зареждане на таблото,OK
+provider_dashboard.msg_failed_load_image,Failed to load image,Failed to load image,Неуспешно зареждане на изображението,OK
+provider_dashboard.msg_failed_load_leads,Failed to load leads,Failed to load leads,Неуспешно зареждане на запитванията,OK
+provider_dashboard.msg_failed_load_profile,Failed to load profile,Failed to load profile,Неуспешно зареждане на профила,OK
+provider_dashboard.msg_failed_load_reviews,Failed to load reviews,Failed to load reviews,Неуспешно зареждане на отзивите,OK
+provider_dashboard.msg_failed_load_services,Failed to load services,Failed to load services,Неуспешно зареждане на услугите,OK
+provider_dashboard.msg_failed_save,Failed to save,Failed to save,Неуспешно запазване,OK
+provider_dashboard.msg_failed_save_profile,Failed to save profile,Failed to save profile,Неуспешно запазване на профила,OK
+provider_dashboard.msg_failed_save_service,Failed to save service,Failed to save service,Неуспешно запазване на услугата,OK
+provider_dashboard.msg_failed_save_url,Failed to save URL,Failed to save URL,Неуспешно запазване на URL адреса,OK
+provider_dashboard.msg_failed_submit_reply,Failed to submit reply,Failed to submit reply,Неуспешно изпращане на отговора,OK
+provider_dashboard.msg_failed_switch_role,Failed to switch role,Failed to switch role,Неуспешна смяна на ролята,OK
+provider_dashboard.msg_failed_upload_image,Failed to upload image. Please try again.,Failed to upload image. Please try again.,"Неуспешно качване на изображението. Моля, опитайте отново.",OK
+provider_dashboard.msg_file_size_limit_5mb,File size must be less than 5 MB,File size must be less than 5 MB,Размерът на файла трябва да е под 5 MB,OK
+provider_dashboard.msg_file_too_large,File too large. Maximum size is 5 MB.,File too large. Maximum size is 5 MB.,Файлът е твърде голям. Максималният размер е 5 MB.,OK
+provider_dashboard.msg_file_type_jpg_png_webp,,"File must be JPG, PNG or WebP","Файлът трябва да е JPG, PNG или WebP",Not used in code
+msg_file_type_jpg_png_webp_heic,"File must be JPG, PNG, WebP, or HEIC",,,Missing in DB (EN)
+provider_dashboard.msg_finish_setup_to_start_getting_clients,Finish setup to start getting clients,Finish setup to start getting clients,"Завършете настройката, за да започнете да получавате клиенти",OK
+provider_dashboard.msg_generating,Generating…,Generating…,Генериране…,OK
+provider_dashboard.msg_invalid_file_format,"Invalid file format. Use JPG, PNG, WebP, or HEIC.","Invalid file format. Use JPG, PNG or WebP.","Невалиден файлов формат. Използвайте JPG, PNG или WebP.",OK
+provider_dashboard.msg_invalid_image_url,Invalid image URL format,Invalid image URL format,Невалиден формат на URL адреса на изображението,OK
+provider_dashboard.msg_need_help,Need help? Contact support.,Need help? Contact support.,Нуждаете се от помощ? Свържете се с поддръжката.,OK
+provider_dashboard.msg_needs_reply,,Needs Reply,Нуждае се от отговор,Not used in code
+provider_dashboard.msg_network_error,Network error - check connection,Network error - check connection,Мрежова грешка - проверете връзката,OK
+provider_dashboard.msg_no_data,No data,No data,Няма данни,OK
+msg_no_description,No description provided,,,Missing in DB (EN)
+provider_dashboard.msg_no_leads_30_days,No leads yet in the last 30 days.,No leads yet in the last 30 days.,Няма запитвания през последните 30 дни.,OK
+provider_dashboard.msg_no_leads_found,No leads found,No leads found,Не са намерени запитвания,OK
+provider_dashboard.msg_no_leads_yet,No leads yet,No leads yet,Все още няма запитвания,OK
+provider_dashboard.msg_no_results,No results,No results,Няма резултати,OK
+provider_dashboard.msg_no_reviews_yet,No reviews yet,No reviews yet,Все още няма отзиви,OK
+provider_dashboard.msg_no_services_yet,No services yet,No services yet,Все още няма услуги,OK
+msg_notes_save_failed,Failed to save notes,,,Missing in DB (EN)
+msg_notes_saved,Notes saved successfully,,,Missing in DB (EN)
+provider_dashboard.msg_old_links_redirect,Old links will continue working (redirected).,Old links will continue working (redirected).,Старите линкове ще продължат да работят (с пренасочване).,OK
+provider_dashboard.msg_old_links_work,Old links continue to work via redirects.,Old links continue to work via redirects.,Старите линкове продължават да работят чрез пренасочване.,OK
+provider_dashboard.msg_profile_not_loaded,Profile not loaded.,Profile not loaded.,Профилът не е зареден.,OK
+provider_dashboard.msg_qr_language_description,The QR code text and slogan will be displayed in this language,The QR code text and slogan will be displayed in this language,Текстът и слоганът в QR кода ще бъдат показани на този език,OK
+provider_dashboard.msg_qr_share_description,"Share this QR code on your business cards, flyers, or at your location. Clients scan it to reach your profile directly. Enhanced QR codes include your business name and a call-to-action slogan.","Share this QR code on your business cards, flyers, or at your location. Clients scan it to reach your profile directly. Enhanced QR codes include your business name and a call-to-action slogan.","Споделете този QR код на визитки, флаери или на място. Клиентите го сканират, за да стигнат директно до профила ви. Подобрените QR кодове включват името на бизнеса ви и призив за действие.",OK
+provider_dashboard.msg_retrying,Retrying...,Retrying...,Повторен опит...,OK
+provider_dashboard.msg_review_waiting,,review waiting for your reply,"отзив, чакащ вашия отговор",Not used in code
+provider_dashboard.msg_reviews_appear_here,"When clients review your services, they will appear here","When clients review your services, they will appear here","Когато клиентите оценят услугите ви, те ще се появят тук",OK
+provider_dashboard.msg_reviews_waiting_reply,{count} reviews waiting for your reply,{count} reviews waiting for your reply,{count} отзива чакат вашия отговор,OK
+provider_dashboard.msg_saved,Saved!,Saved!,Запазено!,OK
+provider_dashboard.msg_saving,Saving...,Saving…,Запазване…,OK
+provider_dashboard.msg_sending,Sending...,Sending…,Изпращане…,OK
+provider_dashboard.msg_service_created,Service created successfully,Service created successfully,Услугата е създадена успешно,OK
+provider_dashboard.msg_service_deleted,Service deleted,Service deleted,Услугата е изтрита,OK
+provider_dashboard.msg_service_updated,Service updated successfully,Service updated successfully,Услугата е обновена успешно,OK
+provider_dashboard.msg_services_count,{count} services,{count} services,{count} услуги,OK
+provider_dashboard.msg_setup_complete_redirecting,Setup complete! Redirecting…,Setup complete! Redirecting…,Настройката е завършена! Пренасочване…,OK
+provider_dashboard.msg_start_receiving,Start receiving client requests in minutes,Start receiving client requests in minutes,Започнете да получавате клиентски запитвания за минути,OK
+provider_dashboard.msg_supported_image_formats,"JPG, PNG, WebP, HEIC · max 5 MB","JPG, PNG or WebP · max 5 MB","JPG, PNG или WebP · до 5 MB",OK
+provider_dashboard.msg_switch_role_description,You are currently a Provider. Switching to a client account will allow you to browse services and submit requests. Your provider profile and data will be preserved.,You are currently a Provider. Switching to a client account will allow you to browse services and submit requests. Your provider profile and data will be preserved.,В момента сте доставчик. Превключването към клиентски акаунт ще ви позволи да разглеждате услуги и да изпращате запитвания. Вашият профил на доставчик и данни ще бъдат запазени.,OK
+provider_dashboard.msg_switching,Switching…,Switching…,Превключване…,OK
+provider_dashboard.msg_takes_less_than_1_minute,Takes less than 1 minute,Takes less than 1 minute,Отнема по-малко от 1 минута,OK
+provider_dashboard.msg_too_many_upload_attempts,Too many upload attempts. Please wait a moment.,Too many upload attempts. Please wait a moment.,"Твърде много опити за качване. Моля, изчакайте малко.",OK
+provider_dashboard.msg_uploading,Uploading…,Uploading…,Качване…,OK
+provider_dashboard.msg_url_already_updated,Your public URL has already been updated.,Your public URL has already been updated.,Публичният ви URL вече е актуализиран.,OK
+provider_dashboard.msg_url_change_limit,URL can only be changed once. Contact support for assistance.,URL can only be changed once. Contact support for assistance.,URL може да бъде променен само веднъж. Свържете се с поддръжката за помощ.,OK
+provider_dashboard.msg_url_change_warning,You can only change your URL once.,You can only change your URL once.,Можете да промените URL-а си само веднъж.,OK
+provider_dashboard.msg_url_changes_remaining,URL changes remaining:,URL changes remaining:,Оставащи промени на URL:,OK
+provider_dashboard.msg_url_locked,URL can only be changed once. Contact support for assistance.,URL locked,URL заключен,OK
+provider_dashboard.msg_url_taken,This URL is already taken,This URL is already taken,Този URL вече е зает,OK
+provider_dashboard.nav_analytics,Analytics,Analytics,Анализи,OK
+client_dashboard.nav_become_provider,Become a Provider,Become a Provider,Стани доставчик,OK
+client_dashboard.nav_client_dashboard,Client Dashboard,Client Dashboard,Клиентски панел,OK
+provider_dashboard.nav_dashboard,Dashboard,Dashboard,Табло,OK
+client_dashboard.nav_find_service,Find Service,Find Service,Намери услуга,OK
+provider_dashboard.nav_leads,Leads,Leads,Запитвания,OK
+homepage.nav_link,Looking for a service?,Looking for a service?,Търсиш услуга?,OK
+client_dashboard.nav_logout,Logout,Logout,Изход,OK
+client_dashboard.nav_overview,Overview,Overview,Преглед,OK
+provider_dashboard.nav_profile,Profile,Profile,Профил,OK
+client_dashboard.nav_provider_pitch,Offer services and get clients!,Offer services and get clients!,Предлагай услуги и получавай клиенти!,OK
+provider_dashboard.nav_qr_code,QR Code,QR Code,QR код,OK
+client_dashboard.nav_requests,My Requests,My Requests,Моите заявки,OK
+provider_dashboard.nav_reviews,Reviews,Reviews,Ревюта,OK
+provider_dashboard.nav_services,Services,Services,Услуги,OK
+provider_dashboard.nav_settings,Settings,Settings,Настройки,OK
+client_dashboard.nav_switching,Switching...,Switching...,Превключване...,OK
+widget.new_badge,,New,Ново,Not used in code
+new_request_button,,New request,Нова заявка,Not used in code
+category.no_providers_subtitle,Providers joining Nevumo will see your request and contact you,Providers joining Nevumo will see your request and contact you,"Доставчиците, присъединяващи се към Nevumo, ще видят заявката ти и ще се свържат с теб",OK
+category.no_providers_title,Be the first to request this service in your area,Be the first to request this service in your area,"Бъди първият, поискал тази услуга в района си",OK
+widget.no_registration,,No registration,Без регистрация,Not used in code
+widget.no_reviews_yet,,No reviews yet,Все още няма отзиви,Not used in code
+notes_label,,Notes,Бележки,Not used in code
+notes_placeholder,,"Describe your request (time, address, details)","Опишете заявката си (час, адрес, детайли)",Not used in code
+onboarding_hero_1step_cta,Add your first service,,,Missing in DB (EN)
+onboarding_hero_1step_desc,Add your first service to start receiving requests,,,Missing in DB (EN)
+onboarding_hero_2steps_cta,Complete your profile,,,Missing in DB (EN)
+onboarding_hero_2steps_desc,Complete your profile to start receiving requests,,,Missing in DB (EN)
+onboarding_step_profile,Profile,,,Missing in DB (EN)
+onboarding_step_service,Service,,,Missing in DB (EN)
+auth.or_with_email,,or with email,или с имейл,No default in code
+provider_dashboard.overview_subtitle,Overview of your requests and reviews,Overview of your business,Преглед на вашия бизнес,OK
+client_dashboard.overview_title,Overview,Overview,Преглед,OK
+auth.page_title,,Login | Nevumo,Вход | Nevumo,Not used in code
+auth.password_placeholder_login,Password,Password,Парола,OK
+auth.password_placeholder_register,Click to generate a password,Click to generate a password,Кликни тук за генериране на парола,OK
+provider_dashboard.period_all_time,All time,All time,За всички времена,OK
+provider_dashboard.period_last_30_days,Last 30 days,Last 30 days,Последните 30 дни,OK
+provider_dashboard.period_last_7_days,Last 7 days,Last 7 days,Последните 7 дни,OK
+provider_dashboard.period_last_90_days,Last 90 days,Last 90 days,Последните 90 дни,OK
+phone_label,,Phone,Телефон,Not used in code
+phone_placeholder,,e.g. +1 555 123 4567,напр. +359 888 123 456,Not used in code
+provider_dashboard.placeholder_business_description,"Describe your services, experience and what makes you different","Describe your services, experience and what makes you different","Опишете услугите си, опита си и с какво се отличавате",OK
+provider_dashboard.placeholder_business_name_example,e.g. Sofia Plumbing Pro,e.g. Maria's Massage Ltd or Maria Kowalska,напр. Масажно студио Мария ЕООД или Мария Ковалска,OK
+provider_dashboard.placeholder_business_slug,your-business-name,your-business-name,vasheto-ime-na-biznes,OK
+provider_dashboard.placeholder_description,Brief description…,Brief description…,Кратко описание…,OK
+provider_dashboard.placeholder_from,From,From,От,OK
+placeholder_private_notes,Write your private notes here...,,,Missing in DB (EN)
+provider_dashboard.placeholder_search_leads,"Search name, email, phone, description or notes...","Search name, email, phone, description or notes...","Търси име, имейл, телефон, описание или бележки...",OK
+provider_dashboard.placeholder_select_category,Select a category,Select a category,Изберете категория,OK
+provider_dashboard.placeholder_select_cities,Select cities where you offer this service,Select cities where you offer this service,"Изберете градовете, в които предлагате тази услуга",OK
+provider_dashboard.placeholder_service_title_example,e.g. Apartment cleaning,e.g. Apartment cleaning,напр. Почистване на апартамент,OK
+provider_dashboard.placeholder_to,To,To,До,OK
+provider_dashboard.placeholder_type_to_search,Type to search…,Type to search…,Пишете за търсене…,OK
+provider_dashboard.placeholder_write_reply,Write your reply...,Write your reply...,Напишете отговора си...,OK
+provider_dashboard.placeholder_write_reply_review,Write your reply to this review...,Write a reply to this review...,Напишете отговор на този отзив...,OK
+category.price_faq_none,,Prices vary depending on the scope and size of the work.,Цените варират в зависимост от обхвата и площта на работата.,Not used in code
+category.price_faq_range,,"The service costs from {min} to {max} {currency}, depending on the scope and size of the work.","Услугата струва от {min} до {max} {currency}, в зависимост от обхвата и площта на работата.",Not used in code
+category.price_faq_single,,"The service costs around {price} {currency}, depending on the scope of work.","Услугата струва около {price} {currency}, в зависимост от обхвата на работата.",Not used in code
+provider_dashboard.price_fixed,,Fixed price,Фиксирана цена,Not used in code
+category.price_meta_none,,Compare prices from local providers,Сравнете цени от местни изпълнители,Not used in code
+category.price_meta_range,,from {min} to {max} {currency},от {min} до {max} {currency},Not used in code
+category.price_meta_single,,from {price} {currency},от {price} {currency},Not used in code
+widget.price_on_request,,Price on request,Цена при запитване,Not used in code
+provider_dashboard.price_per_hour,,Per hour,На час,Not used in code
+provider_dashboard.price_per_request,,Per request (quote),На запитване (оферта),Not used in code
+provider_dashboard.price_per_sqm,,Per sq.m.,На кв.м.,Not used in code
+category.price_text_none,,Prices vary depending on the scope and size of the work.,Цените варират в зависимост от обхвата и площта на работата.,Not used in code
+category.price_text_range,,"The service costs from {min} to {max} {currency}, depending on the scope and size of the work.","Услугата струва от {min} до {max} {currency}, в зависимост от обхвата и площта на работата.",Not used in code
+category.price_text_single,,"The service costs around {price} {currency}, depending on the scope of work.","Услугата струва около {price} {currency}, в зависимост от обхвата на работата.",Not used in code
+provider_dashboard.price_type_fixed,Fixed price,Fixed price,Фиксирана цена,OK
+provider_dashboard.price_type_hourly,Per hour,Per hour,На час,OK
+provider_dashboard.price_type_per_sqm,Per sq.m.,Per sq.m.,На кв.м.,OK
+provider_dashboard.price_type_request,Per request (quote),Per request (quote),По запитване (оферта),OK
+provider_dashboard.profile_50_chars,,/At least 50 chars gets better results,/Поне 50 знака дават по-добри резултати,Not used in code
+provider_dashboard.profile_business_name_min,,Business name must be at least 2 characters,Името на бизнеса трябва да е поне 2 знака,Not used in code
+provider_dashboard.profile_category_required,,Category is required,Категорията е задължителна,Not used in code
+provider_dashboard.profile_change_photo,,Change photo,Смени снимка,Not used in code
+provider_dashboard.profile_city_required,,At least one city is required,Изисква се поне един град,Not used in code
+provider_dashboard.profile_complete,,Complete your profile,Попълнете профила си,Not used in code
+provider_dashboard.profile_describe,,"Describe your services, experience and what makes you different","Опишете услугите си, опита си и какво ви отличава",Not used in code
+provider_dashboard.profile_edit_url,,Edit URL,Редактирай URL,Not used in code
+provider_dashboard.profile_failed_check,,Failed to check URL availability,Неуспешна проверка на наличността на URL,Not used in code
+provider_dashboard.profile_failed_create,,Failed to create service,Неуспешно създаване на услуга,Not used in code
+provider_dashboard.profile_failed_load,,Failed to load image,Неуспешно зареждане на изображението,Not used in code
+provider_dashboard.profile_failed_load_profile,,Failed to load profile,Неуспешно зареждане на профила,Not used in code
+provider_dashboard.profile_failed_save,,Failed to save profile,Неуспешно запазване на профила,Not used in code
+provider_dashboard.profile_failed_save_generic,,Failed to save,Неуспешно запазване,Not used in code
+provider_dashboard.profile_invalid_url,,Invalid image URL format,Невалиден формат на URL за изображение,Not used in code
+provider_dashboard.profile_network_error,,Network error - check connection,Мрежова грешка - проверете връзката,Not used in code
+provider_dashboard.profile_photo,,Profile photo (optional),Снимка на профила (по избор),Not used in code
+provider_dashboard.profile_photo_format,,"JPG, PNG or WebP · max 5 MB","JPG, PNG или WebP · макс 5 MB",Not used in code
+provider_dashboard.profile_retrying,,Retrying...,Повторен опит...,Not used in code
+provider_dashboard.profile_setup,,Profile Setup,Настройка на профила,Not used in code
+provider_dashboard.profile_slug_placeholder,,your-business-name,vasheto-ime-na-biznes,Not used in code
+provider_dashboard.profile_start_receiving,,Start receiving client requests in minutes,Започнете да получавате клиентски запитвания за минути,Not used in code
+provider_dashboard.profile_subtitle,Your public business profile,Manage your public business profile,Управлявайте публичния профил на бизнеса си,OK
+provider_dashboard.profile_title_required,,Title is required,Заглавието е задължително,Not used in code
+provider_dashboard.profile_try_again,,Try again,Опитай отново,Not used in code
+provider_dashboard.profile_upload_photo,,Upload photo,Качи снимка,Not used in code
+provider_dashboard.profile_uploading,,Uploading…,Качване…,Not used in code
+provider_dashboard.profile_url_taken,,This URL is already taken,Този URL вече е зает,Not used in code
+category.provider_cta_link,Join for free →,Join for free →,Присъедини се безплатно →,OK
+category.provider_cta_prefix,Do you offer,Do you offer,Предлагаш,OK
+category.provider_cta_suffix,in Warsaw?,in Warsaw?,във Варшава?,OK
+provider_desc_fallback,Trusted specialist available in Warsaw. Send a short request and wait for contact.,,,Missing in DB (EN)
+category.provider_direct_contact,Direct contact,Direct contact,Директен контакт,OK
+provider_jobs_completed,completed jobs,,,Missing in DB (EN)
+provider_last_request,Last request,,,Missing in DB (EN)
+pwa.provider_subtitle,,See new requests instantly,Виж нови заявки веднага,Not used in code
+provider_dashboard.qr_business,,Business:,Бизнес:,Not used in code
+provider_dashboard.qr_canonical_url,,Canonical profile URL,Каноничен URL на профила,Not used in code
+provider_dashboard.qr_clients_scan,,Clients scan it to reach your profile directly.,"Клиентите го сканират, за да стигнат директно до вашия профил.",Not used in code
+provider_dashboard.qr_code_subtitle,Share your provider profile with a QR code,Share your provider profile with a QR code,Споделете профила си на доставчик с QR код,OK
+provider_dashboard.qr_enhanced,,Enhanced QR Code,Разширен QR код,Not used in code
+provider_dashboard.qr_enhanced_desc,,Enhanced QR codes include your business name and a call-to-action slogan.,Разширените QR кодове включват името на бизнеса ви и слоган с призив за действие.,Not used in code
+provider_dashboard.qr_generate,,Generate QR Code,Генерирай QR код,Not used in code
+provider_dashboard.qr_generating,,Generating…,Генериране…,Not used in code
+provider_dashboard.qr_language,,QR Code Language,Език на QR кода,Not used in code
+provider_dashboard.qr_language_desc,,The QR code text and slogan will be displayed in this language,Текстът и слоганът на QR кода ще се показват на този език,Not used in code
+provider_dashboard.qr_language_label,,Language:,Език:,Not used in code
+provider_dashboard.qr_service,,Service:,Услуга:,Not used in code
+provider_dashboard.qr_share_cards,,"Share this QR code on your business cards, flyers, or at your location.","Споделете този QR код върху визитките си, листовките си или на място.",Not used in code
+qr_slogan_submit_request,,Send a request in 30 sec!,Пусни заявка за 30 сек!,Not used in code
+provider_dashboard.qr_your_url,,Your QR URL,Вашият QR URL,Not used in code
+auth.quick_login_label,,Quick login without password,Бърз вход без парола,No default in code
+rating_label,,rating,рейтинг,Not used in code
+widget.recent_request_label,,{name} from {city} requested recently,{name} от {city} заяви наскоро,Not used in code
+client_dashboard.recent_subtitle,Your latest activity in Nevumo,Your latest activity in Nevumo,Последните ти активности в Nevumo,OK
+client_dashboard.recent_title,Recent Requests,Recent Requests,Последни заявки,OK
+auth.register_subtitle,,We'll create an account automatically,Ще създадем акаунт автоматично,Not used in code
+auth.register_success,Account created successfully,Account created successfully,Акаунтът е създаден успешно,OK
+auth.registering_btn,Creating...,Creating...,Създаване...,OK
+client_dashboard.requests_empty_desc,Send a new request and it will appear here.,Send a new request and it will appear here.,Изпрати нова заявка и тя ще се появи тук.,OK
+client_dashboard.requests_empty_title,No requests found,No requests found,Няма намерени заявки,OK
+client_dashboard.requests_title,My Requests,My Requests,Моите заявки,OK
+response_time,,⏱ Provider usually responds within 30 minutes,⏱ Доставчикът обикновено отговаря до 30 минути,Not used in code
+client_dashboard.review_placeholder,Share your impressions...,Share your impressions of the provider,Сподели впечатленията си от доставчика,OK
+provider_dashboard.reviews_all,,All Reviews,Всички отзиви,Not used in code
+provider_dashboard.reviews_appear_here,,"When clients review your services, they will appear here.","Когато клиентите оценят услугите ви, те ще се появят тук.",Not used in code
+provider_dashboard.reviews_edit,,Edit,Редактирай,Not used in code
+provider_dashboard.reviews_edited,,Edited,Редактирано,Not used in code
+provider_dashboard.reviews_failed_load,,Failed to load reviews,Неуспешно зареждане на отзивите,Not used in code
+provider_dashboard.reviews_failed_submit,,Failed to submit reply,Неуспешно изпращане на отговора,Not used in code
+provider_dashboard.reviews_reply_review,,Reply to this review,Отговори на този отзив,Not used in code
+provider_dashboard.reviews_save_changes,,Save Changes,Запази промените,Not used in code
+provider_dashboard.reviews_send_reply,,Send Reply,Изпрати отговор,Not used in code
+provider_dashboard.reviews_sending,,Sending...,Изпращане...,Not used in code
+provider_dashboard.reviews_subtitle,Your written reviews and pending ratings,Manage your client reviews and replies,Управлявайте клиентските си отзиви и отговори,OK
+client_dashboard.reviews_title,Reviews,Reviews,Ревюта,OK
+provider_dashboard.reviews_unreplied,,Unreplied,Без отговор,Not used in code
+provider_dashboard.reviews_write_reply,,Write your reply...,Напишете отговора си...,Not used in code
+provider_dashboard.reviews_write_reply_review,,Write your reply to this review...,Напишете отговора си на този отзив...,Not used in code
+homepage.rotating_categories,"Massage,Cleaning,Plumbing","Massage,Cleaning,Plumbing","Масаж,Почистване,Водопроводчик",OK
+client_dashboard.section_account,Account,Account,Акаунт,OK
+client_dashboard.section_notifications,Email Notifications,Email Notifications,Имейл нотификации,OK
+client_dashboard.section_role,Account Role,Account Role,Роля на акаунта,OK
+client_dashboard.section_security,Security,Security,Сигурност,OK
+client_dashboard.section_session,Session,Session,Сесия,OK
+auth.sending_btn,Sending...,Sending...,Изпращане...,OK
+category.seo_cleaning_h2,,Cleaning in Warsaw — what is worth knowing?,Почистване във Варшава — какво е важно да знаете?,Not used in code
+category.seo_cleaning_h3_1,,How to choose a cleaning specialist?,Как да изберете специалист по почистване?,Not used in code
+category.seo_cleaning_h3_2,,How much does cleaning cost in Warsaw?,Колко струва почистване във Варшава?,Not used in code
+category.seo_cleaning_p1,,"Professional cleaning specialists in Warsaw offer comprehensive services for homes, apartments, and offices. On Nevumo you will find trusted professionals available throughout Warsaw.","Професионални специалисти по почистване във Варшава предлагат комплексни услуги за домове, апартаменти и офиси. В Nevumo ще намерите проверени професионалисти, налични в цяла Варшава.",Not used in code
+category.seo_cleaning_p2,,"Pay attention to client reviews, scope of services, and schedule flexibility. The best specialists offer regular cooperation with discounts.","Обърнете внимание на отзивите на клиентите, обхвата на услугите и гъвкавостта на сроковете. Най-добрите специалисти предлагат редовно сътрудничество с отстъпка.",Not used in code
+category.seo_cleaning_p3,,,,Not used in code
+category.seo_massage_h2,,Massage in Warsaw — what is worth knowing?,Масаж във Варшава — какво е важно да знаете?,Not used in code
+category.seo_massage_h3_1,,How to choose a massage specialist?,Как да изберете масажист?,Not used in code
+category.seo_massage_h3_2,,How much does massage cost in Warsaw?,Колко струва масаж във Варшава?,Not used in code
+category.seo_massage_p1,,"Warsaw offers a wide selection of professional massage specialists. Whether you are looking for relaxing, sports, or therapeutic massage, Nevumo helps you find trusted professionals nearby.","Варшава предлага широк избор от професионални масажисти. Независимо дали търсите релаксиращ, спортен или терапевтичен масаж, в Nevumo ще намерите проверени специалисти в района.",Not used in code
+category.seo_massage_p2,,"Check previous client reviews, specialist experience, and the scope of services offered. A good massage specialist will adapt the technique to your needs.","Проверете отзивите на предишни клиенти, опита на специалиста и обхвата на предлаганите услуги. Добрият масажист ще адаптира техниката към вашите нужди.",Not used in code
+category.seo_massage_p3,,,,Not used in code
+category.seo_plumbing_h2,,Plumbing in Warsaw — what is worth knowing?,Водопроводчик във Варшава — какво е важно да знаете?,Not used in code
+category.seo_plumbing_h3_1,,When to call a plumber?,Кога да се обадите на водопроводчик?,Not used in code
+category.seo_plumbing_h3_2,,How much does a plumber cost in Warsaw?,Колко струва водопроводчик във Варшава?,Not used in code
+category.seo_plumbing_p1,,"A plumbing emergency requires a quick response. On Nevumo you will find trusted plumbers in Warsaw available even for urgent jobs. Free request, fast response.","Авария с водопровод изисква бърза реакция. В Nevumo ще намерите проверени водопроводчици във Варшава, достъпни дори при спешни случаи. Безплатна заявка, бърз отговор.",Not used in code
+category.seo_plumbing_p2,,"Call a plumber for water system failures, leaking taps, clogged drains, and during bathroom or kitchen renovations.","Водопроводчик се вика при аварии на водопроводната инсталация, течащи кранове, запушена канализация и при ремонт на баня или кухня.",Not used in code
+category.seo_plumbing_p3,,,,Not used in code
+provider_dashboard.services_created,,Service created successfully,Услугата е създадена успешно,Not used in code
+provider_dashboard.services_delete_btn,,Delete,Изтрий,Not used in code
+provider_dashboard.services_delete_confirm,,Are you sure you want to delete,"Сигурни ли сте, че искате да изтриете",Not used in code
+provider_dashboard.services_delete_undo,,This action cannot be undone.,Това действие не може да бъде отменено.,Not used in code
+provider_dashboard.services_deleted,,Service deleted,Услугата е изтрита,Not used in code
+provider_dashboard.services_deleting,,Deleting…,Изтриване…,Not used in code
+provider_dashboard.services_failed_delete,,Failed to delete service,Неуспешно изтриване на услугата,Not used in code
+provider_dashboard.services_failed_load,,Failed to load services,Неуспешно зареждане на услугите,Not used in code
+provider_dashboard.services_failed_save,,Failed to save service,Неуспешно запазване на услугата,Not used in code
+widget.services_label,,Services,Услуги,Not used in code
+provider_dashboard.services_singular,,service,услуга,Not used in code
+provider_dashboard.services_subtitle,,Manage the services you offer,"Управлявайте услугите, които предлагате",Not used in code
+provider_dashboard.services_updated,,Service updated successfully,Услугата е обновена успешно,Not used in code
+provider_dashboard.settings_available,,Available,Наличен,Not used in code
+provider_dashboard.settings_available_desc,,Controls whether you appear as available to new clients.,Определя дали се показвате като достъпни за нови клиенти.,Not used in code
+provider_dashboard.settings_checking,,Checking...,Проверка...,Not used in code
+provider_dashboard.settings_contact_help,,Need help? Contact support.,Нуждаете се от помощ? Свържете се с поддръжката.,Not used in code
+provider_dashboard.settings_current_provider,,You are currently a Provider.,В момента сте доставчик.,Not used in code
+provider_dashboard.settings_data_preserved,,Your provider profile and data will be preserved.,Вашият профил на доставчик и данни ще бъдат запазени.,Not used in code
+provider_dashboard.settings_edit_slug,,Edit public slug,Редактирай публичния slug,Not used in code
+client_dashboard.settings_email_notif,Receive email on review reply,Receive email on review reply,Получавай имейл при отговор на ревю,OK
+client_dashboard.settings_email_notif_desc,Receive email notifications when providers reply to your reviews,Receive email notifications when providers reply to your reviews,Получавай имейл известия когато доставчик отговори на ревюто ти,OK
+provider_dashboard.settings_not_loaded,,Profile not loaded.,Профилът не е зареден.,Not used in code
+provider_dashboard.settings_old_links,,Old links will continue working (redirected).,Старите линкове ще продължат да работят (с пренасочване).,Not used in code
+provider_dashboard.settings_old_links_redirect,,Old links continue to work via redirects.,Старите линкове продължават да работят чрез пренасочване.,Not used in code
+provider_dashboard.settings_profile_link,,Your profile link,Вашият линк към профила,Not used in code
+client_dashboard.settings_role_desc,If you want to offer services...,"If you want to offer services on Nevumo, you can switch to a provider without losing your current profile.","Ако искаш да предлагаш услуги в Nevumo, можеш да преминеш към доставчик без да губиш текущия си профил.",OK
+client_dashboard.settings_security,Manage access...,Manage access to your profile and change your password if needed.,Управлявай достъпа до профила си и смени паролата при нужда.,OK
+provider_dashboard.settings_seo_url,,Add a city and category in your Profile to get a full SEO URL.,"Добавете град и категория в профила си, за да получите пълен SEO URL.",Not used in code
+provider_dashboard.settings_subtitle,Account and preferences,Account and preferences,Акаунт и предпочитания,OK
+provider_dashboard.settings_suggestions,,Suggestions:,Предложения:,Not used in code
+provider_dashboard.settings_switch_desc,,Switching to a client account will allow you to browse services and submit requests.,Превключването към клиентски акаунт ще ви позволи да разглеждате услуги и да изпращате запитвания.,Not used in code
+provider_dashboard.settings_switching,,Switching…,Превключване…,Not used in code
+client_dashboard.settings_title,Settings,Settings,Настройки,OK
+provider_dashboard.settings_url_contact_support,,URL can only be changed once. Contact support for assistance.,URL може да бъде променен само веднъж. Свържете се с поддръжката за помощ.,Not used in code
+provider_dashboard.settings_url_locked,,URL locked,URL заключен,Not used in code
+provider_dashboard.settings_url_once,,You can only change your URL once.,Можете да промените URL-а си само веднъж.,Not used in code
+provider_dashboard.settings_url_remaining,,URL changes remaining:,Оставащи промени на URL:,Not used in code
+provider_dashboard.settings_url_updated,,Your public URL has already been updated.,Публичният ви URL вече е актуализиран.,Not used in code
+shortcut-recorder,,,,Missing in DB (EN)
+show_more,Show more,,,Missing in DB (EN)
+homepage.social_proof,,47 specialists • 120 requests this month,47 специалисти • 120 заявки този месец,No default in code
+provider_dashboard.source_direct,,Direct,Директно,Not used in code
+provider_dashboard.source_other,,Other,Друго,Not used in code
+provider_dashboard.source_qr_code,,QR Code,QR код,Not used in code
+provider_dashboard.source_seo,,SEO,SEO,Not used in code
+provider_dashboard.source_top,,Top sources,Топ източници,Not used in code
+provider_dashboard.source_widget,,Widget,Widget,Not used in code
+client_dashboard.stat_active_requests,Active Requests,Active Requests,Активни заявки,OK
+client_dashboard.stat_completed_services,Completed Services,Completed Services,Завършени услуги,OK
+provider_dashboard.stat_conversion_rate,Conversion Rate,Conversion Rate,Процент на конверсия,OK
+provider_dashboard.stat_leads_contacted,Leads contacted,Leads Contacted,Свързани запитвания,OK
+provider_dashboard.stat_leads_received,Leads received,Leads Received,Получени запитвания,OK
+provider_dashboard.stat_new_leads,New Leads,New Leads,Нови запитвания,OK
+provider_dashboard.stat_rating,Rating,Rating,Рейтинг,OK
+client_dashboard.stat_reviews,Reviews,Reviews,Ревюта,OK
+provider_dashboard.stat_total_leads,Total Leads,Total Leads,Общо запитвания,OK
+client_dashboard.status_active,Active,Active,Активна,OK
+client_dashboard.status_all,All,All,Всички,OK
+provider_dashboard.status_awaiting_action,Awaiting action,Awaiting action,Очаква действие,OK
+provider_dashboard.status_busy,,Busy,Зает,Not used in code
+client_dashboard.status_completed,Completed,Completed,Завършена,OK
+provider_dashboard.status_contacted,Contacted,Contacted,Свързано,OK
+provider_dashboard.status_done,Done,Done,Готово,OK
+provider_dashboard.status_new,New,New,Ново,OK
+provider_dashboard.status_offline,,Offline,Офлайн,Not used in code
+provider_dashboard.status_rejected,Rejected,Rejected,Отхвърлен,OK
+homepage.step1_sub,2 minutes,2 minutes,2 минути,OK
+homepage.step1_title,Create a profile,Create a profile,Създай профил,OK
+homepage.step2_sub,immediately after registration,immediately after registration,веднага след регистрация,OK
+homepage.step2_title,Receive client requests,Receive client requests,Получаваш заявки от клиенти,OK
+homepage.step3_sub,no middlemen,no middlemen,без посредници,OK
+homepage.step3_title,Contact clients directly,Contact clients directly,Свързваш се директно,OK
+category.sticky_btn,Get offers — Free,Get offers — Free,Получи оферти — безплатно,OK
+login.findService.subtext,,Search and book services. You can become a provider later.,Търси и резервирай услуги. Може да станеш доставчик по-късно.,Not used in code
+category.subtitle_cleaning,,"Find verified cleaning specialists in Warsaw. Free request, no obligation.","Намери проверени специалисти за почистване във Варшава. Безплатна заявка, без ангажимент.",Not used in code
+category.subtitle_massage,,"Find verified massage therapists in Warsaw. Free request, no obligation.","Намери проверени масажисти във Варшава. Безплатна заявка, без ангажимент.",Not used in code
+category.subtitle_plumbing,,"Find a verified plumber in Warsaw. Free request, no obligation.","Намери проверен водопроводчик във Варшава. Безплатна заявка, без ангажимент.",Not used in code
+category.success_bullet_manage,,Manage your requests,Управлявайте заявките си,Not used in code
+category.success_bullet_notifications,,Get notifications,Получавайте известия,Not used in code
+category.success_bullet_responses,,See who responded,Вижте кой е отговорил,Not used in code
+category.success_cta_email,,Continue with email →,Продължи с имейл →,Not used in code
+category.success_free_label,,Free · No registration required,Безплатно · Без регистрация,Not used in code
+success_message,,We will contact you soon.,Ще се свържем с вас скоро.,Not used in code
+success_message_received,, received your request and will contact you by phone., получи заявката ти и ще се свърже с теб по телефона.,Not used in code
+client_dashboard.success_review_sent,,Review submitted successfully.,Ревюто беше изпратено успешно.,Not used in code
+category.success_skip_link,,No thanks,"Не, благодаря",Not used in code
+category.success_subtitle,,Specialists in {cityName} will contact you.,Специалисти в {cityName} ще се свържат с вас.,Not used in code
+success_title,,✓ Request sent!,✓ Заявката е изпратена!,Not used in code
+category.success_track_title,,Want to track your request?,Искате да следите заявката си?,Not used in code
+client_dashboard.tab_pending,Pending Review,Pending Review,Чакащи ревю,OK
+client_dashboard.tab_written,Written,Written,Написани,OK
+homepage.trust_1,No commission,No commission,Без комисион,OK
+homepage.trust_2,2 min registration,2 min registration,Регистрация 2 минути,OK
+homepage.trust_3,Real requests,Real requests,Реални заявки,OK
+category.trust_multiple,,Your request will be sent to multiple providers,Заявката се изпраща до няколко специалиста,Not used in code
+category.trust_rating,rating,rating,оценка,OK
+category.trust_requests,requests this month,requests this month,заявки този месец,OK
+category.trust_response,Avg. response: ~30 min,Response within 30 min,Отговор до 30 мин,OK
+category.trust_specialists,specialists,specialists,специалисти,OK
+verified_label,,✓ Verified professional,✓ Потвърден професионалист,Not used in code
+category.what_need_label,,What do you need?,Какво ви трябва?,Not used in code
+homepage.why_1_sub,,no hidden fees,без скрити такси,No default in code
+homepage.why_1_title,Free,Free,Безплатно,OK
+homepage.why_2,,Direct contact with clients,Директен контакт с клиентите,No default in code
+homepage.why_3,,Profile + SEO page that works for you 24/7,"Профил + SEO страница, която работи за теб 24/7",No default in code
+homepage.why_title,,Why specialists choose Nevumo,Защо специалистите избират Nevumo,No default in code

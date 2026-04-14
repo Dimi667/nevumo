@@ -7,9 +7,9 @@
 import json
 import redis
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models import Translation
-from i18n import SUPPORTED_LANGUAGES
+from apps.api.database import SessionLocal
+from apps.api.i18n import SUPPORTED_LANGUAGES
+from apps.api.models import Translation
 
 # Translation данни от JSON файла
 LOGIN_NAV_TRANSLATIONS = {

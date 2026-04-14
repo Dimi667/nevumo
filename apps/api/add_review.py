@@ -3,16 +3,11 @@
 Add a single review with rating 5 for ET LILI provider.
 """
 
-import sys
-import os
 from datetime import datetime
 import uuid
 
-# Add the parent directory to the path so we can import app modules
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from dependencies import get_db
-from models import Review
+from apps.api.dependencies import get_db
+from apps.api.models import Review
 
 def add_review():
     """Add a review with rating 5 for ET LILI provider."""

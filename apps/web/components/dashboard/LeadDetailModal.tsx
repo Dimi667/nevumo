@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { formatDashboardDate, useDashboardI18n } from '@/lib/provider-dashboard-i18n';
-import { t, type TranslationDict } from '@/lib/ui-translations';
 import StatusBadge from './StatusBadge';
 import { updateLeadNotes } from '@/lib/provider-api';
 import type { Lead } from '@/types/provider';
@@ -26,29 +25,32 @@ function Toast({ message, onDone }: { message: string; onDone: () => void }) {
   );
 }
 
-function getSourceLabel(source: string | null, dict: TranslationDict): string {
+function getSourceLabel(source: string | null, t: (key: string, fallback?: string) => string): string {
   if (!source) return '—';
   switch (source) {
     case 'seo':
-      return t(dict, 'label_source_seo', 'SEO');
+      return t('label_source_seo');
     case 'widget':
-      return t(dict, 'label_source_widget', 'Widget');
+      return t('label_source_widget');
     case 'qr':
-      return t(dict, 'label_source_qr', 'QR Code');
+      return t('label_source_qr');
     case 'direct':
-      return t(dict, 'label_source_direct', 'Direct');
+      return t('label_source_direct');
     case 'other':
-      return t(dict, 'label_source_other', 'Other');
+      return t('label_source_other');
     default:
       return source;
   }
 }
 
 export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }: LeadDetailModalProps) {
-  const { dict, lang } = useDashboardI18n();
+  const { t, lang } = useDashboardI18n();
   const [notes, setNotes] = useState(lead?.provider_notes ?? '');
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+
+  // Debug: log the translations dict
+  console.log('[LeadDetailModal] DashboardI18n hook called, lang:', lang);
 
   // Reset notes when lead changes
   useEffect(() => {
@@ -66,10 +68,10 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
     setSaving(true);
     try {
       const result = await updateLeadNotes(lead.id, notes);
-      setToast(t(dict, 'msg_notes_saved', 'Notes saved successfully'));
+      setToast(t('msg_notes_saved'));
       onNotesSaved?.(lead.id, result.provider_notes);
     } catch {
-      setToast(t(dict, 'msg_notes_save_failed', 'Failed to save notes'));
+      setToast(t('msg_notes_save_failed'));
     } finally {
       setSaving(false);
     }
@@ -93,12 +95,12 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
             <h2 className="text-lg font-semibold text-gray-900">
-              {t(dict, 'lead_detail_title', 'Lead Details')}
+              {t('lead_detail_title')}
             </h2>
             <button
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-              aria-label={t(dict, 'aria_close', 'Close')}
+              aria-label={t('aria_close')}
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18" />
@@ -113,7 +115,7 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  {t(dict, 'label_date', 'Date')}
+                  {t('label_date')}
                 </label>
                 <p className="text-sm text-gray-900 mt-1">
                   {formatDashboardDate(lead.created_at, lang)}
@@ -121,7 +123,7 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
               </div>
               <div>
                 <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  {t(dict, 'label_phone', 'Phone')}
+                  {t('label_phone')}
                 </label>
                 <p className="text-sm font-medium text-gray-900 mt-1">
                   {lead.phone}
@@ -129,7 +131,7 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
               </div>
               <div>
                 <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  {t(dict, 'label_status', 'Status')}
+                  {t('label_status')}
                 </label>
                 <div className="mt-1">
                   <StatusBadge status={lead.status} />
@@ -137,10 +139,10 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
               </div>
               <div>
                 <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  {t(dict, 'label_source', 'Source')}
+                  {t('label_source')}
                 </label>
                 <p className="text-sm text-gray-900 mt-1">
-                  {getSourceLabel(lead.source, dict)}
+                  {getSourceLabel(lead.source, t)}
                 </p>
               </div>
             </div>
@@ -148,10 +150,10 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
             {/* Client Description Section */}
             <div className="bg-gray-50 rounded-xl p-4">
               <label className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                {t(dict, 'label_client_message', 'CLIENT MESSAGE')}
+                {t('label_client_message')}
               </label>
               <p className="text-sm text-gray-800 mt-2 whitespace-pre-wrap">
-                {lead.description ?? t(dict, 'msg_no_description', 'No description provided')}
+                {lead.description ?? t('msg_no_description')}
               </p>
             </div>
 
@@ -166,18 +168,18 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
                   <polyline points="10 9 9 9 8 9" />
                 </svg>
                 <label className="text-sm font-semibold text-amber-800">
-                  {t(dict, 'label_private_notes', 'Private Notes')}
+                  {t('label_private_notes')}
                 </label>
               </div>
 
               <p className="text-xs text-amber-700 mb-3">
-                {t(dict, 'label_notes_privacy_disclaimer', 'These notes are only visible to you and will not be shared with the client.')}
+                {t('label_notes_privacy_disclaimer')}
               </p>
 
               <textarea
                 value={notes}
                 onChange={(e) => handleNotesChange(e.target.value)}
-                placeholder={t(dict, 'placeholder_private_notes', 'Write your private notes here...')}
+                placeholder={t('placeholder_private_notes')}
                 rows={4}
                 className="w-full px-3 py-2.5 text-sm bg-white/80 border border-amber-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-amber-400 resize-none placeholder:text-amber-400/70 text-gray-800"
               />
@@ -194,7 +196,7 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                       </svg>
-                      {t(dict, 'msg_saving', 'Saving...')}
+                      {t('msg_saving')}
                     </>
                   ) : (
                     <>
@@ -203,7 +205,7 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
                         <polyline points="17 21 17 13 7 13 7 21" />
                         <polyline points="7 3 7 8 15 8" />
                       </svg>
-                      {t(dict, 'btn_save_notes', 'Save Notes')}
+                      {t('btn_save_notes')}
                     </>
                   )}
                 </button>
@@ -217,7 +219,7 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
               onClick={onClose}
               className="w-full px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
             >
-              {t(dict, 'btn_close', 'Close')}
+              {t('btn_close')}
             </button>
           </div>
         </div>

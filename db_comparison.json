@@ -1,0 +1,310 @@
+{
+  "local_tables": [
+    "alembic_version",
+    "auth_rate_limits",
+    "categories",
+    "category_translations",
+    "lead_events",
+    "lead_matches",
+    "lead_rate_limits",
+    "leads",
+    "location_translations",
+    "locations",
+    "magic_link_tokens",
+    "messages",
+    "page_events",
+    "password_reset_tokens",
+    "pending_lead_claims",
+    "provider_cities",
+    "provider_slug_history",
+    "provider_translations",
+    "providers",
+    "reviews",
+    "service_cities",
+    "services",
+    "translations",
+    "url_redirects",
+    "users"
+  ],
+  "docker_tables": [
+    "alembic_version",
+    "auth_rate_limits",
+    "categories",
+    "category_translations",
+    "lead_events",
+    "lead_matches",
+    "lead_rate_limits",
+    "leads",
+    "location_translations",
+    "locations",
+    "magic_link_tokens",
+    "messages",
+    "page_events",
+    "password_reset_tokens",
+    "pending_lead_claims",
+    "provider_cities",
+    "provider_slug_history",
+    "provider_translations",
+    "providers",
+    "reviews",
+    "service_cities",
+    "services",
+    "translations",
+    "url_redirects",
+    "users"
+  ],
+  "all_tables": [
+    "alembic_version",
+    "auth_rate_limits",
+    "categories",
+    "category_translations",
+    "lead_events",
+    "lead_matches",
+    "lead_rate_limits",
+    "leads",
+    "location_translations",
+    "locations",
+    "magic_link_tokens",
+    "messages",
+    "page_events",
+    "password_reset_tokens",
+    "pending_lead_claims",
+    "provider_cities",
+    "provider_slug_history",
+    "provider_translations",
+    "providers",
+    "reviews",
+    "service_cities",
+    "services",
+    "translations",
+    "url_redirects",
+    "users"
+  ],
+  "comparison": [
+    {
+      "table": "alembic_version",
+      "local_count": 3,
+      "docker_count": 4,
+      "diff": -1,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "auth_rate_limits",
+      "local_count": 185,
+      "docker_count": 185,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "categories",
+      "local_count": 3,
+      "docker_count": 3,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "category_translations",
+      "local_count": 102,
+      "docker_count": 102,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "lead_events",
+      "local_count": 0,
+      "docker_count": 0,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "lead_matches",
+      "local_count": 51,
+      "docker_count": 51,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "lead_rate_limits",
+      "local_count": 47,
+      "docker_count": 47,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "leads",
+      "local_count": 180,
+      "docker_count": 180,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "location_translations",
+      "local_count": 102,
+      "docker_count": 102,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "locations",
+      "local_count": 3,
+      "docker_count": 3,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "magic_link_tokens",
+      "local_count": 3,
+      "docker_count": 3,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "messages",
+      "local_count": 0,
+      "docker_count": 0,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "page_events",
+      "local_count": 1780,
+      "docker_count": 1800,
+      "diff": -20,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "password_reset_tokens",
+      "local_count": 9,
+      "docker_count": 9,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "pending_lead_claims",
+      "local_count": 3,
+      "docker_count": 3,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "provider_cities",
+      "local_count": 60,
+      "docker_count": 60,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "provider_slug_history",
+      "local_count": 13,
+      "docker_count": 13,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "provider_translations",
+      "local_count": 238,
+      "docker_count": 238,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "providers",
+      "local_count": 70,
+      "docker_count": 70,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "reviews",
+      "local_count": 1,
+      "docker_count": 1,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "service_cities",
+      "local_count": 57,
+      "docker_count": 57,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "services",
+      "local_count": 52,
+      "docker_count": 52,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "translations",
+      "local_count": 20971,
+      "docker_count": 20971,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "url_redirects",
+      "local_count": 13,
+      "docker_count": 13,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    },
+    {
+      "table": "users",
+      "local_count": 88,
+      "docker_count": 88,
+      "diff": 0,
+      "in_local_only": false,
+      "in_docker_only": false
+    }
+  ],
+  "summary": {
+    "local_only_count": 0,
+    "docker_only_count": 0,
+    "has_diff_count": 2,
+    "local_only_tables": [],
+    "docker_only_tables": [],
+    "tables_with_diff": [
+      {
+        "table": "alembic_version",
+        "local_count": 3,
+        "docker_count": 4,
+        "diff": -1,
+        "in_local_only": false,
+        "in_docker_only": false
+      },
+      {
+        "table": "page_events",
+        "local_count": 1780,
+        "docker_count": 1800,
+        "diff": -20,
+        "in_local_only": false,
+        "in_docker_only": false
+      }
+    ]
+  }
+}

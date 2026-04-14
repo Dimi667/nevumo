@@ -13,7 +13,7 @@ from typing import Optional, TYPE_CHECKING, List, Dict, Any
 from uuid import UUID
 
 if TYPE_CHECKING:
-    from models import User
+    from apps.api.models import User
 
 import qrcode
 from PIL import Image, ImageDraw, ImageFont, ImageOps
@@ -25,10 +25,10 @@ from sqlalchemy.orm import Session
 # Register HEIF opener to support HEIC/HEIF formats
 register_heif_opener()
 
-from exceptions import NevumoException
-from constants import COUNTRY_CURRENCY_MAP, DEFAULT_CURRENCY
-from i18n import resolve_translation
-from models import (
+from apps.api.constants import COUNTRY_CURRENCY_MAP, DEFAULT_CURRENCY
+from apps.api.exceptions import NevumoException
+from apps.api.i18n import resolve_translation
+from apps.api.models import (
     Category,
     CategoryTranslation,
     Lead,
@@ -200,7 +200,7 @@ def save_provider_image(provider_id: UUID, content: bytes, content_type: str, ba
     
     # Use provided base_url, or fall back to settings, or use localhost as last resort
     if base_url is None:
-        from config import settings
+        from apps.api.config import settings
         base_url = settings.STATIC_FILES_BASE_URL or "http://localhost:8000"
     
     # Return full URL

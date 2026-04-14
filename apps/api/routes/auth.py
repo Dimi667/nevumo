@@ -6,10 +6,10 @@ from fastapi import APIRouter, Depends, Query, Request, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
-from config import settings
-from dependencies import get_db, get_current_user
-from models import MagicLinkToken, PasswordResetToken, Provider, User
-from schemas import (
+from apps.api.config import settings
+from apps.api.dependencies import get_db, get_current_user
+from apps.api.models import MagicLinkToken, PasswordResetToken, Provider, User
+from apps.api.schemas import (
     AuthTokenResponse,
     CheckEmailRequest,
     CheckEmailResponse,
@@ -25,7 +25,7 @@ from schemas import (
     ValidateResetTokenRequest,
     ValidateResetTokenResponse,
 )
-from services.auth_service import (
+from apps.api.services.auth_service import (
     check_rate_limit,
     create_jwt,
     generate_reset_token,
@@ -58,7 +58,7 @@ async def check_registration_slug(
     db: Session = Depends(get_db),
 ) -> SlugCheckResponse:
     """Check slug availability during registration (no auth required)."""
-    from services.provider_service import validate_slug, generate_slug_suggestions
+    from apps.api.services.provider_service import validate_slug, generate_slug_suggestions
     
     is_valid, error = validate_slug(slug)
     if not is_valid:
@@ -301,11 +301,11 @@ async def switch_role(
         )
 
     if body.role == "provider":
-        from services.provider_service import get_or_create_provider
+        from apps.api.services.provider_service import get_or_create_provider
         from secrets import token_hex
         
         # Check if provider already exists
-        from models import Provider
+        from apps.api.models import Provider
         existing_provider = db.query(Provider).filter(Provider.user_id == current_user.id).first()
         
         if existing_provider:

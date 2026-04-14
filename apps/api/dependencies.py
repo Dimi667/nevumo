@@ -6,8 +6,8 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
-from database import SessionLocal
-from services.auth_service import decode_jwt
+from apps.api.database import SessionLocal
+from apps.api.services.auth_service import decode_jwt
 
 
 def get_db():
@@ -44,7 +44,7 @@ def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(_bearer),
     db: Session = Depends(get_db),
 ):
-    from models import User  # local import to avoid circular
+    from apps.api.models import User  # local import to avoid circular
 
     token = credentials.credentials
     payload = decode_jwt(token)
@@ -63,7 +63,7 @@ def get_optional_current_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(_optional_bearer),
     db: Session = Depends(get_db),
 ) -> Optional["User"]:
-    from models import User  # local import to avoid circular
+    from apps.api.models import User  # local import to avoid circular
 
     if credentials is None:
         return None
@@ -88,5 +88,5 @@ def get_current_provider(
     if current_user.role != "provider":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a provider account")
 
-    from services.provider_service import get_or_create_provider
+    from apps.api.services.provider_service import get_or_create_provider
     return get_or_create_provider(current_user, db)

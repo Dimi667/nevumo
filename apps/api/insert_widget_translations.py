@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from database import SessionLocal, init_db
-from models import Translation
-from i18n import SUPPORTED_LANGUAGES
+from apps.api.database import SessionLocal, init_db
+from apps.api.i18n import SUPPORTED_LANGUAGES
+from apps.api.models import Translation
 
 def insert_widget_translations():
     """Insert all widget translations for all 34 languages"""
@@ -113,10 +113,6 @@ def insert_widget_translations():
     remaining_languages = [lang for lang in SUPPORTED_LANGUAGES if lang not in widget_translations]
     
     # Load existing translations from seed_translations.py for remaining languages
-    import sys
-    import os
-    sys.path.append(os.path.dirname(__file__))
-    
     # Read the existing seed_translations.py to get translations for other languages
     with open('seed_translations.py', 'r', encoding='utf-8') as f:
         content = f.read()

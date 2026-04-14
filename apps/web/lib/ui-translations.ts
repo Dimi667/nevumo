@@ -18,9 +18,7 @@ export async function fetchTranslations(
   try {
     const res = await fetch(
       `${apiBase}/api/v1/translations?lang=${resolvedLang}&namespace=${namespace}`,
-      process.env.NODE_ENV === 'development' 
-        ? { cache: 'no-store' } 
-        : { next: { revalidate: 3600 } }
+      { cache: 'no-store' }
     );
     if (!res.ok) throw new Error('Failed to fetch translations');
     const json = (await res.json()) as { data?: TranslationDict };
@@ -31,5 +29,16 @@ export async function fetchTranslations(
 }
 
 export function t(dict: TranslationDict, key: string, fallback = ''): string {
-  return dict[key] ?? fallback;
+  if (!dict || !key) return fallback;
+  const cleanKey = key.trim(); // Защита срещу случайно попадали интервали в бъдеще
+  return dict[cleanKey] ?? fallback;
+}
+
+// Server-side helper: creates a scoped t function that auto-prefixes keys
+export function createScopedT(namespace: string, dict: TranslationDict) {
+  return (key: string, fallback = ''): string => {
+    if (!dict || !key) return fallback;
+    const fullKey = `${namespace}.${key.trim()}`;
+    return dict[fullKey] ?? fallback;
+  };
 }

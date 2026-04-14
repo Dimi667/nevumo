@@ -2,8 +2,8 @@ import unittest
 from unittest.mock import MagicMock, patch
 from uuid import uuid4
 
-from services.provider_service import resolve_provider_slug_safe, resolve_provider_slug
-from models import Provider, UrlRedirect
+from apps.api.models import Provider, UrlRedirect
+from apps.api.services.provider_service import resolve_provider_slug_safe, resolve_provider_slug
 
 
 class RedirectSystemTests(unittest.TestCase):
@@ -28,7 +28,7 @@ class RedirectSystemTests(unittest.TestCase):
         db = MagicMock()
         
         # Mock resolve_provider_slug to simulate redirect scenario
-        with patch('services.provider_service.resolve_provider_slug') as mock_resolve:
+        with patch('apps.api.services.provider_service.resolve_provider_slug') as mock_resolve:
             # Simulate: old-slug redirects to new-slug, new-slug resolves to provider
             mock_resolve.return_value = (provider, 'old-slug')
             

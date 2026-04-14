@@ -1,0 +1,1630 @@
+File Path,Key in Code,Default Text (Code),DB English,DB Bulgarian,Status,Detected Namespace,Dict Variable
+apps/web/app/[lang]/page.tsx,meta_title,Get clients for your services | Nevumo,,,"NAMESPACE_MISMATCH (code: meta_title, db: homepage.meta_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,meta_description,Free registration. No commission.,,,"NAMESPACE_MISMATCH (code: meta_description, db: homepage.meta_description)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,rotating_categories,"Massage,Cleaning,Plumbing",,,"NAMESPACE_MISMATCH (code: rotating_categories, db: homepage.rotating_categories)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,nav_link,Looking for a service?,,,"NAMESPACE_MISMATCH (code: nav_link, db: homepage.nav_link)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,hero_prefix,Get clients for,,,"NAMESPACE_MISMATCH (code: hero_prefix, db: homepage.hero_prefix)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,hero_suffix,in Warsaw,,,"NAMESPACE_MISMATCH (code: hero_suffix, db: homepage.hero_suffix)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,hero_subtitle,Free. No commission. Direct contact.,,,"NAMESPACE_MISMATCH (code: hero_subtitle, db: homepage.hero_subtitle)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,trust_1,No commission,,,"NAMESPACE_MISMATCH (code: trust_1, db: homepage.trust_1)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,trust_2,2 min registration,,,"NAMESPACE_MISMATCH (code: trust_2, db: homepage.trust_2)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,trust_3,Real requests,,,"NAMESPACE_MISMATCH (code: trust_3, db: homepage.trust_3)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,social_proof,,,,"NAMESPACE_MISMATCH (code: social_proof, db: homepage.social_proof)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cta_hero,Start for free,,,"NAMESPACE_MISMATCH (code: cta_hero, db: homepage.cta_hero)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,how_title,How it works,,,"NAMESPACE_MISMATCH (code: how_title, db: homepage.how_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step1_title,Create a profile,,,"NAMESPACE_MISMATCH (code: step1_title, db: homepage.step1_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step1_sub,2 minutes,,,"NAMESPACE_MISMATCH (code: step1_sub, db: homepage.step1_sub)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step2_title,Receive client requests,,,"NAMESPACE_MISMATCH (code: step2_title, db: homepage.step2_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step2_sub,immediately after registration,,,"NAMESPACE_MISMATCH (code: step2_sub, db: homepage.step2_sub)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step3_title,Contact clients directly,,,"NAMESPACE_MISMATCH (code: step3_title, db: homepage.step3_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step3_sub,no middlemen,,,"NAMESPACE_MISMATCH (code: step3_sub, db: homepage.step3_sub)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cleaning_name,Cleaning,,,"NAMESPACE_MISMATCH (code: cat_cleaning_name, db: homepage.cat_cleaning_name)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cleaning_leads,26 requests this week,,,"NAMESPACE_MISMATCH (code: cat_cleaning_leads, db: homepage.cat_cleaning_leads)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cta,I offer this service,,,"NAMESPACE_MISMATCH (code: cat_cta, db: homepage.cat_cta)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_plumbing_name,Plumbing,,,"NAMESPACE_MISMATCH (code: cat_plumbing_name, db: homepage.cat_plumbing_name)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_plumbing_leads,18 requests this week,,,"NAMESPACE_MISMATCH (code: cat_plumbing_leads, db: homepage.cat_plumbing_leads)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cta,I offer this service,,,"NAMESPACE_MISMATCH (code: cat_cta, db: homepage.cat_cta)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_massage_name,Massage,,,"NAMESPACE_MISMATCH (code: cat_massage_name, db: homepage.cat_massage_name)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_massage_leads,14 requests this week,,,"NAMESPACE_MISMATCH (code: cat_massage_leads, db: homepage.cat_massage_leads)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cta,I offer this service,,,"NAMESPACE_MISMATCH (code: cat_cta, db: homepage.cat_cta)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_title,Recent requests,,,"NAMESPACE_MISMATCH (code: activity_title, db: homepage.activity_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_1,,,,"NAMESPACE_MISMATCH (code: activity_1, db: homepage.activity_1)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_1_time,,,,"NAMESPACE_MISMATCH (code: activity_1_time, db: homepage.activity_1_time)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_2,,,,"NAMESPACE_MISMATCH (code: activity_2, db: homepage.activity_2)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_2_time,,,,"NAMESPACE_MISMATCH (code: activity_2_time, db: homepage.activity_2_time)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_3,,,,"NAMESPACE_MISMATCH (code: activity_3, db: homepage.activity_3)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_3_time,,,,"NAMESPACE_MISMATCH (code: activity_3_time, db: homepage.activity_3_time)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_title,,,,"NAMESPACE_MISMATCH (code: why_title, db: homepage.why_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_1_title,Free,,,"NAMESPACE_MISMATCH (code: why_1_title, db: homepage.why_1_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_1_sub,,,,"NAMESPACE_MISMATCH (code: why_1_sub, db: homepage.why_1_sub)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_2,,,,"NAMESPACE_MISMATCH (code: why_2, db: homepage.why_2)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_3,,,,"NAMESPACE_MISMATCH (code: why_3, db: homepage.why_3)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cta2_title,,,,"NAMESPACE_MISMATCH (code: cta2_title, db: homepage.cta2_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cta2_btn,,,,"NAMESPACE_MISMATCH (code: cta2_btn, db: homepage.cta2_btn)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_title,,,,"NAMESPACE_MISMATCH (code: footer_title, db: homepage.footer_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_link_cleaning,,,,"NAMESPACE_MISMATCH (code: footer_link_cleaning, db: homepage.footer_link_cleaning)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_link_plumbing,,,,"NAMESPACE_MISMATCH (code: footer_link_plumbing, db: homepage.footer_link_plumbing)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_link_massage,,,,"NAMESPACE_MISMATCH (code: footer_link_massage, db: homepage.footer_link_massage)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_popular,,,,"NAMESPACE_MISMATCH (code: footer_popular, db: homepage.footer_popular)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cta_hero,Start for free,,,"NAMESPACE_MISMATCH (code: cta_hero, db: homepage.cta_hero)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,meta_title,'Get clients for your services | Nevumo',,,"NAMESPACE_MISMATCH (code: meta_title, db: homepage.meta_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,meta_description,'Free registration. No commission.',,,"NAMESPACE_MISMATCH (code: meta_description, db: homepage.meta_description)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,rotating_categories,"'Massage,Cleaning,Plumbing'",,,"NAMESPACE_MISMATCH (code: rotating_categories, db: homepage.rotating_categories)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,nav_link,'Looking for a service?',,,"NAMESPACE_MISMATCH (code: nav_link, db: homepage.nav_link)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,hero_prefix,'Get clients for',,,"NAMESPACE_MISMATCH (code: hero_prefix, db: homepage.hero_prefix)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,hero_suffix,'in Warsaw',,,"NAMESPACE_MISMATCH (code: hero_suffix, db: homepage.hero_suffix)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,hero_subtitle,'Free. No commission. Direct contact.',,,"NAMESPACE_MISMATCH (code: hero_subtitle, db: homepage.hero_subtitle)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,trust_1,'No commission',,,"NAMESPACE_MISMATCH (code: trust_1, db: homepage.trust_1)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,trust_2,'2 min registration',,,"NAMESPACE_MISMATCH (code: trust_2, db: homepage.trust_2)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,trust_3,'Real requests',,,"NAMESPACE_MISMATCH (code: trust_3, db: homepage.trust_3)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,social_proof,'',,,"NAMESPACE_MISMATCH (code: social_proof, db: homepage.social_proof)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cta_hero,'Start for free',,,"NAMESPACE_MISMATCH (code: cta_hero, db: homepage.cta_hero)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,how_title,'How it works',,,"NAMESPACE_MISMATCH (code: how_title, db: homepage.how_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step1_title,'Create a profile',,,"NAMESPACE_MISMATCH (code: step1_title, db: homepage.step1_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step1_sub,'2 minutes',,,"NAMESPACE_MISMATCH (code: step1_sub, db: homepage.step1_sub)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step2_title,'Receive client requests',,,"NAMESPACE_MISMATCH (code: step2_title, db: homepage.step2_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step2_sub,'immediately after registration',,,"NAMESPACE_MISMATCH (code: step2_sub, db: homepage.step2_sub)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step3_title,'Contact clients directly',,,"NAMESPACE_MISMATCH (code: step3_title, db: homepage.step3_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,step3_sub,'no middlemen',,,"NAMESPACE_MISMATCH (code: step3_sub, db: homepage.step3_sub)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cleaning_name,'Cleaning',,,"NAMESPACE_MISMATCH (code: cat_cleaning_name, db: homepage.cat_cleaning_name)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cleaning_leads,'26 requests this week',,,"NAMESPACE_MISMATCH (code: cat_cleaning_leads, db: homepage.cat_cleaning_leads)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cta,'I offer this service',,,"NAMESPACE_MISMATCH (code: cat_cta, db: homepage.cat_cta)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_plumbing_name,'Plumbing',,,"NAMESPACE_MISMATCH (code: cat_plumbing_name, db: homepage.cat_plumbing_name)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_plumbing_leads,'18 requests this week',,,"NAMESPACE_MISMATCH (code: cat_plumbing_leads, db: homepage.cat_plumbing_leads)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cta,'I offer this service',,,"NAMESPACE_MISMATCH (code: cat_cta, db: homepage.cat_cta)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_massage_name,'Massage',,,"NAMESPACE_MISMATCH (code: cat_massage_name, db: homepage.cat_massage_name)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_massage_leads,'14 requests this week',,,"NAMESPACE_MISMATCH (code: cat_massage_leads, db: homepage.cat_massage_leads)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cat_cta,'I offer this service',,,"NAMESPACE_MISMATCH (code: cat_cta, db: homepage.cat_cta)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_title,'Recent requests',,,"NAMESPACE_MISMATCH (code: activity_title, db: homepage.activity_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_1,'',,,"NAMESPACE_MISMATCH (code: activity_1, db: homepage.activity_1)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_1_time,'',,,"NAMESPACE_MISMATCH (code: activity_1_time, db: homepage.activity_1_time)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_2,'',,,"NAMESPACE_MISMATCH (code: activity_2, db: homepage.activity_2)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_2_time,'',,,"NAMESPACE_MISMATCH (code: activity_2_time, db: homepage.activity_2_time)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_3,'',,,"NAMESPACE_MISMATCH (code: activity_3, db: homepage.activity_3)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,activity_3_time,'',,,"NAMESPACE_MISMATCH (code: activity_3_time, db: homepage.activity_3_time)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_title,'',,,"NAMESPACE_MISMATCH (code: why_title, db: homepage.why_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_1_title,'Free',,,"NAMESPACE_MISMATCH (code: why_1_title, db: homepage.why_1_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_1_sub,'',,,"NAMESPACE_MISMATCH (code: why_1_sub, db: homepage.why_1_sub)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_2,'',,,"NAMESPACE_MISMATCH (code: why_2, db: homepage.why_2)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,why_3,'',,,"NAMESPACE_MISMATCH (code: why_3, db: homepage.why_3)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cta2_title,'',,,"NAMESPACE_MISMATCH (code: cta2_title, db: homepage.cta2_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cta2_btn,'',,,"NAMESPACE_MISMATCH (code: cta2_btn, db: homepage.cta2_btn)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_title,'',,,"NAMESPACE_MISMATCH (code: footer_title, db: homepage.footer_title)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_link_cleaning,'',,,"NAMESPACE_MISMATCH (code: footer_link_cleaning, db: homepage.footer_link_cleaning)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_link_plumbing,'',,,"NAMESPACE_MISMATCH (code: footer_link_plumbing, db: homepage.footer_link_plumbing)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_link_massage,'',,,"NAMESPACE_MISMATCH (code: footer_link_massage, db: homepage.footer_link_massage)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,footer_popular,'',,,"NAMESPACE_MISMATCH (code: footer_popular, db: homepage.footer_popular)",homepage,homepageT
+apps/web/app/[lang]/page.tsx,cta_hero,'Start for free',,,"NAMESPACE_MISMATCH (code: cta_hero, db: homepage.cta_hero)",homepage,homepageT
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,An error occurred. Please try again.,,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_rate_limit,Too many attempts. Please try later.,,,"NAMESPACE_MISMATCH (code: error_rate_limit, db: auth.error_rate_limit)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_account_disabled,Account is disabled.,,,"NAMESPACE_MISMATCH (code: error_account_disabled, db: auth.error_account_disabled)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,An error occurred. Please try again.,,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,An error occurred. Please try again.,,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_email_exists,This email is already registered.,,,"NAMESPACE_MISMATCH (code: error_email_exists, db: auth.error_email_exists)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,An error occurred. Please try again.,,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,An error occurred. Please try again.,,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,coming_soon,Coming soon,,,"NAMESPACE_MISMATCH (code: coming_soon, db: auth.coming_soon)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,back_btn,← Back,,,"NAMESPACE_MISMATCH (code: back_btn, db: auth.back_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,hero_title_provider,Start getting clients,,,"NAMESPACE_MISMATCH (code: hero_title_provider, db: auth.hero_title_provider)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,hero_title_client,Find a service in minutes,,,"NAMESPACE_MISMATCH (code: hero_title_client, db: auth.hero_title_client)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,hero_subtitle_client,Free • No obligation,,,"NAMESPACE_MISMATCH (code: hero_subtitle_client, db: auth.hero_subtitle_client)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,checking_btn,Checking...,,,"NAMESPACE_MISMATCH (code: checking_btn, db: auth.checking_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,password_placeholder_login,Password,,,"NAMESPACE_MISMATCH (code: password_placeholder_login, db: auth.password_placeholder_login)",auth,"); handleLogin(); }}>
+              <input type=""email"" name=""email"" value={state.email} readOnly autoComplete=""username"" onChange={() => {}} className=""absolute opacity-0 h-0 w-0 overflow-hidden"" aria-hidden=""true"" />
+              <div className=""flex flex-col gap-1"">
+                <input
+                  ref={passwordRef}
+                  type=""password""
+                  name=""password""
+                  autoComplete=""current-password""
+                  placeholder={t(authDict"
+apps/web/app/[lang]/auth/LoginClient.tsx,error_wrong_password,Wrong password,,,"NAMESPACE_MISMATCH (code: error_wrong_password, db: auth.error_wrong_password)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_password_link,Forgot password?,,,"NAMESPACE_MISMATCH (code: forgot_password_link, db: auth.forgot_password_link)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,logging_in_btn,Signing in...,,,"NAMESPACE_MISMATCH (code: logging_in_btn, db: auth.logging_in_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,login_btn,Sign in,,,"NAMESPACE_MISMATCH (code: login_btn, db: auth.login_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,password_placeholder_register,Click to generate a password,,,"NAMESPACE_MISMATCH (code: password_placeholder_register, db: auth.password_placeholder_register)",auth,"); handleRegister(); }}>
+              <input type=""email"" name=""email"" value={state.email} readOnly autoComplete=""username"" onChange={() => {}} className=""absolute opacity-0 h-0 w-0 overflow-hidden"" aria-hidden=""true"" />
+              <div className=""relative mb-6"">
+                <input
+                  ref={passwordRef}
+                  type={state.showPassword ? 'text' : 'password'}
+                  name=""password""
+                  autoComplete=""new-password""
+                  placeholder={t(authDict"
+apps/web/app/[lang]/auth/LoginClient.tsx,registering_btn,Creating...,,,"NAMESPACE_MISMATCH (code: registering_btn, db: auth.registering_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,register_success,Account created successfully,,,"NAMESPACE_MISMATCH (code: register_success, db: auth.register_success)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_title,Forgot password,,,"NAMESPACE_MISMATCH (code: forgot_title, db: auth.forgot_title)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_sent_btn,Sent,,,"NAMESPACE_MISMATCH (code: forgot_sent_btn, db: auth.forgot_sent_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,sending_btn,Sending...,,,"NAMESPACE_MISMATCH (code: sending_btn, db: auth.sending_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_send_btn,Send link,,,"NAMESPACE_MISMATCH (code: forgot_send_btn, db: auth.forgot_send_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_check_email,Check your email,,,"NAMESPACE_MISMATCH (code: forgot_check_email, db: auth.forgot_check_email)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,auth,,,,MISSING_IN_DB,unknown,'auth_view'
+apps/web/app/[lang]/auth/LoginClient.tsx,auth,,,,MISSING_IN_DB,unknown,'auth_email_entered'
+apps/web/app/[lang]/auth/LoginClient.tsx,auth,,,,MISSING_IN_DB,unknown,'auth_password_shown'
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,'An error occurred. Please try again.',,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,auth,,,,MISSING_IN_DB,unknown,'auth_success'
+apps/web/app/[lang]/auth/LoginClient.tsx,error_rate_limit,'Too many attempts. Please try later.',,,"NAMESPACE_MISMATCH (code: error_rate_limit, db: auth.error_rate_limit)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_account_disabled,'Account is disabled.',,,"NAMESPACE_MISMATCH (code: error_account_disabled, db: auth.error_account_disabled)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,'An error occurred. Please try again.',,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,'An error occurred. Please try again.',,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,login,,,,MISSING_IN_DB,unknown,'auth_success'
+apps/web/app/[lang]/auth/LoginClient.tsx,error_email_exists,'This email is already registered.',,,"NAMESPACE_MISMATCH (code: error_email_exists, db: auth.error_email_exists)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,'An error occurred. Please try again.',,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,error_generic,'An error occurred. Please try again.',,,"NAMESPACE_MISMATCH (code: error_generic, db: auth.error_generic)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,coming_soon,'Coming soon',,,"NAMESPACE_MISMATCH (code: coming_soon, db: auth.coming_soon)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,back_btn,'← Back',,,"NAMESPACE_MISMATCH (code: back_btn, db: auth.back_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,hero_title_provider,'Start getting clients',,,"NAMESPACE_MISMATCH (code: hero_title_provider, db: auth.hero_title_provider)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,hero_title_client,'Find a service in minutes',,,"NAMESPACE_MISMATCH (code: hero_title_client, db: auth.hero_title_client)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,hero_subtitle_client,'Free • No obligation',,,"NAMESPACE_MISMATCH (code: hero_subtitle_client, db: auth.hero_subtitle_client)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,checking_btn,'Checking...',,,"NAMESPACE_MISMATCH (code: checking_btn, db: auth.checking_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,password_placeholder_login,'Password',,,"NAMESPACE_MISMATCH (code: password_placeholder_login, db: auth.password_placeholder_login)",auth,"); handleLogin(); }}>
+              <input type=""email"" name=""email"" value={state.email} readOnly autoComplete=""username"" onChange={() => {}} className=""absolute opacity-0 h-0 w-0 overflow-hidden"" aria-hidden=""true"" />
+              <div className=""flex flex-col gap-1"">
+                <input
+                  ref={passwordRef}
+                  type=""password""
+                  name=""password""
+                  autoComplete=""current-password""
+                  placeholder={t(authDict"
+apps/web/app/[lang]/auth/LoginClient.tsx,error_wrong_password,'Wrong password',,,"NAMESPACE_MISMATCH (code: error_wrong_password, db: auth.error_wrong_password)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_password_link,'Forgot password?',,,"NAMESPACE_MISMATCH (code: forgot_password_link, db: auth.forgot_password_link)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,logging_in_btn,'Signing in...',,,"NAMESPACE_MISMATCH (code: logging_in_btn, db: auth.logging_in_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,login_btn,'Sign in',,,"NAMESPACE_MISMATCH (code: login_btn, db: auth.login_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,register_subtitle,"""We'll create an account automatically""",,,"NAMESPACE_MISMATCH (code: register_subtitle, db: auth.register_subtitle)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,password_placeholder_register,'Click to generate a password',,,"NAMESPACE_MISMATCH (code: password_placeholder_register, db: auth.password_placeholder_register)",auth,"); handleRegister(); }}>
+              <input type=""email"" name=""email"" value={state.email} readOnly autoComplete=""username"" onChange={() => {}} className=""absolute opacity-0 h-0 w-0 overflow-hidden"" aria-hidden=""true"" />
+              <div className=""relative mb-6"">
+                <input
+                  ref={passwordRef}
+                  type={state.showPassword ? 'text' : 'password'}
+                  name=""password""
+                  autoComplete=""new-password""
+                  placeholder={t(authDict"
+apps/web/app/[lang]/auth/LoginClient.tsx,registering_btn,'Creating...',,,"NAMESPACE_MISMATCH (code: registering_btn, db: auth.registering_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,register_success,'Account created successfully',,,"NAMESPACE_MISMATCH (code: register_success, db: auth.register_success)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_title,'Forgot password',,,"NAMESPACE_MISMATCH (code: forgot_title, db: auth.forgot_title)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_subtitle,"""We'll send you a link for a new password""",,,"NAMESPACE_MISMATCH (code: forgot_subtitle, db: auth.forgot_subtitle)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_sent_btn,'Sent',,,"NAMESPACE_MISMATCH (code: forgot_sent_btn, db: auth.forgot_sent_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,sending_btn,'Sending...',,,"NAMESPACE_MISMATCH (code: sending_btn, db: auth.sending_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_send_btn,'Send link',,,"NAMESPACE_MISMATCH (code: forgot_send_btn, db: auth.forgot_send_btn)",auth,authDict
+apps/web/app/[lang]/auth/LoginClient.tsx,forgot_check_email,'Check your email',,,"NAMESPACE_MISMATCH (code: forgot_check_email, db: auth.forgot_check_email)",auth,authDict
+apps/web/app/[lang]/auth/magic/MagicLinkClient.tsx,magic-link,,,,MISSING_IN_DB,unknown,'magic_link_success'
+apps/web/app/[lang]/auth/magic/MagicLinkClient.tsx,magic-link,,,,MISSING_IN_DB,unknown,'magic_link_error'
+apps/web/app/[lang]/auth/magic/MagicLinkClient.tsx,magic-link,,,,MISSING_IN_DB,unknown,'magic_link_error'
+apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx,reset-password,,,,MISSING_IN_DB,unknown,"() => {
+    validateResetToken(token).then(result => {
+      if (result.valid) {
+        trackPageEvent('password_reset_view'"
+apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx,reset-password,,,,MISSING_IN_DB,unknown,'token_used'
+apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx,reset-password,,,,MISSING_IN_DB,unknown,'token_expired'
+apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx,reset-password,,,,MISSING_IN_DB,unknown,'token_expired'
+apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx,reset-password,,,,MISSING_IN_DB,unknown,") {
+    if (!bothFilled || state.loading) return;
+
+    if (state.password !== state.confirm) {
+      trackPageEvent('password_reset_error'"
+apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx,reset-password,,,,MISSING_IN_DB,unknown,'password_reset_error'
+apps/web/app/[lang]/auth/reset-password/ResetPasswordClient.tsx,reset-password,,,,MISSING_IN_DB,unknown,'password_reset_success'
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_source_seo,SEO,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_source_widget,Widget,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_source_qr,QR Code,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_source_direct,Direct,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_failed_load_dashboard,Failed to load dashboard,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,nav_dashboard,Dashboard,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,overview_subtitle,Overview of your business,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock,Add a service to unlock,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_total_leads,Total Leads,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock,Add a service to unlock,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_new_leads,New Leads,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,status_awaiting_action,Awaiting action,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock,Add a service to unlock,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,status_contacted,Contacted,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_leads_contacted,Leads contacted,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock,Add a service to unlock,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_rating,Rating,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock_analytics,Add a service to unlock analytics,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_last_30_days,Last 30 days,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,btn_view_analytics,View Analytics →,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_no_leads_30_days,No leads yet in the last 30 days.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_leads_received,Leads received,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_leads_contacted,Leads contacted,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_top_sources,Top sources,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_no_data,No data,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_latest_review,Latest Review,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,btn_view_all,View All →,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_needs_reply,Needs Reply,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_reviews_waiting_reply,,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,btn_reply_now,Reply now →,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_no_reviews_yet,No reviews yet,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_reviews_appear_here,"When clients review your services, they will appear here",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_source_seo,'SEO',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_source_widget,'Widget',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_source_qr,'QR Code',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_source_direct,'Direct',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_failed_load_dashboard,'Failed to load dashboard',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,nav_dashboard,'Dashboard',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,overview_subtitle,'Overview of your business',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock,'Add a service to unlock',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_total_leads,'Total Leads',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock,'Add a service to unlock',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_new_leads,'New Leads',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,status_awaiting_action,'Awaiting action',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock,'Add a service to unlock',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,status_contacted,'Contacted',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_leads_contacted,'Leads contacted',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock,'Add a service to unlock',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_rating,'Rating',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_add_service_unlock_analytics,'Add a service to unlock analytics',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_last_30_days,'Last 30 days',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,btn_view_analytics,'View Analytics →',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_no_leads_30_days,'No leads yet in the last 30 days.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_leads_received,'Leads received',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,stat_leads_contacted,'Leads contacted',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_top_sources,'Top sources',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_no_data,'No data',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_latest_review,'Latest Review',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,btn_view_all,'View All →',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,label_needs_reply,'Needs Reply',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_reviews_waiting_reply,'{count} reviews waiting for your reply',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,btn_reply_now,'Reply now →',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_no_reviews_yet,'No reviews yet',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/page.tsx,msg_reviews_appear_here,"'When clients review your services, they will appear here'",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,availability_active,Active,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,availability_busy,Busy,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,availability_offline,Offline,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_change_limit,URL can only be changed once. Contact support for assistance.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_taken,This URL is already taken,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_failed_check_url,Failed to check URL availability,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_failed_save_url,Failed to save URL,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_failed_switch_role,Failed to switch role,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,nav_settings,Settings,,,MISSING_IN_DB,unknown,") {
+    clearAuth();
+    router.push(`/${lang}/auth`);
+  }
+
+  // Build public URL from profile data
+  const publicUrl = (() => {
+    if (!profile) return null;
+    const city = profile.current_city?.slug;
+    const category = profile.current_category?.slug;
+    if (city && category) {
+      return `${SITE_HOST}/${lang}/${city}/${category}/${slugInput || profile.slug}`;
+    }
+    return `${SITE_HOST}/provider/${slugInput || profile.slug}`;
+  })();
+
+  return (
+    <div className=""space-y-6 max-w-2xl"">
+      <div>
+        <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,settings_subtitle,Account and preferences,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_account,Account,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_email,Email,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_role,Role,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_phone,Phone,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_saving,Saving…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,btn_save_phone,Save Phone,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_saved,Saved!,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_availability,Availability,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_availability_description,Controls whether you appear as available to new clients.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_public_url,Public URL,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_your_profile_link,Your profile link,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_edit_public_slug,Edit public slug,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_changes_remaining,URL changes remaining:,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_change_warning,You can only change your URL once.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_old_links_redirect,Old links will continue working (redirected).,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,placeholder_business_slug,your-business-name,,,MISSING_IN_DB,unknown,"sanitizeSlug(e.target.value));
+                        setSlugSaved(false);
+                        setSlugError(null);
+                        setSlugSuggestions([]);
+                        setSlugAvailable(null);
+                      }}
+                      placeholder={t(dict"
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_checking,Checking...,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_available,Available,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_locked,URL can only be changed once. Contact support for assistance.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_suggestions,Suggestions:,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_saving,Saving…,,,MISSING_IN_DB,unknown,"suggestion);
+                            setSlugSaved(false);
+                            setSlugError(null);
+                            setSlugSuggestions([]);
+                            setSlugAvailable(null);
+                          }}
+                          className=""px-2 py-1 text-xs bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors""
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {canEditSlug ? (
+                  <div className=""flex items-center gap-3"">
+                    <button
+                      type=""button""
+                      onClick={handleSaveSlug}
+                      disabled={savingSlug || slugChecking || !slugInput.trim() || slugInput.trim() === profile?.slug}
+                      className=""px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors""
+                    >
+                      {savingSlug ? t(dict"
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,btn_save_url,Save URL,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_saved,Saved!,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_url_locked,URL locked,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_already_updated,Your public URL has already been updated.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_old_links_work,Old links continue to work via redirects.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_need_help,Need help? Contact support.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_add_city_category,Add a city and category in your Profile to get a full SEO URL.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_profile_not_loaded,Profile not loaded.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_account_role,Account Role,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_switch_role_description,You are currently a Provider. Switching to a client account will allow you to browse services and submit requests. Your provider profile and data will be preserved.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_switching,Switching…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,btn_switch_client,Switch to Client Account,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_session,Session,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,btn_log_out,Log out,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,availability_active,'Active',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,availability_busy,'Busy',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,availability_offline,'Offline',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_change_limit,'URL can only be changed once. Contact support for assistance.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_taken,'This URL is already taken',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_failed_check_url,'Failed to check URL availability',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_failed_save_url,'Failed to save URL',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_failed_switch_role,'Failed to switch role',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,nav_settings,'Settings',,,MISSING_IN_DB,unknown,") {
+    clearAuth();
+    router.push(`/${lang}/auth`);
+  }
+
+  // Build public URL from profile data
+  const publicUrl = (() => {
+    if (!profile) return null;
+    const city = profile.current_city?.slug;
+    const category = profile.current_category?.slug;
+    if (city && category) {
+      return `${SITE_HOST}/${lang}/${city}/${category}/${slugInput || profile.slug}`;
+    }
+    return `${SITE_HOST}/provider/${slugInput || profile.slug}`;
+  })();
+
+  return (
+    <div className=""space-y-6 max-w-2xl"">
+      <div>
+        <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,settings_subtitle,'Account and preferences',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_account,'Account',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_email,'Email',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_role,'Role',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_phone,'Phone',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_saving,'Saving…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,btn_save_phone,'Save Phone',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_saved,'Saved!',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_availability,'Availability',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_availability_description,'Controls whether you appear as available to new clients.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_public_url,'Public URL',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_your_profile_link,'Your profile link',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_edit_public_slug,'Edit public slug',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_changes_remaining,'URL changes remaining:',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_change_warning,'You can only change your URL once.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_old_links_redirect,'Old links will continue working (redirected,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,placeholder_business_slug,'your-business-name',,,MISSING_IN_DB,unknown,"sanitizeSlug(e.target.value));
+                        setSlugSaved(false);
+                        setSlugError(null);
+                        setSlugSuggestions([]);
+                        setSlugAvailable(null);
+                      }}
+                      placeholder={t(dict"
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_checking,'Checking...',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_available,'Available',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_locked,'URL can only be changed once. Contact support for assistance.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_suggestions,'Suggestions:',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_saving,'Saving…',,,MISSING_IN_DB,unknown,"suggestion);
+                            setSlugSaved(false);
+                            setSlugError(null);
+                            setSlugSuggestions([]);
+                            setSlugAvailable(null);
+                          }}
+                          className=""px-2 py-1 text-xs bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors""
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {canEditSlug ? (
+                  <div className=""flex items-center gap-3"">
+                    <button
+                      type=""button""
+                      onClick={handleSaveSlug}
+                      disabled={savingSlug || slugChecking || !slugInput.trim() || slugInput.trim() === profile?.slug}
+                      className=""px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors""
+                    >
+                      {savingSlug ? t(dict"
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,btn_save_url,'Save URL',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_saved,'Saved!',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_url_locked,'URL locked',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_url_already_updated,'Your public URL has already been updated.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_old_links_work,'Old links continue to work via redirects.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_need_help,'Need help? Contact support.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_add_city_category,'Add a city and category in your Profile to get a full SEO URL.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_profile_not_loaded,'Profile not loaded.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_account_role,'Account Role',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_switch_role_description,'You are currently a Provider. Switching to a client account will allow you to browse services and submit requests. Your provider profile and data will be preserved.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,msg_switching,'Switching…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,btn_switch_client,'Switch to Client Account',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,label_session,'Session',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/settings/page.tsx,btn_log_out,'Log out',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_all,All,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_new,New,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_contacted,Contacted,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_done,Done,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_rejected,Rejected,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,period_all_time,All time,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,period_last_7_days,Last 7 days,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,period_last_30_days,Last 30 days,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,period_last_90_days,Last 90 days,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_new_leads,New leads,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,total,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_contacted_leads,Contacted leads,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,total,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_done_leads,Done leads,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,total,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_rejected_leads,Rejected leads,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,total,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,nav_leads,Leads,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,total,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,msg_failed_load_leads,Failed to load leads,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_search,Search,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,placeholder_search_leads,"Search name, email, phone, description or notes...",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,clear_search,Clear search,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_status,Status,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_period,Period,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,aria_select_period_filter,Select period filter,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_date_range,Date range,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,placeholder_from,From,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,placeholder_to,To,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,msg_no_leads_found,No leads found,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,msg_adjust_filters,Try adjusting your filters or check back later.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_date,Date,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_phone,Phone,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_description,Description,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_source,Source,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_notes,Notes,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_status,Status,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_actions,Actions,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_all,'All',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_new,'New',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_contacted,'Contacted',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_done,'Done',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,status_rejected,'Rejected',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,period_all_time,'All time',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,period_last_7_days,'Last 7 days',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,period_last_30_days,'Last 30 days',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,period_last_90_days,'Last 90 days',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_new_leads,'New leads',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,'total',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_contacted_leads,'Contacted leads',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,'total',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_done_leads,'Done leads',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,'total',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_rejected_leads,'Rejected leads',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,'total',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,nav_leads,'Leads',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_total,'total',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,msg_failed_load_leads,'Failed to load leads',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_search,'Search',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,placeholder_search_leads,"'Search name, email, phone, description or notes...'",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,clear_search,'Clear search',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_status,'Status',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_period,'Period',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,aria_select_period_filter,'Select period filter',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_date_range,'Date range',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,placeholder_from,'From',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,placeholder_to,'To',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,msg_no_leads_found,'No leads found',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,msg_adjust_filters,'Try adjusting your filters or check back later.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_date,'Date',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_phone,'Phone',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_description,'Description',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_source,'Source',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_notes,'Notes',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_status,'Status',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,label_actions,'Actions',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/leads/page.tsx,rejected,,,,MISSING_IN_DB,unknown,"id: string) {
+    try {
+      await updateLeadStatus(id"
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_failed_generate_qr,Failed to generate QR code,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_failed_download_qr,Failed to download QR code,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,nav_qr_code,QR Code,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,qr_code_subtitle,Share your provider profile with a QR code,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_qr_code_language,QR Code Language,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_qr_language_description,The QR code text and slogan will be displayed in this language,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_qr_share_description,"Share this QR code on your business cards, flyers, or at your location. Clients scan it to reach your profile directly. Enhanced QR codes include your business name and a call-to-action slogan.",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_generating,Generating…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,btn_generate_qr_code,Generate QR Code,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_enhanced_qr_code,Enhanced QR Code,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_business,Business,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,nav_services,Service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_language,Language,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_your_qr_url,Your QR URL,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_canonical_profile_url,Canonical profile URL,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,btn_download,Download,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,btn_regenerate,Regenerate,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_failed_generate_qr,'Failed to generate QR code',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_failed_download_qr,'Failed to download QR code',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,nav_qr_code,'QR Code',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,qr_code_subtitle,'Share your provider profile with a QR code',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_qr_code_language,'QR Code Language',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_qr_language_description,'The QR code text and slogan will be displayed in this language',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_qr_share_description,"'Share this QR code on your business cards, flyers, or at your location. Clients scan it to reach your profile directly. Enhanced QR codes include your business name and a call-to-action slogan.'",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,msg_generating,'Generating…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,btn_generate_qr_code,'Generate QR Code',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_enhanced_qr_code,'Enhanced QR Code',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_business,'Business',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,nav_services,'Service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_language,'Language',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_your_qr_url,'Your QR URL',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,label_canonical_profile_url,'Canonical profile URL',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,btn_download,'Download',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/qr-code/page.tsx,btn_regenerate,'Regenerate',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,price_type_fixed,Fixed price,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,price_type_hourly,Per hour,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,price_type_request,Per request (quote),,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,price_type_per_sqm,Per sq.m.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_network_error,Network error - check connection,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_invalid_image_url,Invalid image URL format,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile,Profile,,,MISSING_IN_DB,unknown,"0);
+    setErrorDetails('');
+  };
+
+  const getRetryUrl = () => {
+    if (!imageUrl) return undefined;
+    
+    const separator = imageUrl.includes('?') ? '&' : '?';
+    return `${imageUrl}${separator}retry=${retryCount}&t=${Date.now()}`;
+  };
+
+  return (
+    <div className=""flex items-center gap-3"">
+      <div className=""w-14 h-14 rounded-full bg-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center text-gray-400"">
+        {imageUrl && !imageError ? (
+          <img 
+            src={retryCount > 0 ? getRetryUrl() : imageUrl} 
+            alt={t(dict"
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_uploading,Uploading…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_change_photo,Change photo,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_upload_photo,Upload photo,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_supported_image_formats,"JPG, PNG, WebP, HEIC · max 5 MB",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_load_image,Failed to load image,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_try_again,Try again,,,MISSING_IN_DB,unknown,"0);
+                setImageError(false);
+                setErrorDetails('');
+              }}
+              className=""text-xs text-orange-600 hover:text-orange-700 mt-0.5""
+            >
+              {t(dict"
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_retrying,Retrying...,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile_setup,Profile Setup,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_service,Service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_url_taken,This URL is already taken,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_check_url,Failed to check URL availability,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_file_size_limit_5mb,File size must be less than 5 MB,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_file_type_jpg_png_webp_heic,"File must be JPG, PNG, WebP, or HEIC",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_upload_image,Failed to upload image. Please try again.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_file_too_large,File too large. Maximum size is 5 MB.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_invalid_file_format,"Invalid file format. Use JPG, PNG, WebP, or HEIC.",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_authentication_error_login_again,Authentication error. Please log in again.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_too_many_upload_attempts,Too many upload attempts. Please wait a moment.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,error_business_name_min_chars,Business name must be at least 2 characters,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_save_profile,Failed to save profile,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,error_title_required,Title is required,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,error_category_required,Category is required,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,error_city_required,At least one city is required,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_create_service,Failed to create service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_save,Failed to save,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_load_profile,Failed to load profile,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_complete_profile,Complete your profile,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_start_receiving,Start receiving client requests in minutes,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile_setup,Profile Setup,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile_photo,Profile photo,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_optional,optional,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_business_name,Business name,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_name_example,e.g. Sofia Plumbing Pro,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_description,Description,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_optional,optional,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_description,"Describe your services, experience and what makes you different",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_50_chars_better,At least 50 chars gets better results,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_public_url,Public URL,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_slug,your-business-name,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_edit_url,Edit URL,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_checking,Checking...,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_available,Available,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_slug,your-business-name,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_url_changes_remaining,URL changes remaining:,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_url_change_warning,You can only change your URL once.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_old_links_redirect,Old links will continue working (redirected).,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_url_taken,This URL is already taken,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_suggestions,Suggestions:,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_saving,Saving…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_continue,Continue →,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_skip_for_now,Skip for now,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_takes_less_than_1_minute,Takes less than 1 minute,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_add_first_service,Add Your First Service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_service_title,Service title,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_service_title_example,e.g. Apartment cleaning,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_select_category,Select a category,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_select_cities,Select cities where you offer this service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_price_type,Price type,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_price_in_currency,Price in {currency},,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_optional,optional,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_setup_complete_redirecting,Setup complete! Redirecting…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_back,← Back,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_saving,Saving…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_complete_setup,Complete Setup,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_finish_setup_to_start_getting_clients,Finish setup to start getting clients,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,nav_profile,Profile,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,profile_subtitle,Your public business profile,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile_photo,Profile photo,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_business_details,Business details,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_business_name,Business name,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_description,Description,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_description,"Describe your services, experience and what makes you different",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_saving,Saving…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_save_changes,Save changes,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_saved,Saved!,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,price_type_fixed,'Fixed price',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,price_type_hourly,'Per hour',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,price_type_request,'Per request (quote,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,price_type_per_sqm,'Per sq.m.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_network_error,'Network error - check connection',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_invalid_image_url,'Invalid image URL format',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile,'Profile',,,MISSING_IN_DB,unknown,"0);
+    setErrorDetails('');
+  };
+
+  const getRetryUrl = () => {
+    if (!imageUrl) return undefined;
+    
+    const separator = imageUrl.includes('?') ? '&' : '?';
+    return `${imageUrl}${separator}retry=${retryCount}&t=${Date.now()}`;
+  };
+
+  return (
+    <div className=""flex items-center gap-3"">
+      <div className=""w-14 h-14 rounded-full bg-gray-100 overflow-hidden flex-shrink-0 flex items-center justify-center text-gray-400"">
+        {imageUrl && !imageError ? (
+          <img 
+            src={retryCount > 0 ? getRetryUrl() : imageUrl} 
+            alt={t(dict"
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_uploading,'Uploading…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_change_photo,'Change photo',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_upload_photo,'Upload photo',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_supported_image_formats,"'JPG, PNG, WebP, HEIC · max 5 MB'",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_load_image,'Failed to load image',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_try_again,'Try again',,,MISSING_IN_DB,unknown,"0);
+                setImageError(false);
+                setErrorDetails('');
+              }}
+              className=""text-xs text-orange-600 hover:text-orange-700 mt-0.5""
+            >
+              {t(dict"
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_retrying,'Retrying...',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile_setup,'Profile Setup',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_service,'Service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_url_taken,'This URL is already taken',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_check_url,'Failed to check URL availability',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_file_size_limit_5mb,'File size must be less than 5 MB',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_file_type_jpg_png_webp_heic,"'File must be JPG, PNG, WebP, or HEIC'",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_upload_image,'Failed to upload image. Please try again.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_file_too_large,'File too large. Maximum size is 5 MB.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_invalid_file_format,"'Invalid file format. Use JPG, PNG, WebP, or HEIC.'",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_authentication_error_login_again,'Authentication error. Please log in again.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_too_many_upload_attempts,'Too many upload attempts. Please wait a moment.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,error_business_name_min_chars,'Business name must be at least 2 characters',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_save_profile,'Failed to save profile',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,error_title_required,'Title is required',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,error_category_required,'Category is required',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,error_city_required,'At least one city is required',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_create_service,'Failed to create service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_save,'Failed to save',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_failed_load_profile,'Failed to load profile',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_complete_profile,'Complete your profile',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_start_receiving,'Start receiving client requests in minutes',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile_setup,'Profile Setup',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile_photo,'Profile photo',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_optional,'optional',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_business_name,'Business name',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_name_example,'e.g. Sofia Plumbing Pro',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_description,'Description',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_optional,'optional',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_description,"'Describe your services, experience and what makes you different'",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_50_chars_better,'At least 50 chars gets better results',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_public_url,'Public URL',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_slug,'your-business-name',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_edit_url,'Edit URL',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_checking,'Checking...',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_available,'Available',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_slug,'your-business-name',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_url_changes_remaining,'URL changes remaining:',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_url_change_warning,'You can only change your URL once.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_old_links_redirect,'Old links will continue working (redirected,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_url_taken,'This URL is already taken',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_suggestions,'Suggestions:',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_saving,'Saving…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_continue,'Continue →',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_skip_for_now,'Skip for now',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_takes_less_than_1_minute,'Takes less than 1 minute',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_add_first_service,'Add Your First Service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_service_title,'Service title',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_service_title_example,'e.g. Apartment cleaning',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_select_category,'Select a category',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_select_cities,'Select cities where you offer this service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_price_type,'Price type',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_price_in_currency,'Price in {currency}',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_optional,'optional',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_setup_complete_redirecting,'Setup complete! Redirecting…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_back,'← Back',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_saving,'Saving…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_complete_setup,'Complete Setup',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_finish_setup_to_start_getting_clients,'Finish setup to start getting clients',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,nav_profile,'Profile',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,profile_subtitle,'Your public business profile',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_profile_photo,'Profile photo',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_business_details,'Business details',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_business_name,'Business name',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,label_description,'Description',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,placeholder_business_description,"'Describe your services, experience and what makes you different'",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_saving,'Saving…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,btn_save_changes,'Save changes',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/profile/page.tsx,msg_saved,'Saved!',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,price_type_fixed,Fixed price,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,price_type_hourly,Per hour,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,price_type_request,Per request (quote),,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,price_type_per_sqm,Per sq.m.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_delete_service,Delete service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_delete_confirm,Are you sure you want to delete,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_delete_undo_warning,This action cannot be undone.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_cancel,Cancel,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_deleting,Deleting…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_delete,Delete,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_new_service,New Service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_edit_service,Edit Service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_title,Title,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,placeholder_service_title_example,e.g. Apartment cleaning,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_description,Description,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_optional,optional,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,placeholder_description,Brief description…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_category,Category,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,placeholder_select_category,Select a category,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_cities,Cities,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,placeholder_select_cities,Select cities where you offer this service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_price_type,Price type,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_price_type,Price type,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_price_in_currency,Price in {currency},,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_optional,optional,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_saving,Saving…,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_create_service,Create Service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_save_changes,Save Changes,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_cancel,Cancel,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,error_title_required,Title is required,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,error_category_required,Category is required,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,error_city_required,At least one city is required,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_service_created,Service created successfully,,,MISSING_IN_DB,unknown,t(dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_service_updated,Service updated successfully,,,MISSING_IN_DB,unknown,t(dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_failed_save_service,Failed to save service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_service_deleted,Service deleted,,,MISSING_IN_DB,unknown,t(dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_failed_delete_service,Failed to delete service,,,MISSING_IN_DB,unknown,"null);
+    } catch (e: unknown) {
+      setToast(e instanceof Error ? e.message : t(dict"
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_failed_load_services,Failed to load services,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,nav_services,Services,,,MISSING_IN_DB,unknown,"null)}
+          deleting={deleting}
+          dict={dict}
+        />
+      )}
+
+      <div className=""space-y-4"">
+        {/* Header */}
+        <div className=""flex items-center justify-between gap-4"">
+          <div>
+            <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_services_count,,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_add_service,Add Service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_no_services_yet,No services yet,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_add_services_desc,Add the services you offer to start receiving leads.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_add_service,Add Service,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,price_type_fixed,'Fixed price',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,price_type_hourly,'Per hour',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,price_type_request,'Per request (quote,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,price_type_per_sqm,'Per sq.m.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_delete_service,'Delete service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_delete_confirm,'Are you sure you want to delete',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_delete_undo_warning,'This action cannot be undone.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_cancel,'Cancel',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_deleting,'Deleting…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_delete,'Delete',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_new_service,'New Service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_edit_service,'Edit Service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_title,'Title',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,placeholder_service_title_example,'e.g. Apartment cleaning',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_description,'Description',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_optional,'optional',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,placeholder_description,'Brief description…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_category,'Category',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,placeholder_select_category,'Select a category',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_cities,'Cities',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,placeholder_select_cities,'Select cities where you offer this service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_price_type,'Price type',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_price_type,'Price type',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_price_in_currency,'Price in {currency}',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,label_optional,'optional',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_saving,'Saving…',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_create_service,'Create Service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_save_changes,'Save Changes',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_cancel,'Cancel',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,error_title_required,'Title is required',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,error_category_required,'Category is required',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,error_city_required,'At least one city is required',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_service_created,'Service created successfully',,,MISSING_IN_DB,unknown,t(dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_service_updated,'Service updated successfully',,,MISSING_IN_DB,unknown,t(dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_failed_save_service,'Failed to save service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_service_deleted,'Service deleted',,,MISSING_IN_DB,unknown,t(dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_failed_delete_service,'Failed to delete service',,,MISSING_IN_DB,unknown,"null);
+    } catch (e: unknown) {
+      setToast(e instanceof Error ? e.message : t(dict"
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_failed_load_services,'Failed to load services',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,nav_services,'Services',,,MISSING_IN_DB,unknown,"null)}
+          deleting={deleting}
+          dict={dict}
+        />
+      )}
+
+      <div className=""space-y-4"">
+        {/* Header */}
+        <div className=""flex items-center justify-between gap-4"">
+          <div>
+            <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_services_count,'{count} services',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_add_service,'Add Service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_no_services_yet,'No services yet',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,msg_add_services_desc,'Add the services you offer to start receiving leads.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/services/page.tsx,btn_add_service,'Add Service',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_seo,SEO,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_widget,Widget,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_qr,QR Code,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_direct,Direct,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_other,Other,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,nav_analytics,Analytics,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,analytics_subtitle,Lead performance overview,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_last_x_days,Last {p} days,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,msg_failed_load_analytics,Failed to load analytics,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,msg_no_leads_yet,No leads yet,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,msg_analytics_appear_when_leads,Analytics will appear once you start receiving leads.,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,stat_leads_received,Leads Received,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,stat_leads_contacted,Leads Contacted,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,stat_conversion_rate,Conversion Rate,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_lead_sources,Lead Sources,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_seo,'SEO',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_widget,'Widget',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_qr,'QR Code',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_direct,'Direct',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_source_other,'Other',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,nav_analytics,'Analytics',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,analytics_subtitle,'Lead performance overview',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_last_x_days,'Last {p} days',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,msg_failed_load_analytics,'Failed to load analytics',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,msg_no_leads_yet,'No leads yet',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,msg_analytics_appear_when_leads,'Analytics will appear once you start receiving leads.',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,stat_leads_received,'Leads Received',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,stat_leads_contacted,'Leads Contacted',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,stat_conversion_rate,'Conversion Rate',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/analytics/page.tsx,label_lead_sources,'Lead Sources',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_failed_load_reviews,Failed to load reviews,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_failed_submit_reply,Failed to submit reply,,,MISSING_IN_DB,unknown,"'');
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,nav_reviews,Reviews,,,MISSING_IN_DB,unknown,"review: ProviderReviewItem) {
+    setEditReplyId(review.id);
+    setReplyingTo(null);
+    setReplyText(review.provider_reply || '');
+  }
+
+  function startReply(reviewId: string) {
+    setReplyingTo(reviewId);
+    setEditReplyId(null);
+    setReplyText('');
+  }
+
+  function cancelReply() {
+    setReplyingTo(null);
+    setEditReplyId(null);
+    setReplyText('');
+  }
+
+  if (loading) {
+    return (
+      <div className=""flex items-center justify-center py-20"">
+        <div className=""w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"" />
+      </div>
+    );
+  }
+
+  const unrepliedCount = reviews.filter(r => !r.provider_reply).length;
+
+  return (
+    <div className=""space-y-6"">
+      <div>
+        <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,reviews_subtitle,Manage your client reviews and replies,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_all_reviews,All Reviews,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_unreplied,Unreplied,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_no_reviews_yet,No reviews yet,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_reviews_appear_here,"When clients review your services, they will appear here.",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_needs_reply,Needs Reply,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_your_reply,Your Reply,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_edited,Edited,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_edit,Edit,,,MISSING_IN_DB,unknown,"review)}
+                        className=""text-xs text-blue-600 hover:text-blue-700 font-medium""
+                      >
+                        {t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,placeholder_write_reply,Write your reply...,,,MISSING_IN_DB,unknown,"e.target.value)}
+                        className=""w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500""
+                        rows={3}
+                        maxLength={2000}
+                        placeholder={t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_cancel,Cancel,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_saving,Saving...,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_save_changes,Save Changes,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,placeholder_write_reply_review,Write your reply to this review...,,,MISSING_IN_DB,unknown,"e.target.value)}
+                    className=""w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500""
+                    rows={3}
+                    maxLength={2000}
+                    placeholder={t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_cancel,Cancel,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_sending,Sending...,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_send_reply,Send Reply,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_reply_to_review,Reply to this review,,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_failed_load_reviews,'Failed to load reviews',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_failed_submit_reply,'Failed to submit reply',,,MISSING_IN_DB,unknown,"'');
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,nav_reviews,'Reviews',,,MISSING_IN_DB,unknown,"review: ProviderReviewItem) {
+    setEditReplyId(review.id);
+    setReplyingTo(null);
+    setReplyText(review.provider_reply || '');
+  }
+
+  function startReply(reviewId: string) {
+    setReplyingTo(reviewId);
+    setEditReplyId(null);
+    setReplyText('');
+  }
+
+  function cancelReply() {
+    setReplyingTo(null);
+    setEditReplyId(null);
+    setReplyText('');
+  }
+
+  if (loading) {
+    return (
+      <div className=""flex items-center justify-center py-20"">
+        <div className=""w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"" />
+      </div>
+    );
+  }
+
+  const unrepliedCount = reviews.filter(r => !r.provider_reply).length;
+
+  return (
+    <div className=""space-y-6"">
+      <div>
+        <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,reviews_subtitle,'Manage your client reviews and replies',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_all_reviews,'All Reviews',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_unreplied,'Unreplied',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_no_reviews_yet,'No reviews yet',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_reviews_appear_here,"'When clients review your services, they will appear here.'",,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_needs_reply,'Needs Reply',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_your_reply,'Your Reply',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,label_edited,'Edited',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_edit,'Edit',,,MISSING_IN_DB,unknown,"review)}
+                        className=""text-xs text-blue-600 hover:text-blue-700 font-medium""
+                      >
+                        {t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,placeholder_write_reply,'Write your reply...',,,MISSING_IN_DB,unknown,"e.target.value)}
+                        className=""w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500""
+                        rows={3}
+                        maxLength={2000}
+                        placeholder={t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_cancel,'Cancel',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_saving,'Saving...',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_save_changes,'Save Changes',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,placeholder_write_reply_review,'Write your reply to this review...',,,MISSING_IN_DB,unknown,"e.target.value)}
+                    className=""w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500""
+                    rows={3}
+                    maxLength={2000}
+                    placeholder={t(dict"
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_cancel,'Cancel',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,msg_sending,'Sending...',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_send_reply,'Send Reply',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/provider/dashboard/reviews/page.tsx,btn_reply_to_review,'Reply to this review',,,MISSING_IN_DB,unknown,dict
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_desc_fallback,Trusted specialist available in Warsaw. Send a short request and wait for contact.,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_jobs_completed,completed jobs,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_last_request,Last request,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_direct_contact,Direct contact,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,form_btn,Send request,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_cleaning,Cleaning in Warsaw,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_plumbing,Plumbing in Warsaw,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_massage,Massage in Warsaw,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_plumbing,Plumbing in Warsaw,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_massage,Massage in Warsaw,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_cleaning,Cleaning in Warsaw,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,trust_specialists,specialists,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,trust_rating,rating,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,trust_requests,requests this month,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,nav_link,Become a specialist,,,"NAMESPACE_MISMATCH (code: nav_link, db: homepage.nav_link)",homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,trust_response,Avg. response: ~30 min,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,no_providers_title,Be the first to request this service in your area,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,no_providers_subtitle,Providers joining Nevumo will see your request and contact you,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,show_more,Show more,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,sticky_btn,Get offers — Free,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,also_check,See also:,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,form_btn,Get offers,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_cta_prefix,Do you offer,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_cta_suffix,in Warsaw?,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_cta_link,Join for free →,,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_desc_fallback,'Trusted specialist available in Warsaw. Send a short request and wait for contact.',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_jobs_completed,'completed jobs',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_last_request,'Last request',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_direct_contact,'Direct contact',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,form_btn,'Send request',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_cleaning,'Cleaning in Warsaw',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_plumbing,'Plumbing in Warsaw',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_massage,'Massage in Warsaw',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_plumbing,'Plumbing in Warsaw',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_massage,'Massage in Warsaw',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,h1_cleaning,'Cleaning in Warsaw',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,trust_specialists,'specialists',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,trust_rating,'rating',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,trust_requests,'requests this month',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,nav_link,'Become a specialist',,,"NAMESPACE_MISMATCH (code: nav_link, db: homepage.nav_link)",homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,trust_response,'Avg. response: ~30 min',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,no_providers_title,'Be the first to request this service in your area',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,no_providers_subtitle,'Providers joining Nevumo will see your request and contact you',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,show_more,'Show more',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,sticky_btn,'Get offers — Free',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,also_check,'See also:',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,form_btn,'Get offers',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_cta_prefix,'Do you offer',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_cta_suffix,'in Warsaw?',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,provider_cta_link,'Join for free →',,,MISSING_IN_DB,homepage,categoryT
+apps/web/app/[lang]/[city]/[category]/page.tsx,category,,,,MISSING_IN_DB,homepage,"category);
+  const categoryT = await fetchTranslations(lang"
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_client_dashboard,Client Dashboard,,,"NAMESPACE_MISMATCH (code: nav_client_dashboard, db: client_dashboard.nav_client_dashboard)",client_dashboard,") {
+    clearAuth();
+    router.push(`/${lang}/auth`);
+  }
+
+  return (
+    <header className=""h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 flex-shrink-0"">
+      <div className=""flex items-center gap-3 min-w-0"">
+        <button
+          onClick={onMenuClick}
+          className=""md:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors""
+          aria-label=""Open menu""
+        >
+          <svg width=""20"" height=""20"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" strokeWidth=""2"" strokeLinecap=""round"" strokeLinejoin=""round"">
+            <line x1=""3"" y1=""12"" x2=""21"" y2=""12"" />
+            <line x1=""3"" y1=""6"" x2=""21"" y2=""6"" />
+            <line x1=""3"" y1=""18"" x2=""21"" y2=""18"" />
+          </svg>
+        </button>
+        <h1 className=""font-medium text-gray-900"">{t(dict"
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_logout,Logout,,,"NAMESPACE_MISMATCH (code: nav_logout, db: client_dashboard.nav_logout)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_overview,Overview,,,"NAMESPACE_MISMATCH (code: nav_overview, db: client_dashboard.nav_overview)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_requests,My Requests,,,"NAMESPACE_MISMATCH (code: nav_requests, db: client_dashboard.nav_requests)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_reviews,Reviews,,,"NAMESPACE_MISMATCH (code: nav_reviews, db: client_dashboard.nav_reviews)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_settings,Settings,,,"NAMESPACE_MISMATCH (code: nav_settings, db: client_dashboard.nav_settings)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_find_service,Find Service,,,"NAMESPACE_MISMATCH (code: nav_find_service, db: client_dashboard.nav_find_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_provider_pitch,Offer services and get clients!,,,"NAMESPACE_MISMATCH (code: nav_provider_pitch, db: client_dashboard.nav_provider_pitch)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_switching,Switching...,,,"NAMESPACE_MISMATCH (code: nav_switching, db: client_dashboard.nav_switching)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_become_provider,Become a Provider,,,"NAMESPACE_MISMATCH (code: nav_become_provider, db: client_dashboard.nav_become_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_logout,Logout,,,"NAMESPACE_MISMATCH (code: nav_logout, db: client_dashboard.nav_logout)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_client_dashboard,'Client Dashboard',,,"NAMESPACE_MISMATCH (code: nav_client_dashboard, db: client_dashboard.nav_client_dashboard)",client_dashboard,") {
+    clearAuth();
+    router.push(`/${lang}/auth`);
+  }
+
+  return (
+    <header className=""h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 flex-shrink-0"">
+      <div className=""flex items-center gap-3 min-w-0"">
+        <button
+          onClick={onMenuClick}
+          className=""md:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors""
+          aria-label=""Open menu""
+        >
+          <svg width=""20"" height=""20"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" strokeWidth=""2"" strokeLinecap=""round"" strokeLinejoin=""round"">
+            <line x1=""3"" y1=""12"" x2=""21"" y2=""12"" />
+            <line x1=""3"" y1=""6"" x2=""21"" y2=""6"" />
+            <line x1=""3"" y1=""18"" x2=""21"" y2=""18"" />
+          </svg>
+        </button>
+        <h1 className=""font-medium text-gray-900"">{t(dict"
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_logout,'Logout',,,"NAMESPACE_MISMATCH (code: nav_logout, db: client_dashboard.nav_logout)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_overview,'Overview',,,"NAMESPACE_MISMATCH (code: nav_overview, db: client_dashboard.nav_overview)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_requests,'My Requests',,,"NAMESPACE_MISMATCH (code: nav_requests, db: client_dashboard.nav_requests)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_reviews,'Reviews',,,"NAMESPACE_MISMATCH (code: nav_reviews, db: client_dashboard.nav_reviews)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_settings,'Settings',,,"NAMESPACE_MISMATCH (code: nav_settings, db: client_dashboard.nav_settings)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_find_service,'Find Service',,,"NAMESPACE_MISMATCH (code: nav_find_service, db: client_dashboard.nav_find_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_provider_pitch,'Offer services and get clients!',,,"NAMESPACE_MISMATCH (code: nav_provider_pitch, db: client_dashboard.nav_provider_pitch)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_switching,'Switching...',,,"NAMESPACE_MISMATCH (code: nav_switching, db: client_dashboard.nav_switching)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_become_provider,'Become a Provider',,,"NAMESPACE_MISMATCH (code: nav_become_provider, db: client_dashboard.nav_become_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,nav_logout,'Logout',,,"NAMESPACE_MISMATCH (code: nav_logout, db: client_dashboard.nav_logout)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/layout.tsx,client_dashboard,,,,MISSING_IN_DB,client_dashboard,"() => {
+    async function loadTranslations() {
+      const translations = await fetchTranslations(lang"
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_title,Settings,,,"NAMESPACE_MISMATCH (code: settings_title, db: client_dashboard.settings_title)",client_dashboard,") {
+    clearAuth();
+    router.push(`/${lang}/auth`);
+  }
+
+  if (loading) {
+    return (
+      <div className=""flex items-center justify-center py-20"">
+        <div className=""w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"" />
+      </div>
+    );
+  }
+
+  return (
+    <div className=""space-y-6 max-w-2xl"">
+      <div>
+        <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_subtitle,Account and preferences,,,"NAMESPACE_MISMATCH (code: settings_subtitle, db: client_dashboard.settings_subtitle)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_account,Account,,,"NAMESPACE_MISMATCH (code: section_account, db: client_dashboard.section_account)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,label_email,Email,,,"NAMESPACE_MISMATCH (code: label_email, db: client_dashboard.label_email)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,label_phone,Phone,,,"NAMESPACE_MISMATCH (code: label_phone, db: client_dashboard.label_phone)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,btn_saving,Saving…,,,"NAMESPACE_MISMATCH (code: btn_saving, db: client_dashboard.btn_saving)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,btn_save_phone,Save Phone,,,"NAMESPACE_MISMATCH (code: btn_save_phone, db: client_dashboard.btn_save_phone)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,btn_saved,Saved!,,,"NAMESPACE_MISMATCH (code: btn_saved, db: client_dashboard.btn_saved)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_security,Security,,,"NAMESPACE_MISMATCH (code: section_security, db: client_dashboard.section_security)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_security,Manage access...,,,"NAMESPACE_MISMATCH (code: settings_security, db: client_dashboard.settings_security)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,btn_change_password,Change Password,,,"NAMESPACE_MISMATCH (code: btn_change_password, db: client_dashboard.btn_change_password)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_notifications,Email Notifications,,,"NAMESPACE_MISMATCH (code: section_notifications, db: client_dashboard.section_notifications)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_email_notif,Receive email on review reply,,,"NAMESPACE_MISMATCH (code: settings_email_notif, db: client_dashboard.settings_email_notif)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_email_notif_desc,Receive email notifications when providers reply to your reviews,,,"NAMESPACE_MISMATCH (code: settings_email_notif_desc, db: client_dashboard.settings_email_notif_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_role,Account Role,,,"NAMESPACE_MISMATCH (code: section_role, db: client_dashboard.section_role)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_role_desc,If you want to offer services...,,,"NAMESPACE_MISMATCH (code: settings_role_desc, db: client_dashboard.settings_role_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,nav_switching,Switching...,,,"NAMESPACE_MISMATCH (code: nav_switching, db: client_dashboard.nav_switching)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,nav_become_provider,Become a Provider,,,"NAMESPACE_MISMATCH (code: nav_become_provider, db: client_dashboard.nav_become_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_session,Session,,,"NAMESPACE_MISMATCH (code: section_session, db: client_dashboard.section_session)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,nav_logout,Logout,,,"NAMESPACE_MISMATCH (code: nav_logout, db: client_dashboard.nav_logout)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_title,'Settings',,,"NAMESPACE_MISMATCH (code: settings_title, db: client_dashboard.settings_title)",client_dashboard,") {
+    clearAuth();
+    router.push(`/${lang}/auth`);
+  }
+
+  if (loading) {
+    return (
+      <div className=""flex items-center justify-center py-20"">
+        <div className=""w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"" />
+      </div>
+    );
+  }
+
+  return (
+    <div className=""space-y-6 max-w-2xl"">
+      <div>
+        <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_subtitle,'Account and preferences',,,"NAMESPACE_MISMATCH (code: settings_subtitle, db: client_dashboard.settings_subtitle)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_account,'Account',,,"NAMESPACE_MISMATCH (code: section_account, db: client_dashboard.section_account)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,label_email,'Email',,,"NAMESPACE_MISMATCH (code: label_email, db: client_dashboard.label_email)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,label_phone,'Phone',,,"NAMESPACE_MISMATCH (code: label_phone, db: client_dashboard.label_phone)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,btn_saving,'Saving…',,,"NAMESPACE_MISMATCH (code: btn_saving, db: client_dashboard.btn_saving)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,btn_save_phone,'Save Phone',,,"NAMESPACE_MISMATCH (code: btn_save_phone, db: client_dashboard.btn_save_phone)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,btn_saved,'Saved!',,,"NAMESPACE_MISMATCH (code: btn_saved, db: client_dashboard.btn_saved)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_security,'Security',,,"NAMESPACE_MISMATCH (code: section_security, db: client_dashboard.section_security)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_security,'Manage access...',,,"NAMESPACE_MISMATCH (code: settings_security, db: client_dashboard.settings_security)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,btn_change_password,'Change Password',,,"NAMESPACE_MISMATCH (code: btn_change_password, db: client_dashboard.btn_change_password)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_notifications,'Email Notifications',,,"NAMESPACE_MISMATCH (code: section_notifications, db: client_dashboard.section_notifications)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_email_notif,'Receive email on review reply',,,"NAMESPACE_MISMATCH (code: settings_email_notif, db: client_dashboard.settings_email_notif)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_email_notif_desc,'Receive email notifications when providers reply to your reviews',,,"NAMESPACE_MISMATCH (code: settings_email_notif_desc, db: client_dashboard.settings_email_notif_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_role,'Account Role',,,"NAMESPACE_MISMATCH (code: section_role, db: client_dashboard.section_role)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,settings_role_desc,'If you want to offer services...',,,"NAMESPACE_MISMATCH (code: settings_role_desc, db: client_dashboard.settings_role_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,nav_switching,'Switching...',,,"NAMESPACE_MISMATCH (code: nav_switching, db: client_dashboard.nav_switching)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,nav_become_provider,'Become a Provider',,,"NAMESPACE_MISMATCH (code: nav_become_provider, db: client_dashboard.nav_become_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,section_session,'Session',,,"NAMESPACE_MISMATCH (code: section_session, db: client_dashboard.section_session)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,nav_logout,'Logout',,,"NAMESPACE_MISMATCH (code: nav_logout, db: client_dashboard.nav_logout)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/settings/page.tsx,client_dashboard,,,,MISSING_IN_DB,client_dashboard,"() => {
+    async function loadTranslations() {
+      const translations = await fetchTranslations(lang"
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,status_completed,Completed,,,"NAMESPACE_MISMATCH (code: status_completed, db: client_dashboard.status_completed)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,status_rejected,Rejected,,,"NAMESPACE_MISMATCH (code: status_rejected, db: client_dashboard.status_rejected)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,status_active,Active,,,"NAMESPACE_MISMATCH (code: status_active, db: client_dashboard.status_active)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,requests_title,My Requests,,,"NAMESPACE_MISMATCH (code: requests_title, db: client_dashboard.requests_title)",client_dashboard,"'Ревюто беше изпратено успешно.');
+      await loadLeads(activeTab);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Неуспешно изпращане на ревю.');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className=""flex items-center justify-center py-20"">
+        <div className=""w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"" />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {toast && <Toast message={toast} onDone={clearToast} />}
+      <div className=""space-y-6"">
+        <div>
+          <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,requests_empty_title,No requests found,,,"NAMESPACE_MISMATCH (code: requests_empty_title, db: client_dashboard.requests_empty_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,requests_empty_desc,Send a new request and it will appear here.,,,"NAMESPACE_MISMATCH (code: requests_empty_desc, db: client_dashboard.requests_empty_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,cta_find_service,Find Service,,,"NAMESPACE_MISMATCH (code: cta_find_service, db: client_dashboard.cta_find_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_rate_service,Rate Service,,,"NAMESPACE_MISMATCH (code: btn_rate_service, db: client_dashboard.btn_rate_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,label_comment,Comment,,,"NAMESPACE_MISMATCH (code: label_comment, db: client_dashboard.label_comment)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,review_placeholder,Share your impressions...,,,"NAMESPACE_MISMATCH (code: review_placeholder, db: client_dashboard.review_placeholder)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_cancel,Cancel,,,"NAMESPACE_MISMATCH (code: btn_cancel, db: client_dashboard.btn_cancel)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_submitting,Submitting...,,,"NAMESPACE_MISMATCH (code: btn_submitting, db: client_dashboard.btn_submitting)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_submit_review,Submit Review,,,"NAMESPACE_MISMATCH (code: btn_submit_review, db: client_dashboard.btn_submit_review)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_write_review,Write a Review,,,"NAMESPACE_MISMATCH (code: btn_write_review, db: client_dashboard.btn_write_review)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,status_completed,'Completed',,,"NAMESPACE_MISMATCH (code: status_completed, db: client_dashboard.status_completed)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,status_rejected,'Rejected',,,"NAMESPACE_MISMATCH (code: status_rejected, db: client_dashboard.status_rejected)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,status_active,'Active',,,"NAMESPACE_MISMATCH (code: status_active, db: client_dashboard.status_active)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,active,"'done', 'rejected'];
+    if (statusFromUrl && validStatuses.includes(statusFromUrl as ClientLeadFilterStatus",,,MISSING_IN_DB,client_dashboard,"'status');
+    const validStatuses: ClientLeadFilterStatus[] = ['all'"
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,requests_title,'My Requests',,,"NAMESPACE_MISMATCH (code: requests_title, db: client_dashboard.requests_title)",client_dashboard,"'Ревюто беше изпратено успешно.');
+      await loadLeads(activeTab);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Неуспешно изпращане на ревю.');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className=""flex items-center justify-center py-20"">
+        <div className=""w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full animate-spin"" />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {toast && <Toast message={toast} onDone={clearToast} />}
+      <div className=""space-y-6"">
+        <div>
+          <h1 className=""text-xl font-bold text-gray-900"">{t(dict"
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,requests_empty_title,'No requests found',,,"NAMESPACE_MISMATCH (code: requests_empty_title, db: client_dashboard.requests_empty_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,requests_empty_desc,'Send a new request and it will appear here.',,,"NAMESPACE_MISMATCH (code: requests_empty_desc, db: client_dashboard.requests_empty_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,cta_find_service,'Find Service',,,"NAMESPACE_MISMATCH (code: cta_find_service, db: client_dashboard.cta_find_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_rate_service,'Rate Service',,,"NAMESPACE_MISMATCH (code: btn_rate_service, db: client_dashboard.btn_rate_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,label_comment,'Comment',,,"NAMESPACE_MISMATCH (code: label_comment, db: client_dashboard.label_comment)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,review_placeholder,'Share your impressions...',,,"NAMESPACE_MISMATCH (code: review_placeholder, db: client_dashboard.review_placeholder)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_cancel,'Cancel',,,"NAMESPACE_MISMATCH (code: btn_cancel, db: client_dashboard.btn_cancel)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_submitting,'Submitting...',,,"NAMESPACE_MISMATCH (code: btn_submitting, db: client_dashboard.btn_submitting)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_submit_review,'Submit Review',,,"NAMESPACE_MISMATCH (code: btn_submit_review, db: client_dashboard.btn_submit_review)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,btn_write_review,'Write a Review',,,"NAMESPACE_MISMATCH (code: btn_write_review, db: client_dashboard.btn_write_review)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/requests/page.tsx,client_dashboard,,,,MISSING_IN_DB,client_dashboard,"() => {
+    async function loadTranslations() {
+      const translations = await fetchTranslations(lang"
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,status_completed,Completed,,,"NAMESPACE_MISMATCH (code: status_completed, db: client_dashboard.status_completed)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,status_rejected,Rejected,,,"NAMESPACE_MISMATCH (code: status_rejected, db: client_dashboard.status_rejected)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,status_active,Active,,,"NAMESPACE_MISMATCH (code: status_active, db: client_dashboard.status_active)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,overview_title,Overview,,,"NAMESPACE_MISMATCH (code: overview_title, db: client_dashboard.overview_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,overview_subtitle,Overview of your requests and reviews,,,"NAMESPACE_MISMATCH (code: overview_subtitle, db: client_dashboard.overview_subtitle)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,stat_active_requests,Active Requests,,,"NAMESPACE_MISMATCH (code: stat_active_requests, db: client_dashboard.stat_active_requests)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,stat_completed_services,Completed Services,,,"NAMESPACE_MISMATCH (code: stat_completed_services, db: client_dashboard.stat_completed_services)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,stat_reviews,Reviews,,,"NAMESPACE_MISMATCH (code: stat_reviews, db: client_dashboard.stat_reviews)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,empty_requests_title,No requests yet,,,"NAMESPACE_MISMATCH (code: empty_requests_title, db: client_dashboard.empty_requests_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,empty_requests_desc,Browse available services...,,,"NAMESPACE_MISMATCH (code: empty_requests_desc, db: client_dashboard.empty_requests_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,cta_find_service,Find Service,,,"NAMESPACE_MISMATCH (code: cta_find_service, db: client_dashboard.cta_find_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,recent_title,Recent Requests,,,"NAMESPACE_MISMATCH (code: recent_title, db: client_dashboard.recent_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,recent_subtitle,Your latest activity in Nevumo,,,"NAMESPACE_MISMATCH (code: recent_subtitle, db: client_dashboard.recent_subtitle)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,label_provider,Provider,,,"NAMESPACE_MISMATCH (code: label_provider, db: client_dashboard.label_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,label_marketplace,Marketplace Request,,,"NAMESPACE_MISMATCH (code: label_marketplace, db: client_dashboard.label_marketplace)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,label_date,Date,,,"NAMESPACE_MISMATCH (code: label_date, db: client_dashboard.label_date)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,status_completed,'Completed',,,"NAMESPACE_MISMATCH (code: status_completed, db: client_dashboard.status_completed)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,status_rejected,'Rejected',,,"NAMESPACE_MISMATCH (code: status_rejected, db: client_dashboard.status_rejected)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,status_active,'Active',,,"NAMESPACE_MISMATCH (code: status_active, db: client_dashboard.status_active)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,overview_title,'Overview',,,"NAMESPACE_MISMATCH (code: overview_title, db: client_dashboard.overview_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,overview_subtitle,'Overview of your requests and reviews',,,"NAMESPACE_MISMATCH (code: overview_subtitle, db: client_dashboard.overview_subtitle)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,stat_active_requests,'Active Requests',,,"NAMESPACE_MISMATCH (code: stat_active_requests, db: client_dashboard.stat_active_requests)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,stat_completed_services,'Completed Services',,,"NAMESPACE_MISMATCH (code: stat_completed_services, db: client_dashboard.stat_completed_services)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,stat_reviews,'Reviews',,,"NAMESPACE_MISMATCH (code: stat_reviews, db: client_dashboard.stat_reviews)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,empty_requests_title,'No requests yet',,,"NAMESPACE_MISMATCH (code: empty_requests_title, db: client_dashboard.empty_requests_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,empty_requests_desc,'Browse available services...',,,"NAMESPACE_MISMATCH (code: empty_requests_desc, db: client_dashboard.empty_requests_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,cta_find_service,'Find Service',,,"NAMESPACE_MISMATCH (code: cta_find_service, db: client_dashboard.cta_find_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,recent_title,'Recent Requests',,,"NAMESPACE_MISMATCH (code: recent_title, db: client_dashboard.recent_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,recent_subtitle,'Your latest activity in Nevumo',,,"NAMESPACE_MISMATCH (code: recent_subtitle, db: client_dashboard.recent_subtitle)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,label_provider,'Provider',,,"NAMESPACE_MISMATCH (code: label_provider, db: client_dashboard.label_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,label_marketplace,'Marketplace Request',,,"NAMESPACE_MISMATCH (code: label_marketplace, db: client_dashboard.label_marketplace)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,label_date,'Date',,,"NAMESPACE_MISMATCH (code: label_date, db: client_dashboard.label_date)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/overview/page.tsx,client_dashboard,,,,MISSING_IN_DB,client_dashboard,"() => {
+    async function loadTranslations() {
+      const translations = await fetchTranslations(lang"
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,reviews_title,Reviews,,,"NAMESPACE_MISMATCH (code: reviews_title, db: client_dashboard.reviews_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,reviews_subtitle,Your written reviews and pending ratings,,,"NAMESPACE_MISMATCH (code: reviews_subtitle, db: client_dashboard.reviews_subtitle)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,tab_written,Written,,,"NAMESPACE_MISMATCH (code: tab_written, db: client_dashboard.tab_written)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,tab_pending,Pending Review,,,"NAMESPACE_MISMATCH (code: tab_pending, db: client_dashboard.tab_pending)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,empty_reviews_title,No reviews written yet,,,"NAMESPACE_MISMATCH (code: empty_reviews_title, db: client_dashboard.empty_reviews_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,empty_reviews_desc,When you rate a completed service...,,,"NAMESPACE_MISMATCH (code: empty_reviews_desc, db: client_dashboard.empty_reviews_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_provider,Provider,,,"NAMESPACE_MISMATCH (code: label_provider, db: client_dashboard.label_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_has_reply,Has Reply,,,"NAMESPACE_MISMATCH (code: label_has_reply, db: client_dashboard.label_has_reply)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_service,Service:,,,"NAMESPACE_MISMATCH (code: label_service, db: client_dashboard.label_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_hide_reply,Hide Provider Reply,,,"NAMESPACE_MISMATCH (code: label_hide_reply, db: client_dashboard.label_hide_reply)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_provider_reply,Provider Reply,,,"NAMESPACE_MISMATCH (code: label_provider_reply, db: client_dashboard.label_provider_reply)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_provider_reply,Provider Reply,,,"NAMESPACE_MISMATCH (code: label_provider_reply, db: client_dashboard.label_provider_reply)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_replied_on,Replied on,,,"NAMESPACE_MISMATCH (code: label_replied_on, db: client_dashboard.label_replied_on)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,empty_pending_title,No pending reviews,,,"NAMESPACE_MISMATCH (code: empty_pending_title, db: client_dashboard.empty_pending_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,empty_pending_desc,Completed services you have not rated...,,,"NAMESPACE_MISMATCH (code: empty_pending_desc, db: client_dashboard.empty_pending_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,cta_find_service,Find Service,,,"NAMESPACE_MISMATCH (code: cta_find_service, db: client_dashboard.cta_find_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_provider,Provider,,,"NAMESPACE_MISMATCH (code: label_provider, db: client_dashboard.label_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,btn_rate_service,Rate,,,"NAMESPACE_MISMATCH (code: btn_rate_service, db: client_dashboard.btn_rate_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_rating,Rating,,,"NAMESPACE_MISMATCH (code: label_rating, db: client_dashboard.label_rating)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_comment,Comment,,,"NAMESPACE_MISMATCH (code: label_comment, db: client_dashboard.label_comment)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,review_placeholder,Share your impressions...,,,"NAMESPACE_MISMATCH (code: review_placeholder, db: client_dashboard.review_placeholder)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,btn_cancel,Cancel,,,"NAMESPACE_MISMATCH (code: btn_cancel, db: client_dashboard.btn_cancel)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,btn_submitting,Submitting...,,,"NAMESPACE_MISMATCH (code: btn_submitting, db: client_dashboard.btn_submitting)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,btn_submit_review,Submit Review,,,"NAMESPACE_MISMATCH (code: btn_submit_review, db: client_dashboard.btn_submit_review)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,settings_email_notif,Receive email on review reply,,,"NAMESPACE_MISMATCH (code: settings_email_notif, db: client_dashboard.settings_email_notif)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,reviews_title,'Reviews',,,"NAMESPACE_MISMATCH (code: reviews_title, db: client_dashboard.reviews_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,reviews_subtitle,'Your written reviews and pending ratings',,,"NAMESPACE_MISMATCH (code: reviews_subtitle, db: client_dashboard.reviews_subtitle)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,tab_written,'Written',,,"NAMESPACE_MISMATCH (code: tab_written, db: client_dashboard.tab_written)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,tab_pending,'Pending Review',,,"NAMESPACE_MISMATCH (code: tab_pending, db: client_dashboard.tab_pending)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,empty_reviews_title,'No reviews written yet',,,"NAMESPACE_MISMATCH (code: empty_reviews_title, db: client_dashboard.empty_reviews_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,empty_reviews_desc,'When you rate a completed service...',,,"NAMESPACE_MISMATCH (code: empty_reviews_desc, db: client_dashboard.empty_reviews_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_provider,'Provider',,,"NAMESPACE_MISMATCH (code: label_provider, db: client_dashboard.label_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_has_reply,'Has Reply',,,"NAMESPACE_MISMATCH (code: label_has_reply, db: client_dashboard.label_has_reply)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_service,'Service: ',,,"NAMESPACE_MISMATCH (code: label_service, db: client_dashboard.label_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_hide_reply,'Hide Provider Reply',,,"NAMESPACE_MISMATCH (code: label_hide_reply, db: client_dashboard.label_hide_reply)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_provider_reply,'Provider Reply',,,"NAMESPACE_MISMATCH (code: label_provider_reply, db: client_dashboard.label_provider_reply)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_provider_reply,'Provider Reply',,,"NAMESPACE_MISMATCH (code: label_provider_reply, db: client_dashboard.label_provider_reply)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_replied_on,'Replied on ',,,"NAMESPACE_MISMATCH (code: label_replied_on, db: client_dashboard.label_replied_on)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,empty_pending_title,'No pending reviews',,,"NAMESPACE_MISMATCH (code: empty_pending_title, db: client_dashboard.empty_pending_title)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,empty_pending_desc,'Completed services you have not rated...',,,"NAMESPACE_MISMATCH (code: empty_pending_desc, db: client_dashboard.empty_pending_desc)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,cta_find_service,'Find Service',,,"NAMESPACE_MISMATCH (code: cta_find_service, db: client_dashboard.cta_find_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_provider,'Provider',,,"NAMESPACE_MISMATCH (code: label_provider, db: client_dashboard.label_provider)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,btn_rate_service,'Rate',,,"NAMESPACE_MISMATCH (code: btn_rate_service, db: client_dashboard.btn_rate_service)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_rating,'Rating',,,"NAMESPACE_MISMATCH (code: label_rating, db: client_dashboard.label_rating)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,label_comment,'Comment',,,"NAMESPACE_MISMATCH (code: label_comment, db: client_dashboard.label_comment)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,review_placeholder,'Share your impressions...',,,"NAMESPACE_MISMATCH (code: review_placeholder, db: client_dashboard.review_placeholder)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,btn_cancel,'Cancel',,,"NAMESPACE_MISMATCH (code: btn_cancel, db: client_dashboard.btn_cancel)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,btn_submitting,'Submitting...',,,"NAMESPACE_MISMATCH (code: btn_submitting, db: client_dashboard.btn_submitting)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,btn_submit_review,'Submit Review',,,"NAMESPACE_MISMATCH (code: btn_submit_review, db: client_dashboard.btn_submit_review)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,settings_email_notif,'Receive email on review reply',,,"NAMESPACE_MISMATCH (code: settings_email_notif, db: client_dashboard.settings_email_notif)",client_dashboard,dict
+apps/web/app/[lang]/client/dashboard/reviews/page.tsx,client_dashboard,,,,MISSING_IN_DB,client_dashboard,"() => {
+    async function loadTranslations() {
+      const translations = await fetchTranslations(lang"
+apps/web/app/[lang]/login/LoginCards.tsx,login,,,,MISSING_IN_DB,unknown,"""login_intent_selected"""
+apps/web/components/dashboard/SearchableSelect.tsx,placeholder_type_to_search,Type to search…,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchableSelect.tsx,msg_no_results,No results,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchableSelect.tsx,placeholder_type_to_search,'Type to search…',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchableSelect.tsx,msg_no_results,'No results',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardTopBar.tsx,aria_open_menu,Open menu,,,MISSING_IN_DB,unknown,") {
+    clearAuth();
+    router.push(`/${lang}/auth`);
+  }
+
+  return (
+    <header className=""h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 flex-shrink-0"">
+      {/* Mobile menu button */}
+      <button
+        onClick={onMenuClick}
+        className=""md:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors""
+        aria-label={t(dict"
+apps/web/components/dashboard/DashboardTopBar.tsx,btn_log_out,Log out,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardTopBar.tsx,aria_open_menu,'Open menu',,,MISSING_IN_DB,unknown,") {
+    clearAuth();
+    router.push(`/${lang}/auth`);
+  }
+
+  return (
+    <header className=""h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 flex-shrink-0"">
+      {/* Mobile menu button */}
+      <button
+        onClick={onMenuClick}
+        className=""md:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors""
+        aria-label={t(dict"
+apps/web/components/dashboard/DashboardTopBar.tsx,btn_log_out,'Log out',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_seo,SEO,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_widget,Widget,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_qr,QR Code,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_direct,Direct,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_other,Other,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,msg_notes_saved,Notes saved successfully,,,MISSING_IN_DB,unknown,t(dict
+apps/web/components/dashboard/LeadDetailModal.tsx,msg_notes_save_failed,Failed to save notes,,,MISSING_IN_DB,unknown,t(dict
+apps/web/components/dashboard/LeadDetailModal.tsx,lead_detail_title,Lead Details,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,aria_close,Close,Close,Затвори,MATCH,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_date,Date,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_phone,Phone,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_status,Status,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source,Source,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_client_message,CLIENT MESSAGE,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,msg_no_description,No description provided,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_private_notes,Private Notes,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_notes_privacy_disclaimer,These notes are only visible to you and will not be shared with the client.,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,placeholder_private_notes,Write your private notes here...,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,msg_saving,Saving...,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,btn_save_notes,Save Notes,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,btn_close,Close,Close,Затвори,MATCH,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_seo,'SEO',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_widget,'Widget',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_qr,'QR Code',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_direct,'Direct',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source_other,'Other',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,msg_notes_saved,'Notes saved successfully',,,MISSING_IN_DB,unknown,t(dict
+apps/web/components/dashboard/LeadDetailModal.tsx,msg_notes_save_failed,'Failed to save notes',,,MISSING_IN_DB,unknown,t(dict
+apps/web/components/dashboard/LeadDetailModal.tsx,lead_detail_title,'Lead Details',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,aria_close,'Close',Close,Затвори,MATCH,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_date,'Date',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_phone,'Phone',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_status,'Status',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_source,'Source',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_client_message,'CLIENT MESSAGE',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,msg_no_description,'No description provided',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_private_notes,'Private Notes',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,label_notes_privacy_disclaimer,'These notes are only visible to you and will not be shared with the client.',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,placeholder_private_notes,'Write your private notes here...',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,msg_saving,'Saving...',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,btn_save_notes,'Save Notes',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadDetailModal.tsx,btn_close,'Close',Close,Затвори,MATCH,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_new,New,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_contacted,Contacted,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_done,Done,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_rejected,Rejected,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_new,New,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,availability_active,Active,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,availability_busy,Busy,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,availability_offline,Offline,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_new,'New',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_contacted,'Contacted',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_done,'Done',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_rejected,'Rejected',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,status_new,'New',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,availability_active,'Active',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,availability_busy,'Busy',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/StatusBadge.tsx,availability_offline,'Offline',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_dashboard,Dashboard,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_leads,Leads,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_services,Services,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_analytics,Analytics,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_reviews,Reviews,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_qr_code,QR Code,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_profile,Profile,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_settings,Settings,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,msg_failed_switch_role,Failed to switch role,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,logo_pro,Pro,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,msg_switching,Switching…,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,btn_find_service,Find Service,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,aria_close_menu,Close menu,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_dashboard,'Dashboard',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_leads,'Leads',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_services,'Services',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_analytics,'Analytics',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_reviews,'Reviews',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_qr_code,'QR Code',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_profile,'Profile',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,nav_settings,'Settings',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,msg_failed_switch_role,'Failed to switch role',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,logo_pro,'Pro',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,msg_switching,'Switching…',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,btn_find_service,'Find Service',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/DashboardSidebar.tsx,aria_close_menu,'Close menu',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,label_source_seo,SEO,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,label_source_widget,Widget,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,label_source_qr,QR Code,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,label_source_direct,Direct,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,label_source_other,Other,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,btn_view,View,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,btn_contact,Contact,,,MISSING_IN_DB,unknown,"lead.id);
+                  }}
+                  className=""px-3 py-1 text-xs font-medium bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors""
+                >
+                  {t(dict"
+apps/web/components/dashboard/LeadRow.tsx,status_done,Done,,,MISSING_IN_DB,unknown,"lead.id);
+                  }}
+                  className=""px-3 py-1 text-xs font-medium bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors""
+                >
+                  {t(dict"
+apps/web/components/dashboard/LeadRow.tsx,btn_reject,Reject,,,MISSING_IN_DB,unknown,"lead.id);
+                }}
+                className=""px-3 py-1 text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors""
+              >
+                {t(dict"
+apps/web/components/dashboard/LeadRow.tsx,label_source_seo,'SEO',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,label_source_widget,'Widget',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,label_source_qr,'QR Code',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,label_source_direct,'Direct',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,label_source_other,'Other',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,btn_view,'View',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/LeadRow.tsx,btn_contact,'Contact',,,MISSING_IN_DB,unknown,"lead.id);
+                  }}
+                  className=""px-3 py-1 text-xs font-medium bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors""
+                >
+                  {t(dict"
+apps/web/components/dashboard/LeadRow.tsx,status_done,'Done',,,MISSING_IN_DB,unknown,"lead.id);
+                  }}
+                  className=""px-3 py-1 text-xs font-medium bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors""
+                >
+                  {t(dict"
+apps/web/components/dashboard/LeadRow.tsx,btn_reject,'Reject',,,MISSING_IN_DB,unknown,"lead.id);
+                }}
+                className=""px-3 py-1 text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors""
+              >
+                {t(dict"
+apps/web/components/dashboard/ServiceCard.tsx,price_type_fixed,Fixed price,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/ServiceCard.tsx,price_type_hourly,Per hour,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/ServiceCard.tsx,price_type_request,Per request (quote),,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/ServiceCard.tsx,price_type_per_sqm,Per sq.m.,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/ServiceCard.tsx,btn_edit,Edit,,,MISSING_IN_DB,unknown,"service)}
+          className=""flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors""
+        >
+          <svg width=""12"" height=""12"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" strokeWidth=""2"" strokeLinecap=""round"" strokeLinejoin=""round"" aria-hidden=""true"">
+            <path d=""M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"" />
+            <path d=""M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"" />
+          </svg>
+          {t(dict"
+apps/web/components/dashboard/ServiceCard.tsx,btn_delete,Delete,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/ServiceCard.tsx,price_type_fixed,'Fixed price',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/ServiceCard.tsx,price_type_hourly,'Per hour',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/ServiceCard.tsx,price_type_request,'Per request (quote,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/ServiceCard.tsx,price_type_per_sqm,'Per sq.m.',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/ServiceCard.tsx,btn_edit,'Edit',,,MISSING_IN_DB,unknown,"service)}
+          className=""flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors""
+        >
+          <svg width=""12"" height=""12"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" strokeWidth=""2"" strokeLinecap=""round"" strokeLinejoin=""round"" aria-hidden=""true"">
+            <path d=""M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"" />
+            <path d=""M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"" />
+          </svg>
+          {t(dict"
+apps/web/components/dashboard/ServiceCard.tsx,btn_delete,'Delete',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/MultiSelect.tsx,aria_remove_item,Remove,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/MultiSelect.tsx,aria_open_menu,Open menu,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/MultiSelect.tsx,placeholder_type_to_search,Type to search…,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/MultiSelect.tsx,msg_no_results,No results,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/MultiSelect.tsx,aria_remove_item,'Remove',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/MultiSelect.tsx,aria_open_menu,'Open menu',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/MultiSelect.tsx,placeholder_type_to_search,'Type to search…',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/MultiSelect.tsx,msg_no_results,'No results',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchInput.tsx,placeholder_type_to_search,Type to search…,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchInput.tsx,aria_remove_item,Remove,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchInput.tsx,aria_open_menu,Open menu,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchInput.tsx,msg_no_results,No results,,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchInput.tsx,placeholder_type_to_search,'Type to search…',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchInput.tsx,aria_remove_item,'Remove',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchInput.tsx,aria_open_menu,'Open menu',,,MISSING_IN_DB,unknown,dict
+apps/web/components/dashboard/SearchInput.tsx,msg_no_results,'No results',,,MISSING_IN_DB,unknown,dict
+apps/web/components/pwa/PWAInstallPrompt.tsx,pwa,,,,MISSING_IN_DB,unknown,"() => {
+    if (canInstall && !hasTracked) {
+      trackPageEvent('pwa_prompt_shown'"
+apps/web/components/pwa/PWAInstallPrompt.tsx,pwa,,,,MISSING_IN_DB,unknown,"Android only)
+  useEffect(() => {
+    if (isIOS) return;
+
+    const handleAppInstalled = () => {
+      trackPageEvent('pwa_installed'"
+apps/web/components/pwa/PWAInstallPrompt.tsx,pwa,,,,MISSING_IN_DB,unknown,'pwa_install_accepted'
+apps/web/components/pwa/PWAInstallPrompt.tsx,pwa,,,,MISSING_IN_DB,unknown,");
+    }
+  };
+
+  const handleDismissClick = () => {
+    trackPageEvent('pwa_install_dismissed'"
+apps/web/components/pwa/PWAInstallPrompt.tsx,Install Nevumo,,,,MISSING_IN_DB,unknown,'install_title'
+apps/web/components/pwa/PWAInstallPrompt.tsx,Track requests without opening a browser,,,,MISSING_IN_DB,unknown,'client_subtitle'
+apps/web/components/pwa/PWAInstallPrompt.tsx,See new requests instantly,,,,MISSING_IN_DB,unknown,'provider_subtitle'
+apps/web/components/pwa/PWAInstallPrompt.tsx,Tap Share in the bottom toolbar,,,,MISSING_IN_DB,unknown,'ios_step1'
+apps/web/components/pwa/PWAInstallPrompt.tsx,Got it,,,,MISSING_IN_DB,unknown,'dismiss_button'
+apps/web/components/pwa/PWAInstallPrompt.tsx,Track requests without opening a browser,,,,MISSING_IN_DB,unknown,'client_subtitle'
+apps/web/components/pwa/PWAInstallPrompt.tsx,See new requests instantly,,,,MISSING_IN_DB,unknown,'provider_subtitle'
+apps/web/components/pwa/PWAInstallPrompt.tsx,Install Nevumo,,,,MISSING_IN_DB,unknown,'install_title'
+apps/web/components/pwa/PWAInstallPrompt.tsx,Got it,,,,MISSING_IN_DB,unknown,'dismiss_button'
