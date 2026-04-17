@@ -17,12 +17,12 @@ export async function fetchTranslations(
 
   try {
     const res = await fetch(
-      `${apiBase}/api/v1/translations?lang=${resolvedLang}&namespace=${namespace}`,
+      `${apiBase}/api/v1/translations/${namespace}?lang=${resolvedLang}`,
       { cache: 'no-store' }
     );
     if (!res.ok) throw new Error('Failed to fetch translations');
-    const json = (await res.json()) as { data?: TranslationDict };
-    return (json.data ?? {}) as TranslationDict;
+    const json = (await res.json()) as TranslationDict;
+    return json || {};
   } catch {
     return {};
   }
@@ -34,11 +34,11 @@ export function t(dict: TranslationDict, key: string, fallback = ''): string {
   return dict[cleanKey] ?? fallback;
 }
 
-// Server-side helper: creates a scoped t function that auto-prefixes keys
+// Server-side helper: uses the already namespaced dictionary
 export function createScopedT(namespace: string, dict: TranslationDict) {
   return (key: string, fallback = ''): string => {
     if (!dict || !key) return fallback;
-    const fullKey = `${namespace}.${key.trim()}`;
-    return dict[fullKey] ?? fallback;
+    const cleanKey = key.trim();
+    return dict[cleanKey] ?? fallback;
   };
 }

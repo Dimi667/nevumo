@@ -1,13 +1,13 @@
 import MagicLinkClient from './MagicLinkClient';
 
 interface MagicLinkPageProps {
-  params: { lang: string };
-  searchParams: { token?: string };
+  params: Promise<{ lang: string }>;
+  searchParams: Promise<{ token?: string }>;
 }
 
-export default function MagicLinkPage({ params, searchParams }: MagicLinkPageProps) {
-  const { lang } = params;
-  const token = searchParams.token || '';
+export default async function MagicLinkPage({ params, searchParams }: MagicLinkPageProps) {
+  const { lang } = await params;
+  const { token } = await searchParams;
 
-  return <MagicLinkClient lang={lang} token={token} />;
+  return <MagicLinkClient lang={lang} token={token || ''} />;
 }

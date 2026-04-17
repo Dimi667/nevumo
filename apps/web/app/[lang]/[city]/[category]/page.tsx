@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData } from '@/lib/api';
+import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug } from '@/lib/api';
 import { generateHreflangAlternates } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { JsonLd } from '@/components/JsonLd';
@@ -421,8 +421,13 @@ export default async function CategoryPage({ params }: PageProps) {
   const subtitle = t(categoryT, `subtitle_${catKey}`, '');
   const catNameKey = `cat_${catKey}_name` as const;
   const categoryName = t(homepageT, catNameKey, catKey);
+  const cityData = await getCityBySlug(city, lang);
+  console.log("DEBUG CITY DATA:", JSON.stringify(cityData, null, 2));
+  const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+  console.log("CATEGORY DATA:", categoryT);
+  console.log("PROVIDER_DESC_FALLBACK key:", categoryT['provider_desc_fallback']);
   const providerCardTexts: ProviderCardTexts = {
-    defaultDescription: t(categoryT, 'provider_desc_fallback', 'Trusted specialist available in Warsaw. Send a short request and wait for contact.'),
+    defaultDescription: t(categoryT, 'provider_desc_fallback', 'Проверен специалист в {city}. Изпратете кратко запитване и изчакайте връзка.').replace('{city}', cityName),
     jobsCompleted: t(categoryT, 'provider_jobs_completed', 'completed jobs'),
     lastRequest: t(categoryT, 'provider_last_request', 'Last request'),
     directContact: t(categoryT, 'provider_direct_contact', 'Direct contact'),
@@ -494,7 +499,7 @@ export default async function CategoryPage({ params }: PageProps) {
               <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
             </Link>
             <Link href={`/${lang}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
-              {t(homepageT, 'homepage.nav_link', 'Become a specialist')}
+              {t(categoryT, 'nav_link', 'Become a specialist')}
             </Link>
           </div>
         </header>

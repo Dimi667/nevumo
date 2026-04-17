@@ -13,13 +13,22 @@ This document reflects the major architectural optimization performed in April 2
 - **Optimized Dockerfiles**: Implemented multi-stage builds (Build-stage + Run-stage) to minimize image size and maximize build speed.
 - **Docker Compose Orchestration**: The root `docker-compose.yml` manages `nevumo-api`, `nevumo-web`, `nevumo-postgres`, and `nevumo-redis`.
 - **Volume Mapping**: Local development uses volume mapping (`./:/workspace`) to ensure hot-reload works correctly across the monorepo.
+- **STATIC_FILES_BASE_URL**: API service must set this environment variable to point to the API server port (8000 in Docker), not the frontend port (3000). This ensures static file URLs (images, etc.) are accessible from the browser.
 
 ### 3. SQLAlchemy & Models (The 'Base' Fix)
 - **Centralized Base**: All SQLAlchemy models now inherit from a single `Base` defined in `apps/api/database.py`.
 - **Explicit Imports**: To prevent 'table not found' errors during migrations or `docker exec` sessions, all models are explicitly imported into `database.py`.
 - **SessionLocal Standardization**: `SessionLocal` usage is standardized for both the API and CLI commands to ensure consistent transaction management.
 
-### 4. Next.js & UI (Metadata + i18n)
+### 4. Networking & Environment
+- **Centralized URL Management**: All internal and external URL addresses are managed through environment variables to ensure consistency across development, staging, and production environments.
+- **Key Environment Variables**:
+  - `APP_URL`: The public base URL of the frontend application (e.g., `http://localhost:3000` in dev). Used for generating magic links, reset emails, and QR codes.
+  - `STATIC_FILES_BASE_URL`: The public base URL of the API server. Used for generating absolute URLs for uploaded images and other static assets.
+  - `NEXT_PUBLIC_API_URL`: The URL used by the frontend to communicate with the backend. In SSR, this might be an internal Docker URL (e.g., `http://nevumo-api:8000`), while in the browser, it is the public API URL.
+- **Inter-container Communication**: Containers in Docker Compose communicate using service names (e.g., `nevumo-api`, `nevumo-postgres`) rather than `localhost`.
+
+### 5. Next.js & UI (Metadata + i18n)
 - **Metadata API Fix**: Fixed page titles (Browser Tabs) in `layout.tsx` to properly use the Next.js Metadata API, ensuring SEO-friendly and dynamic titles.
 - **Namespaced Translations**: All translation keys MUST be prefixed with their namespace (e.g., `provider_dashboard.title`).
 - **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.
@@ -35,12 +44,21 @@ Nevumo използва **Hybrid Marketplace Model**:
 
 ---
 
-## Backend Package Runtime Layout
-
-- Backend Python imports are standardized to absolute package paths under `apps.api.*`
-- `apps/api/pyproject.toml` defines the backend package for the Phase 3 packaging migration
-- Local runtime from repo root uses module entrypoints like `python3 -m uvicorn apps.api.main:app`
-- Standalone scripts now run as modules, for example `python3 -m apps.api.scripts.seed_ui_translations`
+## Backend
+- FastAPI
+- Python 3.13.12
+- SQLAlchemy (ORM)
+- Pydantic v2 + pydantic-settings (validation + config)
+- bcrypt 4.2.1 (password hashing)
+- python-jose (JWT — HS256, 30-day tokens)
+- Alembic (migrations)
+- python-slugify (URL slug generation)
+- qrcode[pil] (QR code generation for provider growth tools)
+- python-multipart (file upload support)
+- apscheduler>=3.10.0 (background jobs for magic link delivery)
+- tzlocal>=3.0 (timezone support for APScheduler)
+- Backend packaging/runtime: absolute `apps.api.*` imports with module-based startup/scripts
+- STATIC_FILES_BASE_URL: Environment variable for proper static file URL generation (images, etc.)
 - Docker runtime must expose the monorepo root on `PYTHONPATH` so the top-level `apps` package is importable
 - Current container alignment uses:
   - `PYTHONPATH=/workspace`
@@ -534,6 +552,74 @@ The fix is purely data-seeding + cache invalidation. No API contracts, database 
 - FAQ structured data is rendered through JSON-LD for richer search appearance
 - Related internal links are category-aware to strengthen crawl paths between major service pages
 - Long-form SEO text is still rendered in the main page response, not lazy-loaded, to preserve crawlability---
+
+## Next.js 15+ Page Architecture Standard (April 2026)
+
+### Server Component Wrapper Pattern
+All dashboard and complex interactive pages now follow a consistent two-component architecture:
+
+1. **Server Component Wrapper** (`page.tsx`):
+   - Extracts and awaits `params` and `searchParams` (which are now Promises in Next.js 15+)
+   - Fetches initial data server-side
+   - Passes resolved params and data to the Client Component
+   - Handles metadata generation and SEO concerns
+
+2. **Client Component** (`...Client.tsx`):
+   - Contains all interactive logic (state, event handlers, forms)
+   - Receives pre-resolved params and initial data as props
+   - Manages client-side state and API calls
+   - No need to await params — they're already resolved
+
+**Example structure:**
+```typescript
+// app/[lang]/provider/dashboard/profile/page.tsx (Server Component)
+export default async function ProfilePage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  const initialData = await fetchProfileData();
+  return <ProfileClient lang={lang} initialData={initialData} />;
+}
+
+// ProfileClient.tsx (Client Component)
+'use client';
+export default function ProfileClient({ lang, initialData }: Props) {
+  // Interactive logic here
+}
+```
+
+### Params and SearchParams as Promises
+In Next.js 15+, `params` and `searchParams` are no longer synchronous objects — they are Promises that must be awaited. This change enables streaming and better performance. All server components that need route parameters must now use `await params` and `await searchParams`.
+
+**Migration pattern:**
+- Before: `const { lang } = params`
+- After: `const { lang } = await params`
+
+### Translation Key Standards (CRITICAL)
+Translation keys used in `t()` calls must follow strict conventions to ensure consistency with the database namespace system:
+
+1. **Clean Keys Only**: Keys must NOT contain colons (`:`) or prefixes in the `t()` function call itself
+   - ✅ Correct: `t('msg_url_changes_remaining', 'URL changes remaining')`
+   - ❌ Wrong: `t('msg_url_changes_remaining:', 'URL changes remaining')`
+
+2. **Colons in JSX**: If UI requires a colon after a label, place it in the JSX text, not in the translation key or fallback
+   - ✅ Correct: `{t('label_suggestions', 'Suggestions')}:`
+   - ❌ Wrong: `t('label_suggestions:', 'Suggestions:')`
+
+3. **Namespace Matching**: Keys must correspond exactly to namespaces defined in the database (`translations` table)
+   - Provider dashboard: keys in `provider_dashboard` namespace
+   - Client dashboard: keys in `client_dashboard` namespace
+   - Public pages: keys in `homepage`, `category`, etc. namespaces
+
+4. **No Manual Prefixing**: The `t()` function or hook handles namespace prefixing internally
+   - ✅ Correct: `t('nav_dashboard', 'Dashboard')` (hook prefixes with `provider_dashboard.`)
+   - ❌ Wrong: `t('provider_dashboard.nav_dashboard', 'Dashboard')`
+
+**Operational Rule:** When adding new translation keys, always:
+1. Add to the appropriate seed script (`seed_provider_dashboard_translations.py` or `seed_client_dashboard_translations.py`)
+2. Use clean key names without colons or prefixes
+3. Run the seed script to update the database
+4. Flush Redis cache for the affected namespace
+
+---
 
 ## Category Page Lead Form (Broadcast Model)
 
@@ -1058,6 +1144,7 @@ Returned in dashboard response as profile.is_complete + profile.missing_fields[]
 - Phase 1: Local filesystem at uploads/provider_images/{provider_id}.webp
 - Served via FastAPI StaticFiles mount at /static/provider_images
 - Storage abstraction (save_provider_image in provider_service.py) ready for S3/R2 migration
+- **STATIC_FILES_BASE_URL**: Backend uses this environment variable to generate full URLs for static files. In Docker, this must point to the API server port (8000), not the frontend port (3000). The upload endpoint in `apps/api/routes/provider.py` prioritizes this variable over request headers for URL generation.
 
 ### QR Code Generation
 - Generated on-the-fly as base64 PNG data URI (no file storage needed)

@@ -1,9 +1,5 @@
-import { apiPost } from "@/lib/api";
+import { apiPost, API_BASE } from "@/lib/api";
 import type { AuthResult, CheckEmailResult, MessageResult, ValidateTokenResult } from "@/lib/auth-types";
-
-const API_BASE = typeof window === 'undefined'
-  ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
-  : '';
 
 export interface SlugCheckResult {
   available: boolean;

@@ -7,7 +7,7 @@ import { trackPageEvent } from "@/lib/tracking";
 import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
 import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@/lib/auth-api";
 import { saveAuth, isAuthenticated, getAuthUser } from "@/lib/auth-store";
-import { ApiError } from "@/lib/api";
+import { ApiError, API_BASE } from "@/lib/api";
 
 function generateStrongPassword(): string {
   const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -218,7 +218,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
       trackPageEvent('auth_password_shown', 'auth', { step: nextStep });
       setState(s => ({ ...s, loading: false, step: nextStep, password: '' }));
     } catch {
-      setState(s => ({ ...s, loading: false, error: t(authDict, 'auth.error_generic', 'An error occurred. Please try again.') }));
+      setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
     }
   }
 
@@ -239,7 +239,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
       if (pendingClaimToken) {
         try {
           const claimRes = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/providers/claim`,
+            `${API_BASE}/api/v1/providers/claim`,
             {
               method: 'POST',
               headers: {
@@ -268,14 +268,14 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
         if (err.code === 'INVALID_CREDENTIALS' || err.message.includes('Invalid credentials')) {
           setState(s => ({ ...s, loading: false, error: 'invalid_password' }));
         } else if (err.code === 'RATE_LIMIT_EXCEEDED' || err.message.includes('Too many')) {
-          setState(s => ({ ...s, loading: false, error: t(authDict, 'auth.error_rate_limit', 'Too many attempts. Please try later.') }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_rate_limit', 'Too many attempts. Please try later.') }));
         } else if (err.code === 'ACCOUNT_DISABLED') {
-          setState(s => ({ ...s, loading: false, error: t(authDict, 'auth.error_account_disabled', 'Account is disabled.') }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_account_disabled', 'Account is disabled.') }));
         } else {
-          setState(s => ({ ...s, loading: false, error: t(authDict, 'auth.error_generic', 'An error occurred. Please try again.') }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
         }
       } else {
-        setState(s => ({ ...s, loading: false, error: t(authDict, 'auth.error_generic', 'An error occurred. Please try again.') }));
+        setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
       }
     }
   }
@@ -300,7 +300,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
       if (pendingClaimToken) {
         try {
           const claimRes = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/providers/claim`,
+            `${API_BASE}/api/v1/providers/claim`,
             {
               method: 'POST',
               headers: {
@@ -327,14 +327,14 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'EMAIL_ALREADY_EXISTS' || err.message.includes('already registered')) {
-          setState(s => ({ ...s, loading: false, error: t(authDict, 'auth.error_email_exists', 'This email is already registered.') }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_email_exists', 'This email is already registered.') }));
         } else if (err.code === 'VALIDATION_ERROR') {
           setState(s => ({ ...s, loading: false, error: err.message }));
         } else {
-          setState(s => ({ ...s, loading: false, error: t(authDict, 'auth.error_generic', 'An error occurred. Please try again.') }));
+          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
         }
       } else {
-        setState(s => ({ ...s, loading: false, error: t(authDict, 'auth.error_generic', 'An error occurred. Please try again.') }));
+        setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
       }
     }
   }
@@ -362,7 +362,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
 
   function handleSocialClick(_provider: 'google' | 'facebook') {
     // TODO: integrate real OAuth
-    setState(s => ({ ...s, socialToast: t(authDict, 'auth.coming_soon', 'Coming soon') }));
+    setState(s => ({ ...s, socialToast: t(authDict, 'coming_soon', 'Coming soon') }));
     setTimeout(() => setState(s => ({ ...s, socialToast: null })), 2000);
   }
 
@@ -398,7 +398,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
       onClick={handleBack}
       className="text-sm text-gray-500 hover:text-gray-700 mb-5 transition-colors"
     >
-      {t(authDict, 'auth.back_btn', '← Back')}
+      {t(authDict, 'back_btn', '← Back')}
     </button>
   );
 
@@ -423,23 +423,23 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
             <div className="mb-6 text-center">
               <h1 className="text-[20px] font-bold text-[#171717] leading-tight">
                 {claimToken
-                  ? t(authDict, 'auth.claim_headline', "Claim your profile on Nevumo")
+                  ? t(authDict, 'claim_headline', "Claim your profile on Nevumo")
                   : state.intent === 'provider'
-                  ? t(authDict, 'auth.hero_title_provider', 'Start getting clients')
-                  : t(authDict, 'auth.hero_title_client', 'Find a service in minutes')}
+                  ? t(authDict, 'hero_title_provider', 'Start getting clients')
+                  : t(authDict, 'hero_title_client', 'Find a service in minutes')}
               </h1>
               {claimToken ? (
                 <p className="text-sm text-gray-500 mt-1">
-                  {t(authDict, 'auth.claim_subtitle', "Register for free and manage your clients")}
+                  {t(authDict, 'claim_subtitle', "Register for free and manage your clients")}
                 </p>
               ) : state.intent !== 'provider' && (
-                <p className="text-sm text-gray-500 mt-1">{t(authDict, 'auth.hero_subtitle_client', 'Free • No obligation')}</p>
+                <p className="text-sm text-gray-500 mt-1">{t(authDict, 'hero_subtitle_client', 'Free • No obligation')}</p>
               )}
             </div>
 
             {/* Social buttons */}
             <p className={`text-center text-xs mb-2 transition-colors ${state.socialToast ? 'text-orange-500' : 'text-gray-500'}`}>
-              {state.socialToast ?? t(authDict, 'auth.quick_login_label', "Quick login without password")}
+              {state.socialToast ?? t(authDict, 'quick_login_label', "Quick login without password")}
             </p>
             <div className="flex flex-col gap-[10px]">
               <button
@@ -447,21 +447,21 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
                 className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <GoogleIcon />
-                {t(authDict, 'auth.google_btn', "Sign in with Google")}
+                {t(authDict, 'google_btn', "Sign in with Google")}
               </button>
               <button
                 onClick={() => handleSocialClick('facebook')}
                 className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <FacebookIcon />
-                {t(authDict, 'auth.facebook_btn', "Sign in with Facebook")}
+                {t(authDict, 'facebook_btn', "Sign in with Facebook")}
               </button>
             </div>
 
             {/* Divider */}
             <div className="flex items-center gap-3 my-5">
               <div className="flex-1 h-px bg-gray-200" />
-              <span className="text-xs text-gray-400">{t(authDict, 'auth.or_with_email', "or with email")}</span>
+              <span className="text-xs text-gray-400">{t(authDict, 'or_with_email', "or with email")}</span>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
 
@@ -482,8 +482,8 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
             {primaryBtn(
               !isEmailValid || state.loading,
               state.loading,
-              claimToken ? t(authDict, 'auth.claim_cta_btn', "Claim profile") : t(authDict, 'auth.continue_btn', "Continue"),
-              t(authDict, 'auth.checking_btn', 'Checking...'),
+              claimToken ? t(authDict, 'claim_cta_btn', "Claim profile") : t(authDict, 'continue_btn', "Continue"),
+              t(authDict, 'checking_btn', 'Checking...'),
               handleCheckEmail
             )}
 
@@ -502,7 +502,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
                 <input
                   type={state.showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
-                  placeholder={t(authDict, 'auth.password_placeholder_login', 'Password')}
+                  placeholder={t(authDict, 'password_placeholder_login', 'Password')}
                   value={state.password}
                   onChange={e => handlePasswordChange(e.target.value)}
                   className={`w-full border rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400
@@ -517,7 +517,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
                   {state.showPassword ? <EyeOffIcon /> : <EyeIcon />}
                 </button>
                 {state.error === 'invalid_password' && (
-                  <p className="text-red-500 text-xs mt-0.5">{t(authDict, 'auth.error_wrong_password', 'Wrong password')}</p>
+                  <p className="text-red-500 text-xs mt-0.5">{t(authDict, 'error_wrong_password', 'Wrong password')}</p>
                 )}
               </div>
 
@@ -527,7 +527,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
                   onClick={() => setState(s => ({ ...s, step: 'forgot', error: null }))}
                   className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
                 >
-                  {t(authDict, 'auth.forgot_password_link', 'Forgot password?')}
+                  {t(authDict, 'forgot_password_link', 'Forgot password?')}
                 </button>
               </div>
 
@@ -539,7 +539,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
                     ? 'bg-orange-500 hover:bg-orange-600 cursor-pointer'
                     : 'bg-gray-400 opacity-50 cursor-not-allowed'}`}
               >
-                {state.loading ? t(authDict, 'auth.logging_in_btn', 'Signing in...') : t(authDict, 'auth.login_btn', 'Sign in')}
+                {state.loading ? t(authDict, 'logging_in_btn', 'Signing in...') : t(authDict, 'login_btn', 'Sign in')}
               </button>
             </form>
 
@@ -556,14 +556,14 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
             {claimToken ? (
               <>
                 <h2 className="text-[17px] font-bold text-[#171717] mb-1">
-                  {t(authDict, 'auth.claim_headline', "Claim your profile on Nevumo")}
+                  {t(authDict, 'claim_headline', "Claim your profile on Nevumo")}
                 </h2>
                 <p className="text-sm text-gray-500 mb-3">
-                  {t(authDict, 'auth.claim_subtitle', "Register for free and manage your clients")}
+                  {t(authDict, 'claim_subtitle', "Register for free and manage your clients")}
                 </p>
               </>
             ) : (
-              <p className="text-xs text-gray-600 mb-3">{t(authDict, 'auth.register_subtitle', "We'll create an account automatically")}</p>
+              <p className="text-xs text-gray-600 mb-3">{t(authDict, 'register_subtitle', "We'll create an account automatically")}</p>
             )}
 
             <form onSubmit={e => { e.preventDefault(); handleRegister(); }}>
@@ -571,7 +571,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
                 <input
                   type={state.showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
-                  placeholder={t(authDict, 'auth.password_placeholder_register', 'Click to generate a password')}
+                  placeholder={t(authDict, 'password_placeholder_register', 'Click to generate a password')}
                   value={state.password}
                   onChange={e => handlePasswordChange(e.target.value)}
                   onClick={() => {
@@ -597,13 +597,13 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
                 className={`w-full py-2.5 rounded-lg text-base font-semibold text-white transition-colors mt-4
                   ${state.password.length > 0 && !state.loading ? 'bg-orange-500 hover:bg-orange-600 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}
               >
-                {state.loading ? t(authDict, 'auth.registering_btn', 'Creating...') : claimToken ? t(authDict, 'auth.claim_cta_btn', "Claim profile") : t(authDict, 'auth.continue_btn', "Continue")}
+                {state.loading ? t(authDict, 'registering_btn', 'Creating...') : claimToken ? t(authDict, 'claim_cta_btn', "Claim profile") : t(authDict, 'continue_btn', "Continue")}
               </button>
             </form>
 
             {state.registerSuccess && (
               <div className="bg-green-50 text-green-700 text-sm p-2.5 rounded-lg text-center mt-3">
-                {t(authDict, 'auth.register_success', 'Account created successfully')}
+                {t(authDict, 'register_success', 'Account created successfully')}
               </div>
             )}
 
@@ -617,8 +617,8 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
             {backBtn}
 
             <div className="mb-5">
-              <h2 className="text-[17px] font-bold text-[#171717]">{t(authDict, 'auth.forgot_title', 'Forgot password')}</h2>
-              <p className="text-sm text-gray-500 mt-1">{t(authDict, 'auth.forgot_subtitle', "We'll send you a link for a new password")}</p>
+              <h2 className="text-[17px] font-bold text-[#171717]">{t(authDict, 'forgot_title', 'Forgot password')}</h2>
+              <p className="text-sm text-gray-500 mt-1">{t(authDict, 'forgot_subtitle', "We'll send you a link for a new password")}</p>
             </div>
 
             {emailPill}
@@ -629,12 +629,12 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
               className={`w-full py-2.5 rounded-lg text-base font-semibold text-white bg-orange-500 transition-colors
                 ${(state.loading || state.forgotSuccess) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-orange-600'}`}
             >
-              {state.forgotSuccess ? t(authDict, 'auth.forgot_sent_btn', 'Sent') : state.loading ? t(authDict, 'auth.sending_btn', 'Sending...') : t(authDict, 'auth.forgot_send_btn', 'Send link')}
+              {state.forgotSuccess ? t(authDict, 'forgot_sent_btn', 'Sent') : state.loading ? t(authDict, 'sending_btn', 'Sending...') : t(authDict, 'forgot_send_btn', 'Send link')}
             </button>
 
             {state.forgotSuccess && (
               <div className="bg-green-50 text-green-700 text-sm p-2.5 rounded-lg text-center mt-3">
-                {t(authDict, 'auth.forgot_check_email', 'Check your email')}
+                {t(authDict, 'forgot_check_email', 'Check your email')}
               </div>
             )}
 

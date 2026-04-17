@@ -1,4 +1,4 @@
-const API_BASE = typeof window === 'undefined'
+export const API_BASE = typeof window === 'undefined'
   ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
   : '';
 
@@ -281,12 +281,12 @@ export async function getCities(country: string, lang?: string): Promise<CityOut
   }
 }
 
-export async function getCityBySlug(slug: string): Promise<CityOut | null> {
+export async function getCityBySlug(slug: string, lang?: string): Promise<CityOut | null> {
   try {
-    const res = await fetch(
-      `${API_BASE}/api/v1/cities/${encodeURIComponent(slug)}`,
-      { next: { revalidate: 3600 } },
-    );
+    const params = new URLSearchParams();
+    if (lang) params.set('lang', lang);
+    const url = `${API_BASE}/api/v1/cities/${encodeURIComponent(slug)}${params.toString() ? `?${params.toString()}` : ''}`;
+    const res = await fetch(url, { next: { revalidate: 3600 } });
     if (!res.ok) return null;
     const json: ApiResponse<CityOut> = await res.json();
     return json.success ? json.data : null;

@@ -402,6 +402,7 @@ export default function LeadForm({
         onChange={handleChange}
         countryCode={countryCode}
         error={phoneError}
+        label={translations['form_phone'] || 'Phone'}
         required
       />
 

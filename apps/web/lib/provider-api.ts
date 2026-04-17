@@ -1,3 +1,4 @@
+import { API_BASE } from '@/lib/api';
 import { getAuthToken } from '@/lib/auth-store';
 import type { UserInfo } from '@/lib/auth-types';
 import type {
@@ -13,10 +14,6 @@ import type {
   Service,
   UpdateProfileInput,
 } from '@/types/provider';
-
-const API_BASE = typeof window === 'undefined'
-  ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
-  : '';
 
 export class ProviderApiError extends Error {
   code: string;

@@ -124,26 +124,26 @@ export function getHeroContent(state: OnboardingState, t: (key: string, fallback
   if (state.missingProfile) {
     // Step 1 incomplete - user skipped without entering business name
     return {
-      headline: t('onboarding_hero_2steps_title', "You're 2 steps away from getting clients"),
-      description: t('onboarding_hero_2steps_desc', 'Complete your profile to start receiving requests'),
-      ctaLabel: t('onboarding_hero_2steps_cta', 'Complete your profile'),
+      headline: t('setup_title', "You're 2 steps away from getting clients"),
+      description: t('setup_subtitle', 'Complete your profile to start receiving requests'),
+      ctaLabel: t('btn_complete_setup', 'Complete your profile'),
     };
   }
   
   if (state.missingService) {
     // Profile complete, service missing
     return {
-      headline: t('onboarding_hero_1step_title', "You're 1 step away from getting clients"),
-      description: t('onboarding_hero_1step_desc', 'Add your first service to start receiving requests'),
-      ctaLabel: t('onboarding_hero_1step_cta', 'Add your first service'),
+      headline: t('setup_title_1step', "You're 1 step away from getting clients"),
+      description: t('setup_subtitle_1step', 'Add your first service to start receiving requests'),
+      ctaLabel: t('btn_add_service', 'Add your first service'),
     };
   }
   
   // Should not reach here if called correctly (only when incomplete)
   return {
-    headline: t('onboarding_hero_2steps_title', "You're 2 steps away from getting clients"),
-    description: t('onboarding_hero_2steps_desc', 'Complete your profile to start receiving requests'),
-    ctaLabel: t('onboarding_hero_2steps_cta', 'Complete your profile'),
+      headline: t('setup_title', "You're 2 steps away from getting clients"),
+      description: t('setup_subtitle', 'Complete your profile to start receiving requests'),
+      ctaLabel: t('btn_complete_setup', 'Complete your profile'),
   };
 }
 
@@ -237,7 +237,7 @@ export function CompactStepIndicator({
           ) : '1'}
         </div>
         <span className={`text-xs ${isProfileComplete ? 'text-gray-600' : 'text-orange-600 font-medium'}`}>
-          {t('onboarding_step_profile', 'Profile')}
+          {t('step_profile', 'Profile')}
         </span>
       </div>
 
@@ -264,7 +264,7 @@ export function CompactStepIndicator({
             ? 'text-orange-600 font-medium' 
             : 'text-gray-400'
         }`}>
-          {t('onboarding_step_service', 'Service')}
+          {t('step_service', 'Service')}
         </span>
       </div>
     </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { use, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import StatsCard from '@/components/dashboard/StatsCard';
@@ -59,9 +59,15 @@ function getSourceLabels(t: (key: string, fallback?: string) => string): Record<
 const MOTIVATIONAL_RATING = '5.0';
 const MOTIVATIONAL_CONTACTED = 137;
 
-export default function DashboardOverviewPage() {
+interface PageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export default function DashboardOverviewPage({ params }: PageProps) {
+  const { lang: paramsLang } = use(params);
   const router = useRouter();
-  const { t, lang } = useDashboardI18n();
+  const { t, lang: contextLang } = useDashboardI18n();
+  const lang = paramsLang || contextLang;
   const base = `/${lang}/provider/dashboard`;
 
   const [data, setData] = useState<DashboardResponse | null>(null);

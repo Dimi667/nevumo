@@ -879,7 +879,7 @@ export default function ProfilePage() {
                 nevumo.com/.../{step1.slug || t('placeholder_business_slug', 'your-business-name')}
               </p>
               <p className="text-xs text-gray-500 mt-2">
-                {t('msg_url_changes_remaining', 'URL changes remaining:')} {step1SlugChangesRemaining}/{MAX_SLUG_CHANGES}
+                {t('msg_url_changes_remaining', 'URL changes remaining')}: {step1SlugChangesRemaining}/{MAX_SLUG_CHANGES}
               </p>
               <p className="text-xs text-orange-600 mt-2">
                 {t('msg_url_change_warning', 'You can only change your URL once.')}<br />
@@ -900,7 +900,7 @@ export default function ProfilePage() {
 
               {step1SlugSuggestions.length > 0 && (
                 <div className="mt-2">
-                  <p className="text-xs text-gray-600 mb-1">{t('label_suggestions', 'Suggestions:')}</p>
+                  <p className="text-xs text-gray-600 mb-1">{t('label_suggestions', 'Suggestions')}:</p>
                   <div className="flex flex-wrap gap-2">
                     {step1SlugSuggestions.map(suggestion => (
                       <button
@@ -1061,7 +1061,7 @@ export default function ProfilePage() {
                 <input
                   type="number"
                   min="0"
-                  step="0.01"
+                  step="1"
                   value={step2.base_price}
                   onChange={e => setStep2(f => ({ ...f, base_price: e.target.value }))}
                   placeholder="0.00"

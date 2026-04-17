@@ -35,12 +35,12 @@ export function useTranslation(namespace: string, lang: string): UseTranslationR
   const t = useMemo(
     () => (key: string, fallback = ''): string => {
       if (!dict || !key) return fallback;
-      const fullKey = `${namespace}.${key.trim()}`;
-      const value = dict[fullKey] ?? fallback;
-      console.log('[use-translation] Final translation source:', fullKey, 'value:', value, 'from dict:', !!dict[fullKey]);
+      const cleanKey = key.trim();
+      const value = dict[cleanKey] ?? fallback;
+      console.log('[use-translation] Final translation source:', cleanKey, 'value:', value, 'from dict:', !!dict[cleanKey]);
       return value;
     },
-    [dict, namespace],
+    [dict],
   );
 
   return { t, dict, isLoading };
