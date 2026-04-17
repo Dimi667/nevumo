@@ -8,7 +8,8 @@ Run: python scripts/seed_provider_dashboard_translations.py
 
 import os
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
+from apps.api.database import engine
 from apps.api.scripts.seed_client_dashboard_translations import TRANSLATIONS as CLIENT_DASHBOARD_TRANSLATIONS
 
 NAMESPACE = "provider_dashboard"
@@ -3471,30 +3472,25 @@ for key, value in POLISH_OVERRIDES.items():
     TRANSLATIONS[key]["pl"] = value
 
 def main():
-    database_url = os.getenv("DATABASE_URL", "postgresql://nevumo:nevumo@localhost:5432/nevumo_leads")
-    engine = create_engine(database_url)
-
     # Delete existing translations for this namespace
     with engine.connect() as conn:
         conn.execute(text(f"DELETE FROM translations WHERE key LIKE '{NAMESPACE}.%'"))
         conn.commit()
 
     # Insert new translations
-    conn = engine.connect()
-    try:
-        for key, translations in TRANSLATIONS.items():
-            full_key = f"{NAMESPACE}.{key}"
-            for lang, value in translations.items():
-                conn.execute(
-                    text("INSERT INTO translations (lang, key, value) VALUES (:lang, :key, :value)"),
-                    {"lang": lang, "key": full_key, "value": value}
-                )
-        conn.commit()
-    except Exception as e:
-        conn.rollback()
-        raise
-    finally:
-        conn.close()
+    with engine.connect() as conn:
+        try:
+            for key, translations in TRANSLATIONS.items():
+                full_key = f"{NAMESPACE}.{key}"
+                for lang, value in translations.items():
+                    conn.execute(
+                        text("INSERT INTO translations (lang, key, value) VALUES (:lang, :key, :value)"),
+                        {"lang": lang, "key": full_key, "value": value}
+                    )
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            raise
 
     # Count inserted rows
     with engine.connect() as conn:

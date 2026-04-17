@@ -50,6 +50,7 @@ services:
       - PYTHONPATH=/workspace
       - DATABASE_URL=postgresql://nevumo:nevumo@nevumo-postgres:5432/nevumo_leads
       - REDIS_HOST=nevumo-redis
+      - STATIC_FILES_BASE_URL=http://localhost:8000
     working_dir: /workspace/apps/api
     volumes:
       - ./:/workspace

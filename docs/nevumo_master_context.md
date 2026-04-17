@@ -38,6 +38,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 - apscheduler>=3.10.0 (background jobs for magic link delivery)
 - tzlocal>=3.0 (timezone support for APScheduler)
 - Backend packaging/runtime: absolute `apps.api.*` imports with module-based startup/scripts
+- STATIC_FILES_BASE_URL: Environment variable for proper static file URL generation (images, etc.)
 
 ### Database & Caching
 - PostgreSQL (nevumo_leads)
@@ -91,13 +92,13 @@ Nevumo е уеб платформа за marketplace на услуги.
 bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, nl, no, pl, pt, pt-PT, ro, ru, sk, sl, sq, sr, sv, tr, uk
 
 - Default language: en
-- UI translation seed status (April 9, 2026):
+- UI translation seed status (April 16, 2026):
   - `43` homepage keys per language
   - `24` category-page keys per language
   - `67` total UI keys per language
   - `2,788` rows in `translations` for homepage/category namespaces across 34 languages
-  - `339` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services)
-  - `11,526` rows in `translations` for provider_dashboard namespace across 34 languages
+  - `342` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services, lead search & notes)
+  - `11,628` rows in `translations` for provider_dashboard namespace across 34 languages
 
 ---
 
@@ -106,6 +107,8 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Никога не рефакторирай код извън текущата задача
 - Никога не добавяй функционалност, която не е поискана
 - Никога не модифицирай .env файлове
+- Никога не използвай hardcoded localhost или портове в кода. Винаги използвай `config.settings` в Backend и `API_BASE` във Frontend.
+- Скриптовете за сийдване трябва да използват централизираната база данни и Redis чрез `apps.api.database` и `apps.api.dependencies`.
 - Винаги спазвай текущата архитектура
 
 ### TypeScript
@@ -151,6 +154,16 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Frontend Next.js 15+ Compliance (April 16, 2026)** — Completed full audit and remediation of Promise-based params:
+  - **Audit Scope**: Reviewed all `page.tsx` and `layout.tsx` files in `apps/web/app/[lang]` for Next.js 15+ standards compliance
+  - **Translation Consistency**: Verified `t()` function usage - all files correctly use keys without namespace prefixes (backend unpacks namespaces)
+  - **Fix Applied**: Updated `apps/web/app/[lang]/auth/magic/page.tsx` to use `params: Promise<{ lang: string }>` and `searchParams: Promise<{ token?: string }>`
+  - **Result**: All frontend pages now fully compliant with Next.js 15+ Promise-based params standard
+- **URL Audit & Centralized Networking (April 16, 2026)** — Completed a full audit and remediation of hardcoded URLs, IPs, and ports:
+  - **Backend Centralization**: All URLs (magic links, QR codes, static files) now derive from `apps/api/config.py` settings. Hardcoded `localhost` fallbacks removed from `provider_service.py` and `main.py`.
+  - **Frontend Consolidation**: `API_BASE` in `apps/web/lib/api.ts` is now the single source of truth for API communication. All API clients (`auth-api`, `provider-api`, `client-api`, `tracking`) use this shared constant.
+  - **Seed Script Standardization**: Key seed scripts now use centralized DB/Redis connection logic from `apps.api.database`, ensuring consistency and avoiding redundant connection code.
+  - **Docker Compose Alignment**: Updated configuration to use service names instead of `localhost` for inter-container communication.
 - **Major Architectural Overhaul (April 14, 2026)** — Unified the project into a high-performance monorepo:
   - **New Monorepo Structure**: Unified root managed by Turborepo, decoupling `apps/api` and `apps/web` while sharing a consistent environment.
   - **Docker Strategy**: Implemented multi-stage builds and root `docker-compose.yml` orchestration for `nevumo-api`, `nevumo-web`, `nevumo-postgres`, and `nevumo-redis`.
@@ -538,3 +551,4 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Advanced provider analytics
 - **PWA Етап 2** — Push notifications само за провайдери: нова таблица push_subscriptions, Web Push протокол, интеграция с lead creation flow. Старт след валидиране на PWA install adoption от page_events данни.
 - **PWA Етап 3** — Push notifications за клиенти: нотификация когато провайдер отговори на заявка.
+- **Static Files URL Standardization** — Extend STATIC_FILES_BASE_URL pattern to other services that generate public URLs (e.g., QR codes, document uploads). Current implementation is specific to provider profile images; future services should use the same environment variable pattern for consistency across local and production environments.

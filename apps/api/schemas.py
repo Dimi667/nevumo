@@ -440,6 +440,13 @@ class CreateServiceRequest(BaseModel):
             raise ValueError(f"currency must be one of: {', '.join(sorted(_VALID_CURRENCIES))}")
         return v
 
+    @field_validator("base_price", mode="before")
+    @classmethod
+    def convert_price(cls, v):
+        if v is not None:
+            return Decimal(str(v))
+        return None
+
     @field_validator("city_ids")
     @classmethod
     def validate_city_ids(cls, v: List[int]) -> List[int]:

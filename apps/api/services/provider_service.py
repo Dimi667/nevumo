@@ -149,16 +149,14 @@ def get_public_latest_lead_preview(
     }
 
 
-# ---------------------------------------------------------------------------
-# Storage
-# ---------------------------------------------------------------------------
-
-UPLOAD_BASE = Path("uploads/provider_images")
+from apps.api.config import settings
+UPLOAD_BASE = Path(settings.UPLOADS_DIR) / "provider_images"
 
 
 def get_static_files_base_url() -> str:
     """Get the base URL for static files, supporting both local and cloud storage."""
-    return os.getenv("STATIC_FILES_BASE_URL", "http://localhost:8000")
+    from apps.api.config import settings
+    return settings.STATIC_FILES_BASE_URL
 
 
 def save_provider_image(provider_id: UUID, content: bytes, content_type: str, base_url: str | None = None) -> str:
@@ -198,10 +196,10 @@ def save_provider_image(provider_id: UUID, content: bytes, content_type: str, ba
     filepath = UPLOAD_BASE / filename
     img.save(filepath, 'WEBP', quality=85, method=6)
     
-    # Use provided base_url, or fall back to settings, or use localhost as last resort
+    # Use provided base_url, or fall back to settings
     if base_url is None:
         from apps.api.config import settings
-        base_url = settings.STATIC_FILES_BASE_URL or "http://localhost:8000"
+        base_url = settings.STATIC_FILES_BASE_URL
     
     # Return full URL
     return f"{base_url.rstrip('/')}/static/provider_images/{filename}"
@@ -348,17 +346,19 @@ def _sync_provider_cities(
     locations: list[Location],
 ) -> None:
     """Ensure every location also exists in provider_cities (for lead matching)."""
+    from sqlalchemy import text
+    
     for loc in locations:
-        existing = (
-            db.query(ProviderCity)
-            .filter(
-                ProviderCity.provider_id == provider_id,
-                ProviderCity.city_id == loc.id,
-            )
-            .first()
+        # Use ON CONFLICT DO NOTHING to handle race conditions gracefully
+        # This handles both primary key conflicts and unique constraint conflicts
+        db.execute(
+            text("""
+            INSERT INTO provider_cities (provider_id, city_id)
+            VALUES (:provider_id, :city_id)
+            ON CONFLICT DO NOTHING
+            """),
+            {"provider_id": str(provider_id), "city_id": loc.id}
         )
-        if not existing:
-            db.add(ProviderCity(provider_id=provider_id, city_id=loc.id))
 
 
 def _serialize_service(service: Service, db: Session) -> dict:
@@ -427,8 +427,19 @@ def add_service(
     db.add(service)
     db.flush()  # get service.id before adding service_cities
 
+    from sqlalchemy import text
+    
     for loc in locations:
-        db.add(ServiceCity(service_id=service.id, city_id=loc.id))
+        # Use ON CONFLICT (service_id, city_id) DO NOTHING to handle race conditions gracefully
+        # This only skips duplicates of the unique constraint, not primary key sequence conflicts
+        db.execute(
+            text("""
+            INSERT INTO service_cities (service_id, city_id)
+            VALUES (:service_id, :city_id)
+            ON CONFLICT (service_id, city_id) DO NOTHING
+            """),
+            {"service_id": str(service.id), "city_id": loc.id}
+        )
 
     _sync_provider_cities(db, provider_id, locations)
 
@@ -1329,7 +1340,8 @@ def generate_enhanced_qr_code_base64(
     slogan = "Send a request in 30 sec!"  # Default fallback
     if db:
         try:
-            slogan = resolve_translation(db, "qr_slogan_submit_request", language)
+            # The database key is namespaced
+            slogan = resolve_translation(db, "provider_dashboard.qr_slogan_submit_request", language)
         except Exception as e:
             print(f"Warning: Could not resolve translation: {e}")
     
@@ -1383,7 +1395,8 @@ def generate_enhanced_qr_code_svg(
     slogan = "Пусни заявка за 30 сек!"  # fallback
     if db:
         try:
-            slogan = resolve_translation(db, "qr_slogan_submit_request", language)
+            # The database key is namespaced
+            slogan = resolve_translation(db, "provider_dashboard.qr_slogan_submit_request", language)
         except Exception:
             pass
 

@@ -211,8 +211,25 @@ async def upload_profile_image(
     db: Session = Depends(get_db),
     request: Request = None,
 ):
-    # Derive base URL from request for dynamic URL generation
-    base_url = str(request.base_url) if request else None
+    # Derive base URL for static files
+    # Priority: STATIC_FILES_BASE_URL env var > X-Forwarded headers > Host header
+    from apps.api.config import settings
+    
+    base_url = settings.STATIC_FILES_BASE_URL
+    
+    if not base_url and request:
+        # Check for X-Forwarded headers (set by reverse proxy)
+        forwarded_host = request.headers.get("X-Forwarded-Host")
+        forwarded_proto = request.headers.get("X-Forwarded-Proto", "http")
+        
+        if forwarded_host:
+            # Use forwarded headers (Docker/production with reverse proxy)
+            base_url = f"{forwarded_proto}://{forwarded_host}"
+        else:
+            # Use Host header directly (local development without proxy)
+            host = request.headers.get("Host", "localhost:8000")
+            scheme = request.url.scheme if request.url else "http"
+            base_url = f"{scheme}://{host}"
     
     allowed = {"image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"}
     # Also check by filename extension if content_type is missing or generic

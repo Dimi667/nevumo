@@ -1,8 +1,9 @@
 import logging
 import httpx
-from typing import Optional
+import json
+from typing import Optional, Dict
 from sqlalchemy.orm import Session
-from apps.api.models import ProviderTranslation
+from apps.api.models import ProviderTranslation, Translation
 from uuid import UUID
 
 logger = logging.getLogger(__name__)
@@ -94,3 +95,64 @@ def translate_and_store(
         )
 
     return {"translated": translated, "fallback": fallback}
+
+
+def get_namespaced_translations(
+    db: Session,
+    lang: str,
+    namespace: str,
+    redis_client: Optional[any] = None
+) -> Dict[str, str]:
+    """
+    Fetch translations for a specific namespace and language.
+    Strips the namespace prefix from the keys.
+    Uses Redis caching with key trans:{lang}:{namespace}.
+    """
+    cache_key = f"trans:{lang}:{namespace}"
+
+    if redis_client:
+        try:
+            cached = redis_client.get(cache_key)
+            if cached:
+                return json.loads(cached)
+        except Exception as e:
+            logger.error(f"Redis error: {e}")
+
+    prefix = f"{namespace}."
+    
+    # Fetch English defaults first
+    en_rows = (
+        db.query(Translation)
+        .filter(
+            Translation.lang == "en",
+            Translation.key.like(f"{prefix}%")
+        )
+        .all()
+    )
+    
+    result: Dict[str, str] = {}
+    for row in en_rows:
+        stripped_key = row.key[len(prefix):]
+        result[stripped_key] = row.value
+
+    # Overwrite with target language if not English
+    if lang != "en":
+        lang_rows = (
+            db.query(Translation)
+            .filter(
+                Translation.lang == lang,
+                Translation.key.like(f"{prefix}%")
+            )
+            .all()
+        )
+        for row in lang_rows:
+            stripped_key = row.key[len(prefix):]
+            result[stripped_key] = row.value
+
+    if redis_client and result:
+        try:
+            redis_client.setex(cache_key, 3600, json.dumps(result, ensure_ascii=False))
+        except Exception as e:
+            logger.error(f"Redis set error: {e}")
+
+    return result

@@ -4,18 +4,19 @@
 import psycopg2
 
 # Connection string
-DB_URL = "postgresql://nevumo:nevumo@localhost:5432/nevumo_leads"
+import os
+DB_URL = os.environ.get("DATABASE_URL", "postgresql://nevumo:nevumo@nevumo-postgres:5432/nevumo_leads")
 
 # Translation keys
 KEYS = [
-    "provider_dashboard.onboarding_hero_2steps_title",
-    "provider_dashboard.onboarding_hero_2steps_desc",
-    "provider_dashboard.onboarding_hero_2steps_cta",
-    "provider_dashboard.onboarding_hero_1step_title",
-    "provider_dashboard.onboarding_hero_1step_desc",
-    "provider_dashboard.onboarding_hero_1step_cta",
-    "provider_dashboard.onboarding_step_profile",
-    "provider_dashboard.onboarding_step_service",
+    "provider_dashboard.setup_title",
+    "provider_dashboard.setup_subtitle",
+    "provider_dashboard.btn_complete_setup",
+    "provider_dashboard.setup_title_1step",
+    "provider_dashboard.setup_subtitle_1step",
+    "provider_dashboard.btn_add_service",
+    "provider_dashboard.step_profile",
+    "provider_dashboard.step_service",
 ]
 
 # Translations for all 34 languages

@@ -6,7 +6,7 @@ import psycopg2
 from psycopg2.extras import execute_values
 
 # Database connection string
-DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://nevumo:nevumo@localhost:5432/nevumo_leads")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://nevumo:nevumo@localhost:5433/nevumo_leads")
 
 # Translations: language -> list of 8 values in order
 TRANSLATIONS = {

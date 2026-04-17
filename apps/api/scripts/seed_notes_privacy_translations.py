@@ -7,12 +7,9 @@ Run: python scripts/seed_notes_privacy_translations_v2.py
 
 import os
 
-from sqlalchemy import create_engine, text
-from dotenv import load_dotenv
-
-# Load from .env file in the api directory
-env_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
-load_dotenv(env_path)
+from sqlalchemy import text
+from apps.api.database import engine
+from apps.api.dependencies import get_redis
 
 NAMESPACE = "provider_dashboard"
 KEY = "label_notes_privacy_disclaimer"
@@ -57,26 +54,7 @@ TRANSLATIONS = {
 }
 
 
-def get_db_url():
-    """Get database URL from environment or .env file."""
-    db_url = os.getenv('DATABASE_URL')
-    if db_url:
-        return db_url
-    
-    # Construct from individual variables (matching .env.example defaults)
-    user = os.getenv('POSTGRES_USER', 'nevumo')
-    password = os.getenv('POSTGRES_PASSWORD', 'nevumo')
-    host = os.getenv('POSTGRES_HOST', 'localhost')
-    port = os.getenv('POSTGRES_PORT', '5432')
-    db = os.getenv('POSTGRES_DB', 'nevumo_leads')
-    
-    return f"postgresql://{user}:{password}@{host}:{port}/{db}"
-
-
 def main():
-    db_url = get_db_url()
-    engine = create_engine(db_url)
-    
     with engine.connect() as conn:
         # Insert or update translations using ON CONFLICT upsert
         for lang, value in TRANSLATIONS.items():
@@ -102,10 +80,11 @@ def main():
     
     # Clear Redis cache for provider_dashboard namespace
     try:
-        import redis
-        redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
-        r = redis.from_url(redis_url, decode_responses=True)
-        
+        r = get_redis()
+        if not r:
+            print("✓ Redis not available, skipping cache clear")
+            return
+
         # Delete all keys matching the pattern for provider_dashboard
         pattern = f"i18n:{NAMESPACE}:*"
         keys = list(r.scan_iter(match=pattern))
@@ -116,7 +95,6 @@ def main():
             print("✓ No Redis keys to clear")
     except Exception as e:
         print(f"⚠ Could not clear Redis cache: {e}")
-        print("  Please manually clear cache or restart Redis")
 
 
 if __name__ == "__main__":

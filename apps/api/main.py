@@ -152,13 +152,14 @@ app.include_router(page_events_router)
 app.include_router(provider_router)
 app.include_router(reviews_router)
 app.include_router(user_router)
-app.include_router(translations_router, prefix="/api/v1")
+app.include_router(translations_router, prefix="/api/v1/translations")
 app.include_router(price_range_router, prefix="/api/v1")
 
 # Serve uploaded provider images
-import os as _os
-_os.makedirs("uploads/provider_images", exist_ok=True)
-app.mount("/static/provider_images", StaticFiles(directory="uploads/provider_images"), name="provider_images")
+from apps.api.config import settings
+provider_images_dir = os.path.join(settings.UPLOADS_DIR, "provider_images")
+os.makedirs(provider_images_dir, exist_ok=True)
+app.mount("/static/provider_images", StaticFiles(directory=provider_images_dir), name="provider_images")
 
 
 # Keep existing translations endpoint
