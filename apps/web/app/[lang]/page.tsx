@@ -2,6 +2,7 @@ import { SUPPORTED_LANGUAGES } from '@/lib/locales';
 import { generateHreflangAlternates } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import Image from 'next/image';
+import Link from 'next/link';
 import RotatingCategory from '@/components/homepage/RotatingCategory';
 import { AuthIntentButton } from './AuthIntentButton';
 import CategoryIntentButton from '@/components/homepage/CategoryIntentButton';
@@ -49,12 +50,12 @@ export default async function Homepage({ params }: PageProps) {
           height={36}
           priority
         />
-        <a 
+        <Link 
           href={`/${normalizedLang}/warszawa/sprzatanie`}
-          className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          className="text-sm text-gray-600 transition-colors"
         >
           {t(homepageT, 'nav_link', 'Looking for a service?')}
-        </a>
+        </Link>
       </nav>
 
       {/* HERO SECTION */}
@@ -252,17 +253,17 @@ export default async function Homepage({ params }: PageProps) {
         <div className="max-w-4xl mx-auto text-center">
           <p className="mb-6 text-gray-700">{t(homepageT, 'footer_title', '')}</p>
           <div className="flex flex-wrap justify-center gap-4 mb-6 text-sm">
-            <a href={`/${normalizedLang}/warszawa/sprzatanie`} className="text-gray-700 hover:text-orange-500 transition-colors">
+            <Link href={`/${normalizedLang}/warszawa/sprzatanie`} className="text-gray-700 transition-colors">
               {t(homepageT, 'footer_link_cleaning', '')}
-            </a>
+            </Link>
             <span className="text-gray-500">|</span>
-            <a href={`/${normalizedLang}/warszawa/hydraulik`} className="text-gray-700 hover:text-orange-500 transition-colors">
+            <Link href={`/${normalizedLang}/warszawa/hydraulik`} className="text-gray-700 transition-colors">
               {t(homepageT, 'footer_link_plumbing', '')}
-            </a>
+            </Link>
             <span className="text-gray-500">|</span>
-            <a href={`/${normalizedLang}/warszawa/masaz`} className="text-gray-700 hover:text-orange-500 transition-colors">
+            <Link href={`/${normalizedLang}/warszawa/masaz`} className="text-gray-700 transition-colors">
               {t(homepageT, 'footer_link_massage', '')}
-            </a>
+            </Link>
           </div>
           <p className="text-gray-500 text-sm">
             {t(homepageT, 'footer_popular', '')}

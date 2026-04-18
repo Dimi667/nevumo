@@ -63,6 +63,30 @@
   a {
     text-decoration: none;
     color: inherit;
+    cursor: pointer;
+    transition: color 200ms ease;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  input[type="submit"],
+  input[type="button"] {
+    cursor: pointer;
+  }
+
+  /* Disabled elements should show not-allowed cursor */
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  input[type="submit"]:disabled,
+  input[type="button"]:disabled,
+  a[aria-disabled="true"] {
+    cursor: not-allowed;
   }
 }
 
@@ -86,4 +110,15 @@
   &:hover {
     background-color: var(--color-primary-hover);
   }
+}
+
+/* THE ABSOLUTE FORCE - No link can escape this */
+html body a:hover {
+  color: #ff5a1f !important;
+  fill: #ff5a1f !important;
+}
+
+html body a:hover * {
+  color: #ff5a1f !important;
+  fill: #ff5a1f !important;
 }

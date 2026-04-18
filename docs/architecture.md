@@ -500,6 +500,22 @@ The fix is purely data-seeding + cache invalidation. No API contracts, database 
 - Server Components for SEO pages
 - Client components for interactions
 
+### Global Cursor UX Rule
+All clickable elements have consistent cursor feedback via global CSS in `apps/web/app/globals.css`:
+- `cursor: pointer` applied to: `a`, `button`, `[role="button"]`, `input[type="submit"]`, `input[type="button"]`
+- `cursor: not-allowed` applied to disabled elements via `:disabled` and `[aria-disabled="true"]` selectors
+- Implemented in `@layer base` to ensure Tailwind utility classes can override when needed
+- This provides consistent UX across all interactive elements without requiring per-component cursor styles
+
+### Global Link Hover Rule
+All text links have consistent hover feedback via global CSS in `apps/web/app/globals.css`:
+- **Default state**: `color: inherit` (inherits from parent)
+- **Hover state**: `color: #ff5a1f` (Nevumo orange)
+- **Transition**: `color 0.2s ease-in-out`
+- **Implementation (Absolute Force)**: A high-specificity rule `html body a:hover` is placed at the end of `globals.css` with `!important` to ensure the brand orange applies even when Tailwind utility classes are present.
+- **SVG Support**: The rule also applies `fill: !important` to ensure nested icons change color on hover.
+- **Constraint**: Avoid using Tailwind's `!` (important) prefix for base text colors on links (e.g., use `text-gray-600` instead of `!text-gray-600`), as this will create a specificity conflict with the hover rule.
+
 ### Homepage Architecture (Provider-First Acquisition)
 - Route: `apps/web/app/[lang]/page.tsx`
 - Homepage is provider-first: it is designed primarily to convert service providers into registrations, not to browse providers

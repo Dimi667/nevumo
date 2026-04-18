@@ -158,31 +158,31 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
   masaz: {
     apiSlug: 'massage',
     displayName: 'massage',
-    heading: 'Massage in Warsaw',
+  heading: '{category} in {city}',
     subtitle:
-      'Find trusted massage specialists in Warsaw. Free request, no obligation.',
-    metadataTitle: 'Massage in Warsaw | Nevumo',
+      'Find trusted massage specialists in {city}. Free request, no obligation.',
+    metadataTitle: 'Massage in {city} | Nevumo',
     metadataDescription:
-      'Find trusted massage specialists in Warsaw. Free request, no obligation. Reply in as little as 30 minutes.',
-    seoTitle: 'Massage in Warsaw — what is worth knowing?',
+      'Find trusted massage specialists in {city}. Free request, no obligation. Reply in as little as 30 minutes.',
+    seoTitle: 'Massage in {city} — what is worth knowing?',
     seoParagraphs: [
-      'Warsaw offers a wide selection of professional massage specialists. Whether you are looking for relaxing, sports, or therapeutic massage, Nevumo helps you find trusted professionals nearby.',
+      '{city} offers a wide selection of professional massage specialists. Whether you are looking for relaxing, sports, or therapeutic massage, Nevumo helps you find trusted professionals nearby.',
       'Check previous client reviews, specialist experience, and the scope of services offered. A good massage specialist will adapt the technique to your needs.',
       '',
     ],
     seoQuestions: ['How to choose a massage specialist?', ''],
     relatedLinks: [
-      { href: '/pl/warszawa/sprzatanie', label: 'Cleaning in Warsaw' },
-      { href: '/pl/warszawa/hydraulik', label: 'Plumbing in Warsaw' },
+      { href: '/{lang}/{city_slug}/sprzatanie', label: 'Cleaning in {city}' },
+      { href: '/{lang}/{city_slug}/hydraulik', label: 'Plumbing in {city}' },
     ],
     faq: [
       {
-        question: 'How to find a massage specialist in Warsaw?',
+        question: 'How to find a massage specialist in {city}?',
         answer:
-          'On Nevumo you can send a free request to trusted massage specialists in Warsaw and receive a response in as little as 30 minutes.',
+          'On Nevumo you can send a free request to trusted massage specialists in {city} and receive a response in as little as 30 minutes.',
       },
       {
-        question: 'How much does massage cost in Warsaw?',
+        question: 'How much does massage cost in {city}?',
         answer: '',
       },
       {
@@ -195,31 +195,31 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
   sprzatanie: {
     apiSlug: 'cleaning',
     displayName: 'cleaning',
-    heading: 'Cleaning in Warsaw',
+    heading: '{category} in {city}',
     subtitle:
-      'Find trusted cleaning specialists in Warsaw. Free request, no obligation.',
-    metadataTitle: 'Cleaning in Warsaw | Nevumo',
+      'Find trusted cleaning specialists in {city}. Free request, no obligation.',
+    metadataTitle: 'Cleaning in {city} | Nevumo',
     metadataDescription:
-      'Find trusted cleaning companies in Warsaw. Free request, no obligation.',
-    seoTitle: 'Cleaning in Warsaw — what is worth knowing?',
+      'Find trusted cleaning companies in {city}. Free request, no obligation.',
+    seoTitle: 'Cleaning in {city} — what is worth knowing?',
     seoParagraphs: [
-      'Professional cleaning companies in Warsaw offer comprehensive services for homes, apartments, and offices. On Nevumo you can find trusted specialists available across the city.',
+      'Professional cleaning companies in {city} offer comprehensive services for homes, apartments, and offices. On Nevumo you can find trusted specialists available across the city.',
       'Pay attention to customer reviews, scope of services, and scheduling flexibility. The best companies often offer recurring service discounts.',
       '',
     ],
-    seoQuestions: ['How to choose a cleaning company?', 'How much does cleaning cost in Warsaw?'],
+    seoQuestions: ['How to choose a cleaning company?', 'How much does cleaning cost in {city}?'],
     relatedLinks: [
-      { href: '/pl/warszawa/masaz', label: 'Massage in Warsaw' },
-      { href: '/pl/warszawa/hydraulik', label: 'Plumbing in Warsaw' },
+      { href: '/{lang}/{city_slug}/masaz', label: 'Massage in {city}' },
+      { href: '/{lang}/{city_slug}/hydraulik', label: 'Plumbing in {city}' },
     ],
     faq: [
       {
-        question: 'How to find a cleaning company in Warsaw?',
+        question: 'How to find a cleaning company in {city}?',
         answer:
-          'On Nevumo you can send a free request to trusted cleaning companies in Warsaw and quickly receive responses from available specialists.',
+          'On Nevumo you can send a free request to trusted cleaning companies in {city} and quickly receive responses from available specialists.',
       },
       {
-        question: 'How much does cleaning cost in Warsaw?',
+        question: 'How much does cleaning cost in {city}?',
         answer: '',
       },
       {
@@ -232,31 +232,31 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
   hydraulik: {
     apiSlug: 'plumbing',
     displayName: 'plumbing',
-    heading: 'Plumbing in Warsaw',
+    heading: '{category} in {city}',
     subtitle:
-      'Find a trusted plumber in Warsaw. Free request, no obligation.',
-    metadataTitle: 'Plumbing in Warsaw | Nevumo',
+      'Find a trusted plumber in {city}. Free request, no obligation.',
+    metadataTitle: 'Plumbing in {city} | Nevumo',
     metadataDescription:
-      'Find a trusted plumber in Warsaw. Fast response, free request.',
-    seoTitle: 'Plumbing in Warsaw — what is worth knowing?',
+      'Find a trusted plumber in {city}. Fast response, free request.',
+    seoTitle: 'Plumbing in {city} — what is worth knowing?',
     seoParagraphs: [
-      'Plumbing issues require a fast response. On Nevumo you can find trusted plumbers in Warsaw, including urgent availability. Free request, quick response.',
+      'Plumbing issues require a fast response. On Nevumo you can find trusted plumbers in {city}, including urgent availability. Free request, quick response.',
       'You usually call a plumber for water system failures, leaking taps, blocked drains, or bathroom and kitchen renovation work.',
       '',
     ],
-    seoQuestions: ['When should you call a plumber?', 'How much does a plumber cost in Warsaw?'],
+    seoQuestions: ['When should you call a plumber?', 'How much does a plumber cost in {city}?'],
     relatedLinks: [
-      { href: '/pl/warszawa/masaz', label: 'Massage in Warsaw' },
-      { href: '/pl/warszawa/sprzatanie', label: 'Cleaning in Warsaw' },
+      { href: '/{lang}/{city_slug}/masaz', label: 'Massage in {city}' },
+      { href: '/{lang}/{city_slug}/sprzatanie', label: 'Cleaning in {city}' },
     ],
     faq: [
       {
-        question: 'How to find a plumber in Warsaw?',
+        question: 'How to find a plumber in {city}?',
         answer:
-          'On Nevumo you can send a free request to trusted plumbers in Warsaw and receive a response quickly.',
+          'On Nevumo you can send a free request to trusted plumbers in {city} and receive a response quickly.',
       },
       {
-        question: 'How much does a plumber cost in Warsaw?',
+        question: 'How much does a plumber cost in {city}?',
         answer: '',
       },
       {
@@ -268,8 +268,40 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
   },
 };
 
-function getCategoryContent(category: string): CategoryContent {
-  return CATEGORY_CONTENT[(category as CategoryKey)] ?? CATEGORY_CONTENT.masaz;
+function getCategoryContent(
+  category: string,
+  cityName: string,
+  categoryName: string,
+  lang: string = 'en',
+  citySlug: string = '',
+): CategoryContent {
+  const base = CATEGORY_CONTENT[(category as CategoryKey)] ?? CATEGORY_CONTENT.masaz;
+
+  const replace = (str: string) =>
+    str
+      .replace(/{city}/g, cityName)
+      .replace(/{category}/g, categoryName)
+      .replace(/{lang}/g, lang)
+      .replace(/{city_slug}/g, citySlug);
+
+  return {
+    ...base,
+    heading: replace(base.heading),
+    subtitle: replace(base.subtitle),
+    metadataTitle: replace(base.metadataTitle),
+    metadataDescription: replace(base.metadataDescription),
+    seoTitle: replace(base.seoTitle),
+    seoParagraphs: base.seoParagraphs.map(replace) as [string, string, string],
+    seoQuestions: base.seoQuestions.map(replace) as [string, string],
+    relatedLinks: base.relatedLinks.map((link) => ({
+      href: replace(link.href),
+      label: replace(link.label),
+    })),
+    faq: base.faq.map((f) => ({
+      question: replace(f.question),
+      answer: replace(f.answer),
+    })),
+  };
 }
 
 function formatRelativeTime(dateString: string): string {
@@ -352,8 +384,14 @@ function buildFaqJsonLd(
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang, city, category } = await params;
   const categoryT = await fetchTranslations(lang, 'category');
+  const homepageT = await fetchTranslations(lang, 'homepage');
+  const cityData = await getCityBySlug(city, lang);
+  const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
   const catKey = getCategoryTranslationKey(category);
-  const title = `${t(categoryT, `h1_${catKey}`, 'Services in Warsaw')} | Nevumo`;
+  const catNameKey = `cat_${catKey}_name` as const;
+  const categoryName = t(homepageT, catNameKey, catKey);
+
+  const title = `${t(categoryT, `h1_${catKey}`, `${categoryName} in ${cityName}`)} | Nevumo`;
   const baseDescription = t(categoryT, `subtitle_${catKey}`, '');
   
   // Fetch price range for metadata
@@ -412,20 +450,21 @@ async function getEnrichedProviders(
 
 export default async function CategoryPage({ params }: PageProps) {
   const { lang, city, category } = await params;
-  const content = getCategoryContent(category);
   const categoryT = await fetchTranslations(lang, 'category');
   const homepageT = await fetchTranslations(lang, 'homepage');
   const apiSlug = getApiSlug(category);
   const catKey = getCategoryTranslationKey(category);
-  const heading = t(categoryT, `h1_${catKey}`, 'Services in Warsaw');
-  const subtitle = t(categoryT, `subtitle_${catKey}`, '');
+
+  const cityData = await getCityBySlug(city, lang);
+  const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+
   const catNameKey = `cat_${catKey}_name` as const;
   const categoryName = t(homepageT, catNameKey, catKey);
-  const cityData = await getCityBySlug(city, lang);
-  console.log("DEBUG CITY DATA:", JSON.stringify(cityData, null, 2));
-  const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
-  console.log("CATEGORY DATA:", categoryT);
-  console.log("PROVIDER_DESC_FALLBACK key:", categoryT['provider_desc_fallback']);
+
+  const content = getCategoryContent(category, cityName, categoryName, lang, city);
+
+  const heading = t(categoryT, `h1_${catKey}`, `${categoryName} in ${cityName}`);
+  const subtitle = t(categoryT, `subtitle_${catKey}`, '');
   const providerCardTexts: ProviderCardTexts = {
     defaultDescription: t(categoryT, 'provider_desc_fallback', 'Проверен специалист в {city}. Изпратете кратко запитване и изчакайте връзка.').replace('{city}', cityName),
     jobsCompleted: t(categoryT, 'provider_jobs_completed', 'completed jobs'),
@@ -436,16 +475,16 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const relatedLinksByCategory: Record<CategoryKey, Array<{ href: string; label: string }>> = {
     masaz: [
-      { href: `/${lang}/${city}/sprzatanie`, label: t(categoryT, 'h1_cleaning', 'Cleaning in Warsaw') },
-      { href: `/${lang}/${city}/hydraulik`, label: t(categoryT, 'h1_plumbing', 'Plumbing in Warsaw') },
+      { href: `/${lang}/${city}/sprzatanie`, label: t(categoryT, 'h1_cleaning', `Cleaning in ${cityName}`) },
+      { href: `/${lang}/${city}/hydraulik`, label: t(categoryT, 'h1_plumbing', `Plumbing in ${cityName}`) },
     ],
     sprzatanie: [
-      { href: `/${lang}/${city}/masaz`, label: t(categoryT, 'h1_massage', 'Massage in Warsaw') },
-      { href: `/${lang}/${city}/hydraulik`, label: t(categoryT, 'h1_plumbing', 'Plumbing in Warsaw') },
+      { href: `/${lang}/${city}/masaz`, label: t(categoryT, 'h1_massage', `Massage in ${cityName}`) },
+      { href: `/${lang}/${city}/hydraulik`, label: t(categoryT, 'h1_plumbing', `Plumbing in ${cityName}`) },
     ],
     hydraulik: [
-      { href: `/${lang}/${city}/masaz`, label: t(categoryT, 'h1_massage', 'Massage in Warsaw') },
-      { href: `/${lang}/${city}/sprzatanie`, label: t(categoryT, 'h1_cleaning', 'Cleaning in Warsaw') },
+      { href: `/${lang}/${city}/masaz`, label: t(categoryT, 'h1_massage', `Massage in ${cityName}`) },
+      { href: `/${lang}/${city}/sprzatanie`, label: t(categoryT, 'h1_cleaning', `Cleaning in ${cityName}`) },
     ],
   };
   const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.sprzatanie;
@@ -624,7 +663,7 @@ export default async function CategoryPage({ params }: PageProps) {
 
           <section className="mt-12 rounded-xl bg-gray-50 border-t border-gray-200 px-6 py-8 text-center">
             <p className="text-sm text-gray-500">
-              {t(categoryT, 'provider_cta_prefix', 'Do you offer')} {categoryName} {t(categoryT, 'provider_cta_suffix', 'in Warsaw?')}
+              {t(categoryT, 'provider_cta_prefix', 'Do you offer')} {categoryName} {t(categoryT, 'provider_cta_suffix', `in ${cityName}?`)}
             </p>
             <Link href={`/${lang}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
               {t(categoryT, 'provider_cta_link', 'Join for free →')}

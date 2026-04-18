@@ -207,7 +207,12 @@ export async function getProviders(
 ): Promise<ProviderListItem[]> {
   try {
     const params = new URLSearchParams({ category_slug: categorySlug, city_slug: citySlug, lang });
-    const res = await fetch(`${API_BASE}/api/v1/providers?${params}`, { cache: 'no-store' });
+    const res = await fetch(`${API_BASE}/api/v1/providers?${params}`, {
+      next: {
+        tags: ['providers', `cat-${categorySlug}`, `city-${citySlug}`, `lang-${lang}`],
+        revalidate: 3600,
+      },
+    });
     if (!res.ok) return [];
     const json: ApiResponse<ProviderListItem[]> = await res.json();
     return json.success ? json.data : [];
@@ -224,7 +229,12 @@ export async function getProviderBySlug(
   try {
     const params = new URLSearchParams({ lang });
     if (citySlug) params.set('city_slug', citySlug);
-    const response = await fetch(`${API_BASE}/api/v1/providers/${slug}?${params.toString()}`, { cache: 'no-store' });
+    const response = await fetch(`${API_BASE}/api/v1/providers/${slug}?${params.toString()}`, {
+      next: {
+        tags: [`provider-${slug}`, `lang-${lang}`],
+        revalidate: 3600,
+      },
+    });
     if (!response.ok) {
       if (response.status === 404) return null;
       throw new Error(`HTTP ${response.status}`);
@@ -255,7 +265,7 @@ export async function getCategories(lang: string): Promise<CategoryOut[]> {
   try {
     const res = await fetch(
       `${API_BASE}/api/v1/categories?lang=${encodeURIComponent(lang)}`,
-      { next: { revalidate: 3600 } },
+      { next: { tags: ['categories', `lang-${lang}`], revalidate: 3600 } },
     );
     if (!res.ok) return [];
     const json: ApiResponse<CategoryOut[]> = await res.json();
@@ -271,7 +281,12 @@ export async function getCities(country: string, lang?: string): Promise<CityOut
     if (lang) params.set('lang', lang);
     const res = await fetch(
       `${API_BASE}/api/v1/cities?${params.toString()}`,
-      { next: { revalidate: 3600 } },
+      {
+        next: {
+          tags: ['cities', `country-${country}`, lang ? `lang-${lang}` : 'lang-en'],
+          revalidate: 3600,
+        },
+      },
     );
     if (!res.ok) return [];
     const json: ApiResponse<CityOut[]> = await res.json();
@@ -281,12 +296,16 @@ export async function getCities(country: string, lang?: string): Promise<CityOut
   }
 }
 
-export async function getCityBySlug(slug: string, lang?: string): Promise<CityOut | null> {
+export async function getCityBySlug(slug: string, lang: string = 'en'): Promise<CityOut | null> {
   try {
-    const params = new URLSearchParams();
-    if (lang) params.set('lang', lang);
-    const url = `${API_BASE}/api/v1/cities/${encodeURIComponent(slug)}${params.toString() ? `?${params.toString()}` : ''}`;
-    const res = await fetch(url, { next: { revalidate: 3600 } });
+    const params = new URLSearchParams({ lang });
+    const url = `${API_BASE}/api/v1/cities/${encodeURIComponent(slug)}?${params.toString()}`;
+    const res = await fetch(url, {
+      next: {
+        tags: [`city-${slug}`, `lang-${lang}`],
+        revalidate: 3600,
+      },
+    });
     if (!res.ok) return null;
     const json: ApiResponse<CityOut> = await res.json();
     return json.success ? json.data : null;
@@ -350,9 +369,12 @@ export async function getPriceRange(
 ): Promise<PriceRangeData | null> {
   try {
     const isDev = process.env.NODE_ENV === 'development';
-    const fetchOptions: RequestInit = isDev
-      ? { cache: 'no-store' }
-      : { next: { revalidate: 3600 } };
+    const fetchOptions: RequestInit = {
+      next: {
+        tags: ['price-range', `cat-${categorySlug}`, `city-${citySlug}`],
+        revalidate: isDev ? 0 : 3600,
+      },
+    };
 
     const params = new URLSearchParams({ category_slug: categorySlug, city_slug: citySlug });
     const res = await fetch(`${API_BASE}/api/v1/price-range?${params}`, fetchOptions);
