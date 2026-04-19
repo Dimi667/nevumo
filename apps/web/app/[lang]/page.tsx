@@ -50,8 +50,8 @@ export default async function Homepage({ params }: PageProps) {
           height={36}
           priority
         />
-        <Link 
-          href={`/${normalizedLang}/warszawa/sprzatanie`}
+        <Link
+          href={`/${normalizedLang}/warszawa`}
           className="text-sm text-gray-600 transition-colors"
         >
           {t(homepageT, 'nav_link', 'Looking for a service?')}

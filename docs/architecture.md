@@ -184,9 +184,17 @@ Location трябва да бъде нормализирана:
 - `city_en` — English name in locations.city_en, used as internal/admin fallback
 - `city_name` — translated display name from location_translations for UI rendering
 - GET /api/v1/cities?lang={lang}&country={country_code} returns translated city_name as `city` field
+- GET /api/v1/cities/{slug}?lang={lang} returns translated city_name as `city` field (IMPORTANT: this endpoint returns the object directly, not wrapped in `data`)
 - Fallback chain: location_translations.city_name → locations.city_en → locations.city
 - Adding a new city requires: 1) row in locations, 2) rows in location_translations for all 34 languages
 - Backend: apps/api/routes/cities.py uses LEFT OUTER JOIN on LocationTranslation
+
+### Frontend City Data Fetching (Next.js SSR)
+- **Problem**: Next.js SSR can cache `fetch()` calls aggressively. If a city name is updated in the DB, the frontend might still show the old name.
+- **Problem**: The API endpoint `/api/v1/cities/{slug}` returns the city object directly (e.g., `{"id": 2, "city": "Варшава", ...}`), while most other endpoints return a wrapped success object (`{"success": true, "data": { ... }}`).
+- **Solution**: Use `cache: 'no-store'` in `fetch()` calls for city data to ensure fresh translations.
+- **Solution**: Correctly handle the unwrapped JSON response in `apps/web/lib/api.ts`'s `getCityBySlug` function.
+- **Cache Invalidation**: After updating `location_translations`, always flush Redis: `docker exec nevumo-redis redis-cli FLUSHALL`.
 
 ---
 
@@ -490,126 +498,7 @@ The key `logo_pro` must remain untranslated as `"Pro"` in all 34 locales. This i
 #### Onboarding Hero Banner i18n (April 10, 2026)
 The onboarding hero banner on the dashboard overview page is now fully DB-backed. All 8 strings (titles, descriptions, CTAs, step labels) are stored in the `provider_dashboard` namespace and served via the standard translations endpoint. `getHeroContent()` and `CompactStepIndicator` in `apps/web/lib/onboarding-utils.tsx` accept a `dict` parameter and use `t()` for rendering. The dashboard page passes `dict` from `useDashboardI18n()` to both components.
 
-**No Code Changes Required:**
-The fix is purely data-seeding + cache invalidation. No API contracts, database schema, or model changes were made.
-
----
- 
-## Frontend Architecture
-- Next.js App Router
-- Server Components for SEO pages
-- Client components for interactions
-
-### Global Cursor UX Rule
-All clickable elements have consistent cursor feedback via global CSS in `apps/web/app/globals.css`:
-- `cursor: pointer` applied to: `a`, `button`, `[role="button"]`, `input[type="submit"]`, `input[type="button"]`
-- `cursor: not-allowed` applied to disabled elements via `:disabled` and `[aria-disabled="true"]` selectors
-- Implemented in `@layer base` to ensure Tailwind utility classes can override when needed
-- This provides consistent UX across all interactive elements without requiring per-component cursor styles
-
-### Global Link Hover Rule
-All text links have consistent hover feedback via global CSS in `apps/web/app/globals.css`:
-- **Default state**: `color: inherit` (inherits from parent)
-- **Hover state**: `color: #ff5a1f` (Nevumo orange)
-- **Transition**: `color 0.2s ease-in-out`
-- **Implementation (Absolute Force)**: A high-specificity rule `html body a:hover` is placed at the end of `globals.css` with `!important` to ensure the brand orange applies even when Tailwind utility classes are present.
-- **SVG Support**: The rule also applies `fill: !important` to ensure nested icons change color on hover.
-- **Constraint**: Avoid using Tailwind's `!` (important) prefix for base text colors on links (e.g., use `text-gray-600` instead of `!text-gray-600`), as this will create a specificity conflict with the hover rule.
-
-### Homepage Architecture (Provider-First Acquisition)
-- Route: `apps/web/app/[lang]/page.tsx`
-- Homepage is provider-first: it is designed primarily to convert service providers into registrations, not to browse providers
-- Rendering strategy is SSR so hero copy, metadata, and translated acquisition content are available on first response
-- Metadata is generated server-side from the `homepage` namespace translations
-- Main CTA drives to `/${lang}/auth`
-- Top navigation includes a secondary service-seeker escape hatch to a real marketplace route
-
-### Homepage Content System
-- Homepage copy is fully DB-driven through the `homepage` namespace
-- The hero uses split keys (`hero_prefix`, `hero_suffix`) plus a rotating category component in the middle
-- Social proof, trust bullets, step copy, category-card labels, activity feed copy, footer links, and CTA copy all read from the same namespace
-- This keeps homepage localization operationally simple: content edits can be made in DB without changing React code
-
-### Rotating Categories Decision
-- `RotatingCategory` is the only client component in the homepage hero path
-- Rotation values come from the DB key `homepage.rotating_categories` as a comma-separated list
-- Server component loads the translated string, splits it into categories, then passes the array to the client component
-- Rotation interval is 3 seconds with a short fade transition
-- Architectural goal: keep the page mostly SSR while isolating animation to a tiny client island
-
-### Category Page Architecture (Client-First Conversion, SEO-Stable Routing)
-- Route: `apps/web/app/[lang]/[city]/[category]/page.tsx`
-- Category pages are SEO landing pages with a strong conversion layer for clients requesting a service
-- Page shell, metadata, provider list, trust bar, SEO body copy, and related links are server-rendered
-- Conversion interaction is centered around the lead form and in-page CTA anchors
-- The page is "client-first" in product intent: the main user action is sending a request, while provider join CTAs are secondary
-- Mobile sticky CTA behavior is handled by `CategoryPageClient` + `StickyLeadFormButton`, which target the mobile form wrapper through `id="lead-form-anchor"`
-- The sticky CTA is rendered as a fixed client component that starts hidden with `translateY(100%)`, stays hidden while the mobile form anchor is intersecting, and slides in with `translateY(0)` only after the form wrapper leaves the viewport on mobile
-
-### Category Slug Mapping Decision
-- Public localized route slugs are intentionally decoupled from backend canonical category slugs
-- Example mapping in current implementation:
-  - `masaz` → `massage`
-  - `sprzatanie` → `cleaning`
-  - `hydraulik` → `plumbing`
-- This preserves localized, SEO-friendly URLs while keeping backend API contracts stable and canonical
-- The same mapping also drives translation key selection (`massage`, `cleaning`, `plumbing`) for category-specific copy
-
-### Category Page Data Composition
-- Provider list comes from `getProviders(categorySlug, citySlug, lang)`
-- Each visible provider is then enriched with `getProviderBySlug(...)` for extra trust fields such as description, jobs completed, and latest lead preview timestamp
-- Trust bar combines dynamic provider count and rating with translated category copy
-- SEO body sections and FAQ content are rendered from translation keys keyed by mapped category type
-- Lead form remains in a sticky sidebar on large screens for persistent conversion visibility
-
-### Category Page SEO Decisions
-- `generateMetadata()` uses category translations to produce localized title/description per route
-- `generateHreflangAlternates()` is used for language alternates on both homepage and category routes
-- FAQ structured data is rendered through JSON-LD for richer search appearance
-- Related internal links are category-aware to strengthen crawl paths between major service pages
-- Long-form SEO text is still rendered in the main page response, not lazy-loaded, to preserve crawlability---
-
-## Next.js 15+ Page Architecture Standard (April 2026)
-
-### Server Component Wrapper Pattern
-All dashboard and complex interactive pages now follow a consistent two-component architecture:
-
-1. **Server Component Wrapper** (`page.tsx`):
-   - Extracts and awaits `params` and `searchParams` (which are now Promises in Next.js 15+)
-   - Fetches initial data server-side
-   - Passes resolved params and data to the Client Component
-   - Handles metadata generation and SEO concerns
-
-2. **Client Component** (`...Client.tsx`):
-   - Contains all interactive logic (state, event handlers, forms)
-   - Receives pre-resolved params and initial data as props
-   - Manages client-side state and API calls
-   - No need to await params — they're already resolved
-
-**Example structure:**
-```typescript
-// app/[lang]/provider/dashboard/profile/page.tsx (Server Component)
-export default async function ProfilePage({ params }: { params: Promise<{ lang: string }> }) {
-  const { lang } = await params;
-  const initialData = await fetchProfileData();
-  return <ProfileClient lang={lang} initialData={initialData} />;
-}
-
-// ProfileClient.tsx (Client Component)
-'use client';
-export default function ProfileClient({ lang, initialData }: Props) {
-  // Interactive logic here
-}
-```
-
-### Params and SearchParams as Promises
-In Next.js 15+, `params` and `searchParams` are no longer synchronous objects — they are Promises that must be awaited. This change enables streaming and better performance. All server components that need route parameters must now use `await params` and `await searchParams`.
-
-**Migration pattern:**
-- Before: `const { lang } = params`
-- After: `const { lang } = await params`
-
-### Translation Key Standards (CRITICAL)
+#### Translation Key Standards (CRITICAL)
 Translation keys used in `t()` calls must follow strict conventions to ensure consistency with the database namespace system:
 
 1. **Clean Keys Only**: Keys must NOT contain colons (`:`) or prefixes in the `t()` function call itself
@@ -757,6 +646,25 @@ Adding new city: add entry to CITY_COUNTRY_MAP in:
 
 ---
 
+### City Landing Page Architecture (April 19, 2026)
+
+- **Route**: `apps/web/app/[lang]/[city]/page.tsx`
+- **Model**: SEO-focused entry point for users searching for services in a specific city.
+- **Core Components**:
+  - **Hero Section**: High-impact heading with localized city name + search input placeholder.
+  - **Category Grid**: Dynamic list of categories (cleaning, plumbing, massage) with icons and links.
+  - **How It Works**: 3-step marketplace process explanation.
+  - **SEO Content**: Multi-paragraph localized text blocks for better search ranking.
+- **Data Fetching**:
+  - Uses `getCityBySlug` for localized city details.
+  - Uses `getCategories` for category list.
+  - Fetches translations from the `city` namespace.
+- **Translation Management**:
+  - All UI strings are stored in the `city` namespace in the database.
+  - Keys use `{city}` placeholder for dynamic replacement in the frontend.
+
+---
+
 ## SEO Architecture (CRITICAL)
 
 ### Strategy:
@@ -866,44 +774,43 @@ Taken slugs are filtered out. Maximum 5 suggestions returned.
 - Same behavior as profile endpoint
 - Used during registration flow before account creation
 
-### Profile update endpoint:
-- Accepts optional `slug` field
-- Validates format (no numeric suffixes, only a-z/0-9/-)
-- Returns 409 SLUG_TAKEN with suggestions if slug in use
-- Returns 400 INVALID_SLUG for format violations
-- **SECURITY**: Backend automatically detects onboarding status using `check_onboarding_complete()`
-- **SLUG CHANGE LIMIT**: 1 change allowed after onboarding completion
-- **REDIRECT SYSTEM**: Automatic 301 redirects for old slugs to new slugs
+### Security Features
 
-**Registration endpoint:**
-- Accepts optional `slug`, `city_slug`, `category_slug` fields
-- For provider role: validates slug uniqueness, returns 409 SLUG_TAKEN if taken
-- Auto-generates slug from email if not provided
-- Rolls back user creation if provider creation fails
+**Loop Prevention:**
+- Tracks visited slugs to prevent infinite redirect chains
+- Maximum depth of 5 redirects before aborting
+- Returns 404 if loop detected
 
-### User Flow
+**Change Limit Enforcement:**
+- `MAX_SLUG_CHANGES = 1` - Only one real change allowed after onboarding
+- Backend automatically detects onboarding completion using `check_onboarding_complete()`
+- Frontend parameter `is_onboarding_setup` is ignored for security
 
-**Profile Update Flow:**
-1. User enters business name → base slug auto-generated (no suffix)
-2. If base slug is taken → error shown + 3-5 suggestions displayed
-3. User can:
-   - Click suggestion to use it
-   - Edit slug manually with real-time validation
-   - Check availability via "Check" button
-4. On save → server validates again, returns error with suggestions if needed
+### Frontend Integration
 
-**Registration Flow (Provider):**
-1. User enters email + password
-2. Account created immediately with temporary draft slug (not visible to user)
-3. Redirect to onboarding step 1 (`/[lang]/provider/dashboard/profile`)
-4. User enters business name → slug auto-generated from business name (not email)
-5. Real-time availability check shows suggestions if taken
-6. User can edit slug manually with validation
-7. On save with `is_onboarding_setup: true` → slug set without consuming allowed change count
+**Provider Pages:**
+- Automatic redirect detection via `resolveSlug()` API call
+- Browser URL updates seamlessly using Next.js `redirect()`
+- No user interruption - transparent redirect experience
 
-**Registration Flow (Client):**
-- No slug selection step
-- Registration proceeds directly after password entry
+**Settings Page:**
+- Shows remaining changes allowed based on `slug_change_count`
+- Displays "URL locked" when limit reached
+- Provides support contact information
+
+### User Experience
+
+**Slug Change Flow:**
+1. User changes slug in settings (if allowed)
+2. Backend validates and creates redirect record
+3. Old URLs immediately start redirecting to new URL
+4. SEO value preserved with 301 redirects
+5. Browser address bar updates automatically
+
+**Error Handling:**
+- 404 for non-existent slugs
+- 409 for slug change limit exceeded
+- Graceful degradation if redirect system fails
 
 ---
 
@@ -1635,3 +1542,10 @@ alembic upgrade i8j9k0l1m2n3
 
 # Seed translation keys
 python scripts/seed_review_translations.py
+```
+
+### City Page UI Components
+
+- Hero section with search placeholder and CTAs for becoming a specialist and sending requests.
+  - 'Become a specialist' link updated to `/${lang}/auth?mode=register&role=provider`.
+  - 'Send a free request' CTA now links to a placeholder route `/[lang]/[city]/request`.

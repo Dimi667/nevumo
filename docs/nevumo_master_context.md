@@ -98,7 +98,9 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `67` total UI keys per language
   - `2,788` rows in `translations` for homepage/category namespaces across 34 languages
   - `342` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services, lead search & notes)
+  - `11` city-page keys per language (hero, search, CTA, empty state, how it works, SEO)
   - `11,628` rows in `translations` for provider_dashboard namespace across 34 languages
+  - `374` rows in `translations` for city namespace across 34 languages
 
 ---
 
@@ -345,9 +347,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - iOS bottom sheet: текстовете са центрирани, бутонът е sticky
 - **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
   - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
-  - 272 new rows seeded via `apps/api/scripts/seed_onboarding_hero_translations.py` 
-  - `getHeroContent()` and `CompactStepIndicator` in `apps/web/lib/onboarding-utils.tsx` now accept `dict` param and use `t()` for all strings
-  - Dashboard page passes `dict` from `useDashboardI18n()` to both components
+  - 272 new rows 
+  - Seed script: `apps/api/scripts/seed_onboarding_hero_translations.py` 
+- **City Page Launch (April 19, 2026)** — Implementation of the dynamic city landing page system (`/[lang]/[city]`):
+  - **New Page Structure**: SSR landing page featuring a hero section with search, category grid, "How it works" section, and SEO content blocks.
+  - **Dynamic Metadata**: SEO-optimized titles and descriptions using localized city names.
+  - **Namespace: `city`**: 11 new translation keys per language (374 total rows) covering all UI elements.
+  - **API Integration**: Frontend now consumes `GET /api/v1/cities/{slug}` for localized city context.
+  - **Seed Script**: `apps/api/scripts/seed_city_translations.py` for idempotent deployment across 34 languages.
+  - **UX**: Automatic category icon mapping and links to category-specific pages within the city.
 - **Location Translations System** — Multilingual city name display (April 2026):
   - New table: location_translations (location_id, lang, city_name) — 102 rows seeded
   - locations.city_en added for English/admin fallback

@@ -265,7 +265,7 @@ export async function getCategories(lang: string): Promise<CategoryOut[]> {
   try {
     const res = await fetch(
       `${API_BASE}/api/v1/categories?lang=${encodeURIComponent(lang)}`,
-      { next: { tags: ['categories', `lang-${lang}`], revalidate: 3600 } },
+      { next: { tags: ['categories', `lang-${lang}`], revalidate: 60 } }, // Reduced to 60s
     );
     if (!res.ok) return [];
     const json: ApiResponse<CategoryOut[]> = await res.json();
@@ -301,14 +301,12 @@ export async function getCityBySlug(slug: string, lang: string = 'en'): Promise<
     const params = new URLSearchParams({ lang });
     const url = `${API_BASE}/api/v1/cities/${encodeURIComponent(slug)}?${params.toString()}`;
     const res = await fetch(url, {
-      next: {
-        tags: [`city-${slug}`, `lang-${lang}`],
-        revalidate: 3600,
-      },
+      cache: 'no-store',
     });
     if (!res.ok) return null;
-    const json: ApiResponse<CityOut> = await res.json();
-    return json.success ? json.data : null;
+    const data = await res.json();
+    // The cities/{slug} endpoint returns the city object directly, not wrapped in { success: true, data: ... }
+    return data as CityOut;
   } catch {
     return null;
   }

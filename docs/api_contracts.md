@@ -1038,6 +1038,35 @@ Check if a slug redirects to another slug without following the redirect. Used b
 
 ---
 
+## 5.2. Get City by Slug
+
+### GET
+/api/v1/cities/{slug}?lang=en
+
+### Query Params
+- `lang` (optional, default: "en") — Language code for translated city name
+
+### Response
+**IMPORTANT**: This endpoint returns the `CityOut` object **directly**, without the standard `{ "success": true, "data": ... }` wrapper.
+
+```json
+{
+  "id": 2,
+  "slug": "warszawa",
+  "city": "Варшава",
+  "city_en": "Warszawa",
+  "country_code": "PL",
+  "currency": "PLN"
+}
+```
+
+### Notes
+- Returns 404 if city slug not found
+- Used by frontend city pages to get localized names for metadata and headings
+- Always use `cache: 'no-store'` in Next.js when calling this to prevent stale translations
+
+---
+
 ## 5.1. Get Price Range
 
 ### GET
