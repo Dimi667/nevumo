@@ -360,6 +360,7 @@ Used for:
 
 ### Translation System Architecture
 - **Source of truth**: PostgreSQL `translations` table
+- **Translation Key Validation (Mandatory)**: All keys MUST follow the `namespace.key` pattern (e.g., `auth.login_title`). This is enforced at the **SQLAlchemy model level** (`@validates`) and the **Pydantic schema level**. Keys without at least one dot will trigger a validation error.
 - Translation content is stored as `namespace.key` rows, for example `homepage.hero_title` and `category.form_btn`
 - The database is the authoritative content layer for UI copy across homepage, category pages, reviews, and future market surfaces
 - Backend translation reads are namespace-scoped, which keeps payloads small and frontend usage simple
