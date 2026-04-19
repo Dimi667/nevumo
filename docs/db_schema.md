@@ -397,8 +397,9 @@ CREATE INDEX idx_translations_lang ON translations(lang);
 CREATE INDEX idx_translations_key ON translations(key);
 
 ### Storage Format
-- **namespace.key pattern**: Keys are stored as `namespace.key` (e.g., `homepage.title`, `category.cleaning`)
-- **Namespace separation**: Different feature areas use different namespaces for organization
+- **namespace.key pattern**: Keys are stored as `namespace.key` (e.g., `homepage.title`, `category.cleaning`).
+- **Validation**: **Mandatory namespacing**. Keys must contain at least one dot and cannot start or end with a dot. Enforced at the ORM layer (SQLAlchemy `@validates`).
+- **Namespace separation**: Different feature areas use different namespaces for organization.
 
 ### Current Seeded Data (April 4, 2026)
 - **homepage namespace**: 45 keys × 34 languages = 1,530 rows

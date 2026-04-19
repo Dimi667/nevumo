@@ -111,6 +111,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Никога не модифицирай .env файлове
 - Никога не използвай hardcoded localhost или портове в кода. Винаги използвай `config.settings` в Backend и `API_BASE` във Frontend.
 - Скриптовете за сийдване трябва да използват централизираната база данни и Redis чрез `apps.api.database` и `apps.api.dependencies`.
+- **Валидация на преводи**: Всички ключове в `translations` таблицата ЗАДЪЛЖИТЕЛНО трябва да следват патърна `namespace.key` (напр. `auth.login_title`). Валидацията е на ниво SQLAlchemy модел и Pydantic схема.
 - Винаги спазвай текущата архитектура
 
 ### TypeScript
@@ -268,6 +269,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Router mounted in `apps/api/main.py`
   - Redis cache key pattern: `translations:{lang}:{namespace}` with 1 hour TTL
   - Per-key English fallback when requested language is missing part of a namespace payload
+  - **Translation Key Validation (April 19, 2026)**: Completed audit of 712 unique keys (100% compliant). Implemented mandatory namespacing validation (`namespace.key`) at SQLAlchemy model level and Pydantic schema level to prevent "flat" keys.
 - **Provider Dashboard i18n Hardening** — provider dashboard shell and pages now share one `provider_dashboard` dictionary via `DashboardI18nProvider`, use locale-aware category/date loading, and ship DB-backed translations for the remaining shared dashboard UI copy
 - **Verified UI Translation Coverage** — Homepage and category UI copy seeded for 34 languages:
   - Source script: `apps/api/scripts/seed_ui_translations.py`

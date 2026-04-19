@@ -744,3 +744,36 @@ class LatestReviewPreview(BaseModel):
 
 class ClaimProviderRequest(BaseModel):
     claim_token: str
+
+
+# -------------------------
+# Translations
+# -------------------------
+
+class TranslationOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    lang: str
+    key: str
+    value: Optional[str] = None
+
+
+class TranslationCreate(BaseModel):
+    lang: str
+    key: str
+    value: str
+
+    @field_validator("key")
+    @classmethod
+    def validate_key_namespace(cls, v: str) -> str:
+        if "." not in v or v.startswith(".") or v.endswith("."):
+            raise ValueError(
+                "Key must follow 'namespace.key' format (e.g., 'auth.login_title')"
+            )
+        return v
+
+
+class TranslationResponse(BaseModel):
+    success: bool = True
+    data: List[TranslationOut]
