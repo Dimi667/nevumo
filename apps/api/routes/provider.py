@@ -2,7 +2,7 @@
 
 from typing import Union, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, status, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, status, Response, BackgroundTasks
 from sqlalchemy.orm import Session
 
 from apps.api.config import settings
@@ -103,6 +103,7 @@ def get_profile(
 def update_profile(
     body: ProviderProfileUpdateRequest,
     request: Request,
+    background_tasks: BackgroundTasks,
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ) -> ProviderProfileUpdateResponse:
@@ -132,19 +133,29 @@ def update_profile(
         response_data = get_provider_profile(updated, db)
         print(f"BACKEND: Response data built successfully")
         
-        # Trigger translation for description if updated
-        try:
-            if getattr(body, 'description', None) and body.description.strip():
+        # Trigger translation for description if updated (moved to BackgroundTasks)
+        if getattr(body, 'description', None) and body.description.strip():
+            def run_translations(provider_id, text):
+                from apps.api.database import SessionLocal
                 from apps.api.services.translation_service import translate_and_store
-                translate_and_store(
-                    provider_id=provider.id,
-                    field="description",
-                    text=body.description.strip(),
-                    db=db
-                )
-        except Exception as e:
-            import logging
-            logging.getLogger(__name__).error(f"Translation failed silently: {e}")
+                new_db = SessionLocal()
+                try:
+                    print(f"BACKEND: Starting background translations for provider {provider_id}")
+                    translate_and_store(
+                        provider_id=provider_id,
+                        field="description",
+                        text=text,
+                        db=new_db
+                    )
+                    print(f"BACKEND: Background translations finished for provider {provider_id}")
+                except Exception as te:
+                    import logging
+                    logging.getLogger(__name__).error(f"Background translation failed: {te}")
+                finally:
+                    new_db.close()
+
+            background_tasks.add_task(run_translations, provider.id, body.description.strip())
+            print("BACKEND: Translation task added to background queue")
         
         print("=" * 50)
         return ProviderProfileUpdateResponse(data=response_data)
@@ -212,24 +223,9 @@ async def upload_profile_image(
     request: Request = None,
 ):
     # Derive base URL for static files
-    # Priority: STATIC_FILES_BASE_URL env var > X-Forwarded headers > Host header
+    # Priority: STATIC_FILES_BASE_URL env var > relative path (if empty)
     from apps.api.config import settings
-    
     base_url = settings.STATIC_FILES_BASE_URL
-    
-    if not base_url and request:
-        # Check for X-Forwarded headers (set by reverse proxy)
-        forwarded_host = request.headers.get("X-Forwarded-Host")
-        forwarded_proto = request.headers.get("X-Forwarded-Proto", "http")
-        
-        if forwarded_host:
-            # Use forwarded headers (Docker/production with reverse proxy)
-            base_url = f"{forwarded_proto}://{forwarded_host}"
-        else:
-            # Use Host header directly (local development without proxy)
-            host = request.headers.get("Host", "localhost:8000")
-            scheme = request.url.scheme if request.url else "http"
-            base_url = f"{scheme}://{host}"
     
     allowed = {"image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"}
     # Also check by filename extension if content_type is missing or generic

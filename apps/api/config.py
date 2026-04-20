@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     # Static files base URL (used for image URLs)
     # This should be the public URL of the API server (e.g. http://localhost:8000)
-    STATIC_FILES_BASE_URL: str = "http://localhost:8000"
+    STATIC_FILES_BASE_URL: str = ""
 
     # Local storage for uploads
     UPLOADS_DIR: str = "uploads"

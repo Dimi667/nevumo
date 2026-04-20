@@ -54,6 +54,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Backend: 6 endpoints на /api/v1/auth/, bcrypt hashing, JWT tokens
 - Frontend: lib/auth-api.ts (typed API calls), lib/auth-store.ts (localStorage)
 - Security: rate limiting, no email enumeration, token hashing, password policy
+- **Robustness**: BFCache support and auto-login recovery for duplicate registration attempts (back button flow).
 - Phase 2 (future): OAuth Google + Facebook, email sending via Resend/SendGrid
 
 ### Shared
@@ -162,6 +163,19 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Translation Consistency**: Verified `t()` function usage - all files correctly use keys without namespace prefixes (backend unpacks namespaces)
   - **Fix Applied**: Updated `apps/web/app/[lang]/auth/magic/page.tsx` to use `params: Promise<{ lang: string }>` and `searchParams: Promise<{ token?: string }>`
   - **Result**: All frontend pages now fully compliant with Next.js 15+ Promise-based params standard
+- **Lead Submission Bug Fix (April 19, 2026)** — Fixed a critical issue where lead submissions failed with "Internal Server Error" (500):
+  - **Root Cause**: PostgreSQL sequences for `lead_rate_limits` and `auth_rate_limits` were out of sync with existing data, causing `UniqueViolation` on the `id` column.
+  - **Fix**: Synchronized all database sequences using `setval` to match current `MAX(id)` values.
+- **Provider Profile Request Bottleneck Fix (April 20, 2026)** — Resolved request timeouts during profile updates:
+  - **Fix**: Moved 34-language translation process to FastAPI `BackgroundTasks` for non-blocking immediate response.
+  - **Robustness**: Improved `lib/provider-api.ts` with response validation and content-type checking.
+- **Onboarding UX Fixes (April 19, 2026)**:
+  - Added `noValidate` to forms to prevent browser-native interference.
+  - Improved `slugifyText` for proper Bulgarian Cyrillic transliteration.
+- **Auth Flow Robustness (April 19, 2026)** — Fixed back-button navigation issues:
+    - Added `pageshow` listener to handle BFCache (back-button-restored pages)
+    - Implemented session checks in all auth handlers to prevent redundant API calls
+    - Added auto-login recovery in `handleRegister` to gracefully handle "Email already registered" errors by attempting a login with the same credentials
 - **URL Audit & Centralized Networking (April 16, 2026)** — Completed a full audit and remediation of hardcoded URLs, IPs, and ports:
   - **Backend Centralization**: All URLs (magic links, QR codes, static files) now derive from `apps/api/config.py` settings. Hardcoded `localhost` fallbacks removed from `provider_service.py` and `main.py`.
   - **Frontend Consolidation**: `API_BASE` in `apps/web/lib/api.ts` is now the single source of truth for API communication. All API clients (`auth-api`, `provider-api`, `client-api`, `tracking`) use this shared constant.
@@ -304,9 +318,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     success_bullet_notifications, success_cta_email, success_free_label,
     success_skip_link, email_back_link, email_label, email_placeholder,
     email_cta_continue, error_phone_invalid, error_generic)
+  - **City Name Translation Fix (April 19, 2026)**: Fixed an issue where the city name in the lead success message was not translated (e.g., showing "Warszawa" instead of "Варшава" on the Bulgarian site). The `LeadForm` now accepts and uses a translated `cityName` prop passed from the category page.
   - Trust signal keys fixed: form_free→form_trust_1, 
     form_no_obligation→form_trust_2
   - Seed script: apps/api/scripts/seed_success_screen_translations.py
+- **Lead Submission Bug Fix (April 19, 2026)** — Fixed a critical issue where lead submissions failed with "Internal Server Error" (500):
+  - **Root Cause**: PostgreSQL sequences for `lead_rate_limits` and `auth_rate_limits` were out of sync with existing data (likely due to manual imports/migrations during Phase 3), causing `UniqueViolation` on the `id` column.
+  - **Fix**: Synchronized all database sequences using `setval` to match current `MAX(id)` values.
+  - **Verification**: Confirmed successful lead creation and claim-email registration via API/Curl.
+  - **Affected Areas**: All lead forms (category pages, provider pages, widgets) and auth-related rate limiting.
 - **Pending Lead Claims System** — Anonymous lead → account linking bridge:
   - Table: pending_lead_claims (lead_id, email, phone, claimed, expires_at, magic_link_sent)
   - Endpoint: POST /api/v1/leads/{lead_id}/claim-email (no auth required)
@@ -391,6 +411,16 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Full module complete: DB schema, API endpoint, UI components, documentation synchronized
 
 ### Recent Changes (April 2026)
+**April 20 — Provider Profile Request Bottleneck Fix**
+  - Resolved `SyntaxError: The string did not match the expected pattern` (timeout) during provider profile updates.
+  - Root cause: Synchronous sequential translation into 34 languages during the request cycle took >30 seconds, exceeding proxy timeouts.
+  - Fix: Moved translation process to FastAPI `BackgroundTasks` for non-blocking immediate response (<1s).
+  - Improved `lib/provider-api.ts` with robust response validation and `Content-Type` checking to prevent cryptic frontend crashes.
+**April 19 — Provider Onboarding Bug Fix**
+  - Fixed "The string did not match the expected pattern" error during Step 1 of provider registration.
+  - Added `noValidate` to onboarding forms to prevent browser-native validation from interfering with custom logic.
+  - Improved `slugifyText` utility to properly support Bulgarian Cyrillic transliteration.
+  - Ensured all submitted fields are properly trimmed and slug is forced to lowercase before API submission.
 - **April 13 — UI Cleanup & Accessibility Improvements**
   - Removed inline styles in Dashboard section in favor of Tailwind 4 utility classes
   - Improved button accessibility standards across Dashboard components

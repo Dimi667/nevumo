@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { use, useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ProviderProfile, UpdateProfileInput, PriceType } from '@/types/provider';
 import type { CategoryOut, CityOut } from '@/lib/api';
@@ -94,11 +94,12 @@ function AvatarUpload({
       }, 1000);
     } else {
       setImageError(true);
-      setErrorDetails(
-        imageError && !navigator.onLine
-          ? t('msg_network_error', 'Network error - check connection') 
-          : t('msg_invalid_image_url', 'Invalid image URL format')
-      );
+      
+      if (!navigator.onLine) {
+        setErrorDetails(t('msg_network_error', 'Network error - check connection'));
+      } else {
+        setErrorDetails(t('msg_invalid_image_url', 'Failed to load image. Please try again.'));
+      }
     }
   };
 
@@ -237,9 +238,15 @@ function StepIndicator({
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function ProfilePage() {
+interface PageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export default function ProfilePage({ params }: PageProps) {
+  const { lang: paramsLang } = use(params);
   const router = useRouter();
-  const { t, lang } = useDashboardI18n();
+  const { t, lang: contextLang } = useDashboardI18n();
+  const lang = paramsLang || contextLang;
 
   // Load state
   const [profile, setProfile] = useState<ProviderProfile | null>(null);
@@ -541,7 +548,13 @@ export default function ProfilePage() {
     slug: step1Touched.slug ? step1SlugError ?? undefined : undefined,
   };
 
-  async function handleStep1Next() {
+  async function handleStep1Next(e?: React.MouseEvent<HTMLButtonElement>) {
+    // Prevent any browser-native validation or event propagation
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
     // Mark all fields as touched to show validation errors
     setStep1Touched({ business_name: true, slug: true });
     
@@ -567,7 +580,7 @@ export default function ProfilePage() {
       const input: UpdateProfileInput = {
         business_name: step1.business_name.trim(),
         description: step1.description.trim() || undefined,
-        slug: step1.slug.trim(),
+        slug: step1.slug.trim().toLowerCase(), // Уверяваме се, че е малки букви
         is_onboarding_setup: true,
       };
       console.log("FRONTEND: Sending onboarding update request:", input);
@@ -931,6 +944,7 @@ export default function ProfilePage() {
               <div className="flex items-center justify-between">
                 <button
                   type="button"
+                  formNoValidate
                   onClick={handleStep1Next}
                   disabled={saving || step1SlugChecking}
                   className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
@@ -966,7 +980,7 @@ export default function ProfilePage() {
 
         {/* ── Step 2: First Service ── */}
         {step === 2 && (
-          <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+          <form noValidate onSubmit={e => e.preventDefault()} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
             <h2 className="text-sm font-semibold text-gray-800">{t('label_add_first_service', 'Add Your First Service')}</h2>
 
             {/* Title */}
@@ -1099,7 +1113,7 @@ export default function ProfilePage() {
             <p className="text-xs text-gray-400 mt-2 text-center">
               {t('msg_finish_setup_to_start_getting_clients', 'Finish setup to start getting clients')}
             </p>
-          </div>
+          </form>
         )}
 
       </div>
@@ -1122,7 +1136,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Details */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+      <form noValidate onSubmit={e => e.preventDefault()} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
         <h2 className="text-sm font-semibold text-gray-800">{t('label_business_details', 'Business details')}</h2>
 
         <div>
@@ -1160,7 +1174,7 @@ export default function ProfilePage() {
           </button>
           {editSuccess && <span className="text-xs text-green-600 font-medium">{t('msg_saved', 'Saved!')}</span>}
         </div>
-      </div>
+      </form>
     </div>
   );
 }

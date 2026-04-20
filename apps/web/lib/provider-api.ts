@@ -58,11 +58,34 @@ async function authFetch<T>(
   console.log(`NETWORK: Response status: ${res.status}`);
   console.log(`NETWORK: Response headers:`, Object.fromEntries(res.headers.entries()));
 
-  const json = await res.json() as {
-    success: boolean;
-    data?: T;
-    error?: { code: string; message: string };
-  };
+  const contentType = res.headers.get('content-type');
+  let json: any;
+  
+  if (contentType && contentType.includes('application/json')) {
+    const text = await res.text();
+    try {
+      json = JSON.parse(text);
+    } catch (parseError) {
+      console.error(`NETWORK: JSON Parse Error:`, parseError);
+      console.error(`NETWORK: Raw body (first 200 chars):`, text.slice(0, 200));
+      throw new ProviderApiError(
+        'PARSE_ERROR',
+        `Failed to parse server response as JSON. Status: ${res.status}`,
+        res.status,
+        { rawBody: text.slice(0, 500) }
+      );
+    }
+  } else {
+    const text = await res.text();
+    console.error(`NETWORK: Unexpected Content-Type: ${contentType}`);
+    console.error(`NETWORK: Raw body (first 200 chars):`, text.slice(0, 200));
+    throw new ProviderApiError(
+      'UNEXPECTED_RESPONSE',
+      `Server returned non-JSON response (${contentType}). Status: ${res.status}`,
+      res.status,
+      { rawBody: text.slice(0, 500) }
+    );
+  }
   
   console.log(`NETWORK: Response body:`, json);
 
@@ -157,21 +180,33 @@ export async function checkSlugAvailability(
     `${API_BASE}/api/v1/provider/slug/check?${params}`,
     { cache: 'no-store' }
   );
-  const json = await res.json() as { 
-    success: boolean; 
-    data?: { available: boolean; suggestions?: string[] };
-    error?: { code: string; message: string } 
-  };
   
-  if (!json.success) {
+  const contentType = res.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    const json = await res.json() as { 
+      success: boolean; 
+      data?: { available: boolean; suggestions?: string[] };
+      error?: { code: string; message: string } 
+    };
+    
+    if (!json.success) {
+      return {
+        available: false,
+        suggestions: [],
+        error: json.error?.message ?? 'Failed to check availability',
+      };
+    }
+    
+    return json.data as { available: boolean; suggestions?: string[]; error?: string };
+  } else {
+    const text = await res.text();
+    console.error(`NETWORK: Unexpected response from slug check:`, text.slice(0, 200));
     return {
       available: false,
       suggestions: [],
-      error: json.error?.message ?? 'Failed to check availability',
+      error: 'Unexpected server response',
     };
   }
-  
-  return json.data as { available: boolean; suggestions?: string[]; error?: string };
 }
 
 export async function uploadProviderImage(file: File): Promise<{ image_url: string }> {
@@ -185,16 +220,27 @@ export async function uploadProviderImage(file: File): Promise<{ image_url: stri
     body: formData,
   });
 
-  const json = await res.json() as { success: boolean; data?: { image_url: string }; error?: { code: string; message: string } };
-  if (!json.success) {
-    const err = json.error;
+  const contentType = res.headers.get('content-type');
+  if (contentType && contentType.includes('application/json')) {
+    const json = await res.json() as { success: boolean; data?: { image_url: string }; error?: { code: string; message: string } };
+    if (!json.success) {
+      const err = json.error;
+      throw new ProviderApiError(
+        err?.code ?? 'UNKNOWN_ERROR',
+        err?.message ?? 'Upload failed',
+        res.status
+      );
+    }
+    return json.data as { image_url: string };
+  } else {
+    const text = await res.text();
     throw new ProviderApiError(
-      err?.code ?? 'UNKNOWN_ERROR',
-      err?.message ?? 'Upload failed',
-      res.status
+      'UNEXPECTED_RESPONSE',
+      `Server returned non-JSON response during upload. Status: ${res.status}`,
+      res.status,
+      { rawBody: text.slice(0, 500) }
     );
   }
-  return json.data as { image_url: string };
 }
 
 // ---------------------------------------------------------------------------

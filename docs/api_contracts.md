@@ -467,9 +467,9 @@ All fields optional. `availability_status` must be `active` | `busy` | `offline`
 `slug` must be 2-50 chars, lowercase letters/numbers/hyphens only, no numeric suffixes (e.g., `devs-1`).
 
 ### Response
-```json
 { "success": true, "data": { ...updated provider... } }
-```
+
+**Note**: When `description` is updated, the translation into all 34 supported languages is triggered via **FastAPI BackgroundTasks**. This ensures a fast response time (<1s) for the user while the heavy translation process (which can take >30s) runs in the background.
 
 ### Errors
 - 400 INVALID_SLUG — slug format invalid (numeric suffix, invalid chars, wrong length)

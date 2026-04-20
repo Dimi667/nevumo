@@ -29,7 +29,8 @@ This document reflects the major architectural optimization performed in April 2
 - **Inter-container Communication**: Containers in Docker Compose communicate using service names (e.g., `nevumo-api`, `nevumo-postgres`) rather than `localhost`.
 
 ### 5. Next.js & UI (Metadata + i18n)
-- **Metadata API Fix**: Fixed page titles (Browser Tabs) in `layout.tsx` to properly use the Next.js Metadata API, ensuring SEO-friendly and dynamic titles.
+- **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow to prevent users from getting stuck or seeing errors when using the browser back button after successful login/registration.
+- **Auto-Login Recovery**: If a user attempts to register with an existing email (common when going back and clicking "Continue" again), the system automatically attempts to log them in with the provided password instead of showing an error.
 - **Namespaced Translations**: All translation keys MUST be prefixed with their namespace (e.g., `provider_dashboard.title`).
 - **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.
 
@@ -568,9 +569,11 @@ Provider descriptions are automatically translated into all 34 supported languag
 
 ### Translation Service
 - Provider: Langbly API (https://api.langbly.com/language/translate/v2)
+- Execution: Triggered via FastAPI **BackgroundTasks** to prevent request timeouts.
 - API Key: stored in apps/api/services/translation_service.py
 - Format: POST { "q": text, "target": lang } with Authorization: Bearer header
 - Timeout: 30 seconds per request
+- Fast Response: API returns success immediately (<1s) while translation proceeds in background.
 
 ### Fallback Strategy
 - If Langbly returns 429 (monthly limit exhausted): stores original text with auto_translated=False
@@ -663,6 +666,12 @@ Adding new city: add entry to CITY_COUNTRY_MAP in:
 - **Translation Management**:
   - All UI strings are stored in the `city` namespace in the database.
   - Keys use `{city}` placeholder for dynamic replacement in the frontend.
+
+### Bug Fixes (April 19-20, 2026)
+
+- **Onboarding Form Validation**: Added `noValidate` to onboarding forms to prevent browser-native validation from interfering with custom logic and causing cryptic frontend errors.
+- **Cyrillic Slugification**: Improved `slugifyText` utility to properly support Bulgarian Cyrillic transliteration, ensuring valid SEO-friendly slugs for all providers.
+- **Sequence Synchronization**: Fixed critical 500 errors in lead submission by synchronizing PostgreSQL sequences (`lead_rate_limits`, `auth_rate_limits`) that were out of sync after Phase 3 migrations.
 
 ---
 

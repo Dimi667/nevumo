@@ -13,6 +13,7 @@ interface CategoryPageClientProps {
   categorySlug: string;
   citySlug: string;
   lang: string;
+  cityName: string;
   services?: Array<{ id: string; title: string }>;
   cityCountryCode: string;
   stickyButtonLabel: string;
@@ -23,6 +24,7 @@ export default function CategoryPageClient({
   categorySlug,
   citySlug,
   lang,
+  cityName,
   services,
   cityCountryCode,
   stickyButtonLabel
@@ -37,6 +39,7 @@ export default function CategoryPageClient({
             categorySlug={categorySlug}
             citySlug={citySlug}
             lang={lang}
+            cityName={cityName}
             services={services}
             countryCode={cityCountryCode}
             title={translations['form_btn']}

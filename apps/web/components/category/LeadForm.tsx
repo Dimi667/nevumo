@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { createLead } from '@/lib/api';
+import { createLead, claimLeadEmail } from '@/lib/api';
 import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getPhonePrefix } from '@/lib/phoneUtils';
@@ -17,6 +17,7 @@ interface LeadFormProps {
   categorySlug: string;
   citySlug: string;
   lang: string;
+  cityName?: string;
   services?: ServiceOption[];
   countryCode?: string;
   title?: string;
@@ -27,6 +28,7 @@ export default function LeadForm({
   categorySlug,
   citySlug,
   lang,
+  cityName: cityNameProp,
   services,
   countryCode,
   title,
@@ -147,8 +149,8 @@ export default function LeadForm({
     }
   };
 
-  // Get city display name - capitalize first letter if only slug available
-  const cityName = citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
+  // Get city display name - fallback to slug if not provided
+  const cityName = cityNameProp || citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
 
   const handleContinueWithEmail = () => {
     setSuccessStep('email');
@@ -170,6 +172,9 @@ export default function LeadForm({
 
     setIsEmailSubmitting(true);
 
+    // Call API to register the claim email
+    await claimLeadEmail(leadId, email, phoneValue);
+
     // Save to localStorage
     const pendingClaim = {
       lead_id: leadId,
@@ -182,7 +187,7 @@ export default function LeadForm({
     // Get lang from URL
     const currentLang = window.location.pathname.split('/')[1] || 'en';
 
-    // Redirect to auth
+    // Redirect to auth with email in query string
     const redirectUrl = `/${currentLang}/auth?email=${encodeURIComponent(email)}&intent=client`;
     window.location.href = redirectUrl;
   };

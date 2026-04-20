@@ -160,33 +160,74 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
 
   // On mount: redirect if already authenticated
   useEffect(() => {
+    const checkAuth = () => {
+      if (isAuthenticated()) {
+        const user = getAuthUser();
+        window.location.href = user?.role === 'provider'
+          ? `/${lang}/provider/dashboard`
+          : `/${lang}/client/dashboard`;
+      }
+    };
+
+    checkAuth();
+
+    // Handle BFCache (back-forward cache)
+    window.addEventListener('pageshow', checkAuth);
+    return () => window.removeEventListener('pageshow', checkAuth);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
+
+  // On mount: restore intent + email, fire auth_view event
+  useEffect(() => {
+    const stored = getStoredIntent();
+    const urlEmail = searchParams.get('email');
+    
+    // Claim token forces provider intent
+    const resolvedIntent: 'client' | 'provider' | null = claimToken
+      ? 'provider'
+      : (searchParams.get('intent') as 'client' | 'provider') || 
+        stored.intent === 'client' || 
+        stored.intent === 'provider'
+        ? (searchParams.get('intent') as 'client' | 'provider') || stored.intent
+        : initialRole === 'provider'
+        ? 'provider'
+        : 'client';
+
+    const savedEmail = (urlEmail || sessionStorage.getItem(SESSION_EMAIL_KEY)) ?? '';
+
+    setState(s => ({ ...s, intent: resolvedIntent, email: savedEmail }));
+    trackPageEvent('auth_view', 'auth', { intent: resolvedIntent ?? 'unknown' });
+    
+    // Auto-advance to password step if email is provided via URL
+    if (urlEmail && EMAIL_RE.test(urlEmail)) {
+      handleCheckEmailDirectly(urlEmail);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Separate function to handle email check without relying on state update which might be async
+  async function handleCheckEmailDirectly(emailToCheck: string) {
+    if (!emailToCheck || state.loading) return;
+
     if (isAuthenticated()) {
       const user = getAuthUser();
       window.location.href = user?.role === 'provider'
         ? `/${lang}/provider/dashboard`
         : `/${lang}/client/dashboard`;
+      return;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
-  // On mount: restore intent + email, fire auth_view event
-  useEffect(() => {
-    const stored = getStoredIntent();
-    // Claim token forces provider intent
-    const resolvedIntent: 'client' | 'provider' | null = claimToken
-      ? 'provider'
-      : stored.intent === 'client' || stored.intent === 'provider'
-        ? stored.intent
-        : initialRole === 'provider'
-        ? 'provider'
-        : 'client';
-
-    const savedEmail = sessionStorage.getItem(SESSION_EMAIL_KEY) ?? '';
-
-    setState(s => ({ ...s, intent: resolvedIntent, email: savedEmail }));
-    trackPageEvent('auth_view', 'auth', { intent: resolvedIntent ?? 'unknown' });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setState(s => ({ ...s, loading: true, error: null }));
+    try {
+      const { exists } = await checkEmail(emailToCheck);
+      trackPageEvent('auth_email_entered', 'auth', { is_new: String(!exists) });
+      const nextStep: AuthStep = exists ? 'login' : 'register';
+      trackPageEvent('auth_password_shown', 'auth', { step: nextStep });
+      setState(s => ({ ...s, loading: false, step: nextStep, password: '' }));
+    } catch {
+      setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
+    }
+  }
 
   // Store claim token on mount
   useEffect(() => {
@@ -210,6 +251,15 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
 
   async function handleCheckEmail() {
     if (!isEmailValid || state.loading) return;
+
+    if (isAuthenticated()) {
+      const user = getAuthUser();
+      window.location.href = user?.role === 'provider'
+        ? `/${lang}/provider/dashboard`
+        : `/${lang}/client/dashboard`;
+      return;
+    }
+
     setState(s => ({ ...s, loading: true, error: null }));
     try {
       const { exists } = await checkEmail(state.email);
@@ -222,8 +272,17 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
     }
   }
 
-  async function handleLogin() {
-    if (state.loading) return;
+  async function handleLogin(force = false) {
+    if (state.loading && !force) return;
+
+    if (isAuthenticated() && !force) {
+      const user = getAuthUser();
+      window.location.href = user?.role === 'provider'
+        ? `/${lang}/provider/dashboard`
+        : `/${lang}/client/dashboard`;
+      return;
+    }
+
     setState(s => ({ ...s, loading: true, error: null }));
     try {
       const result = await loginWithEmail(state.email, state.password);
@@ -262,7 +321,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
       const role = result.user.role;
       window.location.href = role === 'provider'
         ? `/${lang}/provider/dashboard`
-        : `/${lang}/client/dashboard`;
+        : `/${lang}/client`;
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'INVALID_CREDENTIALS' || err.message.includes('Invalid credentials')) {
@@ -282,6 +341,14 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
 
   async function handleRegister() {
     if (state.loading) return;
+
+    if (isAuthenticated()) {
+      const user = getAuthUser();
+      window.location.href = user?.role === 'provider'
+        ? `/${lang}/provider/dashboard`
+        : `/${lang}/client/dashboard`;
+      return;
+    }
 
     // Register both client and provider immediately (no slug step on auth page)
     setState(s => ({ ...s, loading: true, error: null }));
@@ -322,12 +389,13 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
 
       const redirectPath = result.user.role === 'provider'
         ? `/${lang}/provider/dashboard/profile`
-        : `/${lang}/client/dashboard`;
+        : `/${lang}/client`;
       setTimeout(() => { window.location.href = redirectPath; }, 1000);
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'EMAIL_ALREADY_EXISTS' || err.message.includes('already registered')) {
-          setState(s => ({ ...s, loading: false, error: t(authDict, 'error_email_exists', 'This email is already registered.') }));
+          // Auto-login if already registered. Handles the back button case.
+          return handleLogin(true);
         } else if (err.code === 'VALIDATION_ERROR') {
           setState(s => ({ ...s, loading: false, error: err.message }));
         } else {

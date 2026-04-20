@@ -201,15 +201,21 @@ def save_provider_image(provider_id: UUID, content: bytes, content_type: str, ba
         from apps.api.config import settings
         base_url = settings.STATIC_FILES_BASE_URL
     
-    # Return full URL
-    return f"{base_url.rstrip('/')}/static/provider_images/{filename}"
+    # Return full or relative URL
+    # If base_url is empty, return a relative URL starting with /api/v1/static
+    if not base_url:
+        return f"/api/v1/static/provider_images/{filename}"
+    
+    return f"{base_url.rstrip('/')}/api/v1/static/provider_images/{filename}"
 
 
 def get_image_url(provider_id: UUID, ext: str) -> str:
     """Get public URL for provider image.
     TODO: Replace with S3/R2 URL when migrating cloud storage."""
     base_url = get_static_files_base_url().rstrip('/')
-    return f"{base_url}/static/provider_images/{provider_id}.{ext}"
+    if not base_url:
+        return f"/api/v1/static/provider_images/{provider_id}.{ext}"
+    return f"{base_url}/api/v1/static/provider_images/{provider_id}.{ext}"
 
 
 # ---------------------------------------------------------------------------

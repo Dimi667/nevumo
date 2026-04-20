@@ -12,7 +12,8 @@ export function slugifyText(text: string): string {
     lower: true,
     strict: true,
     trim: true,
-    replacement: '-'
+    replacement: '-',
+    locale: 'bg' // Добавяме поддръжка за българска транслитерация
   });
 }
 

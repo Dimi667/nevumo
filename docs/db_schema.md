@@ -310,6 +310,8 @@ CREATE TABLE lead_rate_limits (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Note: Sequences for this table were synchronized in April 2026 to fix 500 errors 
+-- caused by ID mismatches during manual migrations.
 CREATE INDEX idx_rate_limits_ip ON lead_rate_limits(ip);
 
 ---
@@ -378,6 +380,7 @@ CREATE TABLE auth_rate_limits (
     created_at TIMESTAMP DEFAULT NOW()
 );
 
+-- Note: Sequences for this table were synchronized in April 2026 to fix 500 errors.
 CREATE INDEX idx_auth_rate_limits_ip_action ON auth_rate_limits(ip, action);
 CREATE INDEX idx_auth_rate_limits_created ON auth_rate_limits(created_at);
 

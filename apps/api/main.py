@@ -159,7 +159,7 @@ app.include_router(price_range_router, prefix="/api/v1")
 from apps.api.config import settings
 provider_images_dir = os.path.join(settings.UPLOADS_DIR, "provider_images")
 os.makedirs(provider_images_dir, exist_ok=True)
-app.mount("/static/provider_images", StaticFiles(directory=provider_images_dir), name="provider_images")
+app.mount("/api/v1/static/provider_images", StaticFiles(directory=provider_images_dir), name="provider_images")
 
 
 # Keep existing translations endpoint

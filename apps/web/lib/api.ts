@@ -333,6 +333,20 @@ export async function createLead(input: LeadCreateInput): Promise<LeadCreateResu
   }
 }
 
+export async function claimLeadEmail(leadId: string, email: string, phone?: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE}/api/v1/leads/${leadId}/claim-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, phone }),
+    });
+    const json = await res.json();
+    return json.success === true;
+  } catch {
+    return false;
+  }
+}
+
 export async function trackEvent(
   leadId: string,
   eventType: string,

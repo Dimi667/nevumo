@@ -614,6 +614,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 categorySlug={apiSlug}
                 citySlug={city}
                 lang={lang}
+                cityName={cityName}
                 services={services}
                 cityCountryCode={cityCountryCode}
                 stickyButtonLabel={t(categoryT, 'sticky_btn', 'Get offers — Free')}
@@ -652,6 +653,7 @@ export default async function CategoryPage({ params }: PageProps) {
                     categorySlug={apiSlug}
                     citySlug={city}
                     lang={lang}
+                    cityName={cityName}
                     services={services}
                     countryCode={cityCountryCode}
                     title={t(categoryT, 'form_btn', 'Get offers')}

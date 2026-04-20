@@ -25,11 +25,11 @@ export default function PWAInstallPrompt({
 
   // Fetch translations on mount
   useEffect(() => {
-    fetch(`/api/v1/translations?lang=${lang}&namespace=pwa`)
+    fetch(`/api/v1/translations/pwa?lang=${lang}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data?.success && data?.data && typeof data.data === 'object') {
-          setDict(data.data);
+        if (data && typeof data === 'object') {
+          setDict(data);
         }
       })
       .catch(() => {
