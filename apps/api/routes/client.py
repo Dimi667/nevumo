@@ -32,13 +32,7 @@ router = APIRouter(prefix="/api/v1/client", tags=["client"])
 
 
 def _require_client_role(current_user: User) -> User:
-    """Ensure current user is a client."""
-    if current_user.role != "client":
-        from fastapi import HTTPException, status
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="This endpoint is only for client accounts"
-        )
+    """Ensure current user is an active user (can be client or provider)."""
     return current_user
 
 

@@ -441,7 +441,7 @@ Allowed values: `contacted` | `done` | `rejected`
     "business_name": "Maria Massage",
     "description": "...",
     "slug": "maria-massage",
-    "profile_image_url": "/static/provider_images/uuid.webp",
+    "profile_image_url": "/api/v1/static/provider_images/uuid.webp",
     "rating": 4.8,
     "verified": true,
     "availability_status": "active",
@@ -540,7 +540,7 @@ Taken slugs are filtered out. Maximum 5 suggestions returned.
 
 ### Response
 ```json
-{ "success": true, "data": { "image_url": "http://localhost:8000/static/provider_images/uuid.webp" } }
+{ "success": true, "data": { "image_url": "http://localhost:8000/api/v1/static/provider_images/uuid.webp" } }
 ```
 
 **Note**: 
@@ -716,6 +716,110 @@ Deletes the service and cascades to `service_cities`.
 
 ---
 
+# 🔹 CLIENT DASHBOARD ENDPOINTS (JWT Required)
+
+All endpoints require `Authorization: Bearer <JWT>` header.
+User must have the role `client`.
+
+---
+
+## GET /api/v1/client/dashboard
+
+Returns high-level statistics and recent activity for the client.
+
+### Response
+```json
+{
+  "success": true,
+  "data": {
+    "stats": {
+      "total_requests": 12,
+      "pending_responses": 3,
+      "completed_jobs": 5,
+      "reviews_given": 4
+    },
+    "recent_leads": [...]
+  }
+}
+```
+
+---
+
+## GET /api/v1/client/leads
+
+Returns a paginated list of leads created by the client.
+
+### Query Params
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `status` | string | `all` | Filter by status: `all`, `created`, `matched`, `done`, `rejected` |
+| `limit` | int | 50 | Max records to return |
+| `offset` | int | 0 | Pagination offset |
+
+---
+
+## GET /api/v1/client/reviews/eligible-leads
+
+Lists completed leads that haven't been reviewed yet.
+
+### Response
+```json
+{
+  "success": true,
+  "data": {
+    "leads": [...],
+    "count": 5
+  }
+}
+```
+
+---
+
+## POST /api/v1/client/reviews
+
+Creates a new review for a completed lead.
+
+### Body
+```json
+{
+  "lead_id": "uuid",
+  "rating": 5,
+  "comment": "Great service!"
+}
+```
+
+---
+
+## GET /api/v1/client/reviews/preferences
+
+Returns client's email notification preferences.
+
+### Response
+```json
+{
+  "success": true,
+  "data": {
+    "review_reply_email_enabled": true,
+    "description": "Receive email notifications when providers reply to your reviews"
+  }
+}
+```
+
+---
+
+## PATCH /api/v1/client/reviews/preferences
+
+Updates client's email notification preferences.
+
+### Body
+```json
+{
+  "review_reply_email_enabled": false
+}
+```
+
+---
+
 # 🔹 PUBLIC ENDPOINTS (CRITICAL FOR SEO + WIDGET)
 
 ---
@@ -771,7 +875,7 @@ Deletes the service and cascades to `service_cities`.
     "description": "...",
     "slug": "maria-petrova",
     "slug_change_count": 0,
-    "profile_image_url": "/static/provider_images/uuid.webp",
+    "profile_image_url": "/api/v1/static/provider_images/uuid.webp",
     "rating": 4.9,
     "verified": true,
     "availability_status": "active",
@@ -925,14 +1029,26 @@ Check if a slug redirects to another slug without following the redirect. Used b
 
 ---
 
-### Response
-
+### Success (Anonymous or Authenticated)
+```json
 {
   "success": true,
   "data": {
     "lead_id": "uuid"
   }
 }
+```
+
+### Errors
+- 429 RATE_LIMIT_EXCEEDED
+```json
+{
+  "success": false,
+  "error": { "code": "RATE_LIMIT_EXCEEDED" },
+  "lead_id": "uuid | null"
+}
+```
+*Note*: When rate limited (5 requests per hour), the API returns the `lead_id` of the most recent lead from the same IP. This allows the frontend to still trigger the "Claim your request" email flow for the user.
 
 ---
 

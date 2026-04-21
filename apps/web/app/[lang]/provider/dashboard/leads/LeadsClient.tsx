@@ -45,6 +45,88 @@ function getTitleAndSubtitle(status: LeadStatusQuery | null, total: number, t: (
   }
 }
 
+interface LeadsSearchProps {
+  initialValue: string;
+  onSearch: (value: string) => void;
+  isSearching: boolean;
+  t: (key: string, fallback?: string) => string;
+}
+
+function LeadsSearch({ initialValue, onSearch, isSearching, t }: LeadsSearchProps) {
+  const [inputValue, setInputValue] = useState(initialValue);
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Sync with external changes (e.g. initial load or URL updates)
+  useEffect(() => {
+    setInputValue(initialValue);
+  }, [initialValue]);
+
+  const handleChange = (value: string) => {
+    setInputValue(value);
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(() => {
+      onSearch(value);
+    }, 500);
+  };
+
+  const handleClear = () => {
+    setInputValue('');
+    onSearch('');
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="w-full">
+      <label className="text-xs font-medium text-gray-500 mb-1.5 block">
+        {t('label_search', 'Search')}
+      </label>
+      <div className="relative">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg className="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </div>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => handleChange(e.target.value)}
+          placeholder={t('placeholder_search_leads', 'Search name, email, phone, description or notes...')}
+          className="w-full pl-10 pr-10 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+        />
+        {isSearching ? (
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : inputValue && (
+          <button
+            onClick={handleClear}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+            aria-label={t('clear_search', 'Clear search')}
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function LeadsClient() {
   const { t, lang } = useDashboardI18n();
   const searchParams = useSearchParams();
@@ -70,8 +152,6 @@ export default function LeadsClient() {
   const [dateTo, setDateTo] = useState(urlDateTo);
   const [search, setSearch] = useState(urlSearch);
 
-  // Local input state for search (not synced with URL, debounced)
-  const [searchInput, setSearchInput] = useState(urlSearch);
   const [isSearching, setIsSearching] = useState(false);
 
   // Update document title when translations are loaded
@@ -83,9 +163,6 @@ export default function LeadsClient() {
   // Modal state
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Debounce ref for search
-  const searchDebounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // Sync local state with URL changes
   useEffect(() => {
@@ -207,35 +284,16 @@ export default function LeadsClient() {
     }
   };
 
-  // Handle search input with debounce
-  const handleSearchChange = (value: string) => {
-    setSearchInput(value);
-
-    // Clear previous debounce timer
-    if (searchDebounceRef.current) {
-      clearTimeout(searchDebounceRef.current);
-    }
-
-    // Set new debounce timer (500ms)
-    searchDebounceRef.current = setTimeout(() => {
-      setSearch(value);
-      updateUrlParams({ search: value });
-    }, 500);
+  const handleClearDateRange = () => {
+    setDateFrom('');
+    setDateTo('');
+    updateUrlParams({ date_from: '', date_to: '' });
   };
 
-  // Sync searchInput when URL changes (e.g., back button, initial load)
-  useEffect(() => {
-    setSearchInput(urlSearch);
-  }, [urlSearch]);
-
-  // Cleanup debounce on unmount
-  useEffect(() => {
-    return () => {
-      if (searchDebounceRef.current) {
-        clearTimeout(searchDebounceRef.current);
-      }
-    };
-  }, []);
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    updateUrlParams({ search: value });
+  };
 
   // Modal handlers
   const handleViewLead = (lead: Lead) => {
@@ -302,40 +360,12 @@ export default function LeadsClient() {
       {/* Filters */}
       <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
         {/* Search bar */}
-        <div className="w-full">
-          <label className="text-xs font-medium text-gray-500 mb-1.5 block">{t('label_search', 'Search')}</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-            </div>
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => handleSearchChange(e.target.value)}
-              placeholder={t('placeholder_search_leads', 'Search name, email, phone, description or notes...')}
-              className="w-full pl-10 pr-10 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-            />
-            {isSearching ? (
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                <div className="w-4 h-4 border-2 border-orange-500 border-t-transparent rounded-full animate-spin" />
-              </div>
-            ) : searchInput && (
-              <button
-                onClick={() => handleSearchChange('')}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-                aria-label={t('clear_search', 'Clear search')}
-              >
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            )}
-          </div>
-        </div>
+        <LeadsSearch
+          initialValue={search}
+          onSearch={handleSearch}
+          isSearching={isSearching}
+          t={t}
+        />
 
         <div className="flex flex-wrap items-start gap-6">
           {/* Status filter */}
@@ -379,21 +409,35 @@ export default function LeadsClient() {
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-medium text-gray-500">{t('label_date_range', 'Date range')}</label>
             <div className="flex items-center gap-2">
-              <input
-                type="date"
-                value={dateFrom}
-                onChange={(e) => handleDateFromChange(e.target.value)}
-                className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
-                placeholder={t('placeholder_from', 'From')}
-              />
-              <span className="text-gray-400">-</span>
-              <input
-                type="date"
-                value={dateTo}
-                onChange={(e) => handleDateToChange(e.target.value)}
-                className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
-                placeholder={t('placeholder_to', 'To')}
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => handleDateFromChange(e.target.value)}
+                  className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
+                  placeholder={t('placeholder_from', 'From')}
+                />
+                <span className="text-gray-400">-</span>
+                <input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => handleDateToChange(e.target.value)}
+                  className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 h-[34px]"
+                  placeholder={t('placeholder_to', 'To')}
+                />
+              </div>
+              {(dateFrom || dateTo) && (
+                <button
+                  onClick={handleClearDateRange}
+                  className="p-1.5 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                  title={t('clear_filter', 'Clear filter')}
+                  aria-label={t('clear_filter', 'Clear filter')}
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         </div>

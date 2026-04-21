@@ -133,7 +133,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
     const token = getAuthToken();
     const currentUser = getAuthUser();
 
-    if (!token || currentUser?.role !== 'client') {
+    if (!token) {
       router.replace(`/${lang}/auth`);
       return;
     }

@@ -40,7 +40,7 @@ CREATE TABLE providers (
     description TEXT,
     slug TEXT UNIQUE NOT NULL,                -- URL slug, auto-generated from business_name
     slug_change_count INTEGER NOT NULL DEFAULT 0,
-    profile_image_url TEXT,                   -- served at /static/provider_images/
+    profile_image_url TEXT,                   -- served at /api/v1/static/provider_images/
     rating NUMERIC(2,1) DEFAULT 0,
     verified BOOLEAN DEFAULT FALSE,
     availability_status TEXT DEFAULT 'active',
@@ -401,7 +401,7 @@ CREATE INDEX idx_translations_key ON translations(key);
 
 ### Storage Format
 - **namespace.key pattern**: Keys are stored as `namespace.key` (e.g., `homepage.title`, `category.cleaning`).
-- **Validation**: **Mandatory namespacing**. Keys must contain at least one dot and cannot start or end with a dot. Enforced at the ORM layer (SQLAlchemy `@validates`).
+- **Validation**: **Mandatory namespacing**. Keys must contain at least one dot and cannot start or end with a dot. Enforced at the ORM layer (SQLAlchemy `@validates`) to ensure cache consistency and avoid flat keys.
 - **Namespace separation**: Different feature areas use different namespaces for organization.
 
 ### Current Seeded Data (April 4, 2026)
@@ -412,6 +412,7 @@ CREATE INDEX idx_translations_key ON translations(key);
   how_it_works_label, how_step_1, how_step_2, how_step_3, what_need_label,
   chip_not_sure, details_label, details_placeholder, get_offers_btn,
   trust_multiple, trust_response, sticky_btn
+- **city namespace**: 21 keys × 34 languages = 714 rows (includes 10 hero keys added April 21, 2026)
 - **widget namespace**: 23 keys × 34 languages = 782 rows
 - **client_dashboard namespace**: Client dashboard UI strings
 - **provider_dashboard namespace**: 168 keys × 34 languages = 5,712 rows (includes 8 onboarding hero keys added April 10, 2026)

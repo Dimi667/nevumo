@@ -18,7 +18,7 @@ export async function fetchTranslations(
   try {
     const res = await fetch(
       `${apiBase}/api/v1/translations/${namespace}?lang=${resolvedLang}`,
-      { cache: 'no-store' }
+      { cache: 'no-store', next: { revalidate: 0 } }
     );
     if (!res.ok) throw new Error('Failed to fetch translations');
     const json = (await res.json()) as TranslationDict;

@@ -1051,7 +1051,7 @@ def get_provider_leads(
         provider: The provider to fetch leads for
         db: Database session
         status: Filter by status (all, new, contacted, done, rejected)
-              Note: 'new' maps to DB status 'created'
+              Note: 'new' maps to DB status 'created' for direct and 'invited' for matches
         period: Preset period filter (all, 7, 30, 90 days)
         date_from: Custom start date (YYYY-MM-DD), overrides period if set
         date_to: Custom end date (YYYY-MM-DD), overrides period if set
@@ -1063,15 +1063,37 @@ def get_provider_leads(
         Dict with 'leads' list and 'total' count
     """
     from datetime import datetime, timedelta
-    from sqlalchemy import or_
+    from sqlalchemy import or_, and_
 
-    query = db.query(Lead).outerjoin(User, Lead.client_id == User.id).filter(Lead.provider_id == provider.id)
+    # Query both direct leads (lead.provider_id) and marketplace matches (lead_match)
+    query = db.query(Lead, LeadMatch).outerjoin(
+        User, Lead.client_id == User.id
+    ).outerjoin(
+        LeadMatch, and_(Lead.id == LeadMatch.lead_id, LeadMatch.provider_id == provider.id)
+    ).filter(
+        or_(
+            Lead.provider_id == provider.id,
+            LeadMatch.provider_id == provider.id
+        )
+    )
 
     # Status filter
     if status == "new":
-        query = query.filter(Lead.status == "created")
+        # Direct: 'created', Marketplace: 'invited' (both map to 'new' in UI)
+        query = query.filter(
+            or_(
+                and_(Lead.provider_id == provider.id, Lead.status == "created"),
+                and_(LeadMatch.provider_id == provider.id, LeadMatch.status == "invited")
+            )
+        )
     elif status != "all" and status in ("contacted", "done", "rejected"):
-        query = query.filter(Lead.status == status)
+        # Terminal statuses use the same strings in both tables
+        query = query.filter(
+            or_(
+                and_(Lead.provider_id == provider.id, Lead.status == status),
+                and_(LeadMatch.provider_id == provider.id, LeadMatch.status == status)
+            )
+        )
 
     # Date filter: custom range takes priority over period
     if date_from or date_to:
@@ -1094,7 +1116,7 @@ def get_provider_leads(
         since = datetime.utcnow() - timedelta(days=days)
         query = query.filter(Lead.created_at >= since)
 
-    # Search filter: case-insensitive partial match across 5 fields
+    # Search filter: case-insensitive partial match across multiple fields
     if search and search.strip():
         search_pattern = f"%{search.strip()}%"
         query = query.filter(
@@ -1102,6 +1124,7 @@ def get_provider_leads(
                 User.name.ilike(search_pattern),
                 User.email.ilike(search_pattern),
                 User.phone.ilike(search_pattern),
+                Lead.phone.ilike(search_pattern),
                 Lead.description.ilike(search_pattern),
                 Lead.provider_notes.ilike(search_pattern),
             )
@@ -1111,22 +1134,22 @@ def get_provider_leads(
     total = query.count()
 
     # Apply ordering and limit
-    leads = query.order_by(Lead.created_at.desc()).limit(limit).all()
+    results = query.order_by(Lead.created_at.desc()).limit(limit).all()
 
-    result = []
-    for lead in leads:
-        result.append(
+    final_leads = []
+    for lead, match in results:
+        final_leads.append(
             {
                 "id": str(lead.id),
                 "phone": lead.phone,
                 "description": lead.description,
-                "status": lead.status,
+                "status": get_ui_status(lead, match),
                 "source": lead.source,
                 "provider_notes": lead.provider_notes,
                 "created_at": lead.created_at.isoformat(),
             }
         )
-    return {"leads": result, "total": total}
+    return {"leads": final_leads, "total": total}
 
 
 # ---------------------------------------------------------------------------

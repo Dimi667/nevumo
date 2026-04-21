@@ -7,7 +7,7 @@ from sqlalchemy import (
     Numeric, CheckConstraint, UniqueConstraint, Index
 )
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID, JSONB, INET
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, validates
 
 
 # -------------------------
@@ -421,6 +421,14 @@ class Translation(Base):
     lang: Mapped[str] = mapped_column(String, nullable=False)
     key: Mapped[str] = mapped_column(String, nullable=False)
     value: Mapped[str] = mapped_column(String)
+
+    @validates("key")
+    def validate_key(self, key, value):
+        if "." not in value or value.startswith(".") or value.endswith("."):
+            raise ValueError(
+                f"Translation key '{value}' must follow 'namespace.key' format (e.g., 'auth.login_title')"
+            )
+        return value
 
     __table_args__ = (
         UniqueConstraint("lang", "key"),

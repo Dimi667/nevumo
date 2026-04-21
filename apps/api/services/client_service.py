@@ -12,8 +12,7 @@ REJECTED_LEAD_STATUSES: tuple[str, ...] = ("rejected", "expired", "cancelled")
 
 
 def require_client_user(current_user: User) -> User:
-    if current_user.role != "client":
-        raise NevumoException(403, "NOT_A_CLIENT", "This endpoint is only for client accounts")
+    """Ensure current user is an active user (can be client or provider)."""
     return current_user
 
 

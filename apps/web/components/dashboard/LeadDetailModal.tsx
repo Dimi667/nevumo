@@ -48,20 +48,26 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
   const [notes, setNotes] = useState(lead?.provider_notes ?? '');
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
-
-  // Debug: log the translations dict
-  console.log('[LeadDetailModal] DashboardI18n hook called, lang:', lang);
+  const [mounted, setMounted] = useState(false);
 
   // Reset notes when lead changes
   useEffect(() => {
     setNotes(lead?.provider_notes ?? '');
   }, [lead]);
 
+  const clearToast = useCallback(() => setToast(null), []);
+
+  // Hydration guard - wait for client-side mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Guard: don't render until mounted and i18n is ready
+  if (!mounted || !t) return null;
+
   const handleNotesChange = (value: string) => {
     setNotes(value);
   };
-
-  const clearToast = useCallback(() => setToast(null), []);
 
   const handleSaveNotes = async () => {
     if (!lead) return;
@@ -76,6 +82,7 @@ export default function LeadDetailModal({ lead, isOpen, onClose, onNotesSaved }:
       setSaving(false);
     }
   };
+
 
   if (!isOpen || !lead) return null;
 

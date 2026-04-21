@@ -98,10 +98,10 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `24` category-page keys per language
   - `67` total UI keys per language
   - `2,788` rows in `translations` for homepage/category namespaces across 34 languages
-  - `342` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services, lead search & notes)
-  - `11` city-page keys per language (hero, search, CTA, empty state, how it works, SEO)
-  - `11,628` rows in `translations` for provider_dashboard namespace across 34 languages
-  - `374` rows in `translations` for city namespace across 34 languages
+  - `350` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services, lead search & notes, lead details modal)
+  - `21` city-page keys per language (hero, search, CTA, empty state, how it works, SEO)
+  - `11,696` rows in `translations` for provider_dashboard namespace across 34 languages
+  - `714` rows in `translations` for city namespace across 34 languages
 
 ---
 
@@ -158,6 +158,10 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Frontend Next.js 16 Compliance (April 21, 2026)** — Migrated from `middleware.ts` to `proxy.ts`:
+  - **Reason**: Next.js 16 deprecated the `middleware.ts` convention in favor of `proxy.ts` for improved routing control.
+  - **Fix**: Renamed `middleware.ts` to `proxy.ts` and updated the export to `export default function proxy`.
+  - **Routing Restored**: Resolved a 404 error on `/bg/provider/dashboard/leads` caused by incompatible middleware handling in the new Next.js version.
 - **Frontend Next.js 15+ Compliance (April 16, 2026)** — Completed full audit and remediation of Promise-based params:
   - **Audit Scope**: Reviewed all `page.tsx` and `layout.tsx` files in `apps/web/app/[lang]` for Next.js 15+ standards compliance
   - **Translation Consistency**: Verified `t()` function usage - all files correctly use keys without namespace prefixes (backend unpacks namespaces)
@@ -246,44 +250,38 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Provider Dashboard frontend — all pages (Overview, Leads, Services, Analytics, QR Code, Profile, Settings, Reviews)
 - Provider onboarding — 2-step wizard (profile info → first service), completeness check with auto-redirect
 - Service CRUD — add/edit/delete with category, multi-city, price type, currency
-- Client Dashboard — frontend + backend complete with guarded sidebar/topbar layout, Overview, My Requests, Reviews, Settings, inline review submission, review reply toggle preferences, role switch, and logout
-- DB: service_cities table (many-to-many service↔city), currency on services, per_sqm price type
-- SearchInput Component: Unified searchable select component (single/multi-select modes)
-- **URL Redirect System** — Complete slug change management with 301 redirects, SEO protection, loop prevention
-- **Slug Change Security** — Backend-controlled change limits (1 change after onboarding), frontend manipulation protection
-- **Automatic Redirect Resolution** — Seamless frontend URL updates, browser address bar synchronization
-- **Review System (Closed Trust Conversation Model)** — Complete review/rating system with:
-  - Client reviews for completed jobs
-  - Provider single reply (editable)
-  - Email notifications on first reply (with opt-out)
-  - Provider dashboard reviews section with reply/edit functionality
-  - Client dashboard completed jobs with review CTA
-  - Client email preferences toggle
-  - Translation keys for all 34 languages
-- **Rating card** on provider dashboard clearly labeled as "Overall Rating" from all client reviews
-- **Warsaw Launch Data Seeded** — Complete Warsaw marketplace setup:
+- Client Dashboard — frontend + backend complete with guarded sidebar/topbar layout, Overview, My Requests, Reviews, Settings, inline review submission, review reply toggle preferences, role switch, and logout. Fixes (April 2026): Resolved data inconsistencies and added real-time status updates for reviews and leads.
+- Lead Rate Limiting UX Improvement (April 2026) — When a user is rate limited during lead submission, the API now returns the ID of their most recent lead. This allows the frontend to show the "Success" screen and allow the user to claim that lead via email, even if the new submission was blocked.
+- Namespaced Translations Validator — Implemented strict `namespace.key` validation at the model layer to prevent incorrect translation keys.
+- Warsaw Launch Data Seeded — Complete Warsaw marketplace setup:
   - City: Warszawa (PL) with coordinates 52.2297, 21.0122
   - Categories: cleaning, plumbing, massage
   - Category translation rows: 102 (`3` categories × `34` languages)
   - Seed script: apps/api/scripts/seed_warsaw_launch.py (idempotent)
-- **Warsaw Homepage** — Provider-first landing page implemented at `apps/web/app/[lang]/page.tsx`:
+- Warsaw Homepage — Provider-first landing page implemented at `apps/web/app/[lang]/page.tsx`:
   - SSR metadata and hreflang generation
   - Database-backed homepage copy via `fetchTranslations(lang, 'homepage')`
   - Hero with rotating categories, trust bullets, social proof and primary CTA to auth
   - Category cards for cleaning, plumbing, massage
   - Live activity feed, Why Nevumo section, footer service links, mobile sticky CTA
-- **Warsaw Category Pages** — Client-first SEO pages implemented at `apps/web/app/[lang]/[city]/[category]/page.tsx`:
+- Warsaw Category Pages — Client-first SEO pages implemented at `apps/web/app/[lang]/[city]/[category]/page.tsx`:
   - SSR metadata from DB translations
   - Provider listing cards enriched with provider details, rating, jobs completed and recent lead preview
   - Sticky sidebar lead form
   - SEO body blocks, FAQ schema, internal related links and provider acquisition CTA
-- **Namespaced UI Translations** — Public DB-backed translation delivery is live:
+- Namespaced UI Translations — Public DB-backed translation delivery is live:
   - Endpoint: `GET /api/v1/translations?lang={lang}&namespace={namespace}`
   - Backend file: `apps/api/routes/translations.py`
   - Router mounted in `apps/api/main.py`
   - Redis cache key pattern: `translations:{lang}:{namespace}` with 1 hour TTL
   - Per-key English fallback when requested language is missing part of a namespace payload
   - **Translation Key Validation (April 19, 2026)**: Completed audit of 712 unique keys (100% compliant). Implemented mandatory namespacing validation (`namespace.key`) at SQLAlchemy model level and Pydantic schema level to prevent "flat" keys.
+- **Client Dashboard & Leads Enhancement (April 2026)**:
+  - Implemented 8 new endpoints for client dashboard management.
+  - Added review eligibility check and preference management.
+  - Optimized leads listing with status filtering and pagination.
+  - Fixed dashboard errors related to role switching and data loading.
+- **Leads Rate Limiting UX (April 21, 2026)**: Improved lead creation failure response to return the last successful lead ID, enabling the "claim" flow for rate-limited users.
 - **Provider Dashboard i18n Hardening** — provider dashboard shell and pages now share one `provider_dashboard` dictionary via `DashboardI18nProvider`, use locale-aware category/date loading, and ship DB-backed translations for the remaining shared dashboard UI copy
 - **Verified UI Translation Coverage** — Homepage and category UI copy seeded for 34 languages:
   - Source script: `apps/api/scripts/seed_ui_translations.py`
@@ -411,11 +409,23 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Full module complete: DB schema, API endpoint, UI components, documentation synchronized
 
 ### Recent Changes (April 2026)
-**April 20 — Provider Profile Request Bottleneck Fix**
-  - Resolved `SyntaxError: The string did not match the expected pattern` (timeout) during provider profile updates.
-  - Root cause: Synchronous sequential translation into 34 languages during the request cycle took >30 seconds, exceeding proxy timeouts.
-  - Fix: Moved translation process to FastAPI `BackgroundTasks` for non-blocking immediate response (<1s).
-  - Improved `lib/provider-api.ts` with robust response validation and `Content-Type` checking to prevent cryptic frontend crashes.
+**April 21 — City Page Enhancements, Leads Dashboard UX & Next.js 16 Proxy**
+  - **City Page Hero (4 States)**: Implemented `CityPageHero.tsx` with dynamic content based on provider count, request count, and ratings.
+  - **City Stats API**: Added `GET /api/v1/cities/{slug}/stats` with Redis caching (1h TTL) to power the hero section.
+  - **Lead Form Integration**: Integrated `LeadForm` directly into the city hero via `CityHeroChips.tsx`.
+  - **LeadForm UX**: Set `showTextarea` to true by default and removed the "Not sure" chip for a more direct request flow on city pages.
+  - **Leads Rate Limiting UX**: API now returns the last `lead_id` on 429 errors, allowing email claim for rate-limited users.
+  - **Next.js 16 Compliance**: Migrated `middleware.ts` to `proxy.ts` and resolved 404 routing issues on dashboard leads.
+  - **Auth Redirect Fix**: Fixed `LoginClient.tsx` to correctly redirect clients to `/client/dashboard`.
+  - **Translations**: Seeded 10 new `city.hero_*` keys across 34 languages and 306 new `provider_dashboard` rows.
+**April 20 — Provider Profile Optimization, CORS Hardening & Static Routing**
+  - **Background Translations**: Moved 34-language translation process to FastAPI `BackgroundTasks` to prevent proxy timeouts (>30s) during provider profile updates.
+  - **CORS Hardening**: Implemented `CORS_ORIGINS` configuration in `apps/api/config.py` and `main.py` using `load_dotenv()` for secure cross-origin communication.
+  - **Static Routing Update**: Relocated static file mount point to `/api/v1/static/provider_images` for architectural consistency and updated `STATIC_FILES_BASE_URL` to support relative paths.
+  - **Sequence Synchronization**: Fixed critical 500 errors in lead submission by synchronizing PostgreSQL sequences (`lead_rate_limits`, `auth_rate_limits`) that were out of sync after Phase 3 migrations.
+  - **Onboarding UX**: Added `noValidate` to forms to prevent browser-native interference and improved `slugifyText` for proper Bulgarian Cyrillic transliteration.
+  - **API Robustness**: Enhanced `lib/provider-api.ts` with strict response validation and `Content-Type` checking to prevent frontend crashes on non-JSON responses.
+  - **Location Translations**: Seeded `location_translations` table with 102 rows (3 cities × 34 languages) and updated `cities` API with a multi-level fallback chain.
 **April 19 — Provider Onboarding Bug Fix**
   - Fixed "The string did not match the expected pattern" error during Step 1 of provider registration.
   - Added `noValidate` to onboarding forms to prevent browser-native validation from interfering with custom logic.

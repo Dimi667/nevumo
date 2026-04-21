@@ -13,7 +13,7 @@ This document reflects the major architectural optimization performed in April 2
 - **Optimized Dockerfiles**: Implemented multi-stage builds (Build-stage + Run-stage) to minimize image size and maximize build speed.
 - **Docker Compose Orchestration**: The root `docker-compose.yml` manages `nevumo-api`, `nevumo-web`, `nevumo-postgres`, and `nevumo-redis`.
 - **Volume Mapping**: Local development uses volume mapping (`./:/workspace`) to ensure hot-reload works correctly across the monorepo.
-- **STATIC_FILES_BASE_URL**: API service must set this environment variable to point to the API server port (8000 in Docker), not the frontend port (3000). This ensures static file URLs (images, etc.) are accessible from the browser.
+- **Static File Routing (April 20, 2026)**: The static file mount point was changed from `/static/provider_images` to `/api/v1/static/provider_images` to bring it under the versioned API namespace. The `STATIC_FILES_BASE_URL` is now an empty string by default to support relative routing when served from the same domain/proxy.
 
 ### 3. SQLAlchemy & Models (The 'Base' Fix)
 - **Centralized Base**: All SQLAlchemy models now inherit from a single `Base` defined in `apps/api/database.py`.
@@ -27,11 +27,13 @@ This document reflects the major architectural optimization performed in April 2
   - `STATIC_FILES_BASE_URL`: The public base URL of the API server. Used for generating absolute URLs for uploaded images and other static assets.
   - `NEXT_PUBLIC_API_URL`: The URL used by the frontend to communicate with the backend. In SSR, this might be an internal Docker URL (e.g., `http://nevumo-api:8000`), while in the browser, it is the public API URL.
 - **Inter-container Communication**: Containers in Docker Compose communicate using service names (e.g., `nevumo-api`, `nevumo-postgres`) rather than `localhost`.
+- **CORS Configuration (April 2026)**: Added `CORSMiddleware` to `apps/api/main.py` using a configurable `CORS_ORIGINS` setting from `.env` (via `load_dotenv()`) to allow secure communication from the frontend domain.
 
 ### 5. Next.js & UI (Metadata + i18n)
 - **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow to prevent users from getting stuck or seeing errors when using the browser back button after successful login/registration.
-- **Auto-Login Recovery**: If a user attempts to register with an existing email (common when going back and clicking "Continue" again), the system automatically attempts to log them in with the provided password instead of showing an error.
-- **Namespaced Translations**: All translation keys MUST be prefixed with their namespace (e.g., `provider_dashboard.title`).
+- **Client Dashboard Fixes (April 2026)**: Resolved issues where client data was not loading correctly after a role switch and implemented robust status tracking for leads and reviews.
+- **Lead Rate Limiting UX (April 2026)**: The lead submission flow now gracefully handles rate limiting by returning the ID of the last successful lead. This allows users to "Claim" their request via email even if they hit the rate limit on a subsequent attempt, significantly improving UX for edge cases.
+- **Namespaced Translations Validator**: Implemented a mandatory `namespace.key` pattern at the ORM layer to ensure all UI copy is properly organized and to avoid cache conflicts.
 - **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.
 
 ---
@@ -73,6 +75,8 @@ Nevumo използва **Hybrid Marketplace Model**:
 
 - Frontend Docker compose development now uses the monorepo root as the `web` build context, matching the `api` service pattern
 - The `web` container installs dependencies from the root workspace so npm can resolve local packages from `packages/*` and sibling workspaces from `apps/*`
+- **Next.js 16 Routing**: The application has migrated from `middleware.ts` to `proxy.ts` to comply with Next.js 16 requirements.
+- **Proxy Interface**: The `proxy.ts` file must use a `default` export for the main interceptor function (previously `middleware`).
 - Current container alignment uses:
   - `context: .`
   - `dockerfile: apps/web/Dockerfile`
@@ -650,23 +654,28 @@ Adding new city: add entry to CITY_COUNTRY_MAP in:
 
 ---
 
-### City Landing Page Architecture (April 19, 2026)
+### City Landing Page Architecture (April 21, 2026)
 
 - **Route**: `apps/web/app/[lang]/[city]/page.tsx`
 - **Model**: SEO-focused entry point for users searching for services in a specific city.
+- **Hero Logic (4 States)**:
+  - **State 1: Full Data**: Shows count of providers, total requests, and average rating.
+  - **State 2: No Ratings**: Shows provider and request counts, hides rating.
+  - **State 3: Only Providers**: Shows "X professionals ready to help", hides requests/rating.
+  - **State 4: Pioneer (Empty)**: Shows "Be the first to request a service", hides all stats.
 - **Core Components**:
-  - **Hero Section**: High-impact dynamic hero with state-based content (provider/request counts and ratings) and a primary CTA.
-  - **Category Grid**: Dynamic list of categories (cleaning, plumbing, massage) with icons and links.
-  - **How It Works**: 3-step marketplace process explanation.
-  - **SEO Content**: Multi-paragraph localized text blocks for better search ranking.
+  - `CityPageHero.tsx`: Main hero container handling the 4 states.
+  - `CityHeroChips.tsx`: Category selector with inline `LeadForm` integration.
+  - `CityLeadSection.tsx`: Contextual "How it works" and secondary CTA.
 - **Data Fetching**:
   - Uses `getCityBySlug` for localized city details.
-  - Fetches aggregate city statistics (providers, requests, rating) from `/api/v1/cities/{slug}/stats`.
+  - Fetches aggregate city statistics from `/api/v1/cities/{slug}/stats` (Redis cached, 1h).
   - Uses `getCategories` for category list.
   - Fetches translations from the `city` namespace.
-- **Translation Management**:
-  - All UI strings are stored in the `city` namespace in the database.
-  - Keys use `{city}`, `{count}`, and `{rating}` placeholders for dynamic replacement in the frontend.
+- **LeadForm Integration**:
+  - Integrated directly into the hero section for maximum conversion.
+  - `showTextarea` defaults to true for better UX.
+  - Removed "Not sure" chip to simplify the flow on city pages.
 
 ### Bug Fixes (April 19-20, 2026)
 
