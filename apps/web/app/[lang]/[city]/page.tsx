@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { getCategories, getCityBySlug } from '@/lib/api';
+import { getCategories, getCityBySlug, API_BASE } from '@/lib/api';
+import CityPageHero from '@/components/city/CityPageHero';
 import { generateHreflangAlternates } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 
@@ -64,9 +65,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function CityPage({ params }: PageProps) {
   const { lang, city } = await params;
   const cityT = await fetchTranslations(lang, 'city');
+  const categoryT = await fetchTranslations(lang, 'category');
   const categories = await getCategories(lang);
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+
+  // Fetch city stats
+  let cityStats = { provider_count: 0, request_count: 0, average_rating: 0 };
+  try {
+    const statsRes = await fetch(`${API_BASE}/api/v1/cities/${city}/stats`, {
+      next: { revalidate: 3600 }
+    });
+    if (statsRes.ok) {
+      const statsJson = await statsRes.json();
+      cityStats = statsJson;
+    }
+  } catch (error) {
+    console.error('Failed to fetch city stats:', error);
+  }
 
   // Use API categories or fallback for development
   const displayCategories = categories.length > 0 ? categories : fallbackCategories;
@@ -84,36 +100,18 @@ export default async function CityPage({ params }: PageProps) {
       </nav>
 
       {/* HERO SECTION */}
-      <section className="py-20 px-4 text-center bg-gradient-to-br from-orange-400 to-orange-700">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            {t(cityT, 'hero_title', `Find services in ${cityName}`).replace('{city}', cityName)}
-          </h1>
-          
-          {/* Search Placeholder */}
-          <div className="max-w-xl mx-auto mb-8">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder={t(cityT, 'search_placeholder', 'What service do you need?')}
-                className="w-full px-6 py-4 rounded-full text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-orange-300"
-                readOnly
-              />
-              <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-orange-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-orange-600 transition">
-                {t(cityT, 'search_btn', 'Search')}
-              </button>
-            </div>
-          </div>
-
-          {/* CTA Button */}
-          <Link
-            href={`/${lang}/${city}/request`}
-            className="inline-block bg-white text-orange-600 font-bold px-8 py-4 rounded-full hover:bg-orange-50 transition"
-          >
-            {t(cityT, 'cta_request', 'Send a free request')}
-          </Link>
-        </div>
-      </section>
+      <CityPageHero
+        translations={cityT}
+        cityName={cityName}
+        providerCount={cityStats.provider_count}
+        requestCount={cityStats.request_count}
+        averageRating={cityStats.average_rating === 0 ? null : cityStats.average_rating}
+        lang={lang}
+        citySlug={city}
+        categories={displayCategories}
+        categoryTranslations={categoryT}
+        countryCode={cityData?.country_code}
+      />
 
       {/* CATEGORY GRID */}
       <section className="py-16 px-6">
@@ -144,23 +142,6 @@ export default async function CityPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* EMPTY STATE CTA SECTION */}
-      <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-4 text-gray-900">
-            {t(cityT, 'empty_title', "Can't find what you're looking for?")}
-          </h2>
-          <p className="text-gray-600 mb-8">
-            {t(cityT, 'empty_subtitle', 'Describe your request and we will connect you with the right specialists.')}
-          </p>
-          <Link
-            href={`/${lang}/${city}/request`}
-            className="inline-block bg-orange-500 text-white font-bold px-8 py-4 rounded-full hover:bg-orange-600 transition"
-          >
-            {t(cityT, 'empty_cta', 'Request any service')}
-          </Link>
-        </div>
-      </section>
 
       {/* HOW IT WORKS */}
       <section className="py-16 px-6 bg-gray-100">

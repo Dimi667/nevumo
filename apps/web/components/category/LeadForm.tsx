@@ -21,6 +21,7 @@ interface LeadFormProps {
   services?: ServiceOption[];
   countryCode?: string;
   title?: string;
+  onReset?: () => void;
 }
 
 export default function LeadForm({
@@ -32,6 +33,7 @@ export default function LeadForm({
   services,
   countryCode,
   title,
+  onReset,
 }: LeadFormProps) {
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,7 +42,7 @@ export default function LeadForm({
   const [phoneValue, setPhoneValue] = useState('');
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const [selectedChip, setSelectedChip] = useState<string | null>(null);
-  const [showTextarea, setShowTextarea] = useState(false);
+  const [showTextarea, setShowTextarea] = useState(true);
   const [leadId, setLeadId] = useState<string | null>(null);
   const [successStep, setSuccessStep] = useState<'sent' | 'email'>('sent');
   const [email, setEmail] = useState('');
@@ -114,7 +116,7 @@ export default function LeadForm({
       // Check for API error response
       if ('success' in result && !result.success) {
         if (result.error?.code === 'RATE_LIMIT_EXCEEDED') {
-          // User already submitted before, show success screen
+          if (result.lead_id) setLeadId(result.lead_id);
           setIsSuccess(true);
           setSuccessStep('sent');
         } else {
@@ -130,7 +132,7 @@ export default function LeadForm({
         setSuccessStep('sent');
         setDescription('');
         setSelectedChip(null);
-        setShowTextarea(false);
+        setShowTextarea(true);
         // Don't clear phoneValue yet - we need it for the pending_claim
         // Save phone on successful submit
         if (phoneValue.replace(/\D/g, '').length >= 7) {
@@ -203,8 +205,9 @@ export default function LeadForm({
     setHasError(false);
     setDescription('');
     setSelectedChip(null);
-    setShowTextarea(false);
+    setShowTextarea(true);
     setPhoneError(null);
+    if (onReset) onReset();
   };
 
   if (isSuccess && successStep === 'sent') {
@@ -369,17 +372,6 @@ export default function LeadForm({
               {service.title}
             </button>
           ))}
-          <button
-            type="button"
-            onClick={() => handleChipClick(notSureText)}
-            className={`px-3 py-2 rounded-full text-sm transition-colors border ${
-              selectedChip === notSureText
-                ? 'bg-orange-500 text-white border-orange-500'
-                : 'bg-white text-gray-700 border-solid border-gray-300 hover:border-gray-400'
-            }`}
-          >
-            {notSureText}
-          </button>
         </div>
       </div>
 

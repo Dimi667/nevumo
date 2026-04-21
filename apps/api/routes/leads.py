@@ -67,7 +67,20 @@ async def create_lead(
         .count()
     )
     if recent_count >= 5:
-        raise RATE_LIMIT_EXCEEDED
+        # Return the most recent lead_id for this IP so email claim still works
+        recent_lead = (
+            db.query(Lead)
+            .join(LeadRateLimit, LeadRateLimit.ip == client_ip)
+            .filter(LeadRateLimit.created_at >= one_hour_ago)
+            .order_by(Lead.created_at.desc())
+            .first()
+        )
+        recent_lead_id = str(recent_lead.id) if recent_lead else None
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=200,
+            content={"success": False, "error": {"code": "RATE_LIMIT_EXCEEDED"}, "lead_id": recent_lead_id}
+        )
 
     lead = Lead(
         client_id=current_user.id if current_user else None,

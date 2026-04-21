@@ -1067,6 +1067,31 @@ Check if a slug redirects to another slug without following the redirect. Used b
 
 ---
 
+## 5.3. Get City Stats
+
+### GET
+/api/v1/cities/{slug}/stats
+
+### Response
+```json
+{
+  "success": true,
+  "data": {
+    "provider_count": 5,
+    "request_count": 120,
+    "average_rating": 4.5
+  }
+}
+```
+
+### Notes
+- Returns aggregate statistics for a specific city.
+- `provider_count`: Number of active providers in the city.
+- `request_count`: Total number of leads created in the city.
+- `average_rating`: Average rating of all providers in the city (0 if no ratings).
+
+---
+
 ## 5.1. Get Price Range
 
 ### GET

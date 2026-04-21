@@ -655,17 +655,18 @@ Adding new city: add entry to CITY_COUNTRY_MAP in:
 - **Route**: `apps/web/app/[lang]/[city]/page.tsx`
 - **Model**: SEO-focused entry point for users searching for services in a specific city.
 - **Core Components**:
-  - **Hero Section**: High-impact heading with localized city name + search input placeholder.
+  - **Hero Section**: High-impact dynamic hero with state-based content (provider/request counts and ratings) and a primary CTA.
   - **Category Grid**: Dynamic list of categories (cleaning, plumbing, massage) with icons and links.
   - **How It Works**: 3-step marketplace process explanation.
   - **SEO Content**: Multi-paragraph localized text blocks for better search ranking.
 - **Data Fetching**:
   - Uses `getCityBySlug` for localized city details.
+  - Fetches aggregate city statistics (providers, requests, rating) from `/api/v1/cities/{slug}/stats`.
   - Uses `getCategories` for category list.
   - Fetches translations from the `city` namespace.
 - **Translation Management**:
   - All UI strings are stored in the `city` namespace in the database.
-  - Keys use `{city}` placeholder for dynamic replacement in the frontend.
+  - Keys use `{city}`, `{count}`, and `{rating}` placeholders for dynamic replacement in the frontend.
 
 ### Bug Fixes (April 19-20, 2026)
 

@@ -323,9 +323,9 @@ export async function createLead(input: LeadCreateInput): Promise<LeadCreateResu
       },
       body: JSON.stringify(input),
     });
-    const json: ApiResponse<LeadCreateResult> = await res.json();
+    const json: ApiResponse<LeadCreateResult> & { lead_id?: string } = await res.json();
     if (!json.success) {
-      return { success: false, error: json.error };
+      return { success: false, error: json.error, lead_id: json.lead_id };
     }
     return json.data;
   } catch {

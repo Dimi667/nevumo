@@ -321,7 +321,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
       const role = result.user.role;
       window.location.href = role === 'provider'
         ? `/${lang}/provider/dashboard`
-        : `/${lang}/client`;
+        : `/${lang}/client/dashboard`;
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'INVALID_CREDENTIALS' || err.message.includes('Invalid credentials')) {
@@ -389,7 +389,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
 
       const redirectPath = result.user.role === 'provider'
         ? `/${lang}/provider/dashboard/profile`
-        : `/${lang}/client`;
+        : `/${lang}/client/dashboard`;
       setTimeout(() => { window.location.href = redirectPath; }, 1000);
     } catch (err) {
       if (err instanceof ApiError) {
