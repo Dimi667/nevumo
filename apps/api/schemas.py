@@ -515,6 +515,15 @@ class LeadProviderNotesUpdateResponse(BaseModel):
     data: dict
 
 
+class ClientLeadNotesUpdate(BaseModel):
+    client_notes: Optional[str] = None
+
+
+class ClientLeadNotesUpdateResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
 # -------------------------
 # Lead Claim Email
 # -------------------------
@@ -587,6 +596,7 @@ class ClientLeadListItem(BaseModel):
     source: Optional[str] = None
     created_at: datetime
     has_review: bool
+    client_notes: Optional[str] = None
 
 
 class ClientLeadsData(BaseModel):

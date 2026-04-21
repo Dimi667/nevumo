@@ -756,6 +756,51 @@ Returns a paginated list of leads created by the client.
 | `limit` | int | 50 | Max records to return |
 | `offset` | int | 0 | Pagination offset |
 
+### Response
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "id": "uuid",
+        "category_slug": "massage",
+        "category_name": "Massage",
+        "city": "Sofia",
+        "city_slug": "sofia",
+        "provider_id": "uuid",
+        "provider_business_name": "Maria Massage",
+        "provider_slug": "maria-massage",
+        "status": "contacted",
+        "description": "Need massage therapy",
+        "source": "seo",
+        "created_at": "2025-01-15T10:30:00",
+        "has_review": false,
+        "client_notes": null
+      }
+    ],
+    "total": 1
+  }
+}
+```
+
+---
+
+## PATCH /api/v1/client/leads/{lead_id}/notes
+
+### Body
+```json
+{ "client_notes": "Preferred time: morning" }
+```
+
+### Response
+```json
+{ "success": true, "data": { "lead_id": "uuid", "client_notes": "Preferred time: morning" } }
+```
+
+### Errors
+- 404 LEAD_NOT_FOUND — lead doesn't exist or client doesn't own it
+
 ---
 
 ## GET /api/v1/client/reviews/eligible-leads

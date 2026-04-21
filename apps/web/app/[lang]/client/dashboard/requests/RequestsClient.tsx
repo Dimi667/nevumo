@@ -12,6 +12,7 @@ import {
   type ClientLeadStatus,
 } from '@/lib/client-api';
 import { useTranslation } from '@/lib/use-translation';
+import ClientLeadDetailModal from '@/components/client/ClientLeadDetailModal';
 
 type ReviewFormState = {
   rating: number;
@@ -133,6 +134,7 @@ export default function RequestsClient({ lang }: { lang: string }) {
   const [reviewingLeadId, setReviewingLeadId] = useState<string | null>(null);
   const [reviewForm, setReviewForm] = useState<ReviewFormState>({ rating: 5, comment: '' });
   const [submitting, setSubmitting] = useState(false);
+  const [selectedLead, setSelectedLead] = useState<ClientLead | null>(null);
   const { t } = useTranslation('client_dashboard', lang);
 
   const clearToast = useCallback(() => setToast(null), []);
@@ -259,7 +261,11 @@ export default function RequestsClient({ lang }: { lang: string }) {
             const statusMeta = getStatusMeta(lead.status, t);
 
             return (
-              <div key={lead.id} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+              <div
+                key={lead.id}
+                onClick={() => setSelectedLead(lead)}
+                className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 cursor-pointer"
+              >
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="space-y-1.5">
                     <h2 className="text-base font-semibold text-gray-900">
@@ -270,12 +276,14 @@ export default function RequestsClient({ lang }: { lang: string }) {
                       {lead.provider_business_name || 'Marketplace'}
                     </p>
                   </div>
-                  <div className="flex flex-col items-start gap-2 lg:items-end">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusMeta.className}`}>
-                      {statusMeta.label}
-                    </span>
-                    <span className="text-sm text-gray-500">{formatDate(lead.created_at, lang)}</span>
-                  </div>
+                    <div className="flex flex-col items-start gap-2 lg:items-end">
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusMeta.className}`}>
+                          {statusMeta.label}
+                        </span>
+                      </div>
+                      <span className="text-sm text-gray-500">{formatDate(lead.created_at, lang)}</span>
+                    </div>
                 </div>
 
                 {(lead.status === 'done' && !lead.has_review && lead.provider_id !== null) && (
@@ -336,10 +344,56 @@ export default function RequestsClient({ lang }: { lang: string }) {
                     )}
                   </div>
                 )}
+
+                {/* Note hint / preview */}
+                <div className="mt-2 pt-2 border-t border-gray-100 flex items-center gap-1.5">
+                  {/* Pencil-note SVG icon — modern, no emoji */}
+                  <svg
+                    className="w-3.5 h-3.5 shrink-0 text-orange-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.75}
+                      d="M16.862 4.487a2.25 2.25 0 013.182 3.182L7.5 20.213l-4.5 1.5 1.5-4.5L16.862 4.487z"
+                    />
+                  </svg>
+                  {lead.client_notes ? (
+                    <span className="text-xs text-gray-500 truncate">
+                      {lead.client_notes.length > 45
+                        ? lead.client_notes.slice(0, 45) + '…'
+                        : lead.client_notes}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-orange-400">
+                      {t('btn_add_note', 'Add note')}
+                    </span>
+                  )}
+                </div>
               </div>
             );
           })}
         </div>
+      )}
+
+      {selectedLead && (
+        <ClientLeadDetailModal
+          lead={selectedLead}
+          lang={lang}
+          onClose={() => setSelectedLead(null)}
+          onNotesChange={(leadId, newNotes) => {
+            setLeads(prev =>
+              prev.map(l => l.id === leadId ? { ...l, client_notes: newNotes } : l)
+            );
+            setSelectedLead(prev =>
+              prev?.id === leadId ? { ...prev, client_notes: newNotes } : prev
+            );
+          }}
+        />
       )}
     </div>
   );

@@ -129,7 +129,7 @@ TRANSLATIONS = {
         "sl": "Ocene", "sq": "Vlerësime", "sr": "Рецензије", "sv": "Recensioner",
         "tr": "Değerlendirmeler", "uk": "Відгуки",
     },
-    "recent_title": {
+    "recent_requests_title": {
         "en": "Recent Requests", "bg": "Последни заявки", "pl": "Ostatnie zapytania", "cs": "Nedávné žádosti",
         "da": "Seneste anmodninger", "de": "Letzte Anfragen", "el": "Πρόσφατα αιτήματα", "es": "Solicitudes recientes",
         "et": "Viimased päringud", "fi": "Viimeisimmät pyynnöt", "fr": "Dernières demandes", "ga": "Iarratais le déanaí",

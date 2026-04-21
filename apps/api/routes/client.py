@@ -3,13 +3,15 @@
 from typing import Annotated, Optional
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 
 from apps.api.dependencies import get_current_user, get_db
 from apps.api.models import User
 from apps.api.schemas import (
     ClientDashboardResponse,
+    ClientLeadNotesUpdate,
+    ClientLeadNotesUpdateResponse,
     ClientLeadsQueryParams,
     ClientLeadsResponse,
     ReviewCreateRequest,
@@ -61,6 +63,35 @@ def list_client_leads(
         offset=params.offset,
     )
     return ClientLeadsResponse(data=result)
+
+
+@router.patch("/leads/{lead_id}/notes", response_model=ClientLeadNotesUpdateResponse)
+def update_lead_client_notes(
+    lead_id: UUID,
+    body: ClientLeadNotesUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> ClientLeadNotesUpdateResponse:
+    """Update private notes for a lead (client view)."""
+    from apps.api.models import Lead
+    user = require_client_user(current_user)
+
+    lead = (
+        db.query(Lead)
+        .filter(Lead.id == lead_id, Lead.client_id == user.id)
+        .first()
+    )
+
+    if not lead:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lead not found or you don't have access to this lead"
+        )
+
+    lead.client_notes = body.client_notes
+    db.commit()
+
+    return ClientLeadNotesUpdateResponse(data={"lead_id": lead_id, "client_notes": body.client_notes})
 
 
 @router.get("/reviews/eligible-leads", response_model=ReviewEligibleLeadsResponse)

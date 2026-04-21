@@ -35,6 +35,7 @@ export interface ClientLead {
   provider_slug: string | null;
   status: ClientLeadStatus;
   description: string | null;
+  client_notes: string | null;
   source: string | null;
   created_at: string;
   has_review: boolean;
@@ -190,4 +191,20 @@ export async function updateReviewPreferences(token: string, enabled: boolean): 
     `/api/v1/client/reviews/preferences?review_reply_email_enabled=${String(enabled)}`,
     { method: 'PATCH' },
   );
+}
+
+export async function updateClientLeadNotes(
+  leadId: string,
+  clientNotes: string | null
+): Promise<void> {
+  const token = localStorage.getItem('nevumo_auth_token');
+  const res = await fetch(`/api/v1/client/leads/${leadId}/notes`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ client_notes: clientNotes }),
+  });
+  if (!res.ok) throw new Error('Failed to save notes');
 }

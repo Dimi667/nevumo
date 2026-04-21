@@ -329,6 +329,7 @@ class Lead(Base):
     status: Mapped[str] = mapped_column(String, default="created")
 
     provider_notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    client_notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 

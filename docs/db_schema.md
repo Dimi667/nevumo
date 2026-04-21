@@ -242,6 +242,7 @@ CREATE TABLE leads (
     -- CHECK (status IN ('created', 'pending_match', 'matched', 'contacted', 'done', 'expired', 'cancelled', 'rejected'))
 
     provider_notes TEXT,  -- Provider's private notes about the lead (added via migration q1r2s3t4u5v6)
+    client_notes TEXT,    -- Client's private notes about the lead (added via migration r2s3t4u5v6w7)
 
     created_at TIMESTAMP DEFAULT NOW()
 );

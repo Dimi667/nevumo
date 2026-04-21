@@ -31,7 +31,35 @@ This document reflects the major architectural optimization performed in April 2
 
 ### 5. Next.js & UI (Metadata + i18n)
 - **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow to prevent users from getting stuck or seeing errors when using the browser back button after successful login/registration.
-- **Client Dashboard Fixes (April 2026)**: Resolved issues where client data was not loading correctly after a role switch and implemented robust status tracking for leads and reviews.
+- **Client Dashboard Fixes (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page for improved lead detail management and private notes.
+- **Client Notes Feature (April 21, 2026)** — COMPLETE:
+  - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
+  - **Backend:**
+    - New endpoint: `PATCH /api/v1/client/leads/{lead_id}/notes`
+    - Body: `{ "client_notes": str | None }`
+    - Response: `{ "success": true, "data": { "lead_id": "uuid", "client_notes": "..." } }`
+    - Ownership check: verifies `lead.client_id == current_user.id`
+    - `GET /api/v1/client/leads` response updated to include `client_notes: string | null`
+    - Schemas added: `ClientLeadNotesUpdate`, `ClientLeadNotesUpdateResponse`
+    - `ClientLeadListItem` updated with `client_notes` field
+  - **Frontend:**
+    - New component: `apps/web/components/client/ClientLeadDetailModal.tsx`
+      - Opens on click of any lead card in requests page
+      - Shows: ДАТА, СПЕЦИАЛИСТ (link to provider profile OR broadcast message), STATUS, ВАШЕТО СЪОБЩЕНИЕ ДО СПЕЦИАЛИСТА
+      - Does NOT show: phone, source
+      - Private notes textarea with debounced auto-save (500ms) + blur save
+      - Button: "Запази и затвори" (btn_save_and_close)
+      - Notes are client-private — not visible to providers
+    - Updated: `apps/web/lib/client-api.ts`
+      - Added `client_notes: string | null` to `ClientLead` interface
+      - Added `updateClientLeadNotes(leadId, clientNotes)` function
+    - Updated: `apps/web/app/[lang]/client/dashboard/requests/RequestsClient.tsx`
+      - Each lead card is now clickable (opens modal)
+      - Note section at bottom of each card: shows truncated note preview OR "Добави бележка" CTA with SVG pencil icon
+  - **Translations:** 8 new keys in `client_dashboard` namespace × 34 languages = 272 rows
+    - modal_title_request, label_specialist, label_your_message, msg_broadcast_lead
+    - label_client_notes, placeholder_client_notes, btn_save_and_close, btn_add_note
+    - Seed script: `apps/api/scripts/seed_client_notes_translations.py`
 - **Lead Rate Limiting UX (April 2026)**: The lead submission flow now gracefully handles rate limiting by returning the ID of the last successful lead. This allows users to "Claim" their request via email even if they hit the rate limit on a subsequent attempt, significantly improving UX for edge cases.
 - **Namespaced Translations Validator**: Implemented a mandatory `namespace.key` pattern at the ORM layer to ensure all UI copy is properly organized and to avoid cache conflicts.
 - **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.

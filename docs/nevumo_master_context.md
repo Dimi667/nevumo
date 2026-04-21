@@ -102,6 +102,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `21` city-page keys per language (hero, search, CTA, empty state, how it works, SEO)
   - `11,696` rows in `translations` for provider_dashboard namespace across 34 languages
   - `714` rows in `translations` for city namespace across 34 languages
+  - `2,686` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 8 new keys × 34 languages = 272 rows)
 
 ---
 
@@ -281,7 +282,36 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Added review eligibility check and preference management.
   - Optimized leads listing with status filtering and pagination.
   - Fixed dashboard errors related to role switching and data loading.
-- **Leads Rate Limiting UX (April 21, 2026)**: Improved lead creation failure response to return the last successful lead ID, enabling the "claim" flow for rate-limited users.
+  - **Leads Rate Limiting UX (April 21, 2026)**: Improved lead creation failure response to return the last successful lead ID, enabling the "claim" flow for rate-limited users.
+  - **Client Dashboard Translation Fix (April 21, 2026)**: Fixed missing translation for "Recent Requests" in the client dashboard overview. Synced key `recent_requests_title` between frontend and backend and seeded 2,482 rows across 34 languages.
+  - **Client Notes Feature (April 21, 2026)** — COMPLETE:
+    - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
+    - **Backend:**
+      - New endpoint: `PATCH /api/v1/client/leads/{lead_id}/notes`
+      - Body: `{ "client_notes": str | None }`
+      - Response: `{ "success": true, "data": { "lead_id": "uuid", "client_notes": "..." } }`
+      - Ownership check: verifies `lead.client_id == current_user.id`
+      - `GET /api/v1/client/leads` response updated to include `client_notes: string | null`
+      - Schemas added: `ClientLeadNotesUpdate`, `ClientLeadNotesUpdateResponse`
+      - `ClientLeadListItem` updated with `client_notes` field
+    - **Frontend:**
+      - New component: `apps/web/components/client/ClientLeadDetailModal.tsx`
+        - Opens on click of any lead card in requests page
+        - Shows: ДАТА, СПЕЦИАЛИСТ (link to provider profile OR broadcast message), STATUS, ВАШЕТО СЪОБЩЕНИЕ ДО СПЕЦИАЛИСТА
+        - Does NOT show: phone, source
+        - Private notes textarea with debounced auto-save (500ms) + blur save
+        - Button: "Запази и затвори" (btn_save_and_close)
+        - Notes are client-private — not visible to providers
+      - Updated: `apps/web/lib/client-api.ts`
+        - Added `client_notes: string | null` to `ClientLead` interface
+        - Added `updateClientLeadNotes(leadId, clientNotes)` function
+      - Updated: `apps/web/app/[lang]/client/dashboard/requests/RequestsClient.tsx`
+        - Each lead card is now clickable (opens modal)
+        - Note section at bottom of each card: shows truncated note preview OR "Добави бележка" CTA with SVG pencil icon
+    - **Translations:** 8 new keys in `client_dashboard` namespace × 34 languages = 272 rows
+      - modal_title_request, label_specialist, label_your_message, msg_broadcast_lead
+      - label_client_notes, placeholder_client_notes, btn_save_and_close, btn_add_note
+      - Seed script: `apps/api/scripts/seed_client_notes_translations.py`
 - **Provider Dashboard i18n Hardening** — provider dashboard shell and pages now share one `provider_dashboard` dictionary via `DashboardI18nProvider`, use locale-aware category/date loading, and ship DB-backed translations for the remaining shared dashboard UI copy
 - **Verified UI Translation Coverage** — Homepage and category UI copy seeded for 34 languages:
   - Source script: `apps/api/scripts/seed_ui_translations.py`
@@ -409,7 +439,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Full module complete: DB schema, API endpoint, UI components, documentation synchronized
 
 ### Recent Changes (April 2026)
-**April 21 — City Page Enhancements, Leads Dashboard UX & Next.js 16 Proxy**
+**April 21 — City Page Enhancements, Leads Dashboard UX, Next.js 16 Proxy & Client Dashboard i18n**
   - **City Page Hero (4 States)**: Implemented `CityPageHero.tsx` with dynamic content based on provider count, request count, and ratings.
   - **City Stats API**: Added `GET /api/v1/cities/{slug}/stats` with Redis caching (1h TTL) to power the hero section.
   - **Lead Form Integration**: Integrated `LeadForm` directly into the city hero via `CityHeroChips.tsx`.
@@ -417,7 +447,8 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Leads Rate Limiting UX**: API now returns the last `lead_id` on 429 errors, allowing email claim for rate-limited users.
   - **Next.js 16 Compliance**: Migrated `middleware.ts` to `proxy.ts` and resolved 404 routing issues on dashboard leads.
   - **Auth Redirect Fix**: Fixed `LoginClient.tsx` to correctly redirect clients to `/client/dashboard`.
-  - **Translations**: Seeded 10 new `city.hero_*` keys across 34 languages and 306 new `provider_dashboard` rows.
+  - **Client Dashboard i18n**: Fixed missing translation for "Recent Requests" by syncing `recent_requests_title` key and re-seeding the `client_dashboard` namespace.
+  - **Translations**: Seeded 10 new `city.hero_*` keys across 34 languages, 306 new `provider_dashboard` rows, and 2,482 `client_dashboard` rows.
 **April 20 — Provider Profile Optimization, CORS Hardening & Static Routing**
   - **Background Translations**: Moved 34-language translation process to FastAPI `BackgroundTasks` to prevent proxy timeouts (>30s) during provider profile updates.
   - **CORS Hardening**: Implemented `CORS_ORIGINS` configuration in `apps/api/config.py` and `main.py` using `load_dotenv()` for secure cross-origin communication.

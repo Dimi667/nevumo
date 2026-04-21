@@ -122,6 +122,7 @@ def get_client_leads(
             Lead.description.label("description"),
             Lead.source.label("source"),
             Lead.created_at.label("created_at"),
+            Lead.client_notes.label("client_notes"),
             has_review_subquery.label("has_review"),
         )
         .join(Category, Lead.category_id == Category.id)
@@ -158,6 +159,7 @@ def get_client_leads(
             "source": row.source,
             "created_at": row.created_at,
             "has_review": bool(row.has_review),
+            "client_notes": row.client_notes,
         }
         for row in rows
     ]
