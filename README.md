@@ -120,6 +120,44 @@ Volumes are mapped from the root to the `/workspace` directory inside containers
 docker-compose up -d
 ```
 
+## Local Development with OrbStack
+
+For optimal performance on macOS, this project uses **OrbStack** instead of Docker Desktop. OrbStack provides significantly faster container startup and better resource utilization.
+
+### Prerequisites
+- OrbStack installed (recommended for macOS development)
+- Docker context set to `orbstack`
+
+### Starting the Project
+
+```sh
+# Ensure OrbStack context is active
+docker context use orbstack
+
+# Start all services
+docker compose up -d
+
+# Check container status
+docker compose ps
+```
+
+### Important Notes
+
+**Alembic Migration Status:** The database currently has multiple Alembic head revisions. When creating new migrations, you may encounter a "Multiple head revisions" error. To resolve this, you'll need to merge the heads before proceeding with new schema changes:
+
+```sh
+docker compose exec api alembic merge heads -m "merge migration"
+docker compose exec api alembic upgrade head
+```
+
+### Local URLs
+
+| Service | URL |
+|---------|-----|
+| Web (frontend) | http://localhost:3000 |
+| API (FastAPI) | http://localhost:8000 |
+| API Docs (Swagger) | http://localhost:8000/docs |
+
 ## Common Commands (Cheat Sheet)
 
 ### Database & Migrations

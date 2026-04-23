@@ -26,7 +26,7 @@ def _apply_status_filter(query: Any, status: str) -> Any:
     return query
 
 
-def get_client_dashboard(client_id: UUID, db: Session) -> dict[str, Any]:
+def get_client_dashboard(client_id: UUID, db: Session, lang: str = 'en') -> dict[str, Any]:
     active_leads = int(
         db.query(func.count(Lead.id))
         .filter(Lead.client_id == client_id, Lead.status.in_(ACTIVE_LEAD_STATUSES))
@@ -47,11 +47,13 @@ def get_client_dashboard(client_id: UUID, db: Session) -> dict[str, Any]:
     )
 
     provider_user = aliased(User)
+    ct_req = aliased(CategoryTranslation)
+    ct_en = aliased(CategoryTranslation)
     recent_rows = (
         db.query(
             Lead.id.label("id"),
             Category.slug.label("category_slug"),
-            func.coalesce(CategoryTranslation.name, Category.slug).label("category_name"),
+            func.coalesce(ct_req.name, ct_en.name, Category.slug).label("category_name"),
             Location.city.label("city"),
             Provider.business_name.label("provider_business_name"),
             Lead.status.label("status"),
@@ -59,8 +61,12 @@ def get_client_dashboard(client_id: UUID, db: Session) -> dict[str, Any]:
         )
         .join(Category, Lead.category_id == Category.id)
         .outerjoin(
-            CategoryTranslation,
-            and_(CategoryTranslation.category_id == Category.id, CategoryTranslation.lang == "en"),
+            ct_req,
+            and_(ct_req.category_id == Category.id, ct_req.lang == lang),
+        )
+        .outerjoin(
+            ct_en,
+            and_(ct_en.category_id == Category.id, ct_en.lang == "en"),
         )
         .join(Location, Lead.city_id == Location.id)
         .outerjoin(Provider, Lead.provider_id == Provider.id)
@@ -100,6 +106,7 @@ def get_client_leads(
     status: str = "all",
     limit: int = 50,
     offset: int = 0,
+    lang: str = 'en',
 ) -> dict[str, Any]:
     total_query = db.query(func.count(Lead.id)).filter(Lead.client_id == client_id)
     total_query = _apply_status_filter(total_query, status)
@@ -107,12 +114,14 @@ def get_client_leads(
 
     provider_user = aliased(User)
     has_review_subquery = db.query(Review.id).filter(Review.lead_id == Lead.id).exists()
+    ct_req = aliased(CategoryTranslation)
+    ct_en = aliased(CategoryTranslation)
 
     leads_query = (
         db.query(
             Lead.id.label("id"),
             Category.slug.label("category_slug"),
-            func.coalesce(CategoryTranslation.name, Category.slug).label("category_name"),
+            func.coalesce(ct_req.name, ct_en.name, Category.slug).label("category_name"),
             Location.city.label("city"),
             Location.slug.label("city_slug"),
             Provider.id.label("provider_id"),
@@ -127,8 +136,12 @@ def get_client_leads(
         )
         .join(Category, Lead.category_id == Category.id)
         .outerjoin(
-            CategoryTranslation,
-            and_(CategoryTranslation.category_id == Category.id, CategoryTranslation.lang == "en"),
+            ct_req,
+            and_(ct_req.category_id == Category.id, ct_req.lang == lang),
+        )
+        .outerjoin(
+            ct_en,
+            and_(ct_en.category_id == Category.id, ct_en.lang == "en"),
         )
         .join(Location, Lead.city_id == Location.id)
         .outerjoin(Provider, Lead.provider_id == Provider.id)

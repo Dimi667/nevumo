@@ -40,11 +40,12 @@ def _require_client_role(current_user: User) -> User:
 
 @router.get("/dashboard", response_model=ClientDashboardResponse)
 def get_dashboard(
+    lang: str = Query(default='en'),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> ClientDashboardResponse:
     user = require_client_user(current_user)
-    result = get_client_dashboard(user.id, db)
+    result = get_client_dashboard(user.id, db, lang=lang)
     return ClientDashboardResponse(data=result)
 
 
@@ -61,6 +62,7 @@ def list_client_leads(
         status=params.status,
         limit=params.limit,
         offset=params.offset,
+        lang=params.lang,
     )
     return ClientLeadsResponse(data=result)
 

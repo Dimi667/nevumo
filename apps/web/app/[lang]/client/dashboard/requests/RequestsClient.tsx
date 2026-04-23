@@ -151,9 +151,22 @@ export default function RequestsClient({ lang }: { lang: string }) {
     try {
       setLoading(true);
       setError(null);
-      const response = await getClientLeads(token, status);
+      const response = await getClientLeads(token, status, undefined, undefined, lang);
       setLeads(response.items);
       setTotal(response.total);
+
+      // Auto-open modal from URL param
+      const openId = searchParams.get('open');
+      if (openId) {
+        const targetLead = response.items.find((l: ClientLead) => l.id === openId);
+        if (targetLead) {
+          setSelectedLead(targetLead);
+          // Clean up URL without reload
+          const url = new URL(window.location.href);
+          url.searchParams.delete('open');
+          router.replace(url.pathname + (url.search || ''), { scroll: false });
+        }
+      }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Неуспешно зареждане на заявките.');
     } finally {
@@ -273,7 +286,11 @@ export default function RequestsClient({ lang }: { lang: string }) {
                     </h2>
                     <p className="text-sm text-gray-500">{lead.city}</p>
                     <p className="text-sm text-gray-700">
-                      {lead.provider_business_name || 'Marketplace'}
+                      {lead.provider_business_name ?? (
+                        <span className="text-gray-400 italic text-sm truncate">
+                          {t('msg_broadcast_lead', 'Sent to many specialists')}
+                        </span>
+                      )}
                     </p>
                   </div>
                     <div className="flex flex-col items-start gap-2 lg:items-end">
@@ -343,6 +360,12 @@ export default function RequestsClient({ lang }: { lang: string }) {
                       </button>
                     )}
                   </div>
+                )}
+
+                {lead.description && (
+                  <p className="text-sm text-gray-600 mt-1 truncate">
+                    {lead.description}
+                  </p>
                 )}
 
                 {/* Note hint / preview */}

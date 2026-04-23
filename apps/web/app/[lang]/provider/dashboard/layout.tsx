@@ -3,7 +3,7 @@
 import { use, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAuthenticated, getAuthUser } from '@/lib/auth-store';
-import { getProviderDashboard } from '@/lib/provider-api';
+import { getProviderDashboard, ProviderApiError } from '@/lib/provider-api';
 import { DashboardI18nProvider } from '@/lib/provider-dashboard-i18n';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
@@ -42,22 +42,34 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
   }, []);
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      router.replace(`/${lang}/auth`);
-      return;
-    }
-    const user = getAuthUser();
-    if (!user) {
-      router.replace(`/${lang}/auth`);
-      return;
-    }
-    if (user.role !== 'provider') {
-      router.replace(`/${lang}/client/dashboard`);
-      return;
-    }
+    const checkAccess = async () => {
+      if (!isAuthenticated()) {
+        router.replace(`/${lang}/auth`);
+        return;
+      }
+      const user = getAuthUser();
+      if (!user) {
+        router.replace(`/${lang}/auth`);
+        return;
+      }
 
-    // Check if user is in onboarding mode
-    checkOnboardingStatus(true).then(() => setReady(true));
+      // Check if user has a provider profile via API
+      try {
+        await getProviderDashboard();
+        // Success - user has a provider profile, continue to onboarding check
+        checkOnboardingStatus(true).then(() => setReady(true));
+      } catch (error) {
+        // If 403 or 404, user has no provider profile - redirect to client dashboard
+        if (error instanceof ProviderApiError && (error.status === 403 || error.status === 404)) {
+          router.replace(`/${lang}/client/dashboard`);
+          return;
+        }
+        // For other errors, still redirect for safety
+        router.replace(`/${lang}/client/dashboard`);
+      }
+    };
+
+    checkAccess();
   }, [lang, router, checkOnboardingStatus]);
 
   // Re-check onboarding status when route changes (for post-onboarding refresh)

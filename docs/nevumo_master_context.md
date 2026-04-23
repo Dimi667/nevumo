@@ -102,7 +102,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `21` city-page keys per language (hero, search, CTA, empty state, how it works, SEO)
   - `11,696` rows in `translations` for provider_dashboard namespace across 34 languages
   - `714` rows in `translations` for city namespace across 34 languages
-  - `2,686` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 8 new keys × 34 languages = 272 rows)
+  - `2,686` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 10 keys × 34 languages = 340 rows)
 
 ---
 
@@ -287,31 +287,42 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Client Notes Feature (April 21, 2026)** — COMPLETE:
     - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
     - **Backend:**
-      - New endpoint: `PATCH /api/v1/client/leads/{lead_id}/notes`
-      - Body: `{ "client_notes": str | None }`
-      - Response: `{ "success": true, "data": { "lead_id": "uuid", "client_notes": "..." } }`
-      - Ownership check: verifies `lead.client_id == current_user.id`
-      - `GET /api/v1/client/leads` response updated to include `client_notes: string | null`
+      - New endpoint: `PATCH /api/v1/client/leads/{lead_id}/notes` (ownership check: lead.client_id == user.id)
+      - `GET /api/v1/client/leads` and `GET /api/v1/client/dashboard` now accept `?lang=` param and return localized `category_name`
       - Schemas added: `ClientLeadNotesUpdate`, `ClientLeadNotesUpdateResponse`
       - `ClientLeadListItem` updated with `client_notes` field
     - **Frontend:**
       - New component: `apps/web/components/client/ClientLeadDetailModal.tsx`
-        - Opens on click of any lead card in requests page
-        - Shows: ДАТА, СПЕЦИАЛИСТ (link to provider profile OR broadcast message), STATUS, ВАШЕТО СЪОБЩЕНИЕ ДО СПЕЦИАЛИСТА
-        - Does NOT show: phone, source
-        - Private notes textarea with debounced auto-save (500ms) + blur save
+        - Opens on card click in requests page
+        - Shows: ДАТА, СПЕЦИАЛИСТ (provider link OR broadcast msg), STATUS, ВАШЕТО СЪОБЩЕНИЕ ДО СПЕЦИАЛИСТА
+        - Private notes textarea: debounced 500ms autosave + blur save
         - Button: "Запази и затвори" (btn_save_and_close)
-        - Notes are client-private — not visible to providers
-      - Updated: `apps/web/lib/client-api.ts`
-        - Added `client_notes: string | null` to `ClientLead` interface
-        - Added `updateClientLeadNotes(leadId, clientNotes)` function
-      - Updated: `apps/web/app/[lang]/client/dashboard/requests/RequestsClient.tsx`
-        - Each lead card is now clickable (opens modal)
-        - Note section at bottom of each card: shows truncated note preview OR "Добави бележка" CTA with SVG pencil icon
-    - **Translations:** 8 new keys in `client_dashboard` namespace × 34 languages = 272 rows
+      - `RequestsClient.tsx`: cards clickable, description preview, note preview/CTA with SVG pencil icon, broadcast message instead of "Marketplace"
+      - `OverviewClient.tsx`: recent lead cards clickable → navigate to /requests?open={lead_id} to auto-open modal; broadcast message instead of "Marketplace"
+      - `client-api.ts`: ClientLead interface + updateClientLeadNotes() + lang param on getClientLeads() and getClientDashboard()
+    - **Translations:** 10 keys in `client_dashboard` namespace × 34 languages = 340 rows
       - modal_title_request, label_specialist, label_your_message, msg_broadcast_lead
       - label_client_notes, placeholder_client_notes, btn_save_and_close, btn_add_note
+      - (+ 2 existing reused: label_date, label_status)
       - Seed script: `apps/api/scripts/seed_client_notes_translations.py`
+  - **Dual Role Architecture (April 2026)** — COMPLETE:
+    - **PROBLEM:** One user can be both provider and client simultaneously (two tabs open)
+    - **SOLUTION:** Removed role-based guards, kept ownership-based security
+    - `apps/api/dependencies.py`: get_current_provider() now queries providers table by user_id instead of checking JWT role
+    - `apps/api/routes/client.py`: _require_client_role() was already a no-op (confirmed by audit)
+    - `apps/web/app/[lang]/provider/dashboard/layout.tsx`: guard now calls GET /api/v1/provider/dashboard to verify provider profile exists (not JWT role check)
+    - **Result:** user with role='client' JWT can access provider dashboard if they have a provider profile, and vice versa
+  - **Category Page Fix (April 2026)** — COMPLETE:
+    - **PROBLEM:** CATEGORY_CONTENT keyed by Polish slugs (masaz, sprzatanie, hydraulik); URLs use English slugs (cleaning, massage, plumbing) → always showed cleaning content
+    - **SOLUTION:** Re-keyed CATEGORY_CONTENT, CategoryKey type, relatedLinksByCategory from Polish to English slugs
+    - Removed categorySlugMap and categoryKeyMap — getApiSlug() is now identity function
+    - File: apps/web/app/[lang]/[city]/[category]/page.tsx
+    - **Result:** /bg/warszawa/plumbing correctly shows plumbing content
+  - **Client Dashboard Localization (April 2026)** — COMPLETE:
+    - GET /api/v1/client/leads: added lang query param, category_name now localized
+    - GET /api/v1/client/dashboard: added lang query param, category_name in recent_leads now localized
+    - ClientLeadsQueryParams schema: added lang field (was causing 422 without it)
+    - Frontend passes lang to both API calls
 - **Provider Dashboard i18n Hardening** — provider dashboard shell and pages now share one `provider_dashboard` dictionary via `DashboardI18nProvider`, use locale-aware category/date loading, and ship DB-backed translations for the remaining shared dashboard UI copy
 - **Verified UI Translation Coverage** — Homepage and category UI copy seeded for 34 languages:
   - Source script: `apps/api/scripts/seed_ui_translations.py`

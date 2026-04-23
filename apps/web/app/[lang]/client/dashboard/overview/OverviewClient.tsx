@@ -93,7 +93,7 @@ export default function OverviewClient({ lang }: { lang: string }) {
       try {
         setLoading(true);
         setError(null);
-        const dashboard = await getClientDashboard(token);
+        const dashboard = await getClientDashboard(token, lang);
         setData(dashboard);
       } catch (e: unknown) {
         setError(e instanceof Error ? e.message : 'Неуспешно зареждане на dashboard.');
@@ -190,27 +190,33 @@ export default function OverviewClient({ lang }: { lang: string }) {
               const statusMeta = getStatusMeta(lead.status, t);
 
               return (
-                <div key={lead.id} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <h3 className="text-base font-semibold text-gray-900">{lead.category_name}</h3>
-                      <p className="text-sm text-gray-500 mt-0.5">{lead.city}</p>
+                <Link key={lead.id} href={`/${lang}/client/dashboard/requests?open=${lead.id}`} className="block">
+                  <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 cursor-pointer hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="text-base font-semibold text-gray-900">{lead.category_name}</h3>
+                        <p className="text-sm text-gray-500 mt-0.5">{lead.city}</p>
+                      </div>
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusMeta.className}`}>
+                        {statusMeta.label}
+                      </span>
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusMeta.className}`}>
-                      {statusMeta.label}
-                    </span>
+                    <div className="space-y-1">
+                      <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t('label_provider', 'Provider')}</p>
+                      <p className="text-sm text-gray-700">
+                        {lead.provider_business_name ?? (
+                          <span className="text-gray-400 italic text-sm truncate">
+                            {t('msg_broadcast_lead', 'Sent to many specialists')}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t('label_date', 'Date')}</p>
+                      <p className="text-sm text-gray-700">{formatDate(lead.created_at, lang)}</p>
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t('label_provider', 'Provider')}</p>
-                    <p className="text-sm text-gray-700">
-                      {lead.provider_business_name || t('label_marketplace', 'Marketplace Request')}
-                    </p>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t('label_date', 'Date')}</p>
-                    <p className="text-sm text-gray-700">{formatDate(lead.created_at, lang)}</p>
-                  </div>
-                </div>
+                </Link>
               );
             })}
           </div>

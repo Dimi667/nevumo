@@ -125,8 +125,8 @@ async function clientFetch<T>(token: string, path: string, options: RequestInit 
   return json.data;
 }
 
-export async function getClientDashboard(token: string): Promise<ClientDashboardData> {
-  return clientFetch<ClientDashboardData>(token, '/api/v1/client/dashboard', { method: 'GET' });
+export async function getClientDashboard(token: string, lang: string = 'en'): Promise<ClientDashboardData> {
+  return clientFetch<ClientDashboardData>(token, `/api/v1/client/dashboard?lang=${lang}`, { method: 'GET' });
 }
 
 export async function getClientLeads(
@@ -134,6 +134,7 @@ export async function getClientLeads(
   status?: ClientLeadFilterStatus,
   limit?: number,
   offset?: number,
+  lang: string = 'en',
 ): Promise<ClientLeadsData> {
   const params = new URLSearchParams();
 
@@ -148,6 +149,8 @@ export async function getClientLeads(
   if (typeof offset === 'number') {
     params.set('offset', String(offset));
   }
+
+  params.set('lang', lang);
 
   const query = params.toString();
   return clientFetch<ClientLeadsData>(

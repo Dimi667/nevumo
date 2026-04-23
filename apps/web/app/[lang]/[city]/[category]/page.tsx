@@ -12,8 +12,7 @@ interface PageProps {
   params: Promise<{ lang: string; city: string; category: string }>;
 }
 
-type CategoryKey = 'masaz' | 'sprzatanie' | 'hydraulik';
-type TranslationCategoryKey = 'cleaning' | 'plumbing' | 'massage';
+type CategoryKey = 'cleaning' | 'massage' | 'plumbing';
 type ApiCategorySlug = 'massage' | 'cleaning' | 'plumbing';
 
 interface CategoryContent {
@@ -49,24 +48,12 @@ interface ProviderCardTexts {
   sendRequest: string;
 }
 
-const categorySlugMap: Record<string, string> = {
-  masaz: 'massage',
-  sprzatanie: 'cleaning',
-  hydraulik: 'plumbing',
-};
-
-const categoryKeyMap: Record<string, TranslationCategoryKey> = {
-  masaz: 'massage',
-  sprzatanie: 'cleaning',
-  hydraulik: 'plumbing',
-};
-
 function getApiSlug(category: string): ApiCategorySlug {
-  return (categorySlugMap[category] ?? category) as ApiCategorySlug;
+  return category as ApiCategorySlug;
 }
 
-function getCategoryTranslationKey(category: string): TranslationCategoryKey {
-  return categoryKeyMap[category] ?? 'cleaning';
+function getCategoryTranslationKey(category: string): CategoryKey {
+  return category as CategoryKey;
 }
 
 function getInitials(name: string): string {
@@ -155,7 +142,7 @@ function ProviderCard({
 }
 
 const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
-  masaz: {
+  massage: {
     apiSlug: 'massage',
     displayName: 'massage',
   heading: '{category} in {city}',
@@ -172,8 +159,8 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
     ],
     seoQuestions: ['How to choose a massage specialist?', ''],
     relatedLinks: [
-      { href: '/{lang}/{city_slug}/sprzatanie', label: 'Cleaning in {city}' },
-      { href: '/{lang}/{city_slug}/hydraulik', label: 'Plumbing in {city}' },
+      { href: '/{lang}/{city_slug}/cleaning', label: 'Cleaning in {city}' },
+      { href: '/{lang}/{city_slug}/plumbing', label: 'Plumbing in {city}' },
     ],
     faq: [
       {
@@ -192,7 +179,7 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
       },
     ],
   },
-  sprzatanie: {
+  cleaning: {
     apiSlug: 'cleaning',
     displayName: 'cleaning',
     heading: '{category} in {city}',
@@ -209,8 +196,8 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
     ],
     seoQuestions: ['How to choose a cleaning company?', 'How much does cleaning cost in {city}?'],
     relatedLinks: [
-      { href: '/{lang}/{city_slug}/masaz', label: 'Massage in {city}' },
-      { href: '/{lang}/{city_slug}/hydraulik', label: 'Plumbing in {city}' },
+      { href: '/{lang}/{city_slug}/massage', label: 'Massage in {city}' },
+      { href: '/{lang}/{city_slug}/plumbing', label: 'Plumbing in {city}' },
     ],
     faq: [
       {
@@ -229,7 +216,7 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
       },
     ],
   },
-  hydraulik: {
+  plumbing: {
     apiSlug: 'plumbing',
     displayName: 'plumbing',
     heading: '{category} in {city}',
@@ -246,8 +233,8 @@ const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
     ],
     seoQuestions: ['When should you call a plumber?', 'How much does a plumber cost in {city}?'],
     relatedLinks: [
-      { href: '/{lang}/{city_slug}/masaz', label: 'Massage in {city}' },
-      { href: '/{lang}/{city_slug}/sprzatanie', label: 'Cleaning in {city}' },
+      { href: '/{lang}/{city_slug}/massage', label: 'Massage in {city}' },
+      { href: '/{lang}/{city_slug}/cleaning', label: 'Cleaning in {city}' },
     ],
     faq: [
       {
@@ -275,7 +262,7 @@ function getCategoryContent(
   lang: string = 'en',
   citySlug: string = '',
 ): CategoryContent {
-  const base = CATEGORY_CONTENT[(category as CategoryKey)] ?? CATEGORY_CONTENT.masaz;
+  const base = CATEGORY_CONTENT[(category as CategoryKey)] ?? CATEGORY_CONTENT.cleaning;
 
   const replace = (str: string) =>
     str
@@ -474,20 +461,20 @@ export default async function CategoryPage({ params }: PageProps) {
   };
 
   const relatedLinksByCategory: Record<CategoryKey, Array<{ href: string; label: string }>> = {
-    masaz: [
-      { href: `/${lang}/${city}/sprzatanie`, label: t(categoryT, 'h1_cleaning', `Cleaning in ${cityName}`) },
-      { href: `/${lang}/${city}/hydraulik`, label: t(categoryT, 'h1_plumbing', `Plumbing in ${cityName}`) },
+    massage: [
+      { href: `/${lang}/${city}/cleaning`, label: t(categoryT, 'h1_cleaning', `Cleaning in ${cityName}`) },
+      { href: `/${lang}/${city}/plumbing`, label: t(categoryT, 'h1_plumbing', `Plumbing in ${cityName}`) },
     ],
-    sprzatanie: [
-      { href: `/${lang}/${city}/masaz`, label: t(categoryT, 'h1_massage', `Massage in ${cityName}`) },
-      { href: `/${lang}/${city}/hydraulik`, label: t(categoryT, 'h1_plumbing', `Plumbing in ${cityName}`) },
+    cleaning: [
+      { href: `/${lang}/${city}/massage`, label: t(categoryT, 'h1_massage', `Massage in ${cityName}`) },
+      { href: `/${lang}/${city}/plumbing`, label: t(categoryT, 'h1_plumbing', `Plumbing in ${cityName}`) },
     ],
-    hydraulik: [
-      { href: `/${lang}/${city}/masaz`, label: t(categoryT, 'h1_massage', `Massage in ${cityName}`) },
-      { href: `/${lang}/${city}/sprzatanie`, label: t(categoryT, 'h1_cleaning', `Cleaning in ${cityName}`) },
+    plumbing: [
+      { href: `/${lang}/${city}/massage`, label: t(categoryT, 'h1_massage', `Massage in ${cityName}`) },
+      { href: `/${lang}/${city}/cleaning`, label: t(categoryT, 'h1_cleaning', `Cleaning in ${cityName}`) },
     ],
   };
-  const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.sprzatanie;
+  const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.cleaning;
 
   const { providers, allCount, averageRating } = await getEnrichedProviders(lang, city, apiSlug);
   const priceData = await getPriceRange(apiSlug, city);

@@ -544,9 +544,12 @@ class ProviderLeadsResponse(BaseModel):
 
 
 class ClientLeadsQueryParams(BaseModel):
+    model_config = ConfigDict(extra='allow')
+    
     status: str = "all"
     limit: int = Field(default=50, ge=1)
     offset: int = Field(default=0, ge=0)
+    lang: str = 'en'
 
     @field_validator("status")
     @classmethod

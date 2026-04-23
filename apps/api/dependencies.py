@@ -85,8 +85,12 @@ def get_current_provider(
     current_user=Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    if current_user.role != "provider":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not a provider account")
+    from apps.api.models import Provider
 
-    from apps.api.services.provider_service import get_or_create_provider
-    return get_or_create_provider(current_user, db)
+    provider = db.query(Provider).filter(Provider.user_id == current_user.id).first()
+    if not provider:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Provider profile not found"
+        )
+    return provider
