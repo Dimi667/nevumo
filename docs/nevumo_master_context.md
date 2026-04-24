@@ -440,7 +440,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Case-insensitive partial matching
   - Frontend UI: Search input with placeholder "Search name, email, phone, description or notes..."
   - i18n keys: label_search, placeholder_search_leads
-- **Provider Notes Feature** — Private notes for providers on leads (COMPLETE):
+  - **Provider Notes Feature** — Private notes for providers on leads (COMPLETE):
   - New field: leads.provider_notes (TEXT, nullable) added via migration q1r2s3t4u5v6
   - New endpoint: PATCH /api/v1/provider/leads/{lead_id}/notes
   - Frontend: LeadDetailModal component with private notes textarea
@@ -448,12 +448,23 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - i18n key: label_private_notes
   - Notes are provider-private and not visible to clients
   - Full module complete: DB schema, API endpoint, UI components, documentation synchronized
+  - **Lead Status Bidirectional Fix (April 24, 2026)** — COMPLETE:
+  - Root cause: get_ui_status() четеше match.status вместо lead.status → разминаване между DB и UI
+  - Fix 1: get_ui_status() вече проверява lead.status ПЪРВО за терминални статуси (cancelled, done, contacted)
+  - Fix 2: change_lead_status() не обновява match.status при cancelled (само lead.status)
+  - Fix 3: Migration cdf063316609 добавя 'cancelled', 'contacted', 'done' в lead_matches CHECK constraint
+  - Засегнати файлове: apps/api/services/provider_service.py, apps/api/alembic/versions/cdf063316609_add_cancelled_to_lead_matches_status.py
 
 ### Recent Changes (April 2026)
 **April 21 — City Page Enhancements, Leads Dashboard UX, Next.js 16 Proxy & Client Dashboard i18n**
   - **City Page Hero (4 States)**: Implemented `CityPageHero.tsx` with dynamic content based on provider count, request count, and ratings.
   - **City Stats API**: Added `GET /api/v1/cities/{slug}/stats` with Redis caching (1h TTL) to power the hero section.
   - **Lead Form Integration**: Integrated `LeadForm` directly into the city hero via `CityHeroChips.tsx`.
+- **Lead Cancellation Logic Improvement (April 24, 2026)** — COMPLETE:
+  - Updated `provider_service.py` to correctly handle UI status for cancelled leads.
+  - Modified `change_lead_status` to prevent `lead_match.status` update when lead is cancelled.
+  - Added `cancelled` status to `lead_matches` check constraint via Alembic migration `cdf063316609`.
+  - Updated documentation (`db_schema.md`, `models.py`) to reflect schema changes.
   - **LeadForm UX**: Set `showTextarea` to true by default and removed the "Not sure" chip for a more direct request flow on city pages.
   - **Leads Rate Limiting UX**: API now returns the last `lead_id` on 429 errors, allowing email claim for rate-limited users.
   - **Next.js 16 Compliance**: Migrated `middleware.ts` to `proxy.ts` and resolved 404 routing issues on dashboard leads.

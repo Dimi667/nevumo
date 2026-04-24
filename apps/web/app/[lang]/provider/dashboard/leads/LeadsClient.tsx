@@ -18,6 +18,7 @@ function getStatusOptions(t: (key: string, fallback?: string) => string): { valu
     { value: 'contacted', label: t('status_contacted', 'Contacted') },
     { value: 'done', label: t('status_done', 'Done') },
     { value: 'rejected', label: t('status_rejected', 'Rejected') },
+    { value: 'cancelled' as LeadStatusQuery, label: t('status_cancelled', 'Cancelled') },
   ];
 }
 
@@ -40,6 +41,8 @@ function getTitleAndSubtitle(status: LeadStatusQuery | null, total: number, t: (
       return { title: t('label_done_leads', 'Done leads'), subtitle: `${total} ${t('label_total', 'total')}` };
     case 'rejected':
       return { title: t('label_rejected_leads', 'Rejected leads'), subtitle: `${total} ${t('label_total', 'total')}` };
+    case 'cancelled' as LeadStatusQuery:
+      return { title: t('label_cancelled_leads', 'Cancelled leads'), subtitle: `${total} ${t('label_total', 'total')}` };
     default:
       return { title: t('nav_leads', 'Leads'), subtitle: `${total} ${t('label_total', 'total')}` };
   }
@@ -153,6 +156,7 @@ export default function LeadsClient() {
   const [search, setSearch] = useState(urlSearch);
 
   const [isSearching, setIsSearching] = useState(false);
+  const [updatingIds, setUpdatingIds] = useState<Set<string>>(new Set());
 
   // Update document title when translations are loaded
   useEffect(() => {
@@ -311,23 +315,31 @@ export default function LeadsClient() {
   };
 
   async function handleContact(id: string) {
+    if (updatingIds.has(id)) return;
     const lead = leads.find(l => l.id === id);
     if (!lead) return;
-    const nextStatus = lead.status === 'contacted' ? 'done' : 'contacted';
+    const nextStatus = 'contacted';
+    setUpdatingIds(prev => new Set(prev).add(id));
     try {
       await updateLeadStatus(id, nextStatus);
       setLeads(prev => prev.map(l => l.id === id ? { ...l, status: nextStatus } : l));
-    } catch {
-      // silently ignore — row stays unchanged
+    } catch (err) {
+      console.error('Lead status update failed:', err);
+    } finally {
+      setUpdatingIds(prev => { const next = new Set(prev); next.delete(id); return next; });
     }
   }
 
   async function handleReject(id: string) {
+    if (updatingIds.has(id)) return;
+    setUpdatingIds(prev => new Set(prev).add(id));
     try {
-      await updateLeadStatus(id, 'rejected');
-      setLeads(prev => prev.map(l => l.id === id ? { ...l, status: 'rejected' } : l));
-    } catch {
-      // silently ignore
+      await updateLeadStatus(id, 'cancelled');
+      setLeads(prev => prev.map(l => l.id === id ? { ...l, status: 'cancelled', cancelled_by: 'provider' } as Lead : l));
+    } catch (err) {
+      console.error('Lead status update failed:', err);
+    } finally {
+      setUpdatingIds(prev => { const next = new Set(prev); next.delete(id); return next; });
     }
   }
 
@@ -471,6 +483,7 @@ export default function LeadsClient() {
                     onContact={handleContact}
                     onReject={handleReject}
                     onView={handleViewLead}
+                    updatingIds={updatingIds}
                   />
                 ))}
               </tbody>

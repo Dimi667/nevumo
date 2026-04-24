@@ -12,6 +12,7 @@ from apps.api.schemas import (
     ClientDashboardResponse,
     ClientLeadNotesUpdate,
     ClientLeadNotesUpdateResponse,
+    ClientLeadStatusUpdateRequest,
     ClientLeadsQueryParams,
     ClientLeadsResponse,
     ReviewCreateRequest,
@@ -65,6 +66,81 @@ def list_client_leads(
         lang=params.lang,
     )
     return ClientLeadsResponse(data=result)
+
+
+@router.patch("/leads/{lead_id}/status")
+def update_lead_status(
+    lead_id: UUID,
+    body: ClientLeadStatusUpdateRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    """Update lead status (client view)."""
+    from datetime import datetime
+    from apps.api.models import Lead
+
+    user = require_client_user(current_user)
+    if user.role != "client":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="NOT_A_CLIENT"
+        )
+
+    lead = (
+        db.query(Lead)
+        .filter(Lead.id == lead_id, Lead.client_id == user.id)
+        .first()
+    )
+
+    if not lead:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="LEAD_NOT_FOUND"
+        )
+
+    # Transition validation
+    # UI status mapping: created, pending_match, matched -> new
+    current_ui_status = lead.status
+    if lead.status in ("created", "pending_match", "matched"):
+        current_ui_status = "new"
+
+    new_status = body.status
+    allowed = False
+    if new_status == "contacted":
+        allowed = current_ui_status == "new"
+    elif new_status == "done":
+        allowed = current_ui_status == "contacted"
+    elif new_status == "cancelled":
+        allowed = current_ui_status in ("new", "contacted")
+
+    if not allowed:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="INVALID_TRANSITION"
+        )
+
+    # Apply changes
+    lead.status = new_status
+    lead.status_changed_by = "client"
+    lead.status_changed_at = datetime.utcnow()
+
+    if new_status == "cancelled":
+        lead.cancelled_by = "client"
+    else:
+        lead.cancelled_by = None
+
+    db.commit()
+
+    return {
+        "success": True,
+        "data": {
+            "id": lead.id,
+            "status": lead.status,
+            "cancelled_by": lead.cancelled_by,
+            "status_changed_by": lead.status_changed_by,
+            "status_changed_at": lead.status_changed_at,
+        }
+    }
 
 
 @router.patch("/leads/{lead_id}/notes", response_model=ClientLeadNotesUpdateResponse)

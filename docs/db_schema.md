@@ -244,6 +244,10 @@ CREATE TABLE leads (
     provider_notes TEXT,  -- Provider's private notes about the lead (added via migration q1r2s3t4u5v6)
     client_notes TEXT,    -- Client's private notes about the lead (added via migration r2s3t4u5v6w7)
 
+    cancelled_by TEXT CHECK (cancelled_by IN ('client', 'provider')),
+    status_changed_by TEXT NOT NULL DEFAULT 'system' CHECK (status_changed_by IN ('system', 'client', 'provider')),
+    status_changed_at TIMESTAMP,
+
     created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -265,8 +269,8 @@ CREATE TABLE lead_matches (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     lead_id UUID REFERENCES leads(id) ON DELETE CASCADE,
     provider_id UUID REFERENCES providers(id),
-    status TEXT CHECK (status IN ('invited', 'contacted', 'done', 'rejected')),
-    -- Updated via migration c3d4e5f6a7b8 to support dashboard lead status flow
+    status TEXT CHECK (status IN ('invited', 'accepted', 'rejected', 'contacted', 'done', 'cancelled')),
+    -- Updated via migration cdf063316609 (April 24, 2026)
     created_at TIMESTAMP DEFAULT NOW(),
     UNIQUE(lead_id, provider_id)
 );

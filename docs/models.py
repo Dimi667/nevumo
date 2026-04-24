@@ -288,12 +288,18 @@ class Lead(Base):
     landing_page: Mapped[Optional[str]] = mapped_column(String)
 
     status: Mapped[str] = mapped_column(String, default="created")
+    cancelled_by: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    status_changed_by: Mapped[str] = mapped_column(Text, server_default="system", default="system")
+    status_changed_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+
     provider_notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     client_notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     __table_args__ = (
+        CheckConstraint("cancelled_by IN ('client', 'provider')", name="ck_leads_cancelled_by"),
+        CheckConstraint("status_changed_by IN ('system', 'client', 'provider')", name="ck_leads_status_changed_by"),
         Index("idx_leads_category", "category_id"),
         Index("idx_leads_city", "city_id"),
         Index("idx_leads_provider", "provider_id"),
@@ -319,7 +325,7 @@ class LeadMatch(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     __table_args__ = (
-        CheckConstraint("status IN ('invited', 'accepted', 'rejected')", name="ck_lead_matches_status"),
+        CheckConstraint("status IN ('invited', 'accepted', 'rejected', 'contacted', 'done', 'cancelled')", name="ck_lead_matches_status"),
         UniqueConstraint("lead_id", "provider_id"),
         Index("idx_lead_matches_lead", "lead_id"),
     )

@@ -14,6 +14,11 @@ import {
 import { useTranslation } from '@/lib/use-translation';
 import ClientLeadDetailModal from '@/components/client/ClientLeadDetailModal';
 
+interface ExtendedClientLead extends ClientLead {
+  cancelled_by?: 'client' | 'provider' | 'system' | null;
+  status_changed_by?: string | null;
+}
+
 type ReviewFormState = {
   rating: number;
   comment: string;
@@ -91,18 +96,54 @@ function formatDate(value: string, locale: string): string {
   }
 }
 
-function getStatusMeta(status: ClientLeadStatus, t: (key: string, fallback?: string) => string): { label: string; className: string } {
+function getStatusMeta(lead: ExtendedClientLead, t: (key: string, fallback?: string) => string): { label: string | null; className: string } {
+  const { status, cancelled_by } = lead;
+
   if (status === 'done') {
     return {
-      label: t('status_completed', 'Completed'),
+      label: t('status_label_done', 'Completed'),
       className: 'bg-green-100 text-green-700',
     };
   }
 
-  if (status === 'rejected' || status === 'expired' || status === 'cancelled') {
+  if (status === 'cancelled') {
+    if (cancelled_by === 'provider') {
+      return {
+        label: t('status_label_cancelled_by_provider', 'Cancelled by specialist'),
+        className: 'bg-gray-100 text-gray-600',
+      };
+    }
     return {
-      label: t('status_rejected', 'Rejected'),
+      label: t('status_label_cancelled_by_client', 'Cancelled'),
       className: 'bg-gray-100 text-gray-600',
+    };
+  }
+
+  if (status === 'rejected') {
+    return {
+      label: t('status_label_cancelled_by_provider', 'Cancelled by specialist'),
+      className: 'bg-gray-100 text-gray-600',
+    };
+  }
+
+  if (status === 'expired') {
+    return {
+      label: null,
+      className: '',
+    };
+  }
+
+  if (status === 'contacted') {
+    return {
+      label: t('status_label_contacted', 'Contact made'),
+      className: 'bg-blue-100 text-blue-700',
+    };
+  }
+
+  if (['created', 'pending_match', 'matched'].includes(status)) {
+    return {
+      label: t('status_label_created', 'Submitted'),
+      className: 'bg-orange-100 text-orange-700',
     };
   }
 
@@ -126,7 +167,7 @@ export default function RequestsClient({ lang }: { lang: string }) {
   }, [searchParams]);
 
   const [activeTab, setActiveTab] = useState<ClientLeadFilterStatus>(getInitialTab);
-  const [leads, setLeads] = useState<ClientLead[]>([]);
+  const [leads, setLeads] = useState<ExtendedClientLead[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -134,7 +175,10 @@ export default function RequestsClient({ lang }: { lang: string }) {
   const [reviewingLeadId, setReviewingLeadId] = useState<string | null>(null);
   const [reviewForm, setReviewForm] = useState<ReviewFormState>({ rating: 5, comment: '' });
   const [submitting, setSubmitting] = useState(false);
-  const [selectedLead, setSelectedLead] = useState<ClientLead | null>(null);
+  const [selectedLead, setSelectedLead] = useState<ExtendedClientLead | null>(null);
+  const [statusUpdating, setStatusUpdating] = useState<string | null>(null);
+  const [confirmingStatus, setConfirmingStatus] = useState<{ leadId: string; status: 'done' | 'cancelled' } | null>(null);
+  const [actionError, setActionError] = useState<Record<string, string>>({});
   const { t } = useTranslation('client_dashboard', lang);
 
   const clearToast = useCallback(() => setToast(null), []);
@@ -152,7 +196,7 @@ export default function RequestsClient({ lang }: { lang: string }) {
       setLoading(true);
       setError(null);
       const response = await getClientLeads(token, status, undefined, undefined, lang);
-      setLeads(response.items);
+      setLeads(response.items as ExtendedClientLead[]);
       setTotal(response.total);
 
       // Auto-open modal from URL param
@@ -208,6 +252,49 @@ export default function RequestsClient({ lang }: { lang: string }) {
       setError(e instanceof Error ? e.message : 'Неуспешно изпращане на отзив.');
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handleStatusUpdate(leadId: string, newStatus: 'contacted' | 'done' | 'cancelled') {
+    const token = getAuthToken();
+    if (!token) {
+      setActionError(prev => ({ ...prev, [leadId]: 'Session expired.' }));
+      return;
+    }
+
+    try {
+      setStatusUpdating(leadId);
+      setActionError(prev => {
+        const next = { ...prev };
+        delete next[leadId];
+        return next;
+      });
+
+      const res = await fetch(`/api/v1/client/leads/${leadId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData?.error?.message || 'Failed to update status');
+      }
+
+      setConfirmingStatus(null);
+      setLeads(prev => prev.map(l =>
+        l.id === leadId
+          ? { ...l, status: newStatus, cancelled_by: newStatus === 'cancelled' ? 'client' : null }
+          : l
+      ));
+      await loadLeads(activeTab);
+    } catch (err) {
+      setActionError(prev => ({ ...prev, [leadId]: err instanceof Error ? err.message : 'Error updating status' }));
+    } finally {
+      setStatusUpdating(null);
     }
   }
 
@@ -271,7 +358,7 @@ export default function RequestsClient({ lang }: { lang: string }) {
       ) : (
         <div className="space-y-4">
           {leads.map((lead) => {
-            const statusMeta = getStatusMeta(lead.status, t);
+            const statusMeta = getStatusMeta(lead, t);
 
             return (
               <div
@@ -295,13 +382,94 @@ export default function RequestsClient({ lang }: { lang: string }) {
                   </div>
                     <div className="flex flex-col items-start gap-2 lg:items-end">
                       <div className="flex items-center gap-2">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusMeta.className}`}>
-                          {statusMeta.label}
-                        </span>
+                        {statusMeta.label && (
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusMeta.className}`}>
+                            {statusMeta.label}
+                          </span>
+                        )}
                       </div>
                       <span className="text-sm text-gray-500">{formatDate(lead.created_at, lang)}</span>
                     </div>
                 </div>
+
+                {/* Status Action Buttons */}
+                {['created', 'pending_match', 'matched', 'contacted'].includes(lead.status) && (
+                  <div className="pt-2" onClick={(e) => e.stopPropagation()}>
+                    {confirmingStatus?.leadId === lead.id ? (
+                      <div className="flex flex-wrap items-center gap-3 bg-orange-50 p-3 rounded-lg border border-orange-100">
+                        <p className="text-sm font-medium text-orange-800">
+                          {confirmingStatus.status === 'done'
+                            ? t('status_confirm_done', 'Are you sure the service is completed?')
+                            : t('status_confirm_cancel', 'Are you sure you want to cancel this request?')}
+                        </p>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            disabled={statusUpdating === lead.id}
+                            onClick={() => handleStatusUpdate(lead.id, confirmingStatus.status)}
+                            className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold rounded-md transition-colors disabled:opacity-50"
+                          >
+                            {t('status_confirm_yes', 'Yes')}
+                          </button>
+                          <button
+                            type="button"
+                            disabled={statusUpdating === lead.id}
+                            onClick={() => setConfirmingStatus(null)}
+                            className="px-3 py-1.5 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 text-xs font-semibold rounded-md transition-colors disabled:opacity-50"
+                          >
+                            {t('status_confirm_no', 'No')}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {['created', 'pending_match', 'matched'].includes(lead.status) && (
+                          <>
+                            <button
+                              type="button"
+                              disabled={statusUpdating === lead.id}
+                              onClick={() => handleStatusUpdate(lead.id, 'contacted')}
+                              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+                            >
+                              {t('status_btn_contacted', 'The specialist contacted me')}
+                            </button>
+                            <button
+                              type="button"
+                              disabled={statusUpdating === lead.id}
+                              onClick={() => setConfirmingStatus({ leadId: lead.id, status: 'cancelled' })}
+                              className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+                            >
+                              {t('status_btn_cancel', 'Cancel request')}
+                            </button>
+                          </>
+                        )}
+                        {lead.status === 'contacted' && (
+                          <>
+                            <button
+                              type="button"
+                              disabled={statusUpdating === lead.id}
+                              onClick={() => setConfirmingStatus({ leadId: lead.id, status: 'done' })}
+                              className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+                            >
+                              {t('status_btn_done', 'Mark as completed')}
+                            </button>
+                            <button
+                              type="button"
+                              disabled={statusUpdating === lead.id}
+                              onClick={() => setConfirmingStatus({ leadId: lead.id, status: 'cancelled' })}
+                              className="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+                            >
+                              {t('status_btn_cancel', 'Cancel request')}
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
+                    {actionError[lead.id] && (
+                      <p className="mt-2 text-xs text-red-600 font-medium">{actionError[lead.id]}</p>
+                    )}
+                  </div>
+                )}
 
                 {(lead.status === 'done' && !lead.has_review && lead.provider_id !== null) && (
                   <div className="space-y-3">

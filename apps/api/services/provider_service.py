@@ -222,24 +222,24 @@ def get_image_url(provider_id: UUID, ext: str) -> str:
 # Lead status state machine
 # ---------------------------------------------------------------------------
 
-VALID_TRANSITIONS: dict[str, list[str]] = {
-    "new": ["contacted", "rejected"],
-    "contacted": ["done", "rejected"],
-    "done": [],       # terminal
-    "rejected": [],   # terminal
+VALID_TRANSITIONS = {
+    'new': ['contacted', 'cancelled'],
+    'contacted': ['cancelled'],
 }
 
 
 def get_ui_status(lead: Lead, match: Optional[LeadMatch] = None) -> str:
-    """Map DB status to UI status."""
-    if match:
-        if match.status in ("contacted", "done", "rejected"):
-            return match.status
-        return "new"  # "invited" → "new" in UI
-    else:
-        if lead.status in ("contacted", "done", "rejected"):
+    if lead.status in ("cancelled", "done", "expired", "rejected"):
+        if lead.status in ("cancelled", "done"):
             return lead.status
-        return "new"  # "created"/"pending_match"/"matched" → "new" in UI
+        return "new"
+    if lead.status == "contacted":
+        return "contacted"
+    if match:
+        if match.status in ("contacted", "done", "cancelled"):
+            return match.status
+        return "new"
+    return "new"
 
 
 def change_lead_status(
@@ -278,14 +278,22 @@ def change_lead_status(
     if new_status not in allowed:
         raise NevumoException(
             400,
-            "INVALID_STATUS_TRANSITION",
+            "INVALID_TRANSITION",
             f"Cannot change from {current_status} to {new_status}",
         )
 
-    if match:
+    # Update lead status tracking
+    lead.status = new_status
+    lead.status_changed_by = "provider"
+    lead.status_changed_at = datetime.utcnow()
+
+    if new_status == "cancelled":
+        lead.cancelled_by = "provider"
+    elif new_status == "contacted":
+        lead.cancelled_by = None
+
+    if match and new_status != "cancelled":
         match.status = new_status
-    else:
-        lead.status = new_status
 
     db.commit()
     return {"lead_id": lead_id_str, "status": new_status}
@@ -1146,6 +1154,7 @@ def get_provider_leads(
                 "status": get_ui_status(lead, match),
                 "source": lead.source,
                 "provider_notes": lead.provider_notes,
+                "cancelled_by": lead.cancelled_by,
                 "created_at": lead.created_at.isoformat(),
             }
         )

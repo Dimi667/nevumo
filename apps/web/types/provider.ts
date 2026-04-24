@@ -1,5 +1,5 @@
 export type LeadStatusQuery = 'all' | 'new' | 'contacted' | 'done' | 'rejected';
-export type LeadStatus = 'new' | 'created' | 'contacted' | 'done' | 'rejected';
+export type LeadStatus = 'new' | 'created' | 'pending_match' | 'matched' | 'contacted' | 'done' | 'rejected' | 'cancelled' | 'expired';
 export type AvailabilityStatus = 'active' | 'busy' | 'offline';
 export type PriceType = 'fixed' | 'hourly' | 'request' | 'per_sqm';
 

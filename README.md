@@ -12,7 +12,7 @@ A multilingual services marketplace platform where providers publish services an
 | Database | PostgreSQL |
 | Cache | Redis |
 | Shared UI | packages/ui |
-| i18n | 32 languages (default: `en`) |
+| i18n | 34 languages (default: `en`) |
 
 ## Monorepo Structure
 
@@ -48,10 +48,10 @@ nevumo/
 
 ## Setup
 
-### 1. Clone & install dependencies
+### 1. Install dependencies
 
 ```sh
-git clone https://github.com/dimitardimitrov/nevumo.git
+# Project is archived locally on external SSD (not on GitHub)
 cd nevumo
 npm install
 ```
@@ -93,7 +93,7 @@ npm run dev
 npm run dev --filter=web
 
 # Backend only
-cd apps/api && uvicorn main:app --reload --port 8000
+cd apps/api && uvicorn apps.api.main:app --reload --port 8000
 ```
 
 ## Docker & Containerization
@@ -143,6 +143,8 @@ docker compose ps
 
 ### Important Notes
 
+**Next.js 16 Routing**: This project uses `proxy.ts` instead of `middleware.ts` to comply with Next.js 16 requirements.
+
 **Alembic Migration Status:** The database currently has multiple Alembic head revisions. When creating new migrations, you may encounter a "Multiple head revisions" error. To resolve this, you'll need to merge the heads before proceeding with new schema changes:
 
 ```sh
@@ -171,6 +173,7 @@ docker compose exec api alembic upgrade head
 | Task | Command |
 |------|---------|
 | **Clear Redis Cache** | `docker exec nevumo-redis redis-cli FLUSHALL` |
+| **Flush translation cache** | `docker exec nevumo-redis redis-cli KEYS "translations:*" | xargs docker exec -i nevumo-redis redis-cli DEL` |
 
 ### Backend Development
 | Task | Command |
@@ -186,7 +189,7 @@ docker compose exec api alembic upgrade head
 
 ## Supported Languages
 
-`bg` `cs` `da` `de` `el` `en` `es` `et` `fi` `fr` `ga` `hr` `hu` `it` `lt` `lv` `mk` `mt` `nl` `no` `pl` `pt` `pt-PT` `ro` `sk` `sl` `sq` `sr` `sv` `tr`
+`bg` `cs` `da` `de` `el` `en` `es` `et` `fi` `fr` `ga` `hr` `hu` `is` `it` `lb` `lt` `lv` `mk` `mt` `nl` `no` `pl` `pt` `pt-PT` `ro` `ru` `sk` `sl` `sq` `sr` `sv` `tr` `uk`
 
 ## Available Scripts
 

@@ -496,8 +496,19 @@ class LeadStatusUpdateRequest(BaseModel):
     @field_validator("status")
     @classmethod
     def validate_lead_status(cls, v: str) -> str:
-        if v not in ("contacted", "done", "rejected"):
-            raise ValueError("status must be contacted, done, or rejected")
+        if v not in ("contacted", "cancelled"):
+            raise ValueError("status must be contacted or cancelled")
+        return v
+
+
+class ClientLeadStatusUpdateRequest(BaseModel):
+    status: str
+
+    @field_validator("status")
+    @classmethod
+    def validate_lead_status(cls, v: str) -> str:
+        if v not in ("contacted", "done", "cancelled"):
+            raise ValueError("status must be contacted, done, or cancelled")
         return v
 
 
@@ -600,6 +611,8 @@ class ClientLeadListItem(BaseModel):
     created_at: datetime
     has_review: bool
     client_notes: Optional[str] = None
+    cancelled_by: Optional[str] = None
+    status_changed_by: Optional[str] = None
 
 
 class ClientLeadsData(BaseModel):

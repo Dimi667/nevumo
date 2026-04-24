@@ -9,6 +9,7 @@ interface LeadRowProps {
   onContact: (id: string) => void;
   onReject: (id: string) => void;
   onView?: (lead: Lead) => void;
+  updatingIds: Set<string>;
 }
 
 function getSourceLabel(source: string, t: (key: string, fallback?: string) => string): string {
@@ -28,10 +29,25 @@ function getSourceLabel(source: string, t: (key: string, fallback?: string) => s
   }
 }
 
-export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowProps) {
+export default function LeadRow({ lead, onContact, onReject, onView, updatingIds }: LeadRowProps) {
   const { t, lang } = useDashboardI18n();
-  const isTerminal = lead.status === 'done' || lead.status === 'rejected';
+  const isTerminal = lead.status === 'done' || lead.status === 'rejected' || (lead.status as string) === 'cancelled';
   const isContacted = lead.status === 'contacted';
+  const isUpdating = updatingIds.has(lead.id);
+
+  const getStatusMeta = (status: string, cancelledBy?: string | null) => {
+    if (status === 'cancelled') {
+      return {
+        label: cancelledBy === 'client'
+          ? t('status_label_cancelled_by_client', 'Client cancelled')
+          : t('status_label_cancelled_by_provider', 'Cancelled'),
+        className: 'bg-red-50 text-red-600'
+      };
+    }
+    return null;
+  };
+
+  const statusMeta = getStatusMeta(lead.status, (lead as any).cancelled_by);
 
   const handleRowClick = () => {
     onView?.(lead);
@@ -65,7 +81,13 @@ export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowPr
         )}
       </td>
       <td className="px-4 py-3">
-        <StatusBadge status={lead.status} />
+        {statusMeta ? (
+          <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${statusMeta.className}`}>
+            {statusMeta.label}
+          </span>
+        ) : (
+          <StatusBadge status={lead.status} />
+        )}
       </td>
       <td className="px-4 py-3">
         <div className="flex items-center gap-2">
@@ -92,20 +114,10 @@ export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowPr
                     e.stopPropagation();
                     onContact(lead.id);
                   }}
-                  className="px-3 py-1 text-xs font-medium bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+                  disabled={isUpdating}
+                  className="px-3 py-1 text-xs font-medium bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {t('btn_contact', 'Contact')}
-                </button>
-              )}
-              {isContacted && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onContact(lead.id);
-                  }}
-                  className="px-3 py-1 text-xs font-medium bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
-                >
-                  {t('status_done', 'Done')}
                 </button>
               )}
               <button
@@ -113,7 +125,8 @@ export default function LeadRow({ lead, onContact, onReject, onView }: LeadRowPr
                   e.stopPropagation();
                   onReject(lead.id);
                 }}
-                className="px-3 py-1 text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                disabled={isUpdating}
+                className="px-3 py-1 text-xs font-medium border border-gray-300 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {t('btn_reject', 'Reject')}
               </button>
