@@ -100,9 +100,9 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `2,788` rows in `translations` for homepage/category namespaces across 34 languages
   - `350` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services, lead search & notes, lead details modal)
   - `21` city-page keys per language (hero, search, CTA, empty state, how it works, SEO)
-  - `11,696` rows in `translations` for provider_dashboard namespace across 34 languages
+  - `11,866` rows in `translations` for provider_dashboard namespace across 34 languages
   - `714` rows in `translations` for city namespace across 34 languages
-  - `2,686` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 10 keys × 34 languages = 340 rows)
+  - `2,856` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 10 keys × 34 languages = 340 rows)
 
 ---
 
@@ -159,6 +159,19 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Delete Account — GDPR-compliant (April 25, 2026)**
+  - Backend: `DELETE /api/v1/auth/account` (JWT required) in `apps/api/routes/auth.py` + `apps/api/services/auth_service.py`
+  - Deletion order (single DB transaction):
+    1. Nullify `leads.client_id` WHERE `client_id = user.id`
+    2. If provider exists: nullify `leads.provider_id`, delete `lead_matches`, `provider_cities`, `services`, then `providers` record
+    3. Delete `user` record (cascade: `password_reset_tokens`, `magic_link_tokens`, `pending_lead_claims`, `reviews`)
+  - Handles all three cases: client-only, provider-only, both simultaneously
+  - Frontend: inline confirmation panel (no modal) in both:
+    - `apps/web/app/[lang]/provider/dashboard/settings/page.tsx`
+    - `apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx`
+  - On success: `clearAuth()` + localStorage cleanup + redirect to `/${lang}`
+  - Translations: 5 keys × 34 languages × 2 namespaces (`provider_dashboard`, `client_dashboard`) = 340 rows seeded
+  - Translation keys: `delete_account_btn`, `delete_account_title`, `delete_account_warning`, `delete_account_confirm`, `delete_account_cancel`
 - **Frontend Next.js 16 Compliance (April 21, 2026)** — Migrated from `middleware.ts` to `proxy.ts`:
   - **Reason**: Next.js 16 deprecated the `middleware.ts` convention in favor of `proxy.ts` for improved routing control.
   - **Fix**: Renamed `middleware.ts` to `proxy.ts` and updated the export to `export default function proxy`.

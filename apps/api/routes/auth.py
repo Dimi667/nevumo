@@ -28,6 +28,7 @@ from apps.api.schemas import (
 from apps.api.services.auth_service import (
     check_rate_limit,
     create_jwt,
+    delete_user_account,
     generate_reset_token,
     get_dummy_hash,
     hash_password,
@@ -410,3 +411,14 @@ async def magic_link_auth(
         "token": token,
         "user": {"id": str(user.id), "email": user.email, "role": user.role},
     })
+
+
+@router.delete("/account")
+async def delete_account(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> JSONResponse:
+    result = delete_user_account(db, current_user)
+    if result["success"]:
+        return JSONResponse(status_code=200, content=result)
+    return JSONResponse(status_code=500, content=result)

@@ -244,6 +244,33 @@ GET /api/v1/auth/register/slug/check?slug=devs&city_slug=sofia&category_slug=mas
 
 ---
 
+## DELETE /api/v1/auth/account
+
+### Auth
+Bearer JWT token required (Authorization header)
+
+### Body
+None
+
+### Response — success
+{ "success": true, "data": { "message": "account_deleted" } }
+
+### Response — error
+{ "success": false, "error": { "code": "DELETE_FAILED", "message": "..." } }
+
+### Description
+GDPR-compliant account deletion. Executed in a single DB transaction:
+1. Nullify leads.client_id WHERE client_id = user.id
+2. If provider exists: nullify leads.provider_id → delete lead_matches → delete provider_cities → delete services → delete provider
+3. Delete user record (cascade handles tokens, claims, reviews)
+Handles client-only, provider-only, and dual-role accounts.
+
+### Errors
+- 401 UNAUTHORIZED — missing or invalid JWT
+- 500 DELETE_FAILED — transaction failed, rolled back
+
+---
+
 ## Auth Error Codes
 
 | Code | Status | Meaning |

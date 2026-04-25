@@ -10,7 +10,7 @@ from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
 from apps.api.config import settings
-from apps.api.models import AuthRateLimit, PendingLeadClaim, Lead
+from apps.api.models import AuthRateLimit, Lead, LeadMatch, PendingLeadClaim, Provider, ProviderCity, Service, User
 
 logger = logging.getLogger(__name__)
 
@@ -138,3 +138,29 @@ def link_pending_claims(user_id: UUID, email: str, phone: Optional[str], db: Ses
         logger.error(f"Error linking pending claims for user {user_id}: {e}")
         db.rollback()
         return 0
+
+
+def delete_user_account(db: Session, user: User) -> dict:
+    """
+    GDPR-compliant account deletion.
+    Runs all steps in a single DB transaction; rolls back on any failure.
+    """
+    try:
+        db.query(Lead).filter(Lead.client_id == user.id).update({"client_id": None})
+
+        provider = db.query(Provider).filter(Provider.user_id == user.id).first()
+        if provider:
+            db.query(Lead).filter(Lead.provider_id == provider.id).update({"provider_id": None})
+            db.query(Service).filter(Service.provider_id == provider.id).delete()
+            db.query(ProviderCity).filter(ProviderCity.provider_id == provider.id).delete()
+            db.query(LeadMatch).filter(LeadMatch.provider_id == provider.id).delete()
+            db.delete(provider)
+
+        db.delete(user)
+
+        db.commit()
+        return {"success": True, "data": {"message": "account_deleted"}}
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Account deletion failed for user {user.id}: {e}")
+        return {"success": False, "error": {"code": "DELETE_FAILED", "message": str(e)}}

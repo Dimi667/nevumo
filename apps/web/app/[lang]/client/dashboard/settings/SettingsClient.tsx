@@ -23,6 +23,8 @@ export default function SettingsClient({ lang }: { lang: string }) {
   const [phoneValue, setPhoneValue] = useState('');
   const [savingPhone, setSavingPhone] = useState(false);
   const [phoneSaved, setPhoneSaved] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
   const { t } = useTranslation('client_dashboard', lang);
   const { phone: savedPhone, savePhone } = usePhone();
 
@@ -114,6 +116,30 @@ export default function SettingsClient({ lang }: { lang: string }) {
   function handleLogout() {
     clearAuth();
     router.push(`/${lang}/auth`);
+  }
+
+  async function handleDeleteAccount() {
+    const token = getAuthToken();
+    if (!token) {
+      setDeleteError('Could not delete account. Please try again.');
+      return;
+    }
+    try {
+      const response = await fetch('/api/v1/auth/account', {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.ok) {
+        clearAuth();
+        localStorage.removeItem('nevumo_selected_category');
+        localStorage.removeItem('nevumo_intent');
+        router.push(`/${lang}`);
+      } else {
+        setDeleteError('Could not delete account. Please try again.');
+      }
+    } catch {
+      setDeleteError('Could not delete account. Please try again.');
+    }
   }
 
   return (
@@ -232,6 +258,53 @@ export default function SettingsClient({ lang }: { lang: string }) {
         >
           {t('nav_logout', 'Logout')}
         </button>
+      </div>
+
+      <hr className="border-red-100 my-6" />
+
+      {/* Delete Account */}
+      <div className="bg-white rounded-xl border border-red-200 p-5 space-y-3">
+        <h3 className="text-red-600 font-semibold">{t('delete_account_title', 'Delete Account')}</h3>
+        {!showDeleteConfirm ? (
+          <>
+            <p className="text-sm text-gray-500 mt-1 mb-3">
+              {t('delete_account_warning', 'This action cannot be undone. All your data will be permanently removed.')}
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowDeleteConfirm(true)}
+              className="w-full border border-red-500 text-red-500 rounded-lg py-2 px-4 hover:bg-red-50 transition-colors"
+            >
+              {t('delete_account_btn', 'Delete Account')}
+            </button>
+          </>
+        ) : (
+          <div>
+            <p className="text-sm text-gray-500 mb-3">
+              {t('delete_account_warning', 'This action cannot be undone. All your data will be permanently removed.')}
+            </p>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowDeleteConfirm(false);
+                  setDeleteError('');
+                }}
+                className="flex-1 border border-gray-300 text-gray-600 rounded-lg py-2 hover:bg-gray-50"
+              >
+                {t('delete_account_cancel', 'Cancel')}
+              </button>
+              <button
+                type="button"
+                onClick={handleDeleteAccount}
+                className="flex-1 bg-red-600 text-white rounded-lg py-2 hover:bg-red-700"
+              >
+                {t('delete_account_confirm', 'Confirm Deletion')}
+              </button>
+            </div>
+            {deleteError && <p className="text-red-500 text-sm mt-2">{deleteError}</p>}
+          </div>
+        )}
       </div>
     </div>
   );
