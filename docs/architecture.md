@@ -72,6 +72,7 @@ This document reflects the major architectural optimization performed in April 2
   - ClientLeadsQueryParams schema: added lang field (was causing 422 without it)
   - Frontend passes lang to both API calls
 - **Lead Rate Limiting UX (April 2026)**: The lead submission flow now gracefully handles rate limiting by returning the ID of the last successful lead. This allows users to "Claim" their request via email even if they hit the rate limit on a subsequent attempt, significantly improving UX for edge cases.
+- **Client Components in Server Pages (April 2026)**: Interactive elements that require browser APIs (e.g., `IntersectionObserver`, DOM manipulation) must be extracted into dedicated `'use client'` components. Inline `<script>` tags with `dangerouslySetInnerHTML` that mutate DOM outside React cause hydration mismatches. Use `useRef`, `useEffect`, and an `isMounted` state pattern to ensure client-only behavior while preserving SSR output. Reference implementation: `apps/web/components/homepage/MobileStickyCTA.tsx`.
 - **Namespaced Translations Validator**: Implemented a mandatory `namespace.key` pattern at the ORM layer to ensure all UI copy is properly organized and to avoid cache conflicts.
 - **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.
 

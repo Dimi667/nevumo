@@ -6,6 +6,7 @@ import Link from 'next/link';
 import RotatingCategory from '@/components/homepage/RotatingCategory';
 import { AuthIntentButton } from './AuthIntentButton';
 import CategoryIntentButton from '@/components/homepage/CategoryIntentButton';
+import MobileStickyCTA from '@/components/homepage/MobileStickyCTA';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -272,7 +273,7 @@ export default async function Homepage({ params }: PageProps) {
       </footer>
 
       {/* MOBILE STICKY CTA */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50 transition-transform duration-300" id="mobile-sticky-cta">
+      <MobileStickyCTA>
         <AuthIntentButton
           href={`/${normalizedLang}/auth`}
           intent="provider"
@@ -280,33 +281,7 @@ export default async function Homepage({ params }: PageProps) {
         >
           {t(homepageT, 'cta_hero', 'Start for free')}
         </AuthIntentButton>
-      </div>
-
-      <script dangerouslySetInnerHTML={{
-        __html: `
-          if (typeof window !== 'undefined') {
-            const mobileStickyCTA = document.getElementById('mobile-sticky-cta');
-            const secondCTA = document.getElementById('second-cta');
-            
-            if (mobileStickyCTA && secondCTA) {
-              const observer = new IntersectionObserver(
-                (entries) => {
-                  entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                      mobileStickyCTA.style.transform = 'translateY(100%)';
-                    } else {
-                      mobileStickyCTA.style.transform = 'translateY(0)';
-                    }
-                  });
-                },
-                { threshold: 0.1 }
-              );
-              
-              observer.observe(secondCTA);
-            }
-          }
-        `
-      }} />
+      </MobileStickyCTA>
     </div>
   );
 }
