@@ -62,3 +62,8 @@ env/
 *.key
 secrets/
 apps/api/uploads/provider_images/*
+
+# Playwright
+playwright-report/
+test-results/
+tests/nevumo_lead_status_test.spec.ts
