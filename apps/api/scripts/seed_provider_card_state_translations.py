@@ -1,0 +1,217 @@
+import os
+import psycopg2
+
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is not set")
+
+TRANSLATIONS = {
+    "category.provider_verified_specialist": {
+        "bg": "Проверен специалист",
+        "cs": "Ověřený specialista",
+        "da": "Verificeret specialist",
+        "de": "Geprüfter Spezialist",
+        "el": "Επαληθευμένος ειδικός",
+        "en": "Verified specialist",
+        "es": "Especialista verificado",
+        "et": "Kontrollitud spetsialist",
+        "fi": "Varmennettu asiantuntija",
+        "fr": "Spécialiste vérifié",
+        "ga": "Saineolaí fíoraithe",
+        "hr": "Provjereni stručnjak",
+        "hu": "Ellenőrzött szakember",
+        "is": "Staðfestur sérfræðingur",
+        "it": "Specialista verificato",
+        "lb": "Geprüfte Spezialist",
+        "lt": "Patikrintas specialistas",
+        "lv": "Pārbaudīts speciālists",
+        "mk": "Проверен специјалист",
+        "mt": "Speċjalista verifikat",
+        "nl": "Geverifieerde specialist",
+        "no": "Verifisert spesialist",
+        "pl": "Zweryfikowany specjalista",
+        "pt": "Especialista verificado",
+        "pt-PT": "Especialista verificado",
+        "ro": "Specialist verificat",
+        "ru": "Проверенный специалист",
+        "sk": "Overený špecialista",
+        "sl": "Preverjen strokovnjak",
+        "sq": "Specialist i verifikuar",
+        "sr": "Верификовани стручњак",
+        "sv": "Verifierad specialist",
+        "tr": "Onaylı uzman",
+        "uk": "Перевірений спеціаліст",
+    },
+    "category.provider_free_no_obligation": {
+        "bg": "Безплатно • Без ангажимент",
+        "cs": "Zdarma • Bez závazků",
+        "da": "Gratis • Ingen forpligtelse",
+        "de": "Kostenlos • Unverbindlich",
+        "el": "Δωρεάν • Χωρίς δέσμευση",
+        "en": "Free • No obligation",
+        "es": "Gratis • Sin compromiso",
+        "et": "Tasuta • Kohustuseta",
+        "fi": "Ilmainen • Ei sitoumuksia",
+        "fr": "Gratuit • Sans engagement",
+        "ga": "Saor in aisce • Gan oibleagáid",
+        "hr": "Besplatno • Bez obveza",
+        "hu": "Ingyenes • Kötelezettség nélkül",
+        "is": "Ókeypis • Engar skuldbindingar",
+        "it": "Gratuito • Senza impegno",
+        "lb": "Gratis • Ouni Verpflichtung",
+        "lt": "Nemokama • Jokių įsipareigojimų",
+        "lv": "Bezmaksas • Bez saistībām",
+        "mk": "Бесплатно • Без обврски",
+        "mt": "Bla ħlas • Bla obbligu",
+        "nl": "Gratis • Geen verplichtingen",
+        "no": "Gratis • Ingen forpliktelse",
+        "pl": "Bezpłatnie • Bez zobowiązań",
+        "pt": "Gratuito • Sem compromisso",
+        "pt-PT": "Gratuito • Sem compromisso",
+        "ro": "Gratuit • Fără obligații",
+        "ru": "Бесплатно • Без обязательств",
+        "sk": "Zadarmo • Bez záväzkov",
+        "sl": "Brezplačno • Brez obveznosti",
+        "sq": "Falas • Pa detyrime",
+        "sr": "Бесплатно • Без обавеза",
+        "sv": "Gratis • Ingen förpliktelse",
+        "tr": "Ücretsiz • Yükümlülük yok",
+        "uk": "Безкоштовно • Без зобов'язань",
+    },
+    "category.provider_people_sought": {
+        "bg": "души потърсиха този специалист",
+        "cs": "lidí hledalo tohoto specialistu",
+        "da": "personer søgte denne specialist",
+        "de": "Personen haben diesen Spezialisten gesucht",
+        "el": "άτομα αναζήτησαν αυτόν τον ειδικό",
+        "en": "people sought this specialist",
+        "es": "personas buscaron este especialista",
+        "et": "inimest otsis seda spetsialisti",
+        "fi": "henkilöä etsi tätä asiantuntijaa",
+        "fr": "personnes ont recherché ce spécialiste",
+        "ga": "duine a chuardaigh an saineolaí seo",
+        "hr": "osoba tražilo ovog stručnjaka",
+        "hu": "ember kereste ezt a szakembert",
+        "is": "einstaklingar leituðu að þessum sérfræðingi",
+        "it": "persone hanno cercato questo specialista",
+        "lb": "Leit hunn dëse Spezialist gesicht",
+        "lt": "žmonių ieškojo šio specialisto",
+        "lv": "cilvēki meklēja šo speciālistu",
+        "mk": "луѓе го побараа овој специјалист",
+        "mt": "nies fittxew dan l-ispeċjalista",
+        "nl": "mensen zochten deze specialist",
+        "no": "personer søkte denne spesialisten",
+        "pl": "osób szukało tego specjalisty",
+        "pt": "pessoas buscaram este especialista",
+        "pt-PT": "pessoas procuraram este especialista",
+        "ro": "persoane au căutat acest specialist",
+        "ru": "человек искали этого специалиста",
+        "sk": "ľudí hľadalo tohto špecialistu",
+        "sl": "ljudi je iskalo tega strokovnjaka",
+        "sq": "persona kërkuan këtë specialist",
+        "sr": "људи су тражили овог стручњака",
+        "sv": "personer sökte denna specialist",
+        "tr": "kişi bu uzmanı aradı",
+        "uk": "людей шукали цього спеціаліста",
+    },
+    "category.provider_recently_requested": {
+        "bg": "наскоро направи заявка",
+        "cs": "nedávno odeslal požadavek",
+        "da": "anmodede for nylig",
+        "de": "hat kürzlich eine Anfrage gestellt",
+        "el": "υπέβαλε πρόσφατα αίτημα",
+        "en": "recently made a request",
+        "es": "solicitó recientemente",
+        "et": "esitas hiljuti päringu",
+        "fi": "teki äskettäin pyynnön",
+        "fr": "a récemment fait une demande",
+        "ga": "rinne iarratas le déanaí",
+        "hr": "nedavno je poslao upit",
+        "hu": "nemrég küldött megkeresést",
+        "is": "sendi nýlega beiðni",
+        "it": "ha recentemente inviato una richiesta",
+        "lb": "huet kuerzlech eng Ufro gemaach",
+        "lt": "neseniai pateikė užklausą",
+        "lv": "nesen iesniedza pieprasījumu",
+        "mk": "неодамна направи барање",
+        "mt": "għamel talba reċentement",
+        "nl": "heeft onlangs een aanvraag gedaan",
+        "no": "sendte nylig en forespørsel",
+        "pl": "niedawno wysłał zapytanie",
+        "pt": "fez uma solicitação recentemente",
+        "pt-PT": "fez um pedido recentemente",
+        "ro": "a făcut recent o solicitare",
+        "ru": "недавно сделал заявку",
+        "sk": "nedávno odoslal požiadavku",
+        "sl": "je nedavno poslal povpraševanje",
+        "sq": "bëri një kërkesë kohët e fundit",
+        "sr": "недавно је поднео захтев",
+        "sv": "skickade nyligen en förfrågan",
+        "tr": "yakın zamanda bir talep gönderdi",
+        "uk": "нещодавно надіслав запит",
+    },
+    "category.provider_reviews": {
+        "bg": "отзива",
+        "cs": "recenzí",
+        "da": "anmeldelser",
+        "de": "Bewertungen",
+        "el": "αξιολογήσεις",
+        "en": "reviews",
+        "es": "reseñas",
+        "et": "arvustust",
+        "fi": "arvostelua",
+        "fr": "avis",
+        "ga": "léirmheasanna",
+        "hr": "recenzija",
+        "hu": "vélemény",
+        "is": "umsagnir",
+        "it": "recensioni",
+        "lb": "Bewäertungen",
+        "lt": "atsiliepimų",
+        "lv": "atsauksmju",
+        "mk": "рецензии",
+        "mt": "recensjonijiet",
+        "nl": "beoordelingen",
+        "no": "anmeldelser",
+        "pl": "opinii",
+        "pt": "avaliações",
+        "pt-PT": "avaliações",
+        "ro": "recenzii",
+        "ru": "отзывов",
+        "sk": "recenzií",
+        "sl": "ocen",
+        "sq": "komente",
+        "sr": "рецензија",
+        "sv": "recensioner",
+        "tr": "yorum",
+        "uk": "відгуків",
+    },
+}
+
+
+def main() -> None:
+    conn = psycopg2.connect(DATABASE_URL)
+    cur = conn.cursor()
+
+    rows: list[tuple[str, str, str]] = []
+    for key, langs in TRANSLATIONS.items():
+        for lang, value in langs.items():
+            rows.append((lang, key, value))
+
+    query = """
+        INSERT INTO translations (lang, key, value)
+        VALUES (%s, %s, %s)
+        ON CONFLICT (lang, key) DO UPDATE SET value = EXCLUDED.value
+    """
+
+    cur.executemany(query, rows)
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    print(f"Inserted/updated {len(rows)} translations.")
+
+
+if __name__ == "__main__":
+    main()

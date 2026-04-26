@@ -113,7 +113,8 @@ def get_city_leads_count(city_id: int, db: Session) -> int:
 
 def _get_public_client_name(client_name: Optional[str]) -> str:
     if client_name and client_name.strip():
-        return client_name.strip()
+        # Return only the first name (first word)
+        return client_name.strip().split()[0]
     return "Client"
 
 

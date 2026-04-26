@@ -243,6 +243,30 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - SEO copy updated: seo_cleaning_h3_1, seo_cleaning_p1, seo_cleaning_p2
     now use 'specialist' instead of 'company/firm' across all 34 languages
     (102 rows upserted via update_cleaning_seo_translations.py)
+- **Provider Card 4-State System (April 2026)** — Category/city listing page provider cards now render dynamically based on provider maturity:
+  - **4 states implemented** in `apps/web/app/[lang]/[city]/[category]/page.tsx`:
+    - State 1 (jobs=0, leads=0, rating=0): "✓ Проверен специалист • Безплатна заявка • Без ангажимент" + "✓ Директен контакт"
+    - State 2 (leads>0, jobs=0, rating=0): "{N} души потърсиха този специалист" + "✓ Директен контакт"
+    - State 3 (jobs>0, rating=0): "✅ {N} изпълнени задачи" + "⚡ {Име} наскоро направи заявка" (само ако < 90 дни) + "✓ Директен контакт"
+    - State 4 (jobs>0, rating>0): "⭐ рейтинг • {N} ревюта" + "✅ {N} изпълнени задачи" + "⚡ {Име} наскоро направи заявка" (само ако < 90 дни) + "✓ Директен контакт"
+  - **EnrichedProvider** extended with: `leadsReceived`, `reviewCount`, `latestLeadPreviewClientName`, `services[]`
+  - **Services display** per card: до 2 услуги с цени (formatPrice helper: fixed/hourly/per_sqm/request), описание на услугата (line-clamp-1 ако има), "+ {n} още услуги" ако има повече от 2. Fallback текст само ако нито една услуга няма описание.
+  - **Backend fix**: `_get_public_client_name()` в `apps/api/services/provider_service.py` вече връща само първото име (split()[0])
+  - **Translation keys seeded** (namespace: category, 34 езика):
+    - `provider_verified_specialist` — "Verified specialist"
+    - `provider_free_no_obligation` — "Free request • No obligation"
+    - `provider_people_sought` — "people sought this specialist"
+    - `provider_recently_requested` — "recently made a request"
+    - `provider_reviews` — "reviews"
+    - `provider_on_request` — "On request"
+    - `provider_more_services` — "and {n} more services"
+    - `provider_desc_fallback` — "Send a free request. Response within 30 minutes."
+  - **Redis cache key pattern**: `trans:{lang}:{namespace}` (НЕ `translations:*`) — важно за flush команди
+  - **Seed scripts created**:
+    - `apps/api/scripts/seed_provider_card_state_translations.py`
+    - `apps/api/scripts/seed_provider_card_fixes.py`
+    - `apps/api/scripts/seed_provider_more_services.py`
+    - `apps/api/scripts/seed_provider_on_request.py`
 - **Category Page Lead Form Redesign** — Converted LeadForm to marketplace broadcast model:
   - Pioneer framing banner when no providers: "Be the first to request this service in your area" / "Providers joining Nevumo will see your request and contact you"
   - How it works 3-step section (DB-backed translations)

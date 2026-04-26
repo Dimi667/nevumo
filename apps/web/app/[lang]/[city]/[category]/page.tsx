@@ -29,6 +29,15 @@ interface CategoryContent {
   faq: Array<{ question: string; answer: string }>;
 }
 
+interface ProviderService {
+  id: string;
+  title: string;
+  priceType: string | null;
+  basePrice: number | null;
+  currency: string;
+  description: string | null;
+}
+
 interface EnrichedProvider {
   id: string;
   slug: string;
@@ -37,7 +46,11 @@ interface EnrichedProvider {
   profileImageUrl: string | null;
   description: string | null;
   jobsCompleted: number;
+  leadsReceived: number;
+  reviewCount: number;
   latestLeadPreviewCreatedAt: string | null;
+  latestLeadPreviewClientName: string | null;
+  services: ProviderService[];
 }
 
 interface ProviderCardTexts {
@@ -46,6 +59,13 @@ interface ProviderCardTexts {
   lastRequest: string;
   directContact: string;
   sendRequest: string;
+  verifiedSpecialist: string;
+  freeNoObligation: string;
+  peopleSought: string;
+  recentlyRequested: string;
+  reviews: string;
+  onRequest: string;
+  moreServices: string;
 }
 
 function getApiSlug(category: string): ApiCategorySlug {
@@ -54,6 +74,14 @@ function getApiSlug(category: string): ApiCategorySlug {
 
 function getCategoryTranslationKey(category: string): CategoryKey {
   return category as CategoryKey;
+}
+
+function isWithin90Days(dateStr: string | null): boolean {
+  if (!dateStr) return false;
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffDays = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
+  return diffDays <= 90;
 }
 
 function getInitials(name: string): string {
@@ -65,6 +93,19 @@ function getInitials(name: string): string {
     .join('');
 }
 
+function formatPrice(
+  basePrice: number | null,
+  priceType: string | null,
+  currency: string,
+  onRequestLabel: string
+): string {
+  if (!basePrice || priceType === 'request') return onRequestLabel;
+  const price = `${basePrice} ${currency}`;
+  if (priceType === 'hourly') return `${price}/ч`;
+  if (priceType === 'per_sqm') return `${price}/м²`;
+  return price;
+}
+
 function ProviderCard({
   provider,
   href,
@@ -74,9 +115,18 @@ function ProviderCard({
   href: string;
   texts: ProviderCardTexts;
 }) {
-  const latestLeadTime = provider.latestLeadPreviewCreatedAt
-    ? formatRelativeTime(provider.latestLeadPreviewCreatedAt)
-    : null;
+  const hasLeads = provider.leadsReceived > 0;
+  const hasJobs = provider.jobsCompleted > 0;
+  const hasRating = provider.rating > 0;
+  const hasRecentLead =
+    isWithin90Days(provider.latestLeadPreviewCreatedAt) &&
+    provider.latestLeadPreviewClientName !== null;
+
+  const providerState: 1 | 2 | 3 | 4 =
+    hasRating && hasJobs ? 4
+    : hasJobs ? 3
+    : hasLeads ? 2
+    : 1;
 
   return (
     <article className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
@@ -102,32 +152,91 @@ function ProviderCard({
             </h2>
           </Link>
 
-          {provider.rating > 0 && (
-            <div className="mt-1 flex items-center gap-2 text-sm font-medium text-amber-600">
-              <span>⭐⭐⭐⭐⭐</span>
-              <span>{provider.rating.toFixed(1)}</span>
+          {provider.services.length > 0 && (() => {
+            const hasAnyDescription = provider.services.some(s => s.description);
+            return (
+              <div className="mt-3 space-y-2">
+                {provider.services.slice(0, 2).map((service) => (
+                  <div key={service.id}>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-700 font-medium">{service.title}</span>
+                      <span className="font-medium text-gray-900">
+                        {formatPrice(service.basePrice, service.priceType, service.currency, texts.onRequest)}
+                      </span>
+                    </div>
+                    {service.description && (
+                      <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">{service.description}</p>
+                    )}
+                  </div>
+                ))}
+                {!hasAnyDescription && (
+                  <p className="text-xs text-gray-500">{texts.defaultDescription}</p>
+                )}
+                {provider.services.length > 2 && (
+                  <div className="text-xs text-orange-600 font-medium">
+                    {texts.moreServices.replace('{n}', String(provider.services.length - 2))}
+                  </div>
+                )}
+              </div>
+            );
+          })()}
+
+          {providerState === 1 && (
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
+              <span className="rounded-full bg-orange-50 px-3 py-1.5 text-orange-700">
+                ✓ {texts.verifiedSpecialist} • {texts.freeNoObligation}
+              </span>
+              <span className="rounded-full bg-gray-50 px-3 py-1.5">
+                ✓ {texts.directContact}
+              </span>
             </div>
           )}
 
-          <p className="mt-3 line-clamp-2 text-sm leading-6 text-gray-600">
-            {provider.description ?? texts.defaultDescription}
-          </p>
+          {providerState === 2 && (
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
+              <span className="rounded-full bg-gray-50 px-3 py-1.5">
+                ⚡ {provider.leadsReceived} {texts.peopleSought}
+              </span>
+              <span className="rounded-full bg-gray-50 px-3 py-1.5">
+                ✓ {texts.directContact}
+              </span>
+            </div>
+          )}
 
-          <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
-            {provider.jobsCompleted > 0 && (
+          {providerState === 3 && (
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
               <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✔ {provider.jobsCompleted} {texts.jobsCompleted}
+                ✅ {provider.jobsCompleted} {texts.jobsCompleted}
               </span>
-            )}
-            {latestLeadTime && (
+              {hasRecentLead && (
+                <span className="rounded-full bg-gray-50 px-3 py-1.5">
+                  ⚡ {provider.latestLeadPreviewClientName} {texts.recentlyRequested}
+                </span>
+              )}
               <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✔ {texts.lastRequest}: {latestLeadTime}
+                ✓ {texts.directContact}
               </span>
-            )}
-            <span className="rounded-full bg-gray-50 px-3 py-1.5">
-              ✔ {texts.directContact}
-            </span>
-          </div>
+            </div>
+          )}
+
+          {providerState === 4 && (
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
+              <span className="rounded-full bg-amber-50 px-3 py-1.5 text-amber-700">
+                ⭐ {provider.rating.toFixed(1)} • {provider.reviewCount} {texts.reviews}
+              </span>
+              <span className="rounded-full bg-gray-50 px-3 py-1.5">
+                ✅ {provider.jobsCompleted} {texts.jobsCompleted}
+              </span>
+              {hasRecentLead && (
+                <span className="rounded-full bg-gray-50 px-3 py-1.5">
+                  ⚡ {provider.latestLeadPreviewClientName} {texts.recentlyRequested}
+                </span>
+              )}
+              <span className="rounded-full bg-gray-50 px-3 py-1.5">
+                ✓ {texts.directContact}
+              </span>
+            </div>
+          )}
 
           <Link
             href={href}
@@ -418,7 +527,20 @@ async function getEnrichedProviders(
         profileImageUrl: detail?.profile_image_url ?? null,
         description: detail?.description ?? null,
         jobsCompleted: detail?.jobs_completed ?? 0,
+        leadsReceived: detail?.leads_received ?? 0,
+        reviewCount: detail?.review_count ?? 0,
         latestLeadPreviewCreatedAt: detail?.latest_lead_preview?.created_at ?? null,
+        latestLeadPreviewClientName: detail?.latest_lead_preview?.client_name ?? null,
+        services: (detail?.services ?? [])
+          .filter((s: { category_slug?: string }) => s.category_slug === category)
+          .map((s: { id: string; title: string; price_type: string | null; base_price: number | null; currency: string; description: string | null }) => ({
+            id: s.id,
+            title: s.title,
+            priceType: s.price_type,
+            basePrice: s.base_price,
+            currency: s.currency ?? 'PLN',
+            description: s.description ?? null,
+          })),
       } satisfies EnrichedProvider;
     }),
   );
@@ -458,6 +580,13 @@ export default async function CategoryPage({ params }: PageProps) {
     lastRequest: t(categoryT, 'provider_last_request', 'Last request'),
     directContact: t(categoryT, 'provider_direct_contact', 'Direct contact'),
     sendRequest: t(categoryT, 'form_btn', 'Send request'),
+    verifiedSpecialist: t(categoryT, 'provider_verified_specialist', 'Verified specialist'),
+    freeNoObligation: t(categoryT, 'provider_free_no_obligation', 'Free • No obligation'),
+    peopleSought: t(categoryT, 'provider_people_sought', 'people sought this specialist'),
+    recentlyRequested: t(categoryT, 'provider_recently_requested', 'recently made a request'),
+    reviews: t(categoryT, 'provider_reviews', 'reviews'),
+    onRequest: t(categoryT, 'provider_on_request', 'По договаряне'),
+    moreServices: t(categoryT, 'provider_more_services', 'и още {n} услуги'),
   };
 
   const relatedLinksByCategory: Record<CategoryKey, Array<{ href: string; label: string }>> = {
