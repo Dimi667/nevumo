@@ -32,6 +32,23 @@ This document reflects the major architectural optimization performed in April 2
 ### 5. Next.js & UI (Metadata + i18n)
 - **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow to prevent users from getting stuck or seeing errors when using the browser back button after successful login/registration.
 - **Client Dashboard Fixes (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page for improved lead detail management and private notes.
+
+### Docker Environment Variable Pattern (April 27, 2026)
+Next.js in Docker requires two separate environment variables to handle server-side and client-side API communication correctly:
+
+- **API_URL=http://nevumo-api:8000** — Used server-side (SSR, Next.js rewrites) for container-to-container communication within the Docker network
+- **NEXT_PUBLIC_API_URL=http://localhost:8000** — Used client-side (browser) for API calls from the user's browser
+
+This pattern is applied in:
+- **docker-compose.yml**: Both `API_URL` and `NEXT_PUBLIC_API_URL` are defined in the web service environment section
+- **apps/web/lib/api.ts**: `API_BASE` checks `process.env.API_URL` first, then falls back to `NEXT_PUBLIC_API_URL`
+- **apps/web/lib/ui-translations.ts**: Same fallback pattern for translation fetching
+- **apps/web/next.config.mjs**: Rewrites use `process.env.API_URL || process.env.NEXT_PUBLIC_API_URL`
+
+This separation ensures that:
+- Server-side rendering can reach the backend container via Docker network
+- Client-side browser requests reach the backend via localhost port forwarding
+- Development and production environments work consistently without hardcoded URLs
 - **Client Notes Feature (April 21, 2026)** — COMPLETE:
   - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
   - **Backend:**
@@ -722,6 +739,13 @@ Adding new city: add entry to CITY_COUNTRY_MAP in:
 
 - **Onboarding Form Validation**: Added `noValidate` to onboarding forms to prevent browser-native validation from interfering with custom logic and causing cryptic frontend errors.
 - **Cyrillic Slugification**: Improved `slugifyText` utility to properly support Bulgarian Cyrillic transliteration, ensuring valid SEO-friendly slugs for all providers.
+
+### ScrollIntoView on Phone Validation Error (April 27, 2026)
+When phone validation fails on form submit, the viewport smoothly scrolls to the phone field to improve UX. This pattern is applied in:
+- **apps/web/components/provider/ProviderWidget.tsx**: On form submit, if phone validation fails, the form scrolls smoothly to the phone input field
+- **apps/web/components/category/LeadForm.tsx**: Same behavior for category page lead forms
+
+This ensures users immediately see the validation error and can correct it without having to manually scroll.
 - **Sequence Synchronization**: Fixed critical 500 errors in lead submission by synchronizing PostgreSQL sequences (`lead_rate_limits`, `auth_rate_limits`) that were out of sync after Phase 3 migrations.
 
 ---
