@@ -373,6 +373,9 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Filtering visible service tags by current category
   - Selecting a service tag to auto-fill the description
   - Expand-to-show-all services flow
+- **ProviderWidget State Updates (April 27, 2026)** — `apps/web/components/ProviderWidget.tsx` rendering logic changes:
+  - **Verified badge**: Now renders unconditionally for ALL providers regardless of `provider.verified` value (condition changed from `{provider.verified && (...)}` to `{...}`)
+  - **Top section waterfall**: Fallback state (`new_badge` + `no_reviews_yet`) removed; waterfall now ends with `null` when no conditions match
 - **Frontend API Shape Alignment** — `apps/web/lib/api.ts` `ServiceOut` now exposes `category_slug` for category-aware UI filtering
 - **Global Phone Field System** — Complete phone persistence and UX:
   - users.phone column added (migration p1q2r3s4t5u6)
@@ -422,7 +425,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Backend: `GET /api/v1/providers/{slug}` now fetches widget translations from DB via `get_widget_translations(lang, db)` in `apps/api/routes/providers.py`
   - Frontend: `apps/web/components/ProviderWidget.tsx` — all hardcoded English strings replaced with `t.*` from `provider.translations`; `'use client'` directive confirmed
   - Frontend: `apps/web/lib/api.ts` `getProviderBySlug` — `lang` param now passed to API; `cache: 'no-store'` added
-  - Keys: verified_label, rating_label, jobs_label, phone_label, phone_placeholder, notes_label, notes_placeholder, response_time, button_text, disclaimer, success_title, success_message, success_message_received, new_request_button, new_badge, no_reviews_yet, recent_request_label, city_leads_label, free_request_no_obligation, no_registration, direct_contact_with_provider, services_label, price_on_request
+  - Keys: verified_label, rating_label, jobs_label, phone_label, phone_placeholder, notes_label, notes_placeholder, response_time, button_text, disclaimer, success_title, success_message, success_message_received, new_request_button, recent_request_label, city_leads_label, free_request_no_obligation, no_registration, direct_contact_with_provider, services_label, price_on_request
 - **PWA Етап 1 — Install Prompt + Tracking** — Базова PWA инфраструктура и install prompt система:
   - `apps/web/public/manifest.json` — Web App Manifest (name, icons, theme_color: #f97316, display: standalone)
   - `apps/web/public/icons/icon-192x192.png` и `icon-512x512.png` — PWA иконки

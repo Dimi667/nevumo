@@ -672,10 +672,10 @@ def build_public_path(provider: Provider, db: Session, lang: Optional[str] = Non
     return f"/provider/{provider.slug}"
 
 
-def build_qr_public_path(provider: Provider, db: Session) -> str:
+def build_qr_public_path(provider: Provider, db: Session, lang: str) -> str:
     """Build the stable QR path for the provider pointing to embedded widget."""
     city_slug, category_slug = _get_provider_public_context(provider, db)
-    normalized_lang = provider.user.locale if provider.user else "en"
+    normalized_lang = lang if lang else "en"
     
     if city_slug and category_slug:
         return f"/{normalized_lang}/{city_slug}/{category_slug}/{provider.slug}?embed=1"
@@ -1166,14 +1166,14 @@ def get_provider_leads(
 # Public URL + QR
 # ---------------------------------------------------------------------------
 
-def build_public_url(provider: Provider, db: Session, app_url: str) -> str:
+def build_public_url(provider: Provider, db: Session, app_url: str, lang: str = "en") -> str:
     """Build the canonical public URL for the provider's page."""
-    return f"{app_url.rstrip('/')}{build_public_path(provider, db)}"
+    return f"{app_url.rstrip('/')}{build_public_path(provider, db, lang)}"
 
 
-def build_qr_public_url(provider: Provider, db: Session, app_url: str) -> str:
+def build_qr_public_url(provider: Provider, db: Session, app_url: str, lang: str = "en") -> str:
     """Build the stable QR URL for the provider."""
-    return f"{app_url.rstrip('/')}{build_qr_public_path(provider, db)}"
+    return f"{app_url.rstrip('/')}{build_qr_public_path(provider, db, lang)}"
 
 
 # ---------------------------------------------------------------------------
@@ -1324,8 +1324,58 @@ def add_text_to_qr(qr_img: Image.Image, business_name: str, service_name: str, s
     # Create space for text and padding
     qr_width, qr_height = qr_img.size
     padding = 24  # 24px padding around QR
-    text_height = 140  # Space for larger text (29px + 36px + spacing)
+
+    FONT_PATHS_REGULAR = [
+        "/app/fonts/NotoSans-Regular.ttf",
+        "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf",
+    ]
+    FONT_PATHS_BOLD = [
+        "/app/fonts/NotoSans-Bold.ttf",
+        "/usr/share/fonts/truetype/noto/NotoSans-Bold.ttf",
+    ]
+
+    font_business = None
+    font_service = None
+    font_slogan = None
+
+    # Load Regular Font (Business 22px, Service 17px)
+    for path in FONT_PATHS_REGULAR:
+        if os.path.exists(path):
+            try:
+                font_business = ImageFont.truetype(path, 22)
+                font_service = ImageFont.truetype(path, 17)
+                break
+            except Exception:
+                continue
+
+    # Load Bold Font (Slogan 36px)
+    for path in FONT_PATHS_BOLD:
+        if os.path.exists(path):
+            try:
+                font_slogan = ImageFont.truetype(path, 36)
+                break
+            except Exception:
+                continue
+
+    # Fallback to load_default() only if none exist
+    if font_business is None:
+        font_business = ImageFont.load_default()
+    if font_service is None:
+        font_service = ImageFont.load_default()
+    if font_slogan is None:
+        font_slogan = ImageFont.load_default()
+
+    # Measure if wrapping is needed
+    text_line = f'"{business_name}" - "{service_name}"'
+    # Use a dummy image to measure text
+    temp_draw = ImageDraw.Draw(Image.new('RGB', (1, 1)))
+    text_bbox = temp_draw.textbbox((0, 0), text_line, font=font_business)
+    text_width = text_bbox[2] - text_bbox[0]
+    
     new_width = qr_width + 2 * padding
+    is_split = text_width > (new_width - 48)
+    
+    text_height = 140 if not is_split else 180  # Increase height if split
     new_height = qr_height + text_height + padding
     
     # Create new image with space for text and padding
@@ -1337,29 +1387,30 @@ def add_text_to_qr(qr_img: Image.Image, business_name: str, service_name: str, s
     # Create drawing context
     draw = ImageDraw.Draw(result_img)
     
-    try:
-        # Try to load fonts with larger sizes
-        font_business = ImageFont.truetype("/System/Library/Fonts/Arial.ttf", 29)
-        font_slogan = ImageFont.truetype("/System/Library/Fonts/Arial Bold.ttf", 36)
-    except:
-        # Fallback to default font
-        font_business = ImageFont.load_default()
-        font_slogan = ImageFont.load_default()
-    
-    # Add business name and service name (50% larger)
-    text_line = f'"{business_name}" - "{service_name}"'
-    text_bbox = draw.textbbox((0, 0), text_line, font=font_business)
-    text_width = text_bbox[2] - text_bbox[0]
-    text_x = (new_width - text_width) // 2
     text_y = qr_height + padding + 15  # Position below QR with padding
     
-    draw.text((text_x, text_y), text_line, fill="black", font=font_business)
+    if is_split:
+        # Line 1: Business Name
+        line1 = f'"{business_name}"'
+        l1_bbox = draw.textbbox((0, 0), line1, font=font_business)
+        l1_x = (new_width - (l1_bbox[2] - l1_bbox[0])) // 2
+        draw.text((l1_x, text_y), line1, fill="black", font=font_business)
+        
+        # Line 2: Service Name
+        line2 = f'"{service_name}"'
+        l2_bbox = draw.textbbox((0, 0), line2, font=font_service)
+        l2_x = (new_width - (l2_bbox[2] - l2_bbox[0])) // 2
+        text_y += 35  # Offset for the second line
+        draw.text((l2_x, text_y), line2, fill="black", font=font_service)
+    else:
+        text_x = (new_width - text_width) // 2
+        draw.text((text_x, text_y), text_line, fill="black", font=font_business)
     
     # Add slogan (even larger and bold)
     slogan_bbox = draw.textbbox((0, 0), slogan, font=font_slogan)
     slogan_width = slogan_bbox[2] - slogan_bbox[0]
     slogan_x = (new_width - slogan_width) // 2
-    slogan_y = text_y + 55  # Space for 29px business text + padding
+    slogan_y = text_y + 55  # Space for business text line(s) + padding
     
     draw.text((slogan_x, slogan_y), slogan, fill="black", font=font_slogan)
     
@@ -1517,11 +1568,6 @@ def generate_enhanced_qr_code_svg(
     text_y2 = text_y1 + 50                 # 466px
     svg_h   = text_y2 + 52                 # 518px
 
-    if safe_service:
-        text_line1 = f'&quot;{safe_business}&quot; - &quot;{safe_service}&quot;'
-    else:
-        text_line1 = f'&quot;{safe_business}&quot;'
-
     return (
         f'<svg width="{svg_w}" height="{svg_h}" '
         f'viewBox="0 0 {svg_w} {svg_h}" '
@@ -1549,7 +1595,10 @@ def generate_enhanced_qr_code_svg(
         # Ред 1 — "business" - "service"
         f'<text x="{cx}" y="{text_y1}" '
         f'font-family="Arial, Helvetica, sans-serif" font-size="17" '
-        f'fill="#333333" text-anchor="middle">{text_line1}</text>'
+        f'fill="#333333" text-anchor="middle">'
+        f'<tspan x="{cx}" dy="0">&quot;{safe_business}&quot;</tspan>'
+        f'{f"<tspan x=\'{cx}\' dy=\'20\'>&quot;{safe_service}&quot;</tspan>" if safe_service else ""}'
+        f'</text>'
 
         # Ред 2 — слоган
         f'<text x="{cx}" y="{text_y2}" '
@@ -1558,9 +1607,6 @@ def generate_enhanced_qr_code_svg(
 
         f'</svg>'
     )
-
-    # Сглобяваме всичко в един финален низ
-    return header + qr_group + logo_group + text_group + footer
 
 
 # ---------------------------------------------------------------------------

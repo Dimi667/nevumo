@@ -425,16 +425,10 @@ export default function ProviderWidget({
             locale={locale}
             text={recentRequestText}
           />
-        ) : (
-          <div className="flex items-center justify-center gap-2 flex-wrap text-sm mb-2">
-            <span className="text-gray-700 font-bold text-base">{t.new_badge || 'New'}</span>
-            <span className="text-gray-400">·</span>
-            <span className="text-gray-700 font-bold text-base">{t.no_reviews_yet || 'No reviews yet'}</span>
-          </div>
-        )}
+        ) : null}
 
         {/* Verified badge */}
-        {provider.verified && (
+        {(
           <span className="inline-flex items-center gap-1 text-base font-bold text-green-600">
             {t.verified_label || 'Verified professional'}
           </span>

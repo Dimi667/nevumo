@@ -449,8 +449,8 @@ def get_enhanced_qr_code(
     db: Session = Depends(get_db),
 ) -> Union[EnhancedQRCodeResponse, ErrorResponse]:
     try:
-        public_url = build_qr_public_url(provider, db, settings.APP_URL)
-        canonical_url = build_public_url(provider, db, settings.APP_URL)
+        public_url = build_qr_public_url(provider, db, settings.APP_URL, request.language)
+        canonical_url = build_public_url(provider, db, settings.APP_URL, request.language)
         
         # Get provider's primary service for QR code
         services = get_provider_services(provider, db)

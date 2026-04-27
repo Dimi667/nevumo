@@ -5,6 +5,8 @@ WORKDIR /workspace/apps/api
 COPY apps/api/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY apps/api/fonts/ /app/fonts/
+
 COPY . /workspace
 
 ENV PYTHONPATH=/workspace
