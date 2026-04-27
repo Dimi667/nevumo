@@ -1,5 +1,19 @@
 # Incident Logs
 
+## 2026-04-27 — Widget Namespace Missing Nudge Translation Keys
+
+**Symptom:** ProviderWidget showed English text for post-lead nudge despite correct Bulgarian translations in category namespace.
+
+**Root cause:** get_widget_translations() in providers.py fetches only widget.* keys. Nudge keys existed only in category namespace — not copied to widget.
+
+**Fix:**
+1. Created apps/api/scripts/seed_widget_nudge_translations.py — copies 13 nudge keys from category → widget namespace for all 34 languages
+2. ON CONFLICT clause must be (lang, key) — translations table has NO separate namespace column
+3. Flush Redis: docker exec nevumo-redis redis-cli KEYS "translations:*" | xargs docker exec -i nevumo-redis redis-cli DEL
+4. docker restart nevumo-web
+
+**Rule:** After every translation seed → always run docker restart nevumo-web.
+
 ## 2026-04-26 - Docker Network Interface Loss
 
 **Problem:** Next.js (nevumo-web) experienced `fetch failed` errors with `ConnectTimeoutError` when attempting to reach the API at `nevumo-api:8000`.
@@ -15,3 +29,5 @@
 6. Confirmed API responding with 200 OK on /docs endpoint
 
 **Status:** Resolved
+
+## След всеки seed на преводи → docker restart nevumo-web

@@ -449,6 +449,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - Embedded widget lead submit — ProviderWidget.tsx (2s delay)
   - localStorage keys: pwa_installed, pwa_prompt_dismissed_count
   - Tracking: pwa_prompt_shown, pwa_install_accepted, pwa_install_dismissed, pwa_installed — всички през trackPageEvent() към page_events таблицата
+- **Post-lead nudge flow added to ProviderWidget.tsx (April 27, 2026)** — Two-step account creation nudge (identical to LeadForm) shown to unauthenticated users after lead submission on provider profile pages. Nudge keys seeded into widget namespace via seed_widget_nudge_translations.py (442 rows copied from category namespace).
   - CORS fix: apps/api/.env добавен с CORS_ORIGINS, apps/api/main.py зарежда .env чрез load_dotenv()
   - PWA prompt не се показва на desktop (очаквано) — активира се само на мобилен Chrome (Android) и Safari (iOS 16.4+)
   - pwa namespace в translations таблицата: 6 ключа × 34 езика = 204 реда (install_title, client_subtitle, provider_subtitle, ios_step1, ios_step2, dismiss_button)
