@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { createLead, claimLeadEmail, type ProviderDetail, getCityBySlug, type CityOut } from '@/lib/api';
 import { usePhone } from '@/hooks/usePhone';
@@ -205,6 +205,7 @@ export default function ProviderWidget({
   const [cityInfo, setCityInfo] = useState<CityOut | null>(null);
   const [phoneValue, setPhoneValue] = useState('');
   const [phoneError, setPhoneError] = useState<string | null>(null);
+  const phoneRef = useRef<HTMLDivElement>(null);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [descriptionValue, setDescriptionValue] = useState('');
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
@@ -286,6 +287,7 @@ export default function ProviderWidget({
 
     if (isPrefixOnlyPhone || !isPhoneValid) {
       setPhoneError(locale === 'bg' ? 'Въведи валиден телефонен номер' : 'Enter a valid phone number');
+      phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setError(false);
       return;
     }
@@ -626,15 +628,17 @@ export default function ProviderWidget({
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <PhoneInput
-            value={phoneValue}
-            onChange={handleChange}
-            countryCode={countryCode ?? cityInfo?.country_code}
-            error={phoneError}
-            errorMessage={locale === 'bg' ? 'Въведи валиден телефонен номер' : 'Enter a valid phone number'}
-            label={t.phone_label || 'Phone'}
-            required
-          />
+          <div ref={phoneRef}>
+            <PhoneInput
+              value={phoneValue}
+              onChange={handleChange}
+              countryCode={countryCode ?? cityInfo?.country_code}
+              error={phoneError}
+              errorMessage={locale === 'bg' ? 'Въведи валиден телефонен номер' : 'Enter a valid phone number'}
+              label={t.phone_label || 'Phone'}
+              required
+            />
+          </div>
 
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-1">

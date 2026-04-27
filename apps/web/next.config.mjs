@@ -16,19 +16,19 @@ const nextConfig = {
     return [
       {
         source: '/api/v1/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
+        destination: `${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
       },
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
+        destination: `${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
       },
       {
         source: '/:lang/api/v1/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
+        destination: `${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
       },
       {
         source: '/:lang/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
+        destination: `${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
       },
     ];
   },

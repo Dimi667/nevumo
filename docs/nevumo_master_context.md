@@ -385,6 +385,14 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Translation key**: New `widget.send_request_to` key added (34 languages, seed script: apps/api/scripts/seed_widget_send_request_to.py)
   - **Backend fallback**: `get_widget_translations()` in apps/api/routes/providers.py refactored to three-layer fallback: hardcoded defaults → English DB → target language DB
   - **Hydration fix**: `suppressHydrationWarning` added to relative time elements in RecentRequestBlock and SocialProofBlock
+- **Docker Environment Variable Pattern (April 27, 2026)** — Next.js in Docker requires two separate environment variables:
+  - API_URL=http://nevumo-api:8000 — used server-side (SSR, Next.js rewrites) for container-to-container communication
+  - NEXT_PUBLIC_API_URL=http://localhost:8000 — used client-side (browser)
+  - Applied in: docker-compose.yml, apps/web/lib/api.ts, apps/web/lib/ui-translations.ts, apps/web/next.config.mjs
+  - Ensures server-side rendering can reach backend via Docker network while client-side requests use localhost port forwarding
+- **ScrollIntoView on Phone Validation Error (April 27, 2026)** — When phone validation fails on form submit, viewport smoothly scrolls to the phone field:
+  - Applied in: apps/web/components/provider/ProviderWidget.tsx, apps/web/components/category/LeadForm.tsx
+  - Ensures users immediately see validation errors and can correct them without manual scrolling
 - **Frontend API Shape Alignment** — `apps/web/lib/api.ts` `ServiceOut` now exposes `category_slug` for category-aware UI filtering
 - **Global Phone Field System** — Complete phone persistence and UX:
   - users.phone column added (migration p1q2r3s4t5u6)

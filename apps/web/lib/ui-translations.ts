@@ -12,7 +12,7 @@ export async function fetchTranslations(
   const resolvedLang = supportedLangs.includes(lang) ? lang : 'en';
 
   const apiBase = typeof window === 'undefined'
-    ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
+    ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
     : '';
 
   try {

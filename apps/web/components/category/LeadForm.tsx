@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createLead, claimLeadEmail } from '@/lib/api';
 import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
@@ -48,6 +48,7 @@ export default function LeadForm({
   const [email, setEmail] = useState('');
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+  const phoneRef = useRef<HTMLDivElement>(null);
   const { phone: savedPhone, savePhone, loading } = usePhone();
   const phonePrefix = getPhonePrefix(countryCode);
   const phoneDigitsCount = phoneValue.replace(/\D/g, '').length;
@@ -91,6 +92,9 @@ export default function LeadForm({
     if (isPrefixOnlyPhone || !isPhoneValid) {
       setPhoneError(translations['error_phone_invalid'] || 'Enter a valid phone number');
       setHasError(false);
+      
+      // Scroll to phone field so user sees the error
+      phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
@@ -394,14 +398,16 @@ export default function LeadForm({
       )}
 
       {/* Phone Field */}
-      <PhoneInput
-        value={phoneValue}
-        onChange={handleChange}
-        countryCode={countryCode}
-        error={phoneError}
-        label={translations['form_phone'] || 'Phone'}
-        required
-      />
+      <div ref={phoneRef}>
+        <PhoneInput
+          value={phoneValue}
+          onChange={handleChange}
+          countryCode={countryCode}
+          error={phoneError}
+          label={translations['form_phone'] || 'Phone'}
+          required
+        />
+      </div>
 
       {/* Submit Button */}
       <button
