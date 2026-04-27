@@ -34,6 +34,7 @@ from apps.api.services.review_service import get_public_latest_review_preview
 
 def get_widget_translations(lang: str, db: Session) -> dict:
     from apps.api.models import Translation
+    from apps.api.i18n import get_widget_translation_defaults
     
     supported_langs = ["bg","cs","da","de","el","en","es","et","fi","fr","ga","hr","hu","is","it","lb","lt","lv","mk","mt","nl","no","pl","pt","pt-PT","ro","ru","sk","sl","sq","sr","sv","tr","uk"]
     
@@ -41,21 +42,27 @@ def get_widget_translations(lang: str, db: Session) -> dict:
     if lang not in supported_langs:
         lang = "en"
     
-    # Query DB for widget namespace
-    rows = db.query(Translation).filter(
-        Translation.lang == lang,
+    # 1. Start with English defaults from hardcoded i18n file
+    result = get_widget_translation_defaults(lang)
+    
+    # 2. Layer 2: Fetch English from database (as base)
+    en_rows = db.query(Translation).filter(
+        Translation.lang == "en",
         Translation.key.like("widget.%")
     ).all()
-    
-    # If no rows found, fallback to English
-    if not rows:
-        rows = db.query(Translation).filter(
-            Translation.lang == "en",
+    for row in en_rows:
+        result[row.key.replace("widget.", "", 1)] = row.value
+        
+    # 3. Layer 3: Overwrite with target language from database (if not en)
+    if lang != "en":
+        lang_rows = db.query(Translation).filter(
+            Translation.lang == lang,
             Translation.key.like("widget.%")
         ).all()
+        for row in lang_rows:
+            result[row.key.replace("widget.", "", 1)] = row.value
     
-    # Strip "widget." prefix from keys
-    return {row.key.replace("widget.", "", 1): row.value for row in rows}
+    return result
 
 
 router = APIRouter(prefix="/api/v1", tags=["providers"])

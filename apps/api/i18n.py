@@ -52,6 +52,7 @@ WIDGET_EMBED_TRANSLATION_DEFAULTS_EN = {
     "free_request_no_obligation": "Free request, no obligation",
     "no_registration": "No registration",
     "direct_contact_with_provider": "Direct contact with the provider",
+    "send_request_to": "Send request directly to",
 }
 WIDGET_EMBED_TRANSLATION_DEFAULTS_BG = {
     "new_badge": "Нов",
@@ -61,6 +62,7 @@ WIDGET_EMBED_TRANSLATION_DEFAULTS_BG = {
     "free_request_no_obligation": "Безплатна заявка, без ангажимент",
     "no_registration": "Без регистрация",
     "direct_contact_with_provider": "Директен контакт с провайдера",
+    "send_request_to": "Изпратете заявка директно на",
 }
 WIDGET_EMBED_TRANSLATION_DEFAULTS = {
     lang: dict(WIDGET_EMBED_TRANSLATION_DEFAULTS_EN)

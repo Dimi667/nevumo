@@ -25,7 +25,8 @@ def insert_widget_translations():
             "success_title": "✓ Заявката е изпратена!",
             "success_message": "Ще се свържем с вас скоро.",
             "success_message_received": " получи заявката ти и ще се свърже с теб по телефона.",
-            "new_request_button": "Нова заявка"
+            "new_request_button": "Нова заявка",
+            "send_request_to": "Изпратете заявка директно на"
         },
         "en": {
             "verified_label": "✓ Verified professional",
@@ -41,7 +42,8 @@ def insert_widget_translations():
             "success_title": "✓ Request sent!",
             "success_message": "We will contact you soon.",
             "success_message_received": " received your request and will contact you by phone.",
-            "new_request_button": "New Request"
+            "new_request_button": "New Request",
+            "send_request_to": "Send request directly to"
         },
         "uk": {
             "verified_label": "✓ Перевірений професіонал",

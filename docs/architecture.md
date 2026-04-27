@@ -471,8 +471,9 @@ const API_BASE = typeof window === 'undefined'
 - Keys follow the pattern `widget.key_name` (e.g., `widget.button_text`, `widget.phone_label`)
 - Backend serves them via `get_widget_translations(lang, db)` in `apps/api/routes/providers.py`
 - Frontend `ProviderWidget` receives them as `provider.translations` prop and accesses via `const t = provider.translations`
-- Fallback: if requested lang has no widget rows, falls back to English
-- Total keys: 23 per language
+- Fallback: three-layer fallback chain — hardcoded defaults → English DB → target language DB
+- Total keys: 24 per language (added `widget.send_request_to` in April 27, 2026)
+- Seed script: apps/api/scripts/seed_widget_send_request_to.py for new keys
 
 ### Provider Dashboard i18n Architecture
 

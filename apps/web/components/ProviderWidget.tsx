@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { createLead, type ProviderDetail, getCityBySlug, type CityOut } from '@/lib/api';
 import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
@@ -94,12 +95,13 @@ function RecentRequestBlock({
   return (
     <div className="bg-gray-50 rounded-xl p-4 mb-3 border border-gray-100 text-left max-w-sm mx-auto">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+        <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center overflow-hidden flex-shrink-0 relative">
           {latestLeadPreview.client_image_url ? (
-            <img
+            <Image
               src={latestLeadPreview.client_image_url}
               alt={latestLeadPreview.client_name}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           ) : (
             <span className="text-orange-600 text-sm font-bold">
@@ -109,7 +111,7 @@ function RecentRequestBlock({
         </div>
         <div className="min-w-0">
           <p className="text-sm font-semibold text-gray-900 leading-snug">{text}</p>
-          <p className="text-xs text-gray-400 mt-1">{timeAgo}</p>
+          <p className="text-xs text-gray-400 mt-1" suppressHydrationWarning>{timeAgo}</p>
         </div>
       </div>
     </div>
@@ -163,7 +165,7 @@ function SocialProofBlock({ review, locale }: { review: ProviderDetail['latest_r
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <span className="font-semibold text-gray-900 text-sm">{review.client_name}</span>
             <StarRating rating={review.rating} />
-            <span className="text-xs text-gray-400">{timeAgo}</span>
+            <span className="text-xs text-gray-400" suppressHydrationWarning>{timeAgo}</span>
           </div>
 
           {review.comment_preview && (
@@ -198,12 +200,10 @@ export default function ProviderWidget({
   const [cityInfo, setCityInfo] = useState<CityOut | null>(null);
   const [phoneValue, setPhoneValue] = useState('');
   const [phoneError, setPhoneError] = useState<string | null>(null);
-  const [selectedService, setSelectedService] = useState<string | null>(null);
-  const [showAllServices, setShowAllServices] = useState(false);
-  const [isAutoFilled, setIsAutoFilled] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [descriptionValue, setDescriptionValue] = useState('');
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
-  const { phone: savedPhone, savePhone, loading: phoneLoading } = usePhone();
+  const { phone: savedPhone, savePhone } = usePhone();
   const locale = (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
   const lang = locale || 'en';
   const phonePrefix = getPhonePrefix(cityInfo?.country_code);
@@ -252,33 +252,16 @@ export default function ProviderWidget({
   // Filter services by current category
   const filteredServices = provider.services.filter(service => service.category_slug === categorySlug);
   
-  // Show max 3 services by default
-  const displayedServices = showAllServices ? filteredServices : filteredServices.slice(0, 3);
-  
-  // Handle service tag click
+  // Handle service card click
   const handleServiceClick = (serviceId: string, serviceTitle: string) => {
-    if (selectedService === serviceId) {
-      // Deselect if already selected
-      setSelectedService(null);
-      if (isAutoFilled) {
-        setDescriptionValue('');
-        setIsAutoFilled(false);
-      }
-    } else {
-      // Select new service
-      setSelectedService(serviceId);
-      // Auto-fill description if empty or was previously auto-filled
-      if (descriptionValue.trim() === '' || isAutoFilled) {
-        setDescriptionValue(serviceTitle);
-        setIsAutoFilled(true);
-      }
-    }
+    setSelectedServiceId(serviceId);
+    setDescriptionValue(serviceTitle);
+    document.getElementById('widget-form')?.scrollIntoView({ behavior: 'smooth' });
   };
   
   // Handle manual textarea input
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescriptionValue(e.target.value);
-    setIsAutoFilled(false); // Mark as manually entered
   };
 
   useEffect(() => {
@@ -344,9 +327,7 @@ export default function ProviderWidget({
         <button
           onClick={() => {
             setSubmitted(false);
-            setSelectedService(null);
-            setShowAllServices(false);
-            setIsAutoFilled(false);
+            setSelectedServiceId(null);
             setDescriptionValue('');
             setPhoneValue('');
           }}
@@ -372,22 +353,26 @@ export default function ProviderWidget({
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       {/* Logo */}
       <div className="px-4 pt-6 pb-2 text-center">
-        <img 
-          src="/Nevumo_logo.svg" 
-          alt="Nevumo" 
-          className="mx-auto opacity-70 mb-4 h-7"
+        <Image
+          src="/Nevumo_logo.svg"
+          alt="Nevumo"
+          width={120}
+          height={28}
+          className="mx-auto opacity-70 mb-4"
+          unoptimized
         />
       </div>
 
       {/* Provider Info */}
       <div className="px-6 pt-4 text-center">
         {/* Avatar */}
-        <div className="w-[200px] h-[200px] rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4 overflow-hidden">
+        <div className="w-[200px] h-[200px] rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4 overflow-hidden relative">
           {provider.profile_image_url ? (
-            <img
+            <Image
               src={provider.profile_image_url}
               alt={provider.business_name}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
           ) : (
             <span className="text-orange-600 text-4xl font-bold">
@@ -435,6 +420,12 @@ export default function ProviderWidget({
         )}
       </div>
 
+      {provider.description && provider.description.trim() !== '' && (
+        <p className="text-sm text-gray-600 leading-relaxed px-6 mt-3 mb-1">
+          {provider.description}
+        </p>
+      )}
+
       {/* Services Section */}
       {filteredServices.length > 0 && (
         <div className="px-6 py-5 border-b border-gray-100">
@@ -443,20 +434,27 @@ export default function ProviderWidget({
           </h2>
           <ul className="space-y-3">
             {filteredServices.map((service) => (
-              <li key={service.id} className="border-b border-gray-100 last:border-0">
-                <div className="pb-3">
-                  <div className="flex justify-between items-start gap-2">
-                    <span className="font-semibold text-gray-800 text-sm">
-                      {service.title}
-                    </span>
-                    <span className="text-sm font-bold text-gray-700 whitespace-nowrap flex-shrink-0">
-                      {formatServicePrice(service.base_price, service.price_type, service.currency, provider.translations)}
-                    </span>
-                  </div>
-                  {service.description && (
-                    <p className="text-xs text-gray-400 mt-0.5">{service.description}</p>
-                  )}
+              <li 
+                key={service.id} 
+                onClick={() => handleServiceClick(service.id, service.title)}
+                className={`p-3 rounded-lg border-b border-gray-100 last:border-0 transition-all cursor-pointer ${
+                  selectedServiceId === service.id 
+                    ? 'border-l-4 border-orange-500 bg-orange-50' 
+                    : 'hover:bg-gray-50'
+                }`}
+              >
+                <div className="flex justify-between items-center gap-2">
+                  <span className="font-semibold text-gray-800 text-sm">
+                    {service.title}
+                  </span>
+                  <span className="text-sm font-bold text-gray-700 whitespace-nowrap flex-shrink-0">
+                    {formatServicePrice(service.base_price, service.price_type, service.currency, provider.translations)}
+                    <span className="text-gray-400 text-lg ml-2 flex-shrink-0">›</span>
+                  </span>
                 </div>
+                {service.description && (
+                  <p className="text-xs text-gray-400 mt-0.5">{service.description}</p>
+                )}
               </li>
             ))}
           </ul>
@@ -464,46 +462,12 @@ export default function ProviderWidget({
       )}
 
       {/* Form */}
-      <div className="px-6 py-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-          {t.button_text || 'Request Service'}
+      <div id="widget-form" className="px-6 py-6">
+        <h2 className="text-base font-semibold text-gray-700 mb-4 text-center">
+          {t.send_request_to} {provider.business_name}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Service Tags */}
-          {filteredServices.length > 0 && (
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">
-                {t.services_label || 'Services'}
-              </label>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {displayedServices.map((service) => (
-                  <button
-                    key={service.id}
-                    type="button"
-                    onClick={() => handleServiceClick(service.id, service.title)}
-                    className={`px-3 py-1 rounded-full border text-sm transition-colors ${
-                      selectedService === service.id
-                        ? 'bg-orange-500 text-white border-orange-500'
-                        : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
-                    }`}
-                  >
-                    {service.title}
-                  </button>
-                ))}
-              </div>
-              {!showAllServices && filteredServices.length > 3 && (
-                <button
-                  type="button"
-                  onClick={() => setShowAllServices(true)}
-                  className="text-sm text-orange-500 hover:text-orange-600 font-medium"
-                >
-                  {t.view_all_services || 'View all'} →
-                </button>
-              )}
-            </div>
-          )}
-
           <PhoneInput
             value={phoneValue}
             onChange={handleChange}

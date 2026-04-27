@@ -376,6 +376,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - **ProviderWidget State Updates (April 27, 2026)** — `apps/web/components/ProviderWidget.tsx` rendering logic changes:
   - **Verified badge**: Now renders unconditionally for ALL providers regardless of `provider.verified` value (condition changed from `{provider.verified && (...)}` to `{...}`)
   - **Top section waterfall**: Fallback state (`new_badge` + `no_reviews_yet`) removed; waterfall now ends with `null` when no conditions match
+- **ProviderWidget UX Refactor (April 27, 2026)** — `apps/web/components/ProviderWidget.tsx` interactive improvements:
+  - **Provider description**: Now renders between verified badge and services section (conditional, non-empty only)
+  - **Services section**: Refactored from static list to interactive clickable cards — on click selects service, pre-fills notes textarea, smooth scrolls to #widget-form
+  - **Service affordance**: Chevron (›) added to each service row as clickable indicator
+  - **Chips removal**: Chips section removed from form entirely
+  - **Dynamic form heading**: Changed from static "Заявете услуга" to dynamic "{t.send_request_to} {provider.business_name}"
+  - **Translation key**: New `widget.send_request_to` key added (34 languages, seed script: apps/api/scripts/seed_widget_send_request_to.py)
+  - **Backend fallback**: `get_widget_translations()` in apps/api/routes/providers.py refactored to three-layer fallback: hardcoded defaults → English DB → target language DB
+  - **Hydration fix**: `suppressHydrationWarning` added to relative time elements in RecentRequestBlock and SocialProofBlock
 - **Frontend API Shape Alignment** — `apps/web/lib/api.ts` `ServiceOut` now exposes `category_slug` for category-aware UI filtering
 - **Global Phone Field System** — Complete phone persistence and UX:
   - users.phone column added (migration p1q2r3s4t5u6)
