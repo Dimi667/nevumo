@@ -562,6 +562,13 @@ The key `logo_pro` must remain untranslated as `"Pro"` in all 34 locales. This i
 #### Onboarding Hero Banner i18n (April 10, 2026)
 The onboarding hero banner on the dashboard overview page is now fully DB-backed. All 8 strings (titles, descriptions, CTAs, step labels) are stored in the `provider_dashboard` namespace and served via the standard translations endpoint. `getHeroContent()` and `CompactStepIndicator` in `apps/web/lib/onboarding-utils.tsx` accept a `dict` parameter and use `t()` for rendering. The dashboard page passes `dict` from `useDashboardI18n()` to both components.
 
+#### Translation Loading Race Condition Fix (April 2026)
+isLoading is now exposed via DashboardI18nContextValue. In provider dashboard page.tsx, isOnboardingComplete defaults to true while translationsLoading is true, preventing the onboarding banner from rendering with English fallback strings before the translation dict is populated.
+
+Root cause: getHeroContent() was called on first render when dict was still empty ({}) — returning English fallback values. The fix delays banner rendering until translations are loaded.
+
+Also fixed: provider_dashboard translation keys for onboarding hero banner were seeded with wrong key names. Correct keys are: setup_title, setup_subtitle, btn_complete_setup, setup_title_1step, setup_subtitle_1step, btn_add_service, step_profile, step_service (seed script: seed_onboarding_hero_v2.py)
+
 #### Translation Key Standards (CRITICAL)
 Translation keys used in `t()` calls must follow strict conventions to ensure consistency with the database namespace system:
 
@@ -720,6 +727,28 @@ Adding new city: add entry to CITY_COUNTRY_MAP in:
   - **State 1: Full Data**: Shows count of providers, total requests, and average rating.
   - **State 2: No Ratings**: Shows provider and request counts, hides rating.
   - **State 3: Only Providers**: Shows "X professionals ready to help", hides requests/rating.
+
+### SEO & Internationalization Infrastructure (April 2026)
+
+#### 1. Source of Truth for Languages
+- **File**: `apps/web/lib/locales.ts`
+- **Definition**: The `SUPPORTED_LANGUAGES` array is the absolute Source of Truth (SoT) for the 34 supported locales across the entire project.
+- **Automation**: `generateHreflangAlternates` (in `lib/seo.ts`) automatically generates `hreflang` tags for all 34 languages based on this array, ensuring global SEO consistency.
+
+#### 2. Metadata Logic & Branding
+- **Template**: Defined in `apps/web/app/layout.tsx` using the Next.js Metadata API: `%s | Nevumo`.
+- **Database Rule**: SEO translations in the database (e.g., `meta_title`) MUST be "clean" — they should not include the brand name "Nevumo", as it is appended programmatically via the template.
+- **Duplication Fix**: Mass correction performed on 2026-04-28 to strip hardcoded suffixes from database translations.
+
+#### 3. Structured Data (JSON-LD)
+- **Centralized Logic**: `apps/web/lib/seo.ts` contains dedicated functions for schema generation:
+  - `generateOrganizationJsonLd()`: Standardized company schema.
+  - `generateWebSiteJsonLd(lang)`: Dynamic site-search schema that adapts to the current page language.
+- **Dynamic Adaptation**: The `WebSite` schema templates (like `urlTemplate`) are localized per language segment.
+
+#### 4. SEO Validation & Diagnostics
+- **Protocol**: SEO code quality is validated using a combination of **Playwright** (for crawler-like page loading) and **Phoenix** (for technical SEO auditing of the rendered HTML).
+- **Scope**: Includes validation of `hreflang` alternates, canonical tags, and JSON-LD integrity.
   - **State 4: Pioneer (Empty)**: Shows "Be the first to request a service", hides all stats.
 - **Core Components**:
   - `CityPageHero.tsx`: Main hero container handling the 4 states.
