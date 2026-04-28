@@ -1648,6 +1648,7 @@ def retro_match_provider(
                 Lead.category_id == category_id,
                 Lead.city_id.in_(city_ids),
                 Lead.status.in_(["created", "pending_match"]),
+                Lead.provider_id == None,
                 not_(
                     Lead.id.in_(
                         db.query(LeadMatch.lead_id)
