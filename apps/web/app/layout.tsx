@@ -25,7 +25,7 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com'),
   title: {
-    default: 'Nevumo',
+    default: 'Nevumo - Local Services & Reviews',
     template: '%s | Nevumo',
   },
   description: 'Find and book local services. Compare providers, read reviews, and request quotes.',

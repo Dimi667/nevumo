@@ -89,6 +89,13 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Codex CLI ги записва в PostgreSQL
 - Redis кешира преводите
 - UI copy за homepage и category страниците вече се подава от PostgreSQL през namespaced endpoint (`homepage.*`, `category.*`)
+- **Source of Truth за езици**: `apps/web/lib/locales.ts` (34 поддържани езика)
+
+### SEO Infrastructure (April 2026)
+- **Автоматизация**: Автоматично генериране на `hreflang` за всички 34 езика чрез `generateHreflangAlternates`.
+- **Метаданни**: Използване на Metadata Template (`%s | Nevumo`). Преводите в БД са без бранд суфикси.
+- **Structured Data**: JSON-LD схеми (`Organization`, `WebSite`) през `lib/seo.ts`. Динамична адаптация според езика.
+- **Валидация**: Playwright + Phoenix за SEO одит на рендериран код.
 
 ### Supported languages (34):
 bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, nl, no, pl, pt, pt-PT, ro, ru, sk, sl, sq, sr, sv, tr, uk
@@ -160,6 +167,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **General SEO Audit & Optimization (April 28, 2026)** — SUCCESSFUL:
+  - **Infrastructure**: `apps/web/lib/locales.ts` established as Source of Truth for 34 languages.
+  - **Automation**: Implemented `generateHreflangAlternates` for automated `hreflang` tags across all locales.
+  - **Metadata**: Unified Metadata Template (`%s | Nevumo`) and cleaned 34-language DB translations of brand suffixes.
+  - **Structured Data**: JSON-LD schemas (`Organization`, `WebSite`) implemented in `lib/seo.ts` with dynamic language adaptation.
+  - **Validation**: Established diagnostic protocol using Playwright + Phoenix.
 - **Delete Account — GDPR-compliant (April 25, 2026)**
   - Backend: `DELETE /api/v1/auth/account` (JWT required) in `apps/api/routes/auth.py` + `apps/api/services/auth_service.py`
   - Deletion order (single DB transaction):

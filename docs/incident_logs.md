@@ -1,5 +1,19 @@
 # Incident Logs
 
+## 2026-04-28 — Mass SEO Title Duplicate Correction
+
+**Symptom:** Duplicated brand name "Nevumo" in page titles (e.g., "Home | Nevumo | Nevumo").
+
+**Root cause:** The `meta_title` keys in the database contained the suffix " | Nevumo", which was also being appended by the global Metadata Template in `layout.tsx`.
+
+**Fix:**
+1. Cleaned up the `translations` table by removing " | Nevumo" and " | Nevumo.com" suffixes from all `meta_title` keys across all 34 languages.
+2. Synchronized database state with the programmatically added brand name in the Next.js `layout.tsx`.
+3. Flush Redis: `docker exec nevumo-redis redis-cli FLUSHALL`
+4. Verified titles on homepage, category pages, and city pages via Playwright + Phoenix.
+
+**Rule:** Database translations for metadata must be "clean" (brand-agnostic) as the brand is managed at the layout level.
+
 ## 2026-04-27 — Widget Namespace Missing Nudge Translation Keys
 
 **Symptom:** ProviderWidget showed English text for post-lead nudge despite correct Bulgarian translations in category namespace.

@@ -12,7 +12,9 @@ export const SUPPORTED_LANGUAGES = [
   "ga",
   "hr",
   "hu",
+  "is",
   "it",
+  "lb",
   "lt",
   "lv",
   "mk",
@@ -23,12 +25,14 @@ export const SUPPORTED_LANGUAGES = [
   "pt",
   "pt-PT",
   "ro",
+  "ru",
   "sk",
   "sl",
   "sq",
   "sr",
   "sv",
   "tr",
+  "uk",
 ];
 
 export const DEFAULT_LANGUAGE = "en";

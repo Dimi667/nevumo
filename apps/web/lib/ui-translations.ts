@@ -1,19 +1,16 @@
+import { SUPPORTED_LANGUAGES } from './locales';
+
 export type TranslationDict = Record<string, string>
 
 export async function fetchTranslations(
   lang: string,
   namespace: string
 ): Promise<TranslationDict> {
-  const supportedLangs = [
-    'bg', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fi', 'fr', 'ga', 'hr', 'hu',
-    'is', 'it', 'lb', 'lt', 'lv', 'mk', 'mt', 'nl', 'no', 'pl', 'pt', 'pt-PT',
-    'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk',
-  ];
-  const resolvedLang = supportedLangs.includes(lang) ? lang : 'en';
+  const resolvedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'en';
 
   const apiBase = typeof window === 'undefined'
     ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
-    : '';
+    : (process.env.NEXT_PUBLIC_API_URL || '');
 
   try {
     const res = await fetch(

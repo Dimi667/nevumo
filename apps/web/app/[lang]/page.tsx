@@ -1,5 +1,5 @@
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
-import { generateHreflangAlternates } from '@/lib/seo';
+import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -16,11 +16,22 @@ export async function generateMetadata({ params }: PageProps) {
   const { lang } = await params;
   const homepageT = await fetchTranslations(lang, 'homepage');
 
+  const title = t(homepageT, 'meta_title', 'Get clients for your services');
+
   return {
-    title: t(homepageT, 'meta_title', 'Get clients for your services | Nevumo'),
+    title,
     description: t(homepageT, 'meta_description', 'Free registration. No commission.'),
     alternates: {
+      canonical: `/${lang}`,
       languages: generateHreflangAlternates('/'),
+    },
+    openGraph: {
+      title,
+      description: t(homepageT, 'meta_description', 'Free registration. No commission.'),
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${lang}`,
+      siteName: 'Nevumo',
+      locale: lang,
+      type: 'website',
     },
   };
 }
@@ -40,8 +51,19 @@ export default async function Homepage({ params }: PageProps) {
   const homepageT = await fetchTranslations(lang, 'homepage');
   const rotatingCategories = t(homepageT, 'rotating_categories', 'Massage,Cleaning,Plumbing').split(',');
 
+  const organizationJsonLd = generateOrganizationJsonLd();
+  const websiteJsonLd = generateWebSiteJsonLd(lang);
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         <Image 

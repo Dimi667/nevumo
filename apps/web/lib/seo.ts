@@ -80,3 +80,39 @@ export function generateServiceListJsonLd(
     })),
   };
 }
+
+/**
+ * Generates JSON-LD Organization schema.
+ */
+export function generateOrganizationJsonLd(): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Nevumo',
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo.png`,
+    sameAs: [
+      'https://x.com/nevumo',
+    ],
+  };
+}
+
+/**
+ * Generates JSON-LD WebSite schema.
+ */
+export function generateWebSiteJsonLd(lang: string): Record<string, unknown> {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Nevumo',
+    url: `${SITE_URL}/${lang}`,
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SITE_URL}/${lang}/search?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+}
