@@ -824,21 +824,23 @@ Nevumo предоставя **embeddable lead widget**, който providers м�
 
 ### Purpose
 
-Replace automatic numeric suffix slug generation with user-controlled slug selection featuring smart suggestions and validation. Prevents SEO-unfriendly URLs like "devs-1", "devs-2".
+Replace automatic numeric suffix slug generation with user-controlled slug selection featuring smart suggestions and validation. Prevents auto-generated numeric suffix slugs. User-entered slugs with numbers (rio-22, studio-7) are allowed.
 
 ### Validation Rules
 
 **Forbidden patterns:**
-- `devs-1`, `devs-123` (any numeric suffix)
 - `DevS` (uppercase)
 - `devs_studio` (underscores)
 - `devs@studio` (special chars)
 
-**Allowed patterns:**
+**Allowed patterns (Manual Input):**
+- `rio-22`, `studio-7` (numeric suffixes in user-entered slugs)
 - `devs-sofia`
 - `devs-massage`
 - `devs-pro`
 - `devs-studio-bg`
+
+**Note:** Numeric suffix restriction applies ONLY to auto-generation (generate_provider_slug), NOT to user-entered slugs (validate_slug in provider_service.py and schemas.py).
 
 ### Implementation
 
