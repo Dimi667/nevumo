@@ -30,7 +30,7 @@ This document reflects the major architectural optimization performed in April 2
 - **CORS Configuration (April 2026)**: Added `CORSMiddleware` to `apps/api/main.py` using a configurable `CORS_ORIGINS` setting from `.env` (via `load_dotenv()`) to allow secure communication from the frontend domain.
 
 ### 5. Next.js & UI (Metadata + i18n)
-- **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow to prevent users from getting stuck or seeing errors when using the browser back button after successful login/registration.
+- **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow. Replaced legacy hidden iframe hacks with the modern **Credential Management API** (`navigator.credentials.store`) for robust password saving across all modern browsers including iOS Safari.
 - **Client Dashboard Fixes (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page for improved lead detail management and private notes.
 
 ### Docker Environment Variable Pattern (April 27, 2026)
@@ -1281,7 +1281,7 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - **Provider registration**: no slug selection on auth page; account created immediately with temporary draft slug, redirect to onboarding step 1 for slug configuration
 - Forgot step: sends reset link → success toast "Провери имейла си"; catch also shows success (no enumeration)
 - All buttons: orange active (bg-orange-500), gray disabled (bg-gray-300)
-- Browser password save: hidden iframe technique (triggerPasswordSave)
+- Browser password save: Credential Management API (saveCredentials in apps/web/lib/password-save.ts) + hidden email input in register form + onInput handler for browser autofill compatibility. generateStrongPassword removed — browser native strong password suggestion used instead.
 - Post-auth: `saveAuth(token, user)` → localStorage; redirect by role (provider → /provider/dashboard/profile for onboarding, client → /)
 - Events: auth_view, auth_email_entered, auth_password_shown, auth_success
 
