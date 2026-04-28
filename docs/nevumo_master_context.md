@@ -404,6 +404,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - NEXT_PUBLIC_API_URL=http://localhost:8000 — used client-side (browser)
   - Applied in: docker-compose.yml, apps/web/lib/api.ts, apps/web/lib/ui-translations.ts, apps/web/next.config.mjs
   - Ensures server-side rendering can reach backend via Docker network while client-side requests use localhost port forwarding
+- **Мобилно тестване (локална мрежа)** — За тестване от телефон на същата WiFi мрежа:
+  - `.env`: CORS_ORIGINS трябва да включва http://{LOCAL_IP}:3000
+  - `docker-compose.yml`: NEXT_PUBLIC_API_URL трябва да е http://{LOCAL_IP}:8000
+  - `apps/web/next.config.mjs`: allowedDevOrigins: ["{LOCAL_IP}"]
+  - При смяна на IP адреса на лаптопа — обнови и трите места
+  - Текущ IP: 192.168.0.15
 - **ScrollIntoView on Phone Validation Error (April 27, 2026)** — When phone validation fails on form submit, viewport smoothly scrolls to the phone field:
   - Applied in: apps/web/components/provider/ProviderWidget.tsx, apps/web/components/category/LeadForm.tsx
   - Ensures users immediately see validation errors and can correct them without manual scrolling
