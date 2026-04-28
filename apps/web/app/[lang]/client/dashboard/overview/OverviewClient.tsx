@@ -170,7 +170,7 @@ export default function OverviewClient({ lang }: { lang: string }) {
       {recentLeads.length === 0 ? (
         <div className="bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6 md:p-8 text-center space-y-4">
           <div className="space-y-1.5">
-            <p className="text-sm text-gray-500">{t('msg_no_recent_requests', 'No recent requests yet.')}</p>
+            <p className="text-sm text-gray-500">{t('empty_requests_title', 'No recent requests yet.')}</p>
           </div>
           <Link
             href={`/${lang}`}
