@@ -29,8 +29,6 @@ export function slugify(text: string): string {
  */
 export function isValidSlugFormat(slug: string): boolean {
   if (slug.length < 2 || slug.length > 50) return false;
-  // No numeric suffixes like -1, -123
-  if (/\-\d+$/.test(slug)) return false;
   // Only lowercase, numbers, and single hyphen separators
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return false;
   return true;
@@ -53,7 +51,6 @@ export function sanitizeSlug(input: string): string {
 export function getSlugValidationError(slug: string): string | null {
   if (slug.length < 2) return 'Slug must be at least 2 characters';
   if (slug.length > 50) return 'Slug must be at most 50 characters';
-  if (/\-\d+$/.test(slug)) return 'Numeric suffixes not allowed (e.g., devs-1)';
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
     return 'Only lowercase letters, numbers, and hyphens allowed';
   }

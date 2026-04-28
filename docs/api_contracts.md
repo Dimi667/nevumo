@@ -544,7 +544,7 @@ GET /api/v1/provider/slug/check?slug=devs&city_slug=sofia&category_slug=massage
 ```json
 {
   "success": false,
-  "error": { "code": "INVALID_SLUG", "message": "Numeric suffixes not allowed (e.g., devs-1)" },
+  "error": { "code": "INVALID_SLUG", "message": "Only lowercase letters, numbers, and hyphens allowed" },
   "data": { "available": false, "suggestions": [] }
 }
 ```
