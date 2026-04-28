@@ -10,6 +10,7 @@ import { useTranslation } from './use-translation';
 interface DashboardI18nContextValue {
   t: (key: string, fallback?: string) => string;
   lang: string;
+  isLoading: boolean;
 }
 
 interface DashboardI18nProviderProps {
@@ -25,6 +26,7 @@ export function DashboardI18nProvider({ children, lang }: DashboardI18nProviderP
   const value = {
     t,
     lang,
+    isLoading,
   };
 
   return (

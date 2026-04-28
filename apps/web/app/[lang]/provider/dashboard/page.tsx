@@ -66,7 +66,7 @@ interface PageProps {
 export default function DashboardOverviewPage({ params }: PageProps) {
   const { lang: paramsLang } = use(params);
   const router = useRouter();
-  const { t, lang: contextLang } = useDashboardI18n();
+  const { t, lang: contextLang, isLoading: translationsLoading } = useDashboardI18n();
   const lang = paramsLang || contextLang;
   const base = `/${lang}/provider/dashboard`;
 
@@ -116,7 +116,7 @@ export default function DashboardOverviewPage({ params }: PageProps) {
 
   // Derive onboarding state from missing_fields
   const onboardingState = deriveOnboardingState(profile?.missing_fields);
-  const isOnboardingComplete = profile?.is_complete ?? true;
+  const isOnboardingComplete = translationsLoading ? true : (profile?.is_complete ?? true);
   const heroContent = !isOnboardingComplete ? getHeroContent(onboardingState, t) : null;
 
   // Top sources for the preview (sorted desc, top 3)
