@@ -54,7 +54,8 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Backend: 6 endpoints на /api/v1/auth/, bcrypt hashing, JWT tokens
 - Frontend: lib/auth-api.ts (typed API calls), lib/auth-store.ts (localStorage)
 - Security: rate limiting, no email enumeration, token hashing, password policy
-- **Robustness**: BFCache support and auto-login recovery for duplicate registration attempts (back button flow).
+- **Robustness**: BFCache support and auto-login recovery for duplicate registration attempts (back button flow). Replaced legacy hidden iframe hacks with the **Credential Management API** (`navigator.credentials.store`) for robust password saving, including iOS Safari.
+- **Password save robustness**: Credential Management API replaces legacy iframe hack. Hidden email input in register form ensures Safari associates email+password. onInput handler fixes browser autofill not triggering React state. Native browser strong password suggestion replaces custom generator.
 - Phase 2 (future): OAuth Google + Facebook, email sending via Resend/SendGrid
 
 ### Shared

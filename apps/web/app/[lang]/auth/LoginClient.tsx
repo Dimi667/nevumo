@@ -8,56 +8,7 @@ import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
 import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@/lib/auth-api";
 import { saveAuth, isAuthenticated, getAuthUser } from "@/lib/auth-store";
 import { ApiError, API_BASE } from "@/lib/api";
-
-function generateStrongPassword(): string {
-  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const lowercase = 'abcdefghijklmnopqrstuvwxyz';
-  const numbers = '0123456789';
-  const symbols = '!@#$%&*_+-=?';
-  const all = uppercase + lowercase + numbers + symbols;
-  const getRandomChar = (chars: string) => chars[Math.floor(Math.random() * chars.length)];
-  const password = [
-    getRandomChar(uppercase),
-    getRandomChar(lowercase),
-    getRandomChar(numbers),
-    getRandomChar(symbols),
-  ];
-  for (let i = password.length; i < 16; i++) password.push(getRandomChar(all));
-  for (let i = password.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [password[i], password[j]] = [password[j]!, password[i]!];
-  }
-  return password.join('');
-}
-
-function triggerPasswordSave(email: string, password: string): void {
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = 'about:blank';
-  form.target = 'nevumo-auth-frame';
-  form.style.display = 'none';
-
-  const emailInput = document.createElement('input');
-  emailInput.type = 'email';
-  emailInput.name = 'email';
-  emailInput.autocomplete = 'username';
-  emailInput.value = email;
-  form.appendChild(emailInput);
-
-  const passwordInput = document.createElement('input');
-  passwordInput.type = 'password';
-  passwordInput.name = 'password';
-  passwordInput.autocomplete = password.length > 0 ? 'current-password' : 'new-password';
-  passwordInput.value = password;
-  form.appendChild(passwordInput);
-
-  document.body.appendChild(form);
-  form.submit();
-
-  setTimeout(() => {
-    document.body.removeChild(form);
-  }, 1000);
-}
+import { saveCredentials } from '@/lib/password-save';
 
 // ---------------------------------------------------------------------------
 // Icons (inline SVG — no external deps)
@@ -287,7 +238,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
     try {
       const result = await loginWithEmail(state.email, state.password);
       saveAuth(result.token, result.user);
-      triggerPasswordSave(state.email, state.password);
+      await saveCredentials(state.email, state.password);
       trackPageEvent('auth_success', 'auth', { method: 'email' });
       sessionStorage.removeItem(SESSION_EMAIL_KEY);
       clearStoredIntent();
@@ -356,7 +307,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
       const role = state.intent ?? 'client';
       const result = await registerWithEmail(state.email, state.password, role, lang);
       saveAuth(result.token, result.user);
-      triggerPasswordSave(state.email, state.password);
+      await saveCredentials(state.email, state.password);
       trackPageEvent('auth_success', 'login', { method: 'email' });
       sessionStorage.removeItem(SESSION_EMAIL_KEY);
       clearStoredIntent();
@@ -634,7 +585,16 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
               <p className="text-xs text-gray-600 mb-3">{t(authDict, 'register_subtitle', "We'll create an account automatically")}</p>
             )}
 
-            <form onSubmit={e => { e.preventDefault(); handleRegister(); }}>
+            <form action="" onSubmit={e => { e.preventDefault(); handleRegister(); }}>
+              <input
+                type="email"
+                name="email"
+                autoComplete="username"
+                value={state.email}
+                readOnly
+                style={{ display: 'none' }}
+                aria-hidden="true"
+              />
               <div className="relative mb-4">
                 <input
                   type={state.showPassword ? 'text' : 'password'}
@@ -642,11 +602,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
                   placeholder={t(authDict, 'password_placeholder_register', 'Click to generate a password')}
                   value={state.password}
                   onChange={e => handlePasswordChange(e.target.value)}
-                  onClick={() => {
-                    if (!state.password) {
-                      setState(s => ({ ...s, password: generateStrongPassword(), showPassword: true, error: null }));
-                    }
-                  }}
+                  onInput={e => handlePasswordChange((e.target as HTMLInputElement).value)}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
                 />
                 <button
@@ -711,14 +667,6 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
         )}
 
       </div>
-
-      {/* Hidden iframe for browser password save trigger */}
-      <iframe
-        name="nevumo-auth-frame"
-        className="hidden absolute w-0 h-0"
-        tabIndex={-1}
-        aria-hidden="true"
-      />
     </div>
   );
 }

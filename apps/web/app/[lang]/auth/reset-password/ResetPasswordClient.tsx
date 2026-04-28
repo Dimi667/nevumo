@@ -7,36 +7,11 @@ import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
 import { validateResetToken, resetPassword } from "@/lib/auth-api";
 import { saveAuth } from "@/lib/auth-store";
 import { ApiError } from "@/lib/api";
+import { saveCredentials } from '@/lib/password-save';
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function triggerPasswordSave(email: string, password: string): void {
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = 'about:blank';
-  form.target = 'nevumo-reset-frame';
-  form.style.display = 'none';
-
-  const emailInput = document.createElement('input');
-  emailInput.type = 'email';
-  emailInput.name = 'email';
-  emailInput.autocomplete = 'username';
-  emailInput.value = email;
-  form.appendChild(emailInput);
-
-  const passwordInput = document.createElement('input');
-  passwordInput.type = 'password';
-  passwordInput.name = 'password';
-  passwordInput.autocomplete = 'new-password';
-  passwordInput.value = password;
-  form.appendChild(passwordInput);
-
-  document.body.appendChild(form);
-  form.submit();
-  setTimeout(() => { document.body.removeChild(form); }, 1000);
-}
 
 // ---------------------------------------------------------------------------
 // Icons
@@ -154,7 +129,7 @@ export default function ResetPasswordClient({ lang, token }: ResetPasswordClient
       saveAuth(result.token, result.user);
 
       // Trigger browser password save using user email from auth result
-      triggerPasswordSave(result.user.email, state.password);
+      await saveCredentials(result.user.email, state.password);
 
       trackPageEvent('password_reset_success', 'reset-password', {});
       setState(s => ({ ...s, loading: false, page: 'success' }));
@@ -205,14 +180,6 @@ export default function ResetPasswordClient({ lang, token }: ResetPasswordClient
       <div className="w-full max-w-[400px] bg-white rounded-xl border border-gray-200 p-8">
         {children}
       </div>
-
-      {/* Hidden iframe for browser password save trigger */}
-      <iframe
-        name="nevumo-reset-frame"
-        style={{ display: 'none', width: 0, height: 0, position: 'absolute' }}
-        tabIndex={-1}
-        aria-hidden="true"
-      />
     </div>
   );
 
