@@ -272,8 +272,6 @@ class RegisterRequest(BaseModel):
         import re
         if len(v) < 2 or len(v) > 50:
             raise ValueError("Slug must be between 2 and 50 characters")
-        if re.search(r'-\d+$', v):
-            raise ValueError("Numeric suffixes like '-1', '-123' are not allowed for SEO reasons")
         if not re.match(r'^[a-z0-9]+(?:-[a-z0-9]+)*$', v):
             raise ValueError("Slug can only contain lowercase letters, numbers, and hyphens")
         return v
@@ -383,8 +381,6 @@ class ProviderProfileUpdateRequest(BaseModel):
             import re
             if len(v) < 2 or len(v) > 50:
                 raise ValueError("Slug must be 2-50 characters")
-            if re.search(r'-\d+$', v):
-                raise ValueError("Numeric suffixes not allowed (e.g., devs-1)")
             if not re.match(r'^[a-z0-9]+(?:-[a-z0-9]+)*$', v):
                 raise ValueError("Only lowercase letters, numbers, and hyphens allowed")
         return v

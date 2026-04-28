@@ -572,8 +572,6 @@ def validate_slug(slug: str) -> tuple[bool, Optional[str]]:
     """Validate slug format. Returns (is_valid, error_message)."""
     if len(slug) < 2 or len(slug) > 50:
         return False, "Slug must be 2-50 characters"
-    if re.search(r'-\d+$', slug):
-        return False, "Numeric suffixes not allowed (e.g., devs-1)"
     if not re.match(r'^[a-z0-9]+(?:-[a-z0-9]+)*$', slug):
         return False, "Only lowercase letters, numbers, and hyphens allowed"
     return True, None
