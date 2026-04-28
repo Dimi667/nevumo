@@ -70,13 +70,12 @@ This separation ensures that:
     - label_client_notes, placeholder_client_notes, btn_save_and_close, btn_add_note
     - (+ 2 existing reused: label_date, label_status)
     - Seed script: `apps/api/scripts/seed_client_notes_translations.py`
-- **Dual Role Architecture (April 2026)** — COMPLETE:
-  - **PROBLEM:** One user can be both provider and client simultaneously (two tabs open)
-  - **SOLUTION:** Removed role-based guards, kept ownership-based security
-  - `apps/api/dependencies.py`: get_current_provider() now queries providers table by user_id instead of checking JWT role
-  - `apps/api/routes/client.py`: _require_client_role() was already a no-op (confirmed by audit)
-  - `apps/web/app/[lang]/provider/dashboard/layout.tsx`: guard now calls GET /api/v1/provider/dashboard to verify provider profile exists (not JWT role check)
-  - **Result:** user with role='client' JWT can access provider dashboard if they have a provider profile, and vice versa
+  - **Dual Role Architecture (April 2026)** — UPDATED:
+  - **PROBLEM:** One user can be both provider and client simultaneously (two tabs open). However, a provider accidentally landing on the client dashboard and clicking "Become a provider" received an `ALREADY_IN_ROLE` error.
+  - **SOLUTION:** 
+    - Kept ownership-based security on the backend.
+    - Added a frontend guard in `apps/web/app/[lang]/client/dashboard/layout.tsx` that decodes the JWT and redirects users with `role === 'provider'` to the provider dashboard.
+  - **Result:** Providers are automatically steered to the correct dashboard, preventing role-switch errors.
 - **Category Page Fix (April 2026)** — COMPLETE:
   - **PROBLEM:** CATEGORY_CONTENT keyed by Polish slugs (masaz, sprzatanie, hydraulik); URLs use English slugs (cleaning, massage, plumbing) → always showed cleaning content
   - **SOLUTION:** Re-keyed CATEGORY_CONTENT, CategoryKey type, relatedLinksByCategory from Polish to English slugs
