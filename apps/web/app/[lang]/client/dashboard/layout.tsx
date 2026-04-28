@@ -131,11 +131,22 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
 
   useEffect(() => {
     const token = getAuthToken();
-    const currentUser = getAuthUser();
 
     if (!token) {
       router.replace(`/${lang}/auth`);
       return;
+    }
+
+    // Redirect provider users to provider dashboard
+    try {
+      const payloadBase64 = token.split('.')[1];
+      const decodedPayload = JSON.parse(atob(payloadBase64));
+      if (decodedPayload.role === 'provider') {
+        router.replace(`/${lang}/provider/dashboard`);
+        return;
+      }
+    } catch (e) {
+      console.error('Error decoding token:', e);
     }
 
     setReady(true);

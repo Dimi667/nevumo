@@ -1005,22 +1005,36 @@ def update_provider_profile(
 # ---------------------------------------------------------------------------
 
 def get_dashboard_stats(provider: Provider, db: Session) -> dict:
-    """Return KPI stats for the provider dashboard."""
-    total_leads = (
-        db.query(func.count(Lead.id))
-        .filter(Lead.provider_id == provider.id)
-        .scalar()
-        or 0
-    )
+    """Return KPI stats for the provider dashboard.
+    Counts both direct leads (Lead.provider_id) and marketplace matches (LeadMatch)."""
+    from sqlalchemy import text
 
-    new_leads = (
+    # total_leads: count unique lead IDs from both direct leads and lead_matches
+    total_leads = db.execute(text("""
+        SELECT COUNT(*) FROM (
+            SELECT id FROM leads WHERE provider_id = :pid
+            UNION
+            SELECT lead_id FROM lead_matches WHERE provider_id = :pid
+        ) AS combined
+    """), {"pid": str(provider.id)}).scalar() or 0
+
+    # new_leads: direct leads with status='created' + lead_matches with status='invited'
+    direct_new = (
         db.query(func.count(Lead.id))
         .filter(Lead.provider_id == provider.id, Lead.status == "created")
         .scalar()
         or 0
     )
+    matched_new = (
+        db.query(func.count(LeadMatch.id))
+        .filter(LeadMatch.provider_id == provider.id, LeadMatch.status == "invited")
+        .scalar()
+        or 0
+    )
+    new_leads = direct_new + matched_new
 
-    contacted_leads = (
+    # contacted_leads: direct leads with status='contacted' + lead_matches with status='contacted'
+    direct_contacted = (
         db.query(func.count(Lead.id))
         .filter(
             Lead.provider_id == provider.id,
@@ -1029,6 +1043,16 @@ def get_dashboard_stats(provider: Provider, db: Session) -> dict:
         .scalar()
         or 0
     )
+    matched_contacted = (
+        db.query(func.count(LeadMatch.id))
+        .filter(
+            LeadMatch.provider_id == provider.id,
+            LeadMatch.status == "contacted",
+        )
+        .scalar()
+        or 0
+    )
+    contacted_leads = direct_contacted + matched_contacted
 
     return {
         "total_leads": total_leads,

@@ -167,12 +167,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
-- **General SEO Audit & Optimization (April 28, 2026)** — SUCCESSFUL:
-  - **Infrastructure**: `apps/web/lib/locales.ts` established as Source of Truth for 34 languages.
-  - **Automation**: Implemented `generateHreflangAlternates` for automated `hreflang` tags across all locales.
-  - **Metadata**: Unified Metadata Template (`%s | Nevumo`) and cleaned 34-language DB translations of brand suffixes.
-  - **Structured Data**: JSON-LD schemas (`Organization`, `WebSite`) implemented in `lib/seo.ts` with dynamic language adaptation.
-  - **Validation**: Established diagnostic protocol using Playwright + Phoenix.
+- **Client Dashboard Guard Fix (April 28, 2026)** — SUCCESSFUL:
+  - **Problem**: Users with `role="provider"` could land on the client dashboard. Clicking "Become a provider" resulted in an `ALREADY_IN_ROLE` error.
+  - **Fix**: Added a frontend guard in `apps/web/app/[lang]/client/dashboard/layout.tsx`.
+  - **Logic**: The guard decodes the JWT from `localStorage` and redirects any user with `role === 'provider'` to the provider dashboard.
+  - **Implementation**: Uses `useEffect`, `getAuthToken`, and `router.replace` with manual JWT payload decoding.
+- **Provider Dashboard Stats Fix (April 28, 2026)** — Retro-matched leads now counted:
+  - **Problem**: Newly registered providers saw 0 on KPI cards (Total/New leads) despite retro-matched leads.
+  - **Root cause**: `get_dashboard_stats()` in `apps/api/services/provider_service.py` only counted `Lead.provider_id == provider.id`. Retro-matched lives in `lead_matches` table.
+  - **Fix**: `total_leads` replaced with UNION SQL query (leads + lead_matches). `new_leads` and `contacted_leads` updated to include `LeadMatch.status` 'invited'/'contacted'.
 - **Delete Account — GDPR-compliant (April 25, 2026)**
   - Backend: `DELETE /api/v1/auth/account` (JWT required) in `apps/api/routes/auth.py` + `apps/api/services/auth_service.py`
   - Deletion order (single DB transaction):

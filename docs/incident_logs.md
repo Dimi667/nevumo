@@ -1,5 +1,27 @@
 # Incident Logs
 
+## 2026-04-28 — Provider Dashboard Stats Excluded Retro-Matched Leads
+
+**Проблем:** Новорегистрирани провайдери виждат 0 на KPI картите (Общо/Нови запитвания) въпреки retro-matched leads.
+
+**Root cause:** get_dashboard_stats() в apps/api/services/provider_service.py броеше само Lead.provider_id == provider.id. Retro-matched leads живеят в lead_matches таблицата и не се брояха.
+
+**Fix:** total_leads заменен с UNION SQL заявка (leads + lead_matches). new_leads и contacted_leads обновени да включват LeadMatch.status 'invited'/'contacted'.
+
+**Файл:** apps/api/services/provider_service.py → get_dashboard_stats()
+
+---
+
+## 2026-04-28 — Client Dashboard Showed Wrong Role State
+
+**Проблем:** Потребител с JWT role="provider" попадаше на client dashboard и получаваше ALREADY_IN_ROLE при клик на "Стани доставчик".
+
+**Root cause:** Client dashboard layout нямаше JWT role guard — не проверяваше дали токенът вече е provider.
+
+**Fix:** Добавен useEffect guard в apps/web/app/[lang]/client/dashboard/layout.tsx — декодира JWT, ако role="provider" redirect-ва към /[lang]/provider/dashboard.
+
+**Тестван — PASS**
+
 ## 2026-04-28 — Retro-Matching Widget Lead Leak
 
 **Проблем:** Нови провайдери получаваха widget leads от чужди провайдери при retro-matching.
