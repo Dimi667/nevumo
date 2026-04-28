@@ -1,5 +1,15 @@
 # Incident Logs
 
+## 2026-04-28 — Retro-Matching Widget Lead Leak
+
+**Проблем:** Нови провайдери получаваха widget leads от чужди провайдери при retro-matching.
+
+**Root cause:** retro_match_provider() не филтрираше по Lead.provider_id — widget leads с provider_id != NULL се матчваха към всички нови провайдери в категорията.
+
+**Fix:** Добавен филтър Lead.provider_id == None в retro_match_provider() в apps/api/services/provider_service.py.
+
+**Тестван с @mcp-playwright — PASS**
+
 ## 2026-04-28 — Mass SEO Title Duplicate Correction
 
 **Symptom:** Duplicated brand name "Nevumo" in page titles (e.g., "Home | Nevumo | Nevumo").
