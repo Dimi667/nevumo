@@ -1173,10 +1173,11 @@ Returned in dashboard response as profile.is_complete + profile.missing_fields[]
 - JPEG, PNG, WebP, HEIC, HEIF (iPhone formats)
 
 **Processing Steps:**
-1. **Format Conversion**: All images automatically converted to WebP format for optimization
-2. **Resize**: Images larger than 1200px are resized proportionally to max 1200px width/height
-3. **Quality**: WebP quality set to 85% for optimal balance between quality and file size
-4. **HEIC/HEIF Support**: iPhone formats are converted to WebP using pillow-heif library
+1. **EXIF Orientation Correction**: `ImageOps.exif_transpose(img)` is applied immediately after `Image.open()` to correctly orient images taken with mobile phones. Mobile cameras physically capture in landscape mode and store rotation in EXIF metadata — without this step, portrait photos appear rotated 90°.
+2. **Format Conversion**: All images automatically converted to WebP format for optimization
+3. **Resize**: Images larger than 1200px are resized proportionally to max 1200px width/height
+4. **Quality**: WebP quality set to 85% for optimal balance between quality and file size
+5. **HEIC/HEIF Support**: iPhone formats are converted to WebP using pillow-heif library
 
 **Storage:**
 - Phase 1: Local filesystem at uploads/provider_images/{provider_id}.webp
