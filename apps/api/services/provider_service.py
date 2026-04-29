@@ -175,7 +175,8 @@ def save_provider_image(provider_id: UUID, content: bytes, content_type: str, ba
     
     # Open image from bytes
     img = Image.open(io.BytesIO(content))
-    
+    img = ImageOps.exif_transpose(img)
+
     # Convert RGBA to RGB if necessary (WebP supports RGBA but we want consistency)
     if img.mode in ('RGBA', 'LA', 'P'):
         img = img.convert('RGB')
