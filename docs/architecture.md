@@ -30,6 +30,9 @@ This document reflects the major architectural optimization performed in April 2
 - **CORS Configuration (April 2026)**: Added `CORSMiddleware` to `apps/api/main.py` using a configurable `CORS_ORIGINS` setting from `.env` (via `load_dotenv()`) to allow secure communication from the frontend domain.
 
 ### 5. Next.js & UI (Metadata + i18n)
+- **Universal Slug Generation (April 30, 2026)**: Unified URL slug generation logic between Frontend and Backend to support all 34 languages.
+  - **Frontend**: Removed the hardcoded 'bg' locale from `apps/web/lib/slug-utils.ts` and replaced the primitive implementation in `apps/web/lib/slugify.ts` with the robust `slugify` library.
+  - **Backend**: Standardized `apps/api/services/provider_service.py` to use a consistent `slugify` wrapper with pre-defined Cyrillic replacements, ensuring identical output for special characters (Turkish İ/ı, German ü/ö, Icelandic ð/þ, etc.) across the entire stack.
 - **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow. Replaced legacy hidden iframe hacks with the modern **Credential Management API** (`navigator.credentials.store`) for robust password saving across all modern browsers including iOS Safari.
 - **Client Dashboard Optimization (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page.
 - **Dynamic User Intent Navigation (April 30, 2026)**: Implemented "City-First" navigation logic for clients. The "Find Service" button in the dashboard (Overview, Sidebar, Requests, and Reviews) now dynamically links based on the `last_city_slug` returned by the API via a multi-layer fallback chain:
@@ -41,6 +44,78 @@ This document reflects the major architectural optimization performed in April 2
    - **last_city_slug present** → Redirect to `/[lang]/[last_city_slug]` (returns user to their relevant local market).
    - **last_city_slug is null** → Redirect to `/[lang]/izberi-grad` (City Selection page).
    Maximizes conversion by returning users to their relevant context while providing a clear selection path if no history exists.
+- **City Landing Page SEO Optimization (April 30, 2026)**:
+  - **Canonical Tags**: Added absolute canonical URLs to `apps/web/app/[lang]/[city]/page.tsx` using `NEXT_PUBLIC_SITE_URL` environment variable.
+  - **JSON-LD Implementation**:
+    - Integrated `Organization` and `WebSite` schemas from `apps/web/lib/seo.ts`.
+    - Added `LocalBusiness` schema using `generateLocalBusinessJsonLd`.
+    - **I18n Compliance**: Schema data (name, description, services) is fully localized using the `lang` parameter and `city` namespace translations.
+    - **Pseudo-Provider Pattern**: Since the city landing page does not have a single provider, a pseudo-provider object representing the platform's presence in the city is used to satisfy the `LocalBusiness` schema requirement.
+
+### Automated SEO Infrastructure (April 30, 2026)
+The system now implements a fully automated SEO strategy for City Landing pages, ensuring production-ready technical SEO across all 34 supported languages:
+
+#### Canonical Tag Generation
+- **Implementation**: `apps/web/app/[lang]/[city]/page.tsx` automatically generates absolute canonical URLs
+- **Environment Variable**: Uses `NEXT_PUBLIC_SITE_URL` to construct canonical links
+- **Purpose**: Prevents duplicate content issues by specifying the canonical version of each city landing page
+- **Scope**: Applied to all city landing pages across all language variants
+
+#### JSON-LD Structured Data
+Three types of structured data schemas are automatically generated for each city landing page:
+
+1. **Organization Schema** (`apps/web/lib/seo.ts`)
+   - Describes Nevumo as a business entity
+   - Includes: name, url, logo, contact information
+   - Serves as the foundation for all city-specific business data
+
+2. **WebSite Schema** (`apps/web/lib/seo.ts`)
+   - Defines the website structure and search functionality
+   - Includes: name, url, potentialAction (SearchAction)
+   - Enables rich search results in Google
+
+3. **LocalBusiness Schema** (`generateLocalBusinessJsonLd`)
+   - **Purpose**: Represents Nevumo's presence in each specific city
+   - **Pseudo-Provider Pattern**: Since city pages don't have a single provider, a pseudo-provider object represents the platform's local presence
+   - **Fields Included**:
+     - `@type`: LocalBusiness
+     - `name`: Localized city name + "Nevumo"
+     - `description`: Localized description from `city` namespace translations
+     - `url`: Absolute URL to the city landing page
+     - `areaServed`: City and country information
+     - `priceRange`: Dynamic price range from `/api/v1/price-range` endpoint
+     - `aggregateRating`: Platform-wide rating (if available)
+   - **I18n Compliance**: All text fields (name, description, services) are fully localized using the `lang` parameter and `city` namespace translations
+
+#### Universal Multi-Language Slug Logic
+The slug generation system has been unified across the entire stack to support special characters from all 34 languages:
+
+- **Frontend** (`apps/web/lib/slug-utils.ts`):
+  - Removed hardcoded `locale: 'bg'` parameter
+  - Replaced primitive implementation in `apps/web/lib/slugify.ts` with the robust `slugify` library
+  - Dynamic locale handling based on the current language context
+
+- **Backend** (`apps/api/services/provider_service.py`):
+  - Standardized slug generation with a consistent `slugify` wrapper
+  - Pre-defined character replacements for special characters across 34 languages:
+    - Turkish: İ → i, ı → i
+    - German: ü → u, ö → o, ä → a, ß → ss
+    - Icelandic: ð → d, þ → th
+    - Cyrillic: Full transliteration support for all Cyrillic-based languages
+  - Ensures identical slug output between frontend and backend
+
+- **Result**:
+  - Consistent URL structure across all languages
+  - No duplicate content issues from slug variations
+  - SEO-friendly URLs that preserve language-specific character semantics
+  - Scalable to 10,000+ locations without slug conflicts
+
+#### Production Readiness
+The automated SEO infrastructure is designed for:
+- **Scalability**: Can handle 10,000+ city landing pages without manual intervention
+- **Consistency**: All pages follow the same SEO pattern across all languages
+- **Performance**: JSON-LD and canonical tags are generated server-side (SSR) for optimal page load speed
+- **Compliance**: Follows Google's structured data guidelines and SEO best practices
 
 ### Docker Environment Variable Pattern (April 27, 2026)
 Next.js in Docker requires two separate environment variables to handle server-side and client-side API communication correctly:

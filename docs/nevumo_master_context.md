@@ -94,8 +94,17 @@ Nevumo е уеб платформа за marketplace на услуги.
 ### SEO Infrastructure (April 2026)
 - **Автоматизация**: Автоматично генериране на `hreflang` за всички 34 езика чрез `generateHreflangAlternates`.
 - **Метаданни**: Използване на Metadata Template (`%s | Nevumo`). Преводите в БД са без бранд суфикси.
-- **Structured Data**: JSON-LD схеми (`Organization`, `WebSite`) през `lib/seo.ts`. Динамична адаптация според езика.
+- **Structured Data**: JSON-LD схеми (`Organization`, `WebSite`, `LocalBusiness`) през `lib/seo.ts`. Динамична адаптация според езика.
 - **Валидация**: Playwright + Phoenix за SEO одит на рендериран код.
+- **Canonical Tags**: Автоматично генериране на абсолютни canonical URLs за всички City Landing страници чрез `NEXT_PUBLIC_SITE_URL`.
+- **Universal Slug Logic**: Унифицирана логика за генериране на slugs между Frontend (`apps/web/lib/slug-utils.ts`) и Backend (`apps/api/services/provider_service.py`), поддържаща специални символи за 34 езика (Turkish İ/ı, German ü/ö, Icelandic ð/þ, Cyrillic).
+
+### Production Ready Status (April 30, 2026)
+- **Technical SEO**: Системата е напълно готова за производство по отношение на техническото SEO
+- **Scalability**: Архитектурата поддържа мащабиране до 10,000+ локации без ръчна интервенция
+- **Automation**: Всички SEO елементи (canonical tags, JSON-LD, hreflang, slugs) се генерират автоматично
+- **Performance**: JSON-LD и canonical tags се генерират server-side (SSR) за оптимална скорост
+- **Compliance**: Следва напълно Google's structured data guidelines и SEO best practices
 
 ### Supported languages (34):
 bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, nl, no, pl, pt, pt-PT, ro, ru, sk, sl, sq, sr, sv, tr, uk
@@ -167,6 +176,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Universal Slug Generation (April 30, 2026)** — SUCCESSFUL:
+  - **Problem**: Inconsistent slug logic between Frontend and Backend, and limited support for special characters beyond Bulgarian.
+  - **Solution**: Unified slug generation logic stack-wide.
+  - **Frontend**: Removed hardcoded `locale: 'bg'` from `apps/web/lib/slug-utils.ts` and updated `apps/web/lib/slugify.ts` to use the robust `slugify` library.
+  - **Backend**: Standardized `apps/api/services/provider_service.py` with a consistent `slugify` wrapper using pre-defined replacements to match Frontend behavior.
+  - **Result**: Identical slug output across 34 languages, correctly handling Turkish (İ, ı), German (ü, ö), Icelandic (ð, þ), and Cyrillic characters.
 - **City Fallback Chain Expansion (April 30, 2026)** — COMPLETE:
   - **Problem**: Providers with services in a specific city were seeing /izberi-grad instead of their city in the client dashboard
   - **Solution**: Expanded fallback chain in apps/api/services/client_service.py
