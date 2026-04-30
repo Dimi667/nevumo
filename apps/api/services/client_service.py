@@ -5,7 +5,7 @@ from sqlalchemy import and_, func
 from sqlalchemy.orm import Session, aliased
 
 from apps.api.exceptions import NevumoException
-from apps.api.models import Category, CategoryTranslation, Lead, Location, Provider, Review, User
+from apps.api.models import Category, CategoryTranslation, Lead, Location, Provider, Review, Service, ServiceCity, User
 
 ACTIVE_LEAD_STATUSES: tuple[str, ...] = ("created", "pending_match", "matched", "contacted")
 REJECTED_LEAD_STATUSES: tuple[str, ...] = ("rejected", "expired", "cancelled")
@@ -111,6 +111,19 @@ def get_client_dashboard(client_id: UUID, db: Session, lang: str = 'en') -> dict
                 .limit(1)
                 .scalar()
             )
+
+    # Priority 3: Provider service city (fallback)
+    if not last_city_slug:
+        last_city_slug = (
+            db.query(Location.slug)
+            .join(ServiceCity, ServiceCity.city_id == Location.id)
+            .join(Service, Service.id == ServiceCity.service_id)
+            .join(Provider, Provider.id == Service.provider_id)
+            .filter(Provider.user_id == client_id)
+            .order_by(Service.created_at.desc())
+            .limit(1)
+            .scalar()
+        )
 
     return {
         "stats": {

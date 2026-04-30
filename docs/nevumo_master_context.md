@@ -167,11 +167,20 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **City Fallback Chain Expansion (April 30, 2026)** — COMPLETE:
+  - **Problem**: Providers with services in a specific city were seeing /izberi-grad instead of their city in the client dashboard
+  - **Solution**: Expanded fallback chain in apps/api/services/client_service.py
+  - **New fallback chain**:
+    1. user.city_id
+    2. Last lead as client
+    3. City from provider's last service (if user is a provider)
+    4. null → /izberi-grad
+  - **Testing**: 4 scenarios tested — all passed successfully
 - **City Context System (April 30, 2026)** — COMPLETE:
   - **Database**: Added `city_id INTEGER REFERENCES locations(id)` to users table (nullable, "last known context", not permanent residence)
   - **Index**: `idx_users_city_id` for efficient queries
   - **Architecture**: city_id represents "last known context", updated on registration from URL city parameter and on each new lead submission
-  - **Fallback chain**: user.city_id → last lead → null → /[lang]/izberи-град
+  - **Fallback chain**: user.city_id → last lead (as client) → last service city (as provider) → null → /[lang]/izberi-grad
   - **New endpoint**: GET /api/v1/cities/active?lang={lang} — returns only cities with at least 1 active provider, Redis cached as `cities:active:{lang}`
   - **New page**: /[lang]/izberи-град — SSR city selection page with grid of active cities, SEO-indexable
   - **Client dashboard**: "Намери услуга" button redirects to /{lang}/{last_city_slug} if available, otherwise /{lang}/izberи-град
