@@ -3,7 +3,9 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { getCategories, getCityBySlug, API_BASE } from '@/lib/api';
 import CityPageHero from '@/components/city/CityPageHero';
-import { generateHreflangAlternates } from '@/lib/seo';
+import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd } from '@/lib/seo';
+import { JsonLd } from '@/components/JsonLd';
+import type { ProviderDetail, ServiceOut } from '@/lib/api';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 
 interface PageProps {
@@ -49,10 +51,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = t(cityT, 'seo_title', `${cityName} — Local Services | Nevumo`).replace('{city}', cityName);
   const description = t(cityT, 'seo_description', `Find trusted local services in ${cityName}. Free requests, no obligation. Cleaning, plumbing, massage and more.`).replace('{city}', cityName);
 
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
+
   return {
     title,
     description,
     alternates: {
+      canonical: `${SITE_URL}/${lang}/${city}`,
       languages: generateHreflangAlternates(`/${city}`),
     },
     openGraph: {
@@ -87,8 +92,44 @@ export default async function CityPage({ params }: PageProps) {
   // Use API categories or fallback for development
   const displayCategories = categories.length > 0 ? categories : fallbackCategories;
 
+  // SEO Schema data
+  const organizationJsonLd = generateOrganizationJsonLd();
+  const websiteJsonLd = generateWebSiteJsonLd(lang);
+  
+  // Create a pseudo-provider to represent the platform in this city for LocalBusiness schema
+  const cityPseudoProvider: ProviderDetail = {
+    id: `city-${city}`,
+    business_name: t(cityT, 'seo_title', `${cityName} — Local Services | Nevumo`).replace('{city}', cityName),
+    description: t(cityT, 'seo_description', `Find trusted local services in ${cityName}.`).replace('{city}', cityName),
+    slug: city,
+    profile_image_url: null,
+    rating: cityStats.average_rating || 4.8,
+    verified: true,
+    services: displayCategories.map((cat) => ({
+      id: `cat-${cat.slug}`,
+      title: cat.name,
+      description: t(cityT, `cat_${cat.slug}_leads`, 'Available now'),
+      price_type: 'request',
+      base_price: null,
+      category_slug: cat.slug,
+      currency: cityData?.currency || 'BGN'
+    })),
+    jobs_completed: cityStats.request_count,
+    review_count: 0,
+    leads_received: cityStats.request_count,
+    city_leads: cityStats.request_count,
+    translations: {},
+    is_claimed: true
+  };
+  
+  const localBusinessJsonLd = generateLocalBusinessJsonLd(cityPseudoProvider, t(cityT, 'categories_title', 'Local Services').replace('{city}', cityName), cityName);
+
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <JsonLd data={organizationJsonLd} />
+      <JsonLd data={websiteJsonLd} />
+      <JsonLd data={localBusinessJsonLd} />
+      <div className="min-h-screen bg-white">
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         <Link href={`/${lang}`} className="inline-flex items-center">
@@ -227,5 +268,6 @@ export default async function CityPage({ params }: PageProps) {
         </div>
       </footer>
     </div>
+    </>
   );
 }

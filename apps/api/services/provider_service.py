@@ -18,9 +18,26 @@ if TYPE_CHECKING:
 import qrcode
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 from pillow_heif import register_heif_opener
-from slugify import slugify
+from slugify import slugify as python_slugify
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+
+# Nevumo Universal Slug Mapping to match JS 'slugify' library defaults
+# This ensures Frontend and Backend generate identical slugs for all 34 languages.
+SLUG_REPLACEMENTS = [
+    ["щ", "sh"],
+    ["ц", "c"],
+    ["я", "ya"],
+    ["ю", "yu"],
+    ["й", "j"],
+    ["і", "i"],
+    ["є", "ie"],
+    ["ї", "i"],
+]
+
+def slugify(text: str, **kwargs) -> str:
+    """Universal slugify that matches the frontend logic."""
+    return python_slugify(text, replacements=SLUG_REPLACEMENTS, **kwargs)
 
 # Register HEIF opener to support HEIC/HEIF formats
 register_heif_opener()
