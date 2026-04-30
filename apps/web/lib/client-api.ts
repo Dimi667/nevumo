@@ -14,6 +14,7 @@ export interface ClientDashboardRecentLead {
   category_slug: string;
   category_name: string;
   city: string;
+  city_slug: string;
   provider_business_name: string | null;
   status: ClientLeadStatus;
   created_at: string;
@@ -22,6 +23,7 @@ export interface ClientDashboardRecentLead {
 export interface ClientDashboardData {
   stats: ClientDashboardStats;
   recent_leads: ClientDashboardRecentLead[];
+  last_city_slug?: string;
 }
 
 export interface ClientLead {

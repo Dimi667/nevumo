@@ -167,6 +167,20 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **City Context System (April 30, 2026)** — COMPLETE:
+  - **Database**: Added `city_id INTEGER REFERENCES locations(id)` to users table (nullable, "last known context", not permanent residence)
+  - **Index**: `idx_users_city_id` for efficient queries
+  - **Architecture**: city_id represents "last known context", updated on registration from URL city parameter and on each new lead submission
+  - **Fallback chain**: user.city_id → last lead → null → /[lang]/izberи-град
+  - **New endpoint**: GET /api/v1/cities/active?lang={lang} — returns only cities with at least 1 active provider, Redis cached as `cities:active:{lang}`
+  - **New page**: /[lang]/izberи-град — SSR city selection page with grid of active cities, SEO-indexable
+  - **Client dashboard**: "Намери услуга" button redirects to /{lang}/{last_city_slug} if available, otherwise /{lang}/izberи-град
+  - **Provider dashboard**: "Намери услуга" now redirects directly without switchRole API call if user already has client role
+  - **Schema**: RegisterRequest updated with optional city_id field
+- **Provider Dashboard "Find Service" Fix (April 29, 2026)** — SUCCESSFUL:
+  - **Problem**: Clicking "Find Service" in the provider dashboard sidebar while already having a client role resulted in an `ALREADY_IN_ROLE` error (400) from the API.
+  - **Fix**: Added a frontend check in `apps/web/components/dashboard/DashboardSidebar.tsx`.
+  - **Logic**: If `user.role === 'client'`, the app now redirects directly to the client dashboard without calling the `switchRole` API.
 - **Client Dashboard Guard Fix (April 28, 2026)** — SUCCESSFUL:
   - **Problem**: Users with `role="provider"` could land on the client dashboard. Clicking "Become a provider" resulted in an `ALREADY_IN_ROLE` error.
   - **Fix**: Added a frontend guard in `apps/web/app/[lang]/client/dashboard/layout.tsx`.
@@ -547,6 +561,11 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Modified `change_lead_status` to prevent `lead_match.status` update when lead is cancelled.
   - Added `cancelled` status to `lead_matches` check constraint via Alembic migration `cdf063316609`.
   - Updated documentation (`db_schema.md`, `models.py`) to reflect schema changes.
+- **Client Dashboard Dynamic Redirect (April 29, 2026)** — COMPLETE:
+  - Updated `getClientDashboard` (API + Frontend) to include `last_city_slug` based on the most recent lead.
+  - Enhanced `OverviewClient.tsx` to dynamically redirect the "Find Service" button to `/[lang]/[city_slug]` instead of `/[lang]`.
+  - Added fallback logic to `/[lang]` if the user has no previous requests.
+  - Synchronized `api_contracts.md` and `client-api.ts` interfaces.
   - **LeadForm UX**: Set `showTextarea` to true by default and removed the "Not sure" chip for a more direct request flow on city pages.
   - **Leads Rate Limiting UX**: API now returns the last `lead_id` on 429 errors, allowing email claim for rate-limited users.
   - **Next.js 16 Compliance**: Migrated `middleware.ts` to `proxy.ts` and resolved 404 routing issues on dashboard leads.

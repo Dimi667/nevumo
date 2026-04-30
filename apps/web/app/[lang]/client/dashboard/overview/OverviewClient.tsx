@@ -103,7 +103,7 @@ export default function OverviewClient({ lang }: { lang: string }) {
     }
 
     void loadDashboard();
-  }, []);
+  }, [lang]);
 
   if (loading) {
     return (
@@ -173,7 +173,7 @@ export default function OverviewClient({ lang }: { lang: string }) {
             <p className="text-sm text-gray-500">{t('empty_requests_title', 'No recent requests yet.')}</p>
           </div>
           <Link
-            href={`/${lang}`}
+            href={data?.last_city_slug ? `/${lang}/${data.last_city_slug}` : `/${lang}/izberi-grad`}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
           >
             {t('cta_find_service', 'Find Service')}

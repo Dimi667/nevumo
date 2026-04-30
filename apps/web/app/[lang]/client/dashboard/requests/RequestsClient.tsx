@@ -169,6 +169,7 @@ export default function RequestsClient({ lang }: { lang: string }) {
   const [activeTab, setActiveTab] = useState<ClientLeadFilterStatus>(getInitialTab);
   const [leads, setLeads] = useState<ExtendedClientLead[]>([]);
   const [total, setTotal] = useState(0);
+  const [lastCitySlug, setLastCitySlug] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -198,6 +199,14 @@ export default function RequestsClient({ lang }: { lang: string }) {
       const response = await getClientLeads(token, status, undefined, undefined, lang);
       setLeads(response.items as ExtendedClientLead[]);
       setTotal(response.total);
+
+      // Also fetch dashboard to get last_city_slug for the "Find Service" button
+      try {
+        const dashboard = await getClientDashboard(token, lang);
+        setLastCitySlug(dashboard.last_city_slug ?? null);
+      } catch (e) {
+        console.error('Error fetching dashboard for last_city_slug:', e);
+      }
 
       // Auto-open modal from URL param
       const openId = searchParams.get('open');
@@ -349,7 +358,7 @@ export default function RequestsClient({ lang }: { lang: string }) {
             {t('requests_empty_desc', 'Send a new request and it will appear here.')}
           </p>
           <Link
-            href={`/${lang}`}
+            href={lastCitySlug ? `/${lang}/${lastCitySlug}` : `/${lang}/izberi-grad`}
             className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
           >
             {t('cta_find_service', 'Find Service')}

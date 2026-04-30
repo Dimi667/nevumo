@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getAuthToken } from '@/lib/auth-store';
 import {
+  getClientDashboard,
   getClientReviews,
   getEligibleLeads,
   getReviewPreferences,
@@ -120,6 +121,7 @@ export default function ClientReviewsPage() {
   const [activeTab, setActiveTab] = useState<ReviewsTab>('written');
   const [writtenReviews, setWrittenReviews] = useState<ClientReview[]>([]);
   const [pendingLeads, setPendingLeads] = useState<EligibleLead[]>([]);
+  const [lastCitySlug, setLastCitySlug] = useState<string | null>(null);
   const [preferences, setPreferences] = useState<ReviewPreferences | null>(null);
   const [loadingTab, setLoadingTab] = useState(true);
   const [loadingPreferences, setLoadingPreferences] = useState(true);
@@ -146,6 +148,14 @@ export default function ClientReviewsPage() {
       setLoadingPreferences(true);
       const prefsData = await getReviewPreferences(token);
       setPreferences(prefsData);
+
+      // Also fetch dashboard to get last_city_slug for the "Find Service" button
+      try {
+        const dashboard = await getClientDashboard(token, lang);
+        setLastCitySlug(dashboard.last_city_slug ?? null);
+      } catch (e) {
+        console.error('Error fetching dashboard for last_city_slug:', e);
+      }
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Неуспешно зареждане на настройките.');
     } finally {
@@ -439,7 +449,7 @@ export default function ClientReviewsPage() {
                 {t(dict, 'empty_pending_desc', 'Completed services you have not rated...')}
               </p>
               <Link
-                href={`/${lang}`}
+                href={lastCitySlug ? `/${lang}/${lastCitySlug}` : `/${lang}/izberi-grad`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
               >
                 {t(dict, 'cta_find_service', 'Find Service')}

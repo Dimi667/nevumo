@@ -119,6 +119,10 @@ async def create_lead(
         for p in matching_providers:
             db.add(LeadMatch(lead_id=lead.id, provider_id=p.id, status="invited"))
 
+    # Update user's last known city context
+    if lead.city_id and lead.client_id:
+        db.query(User).filter(User.id == lead.client_id).update({"city_id": lead.city_id})
+
     db.commit()
     db.refresh(lead)
 

@@ -241,6 +241,7 @@ class RegisterRequest(BaseModel):
     email: str
     password: str
     role: str = "provider"
+    city_id: Optional[int] = None
     slug: Optional[str] = None  # User's preferred slug
     city_slug: Optional[str] = None  # For suggestions context
     category_slug: Optional[str] = None  # For suggestions context
@@ -577,6 +578,7 @@ class ClientDashboardRecentLead(BaseModel):
     category_slug: str
     category_name: str
     city: str
+    city_slug: str
     provider_business_name: Optional[str] = None
     status: str
     created_at: datetime
@@ -585,6 +587,7 @@ class ClientDashboardRecentLead(BaseModel):
 class ClientDashboardData(BaseModel):
     stats: ClientDashboardStats
     recent_leads: List[ClientDashboardRecentLead]
+    last_city_slug: Optional[str] = None
 
 
 class ClientDashboardResponse(BaseModel):

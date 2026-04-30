@@ -102,6 +102,7 @@ async def register(
         email=body.email,
         password_hash=hash_password(body.password),
         role=body.role,
+        city_id=body.city_id,
         is_active=True,
     )
     db.add(user)

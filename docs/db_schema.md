@@ -21,6 +21,7 @@ CREATE TABLE users (
     role TEXT NOT NULL CHECK (role IN ('client', 'provider')),
     locale TEXT NOT NULL DEFAULT 'en',
     country_code CHAR(2),
+    city_id INTEGER REFERENCES locations(id),
     review_reply_email_enabled BOOLEAN NOT NULL DEFAULT TRUE,  -- Opt-in for review reply emails
     created_at TIMESTAMP DEFAULT NOW()
 );
@@ -28,6 +29,7 @@ CREATE TABLE users (
 CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_users_review_reply_email ON users(review_reply_email_enabled);
 CREATE INDEX idx_users_phone ON users(phone) WHERE phone IS NOT NULL;
+CREATE INDEX idx_users_city_id ON users(city_id);
 
 ---
 

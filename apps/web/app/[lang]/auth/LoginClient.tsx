@@ -2,12 +2,12 @@
 // TODO: i18n
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import { trackPageEvent } from "@/lib/tracking";
 import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
 import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@/lib/auth-api";
 import { saveAuth, isAuthenticated, getAuthUser } from "@/lib/auth-store";
-import { ApiError, API_BASE } from "@/lib/api";
+import { ApiError, API_BASE, getCityBySlug } from "@/lib/api";
 import { saveCredentials } from '@/lib/password-save';
 
 // ---------------------------------------------------------------------------
@@ -91,6 +91,10 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
   console.log('[AuthPage] authDict sample:', authDict);
   const t = (dict: Record<string, string>, key: string, fallback: string): string => dict[key] ?? fallback;
   const searchParams = useSearchParams();
+  const params = useParams();
+  const citySlug = (params?.city as string) || searchParams.get('city') || null;
+  const [cityId, setCityId] = useState<number | null>(null);
+
   const claimToken = searchParams.get('claim');
   const [state, setState] = useState<AuthState>({
     step: 'initial',
@@ -149,6 +153,15 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
     setState(s => ({ ...s, intent: resolvedIntent, email: savedEmail }));
     trackPageEvent('auth_view', 'auth', { intent: resolvedIntent ?? 'unknown' });
     
+    // Fetch city ID if city slug is present in URL
+    if (citySlug) {
+      getCityBySlug(citySlug).then(cityData => {
+        if (cityData) {
+          setCityId(cityData.id);
+        }
+      });
+    }
+
     // Auto-advance to password step if email is provided via URL
     if (urlEmail && EMAIL_RE.test(urlEmail)) {
       handleCheckEmailDirectly(urlEmail);
@@ -305,7 +318,16 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
     setState(s => ({ ...s, loading: true, error: null }));
     try {
       const role = state.intent ?? 'client';
-      const result = await registerWithEmail(state.email, state.password, role, lang);
+      const result = await registerWithEmail(
+        state.email, 
+        state.password, 
+        role, 
+        lang, 
+        undefined, 
+        undefined, 
+        undefined, 
+        cityId ?? null
+      );
       saveAuth(result.token, result.user);
       await saveCredentials(state.email, state.password);
       trackPageEvent('auth_success', 'login', { method: 'email' });

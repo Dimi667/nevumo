@@ -24,6 +24,7 @@ export function registerWithEmail(
   slug?: string,
   citySlug?: string,
   categorySlug?: string,
+  cityId?: number | null,
 ): Promise<AuthResult> {
   return apiPost<AuthResult>("/api/v1/auth/register", { 
     email, 
@@ -33,6 +34,7 @@ export function registerWithEmail(
     slug,
     city_slug: citySlug,
     category_slug: categorySlug,
+    city_id: cityId,
   });
 }
 

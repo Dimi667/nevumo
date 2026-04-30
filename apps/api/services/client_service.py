@@ -55,6 +55,7 @@ def get_client_dashboard(client_id: UUID, db: Session, lang: str = 'en') -> dict
             Category.slug.label("category_slug"),
             func.coalesce(ct_req.name, ct_en.name, Category.slug).label("category_name"),
             Location.city.label("city"),
+            Location.slug.label("city_slug"),
             Provider.business_name.label("provider_business_name"),
             Lead.status.label("status"),
             Lead.created_at.label("created_at"),
@@ -83,12 +84,33 @@ def get_client_dashboard(client_id: UUID, db: Session, lang: str = 'en') -> dict
             "category_slug": row.category_slug,
             "category_name": row.category_name,
             "city": row.city,
+            "city_slug": row.city_slug,
             "provider_business_name": row.provider_business_name,
             "status": row.status,
             "created_at": row.created_at,
         }
         for row in recent_rows
     ]
+
+    # Priority 1: user.city_id
+    user = db.query(User).filter(User.id == client_id).first()
+    last_city_slug = None
+    if user and user.city_id:
+        last_city_slug = db.query(Location.slug).filter(Location.id == user.city_id).scalar()
+
+    # Priority 2: Last client lead (fallback)
+    if not last_city_slug:
+        if recent_leads:
+            last_city_slug = recent_leads[0]["city_slug"]
+        else:
+            last_city_slug = (
+                db.query(Location.slug)
+                .join(Lead, Lead.city_id == Location.id)
+                .filter(Lead.client_id == client_id)
+                .order_by(Lead.created_at.desc())
+                .limit(1)
+                .scalar()
+            )
 
     return {
         "stats": {
@@ -97,6 +119,7 @@ def get_client_dashboard(client_id: UUID, db: Session, lang: str = 'en') -> dict
             "reviews_written": reviews_written,
         },
         "recent_leads": recent_leads,
+        "last_city_slug": last_city_slug,
     }
 
 

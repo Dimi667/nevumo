@@ -67,7 +67,8 @@
 { 
   "email": "user@example.com", 
   "password": "min8chars", 
-  "role": "client | provider"
+  "role": "client | provider",
+  "city_id": 1
 }
 ```
 
@@ -765,7 +766,8 @@ Returns high-level statistics and recent activity for the client.
       "completed_jobs": 5,
       "reviews_given": 4
     },
-    "recent_leads": [...]
+    "recent_leads": [...],
+    "last_city_slug": "sofia"
   }
 }
 ```
@@ -1221,6 +1223,22 @@ Check if a slug redirects to another slug without following the redirect. Used b
 
 ### Notes
 - `city` returns the translated name for the requested language, with fallback chain: translation.city_name → location.city_en → location.city
+
+---
+
+## 5.1. Get Active Cities
+
+### GET
+/api/v1/cities/active?lang=en
+
+### Purpose
+Returns ALL cities (across all countries) that have at least one provider with `availability_status = 'active'`. Used for the global city selection page `/[lang]/izberi-grad`.
+
+### Query Params
+- `lang` (optional, default: "en") — Language code for translated city names
+
+### Response
+Same format as `GET /api/v1/cities`.
 - `city_en` always returns the English name (from location.city_en or location.city as fallback)
 - Translation lookup uses LEFT OUTER JOIN on location_translations table
 
@@ -1568,13 +1586,6 @@ The review system implements a closed trust conversation model:
 **Purpose:** Return overview KPI stats and the latest 3 client-owned leads for the authenticated client dashboard.
 
 **Rules:**
-- Requires `Authorization: Bearer <JWT>`
-- User must have `role='client'`
-- `active_leads` maps to DB statuses: `created`, `pending_match`, `matched`, `contacted`
-- `completed_leads` maps to DB status: `done`
-- `reviews_written` counts rows in `reviews` where `reviews.client_id = current_user.id`
-- `category_name` uses `category_translations.lang='en'` with fallback to `categories.slug`
-- `provider_business_name` is `null` when the lead has no assigned provider
 
 **Response:**
 ```json
@@ -1582,9 +1593,9 @@ The review system implements a closed trust conversation model:
   "success": true,
   "data": {
     "stats": {
-      "active_leads": 4,
-      "completed_leads": 2,
-      "reviews_written": 1
+      "active_leads": 5,
+      "completed_leads": 12,
+      "reviews_written": 4
     },
     "recent_leads": [
       {
@@ -1592,14 +1603,20 @@ The review system implements a closed trust conversation model:
         "category_slug": "massage",
         "category_name": "Massage",
         "city": "Sofia",
-        "provider_business_name": "Maria Massage",
-        "status": "contacted",
-        "created_at": "2025-01-15T10:30:00"
+        "city_slug": "sofia",
+        "provider_business_name": "Maria Pro",
+        "status": "matched",
+        "created_at": "2025-04-10T12:00:00"
       }
-    ]
+    ],
+    "last_city_slug": "sofia"
   }
 }
 ```
+
+**Notes:**
+- `last_city_slug` is the slug of the city from the user's most recent request. Can be `null` if no requests exist.
+- Used by the frontend to dynamically link the "Find Service" button to the user's relevant local market.
 
 **Errors:**
 - 403 NOT_A_CLIENT

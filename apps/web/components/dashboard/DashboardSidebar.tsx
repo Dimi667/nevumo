@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { saveAuth } from '@/lib/auth-store';
+import { saveAuth, getAuthUser } from '@/lib/auth-store';
 import { switchRole } from '@/lib/provider-api';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 
@@ -115,6 +115,15 @@ export default function DashboardSidebar({ open, onClose, lang }: DashboardSideb
   ];
 
   async function handleFindService() {
+    const user = getAuthUser();
+
+    // If already a client, just redirect
+    if (user?.role === 'client') {
+      onClose();
+      router.push(`/${lang}/client/dashboard`);
+      return;
+    }
+
     setSwitching(true);
     setSwitchError(null);
     try {

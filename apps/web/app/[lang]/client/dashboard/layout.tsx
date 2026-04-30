@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { getAuthToken, getAuthUser, clearAuth, saveAuth } from '@/lib/auth-store';
 import { switchRole } from '@/lib/provider-api';
+import { getClientDashboard, type ClientDashboardData } from '@/lib/client-api';
 import { useTranslation } from '@/lib/use-translation';
 
 interface DashboardLayoutProps {
@@ -116,6 +117,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const [dashboardData, setDashboardData] = useState<ClientDashboardData | null>(null);
   const [switchingRole, setSwitchingRole] = useState(false);
   const [switchError, setSwitchError] = useState<string | null>(null);
   const { t, isLoading } = useTranslation('client_dashboard', lang);
@@ -130,26 +132,39 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
   ];
 
   useEffect(() => {
-    const token = getAuthToken();
+    async function init() {
+      const token = getAuthToken();
 
-    if (!token) {
-      router.replace(`/${lang}/auth`);
-      return;
-    }
-
-    // Redirect provider users to provider dashboard
-    try {
-      const payloadBase64 = token.split('.')[1];
-      const decodedPayload = JSON.parse(atob(payloadBase64));
-      if (decodedPayload.role === 'provider') {
-        router.replace(`/${lang}/provider/dashboard`);
+      if (!token) {
+        router.replace(`/${lang}/auth`);
         return;
       }
-    } catch (e) {
-      console.error('Error decoding token:', e);
+
+      // Redirect provider users to provider dashboard
+      try {
+        const payloadBase64 = token.split('.')[1];
+        if (payloadBase64) {
+          const decodedPayload = JSON.parse(atob(payloadBase64));
+          if (decodedPayload.role === 'provider') {
+            router.replace(`/${lang}/provider/dashboard`);
+            return;
+          }
+        }
+      } catch (e) {
+        console.error('Error decoding token:', e);
+      }
+
+      try {
+        const data = await getClientDashboard(token, lang);
+        setDashboardData(data);
+      } catch (e) {
+        console.error('Error fetching dashboard for layout:', e);
+      }
+
+      setReady(true);
     }
 
-    setReady(true);
+    void init();
   }, [lang, router]);
 
 
@@ -207,7 +222,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
         {/* НАМЕРИ УСЛУГА бутон след Settings */}
         <div className="pt-6 border-t border-gray-200 pb-6">
           <Link
-            href={`/${lang}`}
+            href={dashboardData?.last_city_slug ? `/${lang}/${dashboardData.last_city_slug}` : `/${lang}/izberi-grad`}
             onClick={() => setSidebarOpen(false)}
             className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-xs font-bold tracking-widest uppercase transition-colors bg-orange-500 hover:bg-orange-600 text-white"
           >

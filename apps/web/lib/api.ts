@@ -312,6 +312,25 @@ export async function getCityBySlug(slug: string, lang: string = 'en'): Promise<
   }
 }
 
+export async function getActiveCities(lang: string): Promise<CityOut[]> {
+  try {
+    const res = await fetch(
+      `${API_BASE}/api/v1/cities/active?lang=${encodeURIComponent(lang)}`,
+      {
+        next: {
+          tags: ['cities-active', `lang-${lang}`],
+          revalidate: 3600,
+        },
+      },
+    );
+    if (!res.ok) return [];
+    const json: ApiResponse<CityOut[]> = await res.json();
+    return json.success ? json.data : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function createLead(input: LeadCreateInput): Promise<LeadCreateResult | { success: false; error: { code: string; message: string } } | null> {
   try {
     const token = getAuthToken();

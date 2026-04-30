@@ -31,7 +31,11 @@ This document reflects the major architectural optimization performed in April 2
 
 ### 5. Next.js & UI (Metadata + i18n)
 - **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow. Replaced legacy hidden iframe hacks with the modern **Credential Management API** (`navigator.credentials.store`) for robust password saving across all modern browsers including iOS Safari.
-- **Client Dashboard Fixes (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page for improved lead detail management and private notes.
+- **Client Dashboard Optimization (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page.
+- **Dynamic User Intent Navigation (April 30, 2026)**: Implemented "City-First" navigation logic for clients. The "Find Service" button in the dashboard (Overview, Sidebar, Requests, and Reviews) now dynamically links based on the `last_city_slug` returned by the API:
+   - **last_city_slug present** → Redirect to `/[lang]/[last_city_slug]` (returns user to their relevant local market).
+   - **last_city_slug is null** → Redirect to `/[lang]/izberi-grad` (City Selection page).
+   Maximizes conversion by returning users to their relevant context while providing a clear selection path if no history exists.
 
 ### Docker Environment Variable Pattern (April 27, 2026)
 Next.js in Docker requires two separate environment variables to handle server-side and client-side API communication correctly:
@@ -75,7 +79,8 @@ This separation ensures that:
   - **SOLUTION:** 
     - Kept ownership-based security on the backend.
     - Added a frontend guard in `apps/web/app/[lang]/client/dashboard/layout.tsx` that decodes the JWT and redirects users with `role === 'provider'` to the provider dashboard.
-  - **Result:** Providers are automatically steered to the correct dashboard, preventing role-switch errors.
+    - Added a frontend check in `apps/web/components/dashboard/DashboardSidebar.tsx` that checks `user.role === 'client'` before calling `switchRole('client')`. If already a client, it redirects directly to the client dashboard.
+  - **Result:** Providers are automatically steered to the correct dashboard, and clients in the provider dashboard can switch back without API errors.
 - **Category Page Fix (April 2026)** — COMPLETE:
   - **PROBLEM:** CATEGORY_CONTENT keyed by Polish slugs (masaz, sprzatanie, hydraulik); URLs use English slugs (cleaning, massage, plumbing) → always showed cleaning content
   - **SOLUTION:** Re-keyed CATEGORY_CONTENT, CategoryKey type, relatedLinksByCategory from Polish to English slugs
@@ -245,10 +250,19 @@ Location трябва да бъде нормализирана:
 - `city_en` — English name in locations.city_en, used as internal/admin fallback
 - `city_name` — translated display name from location_translations for UI rendering
 - GET /api/v1/cities?lang={lang}&country={country_code} returns translated city_name as `city` field
+- GET /api/v1/cities/active?lang={lang} returns all cities with at least one active provider across all countries
 - GET /api/v1/cities/{slug}?lang={lang} returns translated city_name as `city` field (IMPORTANT: this endpoint returns the object directly, not wrapped in `data`)
 - Fallback chain: location_translations.city_name → locations.city_en → locations.city
 - Adding a new city requires: 1) row in locations, 2) rows in location_translations for all 34 languages
 - Backend: apps/api/routes/cities.py uses LEFT OUTER JOIN on LocationTranslation
+
+### City Selection Page (April 30, 2026)
+- **Route**: `/[lang]/izberi-grad`
+- **Purpose**: A landing page for users to select their city before browsing services.
+- **Fetch**: Uses `GET /api/v1/cities/active?lang={lang}` to list only cities with active providers.
+- **UI**: Displayed as a grid of cards with city names and country codes.
+- **SEO**: Indexed, with English metadata by default.
+- **Persistence**: The slug `izberi-grad` is fixed across all languages to maintain SEO stability.
 
 ### Frontend City Data Fetching (Next.js SSR)
 - **Problem**: Next.js SSR can cache `fetch()` calls aggressively. If a city name is updated in the DB, the frontend might still show the old name.

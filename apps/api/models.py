@@ -41,13 +41,17 @@ class User(Base):
     # Phone number (optional)
     phone: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
+    city_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("locations.id"), nullable=True)
+
     provider: Mapped["Provider"] = relationship(back_populates="user", uselist=False)
+    city: Mapped[Optional["Location"]] = relationship("Location", foreign_keys=[city_id])
 
     __table_args__ = (
         CheckConstraint("role IN ('client', 'provider')", name="ck_users_role"),
         Index("idx_users_role", "role"),
         Index("idx_users_review_reply_email", "review_reply_email_enabled"),
         Index("idx_users_phone", "phone"),
+        Index("idx_users_city_id", "city_id"),
     )
 
 
