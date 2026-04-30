@@ -451,7 +451,7 @@ CREATE TABLE reviews (
     provider_reply_edit_count INTEGER NOT NULL DEFAULT 0,  -- Number of edits
 
     created_at TIMESTAMP DEFAULT NOW(),
-    UNIQUE(lead_id)  -- one review per lead
+    UNIQUE(lead_id, provider_id)  -- one review per lead per provider
 );
 
 CREATE INDEX idx_reviews_provider ON reviews(provider_id);
@@ -467,7 +467,7 @@ CREATE INDEX idx_reviews_provider_reply_at ON reviews(provider_reply_at);
 - **Canonical client display name** - Review surfaces use `users.name` when available, otherwise `Client`
 
 ### Constraints
-- One review per lead (enforced by UNIQUE(lead_id))
+- One review per lead/provider combination (enforced by UNIQUE(lead_id, provider_id))
 - Rating must be 1-5 stars
 - Only completed leads (status='done') can be reviewed
 - Client must own the lead being reviewed

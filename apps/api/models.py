@@ -402,7 +402,7 @@ class Review(Base):
         Index("idx_reviews_provider", "provider_id"),
         Index("idx_reviews_client", "client_id"),
         Index("idx_reviews_provider_reply_at", "provider_reply_at"),
-        UniqueConstraint("lead_id", name="uq_reviews_lead"),
+        UniqueConstraint("lead_id", "provider_id", name="uq_reviews_lead_provider"),
     )
 
 

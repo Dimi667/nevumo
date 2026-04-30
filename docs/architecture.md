@@ -33,6 +33,16 @@ This document reflects the major architectural optimization performed in April 2
 - **Universal Slug Generation (April 30, 2026)**: Unified URL slug generation logic between Frontend and Backend to support all 34 languages.
   - **Frontend**: Removed the hardcoded 'bg' locale from `apps/web/lib/slug-utils.ts` and replaced the primitive implementation in `apps/web/lib/slugify.ts` with the robust `slugify` library.
   - **Backend**: Standardized `apps/api/services/provider_service.py` to use a consistent `slugify` wrapper with pre-defined Cyrillic replacements, ensuring identical output for special characters (Turkish İ/ı, German ü/ö, Icelandic ð/þ, etc.) across the entire stack.
+- **Universal Currency Logic (April 30, 2026)**: Implemented a centralized currency determination system based on provider location.
+  - **Source of Truth**: Currency is derived from `provider.services[0].currency` with fallback to `provider.city.country_code` via `apps/web/lib/currency.ts`.
+  - **Fallback Chain**: Service currency → City country code → Country default → 'EUR'
+  - **Special Rule (Bulgaria)**: For country "BG", from 01.01.2026 the currency is strictly "EUR" (Euro), regardless of previous BGN defaults.
+  - **Scope**: Applied to both JSON-LD (`priceCurrency`) and UI visualization (ProviderWidget).
+  - **Country Defaults**: RSD for RS (Serbia), PLN for PL (Poland), EUR for BG (Bulgaria), with dynamic defaults for other countries.
+- **Provider Page Error Fixes & SEO Enhancement (April 30, 2026)**:
+  - **ReferenceError Fix**: Resolved "currency is not defined" in `ProviderWidget.tsx` by ensuring the variable is scoped correctly and has a multi-layer fallback (service data -> city data -> country default -> 'EUR').
+  - **Parsing Error Fix**: Corrected misaligned and missing closing `div` tags in `apps/web/app/[lang]/[city]/[category]/[providerPage]/page.tsx` that interfered with Next.js metadata generation.
+  - **Service Schema**: Added explicit `Service` JSON-LD schema to `ProviderWidget.tsx` to complement the `LocalBusiness` schema, providing search engines with detailed price and location data for specific offerings.
 - **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow. Replaced legacy hidden iframe hacks with the modern **Credential Management API** (`navigator.credentials.store`) for robust password saving across all modern browsers including iOS Safari.
 - **Client Dashboard Optimization (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page.
 - **Dynamic User Intent Navigation (April 30, 2026)**: Implemented "City-First" navigation logic for clients. The "Find Service" button in the dashboard (Overview, Sidebar, Requests, and Reviews) now dynamically links based on the `last_city_slug` returned by the API via a multi-layer fallback chain:
@@ -54,6 +64,13 @@ This document reflects the major architectural optimization performed in April 2
 
 ### Automated SEO Infrastructure (April 30, 2026)
 The system now implements a fully automated SEO strategy for City Landing pages, ensuring production-ready technical SEO across all 34 supported languages:
+
+- **Provider Page SEO Optimization (April 30, 2026)**:
+  - **Dynamic Robots Meta**: Implemented conditional `robots` tag logic based on the `embed=1` query parameter. Embedded views are set to `noindex, nofollow` to prevent duplicate content, while full pages are set to `index, follow`.
+  - **Canonical URLs**: Added dynamic canonical tags that always point to the full page version (stripping the `embed` parameter) to consolidate SEO authority.
+  - **Localized Schema**: Updated `LocalBusiness` JSON-LD to use the translated city name from the database (`addressLocality`) instead of the URL slug.
+  - **Universal City Data**: Removed hardcoded `CITY_COUNTRY_MAP` and replaced it with a dynamic API-driven approach using `getCityBySlug`. This allows the platform to support any city added to the database without code changes.
+  - **Hreflang Alternates**: Programmatically generated `alternates.languages` for all 34+ supported languages.
 
 #### Canonical Tag Generation
 - **Implementation**: `apps/web/app/[lang]/[city]/page.tsx` automatically generates absolute canonical URLs
@@ -86,6 +103,31 @@ Three types of structured data schemas are automatically generated for each city
      - `priceRange`: Dynamic price range from `/api/v1/price-range` endpoint
      - `aggregateRating`: Platform-wide rating (if available)
    - **I18n Compliance**: All text fields (name, description, services) are fully localized using the `lang` parameter and `city` namespace translations
+
+### SEO & Indexing (ProviderWidget JSON-LD)
+The ProviderWidget component implements comprehensive Schema.org structured data to enhance search engine visibility and rich snippet display:
+
+#### ProviderWidget JSON-LD Implementation
+- **Location**: `apps/web/components/provider/ProviderWidget.tsx`
+- **Schema Types**:
+  1. **LocalBusiness Schema**: Represents the provider as a local business entity
+     - Includes: name, description, address, telephone, url, areaServed
+     - Uses localized city name from database (`addressLocality`)
+     - Dynamic price range based on provider services
+  2. **Service Schema**: Represents individual services offered by the provider
+     - Includes: name, description, provider, areaServed, priceCurrency, price
+     - Links to LocalBusiness via `provider` field
+     - Currency determined by fallback chain (Service → City → Country default → EUR)
+- **Currency Handling**:
+  - Uses `apps/web/lib/currency.ts` for currency determination
+  - Fallback chain: `service.currency` → `city.country_code` → country default → 'EUR'
+  - Special rule: Bulgaria (BG) always uses EUR (effective 01.01.2026)
+- **SEO Benefits**:
+  - Rich snippets in Google search results
+  - Price and service information directly visible in SERP
+  - Local business schema enables Google Maps integration
+  - Structured data validation passes Google's Rich Results Test
+- **Integrity Requirement**: Any modifications to ProviderWidget must preserve JSON-LD structure and required fields to maintain SEO compliance
 
 #### Universal Multi-Language Slug Logic
 The slug generation system has been unified across the entire stack to support special characters from all 34 languages:

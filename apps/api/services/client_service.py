@@ -5,7 +5,7 @@ from sqlalchemy import and_, func
 from sqlalchemy.orm import Session, aliased
 
 from apps.api.exceptions import NevumoException
-from apps.api.models import Category, CategoryTranslation, Lead, Location, Provider, Review, Service, ServiceCity, User
+from apps.api.models import Category, CategoryTranslation, Lead, LeadMatch, Location, Provider, Review, Service, ServiceCity, User
 
 ACTIVE_LEAD_STATUSES: tuple[str, ...] = ("created", "pending_match", "matched", "contacted")
 REJECTED_LEAD_STATUSES: tuple[str, ...] = ("rejected", "expired", "cancelled")
@@ -195,8 +195,41 @@ def get_client_leads(
         .all()
     )
 
-    items = [
-        {
+    items = []
+    for row in rows:
+        reviewable_providers = []
+        if row.status == "done":
+            # Find reviewable providers for this lead
+            # Must have LeadMatch status in ('contacted', 'done')
+            # AND no existing review for this lead/provider combo
+            reviewable_providers_query = (
+                db.query(
+                    Provider.id,
+                    Provider.business_name,
+                    Provider.slug
+                )
+                .join(LeadMatch, LeadMatch.provider_id == Provider.id)
+                .outerjoin(
+                    Review,
+                    (Review.lead_id == LeadMatch.lead_id) & (Review.provider_id == LeadMatch.provider_id)
+                )
+                .filter(
+                    LeadMatch.lead_id == row.id,
+                    LeadMatch.status.in_(["contacted", "done"]),
+                    Review.id == None,  # No review yet
+                    Provider.user_id != client_id  # Cannot review self
+                )
+            )
+            providers = reviewable_providers_query.all()
+            reviewable_providers = [
+                {
+                    "provider_id": p.id,
+                    "provider_name": p.business_name,
+                    "provider_slug": p.slug
+                } for p in providers
+            ]
+
+        items.append({
             "id": row.id,
             "category_slug": row.category_slug,
             "category_name": row.category_name,
@@ -210,11 +243,10 @@ def get_client_leads(
             "source": row.source,
             "created_at": row.created_at,
             "has_review": bool(row.has_review),
+            "reviewable_providers": reviewable_providers,
             "client_notes": row.client_notes,
             "cancelled_by": row.cancelled_by,
             "status_changed_by": row.status_changed_by,
-        }
-        for row in rows
-    ]
+        })
 
     return {"items": items, "total": total}

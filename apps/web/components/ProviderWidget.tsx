@@ -7,6 +7,8 @@ import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getPhonePrefix } from '@/lib/phoneUtils';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
+import { getCurrency, formatCurrency } from '@/lib/currency';
+import { JsonLd } from '@/components/JsonLd';
 
 interface ProviderWidgetProps {
   provider: ProviderDetail;
@@ -17,33 +19,26 @@ interface ProviderWidgetProps {
 }
 
 // Helper for compact relative time
-function getRelativeTime(dateString: string, locale: string = 'en'): string {
+function getRelativeTime(dateString: string, t: (key: string, params?: Record<string, string | number>) => string): string {
   const date = new Date(dateString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
   const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  // Bulgarian translations
-  if (locale === 'bg') {
-    if (diffMinutes < 1) return 'преди минута';
-    if (diffMinutes < 60) return `преди ${diffMinutes} мин`;
-    if (diffHours < 24) return `преди ${diffHours} ч`;
-    if (diffDays === 1) return 'преди 1 ден';
-    if (diffDays < 7) return `преди ${diffDays} дни`;
-    if (diffDays < 30) return `преди ${Math.floor(diffDays / 7)} седмици`;
-    return `преди ${Math.floor(diffDays / 30)} месеца`;
+  if (diffMinutes < 1) return t('time_just_now');
+  if (diffMinutes < 60) {
+    if (diffMinutes === 1) return t('time_min_ago_one');
+    return t('time_min_ago_many', { count: diffMinutes });
   }
-
-  // Default English
-  if (diffMinutes < 1) return 'just now';
-  if (diffMinutes < 60) return `${diffMinutes}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays === 1) return '1 day ago';
-  if (diffDays < 7) return `${diffDays} days ago`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
-  return `${Math.floor(diffDays / 30)}mo ago`;
+  if (diffHours < 24) {
+    return t('time_hour_ago_many', { count: diffHours });
+  }
+  if (diffDays === 1) return t('time_day_ago_one');
+  if (diffDays < 7) return t('time_day_ago_many', { count: diffDays });
+  if (diffDays < 30) return t('time_week_ago_many', { count: Math.floor(diffDays / 7) });
+  return t('time_month_ago_many', { count: Math.floor(diffDays / 30) });
 }
 
 // Star rating component
@@ -75,22 +70,21 @@ function formatTranslation(template: string, replacements: Record<string, string
   );
 }
 
-function formatServicePrice(price: number | null, priceType: string, currency: string, translations?: { price_on_request?: string }): string {
-  if (priceType === 'request' || price === null) return translations?.price_on_request || 'Cena do uzgodnienia';
-  if (priceType === 'hourly') return `${price} ${currency}/h`;
-  return `${price} ${currency}`;
+function formatServicePrice(price: number | null, priceType: string, currency: string, t: (key: string) => string): string {
+  if (priceType === 'request' || price === null) return t('price_on_request');
+  return formatCurrency(price, currency) + (priceType === 'hourly' ? '/h' : '');
 }
 
 function RecentRequestBlock({
   latestLeadPreview,
-  locale,
+  t,
   text,
 }: {
   latestLeadPreview: NonNullable<ProviderDetail['latest_lead_preview']>;
-  locale: string;
+  t: (key: string, params?: Record<string, string | number>) => string;
   text: string;
 }) {
-  const timeAgo = getRelativeTime(latestLeadPreview.created_at, locale);
+  const timeAgo = getRelativeTime(latestLeadPreview.created_at, t);
 
   return (
     <div className="bg-gray-50 rounded-xl p-4 mb-3 border border-gray-100 text-left max-w-sm mx-auto">
@@ -145,11 +139,11 @@ function ChecklistBlock({ items }: { items: string[] }) {
 }
 
 // Social Proof block component
-function SocialProofBlock({ review, locale }: { review: ProviderDetail['latest_review']; locale: string }) {
+function SocialProofBlock({ review, t }: { review: ProviderDetail['latest_review']; t: (key: string, params?: Record<string, string | number>) => string }) {
   if (!review) return null;
 
   const initial = getInitial(review.client_name);
-  const timeAgo = getRelativeTime(review.created_at, locale);
+  const timeAgo = getRelativeTime(review.created_at, t);
 
   return (
     <div className="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-100">
@@ -186,12 +180,20 @@ export default function ProviderWidget({
   citySlug,
   countryCode,
 }: ProviderWidgetProps) {
-  const t = provider.translations;
+  const translations = provider.translations || {};
+  const t = (key: string, replacements?: Record<string, string | number>, defaultValue?: string) => {
+    const template = translations[`widget.${key}`] || translations[key] || defaultValue || key;
+    if (!replacements) return template;
+    return formatTranslation(template, Object.fromEntries(
+      Object.entries(replacements).map(([k, v]) => [k, String(v)])
+    ));
+  };
+
   console.log('[ProviderWidget DEBUG]', { 
     hasTranslations: !!provider.translations,
     translationsType: typeof provider.translations,
     translationKeys: Object.keys(provider.translations || {}),
-    buttonText: provider.translations?.button_text,
+    buttonText: t('button_text'),
     providerSlug: provider.slug
   });
   const [loading, setLoading] = useState(false);
@@ -212,6 +214,8 @@ export default function ProviderWidget({
   const { phone: savedPhone, savePhone } = usePhone();
   const locale = (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
   const lang = locale || 'en';
+  const effectiveCountryCode = countryCode ?? cityInfo?.country_code;
+  const currency = provider.services[0]?.currency || getCurrency(effectiveCountryCode, cityInfo?.currency);
   const phonePrefix = getPhonePrefix(cityInfo?.country_code);
   const phoneDigitsCount = phoneValue.replace(/\D/g, '').length;
   const isPhoneValid = phoneDigitsCount >= 7;
@@ -231,33 +235,57 @@ export default function ProviderWidget({
     }
   };
   const cityName = cityInfo?.city ?? citySlug;
-  const jobsLabel = t.jobs_label || 'jobs completed';
-  const cityLeadsText = formatTranslation(
-    t.city_leads_label || '{count} requests for {category} in {city} this year',
-    {
+  const jobsLabel = t('jobs_label', undefined, 'jobs completed');
+  const cityLeadsText = t('city_leads_label', {
       count: new Intl.NumberFormat(locale).format(provider.city_leads),
       category: categoryName.toLocaleLowerCase(locale),
       city: cityName,
-    },
-  );
+    }, '{count} requests for {category} in {city} this year');
+
   const recentRequestText = provider.latest_lead_preview
-    ? formatTranslation(
-        t.recent_request_label || '{name} from {city} requested recently',
-        {
+    ? t('recent_request_label', {
           name: provider.latest_lead_preview.client_name,
           city: provider.latest_lead_preview.city_name,
-        },
-      )
+        }, '{name} from {city} requested recently')
     : null;
   const checklistItems = [
-    t.free_request_no_obligation || 'Free request, no obligation',
-    t.no_registration || 'No registration',
-    t.direct_contact_with_provider || 'Direct contact with the provider',
+    t('free_request_no_obligation', undefined, 'Free request, no obligation'),
+    t('no_registration', undefined, 'No registration'),
+    t('direct_contact_with_provider', undefined, 'Direct contact with the provider'),
   ];
 
   // Filter services by current category
   const filteredServices = provider.services.filter(service => service.category_slug === categorySlug);
-  
+
+  const serviceJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${categoryName} - ${provider.business_name}`,
+    provider: {
+      '@type': 'LocalBusiness',
+      name: provider.business_name,
+      image: provider.profile_image_url || undefined,
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: cityName,
+        addressCountry: countryCode || cityInfo?.country_code || 'BG',
+      },
+    },
+    areaServed: {
+      '@type': 'City',
+      name: cityName,
+    },
+    offers: filteredServices.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: s.title,
+      },
+      price: s.base_price || undefined,
+      priceCurrency: currency,
+    })),
+  };
+
   // Handle service card click
   const handleServiceClick = (serviceId: string, serviceTitle: string) => {
     setSelectedServiceId(serviceId);
@@ -286,7 +314,7 @@ export default function ProviderWidget({
     e.preventDefault();
 
     if (isPrefixOnlyPhone || !isPhoneValid) {
-      setPhoneError(locale === 'bg' ? 'Въведи валиден телефонен номер' : 'Enter a valid phone number');
+      setPhoneError(t('phone_error'));
       phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setError(false);
       return;
@@ -385,20 +413,21 @@ export default function ProviderWidget({
     if (isLoggedIn) {
       return (
         <div className="text-center py-8">
+          <JsonLd data={serviceJsonLd} />
           <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
             <span className="text-green-600 text-3xl">✓</span>
           </div>
           <p className="font-bold text-gray-900 text-lg mb-1">
-            {t.success_title || '✓ Successfully sent!'}
+            {t('success_title', undefined, '✓ Successfully sent!')}
           </p>
           <p className="text-sm text-gray-500 mb-6">
-            {provider.business_name}{t.success_message_received || ' received your request and will contact you by phone.'}
+            {provider.business_name}{t('success_message_received', undefined, ' received your request and will contact you by phone.')}
           </p>
           <button
             onClick={handleNoThanks}
             className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors text-base px-6"
           >
-            {t.new_request_button || 'New Request'}
+            {t('new_request_button', undefined, 'New Request')}
           </button>
 
           {showPWAPrompt && (
@@ -417,38 +446,39 @@ export default function ProviderWidget({
     if (successStep === 'sent') {
       return (
         <div className="flex flex-col items-center justify-center py-8 text-center px-4">
+          <JsonLd data={serviceJsonLd} />
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-600">
             ✓
           </div>
           <h3 className="text-xl font-bold text-gray-900">
-            {t['success_title'] || 'Request sent!'}
+            {t('success_title', undefined, 'Request sent!')}
           </h3>
           <p className="mt-2 mb-4 text-sm text-gray-500">
-            {(t['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace('{cityName}', cityName)}
+            {t('success_subtitle', { cityName }, 'Specialists in {cityName} will contact you.')}
           </p>
           <div className="border-t border-gray-200 my-6 w-full"></div>
           <p className="mt-2 text-sm font-medium text-gray-700 mb-3">
-            {t['success_track_title'] || 'Want to track your request?'}
+            {t('success_track_title', undefined, 'Want to track your request?')}
           </p>
           <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left inline-block">
-            <li>• {t['success_bullet_responses'] || 'See who responded'}</li>
-            <li>• {t['success_bullet_manage'] || 'Manage your requests'}</li>
-            <li>• {t['success_bullet_notifications'] || 'Get notifications'}</li>
+            <li>• {t('success_bullet_responses', undefined, 'See who responded')}</li>
+            <li>• {t('success_bullet_manage', undefined, 'Manage your requests')}</li>
+            <li>• {t('success_bullet_notifications', undefined, 'Get notifications')}</li>
           </ul>
           <button
             onClick={handleContinueWithEmail}
             className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600"
           >
-            {t['success_cta_email'] || 'Continue with email →'}
+            {t('success_cta_email', undefined, 'Continue with email →')}
           </button>
           <p className="mt-2 text-xs text-gray-400">
-            {t['success_free_label'] || 'Free · No registration required'}
+            {t('success_free_label', undefined, 'Free · No registration required')}
           </p>
           <button
             onClick={handleNoThanks}
             className="mt-4 text-sm text-gray-500 underline hover:text-gray-700"
           >
-            {t['success_skip_link'] || 'No thanks'}
+            {t('success_skip_link', undefined, 'No thanks')}
           </button>
           {showPWAPrompt && (
             <PWAInstallPrompt
@@ -470,19 +500,19 @@ export default function ProviderWidget({
             onClick={handleBackToSent}
             className="mb-6 text-sm text-gray-500 hover:text-gray-700 flex items-center"
           >
-            {t['email_back_link'] || '← Back'}
+            {t('email_back_link', undefined, '← Back')}
           </button>
           <form onSubmit={handleEmailSubmit} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                {t['email_label'] || 'Your email address'}
+                {t('email_label', undefined, 'Your email address')}
               </label>
               <input
                 type="email"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={t['email_placeholder'] || 'your@email.com'}
+                placeholder={t('email_placeholder', undefined, 'your@email.com')}
                 autoFocus
                 className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
               />
@@ -492,17 +522,17 @@ export default function ProviderWidget({
               disabled={!emailValid || isEmailSubmitting}
               className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
             >
-              {isEmailSubmitting ? (t['email_cta_continue'] || 'Continue →') : (t['email_cta_continue'] || 'Continue →')}
+              {t('email_cta_continue', undefined, 'Continue →')}
             </button>
           </form>
           <p className="mt-3 text-center text-xs text-gray-400">
-            {t['success_free_label'] || 'Free · No registration required'}
+            {t('success_free_label', undefined, 'Free · No registration required')}
           </p>
           <button
             onClick={handleNoThanks}
             className="mt-4 text-center text-sm text-gray-500 underline hover:text-gray-700"
           >
-            {t['success_skip_link'] || 'No thanks'}
+            {t('success_skip_link', undefined, 'No thanks')}
           </button>
         </div>
       );
@@ -511,6 +541,7 @@ export default function ProviderWidget({
 
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+      <JsonLd data={serviceJsonLd} />
       {/* Logo */}
       <div className="px-4 pt-6 pb-2 text-center">
         <Image
@@ -551,7 +582,7 @@ export default function ProviderWidget({
         {provider.rating > 0 ? (
           <div className="flex items-center justify-center gap-2 flex-wrap text-sm mb-2">
             <span className="text-gray-700 font-bold text-base">
-              ⭐ {provider.rating.toFixed(1)} {t.rating_label || 'rating'}
+              ⭐ {provider.rating.toFixed(1)} {t('rating_label', undefined, 'rating')}
             </span>
             <span className="text-gray-400">•</span>
             <span className="text-gray-700 font-bold text-base">
@@ -567,7 +598,7 @@ export default function ProviderWidget({
         ) : provider.leads_received > 0 && provider.latest_lead_preview && recentRequestText ? (
           <RecentRequestBlock
             latestLeadPreview={provider.latest_lead_preview}
-            locale={locale}
+            t={t}
             text={recentRequestText}
           />
         ) : null}
@@ -575,7 +606,7 @@ export default function ProviderWidget({
         {/* Verified badge */}
         {(
           <span className="inline-flex items-center gap-1 text-base font-bold text-green-600">
-            {t.verified_label || 'Verified professional'}
+            {t('verified_label', undefined, 'Verified professional')}
           </span>
         )}
       </div>
@@ -590,7 +621,7 @@ export default function ProviderWidget({
       {filteredServices.length > 0 && (
         <div className="px-6 py-5 border-b border-gray-100">
           <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">
-            {t.services_label || 'Услуги'}
+            {t('services_label', undefined, 'Услуги')}
           </h2>
           <ul className="space-y-3">
             {filteredServices.map((service) => (
@@ -608,7 +639,7 @@ export default function ProviderWidget({
                     {service.title}
                   </span>
                   <span className="text-sm font-bold text-gray-700 whitespace-nowrap flex-shrink-0">
-                    {formatServicePrice(service.base_price, service.price_type, service.currency, provider.translations)}
+                    {formatServicePrice(service.base_price, service.price_type, currency, t)}
                     <span className="text-gray-400 text-lg ml-2 flex-shrink-0">›</span>
                   </span>
                 </div>
@@ -624,7 +655,7 @@ export default function ProviderWidget({
       {/* Form */}
       <div id="widget-form" className="px-6 py-6">
         <h2 className="text-base font-semibold text-gray-700 mb-4 text-center">
-          {t.send_request_to} {provider.business_name}
+          {t('send_request_to', undefined, 'Send request to')} {provider.business_name}
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -634,15 +665,15 @@ export default function ProviderWidget({
               onChange={handleChange}
               countryCode={countryCode ?? cityInfo?.country_code}
               error={phoneError}
-              errorMessage={locale === 'bg' ? 'Въведи валиден телефонен номер' : 'Enter a valid phone number'}
-              label={t.phone_label || 'Phone'}
+              errorMessage={t('phone_error')}
+              label={t('phone_label', undefined, 'Phone')}
               required
             />
           </div>
 
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-1">
-              {t.notes_label || 'Notes'}
+              {t('notes_label', undefined, 'Notes')}
             </label>
             <textarea
               name="description"
@@ -650,19 +681,18 @@ export default function ProviderWidget({
               value={descriptionValue}
               onChange={handleDescriptionChange}
               placeholder={
-                t.notes_placeholder ||
-                'Describe your request (time, address, details)'
+                t('notes_placeholder', undefined, 'Describe your request (time, address, details)')
               }
               className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none text-base"
             />
           </div>
 
           <p className="text-sm text-gray-700 italic text-center">
-            {t.response_time || '⏱ Provider usually responds within 30 minutes'}
+            {t('response_time', undefined, '⏱ Provider usually responds within 30 minutes')}
           </p>
 
           {provider.review_count > 0 && provider.latest_review ? (
-            <SocialProofBlock review={provider.latest_review} locale={locale} />
+            <SocialProofBlock review={provider.latest_review} t={t} />
           ) : provider.city_leads > 0 ? (
             <CityDemandBlock text={cityLeadsText} />
           ) : (
@@ -671,7 +701,7 @@ export default function ProviderWidget({
 
           {error && (
             <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              {t.error_message || 'Something went wrong. Please try again.'}
+              {t('error_message')}
             </p>
           )}
 
@@ -682,13 +712,13 @@ export default function ProviderWidget({
               disabled={loading}
               className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
             >
-              {loading ? (t.sending_button || 'Sending...') : t.button_text || 'Request Service'}
+              {loading ? (t('sending_button', undefined, 'Sending...')) : t('button_text', undefined, 'Request Service')}
             </button>
           </div>
         </form>
 
         <p className="text-sm text-gray-400 text-center mt-4 md:mt-4 pb-16 md:pb-0">
-          {t.disclaimer || 'Free request • No obligation'}
+          {t('disclaimer', undefined, 'Free request • No obligation')}
         </p>
       </div>
     </div>

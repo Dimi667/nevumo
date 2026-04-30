@@ -2,11 +2,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug } from '@/lib/api';
-import { generateHreflangAlternates } from '@/lib/seo';
+import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { JsonLd } from '@/components/JsonLd';
 import LeadForm from '@/components/category/LeadForm';
 import CategoryPageClient from '@/components/category/CategoryPageClient';
+import type { ProviderDetail } from '@/lib/api';
 
 interface PageProps {
   params: Promise<{ lang: string; city: string; category: string }>;
@@ -496,10 +497,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const priceMetaText = getPriceText(priceData, categoryT, 'price_meta', '');
   const description = priceMetaText ? `${baseDescription} ${priceMetaText}` : baseDescription;
 
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
+
   return {
     title,
     description,
     alternates: {
+      canonical: `${SITE_URL}/${lang}/${city}/${category}`,
       languages: generateHreflangAlternates(`/${city}/${category}`),
     },
     openGraph: {
@@ -644,9 +648,72 @@ export default async function CategoryPage({ params }: PageProps) {
   const trustLeadsText = `120 ${t(categoryT, 'trust_requests', 'requests this month')}`;
   const faqJsonLd = buildFaqJsonLd(content, priceData, categoryT);
 
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
+  const organizationJsonLd = generateOrganizationJsonLd();
+  const websiteJsonLd = generateWebSiteJsonLd(lang);
+
+  // Create a pseudo-provider for the category in this city for LocalBusiness schema
+  const categoryPseudoProvider: ProviderDetail = {
+    id: `cat-${city}-${category}`,
+    business_name: heading,
+    description: subtitle,
+    slug: `${city}/${category}`,
+    profile_image_url: null,
+    rating: averageRating || 4.8,
+    verified: true,
+    services: [
+      {
+        id: `service-${category}`,
+        title: categoryName,
+        description: subtitle,
+        price_type: 'request',
+        base_price: priceData?.min || null,
+        category_slug: category,
+        currency: priceData?.currency || 'PLN'
+      }
+    ],
+    jobs_completed: allCount * 10,
+    review_count: providers.reduce((acc, p) => acc + p.reviewCount, 0),
+    leads_received: allCount * 5,
+    city_leads: allCount * 5,
+    translations: {},
+    is_claimed: true
+  };
+
+  const localBusinessJsonLd = generateLocalBusinessJsonLd(categoryPseudoProvider, categoryName, cityName);
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: `${SITE_URL}/${lang}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: cityName,
+        item: `${SITE_URL}/${lang}/${city}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: categoryName,
+        item: `${SITE_URL}/${lang}/${city}/${category}`,
+      },
+    ],
+  };
+
   return (
     <>
       <JsonLd data={faqJsonLd} />
+      <JsonLd data={organizationJsonLd} />
+      <JsonLd data={websiteJsonLd} />
+      <JsonLd data={localBusinessJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <div className="min-h-screen bg-white text-gray-900">
         <header className="border-b border-orange-100 bg-white/90 backdrop-blur">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">

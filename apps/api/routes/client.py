@@ -175,6 +175,7 @@ def update_lead_client_notes(
 @router.get("/reviews/eligible-leads", response_model=ReviewEligibleLeadsResponse)
 def list_eligible_leads(
     limit: int = Query(default=50, ge=1, le=100),
+    lang: str = Query(default='en'),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ) -> ReviewEligibleLeadsResponse:
@@ -183,7 +184,7 @@ def list_eligible_leads(
     Returns leads with status 'done' that haven't been reviewed yet.
     """
     user = _require_client_role(current_user)
-    leads = get_eligible_leads_for_review(user.id, db, limit=limit)
+    leads = get_eligible_leads_for_review(user.id, db, limit=limit, lang=lang)
 
     return ReviewEligibleLeadsResponse(data={
         "leads": leads,
@@ -209,6 +210,7 @@ def create_client_review(
     review = create_review(
         client_id=user.id,
         lead_id=body.lead_id,
+        provider_id=body.provider_id,
         rating=body.rating,
         comment=body.comment,
         db=db

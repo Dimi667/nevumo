@@ -805,6 +805,13 @@ Returns a paginated list of leads created by the client.
         "source": "seo",
         "created_at": "2025-01-15T10:30:00",
         "has_review": false,
+        "reviewable_providers": [
+          {
+            "provider_id": "uuid",
+            "provider_name": "Maria Massage",
+            "provider_slug": "maria-massage"
+          }
+        ],
         "client_notes": null
       }
     ],
@@ -836,13 +843,35 @@ Returns a paginated list of leads created by the client.
 
 Lists completed leads that haven't been reviewed yet.
 
+### Query Params
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `limit` | int | 50 | Max records to return |
+| `lang` | string | `en` | Language code for translations |
+
 ### Response
 ```json
 {
   "success": true,
   "data": {
-    "leads": [...],
-    "count": 5
+    "leads": [
+      {
+        "id": "uuid",
+        "description": "...",
+        "category_name": "Massage",
+        "city": "Sofia",
+        "has_review": false,
+        "created_at": "2025-01-15T10:30:00",
+        "reviewable_providers": [
+          {
+            "provider_id": "uuid",
+            "provider_name": "Maria Massage",
+            "provider_slug": "maria-massage"
+          }
+        ]
+      }
+    ],
+    "count": 1
   }
 }
 ```
@@ -857,6 +886,7 @@ Creates a new review for a completed lead.
 ```json
 {
   "lead_id": "uuid",
+  "provider_id": "uuid",
   "rating": 5,
   "comment": "Great service!"
 }
@@ -1695,9 +1725,13 @@ The review system implements a closed trust conversation model:
         "id": "uuid",
         "description": "Need massage therapy for back pain",
         "created_at": "2025-01-15T10:30:00",
-        "provider_id": "uuid",
-        "provider_business_name": "Maria Massage",
-        "has_review": false
+        "reviewable_providers": [
+          {
+            "provider_id": "uuid",
+            "provider_name": "Maria Massage",
+            "provider_slug": "maria-massage"
+          }
+        ]
       }
     ],
     "count": 3
@@ -1715,6 +1749,7 @@ The review system implements a closed trust conversation model:
 ```json
 {
   "lead_id": "uuid",
+  "provider_id": "uuid",
   "rating": 5,
   "comment": "Excellent service, very professional!"
 }
@@ -1724,7 +1759,7 @@ The review system implements a closed trust conversation model:
 - Client must own the lead
 - Lead must have status='done'
 - Client cannot review their own provider profile
-- One review per lead only
+- One review per (lead, provider) combination
 - Rating: 1-5 stars
 - Comment: optional, max 1000 chars
 
@@ -1748,7 +1783,8 @@ The review system implements a closed trust conversation model:
 - 400 LEAD_NOT_COMPLETED - lead status is not 'done'
 - 403 NOT_YOUR_LEAD - client doesn't own this lead
 - 403 SELF_REVIEW_NOT_ALLOWED - client owns the target provider profile
-- 409 REVIEW_EXISTS - review already exists for this lead
+- 409 REVIEW_EXISTS - review already exists for this lead/provider combination
+- 403 PROVIDER_NOT_CONTACTED - provider did not contact you for this lead
 
 ---
 
@@ -2085,8 +2121,9 @@ All fields are optional. Empty string `""` for phone will clear the field.
 | LEAD_NOT_COMPLETED | 400 | Lead status is not 'done' |
 | NOT_YOUR_LEAD | 403 | Client doesn't own this lead |
 | SELF_REVIEW_NOT_ALLOWED | 403 | Client attempted to review their own provider profile |
-| REVIEW_EXISTS | 409 | Review already exists for this lead |
+| REVIEW_EXISTS | 409 | Review already exists for this lead/provider combination |
 | REVIEW_NOT_FOUND | 404 | Review doesn't exist or provider doesn't own it |
+| PROVIDER_NOT_CONTACTED | 403 | Provider did not contact you for this lead |
 | INVALID_RATING | 422 | Rating must be 1-5 |
 | INVALID_REPLY | 422 | Reply cannot be empty or exceeds 2000 chars |
 

@@ -595,6 +595,12 @@ class ClientDashboardResponse(BaseModel):
     data: ClientDashboardData
 
 
+class ReviewableProvider(BaseModel):
+    provider_id: UUID
+    provider_name: str
+    provider_slug: str
+
+
 class ClientLeadListItem(BaseModel):
     id: UUID
     category_slug: str
@@ -609,6 +615,7 @@ class ClientLeadListItem(BaseModel):
     source: Optional[str] = None
     created_at: datetime
     has_review: bool
+    reviewable_providers: List[ReviewableProvider] = []
     client_notes: Optional[str] = None
     cancelled_by: Optional[str] = None
     status_changed_by: Optional[str] = None
@@ -665,6 +672,7 @@ class SlugCheckResponse(BaseModel):
 
 class ReviewCreateRequest(BaseModel):
     lead_id: UUID
+    provider_id: UUID
     rating: int
     comment: Optional[str] = None
 
@@ -736,10 +744,11 @@ class ReviewListResponse(BaseModel):
 class ReviewEligibleLead(BaseModel):
     id: UUID
     description: Optional[str] = None
-    created_at: datetime
-    provider_id: UUID
-    provider_business_name: Optional[str] = None
+    category_name: Optional[str] = None
+    city: Optional[str] = None
     has_review: bool = False
+    created_at: datetime
+    reviewable_providers: List[ReviewableProvider]
 
 
 class ReviewEligibleLeadsResponse(BaseModel):

@@ -17,3 +17,4 @@ SELF_REVIEW_NOT_ALLOWED = NevumoException(403, "SELF_REVIEW_NOT_ALLOWED", "You c
 RATE_LIMIT_EXCEEDED = NevumoException(429, "RATE_LIMIT_EXCEEDED", "Too many requests. Maximum 5 leads per hour")
 INVALID_MATCH_STATUS = NevumoException(422, "INVALID_MATCH_STATUS", "Status must be 'accepted' or 'rejected'")
 LEAD_NOT_FOUND = NevumoException(404, "LEAD_NOT_FOUND", "Lead not found")
+PROVIDER_NOT_CONTACTED = NevumoException(403, "PROVIDER_NOT_CONTACTED", "Provider did not contact you for this lead")

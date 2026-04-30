@@ -26,6 +26,12 @@ export interface ClientDashboardData {
   last_city_slug?: string;
 }
 
+export interface ReviewableProvider {
+  provider_id: string;
+  provider_name: string;
+  provider_slug: string;
+}
+
 export interface ClientLead {
   id: string;
   category_slug: string;
@@ -41,6 +47,7 @@ export interface ClientLead {
   source: string | null;
   created_at: string;
   has_review: boolean;
+  reviewable_providers?: ReviewableProvider[];
 }
 
 export interface ClientLeadsData {
@@ -78,6 +85,9 @@ export interface EligibleLead {
   provider_id: string;
   provider_business_name: string | null;
   has_review: boolean;
+  category_name?: string;
+  city?: string;
+  reviewable_providers?: ReviewableProvider[];
 }
 
 export interface EligibleLeadsData {
@@ -173,6 +183,7 @@ export async function getEligibleLeads(token: string): Promise<EligibleLeadsData
 export async function submitReview(
   token: string,
   lead_id: string,
+  provider_id: string,
   rating: number,
   comment?: string,
 ): Promise<SubmitReviewResult> {
@@ -180,6 +191,7 @@ export async function submitReview(
     method: 'POST',
     body: JSON.stringify({
       lead_id,
+      provider_id,
       rating,
       comment: comment?.trim() || undefined,
     }),

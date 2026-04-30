@@ -1,5 +1,6 @@
 import type { ProviderDetail, ProviderListItem } from '@/lib/api';
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
+import { getCurrency } from '@/lib/currency';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
 
@@ -24,7 +25,9 @@ export function generateLocalBusinessJsonLd(
   provider: ProviderDetail,
   category: string,
   city: string,
+  countryCode?: string,
 ): Record<string, unknown> {
+  const currency = getCurrency(countryCode);
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -47,7 +50,7 @@ export function generateLocalBusinessJsonLd(
         description: s.description ?? undefined,
       },
       price: s.base_price ?? undefined,
-      priceCurrency: 'BGN',
+      priceCurrency: currency,
     })),
   };
 }

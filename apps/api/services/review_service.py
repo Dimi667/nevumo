@@ -4,11 +4,11 @@ from datetime import datetime
 from typing import Optional, List, Dict, Any
 from uuid import UUID
 
-from sqlalchemy import func
-from sqlalchemy.orm import Session
+from sqlalchemy import func, and_
+from sqlalchemy.orm import Session, aliased
 
-from apps.api.exceptions import NevumoException, SELF_REVIEW_NOT_ALLOWED
-from apps.api.models import Review, Lead, User, Provider
+from apps.api.exceptions import NevumoException, SELF_REVIEW_NOT_ALLOWED, PROVIDER_NOT_CONTACTED
+from apps.api.models import Review, Lead, User, Provider, LeadMatch, Category, CategoryTranslation, Location
 from apps.api.services.email_service import email_service
 from apps.api.services.provider_service import get_provider_rating
 
@@ -22,28 +22,41 @@ def _get_review_display_name(client_name: Optional[str]) -> str:
 def get_eligible_leads_for_review(
     client_id: UUID,
     db: Session,
-    limit: int = 50
+    limit: int = 50,
+    lang: str = 'en'
 ) -> List[Dict[str, Any]]:
     """Get completed leads that are eligible for review by the client.
 
     A lead is eligible if:
     - It has the client's client_id populated
     - It has status 'done' (completed)
-    - No review exists for this lead yet
+    - There are providers in LeadMatch with status 'contacted' or 'done'
+    - No review exists for the (lead_id, provider_id) combination
     """
-    # Get all completed leads for this client
+    # Get all completed leads for this client with category and location info
+    ct_req = aliased(CategoryTranslation)
+    ct_en = aliased(CategoryTranslation)
+
     leads_query = (
         db.query(
             Lead,
-            Provider.business_name.label('provider_business_name'),
-            Review.id.label('existing_review_id')
+            func.coalesce(ct_req.name, ct_en.name, Category.slug).label("category_name"),
+            Location.city.label("city_name"),
+            Location.city_en.label("city_en")
         )
-        .join(Provider, Lead.provider_id == Provider.id)
-        .outerjoin(Review, Review.lead_id == Lead.id)
+        .join(Category, Lead.category_id == Category.id)
+        .outerjoin(
+            ct_req,
+            and_(ct_req.category_id == Category.id, ct_req.lang == lang),
+        )
+        .outerjoin(
+            ct_en,
+            and_(ct_en.category_id == Category.id, ct_en.lang == "en"),
+        )
+        .join(Location, Lead.city_id == Location.id)
         .filter(
             Lead.client_id == client_id,
             Lead.status == "done",
-            Provider.user_id != client_id,
         )
         .order_by(Lead.created_at.desc())
         .limit(limit)
@@ -52,19 +65,47 @@ def get_eligible_leads_for_review(
     results = leads_query.all()
 
     eligible_leads = []
-    for row in results:
-        lead = row[0]
-        provider_name = row[1]
-        existing_review_id = row[2]
-
-        eligible_leads.append({
-            "id": lead.id,
-            "description": lead.description,
-            "created_at": lead.created_at,
-            "provider_id": lead.provider_id,
-            "provider_business_name": provider_name,
-            "has_review": existing_review_id is not None,
-        })
+    for lead, category_name, city_name, city_en in results:
+        # Find reviewable providers for this lead
+        # Must have LeadMatch status in ('contacted', 'done')
+        # AND no existing review for this lead/provider combo
+        reviewable_providers_query = (
+            db.query(
+                Provider.id,
+                Provider.business_name,
+                Provider.slug
+            )
+            .join(LeadMatch, LeadMatch.provider_id == Provider.id)
+            .outerjoin(
+                Review, 
+                (Review.lead_id == LeadMatch.lead_id) & (Review.provider_id == LeadMatch.provider_id)
+            )
+            .filter(
+                LeadMatch.lead_id == lead.id,
+                LeadMatch.status.in_(["contacted", "done"]),
+                Review.id == None,  # No review yet
+                Provider.user_id != client_id  # Cannot review self
+            )
+        )
+        
+        providers = reviewable_providers_query.all()
+        
+        if providers:
+            eligible_leads.append({
+                "id": lead.id,
+                "description": lead.description,
+                "category_name": category_name,
+                "city": city_en or city_name,
+                "has_review": False,
+                "created_at": lead.created_at,
+                "reviewable_providers": [
+                    {
+                        "provider_id": p.id,
+                        "provider_name": p.business_name,
+                        "provider_slug": p.slug
+                    } for p in providers
+                ]
+            })
 
     return eligible_leads
 
@@ -72,15 +113,16 @@ def get_eligible_leads_for_review(
 def create_review(
     client_id: UUID,
     lead_id: UUID,
+    provider_id: UUID,
     rating: int,
     comment: Optional[str],
     db: Session
 ) -> Review:
-    """Create a new review for a completed lead.
+    """Create a new review for a completed lead and provider.
 
     Raises:
-        NevumoException: If lead not found, not completed, already reviewed,
-                        or client doesn't own the lead.
+        NevumoException: If lead not found, not completed, provider didn't contact,
+                        already reviewed, or client doesn't own the lead.
     """
     # Validate lead exists and is completed
     lead = db.query(Lead).filter(Lead.id == lead_id).first()
@@ -102,33 +144,38 @@ def create_review(
             "You can only review your own completed jobs"
         )
 
-    # Check if lead has a provider
-    if not lead.provider_id:
-        raise NevumoException(
-            400,
-            "LEAD_NO_PROVIDER",
-            "Cannot review a lead without an assigned provider"
-        )
+    # Validate provider and lead match
+    match = db.query(LeadMatch).filter(
+        LeadMatch.lead_id == lead_id,
+        LeadMatch.provider_id == provider_id
+    ).first()
+    
+    if not match or match.status not in ("contacted", "done"):
+        raise PROVIDER_NOT_CONTACTED
 
-    provider = db.query(Provider).filter(Provider.id == lead.provider_id).first()
+    provider = db.query(Provider).filter(Provider.id == provider_id).first()
     if not provider:
         raise NevumoException(404, "PROVIDER_NOT_FOUND", "Provider not found")
 
     if provider.user_id == client_id:
         raise SELF_REVIEW_NOT_ALLOWED
 
-    # Check for existing review (one review per lead)
-    existing = db.query(Review).filter(Review.lead_id == lead_id).first()
+    # Check for existing review (one review per lead per provider)
+    existing = db.query(Review).filter(
+        Review.lead_id == lead_id,
+        Review.provider_id == provider_id
+    ).first()
+    
     if existing:
         raise NevumoException(
             409,
             "REVIEW_EXISTS",
-            "You have already reviewed this job"
+            "You have already reviewed this provider for this job"
         )
 
     # Create the review
     review = Review(
-        provider_id=lead.provider_id,
+        provider_id=provider_id,
         client_id=client_id,
         lead_id=lead_id,
         rating=rating,
@@ -139,7 +186,8 @@ def create_review(
     db.refresh(review)
 
     # Update provider's aggregate rating
-    _update_provider_rating(lead.provider_id, db)
+    # We use provider_id explicitly now
+    _update_provider_rating(provider_id, db)
 
     return review
 

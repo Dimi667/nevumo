@@ -110,7 +110,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, nl, no, pl, pt, pt-PT, ro, ru, sk, sl, sq, sr, sv, tr, uk
 
 - Default language: en
-- UI translation seed status (April 16, 2026):
+- UI translation seed status (April 30, 2026):
   - `43` homepage keys per language
   - `24` category-page keys per language
   - `67` total UI keys per language
@@ -120,6 +120,8 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `11,866` rows in `translations` for provider_dashboard namespace across 34 languages
   - `714` rows in `translations` for city namespace across 34 languages
   - `2,856` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 10 keys × 34 languages = 340 rows)
+  - `340` rows in `translations` for `widget` namespace across 34 languages (relative time translations: 8 keys × 34 languages = 272 rows; error messages: 2 keys × 34 languages = 68 rows)
+    - New error keys: `widget.phone_error` (phone validation error message) and `widget.error_message` (general form error message)
 
 ---
 
@@ -176,6 +178,20 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Provider Page Optimization (April 30, 2026)** — COMPLETE:
+  - **Error Fixes**: Eliminated "currency is not defined" ReferenceError and fixed HTML structure parsing errors in `page.tsx`.
+  - **SEO**: Added `Service` Schema.org JSON-LD to provider widgets.
+  - **Logic**: Robust multi-layer currency fallback (Provider Service -> City -> Country -> 'EUR').
+- **Universal Currency Logic (April 30, 2026)** — COMPLETE:
+  - **Logic**: Currency is now location-based (from `city.country_code`) rather than interface-language-based.
+  - **BG Rule**: For Bulgaria (BG), currency is always "EUR" (active from 01.01.2026).
+  - **Implementation**: `apps/web/lib/currency.ts` handles logic and formatting.
+  - **Integration**: JSON-LD `LocalBusiness` and `ProviderWidget` UI updated to use the new logic.
+- **Provider Page SEO Optimization (April 30, 2026)** — COMPLETE:
+  - **Robots Logic**: Conditional `noindex, nofollow` for `?embed=1` views; `index, follow` for full pages.
+  - **Canonical Tags**: Dynamic canonical URLs that prioritize the full page version.
+  - **Localized Schema**: JSON-LD `LocalBusiness` now uses translated city names from the database.
+  - **Universal City Map**: Replaced hardcoded `CITY_COUNTRY_MAP` with dynamic API-driven city data.
 - **City Selection Page SEO Completion (April 30, 2026)** — COMPLETE:
   - Namespace: `city_selection` — 6 keys × 34 languages = 204 rows seeded
   - Keys: meta_title, meta_description, heading, empty_state, nav_link, footer_text
@@ -431,10 +447,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Logout in topbar and sidebar
   - `Стани доставчик` role-switch CTA
   - `НАМЕРИ УСЛУГА` CTA after settings
-- **Provider Widget UX Improvement** — `apps/web/components/ProviderWidget.tsx` now supports:
+- **Provider Widget UX Improvement (April 30, 2026)** — COMPLETE:
   - Filtering visible service tags by current category
   - Selecting a service tag to auto-fill the description
   - Expand-to-show-all services flow
+  - **Relative Time Localization**: Fully localized relative time (e.g., "just now", "5m ago", "2 days ago") across all 34 languages using DB-backed translations (namespace: `widget`).
+  - **Technical Refactor**: Replaced hardcoded Bulgarian/English logic in `getRelativeTime` with a universal translation function `t` and 8 new translation keys. All component UI strings in the widget now use the `t` function.
 - **ProviderWidget State Updates (April 27, 2026)** — `apps/web/components/ProviderWidget.tsx` rendering logic changes:
   - **Verified badge**: Now renders unconditionally for ALL providers regardless of `provider.verified` value (condition changed from `{provider.verified && (...)}` to `{...}`)
   - **Top section waterfall**: Fallback state (`new_badge` + `no_reviews_yet`) removed; waterfall now ends with `null` when no conditions match

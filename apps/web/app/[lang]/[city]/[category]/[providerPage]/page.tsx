@@ -1,17 +1,10 @@
 import { notFound, redirect } from 'next/navigation';
-import { getProviderBySlug, getCategories, resolveSlug } from '@/lib/api';
+import { getProviderBySlug, getCategories, resolveSlug, getCityBySlug } from '@/lib/api';
 import ProviderWidget from '@/components/ProviderWidget';
 import ClaimProfileBanner from '@/components/ClaimProfileBanner';
 import { generateHreflangAlternates, generateLocalBusinessJsonLd } from '@/lib/seo';
 import { JsonLd } from '@/components/JsonLd';
-
-const CITY_COUNTRY_MAP: Record<string, string> = {
-  warszawa: 'PL',
-  sofia: 'BG',
-  belgrade: 'RS',
-  prague: 'CZ',
-  athens: 'GR',
-};
+import { getCurrency, formatCurrency } from '@/lib/currency';
 
 type ProviderRouteParams = {
   lang: string;
@@ -20,41 +13,54 @@ type ProviderRouteParams = {
   providerPage: string;
 };
 
-function formatPrice(price: number | null, priceType: string, translations?: { services_label?: string; price_on_request?: string }): string {
+function formatPrice(price: number | null, priceType: string, currency: string, translations?: { services_label?: string; price_on_request?: string }): string {
   if (priceType === 'request' || price === null) return translations?.price_on_request || 'Price on request';
-  if (priceType === 'hourly') return `${price} лв./h`;
-  return `${price} лв.`;
+  return formatCurrency(price, currency) + (priceType === 'hourly' ? '/h' : '');
 }
 
 function getInitials(name: string): string {
   return name.charAt(0).toUpperCase();
 }
 
-export async function generateMetadata(props: { params: Promise<ProviderRouteParams> }) {
+export async function generateMetadata(props: { 
+  params: Promise<ProviderRouteParams>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const { lang, city, category, providerPage } = await props.params;
-  try {
-    // Resolve slug to get the canonical slug (but don't redirect here - no access to searchParams)
-    const slugResolution = await resolveSlug(providerPage);
+  const searchParams = await props.searchParams;
+  const isEmbed = searchParams.embed === '1';
 
-    // Use the resolved slug for provider lookup (if found), otherwise fallback to original
+  try {
+    const slugResolution = await resolveSlug(providerPage);
     const slugToUse = slugResolution.found && slugResolution.slug ? slugResolution.slug : providerPage;
 
     const [provider, categories] = await Promise.all([
       getProviderBySlug(slugToUse, lang, city),
       getCategories(lang),
     ]);
+
     if (!provider) return { title: 'Nevumo' };
+
     const categoryName = categories.find((c) => c.slug === category)?.name ?? category;
     const description = provider.description ?? `Book ${provider.business_name} for ${categoryName} services.`;
+    const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
+    const canonicalUrl = `${SITE_URL}/${lang}/${city}/${category}/${slugToUse}`;
+
     return {
       title: `${provider.business_name} | ${categoryName}`,
       description,
+      robots: {
+        index: !isEmbed,
+        follow: !isEmbed,
+      },
       alternates: {
+        canonical: canonicalUrl,
         languages: generateHreflangAlternates(`/${city}/${category}/${slugToUse}`),
       },
       openGraph: {
         title: `${provider.business_name} | ${categoryName} | Nevumo`,
         description,
+        url: canonicalUrl,
       },
     };
   } catch {
@@ -99,15 +105,17 @@ export default async function Page(props: {
   // Use the resolved slug consistently for provider lookups
   const slugToUse = slugResolution.found && slugResolution.slug ? slugResolution.slug : providerPage;
 
-  const [provider, categories] = await Promise.all([
+  const [provider, categories, cityData] = await Promise.all([
     getProviderBySlug(slugToUse, lang, city),
     getCategories(lang),
+    getCityBySlug(city, lang),
   ]);
 
   if (!provider) return notFound();
 
   const categoryName = categories.find((c) => c.slug === category)?.name ?? category;
-  const cityCountryCode = CITY_COUNTRY_MAP[city] ?? 'BG';
+  const cityName = cityData?.city || city;
+  const cityCountryCode = cityData?.country_code ?? 'BG';
 
   // Embed mode - render widget only
   if (isEmbed) {
@@ -129,7 +137,7 @@ export default async function Page(props: {
   // Full page mode (existing logic)
   return (
     <>
-      <JsonLd data={generateLocalBusinessJsonLd(provider, category, city)} />
+      <JsonLd data={generateLocalBusinessJsonLd(provider, category, cityName, cityCountryCode)} />
       <div className="min-h-screen bg-gray-50 py-6 px-4">
         <div className="max-w-md mx-auto">
           {/* Claim profile banner for unclaimed providers */}
@@ -144,8 +152,8 @@ export default async function Page(props: {
             citySlug={city}
             countryCode={cityCountryCode}
           />
+        </div>
       </div>
-    </div>
     </>
   );
 }

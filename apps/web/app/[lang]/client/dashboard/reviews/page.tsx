@@ -21,6 +21,7 @@ type ReviewsTab = 'written' | 'pending';
 
 type ReviewFormState = {
   leadId: string | null;
+  providerId: string | null;
   rating: number;
   comment: string;
 };
@@ -126,8 +127,8 @@ export default function ClientReviewsPage() {
   const [loadingTab, setLoadingTab] = useState(true);
   const [loadingPreferences, setLoadingPreferences] = useState(true);
   const [savingPreference, setSavingPreference] = useState(false);
-  const [reviewForm, setReviewForm] = useState<ReviewFormState>({ leadId: null, rating: 5, comment: '' });
-  const [submittingLeadId, setSubmittingLeadId] = useState<string | null>(null);
+  const [reviewForm, setReviewForm] = useState<ReviewFormState>({ leadId: null, providerId: null, rating: 5, comment: '' });
+  const [submittingId, setSubmittingId] = useState<string | null>(null); // leadId:providerId
   const [expandedReplies, setExpandedReplies] = useState<Record<string, boolean>>({});
   const [toast, setToast] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -257,12 +258,12 @@ export default function ClientReviewsPage() {
     }
   }
 
-  function openReviewForm(leadId: string) {
-    setReviewForm({ leadId, rating: 5, comment: '' });
+  function openReviewForm(leadId: string, providerId: string) {
+    setReviewForm({ leadId, providerId, rating: 5, comment: '' });
   }
 
   function closeReviewForm() {
-    setReviewForm({ leadId: null, rating: 5, comment: '' });
+    setReviewForm({ leadId: null, providerId: null, rating: 5, comment: '' });
   }
 
   function toggleReply(reviewId: string) {
@@ -272,7 +273,7 @@ export default function ClientReviewsPage() {
     }));
   }
 
-  async function handleSubmitReview(leadId: string) {
+  async function handleSubmitReview(leadId: string, providerId: string) {
     const token = getAuthToken();
 
     if (!token) {
@@ -281,9 +282,10 @@ export default function ClientReviewsPage() {
     }
 
     try {
-      setSubmittingLeadId(leadId);
+      const subId = `${leadId}:${providerId}`;
+      setSubmittingId(subId);
       setError(null);
-      await submitReview(token, leadId, reviewForm.rating, reviewForm.comment);
+      await submitReview(token, leadId, providerId, reviewForm.rating, reviewForm.comment);
       closeReviewForm();
       setToast('Ревюто беше изпратено успешно.');
       await Promise.all([
@@ -293,7 +295,7 @@ export default function ClientReviewsPage() {
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Неуспешно изпращане на ревю.');
     } finally {
-      setSubmittingLeadId(null);
+      setSubmittingId(null);
     }
   }
 
@@ -456,78 +458,99 @@ export default function ClientReviewsPage() {
               </Link>
             </div>
           ) : (
-            pendingLeads.map((lead) => (
-              <div key={lead.id} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <h3 className="font-medium text-gray-900">
-                      {lead.provider_business_name || t(dict, 'label_provider', 'Provider')}
-                    </h3>
-                    <p className="text-sm text-gray-500 mt-1">{formatDate(lead.created_at, lang)}</p>
+            pendingLeads.flatMap((lead) => 
+              (lead.reviewable_providers || []).map((provider) => ({
+                ...lead,
+                current_provider: provider
+              }))
+            ).map((item) => {
+              const lead = item;
+              const provider = item.current_provider;
+              const isFormOpen = reviewForm.leadId === lead.id && reviewForm.providerId === provider.provider_id;
+              const subId = `${lead.id}:${provider.provider_id}`;
+
+              return (
+                <div key={subId} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <h3 className="font-medium text-gray-900">
+                        {provider.provider_name}
+                      </h3>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-xs font-medium px-2 py-0.5 bg-gray-100 text-gray-600 rounded-md">
+                          {lead.category_name}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          {lead.city}
+                        </span>
+                        <span className="text-xs text-gray-400">•</span>
+                        <span className="text-xs text-gray-400">{formatDate(lead.created_at, lang)}</span>
+                      </div>
+                    </div>
+                    {!isFormOpen && (
+                      <button
+                        type="button"
+                        onClick={() => openReviewForm(lead.id, provider.provider_id)}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
+                      >
+                        {t(dict, 'btn_rate_service', 'Rate')}
+                      </button>
+                    )}
                   </div>
-                  {reviewForm.leadId === lead.id ? null : (
-                    <button
-                      type="button"
-                      onClick={() => openReviewForm(lead.id)}
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
-                    >
-                      {t(dict, 'btn_rate_service', 'Rate')}
-                    </button>
+
+                  {lead.description && (
+                    <p className="text-sm text-gray-600">{lead.description}</p>
+                  )}
+
+                  {isFormOpen && (
+                    <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-4">
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium text-gray-700">{t(dict, 'label_rating', 'Rating')}</p>
+                        <StarRatingInput
+                          value={reviewForm.rating}
+                          onChange={(rating) => setReviewForm((current) => ({ ...current, rating }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700" htmlFor={`pending-review-comment-${subId}`}>
+                          {t(dict, 'label_comment', 'Comment')}
+                        </label>
+                        <textarea
+                          id={`pending-review-comment-${subId}`}
+                          value={reviewForm.comment}
+                          onChange={(event) => setReviewForm((current) => ({
+                            ...current,
+                            comment: event.target.value,
+                          }))}
+                          rows={4}
+                          maxLength={1000}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
+                          placeholder={t(dict, 'review_placeholder', 'Share your impressions...')}
+                        />
+                        <p className="text-xs text-gray-400">{reviewForm.comment.length}/1000</p>
+                      </div>
+                      <div className="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={closeReviewForm}
+                          className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                        >
+                          {t(dict, 'btn_cancel', 'Cancel')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleSubmitReview(lead.id, provider.provider_id)}
+                          disabled={submittingId === subId}
+                          className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+                        >
+                          {submittingId === subId ? t(dict, 'btn_submitting', 'Submitting...') : t(dict, 'btn_submit_review', 'Submit Review')}
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
-
-                {lead.description && (
-                  <p className="text-sm text-gray-600">{lead.description}</p>
-                )}
-
-                {reviewForm.leadId === lead.id && (
-                  <div className="bg-gray-50 rounded-xl border border-gray-200 p-4 space-y-4">
-                    <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-700">{t(dict, 'label_rating', 'Rating')}</p>
-                      <StarRatingInput
-                        value={reviewForm.rating}
-                        onChange={(rating) => setReviewForm((current) => ({ ...current, rating }))}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700" htmlFor={`pending-review-comment-${lead.id}`}>
-                        {t(dict, 'label_comment', 'Comment')}
-                      </label>
-                      <textarea
-                        id={`pending-review-comment-${lead.id}`}
-                        value={reviewForm.comment}
-                        onChange={(event) => setReviewForm((current) => ({
-                          ...current,
-                          comment: event.target.value,
-                        }))}
-                        rows={4}
-                        maxLength={1000}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
-                        placeholder={t(dict, 'review_placeholder', 'Share your impressions...')}
-                      />
-                      <p className="text-xs text-gray-400">{reviewForm.comment.length}/1000</p>
-                    </div>
-                    <div className="flex justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={closeReviewForm}
-                        className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
-                      >
-                        {t(dict, 'btn_cancel', 'Cancel')}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleSubmitReview(lead.id)}
-                        disabled={submittingLeadId === lead.id}
-                        className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
-                      >
-                        {submittingLeadId === lead.id ? t(dict, 'btn_submitting', 'Submitting...') : t(dict, 'btn_submit_review', 'Submit Review')}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
