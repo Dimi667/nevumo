@@ -32,7 +32,12 @@ This document reflects the major architectural optimization performed in April 2
 ### 5. Next.js & UI (Metadata + i18n)
 - **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow. Replaced legacy hidden iframe hacks with the modern **Credential Management API** (`navigator.credentials.store`) for robust password saving across all modern browsers including iOS Safari.
 - **Client Dashboard Optimization (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page.
-- **Dynamic User Intent Navigation (April 30, 2026)**: Implemented "City-First" navigation logic for clients. The "Find Service" button in the dashboard (Overview, Sidebar, Requests, and Reviews) now dynamically links based on the `last_city_slug` returned by the API:
+- **Dynamic User Intent Navigation (April 30, 2026)**: Implemented "City-First" navigation logic for clients. The "Find Service" button in the dashboard (Overview, Sidebar, Requests, and Reviews) now dynamically links based on the `last_city_slug` returned by the API via a multi-layer fallback chain:
+   - **Fallback Chain**: 
+     1. user.city_id
+     2. Last lead as client
+     3. City from provider's last service (if user is a provider)
+     4. null
    - **last_city_slug present** → Redirect to `/[lang]/[last_city_slug]` (returns user to their relevant local market).
    - **last_city_slug is null** → Redirect to `/[lang]/izberi-grad` (City Selection page).
    Maximizes conversion by returning users to their relevant context while providing a clear selection path if no history exists.
