@@ -176,6 +176,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **City Selection Page SEO Completion (April 30, 2026)** — COMPLETE:
+  - Namespace: `city_selection` — 6 keys × 34 languages = 204 rows seeded
+  - Keys: meta_title, meta_description, heading, empty_state, nav_link, footer_text
+  - page.tsx updated: fetchTranslations, t(dict, key), generateStaticParams, JSON-LD CollectionPage
+  - All hardcoded strings replaced with DB-backed translations
+  - Tested: bg, en, pl — 42/42 PASS
 - **Universal Slug Generation (April 30, 2026)** — SUCCESSFUL:
   - **Problem**: Inconsistent slug logic between Frontend and Backend, and limited support for special characters beyond Bulgarian.
   - **Solution**: Unified slug generation logic stack-wide.

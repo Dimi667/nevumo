@@ -3,25 +3,34 @@ import Image from 'next/image';
 import { getActiveCities } from '@/lib/api';
 import { generateHreflangAlternates } from '@/lib/seo';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
+import { fetchTranslations, t } from '@/lib/ui-translations';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
 }
 
+export async function generateStaticParams() {
+  return SUPPORTED_LANGUAGES.map((lang) => ({ lang }));
+}
+
 export async function generateMetadata({ params }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
+  const dict = await fetchTranslations(normalizedLang, 'city_selection');
   
+  const title = t(dict, 'meta_title', 'Choose a city — Nevumo');
+  const description = t(dict, 'meta_description', 'Find trusted local services in your city. Select your location to browse available specialists.');
+
   return {
-    title: 'Choose a city — Nevumo',
-    description: 'Find trusted local services in your city. Select your location to browse available specialists.',
+    title,
+    description,
     alternates: {
       canonical: `/${normalizedLang}/izberi-grad`,
       languages: generateHreflangAlternates('/izberi-grad'),
     },
     openGraph: {
-      title: 'Choose a city — Nevumo',
-      description: 'Find trusted local services in your city. Select your location to browse available specialists.',
+      title,
+      description,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/${normalizedLang}/izberi-grad`,
       siteName: 'Nevumo',
       locale: normalizedLang,
@@ -33,28 +42,42 @@ export async function generateMetadata({ params }: PageProps) {
 export default async function ChooseCityPage({ params }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
+  const dict = await fetchTranslations(normalizedLang, 'city_selection');
   const cities = await getActiveCities(normalizedLang);
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: t(dict, 'meta_title'),
+    description: t(dict, 'meta_description'),
+    url: `https://nevumo.com/${normalizedLang}/izberi-grad`,
+    inLanguage: normalizedLang,
+  };
 
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         <Link href={`/${normalizedLang}`} className="inline-flex items-center">
           <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
         </Link>
         <Link href={`/${normalizedLang}/auth?mode=register&role=provider`} className="text-sm text-gray-600 transition-colors hover:text-orange-600">
-          Become a specialist
+          {t(dict, 'nav_link')}
         </Link>
       </nav>
 
       <main className="max-w-7xl mx-auto px-6 py-12">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center">
-          In which city are you looking for a service?
+          {t(dict, 'heading')}
         </h1>
 
         {cities.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-xl text-gray-600 font-medium">Очаквай скоро</p>
+            <p className="text-xl text-gray-600 font-medium">{t(dict, 'empty_state')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -96,7 +119,7 @@ export default async function ChooseCityPage({ params }: PageProps) {
       <footer className="py-12 px-6 bg-gray-50 border-t border-gray-200 mt-auto">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-gray-500 text-sm">
-            Nevumo — Connecting you with local specialists
+            {t(dict, 'footer_text')}
           </p>
         </div>
       </footer>
