@@ -784,6 +784,7 @@ Returns a paginated list of leads created by the client.
 | `status` | string | `all` | Filter by status: `all`, `created`, `matched`, `done`, `rejected` |
 | `limit` | int | 50 | Max records to return |
 | `offset` | int | 0 | Pagination offset |
+| `lang` | string | `en` | Language code for translations |
 
 ### Response
 ```json

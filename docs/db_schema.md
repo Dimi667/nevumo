@@ -279,6 +279,10 @@ CREATE TABLE lead_matches (
 
 CREATE INDEX idx_lead_matches_lead ON lead_matches(lead_id);
 
+### Review Eligibility
+- Only leads with LeadMatch.status IN ('contacted', 'done') are eligible for review
+- This allows clients to review each provider who contacted them for a given lead
+
 ---
 
 ## 10. Messages (Future)

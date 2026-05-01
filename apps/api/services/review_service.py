@@ -75,7 +75,7 @@ def get_eligible_leads_for_review(
                 Provider.business_name,
                 Provider.slug
             )
-            .join(LeadMatch, LeadMatch.provider_id == Provider.id)
+            .join(LeadMatch, (LeadMatch.provider_id == Provider.id) & (LeadMatch.lead_id == lead.id))
             .outerjoin(
                 Review, 
                 (Review.lead_id == LeadMatch.lead_id) & (Review.provider_id == LeadMatch.provider_id)

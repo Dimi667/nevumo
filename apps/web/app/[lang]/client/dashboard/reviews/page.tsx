@@ -221,6 +221,10 @@ export default function ClientReviewsPage() {
   }, [loadPreferences]);
 
   useEffect(() => {
+    void loadPendingLeads(false);
+  }, []);
+
+  useEffect(() => {
     if (activeTab === 'written') {
       void loadWrittenReviews();
       return;

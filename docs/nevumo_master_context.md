@@ -366,7 +366,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Provider Dashboard frontend — all pages (Overview, Leads, Services, Analytics, QR Code, Profile, Settings, Reviews)
 - Provider onboarding — 2-step wizard (profile info → first service), completeness check with auto-redirect
 - Service CRUD — add/edit/delete with category, multi-city, price type, currency
-- Client Dashboard — frontend + backend complete with guarded sidebar/topbar layout, Overview, My Requests, Reviews, Settings, inline review submission, review reply toggle preferences, role switch, and logout. Fixes (April 2026): Resolved data inconsistencies and added real-time status updates for reviews and leads.
+- Client Dashboard — frontend + backend complete with guarded sidebar/topbar layout, Overview, My Requests, Reviews, Settings, inline review submission, review reply toggle preferences, role switch, and logout. Multi-provider review system: clients can review each provider who contacted them (LeadMatch.status IN contacted/done), one review per (lead_id, provider_id) pair. Badge count loads on initial mount (not only on tab click). Overview page lead cards have hover:shadow-md + "Write a Review" button for done leads. Fixes (April 2026): Resolved data inconsistencies and added real-time status updates for reviews and leads.
 - Lead Rate Limiting UX Improvement (April 2026) — When a user is rate limited during lead submission, the API now returns the ID of their most recent lead. This allows the frontend to show the "Success" screen and allow the user to claim that lead via email, even if the new submission was blocked.
 - Namespaced Translations Validator — Implemented strict `namespace.key` validation at the model layer to prevent incorrect translation keys.
 - Warsaw Launch Data Seeded — Complete Warsaw marketplace setup:
@@ -795,6 +795,10 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Redis caching with TTL 3600s (key: `price_range:{category}:{city}`)
   - Frontend integration in category page: metadata, FAQ schema, SEO paragraph
   - Translation keys for price display: `price_text_none/single/range`, `price_faq_none/single/range`, `price_meta_none/single/range`
+
+- **Client Dashboard Fixes (Review Flow)**:
+  - Added `useEffect` in `reviews/page.tsx` to load pending leads count on mount without a loading spinner, ensuring the badge count is populated immediately.
+  - Fixed SQL join logic in `get_eligible_leads_for_review()` service to correctly filter `LeadMatch` by both `provider_id` and `lead_id`, ensuring all reviewable providers for a given lead are returned instead of just one.
 
 ### 🔮 Future
 - AI lead matching

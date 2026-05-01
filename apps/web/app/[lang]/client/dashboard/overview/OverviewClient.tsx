@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import StatsCard from '@/components/dashboard/StatsCard';
 import { getAuthToken } from '@/lib/auth-store';
@@ -75,6 +76,7 @@ function getStatusMeta(status: ClientLeadStatus, t: (key: string, fallback?: str
 }
 
 export default function OverviewClient({ lang }: { lang: string }) {
+  const router = useRouter();
   const [data, setData] = useState<ClientDashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -190,8 +192,12 @@ export default function OverviewClient({ lang }: { lang: string }) {
               const statusMeta = getStatusMeta(lead.status, t);
 
               return (
-                <Link key={lead.id} href={`/${lang}/client/dashboard/requests?open=${lead.id}`} className="block">
-                  <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 cursor-pointer hover:shadow-md transition-shadow">
+                <div
+                  key={lead.id}
+                  className="block cursor-pointer"
+                  onClick={() => router.push(`/${lang}/client/dashboard/requests?open=${lead.id}`)}
+                >
+                  <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 cursor-pointer transition-shadow hover:shadow-md">
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <h3 className="text-base font-semibold text-gray-900">{lead.category_name}</h3>
@@ -215,8 +221,20 @@ export default function OverviewClient({ lang }: { lang: string }) {
                       <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t('label_date', 'Date')}</p>
                       <p className="text-sm text-gray-700">{formatDate(lead.created_at, lang)}</p>
                     </div>
+                    {lead.status === 'done' && (
+                      <div className="flex justify-end">
+                        <div className="relative z-10" onClick={(e) => e.stopPropagation()} onMouseEnter={(e) => e.stopPropagation()}>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); e.preventDefault(); router.push(`/${lang}/client/dashboard/reviews?tab=pending`); }}
+                            className="shrink-0 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
+                          >
+                            {t('btn_write_review', 'Write a Review')}
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                </Link>
+                </div>
               );
             })}
           </div>

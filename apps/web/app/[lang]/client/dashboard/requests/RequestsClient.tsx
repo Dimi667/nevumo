@@ -383,7 +383,7 @@ export default function RequestsClient({ lang }: { lang: string }) {
               <div
                 key={lead.id}
                 onClick={() => setSelectedLead(lead)}
-                className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 cursor-pointer"
+                className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 cursor-pointer hover:shadow-md transition-shadow"
               >
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="space-y-1.5">
