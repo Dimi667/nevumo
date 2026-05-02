@@ -50,6 +50,53 @@ This document reflects the major architectural optimization performed in April 2
   - **Placeholder Safety (May 2, 2026)**: Implemented aggressive regex-based removal of price placeholders when no valid price data is available. If `hasValidPrice` is false, any phrase containing `{min_price}`, `{max_price}`, or `{currency}` is automatically replaced with the "Price on request" translation.
   - **Fallback Chain**: Database translation → Hardcoded `CATEGORY_CONTENT` fallback → `getPriceText` (for empty price-related answers).
   - **SEO Synchronization**: The same translated and interpolated FAQ items are used for both the visual UI section and the `FAQPage` JSON-LD schema, ensuring consistency for both users and search engines.
+- **City Placeholder System (May 2, 2026)**:
+  - **Purpose**: Replaced hardcoded city names in homepage translations with a dynamic `{city}` placeholder that resolves based on user context.
+  - **Files Created**:
+    - `apps/web/lib/city-preference.ts`: localStorage utility for managing user city preference
+    - `apps/web/lib/default-city.ts`: City resolver with priority-based logic
+  - **Files Modified**:
+    - `apps/web/app/[lang]/page.tsx`: Added dynamic city resolution and `{city}` placeholder replacement
+    - `apps/api/scripts/seed_ui_translations.py`: Updated homepage translations to use `{city}` placeholder
+    - `apps/api/scripts/seed_select_city_translations.py`: Added new `homepage.select_city_link` translation key
+  - **City Resolution Priority Order**:
+    1. **User Preference** (localStorage): If user has previously selected a city via `saveCityPreference()`
+    2. **Language Mapping**: Maps language codes to default cities (e.g., `pl` → `warszawa`)
+    3. **Fallback**: Defaults to `warsaw` if no preference or mapping exists
+  - **User City Preference System**:
+    - Stored in localStorage under key `nevumo_city_preference`
+    - Functions: `saveCityPreference(citySlug)`, `getCityPreference()`, `clearCityPreference()`
+    - Persists across sessions for returning users
+    - Can be cleared by user via browser settings or UI (future implementation)
+  - **Default City Mapping**:
+    - Defined in `LANGUAGE_TO_CITY` constant in `default-city.ts`
+    - Current mapping: `pl` → `warszawa`
+    - Extensible for future markets (e.g., `bg` → `sofia`, `sr` → `belgrade`)
+  - **Translation Pattern**:
+    - Homepage translations now use `{city}` placeholder instead of hardcoded city names
+    - Affected keys: `homepage.hero_suffix`, `homepage.footer_title`, `homepage.footer_link_*`, `homepage.activity_*`, `homepage.social_proof`
+    - Placeholder is replaced server-side (SSR) with the resolved city name from the database
+    - City names are fetched from `location_translations` table with fallback chain: `location_translations.city_name` → `locations.city_en` → `locations.city`
+  - **API Integration**:
+    - Uses existing endpoint `GET /api/v1/cities/{slug}?lang={lang}` for city data
+    - Endpoint returns city object directly (unwrapped), handled correctly in `apps/web/lib/api.ts`
+    - No new database schema changes required
+  - **Homepage Links**:
+    - All homepage category links (cleaning, plumbing, massage) are now dynamic based on resolved city
+    - "Select City" link added to homepage using new `homepage.select_city_link` translation key
+    - Links redirect to `/[lang]/izberi-grad` (City Selection page)
+  - **Metadata Generation**:
+    - City resolution is integrated into metadata generation for SEO
+    - Dynamic city names appear in page titles and descriptions
+  - **Scalability**:
+    - System is global and designed to support unlimited cities
+    - Adding a new city requires: database entry + language mapping update
+    - No code changes needed for homepage or category pages
+  - **GDPR Considerations**:
+    - City preference is stored in localStorage (client-side, non-sensitive data)
+    - Does not require explicit consent under GDPR for basic functionality
+    - Must be documented in Privacy Policy and Cookie Policy when those documents are created (future task)
+    - User can clear preference via browser localStorage management
 
 ### 6. Handling Empty Categories & Price Fallbacks ("Golden Standard")
 - **Core Logic**: When a category contains no active providers, the system must preserve the marketing value of the FAQ section while ensuring no broken price strings are shown.
@@ -1824,3 +1871,26 @@ python scripts/seed_review_translations.py
 - Hero section with search placeholder and CTAs for becoming a specialist and sending requests.
   - 'Become a specialist' link updated to `/${lang}/auth?mode=register&role=provider`.
   - 'Send a free request' CTA now links to a placeholder route `/[lang]/[city]/request`.
+
+---
+
+## Future Tasks
+
+### Geolocation Implementation (Standing Task)
+
+**When to implement:** When adding a new city beyond Warsaw (e.g., Sofia, Belgrade)
+
+**Requirements:**
+- Implement GDPR-compliant geolocation with opt-in consent
+- Add to priority order: User preference → Geolocation (opt-in) → Language mapping → Fallback
+- No storage of geolocation data (temporary use only)
+- Clear opt-out option for users
+- Update Privacy Policy and Cookie Policy
+
+**Implementation location:** `apps/web/lib/geo-location.ts`
+
+**GDPR compliance:**
+- Explicit user consent required (opt-in)
+- No data persistence
+- Transparent purpose explanation
+- Easy opt-out mechanism

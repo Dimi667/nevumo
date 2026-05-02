@@ -1,6 +1,8 @@
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
 import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
+import { getCityBySlug } from '@/lib/api';
+import { resolveDefaultCity } from '@/lib/default-city';
 import Image from 'next/image';
 import Link from 'next/link';
 import RotatingCategory from '@/components/homepage/RotatingCategory';
@@ -16,18 +18,24 @@ export async function generateMetadata({ params }: PageProps) {
   const { lang } = await params;
   const homepageT = await fetchTranslations(lang, 'homepage');
 
-  const title = t(homepageT, 'meta_title', 'Get clients for your services');
+  // Resolve city for dynamic translations
+  const citySlug = await resolveDefaultCity(lang);
+  const cityData = await getCityBySlug(citySlug, lang);
+  const cityName = cityData?.city || 'Warsaw';
+
+  const title = t(homepageT, 'meta_title', 'Get clients for your services').replace('{city}', cityName);
+  const description = t(homepageT, 'meta_description', 'Free registration. No commission.').replace('{city}', cityName);
 
   return {
     title,
-    description: t(homepageT, 'meta_description', 'Free registration. No commission.'),
+    description,
     alternates: {
       canonical: `/${lang}`,
       languages: generateHreflangAlternates('/'),
     },
     openGraph: {
       title,
-      description: t(homepageT, 'meta_description', 'Free registration. No commission.'),
+      description,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/${lang}`,
       siteName: 'Nevumo',
       locale: lang,
@@ -51,6 +59,11 @@ export default async function Homepage({ params }: PageProps) {
   const homepageT = await fetchTranslations(lang, 'homepage');
   const rotatingCategories = t(homepageT, 'rotating_categories', 'Massage,Cleaning,Plumbing').split(',');
 
+  // Resolve city for dynamic translations
+  const citySlug = await resolveDefaultCity(lang);
+  const cityData = await getCityBySlug(citySlug, lang);
+  const cityName = cityData?.city || 'Warsaw';
+
   const organizationJsonLd = generateOrganizationJsonLd();
   const websiteJsonLd = generateWebSiteJsonLd(lang);
 
@@ -73,12 +86,21 @@ export default async function Homepage({ params }: PageProps) {
           height={36}
           priority
         />
-        <Link
-          href={`/${normalizedLang}/warszawa`}
-          className="text-sm text-gray-600 transition-colors"
-        >
-          {t(homepageT, 'nav_link', 'Looking for a service?')}
-        </Link>
+        <div className="flex items-center gap-4 text-sm">
+          <Link
+            href={`/${normalizedLang}/${citySlug}`}
+            className="text-gray-600 transition-colors"
+          >
+            {t(homepageT, 'nav_link', 'Looking for a service?')}
+          </Link>
+          <span className="text-gray-300">|</span>
+          <Link
+            href={`/${normalizedLang}/izberi-grad`}
+            className="text-gray-600 transition-colors hover:text-orange-600"
+          >
+            {t(homepageT, 'select_city_link', 'Select City')}
+          </Link>
+        </div>
       </nav>
 
       {/* HERO SECTION */}
@@ -87,7 +109,7 @@ export default async function Homepage({ params }: PageProps) {
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             {t(homepageT, 'hero_prefix', 'Get clients for')}{' '}
             <RotatingCategory categories={rotatingCategories} />
-            {' '}{t(homepageT, 'hero_suffix', 'in Warsaw')}
+            {' '}{t(homepageT, 'hero_suffix', 'in Warsaw').replace('{city}', cityName)}
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-white">
             {t(homepageT, 'hero_subtitle', 'Free. No commission. Direct contact.')}
@@ -106,7 +128,7 @@ export default async function Homepage({ params }: PageProps) {
           </div>
           
           <div className="text-lg mb-10 text-orange-100">
-            {t(homepageT, 'social_proof', '')}
+            {t(homepageT, 'social_proof', '').replace('{city}', cityName)}
           </div>
           
           <AuthIntentButton
@@ -202,26 +224,26 @@ export default async function Homepage({ params }: PageProps) {
       {/* LIVE ACTIVITY FEED */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">{t(homepageT, 'activity_title', 'Recent requests')}</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">{t(homepageT, 'activity_title', 'Recent requests').replace('{city}', cityName)}</h2>
           <div className="space-y-4">
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{t(homepageT, 'activity_1', '')}</span>
+                <span className="text-gray-900">{t(homepageT, 'activity_1', '').replace('{city}', cityName)}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_1_time', '')}</span>
             </div>
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{t(homepageT, 'activity_2', '')}</span>
+                <span className="text-gray-900">{t(homepageT, 'activity_2', '').replace('{city}', cityName)}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_2_time', '')}</span>
             </div>
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{t(homepageT, 'activity_3', '')}</span>
+                <span className="text-gray-900">{t(homepageT, 'activity_3', '').replace('{city}', cityName)}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_3_time', '')}</span>
             </div>
@@ -274,22 +296,22 @@ export default async function Homepage({ params }: PageProps) {
       {/* FOOTER */}
       <footer className="py-12 px-6 bg-gray-50 border-t border-gray-200">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="mb-6 text-gray-700">{t(homepageT, 'footer_title', '')}</p>
+          <p className="mb-6 text-gray-700">{t(homepageT, 'footer_title', '').replace('{city}', cityName)}</p>
           <div className="flex flex-wrap justify-center gap-4 mb-6 text-sm">
-            <Link href={`/${normalizedLang}/warszawa/sprzatanie`} className="text-gray-700 transition-colors">
-              {t(homepageT, 'footer_link_cleaning', '')}
+            <Link href={`/${normalizedLang}/${citySlug}/sprzatanie`} className="text-gray-700 transition-colors">
+              {t(homepageT, 'footer_link_cleaning', '').replace('{city}', cityName)}
             </Link>
             <span className="text-gray-500">|</span>
-            <Link href={`/${normalizedLang}/warszawa/hydraulik`} className="text-gray-700 transition-colors">
-              {t(homepageT, 'footer_link_plumbing', '')}
+            <Link href={`/${normalizedLang}/${citySlug}/hydraulik`} className="text-gray-700 transition-colors">
+              {t(homepageT, 'footer_link_plumbing', '').replace('{city}', cityName)}
             </Link>
             <span className="text-gray-500">|</span>
-            <Link href={`/${normalizedLang}/warszawa/masaz`} className="text-gray-700 transition-colors">
-              {t(homepageT, 'footer_link_massage', '')}
+            <Link href={`/${normalizedLang}/${citySlug}/masaz`} className="text-gray-700 transition-colors">
+              {t(homepageT, 'footer_link_massage', '').replace('{city}', cityName)}
             </Link>
           </div>
           <p className="text-gray-500 text-sm">
-            {t(homepageT, 'footer_popular', '')}
+            {t(homepageT, 'footer_popular', '').replace('{city}', cityName)}
           </p>
         </div>
       </footer>
