@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug } from '@/lib/api';
+import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug, ServiceOut } from '@/lib/api';
 import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd } from '@/lib/seo';
-import { fetchTranslations, t } from '@/lib/ui-translations';
+import { fetchTranslations } from '@/lib/ui-translations';
 import { JsonLd } from '@/components/JsonLd';
 import LeadForm from '@/components/category/LeadForm';
 import CategoryPageClient from '@/components/category/CategoryPageClient';
@@ -251,120 +251,6 @@ function ProviderCard({
   );
 }
 
-const CATEGORY_CONTENT: Record<CategoryKey, CategoryContent> = {
-  massage: {
-    apiSlug: 'massage',
-    displayName: 'massage',
-  heading: '{category} in {city}',
-    subtitle:
-      'Find trusted massage specialists in {city}. Free request, no obligation.',
-    metadataTitle: 'Massage in {city} | Nevumo',
-    metadataDescription:
-      'Find trusted massage specialists in {city}. Free request, no obligation. Reply in as little as 30 minutes.',
-    seoTitle: 'Massage in {city} — what is worth knowing?',
-    seoParagraphs: [
-      '{city} offers a wide selection of professional massage specialists. Whether you are looking for relaxing, sports, or therapeutic massage, Nevumo helps you find trusted professionals nearby.',
-      'Check previous client reviews, specialist experience, and the scope of services offered. A good massage specialist will adapt the technique to your needs.',
-      '',
-    ],
-    seoQuestions: ['How to choose a massage specialist?', ''],
-    relatedLinks: [
-      { href: '/{lang}/{city_slug}/cleaning', label: 'Cleaning in {city}' },
-      { href: '/{lang}/{city_slug}/plumbing', label: 'Plumbing in {city}' },
-    ],
-    faq: [
-      {
-        question: 'How to find a massage specialist in {city}?',
-        answer:
-          'On Nevumo you can send a free request to trusted massage specialists in {city} and receive a response in as little as 30 minutes.',
-      },
-      {
-        question: 'How much does massage cost in {city}?',
-        answer: '',
-      },
-      {
-        question: 'Is the request free?',
-        answer:
-          'Yes, sending a request through Nevumo is completely free and without obligation.',
-      },
-    ],
-  },
-  cleaning: {
-    apiSlug: 'cleaning',
-    displayName: 'cleaning',
-    heading: '{category} in {city}',
-    subtitle:
-      'Find trusted cleaning specialists in {city}. Free request, no obligation.',
-    metadataTitle: 'Cleaning in {city} | Nevumo',
-    metadataDescription:
-      'Find trusted cleaning companies in {city}. Free request, no obligation.',
-    seoTitle: 'Cleaning in {city} — what is worth knowing?',
-    seoParagraphs: [
-      'Professional cleaning companies in {city} offer comprehensive services for homes, apartments, and offices. On Nevumo you can find trusted specialists available across the city.',
-      'Pay attention to customer reviews, scope of services, and scheduling flexibility. The best companies often offer recurring service discounts.',
-      '',
-    ],
-    seoQuestions: ['How to choose a cleaning company?', 'How much does cleaning cost in {city}?'],
-    relatedLinks: [
-      { href: '/{lang}/{city_slug}/massage', label: 'Massage in {city}' },
-      { href: '/{lang}/{city_slug}/plumbing', label: 'Plumbing in {city}' },
-    ],
-    faq: [
-      {
-        question: 'How to find a cleaning company in {city}?',
-        answer:
-          'On Nevumo you can send a free request to trusted cleaning companies in {city} and quickly receive responses from available specialists.',
-      },
-      {
-        question: 'How much does cleaning cost in {city}?',
-        answer: '',
-      },
-      {
-        question: 'Is the request free?',
-        answer:
-          'Yes, sending a request through Nevumo is completely free and without obligation.',
-      },
-    ],
-  },
-  plumbing: {
-    apiSlug: 'plumbing',
-    displayName: 'plumbing',
-    heading: '{category} in {city}',
-    subtitle:
-      'Find a trusted plumber in {city}. Free request, no obligation.',
-    metadataTitle: 'Plumbing in {city} | Nevumo',
-    metadataDescription:
-      'Find a trusted plumber in {city}. Fast response, free request.',
-    seoTitle: 'Plumbing in {city} — what is worth knowing?',
-    seoParagraphs: [
-      'Plumbing issues require a fast response. On Nevumo you can find trusted plumbers in {city}, including urgent availability. Free request, quick response.',
-      'You usually call a plumber for water system failures, leaking taps, blocked drains, or bathroom and kitchen renovation work.',
-      '',
-    ],
-    seoQuestions: ['When should you call a plumber?', 'How much does a plumber cost in {city}?'],
-    relatedLinks: [
-      { href: '/{lang}/{city_slug}/massage', label: 'Massage in {city}' },
-      { href: '/{lang}/{city_slug}/cleaning', label: 'Cleaning in {city}' },
-    ],
-    faq: [
-      {
-        question: 'How to find a plumber in {city}?',
-        answer:
-          'On Nevumo you can send a free request to trusted plumbers in {city} and receive a response quickly.',
-      },
-      {
-        question: 'How much does a plumber cost in {city}?',
-        answer: '',
-      },
-      {
-        question: 'Is the request free?',
-        answer:
-          'Yes, sending a request through Nevumo is completely free and without obligation.',
-      },
-    ],
-  },
-};
-
 function getCategoryContent(
   category: string,
   cityName: string,
@@ -372,50 +258,94 @@ function getCategoryContent(
   lang: string = 'en',
   citySlug: string = '',
 ): CategoryContent {
-  const base = CATEGORY_CONTENT[(category as CategoryKey)] ?? CATEGORY_CONTENT.cleaning;
-
   const replace = (str: string) =>
     str
       .replace(/{city}/g, cityName)
       .replace(/{category}/g, categoryName)
+      .replace(/{category_name}/g, categoryName)
       .replace(/{lang}/g, lang)
       .replace(/{city_slug}/g, citySlug);
 
+  const defaultContent: CategoryContent = {
+    apiSlug: category as ApiCategorySlug,
+    displayName: category,
+    heading: '{category} in {city}',
+    subtitle: 'Find trusted {category_name} specialists in {city}. Free request, no obligation.',
+    metadataTitle: '{category_name} in {city} | Nevumo',
+    metadataDescription: 'Find trusted {category_name} specialists in {city}. Free request, no obligation. Reply in as little as 30 minutes.',
+    seoTitle: '{category_name} in {city} — what is worth knowing?',
+    seoParagraphs: [
+      '{city} offers a wide selection of professional {category_name} specialists. Nevumo helps you find trusted professionals nearby.',
+      'Check previous client reviews, specialist experience, and the scope of services offered. A good specialist will adapt the technique to your needs.',
+      '',
+    ],
+    seoQuestions: [`How to choose a ${categoryName} specialist?`, ''],
+    relatedLinks: [
+      { href: '/{lang}/{city_slug}/cleaning', label: 'Cleaning in {city}' },
+      { href: '/{lang}/{city_slug}/massage', label: 'Massage in {city}' },
+      { href: '/{lang}/{city_slug}/plumbing', label: 'Plumbing in {city}' },
+    ].filter(l => !l.href.includes(category)),
+    faq: [
+      {
+        question: 'How to find a {category_name} specialist in {city}?',
+        answer: 'On Nevumo you can send a free request to trusted {category_name} specialists in {city} and receive a response in as little as 30 minutes.',
+      },
+      {
+        question: 'How much does {category_name} cost in {city}?',
+        answer: 'The cost of {category_name} in {city} depends on the specific requirements. Send a request to get free quotes.',
+      },
+      {
+        question: 'Is the request free?',
+        answer: 'Yes, sending a request through Nevumo is completely free and without obligation.',
+      },
+    ],
+  };
+
   return {
-    ...base,
-    heading: replace(base.heading),
-    subtitle: replace(base.subtitle),
-    metadataTitle: replace(base.metadataTitle),
-    metadataDescription: replace(base.metadataDescription),
-    seoTitle: replace(base.seoTitle),
-    seoParagraphs: base.seoParagraphs.map(replace) as [string, string, string],
-    seoQuestions: base.seoQuestions.map(replace) as [string, string],
-    relatedLinks: base.relatedLinks.map((link) => ({
+    ...defaultContent,
+    heading: replace(defaultContent.heading),
+    subtitle: replace(defaultContent.subtitle),
+    metadataTitle: replace(defaultContent.metadataTitle),
+    metadataDescription: replace(defaultContent.metadataDescription),
+    seoTitle: replace(defaultContent.seoTitle),
+    seoParagraphs: defaultContent.seoParagraphs.map(replace) as [string, string, string],
+    seoQuestions: defaultContent.seoQuestions.map(replace) as [string, string],
+    relatedLinks: defaultContent.relatedLinks.map((link) => ({
       href: replace(link.href),
       label: replace(link.label),
     })),
-    faq: base.faq.map((f) => ({
+    faq: defaultContent.faq.map((f) => ({
       question: replace(f.question),
       answer: replace(f.answer),
     })),
   };
 }
 
-function formatRelativeTime(dateString: string): string {
+function formatRelativeTime(dateString: string, lang: string = 'en'): string {
   const diffMs = Date.now() - new Date(dateString).getTime();
-  const diffMinutes = Math.max(1, Math.round(diffMs / 60000));
-
-  if (diffMinutes < 60) {
-    return `${diffMinutes} min temu`;
-  }
-
+  const diffSeconds = Math.round(diffMs / 1000);
+  const diffMinutes = Math.round(diffSeconds / 60);
   const diffHours = Math.round(diffMinutes / 60);
-  if (diffHours < 24) {
-    return `${diffHours} godz. temu`;
-  }
-
   const diffDays = Math.round(diffHours / 24);
-  return `${diffDays} dni temu`;
+
+  try {
+    const rtf = new Intl.RelativeTimeFormat(lang, { numeric: 'always' });
+    
+    if (diffMinutes < 60) {
+      return rtf.format(-Math.max(1, diffMinutes), 'minute');
+    }
+    
+    if (diffHours < 24) {
+      return rtf.format(-diffHours, 'hour');
+    }
+    
+    return rtf.format(-diffDays, 'day');
+  } catch (e) {
+    // Fallback if Intl is not supported or lang is invalid
+    if (diffMinutes < 60) return `${diffMinutes}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${diffDays}d ago`;
+  }
 }
 
 // Helper function to get price text based on price data and translations
@@ -425,49 +355,37 @@ function getPriceText(
   key_prefix: 'price_text' | 'price_faq' | 'price_meta',
   fallback: string = '',
 ): string {
-  if (priceData === null) {
-    return t(translations, `${key_prefix}_none`, fallback);
+  const priceOnRequest = translations['price_on_request'] || 'Price on request';
+  // If priceData is null or prices are missing/zero, return priceOnRequest as fallback
+  if (priceData === null || !priceData.min || !priceData.max || priceData.min === 0 || priceData.max === 0) {
+    return priceOnRequest;
   }
 
   if (priceData.min === priceData.max) {
-    const template = t(translations, `${key_prefix}_single`, fallback);
+    const template = (translations[`${key_prefix}_single`] || fallback);
     return template
-      .replace('{price}', String(priceData.min))
-      .replace('{currency}', priceData.currency);
+      .replace(/{price}/g, String(priceData.min))
+      .replace(/{min_price}/g, String(priceData.min))
+      .replace(/{max_price}/g, String(priceData.max))
+      .replace(/{currency}/g, priceData.currency);
   }
 
-  const template = t(translations, `${key_prefix}_range`, fallback);
+  const template = (translations[`${key_prefix}_range`] || fallback);
   return template
-    .replace('{min}', String(priceData.min))
-    .replace('{max}', String(priceData.max))
-    .replace('{currency}', priceData.currency);
+    .replace(/{min}/g, String(priceData.min))
+    .replace(/{max}/g, String(priceData.max))
+    .replace(/{min_price}/g, String(priceData.min))
+    .replace(/{max_price}/g, String(priceData.max))
+    .replace(/{currency}/g, priceData.currency);
 }
 
 function buildFaqJsonLd(
-  content: CategoryContent,
-  priceData: PriceRangeData | null,
-  translations: Record<string, string>,
+  faq: Array<{ question: string; answer: string }>,
 ): Record<string, unknown> {
-  // Find the price question and replace its answer with price_faq text
-  const priceQuestionKeywords = ['kosztu', 'price', 'cost', 'cena'];
-  const updatedFaq = content.faq.map((item) => {
-    const isPriceQuestion = priceQuestionKeywords.some(keyword =>
-      item.question.toLowerCase().includes(keyword.toLowerCase()),
-    );
-    if (isPriceQuestion && priceData !== null) {
-      const priceFaqText = getPriceText(priceData, translations, 'price_faq', item.answer);
-      return {
-        ...item,
-        answer: priceFaqText,
-      };
-    }
-    return item;
-  });
-
   return {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: updatedFaq.map((item) => ({
+    mainEntity: faq.map((item) => ({
       '@type': 'Question',
       name: item.question,
       acceptedAnswer: {
@@ -486,10 +404,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
   const catKey = getCategoryTranslationKey(category);
   const catNameKey = `cat_${catKey}_name` as const;
-  const categoryName = t(homepageT, catNameKey, catKey);
+  const categoryName = (homepageT[catNameKey] || catKey).replace(/{city}/g, cityName);
 
-  const title = `${t(categoryT, `h1_${catKey}`, `${categoryName} in ${cityName}`)} | Nevumo`;
-  const baseDescription = t(categoryT, `subtitle_${catKey}`, '');
+  const title = `${categoryName} i ${cityName}`;
+  const baseDescription = (categoryT[`subtitle_${catKey}`] || '').replace(/{city}/g, cityName);
   
   // Fetch price range for metadata
   const apiSlug = getApiSlug(category);
@@ -536,8 +454,8 @@ async function getEnrichedProviders(
         latestLeadPreviewCreatedAt: detail?.latest_lead_preview?.created_at ?? null,
         latestLeadPreviewClientName: detail?.latest_lead_preview?.client_name ?? null,
         services: (detail?.services ?? [])
-          .filter((s: { category_slug?: string }) => s.category_slug === category)
-          .map((s: { id: string; title: string; price_type: string | null; base_price: number | null; currency: string; description: string | null }) => ({
+          .filter((s: ServiceOut) => s.category_slug === category)
+          .map((s: ServiceOut) => ({
             id: s.id,
             title: s.title,
             priceType: s.price_type,
@@ -572,39 +490,39 @@ export default async function CategoryPage({ params }: PageProps) {
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
 
   const catNameKey = `cat_${catKey}_name` as const;
-  const categoryName = t(homepageT, catNameKey, catKey);
+  const categoryName = (homepageT[catNameKey] || catKey).replace(/{city}/g, cityName);
 
   const content = getCategoryContent(category, cityName, categoryName, lang, city);
 
-  const heading = t(categoryT, `h1_${catKey}`, `${categoryName} in ${cityName}`);
-  const subtitle = t(categoryT, `subtitle_${catKey}`, '');
+  const heading = (categoryT[`h1_${catKey}`] || `${categoryName} in ${cityName}`).replace(/{city}/g, cityName);
+  const subtitle = (categoryT[`subtitle_${catKey}`] || '').replace(/{city}/g, cityName);
   const providerCardTexts: ProviderCardTexts = {
-    defaultDescription: t(categoryT, 'provider_desc_fallback', 'Проверен специалист в {city}. Изпратете кратко запитване и изчакайте връзка.').replace('{city}', cityName),
-    jobsCompleted: t(categoryT, 'provider_jobs_completed', 'completed jobs'),
-    lastRequest: t(categoryT, 'provider_last_request', 'Last request'),
-    directContact: t(categoryT, 'provider_direct_contact', 'Direct contact'),
-    sendRequest: t(categoryT, 'form_btn', 'Send request'),
-    verifiedSpecialist: t(categoryT, 'provider_verified_specialist', 'Verified specialist'),
-    freeNoObligation: t(categoryT, 'provider_free_no_obligation', 'Free • No obligation'),
-    peopleSought: t(categoryT, 'provider_people_sought', 'people sought this specialist'),
-    recentlyRequested: t(categoryT, 'provider_recently_requested', 'recently made a request'),
-    reviews: t(categoryT, 'provider_reviews', 'reviews'),
-    onRequest: t(categoryT, 'provider_on_request', 'По договаряне'),
-    moreServices: t(categoryT, 'provider_more_services', 'и още {n} услуги'),
+    defaultDescription: (categoryT['provider_desc_fallback'] || 'Проверен специалист в {city}. Изпратете кратко запитване и изчакайте връзка.').replace(/{city}/g, cityName),
+    jobsCompleted: (categoryT['provider_jobs_completed'] || 'completed jobs').replace(/{city}/g, cityName),
+    lastRequest: (categoryT['provider_last_request'] || 'Last request').replace(/{city}/g, cityName),
+    directContact: (categoryT['provider_direct_contact'] || 'Direct contact').replace(/{city}/g, cityName),
+    sendRequest: (categoryT['form_btn'] || 'Send request').replace(/{city}/g, cityName),
+    verifiedSpecialist: (categoryT['provider_verified_specialist'] || 'Verified specialist').replace(/{city}/g, cityName),
+    freeNoObligation: (categoryT['provider_free_no_obligation'] || 'Free • No obligation').replace(/{city}/g, cityName),
+    peopleSought: (categoryT['provider_people_sought'] || 'people sought this specialist').replace(/{city}/g, cityName),
+    recentlyRequested: (categoryT['provider_recently_requested'] || 'recently made a request').replace(/{city}/g, cityName),
+    reviews: (categoryT['provider_reviews'] || 'reviews').replace(/{city}/g, cityName),
+    onRequest: (categoryT['provider_on_request'] || categoryT['price_on_request'] || 'Price on request').replace(/{city}/g, cityName),
+    moreServices: (categoryT['provider_more_services'] || 'и още {n} услуги').replace(/{city}/g, cityName),
   };
 
   const relatedLinksByCategory: Record<CategoryKey, Array<{ href: string; label: string }>> = {
     massage: [
-      { href: `/${lang}/${city}/cleaning`, label: t(categoryT, 'h1_cleaning', `Cleaning in ${cityName}`) },
-      { href: `/${lang}/${city}/plumbing`, label: t(categoryT, 'h1_plumbing', `Plumbing in ${cityName}`) },
+      { href: `/${lang}/${city}/cleaning`, label: (categoryT['h1_cleaning'] || `Cleaning in ${cityName}`).replace(/{city}/g, cityName) },
+      { href: `/${lang}/${city}/plumbing`, label: (categoryT['h1_plumbing'] || `Plumbing in ${cityName}`).replace(/{city}/g, cityName) },
     ],
     cleaning: [
-      { href: `/${lang}/${city}/massage`, label: t(categoryT, 'h1_massage', `Massage in ${cityName}`) },
-      { href: `/${lang}/${city}/plumbing`, label: t(categoryT, 'h1_plumbing', `Plumbing in ${cityName}`) },
+      { href: `/${lang}/${city}/massage`, label: (categoryT['h1_massage'] || `Massage in ${cityName}`).replace(/{city}/g, cityName) },
+      { href: `/${lang}/${city}/plumbing`, label: (categoryT['h1_plumbing'] || `Plumbing in ${cityName}`).replace(/{city}/g, cityName) },
     ],
     plumbing: [
-      { href: `/${lang}/${city}/massage`, label: t(categoryT, 'h1_massage', `Massage in ${cityName}`) },
-      { href: `/${lang}/${city}/cleaning`, label: t(categoryT, 'h1_cleaning', `Cleaning in ${cityName}`) },
+      { href: `/${lang}/${city}/massage`, label: (categoryT['h1_massage'] || `Massage in ${cityName}`).replace(/{city}/g, cityName) },
+      { href: `/${lang}/${city}/cleaning`, label: (categoryT['h1_cleaning'] || `Cleaning in ${cityName}`).replace(/{city}/g, cityName) },
     ],
   };
   const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.cleaning;
@@ -613,6 +531,90 @@ export default async function CategoryPage({ params }: PageProps) {
   const priceData = await getPriceRange(apiSlug, city);
   const priceText = getPriceText(priceData, categoryT, 'price_text', '');
   
+  const cityCountryCode = cityData?.country_code || 'PL';
+  const isAfterEuroAdoption = new Date() >= new Date('2026-01-01');
+  const cityCurrency = cityData?.currency || (
+    cityCountryCode === 'PL' ? 'PLN' : 
+    (cityCountryCode === 'BG' && isAfterEuroAdoption ? '€' : 'BGN')
+  );
+
+  // FAQ items generation with dynamic translations and fallback
+  const faqItems = [1, 2, 3].map(i => {
+    const qKey = `faq_${catKey}_q${i}`;
+    const aKey = `faq_${catKey}_a${i}`;
+    
+    let question = categoryT[qKey]?.replace(/{city}/g, cityName) || '';
+    let answer = categoryT[aKey]?.replace(/{city}/g, cityName) || '';
+
+    // Fallback to dynamic content if DB translation is missing
+    if (!question || !answer) {
+      const fallbackFaq = content.faq[i - 1];
+      if (fallbackFaq) {
+        question = question || fallbackFaq.question;
+        answer = answer || fallbackFaq.answer;
+      }
+    }
+
+    if (!question) return null;
+
+    const priceOnRequest = categoryT['price_on_request'] || 'Price on request';
+    const hasValidPrice = priceData && priceData.min && priceData.max && priceData.min > 0 && priceData.max > 0;
+
+    const replaceFaq = (str: string) => {
+      let result = str
+        .replace(/{city}/g, cityName)
+        .replace(/{category}/g, categoryName)
+        .replace(/{category_name}/g, categoryName);
+
+      if (hasValidPrice) {
+        result = result
+          .replace(/{min_price}/g, String(priceData.min))
+          .replace(/{max_price}/g, String(priceData.max))
+          .replace(/{price_range}/g, `${priceData.min} - ${priceData.max} ${priceData.currency || cityCurrency}`)
+          .replace(/{currency}/g, priceData.currency || cityCurrency);
+      } else {
+        // When no valid prices, identify and replace the entire price phrase containing placeholders
+        // We look for a phrase that contains any of our price placeholders
+        const pricePhrasePattern = /[^.!?]*({min_price}|{max_price}|{currency}|{price_range})[^.!?]*[.!?]?/gi;
+        result = result.replace(pricePhrasePattern, ` ${priceOnRequest}. `);
+
+        // Categorical cleanup: Ensure NO placeholders remain in the entire text
+        result = result
+          .replace(/{min_price}/g, '')
+          .replace(/{max_price}/g, '')
+          .replace(/{currency}/g, '')
+          .replace(/{price_range}/g, '');
+
+        // Clean up any double spaces or messy punctuation resulting from the replacement
+        result = result.replace(/\s+/g, ' ').replace(/\s+([.!?])/g, '$1').trim();
+      }
+
+      return result;
+    };
+
+    let finalAnswer = replaceFaq(answer);
+    
+    // Fallback for price-related questions if answer is still empty
+    if (!finalAnswer && priceData !== null) {
+      const priceQuestionKeywords = ['kosztu', 'price', 'cost', 'cena', 'ceny'];
+      const isPriceQuestion = priceQuestionKeywords.some(keyword =>
+        question.toLowerCase().includes(keyword.toLowerCase()),
+      );
+      if (isPriceQuestion) {
+        finalAnswer = getPriceText(priceData, categoryT, 'price_faq', '');
+      }
+    }
+
+    if (!finalAnswer && providers.length === 0) {
+      finalAnswer = categoryT['price_on_request'] || 'Price on request';
+    }
+
+    return {
+      question: replaceFaq(question),
+      answer: finalAnswer,
+    };
+  }).filter((item): item is { question: string; answer: string } => item !== null && item.question !== '');
+
   // Extract unique service titles from providers for chips
   const services = Array.from(
     new Set(
@@ -631,22 +633,13 @@ export default async function CategoryPage({ params }: PageProps) {
     title
   })).slice(0, 8); // Limit to 8 services
   
-  const CITY_COUNTRY_MAP: Record<string, string> = {
-    'warszawa': 'PL',
-    'sofia': 'BG',
-    'belgrade': 'RS',
-    'prague': 'CZ',
-    'athens': 'GR',
-  };
-  
-  const cityCountryCode = CITY_COUNTRY_MAP[city] ?? 'PL';
   const visibleProviders = providers.slice(0, 20);
   const hiddenProviders = providers.slice(20);
   const hiddenCount = hiddenProviders.length;
-  const trustSpecialistsText = `${allCount > 0 ? allCount : 14} ${t(categoryT, 'trust_specialists', 'specialists')}`;
-  const trustRatingText = `${averageRating.toFixed(1)} ${t(categoryT, 'trust_rating', 'rating')}`;
-  const trustLeadsText = `120 ${t(categoryT, 'trust_requests', 'requests this month')}`;
-  const faqJsonLd = buildFaqJsonLd(content, priceData, categoryT);
+  const trustSpecialistsText = `${allCount > 0 ? allCount : 14} ${(categoryT['trust_specialists'] || 'specialists').replace(/{city}/g, cityName)}`;
+  const trustRatingText = `${averageRating.toFixed(1)} ${(categoryT['trust_rating'] || 'rating').replace(/{city}/g, cityName)}`;
+  const trustLeadsText = `120 ${(categoryT['trust_requests'] || 'requests this month').replace(/{city}/g, cityName)}`;
+  const faqJsonLd = buildFaqJsonLd(faqItems);
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
   const organizationJsonLd = generateOrganizationJsonLd();
@@ -669,7 +662,7 @@ export default async function CategoryPage({ params }: PageProps) {
         price_type: 'request',
         base_price: priceData?.min || null,
         category_slug: category,
-        currency: priceData?.currency || 'PLN'
+        currency: priceData?.currency || cityCurrency
       }
     ],
     jobs_completed: allCount * 10,
@@ -680,7 +673,7 @@ export default async function CategoryPage({ params }: PageProps) {
     is_claimed: true
   };
 
-  const localBusinessJsonLd = generateLocalBusinessJsonLd(categoryPseudoProvider, categoryName, cityName);
+  const localBusinessJsonLd = generateLocalBusinessJsonLd(categoryPseudoProvider, categoryName, cityName, cityCountryCode);
 
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',
@@ -716,18 +709,17 @@ export default async function CategoryPage({ params }: PageProps) {
       <JsonLd data={breadcrumbJsonLd} />
       <div className="min-h-screen bg-white text-gray-900">
         <header className="border-b border-orange-100 bg-white/90 backdrop-blur">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-y-2">
             <Link href={`/${lang}`} className="inline-flex items-center">
               <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
             </Link>
             <Link href={`/${lang}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
-              {t(categoryT, 'nav_link', 'Become a specialist')}
+              {categoryT['nav_link']?.replace(/{city}/g, cityName) || 'Become a specialist'}
             </Link>
           </div>
         </header>
-
-        <main className="max-w-6xl mx-auto px-4 py-8">
-          <section className="mb-8">
+        <main className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+          <section className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               {heading}
             </h1>
@@ -750,7 +742,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-orange-400">
                   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
-                {t(categoryT, 'trust_response', 'Avg. response: ~30 min')}
+                {(categoryT['trust_response'] || 'Avg. response: ~30 min').replace(/{city}/g, cityName)}
               </span>
             </div>
           </section>
@@ -762,10 +754,10 @@ export default async function CategoryPage({ params }: PageProps) {
                 <div className="rounded-xl border border-gray-100 bg-white px-6 py-12 text-center shadow-sm">
                   <div className="border-l-4 border-orange-400 pl-4 py-2 mb-4 text-left inline-block">
                     <p className="font-semibold text-gray-800 text-sm">
-                      {t(categoryT, 'no_providers_title', 'Be the first to request this service in your area')}
+                      {(categoryT['no_providers_title'] || 'Be the first to request this service in your area').replace(/{city}/g, cityName)}
                     </p>
                     <p className="text-sm text-gray-500 mt-0.5">
-                      {t(categoryT, 'no_providers_subtitle', 'Providers joining Nevumo will see your request and contact you')}
+                      {(categoryT['no_providers_subtitle'] || 'Providers joining Nevumo will see your request and contact you').replace(/{city}/g, cityName)}
                     </p>
                   </div>
                 </div>
@@ -778,7 +770,7 @@ export default async function CategoryPage({ params }: PageProps) {
                   {hiddenCount > 0 && (
                     <details className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
                       <summary className="cursor-pointer list-none text-center text-sm font-semibold text-orange-600">
-                        {t(categoryT, 'show_more', 'Show more')}
+                        {(categoryT['show_more'] || 'Show more').replace(/{city}/g, cityName)}
                       </summary>
                       <div className="mt-4 space-y-4">
                         {hiddenProviders.map((provider) => {
@@ -800,21 +792,38 @@ export default async function CategoryPage({ params }: PageProps) {
                 cityName={cityName}
                 services={services}
                 cityCountryCode={cityCountryCode}
-                stickyButtonLabel={t(categoryT, 'sticky_btn', 'Get offers — Free')}
+                stickyButtonLabel={(categoryT['sticky_btn'] || 'Get offers — Free').replace(/{city}/g, cityName)}
               />
 
               <section className="mt-8 rounded-xl bg-gray-50 p-6 sm:p-8">
-                <h2 className="text-2xl font-bold text-gray-900">{t(categoryT, `seo_${catKey}_h2`, '')}</h2>
-                <p className="mt-4 text-base leading-7 text-gray-700">{t(categoryT, `seo_${catKey}_p1`, '')}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{t(categoryT, `seo_${catKey}_h3_1`, '')}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{t(categoryT, `seo_${catKey}_p2`, '')}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{t(categoryT, `seo_${catKey}_h3_2`, '')}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{t(categoryT, `seo_${catKey}_p3`, '')}</p>
+                <h2 className="text-2xl font-bold text-gray-900">{categoryT[`seo_${catKey}_h2`]?.replace(/{city}/g, cityName) || ''}</h2>
+                <p className="mt-4 text-base leading-7 text-gray-700">{categoryT[`seo_${catKey}_p1`]?.replace(/{city}/g, cityName) || ''}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{categoryT[`seo_${catKey}_h3_1`]?.replace(/{city}/g, cityName) || ''}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{categoryT[`seo_${catKey}_p2`]?.replace(/{city}/g, cityName) || ''}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{categoryT[`seo_${catKey}_h3_2`]?.replace(/{city}/g, cityName) || ''}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{categoryT[`seo_${catKey}_p3`]?.replace(/{city}/g, cityName) || ''}</p>
                 {priceText && (
                   <p className="mt-4 text-base leading-7 text-gray-700">{priceText}</p>
                 )}
+
+                {faqItems.length > 0 && (
+                  <div className="mt-10 border-t border-gray-100 pt-10">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                      {(categoryT['faq_title'] || homepageT['faq_title'] || 'Frequently Asked Questions').replace(/{city}/g, cityName)}
+                    </h2>
+                    <div className="space-y-6 text-left">
+                      {faqItems.map((item, index) => (
+                        <div key={index} className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
+                          <h3 className="text-lg font-bold text-gray-900 mb-2">{item.question}</h3>
+                          <p className="text-gray-700 leading-relaxed">{item.answer}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-gray-700">
-                  <span>{t(categoryT, 'also_check', 'See also:')}</span>
+                  <span>{(categoryT['also_check'] || 'See also:').replace(/{city}/g, cityName)}</span>
                   {relatedLinks.map((link, index) => (
                     <span key={link.href}>
                       <Link href={link.href} className="font-medium text-orange-600 underline underline-offset-2">
@@ -825,8 +834,8 @@ export default async function CategoryPage({ params }: PageProps) {
                   ))}
                 </div>
               </section>
-              </section>
-            </div>
+            </section>
+          </div>
 
             <div className="hidden lg:block w-full lg:w-80 xl:w-96 shrink-0">
               <div className="sticky top-6">
@@ -839,7 +848,7 @@ export default async function CategoryPage({ params }: PageProps) {
                     cityName={cityName}
                     services={services}
                     countryCode={cityCountryCode}
-                    title={t(categoryT, 'form_btn', 'Get offers')}
+                    title={(categoryT['form_btn'] || 'Get offers').replace(/{city}/g, cityName)}
                   />
                 </div>
               </div>
@@ -848,10 +857,10 @@ export default async function CategoryPage({ params }: PageProps) {
 
           <section className="mt-12 rounded-xl bg-gray-50 border-t border-gray-200 px-6 py-8 text-center">
             <p className="text-sm text-gray-500">
-              {t(categoryT, 'provider_cta_prefix', 'Do you offer')} {categoryName} {t(categoryT, 'provider_cta_suffix', `in ${cityName}?`)}
+              {(categoryT['provider_cta_prefix'] || 'Do you offer').replace(/{city}/g, cityName)} {categoryName} {(categoryT['provider_cta_suffix'] || `in ${cityName}?`).replace(/{city}/g, cityName)}
             </p>
             <Link href={`/${lang}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
-              {t(categoryT, 'provider_cta_link', 'Join for free →')}
+              {(categoryT['provider_cta_link'] || 'Join for free →').replace(/{city}/g, cityName)}
             </Link>
           </section>
         </main>

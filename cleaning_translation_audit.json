@@ -1,0 +1,656 @@
+{
+  "cs": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "da": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "de": {
+    "total_keys": 21,
+    "missing_keys": [
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 4,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "el": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "es": {
+    "total_keys": 21,
+    "missing_keys": [
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 4,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "et": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "fi": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "fr": {
+    "total_keys": 21,
+    "missing_keys": [
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 4,
+    "empty_translations": [
+      "category.faq_cleaning_a3",
+      "faq_cleaning_a2",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a1",
+      "category.seo_cleaning_p1",
+      "faq_cleaning_a1",
+      "category.seo_cleaning_p2"
+    ],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "ga": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "hr": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "hu": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "is": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "it": {
+    "total_keys": 21,
+    "missing_keys": [
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 4,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "lb": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "lt": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "lv": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "mk": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "mt": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "nl": {
+    "total_keys": 21,
+    "missing_keys": [
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 4,
+    "empty_translations": [
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_a1",
+      "category.seo_cleaning_p1",
+      "faq_cleaning_a1"
+    ],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "no": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "pl": {
+    "total_keys": 24,
+    "missing_keys": [
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 1,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "pt": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "pt-PT": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "ro": {
+    "total_keys": 21,
+    "missing_keys": [
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 4,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "ru": {
+    "total_keys": 21,
+    "missing_keys": [
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 4,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "sk": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "sl": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "sq": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "sr": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "sv": {
+    "total_keys": 15,
+    "missing_keys": [
+      "category.faq_cleaning_a1",
+      "category.faq_cleaning_a2",
+      "category.faq_cleaning_a3",
+      "category.faq_cleaning_q1",
+      "category.faq_cleaning_q2",
+      "category.faq_cleaning_q3",
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 10,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "tr": {
+    "total_keys": 21,
+    "missing_keys": [
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 4,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  },
+  "uk": {
+    "total_keys": 21,
+    "missing_keys": [
+      "category.seo_cleaning_h2",
+      "category.seo_cleaning_h3_2",
+      "category.seo_cleaning_p3",
+      "homepage.h1_cleaning"
+    ],
+    "missing_count": 4,
+    "empty_translations": [],
+    "ui_keys": {
+      "faq_title": false,
+      "price_on_request": true,
+      "nav_link": true
+    }
+  }
+}

@@ -74,6 +74,7 @@ export default async function CityPage({ params }: PageProps) {
   const categories = await getCategories(lang);
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+  const cityCountryCode = cityData?.country_code ?? 'BG';
 
   // Fetch city stats
   let cityStats = { provider_count: 0, request_count: 0, average_rating: 0 };
@@ -121,8 +122,12 @@ export default async function CityPage({ params }: PageProps) {
     translations: {},
     is_claimed: true
   };
-  
-  const localBusinessJsonLd = generateLocalBusinessJsonLd(cityPseudoProvider, t(cityT, 'categories_title', 'Local Services').replace('{city}', cityName), cityName);
+  const localBusinessJsonLd = generateLocalBusinessJsonLd(
+    cityPseudoProvider,
+    t(cityT, 'categories_title', 'Local Services').replace('{city}', cityName),
+    cityName,
+    cityCountryCode
+  );
 
   return (
     <>

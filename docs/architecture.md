@@ -43,6 +43,29 @@ This document reflects the major architectural optimization performed in April 2
   - **ReferenceError Fix**: Resolved "currency is not defined" in `ProviderWidget.tsx` by ensuring the variable is scoped correctly and has a multi-layer fallback (service data -> city data -> country default -> 'EUR').
   - **Parsing Error Fix**: Corrected misaligned and missing closing `div` tags in `apps/web/app/[lang]/[city]/[category]/[providerPage]/page.tsx` that interfered with Next.js metadata generation.
   - **Service Schema**: Added explicit `Service` JSON-LD schema to `ProviderWidget.tsx` to complement the `LocalBusiness` schema, providing search engines with detailed price and location data for specific offerings.
+- **Dynamic Category FAQ System & "Golden Standard" (May 2026)**:
+  - **Implementation**: Refactored `apps/web/app/[lang]/[city]/[category]/page.tsx` to use dynamic translations for the FAQ section.
+  - **Key Pattern**: `category.faq_${catKey}_q1` through `q3` and `a1` through `a3`.
+  - **Interpolation**: Added support for `{city}`, `{category_name}`, `{min_price}`, `{max_price}`, and `{currency}` variables within translation strings.
+  - **Placeholder Safety (May 2, 2026)**: Implemented aggressive regex-based removal of price placeholders when no valid price data is available. If `hasValidPrice` is false, any phrase containing `{min_price}`, `{max_price}`, or `{currency}` is automatically replaced with the "Price on request" translation.
+  - **Fallback Chain**: Database translation → Hardcoded `CATEGORY_CONTENT` fallback → `getPriceText` (for empty price-related answers).
+  - **SEO Synchronization**: The same translated and interpolated FAQ items are used for both the visual UI section and the `FAQPage` JSON-LD schema, ensuring consistency for both users and search engines.
+
+### 6. Handling Empty Categories & Price Fallbacks ("Golden Standard")
+- **Core Logic**: When a category contains no active providers, the system must preserve the marketing value of the FAQ section while ensuring no broken price strings are shown.
+- **Price Template Replacement**: Instead of showing broken ranges (e.g., "Prices from 0 to 0"), the frontend (`page.tsx`) is responsible for a "clean" replacement. The entire price template (including any surrounding text like "Prices from... to...") must be replaced with a single localized phrase: **"Price on request"**.
+- **Frontend Responsibility**: The logic for this replacement resides in the frontend components to avoid server-side complexity and ensure that raw placeholders or grammatically incorrect strings never reach the DOM.
+- **i18n Best Practices**:
+  - **No Concatenation**: Never build price strings by joining "Price from" + value + "to". Always use full template strings with placeholders or full phrase replacement.
+  - **Full Replacement on Null**: If `priceData` is null or invalid, the entire phrase must be swapped for the "Price on request" equivalent.
+  - **Currency Removal**: When price data is missing, the `{currency}` placeholder must be removed entirely from the text, not just left empty or replaced with a symbol.
+
+### 7. Currency & Localization Logic
+- **Universal Currency Logic (April 30, 2026)**: Implemented a centralized currency determination system based on provider location.
+  - **Source of Truth**: Currency is derived from `provider.services[0].currency` with fallback to `provider.city.country_code` via `apps/web/lib/currency.ts`.
+  - **Fallback Chain**: Service currency → City country code → Country default → 'EUR'
+  - **Special Rule (Bulgaria)**: From **01.01.2026**, the currency for Bulgaria (BG) is strictly **EUR (Euro)**. This is a hardcoded system logic to reflect the national currency transition.
+  - **Country Defaults**: RSD for RS (Serbia), PLN for PL (Poland), EUR for BG (Bulgaria).
 - **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow. Replaced legacy hidden iframe hacks with the modern **Credential Management API** (`navigator.credentials.store`) for robust password saving across all modern browsers including iOS Safari.
 - **Client Dashboard Optimization (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page.
 - **Dynamic User Intent Navigation (April 30, 2026)**: Implemented "City-First" navigation logic for clients. The "Find Service" button in the dashboard (Overview, Sidebar, Requests, and Reviews) now dynamically links based on the `last_city_slug` returned by the API via a multi-layer fallback chain:

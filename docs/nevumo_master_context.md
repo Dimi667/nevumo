@@ -178,6 +178,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **FAQ Price Placeholder Fix (May 2, 2026)** — COMPLETE:
+  - **Problem**: Users saw raw placeholders like `{min_price}` in FAQ answers when no price data was available.
+  - **Fix**: Implemented aggressive placeholder removal and replacement with "Price on request" in `apps/web/app/[lang]/[city]/[category]/page.tsx`.
+  - **Logic**: Any sentence containing price placeholders is replaced with localized "Price on request" when `hasValidPrice` is false.
+  - **Safety**: Added a categorical cleanup step to ensure no placeholders remain in the final text.
+  - **getPriceText**: Updated helper to always return `price_on_request` as a safe fallback.
 - **Provider Page Optimization (April 30, 2026)** — COMPLETE:
   - **Error Fixes**: Eliminated "currency is not defined" ReferenceError and fixed HTML structure parsing errors in `page.tsx`.
   - **SEO**: Added `Service` Schema.org JSON-LD to provider widgets.

@@ -229,7 +229,7 @@ export default function LeadForm({
 
         {/* Subtext */}
         <p className="mt-2 mb-4 text-sm text-gray-500">
-          {(translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace('{cityName}', cityName)}
+          {(translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace(/{cityName}/g, cityName)}
         </p>
 
         {/* Separator */}
