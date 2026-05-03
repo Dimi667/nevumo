@@ -417,13 +417,17 @@ CREATE INDEX idx_translations_key ON translations(key);
 
 ### Current Seeded Data (April 4, 2026)
 - **homepage namespace**: 45 keys × 34 languages = 1,530 rows
-- **category namespace**: 42 UI keys × 34 languages + 18 SEO keys (pl/bg/en only) = 1,428 + 54 = 1,482 rows
+- **category namespace**: 44 UI keys × 34 languages + 18 SEO keys (pl/bg/en only) = 1,496 + 54 = 1,550 rows
 - **category form keys (April 2026)**: 15 new keys × 34 languages = 510 rows
   Keys added: no_providers_title, no_providers_subtitle, form_subtext,
   how_it_works_label, how_step_1, how_step_2, how_step_3, what_need_label,
   chip_not_sure, details_label, details_placeholder, get_offers_btn,
   trust_multiple, trust_response, sticky_btn
-- **city namespace**: 21 keys × 34 languages = 714 rows (includes 10 hero keys added April 21, 2026)
+- **category preposition keys (May 2026)**: 2 new keys × 34 languages = 68 rows
+  Keys added: preposition_base, preposition_modified (for dynamic preposition logic)
+- **city namespace**: 24 keys × 34 languages = 816 rows (includes 10 hero keys added April 21, 2026)
+- **city preposition keys (May 2026)**: 3 new keys × 34 languages = 102 rows
+  Keys added: preposition_base, preposition_modified, footer_in (for dynamic preposition logic)
 - **widget namespace**: 23 keys × 34 languages = 782 rows
 - **client_dashboard namespace**: Client dashboard UI strings
 - **provider_dashboard namespace**: 168 keys × 34 languages = 5,712 rows (includes 8 onboarding hero keys added April 10, 2026)

@@ -112,16 +112,21 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Default language: en
 - UI translation seed status (April 30, 2026):
   - `43` homepage keys per language
-  - `24` category-page keys per language
-  - `67` total UI keys per language
-  - `2,788` rows in `translations` for homepage/category namespaces across 34 languages
+  - `26` category-page keys per language (includes preposition keys added May 2026)
+  - `69` total UI keys per language
+  - `2,856` rows in `translations` for homepage/category namespaces across 34 languages (includes preposition keys: +68 rows)
   - `350` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services, lead search & notes, lead details modal)
-  - `21` city-page keys per language (hero, search, CTA, empty state, how it works, SEO)
+  - `24` city-page keys per language (hero, search, CTA, empty state, how it works, SEO, prepositions)
   - `11,866` rows in `translations` for provider_dashboard namespace across 34 languages
-  - `714` rows in `translations` for city namespace across 34 languages
+  - `816` rows in `translations` for city namespace across 34 languages (includes preposition keys: +102 rows)
   - `2,856` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 10 keys × 34 languages = 340 rows)
   - `340` rows in `translations` for `widget` namespace across 34 languages (relative time translations: 8 keys × 34 languages = 272 rows; error messages: 2 keys × 34 languages = 68 rows)
     - New error keys: `widget.phone_error` (phone validation error message) and `widget.error_message` (general form error message)
+  - **Dynamic Preposition Logic (May 2026)**: Added preposition translation keys for language-specific prepositions (e.g., PL: w/we, BG: в/във)
+    - City namespace: preposition_base, preposition_modified, footer_in (3 keys × 34 languages = 102 rows)
+    - Category namespace: preposition_base, preposition_modified (2 keys × 34 languages = 68 rows)
+    - Helper function: `apps/web/lib/cityHelpers.ts` - `getLocalizedCityText()`
+    - Applied to: metadata titles, descriptions, headings, and footer links in city and category pages
 
 ---
 

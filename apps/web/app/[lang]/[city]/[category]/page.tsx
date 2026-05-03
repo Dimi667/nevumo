@@ -160,8 +160,8 @@ function ProviderCard({
                 {provider.services.slice(0, 2).map((service) => (
                   <div key={service.id}>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-700 font-medium">{service.title}</span>
-                      <span className="font-medium text-gray-900">
+                      <span className="text-gray-700 font-medium min-w-0 truncate">{service.title}</span>
+                      <span className="font-medium text-gray-900 shrink-0">
                         {formatPrice(service.basePrice, service.priceType, service.currency, texts.onRequest)}
                       </span>
                     </div>
@@ -171,7 +171,7 @@ function ProviderCard({
                   </div>
                 ))}
                 {!hasAnyDescription && (
-                  <p className="text-xs text-gray-500">{texts.defaultDescription}</p>
+                  <p className="text-xs text-gray-500 line-clamp-1">{texts.defaultDescription}</p>
                 )}
                 {provider.services.length > 2 && (
                   <div className="text-xs text-orange-600 font-medium">
@@ -183,7 +183,7 @@ function ProviderCard({
           })()}
 
           {providerState === 1 && (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
               <span className="rounded-full bg-orange-50 px-3 py-1.5 text-orange-700">
                 ✓ {texts.verifiedSpecialist} • {texts.freeNoObligation}
               </span>
@@ -194,7 +194,7 @@ function ProviderCard({
           )}
 
           {providerState === 2 && (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
               <span className="rounded-full bg-gray-50 px-3 py-1.5">
                 ⚡ {provider.leadsReceived} {texts.peopleSought}
               </span>
@@ -205,12 +205,12 @@ function ProviderCard({
           )}
 
           {providerState === 3 && (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
               <span className="rounded-full bg-gray-50 px-3 py-1.5">
                 ✅ {provider.jobsCompleted} {texts.jobsCompleted}
               </span>
               {hasRecentLead && (
-                <span className="rounded-full bg-gray-50 px-3 py-1.5">
+                <span className="rounded-full bg-gray-50 px-3 py-1.5 truncate">
                   ⚡ {provider.latestLeadPreviewClientName} {texts.recentlyRequested}
                 </span>
               )}
@@ -221,7 +221,7 @@ function ProviderCard({
           )}
 
           {providerState === 4 && (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600">
+            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
               <span className="rounded-full bg-amber-50 px-3 py-1.5 text-amber-700">
                 ⭐ {provider.rating.toFixed(1)} • {provider.reviewCount} {texts.reviews}
               </span>
@@ -229,7 +229,7 @@ function ProviderCard({
                 ✅ {provider.jobsCompleted} {texts.jobsCompleted}
               </span>
               {hasRecentLead && (
-                <span className="rounded-full bg-gray-50 px-3 py-1.5">
+                <span className="rounded-full bg-gray-50 px-3 py-1.5 truncate">
                   ⚡ {provider.latestLeadPreviewClientName} {texts.recentlyRequested}
                 </span>
               )}
@@ -406,7 +406,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const catNameKey = `cat_${catKey}_name` as const;
   const categoryName = (homepageT[catNameKey] || catKey).replace(/{city}/g, cityName);
 
-  const title = `${categoryName} i ${cityName}`;
+  // Dynamic preposition logic for "In"
+  const prepBase = categoryT['preposition_base'] || 'in';
+  const prepModified = categoryT['preposition_modified'] || prepBase;
+  const firstChar = cityName.charAt(0).toLowerCase();
+  let preposition = prepBase;
+
+  if (lang === 'bg' && (firstChar === 'в' || firstChar === 'ф' || firstChar === 'v' || firstChar === 'f')) {
+    preposition = prepModified;
+  } else if ((lang === 'cs' || lang === 'sk') && (firstChar === 'v' || firstChar === 'f')) {
+    preposition = prepModified;
+  } else if (lang === 'pl' && (firstChar === 'w' || firstChar === 'v')) {
+    preposition = prepModified;
+  } else if ((lang === 'ru' || lang === 'uk') && (firstChar === 'в' || firstChar === 'v')) {
+    preposition = prepModified;
+  }
+
+  const title = `${categoryName} ${preposition} ${cityName}`;
   const baseDescription = (categoryT[`subtitle_${catKey}`] || '').replace(/{city}/g, cityName);
   
   // Fetch price range for metadata
@@ -726,7 +742,7 @@ export default async function CategoryPage({ params }: PageProps) {
             <p className="mt-3 max-w-3xl text-base text-gray-600 sm:text-lg">
               {subtitle}
             </p>
-            <div className="mt-5 inline-flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full bg-gray-50 px-4 py-3 text-sm text-gray-700">
+            <div className="mt-5 inline-flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full bg-gray-50 px-4 py-3 text-sm text-gray-700 max-w-full w-full">
               <span>{trustSpecialistsText}</span>
               <span className="text-gray-400">•</span>
               <span className="flex items-center gap-1">

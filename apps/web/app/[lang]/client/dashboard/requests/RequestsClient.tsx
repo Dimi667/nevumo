@@ -593,7 +593,7 @@ export default function RequestsClient({ lang }: { lang: string }) {
                         type="button"
                         onClick={() => {
                           if (lead.reviewable_providers?.length === 1) {
-                            openReviewForm(lead.id, lead.reviewable_providers[0].provider_id);
+                            openReviewForm(lead.id, lead.reviewable_providers[0]?.provider_id);
                           } else {
                             openReviewForm(lead.id);
                           }

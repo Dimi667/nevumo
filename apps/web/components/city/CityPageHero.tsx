@@ -1,4 +1,5 @@
 import CityHeroChips from '@/components/city/CityHeroChips';
+import { getLocalizedCityText } from '@/lib/cityHelpers';
 
 interface CityPageHeroProps {
   translations: Record<string, string>;
@@ -32,22 +33,22 @@ export default function CityPageHero({
   // Determine state logic
   if (providerCount === 0) {
     // State 0
-    title = (translations['hero_title'] || 'Find services in {city}').replace('{city}', cityName);
+    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations);
     subtitle = translations['hero_subtitle_0'] || '';
     trust = translations['hero_trust_0'] || '';
   } else if (providerCount >= 1 && providerCount <= 5 && requestCount === 0) {
     // State 1
-    title = (translations['hero_title'] || 'Find services in {city}').replace('{city}', cityName);
+    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations);
     subtitle = translations['hero_subtitle_few'] || '';
     trust = translations['hero_trust_few'] || '';
   } else if (providerCount > 0 && requestCount > 0 && (averageRating === null || averageRating === 0)) {
     // State 2
-    title = (translations['hero_title'] || 'Find services in {city}').replace('{city}', cityName);
+    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations);
     subtitle = translations['hero_subtitle_active'] || '';
     trust = (translations['hero_trust_requests'] || '').replace('{count}', String(requestCount));
   } else if (providerCount > 0 && requestCount > 0 && averageRating !== null && averageRating > 0) {
     // State 3
-    title = (translations['hero_title'] || 'Find services in {city}').replace('{city}', cityName);
+    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations);
     subtitle = translations['hero_subtitle_active'] || '';
     trust = (translations['hero_trust_full'] || '')
       .replace('{rating}', averageRating.toFixed(1))

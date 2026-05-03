@@ -7,11 +7,11 @@ import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSite
 import { JsonLd } from '@/components/JsonLd';
 import type { ProviderDetail, ServiceOut } from '@/lib/api';
 import { fetchTranslations, t } from '@/lib/ui-translations';
+import { getLocalizedCityText } from '@/lib/cityHelpers';
 
 interface PageProps {
   params: Promise<{ lang: string; city: string }>;
 }
-
 // Category icon mapping (reused from homepage patterns)
 const categoryIcons: Record<string, React.ReactNode> = {
   cleaning: (
@@ -48,8 +48,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
 
-  const title = t(cityT, 'seo_title', `${cityName} — Local Services | Nevumo`).replace('{city}', cityName);
-  const description = t(cityT, 'seo_description', `Find trusted local services in ${cityName}. Free requests, no obligation. Cleaning, plumbing, massage and more.`).replace('{city}', cityName);
+  const baseTitle = t(cityT, 'seo_title', '{city} — Local Services | Nevumo');
+  const title = getLocalizedCityText(baseTitle, lang, cityName, cityT);
+
+  const baseDescription = t(cityT, 'seo_description', `Find trusted local services in ${cityName}. Free requests, no obligation. Cleaning, plumbing, massage and more.`);
+  const description = getLocalizedCityText(baseDescription, lang, cityName, cityT);
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
 
@@ -100,8 +103,8 @@ export default async function CityPage({ params }: PageProps) {
   // Create a pseudo-provider to represent the platform in this city for LocalBusiness schema
   const cityPseudoProvider: ProviderDetail = {
     id: `city-${city}`,
-    business_name: t(cityT, 'seo_title', `${cityName} — Local Services | Nevumo`).replace('{city}', cityName),
-    description: t(cityT, 'seo_description', `Find trusted local services in ${cityName}.`).replace('{city}', cityName),
+    business_name: getLocalizedCityText(t(cityT, 'seo_title', '{city} — Local Services | Nevumo'), lang, cityName, cityT),
+    description: getLocalizedCityText(t(cityT, 'seo_description', 'Find trusted local services in {city}.'), lang, cityName, cityT),
     slug: city,
     profile_image_url: null,
     rating: cityStats.average_rating || 4.8,
@@ -163,7 +166,7 @@ export default async function CityPage({ params }: PageProps) {
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-12 text-gray-900">
-            {t(cityT, 'categories_title', 'Popular services in {city}').replace('{city}', cityName)}
+            {getLocalizedCityText(t(cityT, 'categories_title', 'Popular services in {city}'), lang, cityName, cityT)}
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {displayCategories.map((category) => (
@@ -237,17 +240,17 @@ export default async function CityPage({ params }: PageProps) {
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold mb-6 text-gray-900">
-            {t(cityT, 'seo_title', `Services in ${cityName}`).replace('{city}', cityName)}
+            {getLocalizedCityText(t(cityT, 'seo_title', `Services in ${cityName}`), lang, cityName, cityT)}
           </h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed">
-              {t(cityT, 'seo_description', `Looking for reliable services in ${cityName}? Nevumo connects you with verified local specialists. From home cleaning to plumbing repairs and professional massage therapy, find the right provider for your needs.`).replace('{city}', cityName)}
+              {getLocalizedCityText(t(cityT, 'seo_description', `Looking for reliable services in ${cityName}? Nevumo connects you with verified local specialists. From home cleaning to plumbing repairs and professional massage therapy, find the right provider for your needs.`), lang, cityName, cityT)}
             </p>
             <p className="text-gray-700 leading-relaxed mt-4">
               {t(cityT, 'seo_p2', 'All specialists on our platform are reviewed by real customers. Send a free request, compare offers, and choose the best match for your project. No hidden fees, no obligations.')}
             </p>
             <p className="text-gray-700 leading-relaxed mt-4">
-              {t(cityT, 'seo_p3', 'Whether you need a one-time service or ongoing support, our network of professionals in {city} is ready to help. Get started with a simple request and receive responses within hours.').replace('{city}', cityName)}
+              {getLocalizedCityText(t(cityT, 'seo_p3', 'Whether you need a one-time service or ongoing support, our network of professionals in {city} is ready to help. Get started with a simple request and receive responses within hours.'), lang, cityName, cityT)}
             </p>
           </div>
         </div>
@@ -260,15 +263,18 @@ export default async function CityPage({ params }: PageProps) {
             {t(cityT, 'footer_title', 'Nevumo — Connecting you with local specialists')}
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
-            {displayCategories.slice(0, 3).map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/${lang}/${city}/${cat.slug}`}
-                className="text-gray-600 hover:text-orange-600 transition"
-              >
-                {cat.name} {t(cityT, 'footer_in', 'in')} {cityName}
-              </Link>
-            ))}
+            {displayCategories.slice(0, 3).map((cat) => {
+              const prep = getLocalizedCityText(` ${t(cityT, 'footer_in', 'in')} `, lang, cityName, cityT).trim();
+              return (
+                <Link
+                  key={cat.id}
+                  href={`/${lang}/${city}/${cat.slug}`}
+                  className="text-gray-600 hover:text-orange-600 transition"
+                >
+                  {cat.name} {prep} {cityName}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </footer>

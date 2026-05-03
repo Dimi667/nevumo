@@ -50,6 +50,19 @@ This document reflects the major architectural optimization performed in April 2
   - **Placeholder Safety (May 2, 2026)**: Implemented aggressive regex-based removal of price placeholders when no valid price data is available. If `hasValidPrice` is false, any phrase containing `{min_price}`, `{max_price}`, or `{currency}` is automatically replaced with the "Price on request" translation.
   - **Fallback Chain**: Database translation → Hardcoded `CATEGORY_CONTENT` fallback → `getPriceText` (for empty price-related answers).
   - **SEO Synchronization**: The same translated and interpolated FAQ items are used for both the visual UI section and the `FAQPage` JSON-LD schema, ensuring consistency for both users and search engines.
+- **Dynamic Preposition Logic (May 2026)**:
+  - **Implementation**: Added logic to `apps/web/app/[lang]/[city]/page.tsx` and `apps/web/app/[lang]/[city]/[category]/page.tsx` to handle language-specific prepositions for "In" (e.g., PL: "w" vs "we", BG: "в" vs "във").
+  - **Rules**: Prepositions change based on the first letter of the city name for specific languages:
+    - **BG**: Modified ("във") if city starts with 'в', 'ф', 'v', 'f'.
+    - **CS/SK**: Modified ("ve") if city starts with 'v', 'f'.
+    - **PL**: Modified ("we") if city starts with 'w', 'v'.
+    - **RU/UK**: Modified ("во") if city starts with 'в', 'v'.
+  - **Keys**: Uses `preposition_base` and `preposition_modified` from the relevant namespace (`city` or `category`).
+  - **Metadata & UI**: Applied to page titles, descriptions, headings, and footer links to ensure grammatically correct content across 34 languages.
+  - **Helper Function**: Refactored into `getLocalizedCityText` in `apps/web/lib/cityHelpers.ts` for consistent application across metadata, JSON-LD, and UI components.
+  - **Seed Scripts**: 
+    - `apps/api/scripts/seed_city_preposition_translations.py` - Seeds city preposition keys for all 34 languages
+    - `apps/api/scripts/seed_category_preposition_translations.py` - Seeds category preposition keys for all 34 languages
 - **City Placeholder System (May 2, 2026)**:
   - **Purpose**: Replaced hardcoded city names in homepage translations with a dynamic `{city}` placeholder that resolves based on user context.
   - **Files Created**:
