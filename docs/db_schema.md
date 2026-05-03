@@ -428,6 +428,12 @@ CREATE INDEX idx_translations_key ON translations(key);
 - **city namespace**: 24 keys × 34 languages = 816 rows (includes 10 hero keys added April 21, 2026)
 - **city preposition keys (May 2026)**: 3 new keys × 34 languages = 102 rows
   Keys added: preposition_base, preposition_modified, footer_in (for dynamic preposition logic)
+- **city declension keys (May 2026)**: 2 new keys × 34 languages = 68 rows
+  Keys added: locative_form, genitive_form (for Polish grammatical declension)
+  - locative_form: Used for "in {city}" context (e.g., Warszawa → Warszawie)
+  - genitive_form: Used for "from {city}" context (e.g., Warszawa → Warszawy)
+  - Currently seeded only for Warsaw (Warszawa) - other cities require separate seed script execution
+  - Seed script: apps/api/scripts/seed_city_declension_translations.py
 - **widget namespace**: 23 keys × 34 languages = 782 rows
 - **client_dashboard namespace**: Client dashboard UI strings
 - **provider_dashboard namespace**: 168 keys × 34 languages = 5,712 rows (includes 8 onboarding hero keys added April 10, 2026)

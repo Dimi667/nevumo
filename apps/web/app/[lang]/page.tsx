@@ -3,6 +3,7 @@ import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSite
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { getCityBySlug } from '@/lib/api';
 import { resolveDefaultCity } from '@/lib/default-city';
+import { getLocalizedCityText } from '@/lib/cityHelpers';
 import Image from 'next/image';
 import Link from 'next/link';
 import RotatingCategory from '@/components/homepage/RotatingCategory';
@@ -17,14 +18,27 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps) {
   const { lang } = await params;
   const homepageT = await fetchTranslations(lang, 'homepage');
+  const cityT = await fetchTranslations(lang, 'city');
 
   // Resolve city for dynamic translations
   const citySlug = await resolveDefaultCity(lang);
   const cityData = await getCityBySlug(citySlug, lang);
   const cityName = cityData?.city || 'Warsaw';
 
-  const title = t(homepageT, 'meta_title', 'Get clients for your services').replace('{city}', cityName);
-  const description = t(homepageT, 'meta_description', 'Free registration. No commission.').replace('{city}', cityName);
+  const title = getLocalizedCityText(
+    t(homepageT, 'meta_title', 'Get clients for your services'),
+    lang,
+    cityName,
+    cityT,
+    lang === 'pl' ? 'locative' : 'nominative'
+  );
+  const description = getLocalizedCityText(
+    t(homepageT, 'meta_description', 'Free registration. No commission.'),
+    lang,
+    cityName,
+    cityT,
+    lang === 'pl' ? 'locative' : 'nominative'
+  );
 
   return {
     title,
@@ -57,6 +71,7 @@ export default async function Homepage({ params }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'en';
   const homepageT = await fetchTranslations(lang, 'homepage');
+  const cityT = await fetchTranslations(lang, 'city');
   const rotatingCategories = t(homepageT, 'rotating_categories', 'Massage,Cleaning,Plumbing').split(',');
 
   // Resolve city for dynamic translations
@@ -85,6 +100,7 @@ export default async function Homepage({ params }: PageProps) {
           width={120} 
           height={36}
           priority
+          className="mr-8 sm:mr-0"
         />
         <div className="flex items-center gap-4 text-sm">
           <Link
@@ -109,7 +125,7 @@ export default async function Homepage({ params }: PageProps) {
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             {t(homepageT, 'hero_prefix', 'Get clients for')}{' '}
             <RotatingCategory categories={rotatingCategories} />
-            {' '}{t(homepageT, 'hero_suffix', 'in Warsaw').replace('{city}', cityName)}
+            {' '}{getLocalizedCityText(t(homepageT, 'hero_suffix', 'in Warsaw'), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-white">
             {t(homepageT, 'hero_subtitle', 'Free. No commission. Direct contact.')}
@@ -128,7 +144,7 @@ export default async function Homepage({ params }: PageProps) {
           </div>
           
           <div className="text-lg mb-10 text-orange-100">
-            {t(homepageT, 'social_proof', '').replace('{city}', cityName)}
+            {getLocalizedCityText(t(homepageT, 'social_proof', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
           </div>
           
           <AuthIntentButton
@@ -224,26 +240,26 @@ export default async function Homepage({ params }: PageProps) {
       {/* LIVE ACTIVITY FEED */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">{t(homepageT, 'activity_title', 'Recent requests').replace('{city}', cityName)}</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_title', 'Recent requests'), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}</h2>
           <div className="space-y-4">
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{t(homepageT, 'activity_1', '').replace('{city}', cityName)}</span>
+                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_1', ''), lang, cityName, cityT, lang === 'pl' ? 'genitive' : 'nominative')}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_1_time', '')}</span>
             </div>
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{t(homepageT, 'activity_2', '').replace('{city}', cityName)}</span>
+                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_2', ''), lang, cityName, cityT, lang === 'pl' ? 'genitive' : 'nominative')}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_2_time', '')}</span>
             </div>
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{t(homepageT, 'activity_3', '').replace('{city}', cityName)}</span>
+                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_3', ''), lang, cityName, cityT, lang === 'pl' ? 'genitive' : 'nominative')}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_3_time', '')}</span>
             </div>
@@ -296,22 +312,22 @@ export default async function Homepage({ params }: PageProps) {
       {/* FOOTER */}
       <footer className="py-12 px-6 bg-gray-50 border-t border-gray-200">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="mb-6 text-gray-700">{t(homepageT, 'footer_title', '').replace('{city}', cityName)}</p>
+          <p className="mb-6 text-gray-700">{getLocalizedCityText(t(homepageT, 'footer_title', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}</p>
           <div className="flex flex-wrap justify-center gap-4 mb-6 text-sm">
             <Link href={`/${normalizedLang}/${citySlug}/sprzatanie`} className="text-gray-700 transition-colors">
-              {t(homepageT, 'footer_link_cleaning', '').replace('{city}', cityName)}
+              {getLocalizedCityText(t(homepageT, 'footer_link_cleaning', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
             </Link>
             <span className="text-gray-500">|</span>
             <Link href={`/${normalizedLang}/${citySlug}/hydraulik`} className="text-gray-700 transition-colors">
-              {t(homepageT, 'footer_link_plumbing', '').replace('{city}', cityName)}
+              {getLocalizedCityText(t(homepageT, 'footer_link_plumbing', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
             </Link>
             <span className="text-gray-500">|</span>
             <Link href={`/${normalizedLang}/${citySlug}/masaz`} className="text-gray-700 transition-colors">
-              {t(homepageT, 'footer_link_massage', '').replace('{city}', cityName)}
+              {getLocalizedCityText(t(homepageT, 'footer_link_massage', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
             </Link>
           </div>
           <p className="text-gray-500 text-sm">
-            {t(homepageT, 'footer_popular', '').replace('{city}', cityName)}
+            {getLocalizedCityText(t(homepageT, 'footer_popular', ''), lang, cityName, cityT, 'nominative')}
           </p>
         </div>
       </footer>

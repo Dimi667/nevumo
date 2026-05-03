@@ -12,6 +12,7 @@ interface CityPageHeroProps {
   categories: { id: number; slug: string; name: string }[];
   categoryTranslations: Record<string, string>;
   countryCode?: string;
+  grammaticalCase?: 'nominative' | 'locative' | 'genitive';
 }
 
 export default function CityPageHero({
@@ -25,6 +26,7 @@ export default function CityPageHero({
   categories,
   categoryTranslations,
   countryCode,
+  grammaticalCase = 'nominative',
 }: CityPageHeroProps) {
   let title = '';
   let subtitle = '';
@@ -33,22 +35,22 @@ export default function CityPageHero({
   // Determine state logic
   if (providerCount === 0) {
     // State 0
-    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations);
+    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations, grammaticalCase);
     subtitle = translations['hero_subtitle_0'] || '';
     trust = translations['hero_trust_0'] || '';
   } else if (providerCount >= 1 && providerCount <= 5 && requestCount === 0) {
     // State 1
-    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations);
+    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations, grammaticalCase);
     subtitle = translations['hero_subtitle_few'] || '';
     trust = translations['hero_trust_few'] || '';
   } else if (providerCount > 0 && requestCount > 0 && (averageRating === null || averageRating === 0)) {
     // State 2
-    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations);
+    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations, grammaticalCase);
     subtitle = translations['hero_subtitle_active'] || '';
     trust = (translations['hero_trust_requests'] || '').replace('{count}', String(requestCount));
   } else if (providerCount > 0 && requestCount > 0 && averageRating !== null && averageRating > 0) {
     // State 3
-    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations);
+    title = getLocalizedCityText(translations['hero_title'] || 'Find services in {city}', lang, cityName, translations, grammaticalCase);
     subtitle = translations['hero_subtitle_active'] || '';
     trust = (translations['hero_trust_full'] || '')
       .replace('{rating}', averageRating.toFixed(1))
@@ -71,6 +73,9 @@ export default function CityPageHero({
           citySlug={citySlug}
           lang={lang}
           countryCode={countryCode}
+          cityName={cityName}
+          cityTranslations={translations}
+          grammaticalCase={grammaticalCase}
         />
 
         <p className="text-sm text-white mt-6">{trust}</p>

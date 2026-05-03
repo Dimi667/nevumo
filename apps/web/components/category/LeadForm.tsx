@@ -5,6 +5,7 @@ import { createLead, claimLeadEmail } from '@/lib/api';
 import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getPhonePrefix } from '@/lib/phoneUtils';
+import { getLocalizedCityText } from '@/lib/cityHelpers';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 
 interface ServiceOption {
@@ -22,6 +23,8 @@ interface LeadFormProps {
   countryCode?: string;
   title?: string;
   onReset?: () => void;
+  cityTranslations?: Record<string, string>;
+  grammaticalCase?: 'nominative' | 'locative' | 'genitive';
 }
 
 export default function LeadForm({
@@ -34,6 +37,8 @@ export default function LeadForm({
   countryCode,
   title,
   onReset,
+  cityTranslations,
+  grammaticalCase = 'nominative',
 }: LeadFormProps) {
   const [description, setDescription] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -229,7 +234,9 @@ export default function LeadForm({
 
         {/* Subtext */}
         <p className="mt-2 mb-4 text-sm text-gray-500">
-          {(translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace(/{cityName}/g, cityName)}
+          {cityTranslations 
+            ? getLocalizedCityText(translations['success_subtitle'] || 'Specialists in {city} will contact you.', lang, cityName, cityTranslations, grammaticalCase)
+            : (translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace(/{cityName}|{city}/g, cityName)}
         </p>
 
         {/* Separator */}

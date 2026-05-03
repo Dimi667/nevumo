@@ -386,14 +386,14 @@ export default function RequestsClient({ lang }: { lang: string }) {
                 className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 cursor-pointer hover:shadow-md transition-shadow"
               >
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="space-y-1.5">
-                    <h2 className="text-base font-semibold text-gray-900">
+                  <div className="space-y-1.5 overflow-hidden">
+                    <h2 className="text-base font-semibold text-gray-900 truncate">
                       {lead.category_name}
                     </h2>
-                    <p className="text-sm text-gray-500">{lead.city}</p>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-gray-500 truncate">{lead.city}</p>
+                    <p className="text-sm text-gray-700 truncate">
                       {lead.provider_business_name ?? (
-                        <span className="text-gray-400 italic text-sm truncate">
+                        <span className="text-gray-400 italic text-sm">
                           {t('msg_broadcast_lead', 'Sent to many specialists')}
                         </span>
                       )}

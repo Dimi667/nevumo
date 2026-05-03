@@ -122,11 +122,11 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `2,856` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 10 keys × 34 languages = 340 rows)
   - `340` rows in `translations` for `widget` namespace across 34 languages (relative time translations: 8 keys × 34 languages = 272 rows; error messages: 2 keys × 34 languages = 68 rows)
     - New error keys: `widget.phone_error` (phone validation error message) and `widget.error_message` (general form error message)
-  - **Dynamic Preposition Logic (May 2026)**: Added preposition translation keys for language-specific prepositions (e.g., PL: w/we, BG: в/във)
-    - City namespace: preposition_base, preposition_modified, footer_in (3 keys × 34 languages = 102 rows)
-    - Category namespace: preposition_base, preposition_modified (2 keys × 34 languages = 68 rows)
+  - **Dynamic Preposition & Declension Logic (May 2026)**: Added preposition and grammatical declension support (e.g., PL: w/we, Warszawa → Warszawie/Warszawy)
+    - City namespace: preposition_base, preposition_modified, footer_in, locative_form, genitive_form
+    - Category namespace: preposition_base, preposition_modified
     - Helper function: `apps/web/lib/cityHelpers.ts` - `getLocalizedCityText()`
-    - Applied to: metadata titles, descriptions, headings, and footer links in city and category pages
+    - **Applied to**: metadata titles, descriptions, headings, and footer links in homepage, city and category pages, ensuring grammatically correct output for Polish and other languages.
 
 ---
 
@@ -183,6 +183,21 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Polish City Declension - Homepage & City Pages (May 2026)** — PARTIALLY COMPLETE:
+  - **Completed**: Polish homepage (/pl) - All declension and dynamic prepositions working correctly
+  - **Completed**: Polish city page (/pl/warszawa) - All declension and dynamic prepositions working correctly
+  - **Completed**: Bulgarian and English regression tests - Passing
+  - **Completed**: Seed script executed and database populated with declension forms for Warsaw
+  - **Completed**: cityHelpers.ts extended with grammaticalCase parameter
+  - **Completed**: Homepage and city page components updated
+  - **Outstanding Issues**: Polish category pages (/pl/warszawa/sprzatanie, /pl/warszawa/hydraulik, /pl/warszawa/masaz):
+    - Meta titles showing "we Warszawa" instead of "we Warszawie" (wrong case)
+    - Hero headings showing English "in" instead of Polish prepositions
+    - FAQ sections showing English text
+    - Related links showing "w Warszawie" instead of "we Warszawie" (missing w→we)
+    - Bottom CTA showing "w Warszawie" instead of "we Warszawie"
+  - **Next Steps**: Category pages require separate task to integrate getLocalizedCityText with grammaticalCase parameter
+  - **Scope**: Currently only Warsaw (Warszawa) has declension forms seeded
 - **FAQ Price Placeholder Fix (May 2, 2026)** — COMPLETE:
   - **Problem**: Users saw raw placeholders like `{min_price}` in FAQ answers when no price data was available.
   - **Fix**: Implemented aggressive placeholder removal and replacement with "Price on request" in `apps/web/app/[lang]/[city]/[category]/page.tsx`.

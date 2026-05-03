@@ -207,11 +207,11 @@ export default function OverviewClient({ lang }: { lang: string }) {
                         {statusMeta.label}
                       </span>
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-1 overflow-hidden">
                       <p className="text-xs uppercase tracking-wide text-gray-400 font-medium">{t('label_provider', 'Provider')}</p>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-gray-700 truncate">
                         {lead.provider_business_name ?? (
-                          <span className="text-gray-400 italic text-sm truncate">
+                          <span className="text-gray-400 italic text-sm">
                             {t('msg_broadcast_lead', 'Sent to many specialists')}
                           </span>
                         )}

@@ -47,12 +47,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cityT = await fetchTranslations(lang, 'city');
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+  const grammaticalCase = lang === 'pl' ? 'locative' : 'nominative';
 
   const baseTitle = t(cityT, 'seo_title', '{city} — Local Services | Nevumo');
-  const title = getLocalizedCityText(baseTitle, lang, cityName, cityT);
+  const title = getLocalizedCityText(baseTitle, lang, cityName, cityT, grammaticalCase);
 
   const baseDescription = t(cityT, 'seo_description', `Find trusted local services in ${cityName}. Free requests, no obligation. Cleaning, plumbing, massage and more.`);
-  const description = getLocalizedCityText(baseDescription, lang, cityName, cityT);
+  const description = getLocalizedCityText(baseDescription, lang, cityName, cityT, grammaticalCase);
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
 
@@ -78,6 +79,7 @@ export default async function CityPage({ params }: PageProps) {
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
   const cityCountryCode = cityData?.country_code ?? 'BG';
+  const grammaticalCase = lang === 'pl' ? 'locative' : 'nominative';
 
   // Fetch city stats
   let cityStats = { provider_count: 0, request_count: 0, average_rating: 0 };
@@ -103,8 +105,8 @@ export default async function CityPage({ params }: PageProps) {
   // Create a pseudo-provider to represent the platform in this city for LocalBusiness schema
   const cityPseudoProvider: ProviderDetail = {
     id: `city-${city}`,
-    business_name: getLocalizedCityText(t(cityT, 'seo_title', '{city} — Local Services | Nevumo'), lang, cityName, cityT),
-    description: getLocalizedCityText(t(cityT, 'seo_description', 'Find trusted local services in {city}.'), lang, cityName, cityT),
+    business_name: getLocalizedCityText(t(cityT, 'seo_title', '{city} — Local Services | Nevumo'), lang, cityName, cityT, grammaticalCase),
+    description: getLocalizedCityText(t(cityT, 'seo_description', 'Find trusted local services in {city}.'), lang, cityName, cityT, grammaticalCase),
     slug: city,
     profile_image_url: null,
     rating: cityStats.average_rating || 4.8,
@@ -127,7 +129,7 @@ export default async function CityPage({ params }: PageProps) {
   };
   const localBusinessJsonLd = generateLocalBusinessJsonLd(
     cityPseudoProvider,
-    t(cityT, 'categories_title', 'Local Services').replace('{city}', cityName),
+    getLocalizedCityText(t(cityT, 'categories_title', 'Local Services'), lang, cityName, cityT, grammaticalCase),
     cityName,
     cityCountryCode
   );
@@ -160,13 +162,14 @@ export default async function CityPage({ params }: PageProps) {
         categories={displayCategories}
         categoryTranslations={categoryT}
         countryCode={cityData?.country_code}
+        grammaticalCase={grammaticalCase}
       />
 
       {/* CATEGORY GRID */}
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-center mb-12 text-gray-900">
-            {getLocalizedCityText(t(cityT, 'categories_title', 'Popular services in {city}'), lang, cityName, cityT)}
+            {getLocalizedCityText(t(cityT, 'categories_title', 'Popular services in {city}'), lang, cityName, cityT, grammaticalCase)}
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {displayCategories.map((category) => (
@@ -240,17 +243,17 @@ export default async function CityPage({ params }: PageProps) {
       <section className="py-16 px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl font-bold mb-6 text-gray-900">
-            {getLocalizedCityText(t(cityT, 'seo_title', `Services in ${cityName}`), lang, cityName, cityT)}
+            {getLocalizedCityText(t(cityT, 'seo_title', `Services in ${cityName}`), lang, cityName, cityT, grammaticalCase)}
           </h2>
           <div className="prose prose-gray max-w-none">
             <p className="text-gray-700 leading-relaxed">
-              {getLocalizedCityText(t(cityT, 'seo_description', `Looking for reliable services in ${cityName}? Nevumo connects you with verified local specialists. From home cleaning to plumbing repairs and professional massage therapy, find the right provider for your needs.`), lang, cityName, cityT)}
+              {getLocalizedCityText(t(cityT, 'seo_description', `Looking for reliable services in ${cityName}? Nevumo connects you with verified local specialists. From home cleaning to plumbing repairs and professional massage therapy, find the right provider for your needs.`), lang, cityName, cityT, grammaticalCase)}
             </p>
             <p className="text-gray-700 leading-relaxed mt-4">
               {t(cityT, 'seo_p2', 'All specialists on our platform are reviewed by real customers. Send a free request, compare offers, and choose the best match for your project. No hidden fees, no obligations.')}
             </p>
             <p className="text-gray-700 leading-relaxed mt-4">
-              {getLocalizedCityText(t(cityT, 'seo_p3', 'Whether you need a one-time service or ongoing support, our network of professionals in {city} is ready to help. Get started with a simple request and receive responses within hours.'), lang, cityName, cityT)}
+              {getLocalizedCityText(t(cityT, 'seo_p3', 'Whether you need a one-time service or ongoing support, our network of professionals in {city} is ready to help. Get started with a simple request and receive responses within hours.'), lang, cityName, cityT, grammaticalCase)}
             </p>
           </div>
         </div>
@@ -264,14 +267,15 @@ export default async function CityPage({ params }: PageProps) {
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             {displayCategories.slice(0, 3).map((cat) => {
-              const prep = getLocalizedCityText(` ${t(cityT, 'footer_in', 'in')} `, lang, cityName, cityT).trim();
+              const prep = getLocalizedCityText(` ${t(cityT, 'footer_in', 'in')} `, lang, cityName, cityT, grammaticalCase).trim();
+              const displayedCityName = getLocalizedCityText('{city}', lang, cityName, cityT, grammaticalCase);
               return (
                 <Link
                   key={cat.id}
                   href={`/${lang}/${city}/${cat.slug}`}
                   className="text-gray-600 hover:text-orange-600 transition"
                 >
-                  {cat.name} {prep} {cityName}
+                  {cat.name} {prep} {displayedCityName}
                 </Link>
               );
             })}

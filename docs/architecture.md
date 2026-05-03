@@ -50,19 +50,35 @@ This document reflects the major architectural optimization performed in April 2
   - **Placeholder Safety (May 2, 2026)**: Implemented aggressive regex-based removal of price placeholders when no valid price data is available. If `hasValidPrice` is false, any phrase containing `{min_price}`, `{max_price}`, or `{currency}` is automatically replaced with the "Price on request" translation.
   - **Fallback Chain**: Database translation → Hardcoded `CATEGORY_CONTENT` fallback → `getPriceText` (for empty price-related answers).
   - **SEO Synchronization**: The same translated and interpolated FAQ items are used for both the visual UI section and the `FAQPage` JSON-LD schema, ensuring consistency for both users and search engines.
-- **Dynamic Preposition Logic (May 2026)**:
-  - **Implementation**: Added logic to `apps/web/app/[lang]/[city]/page.tsx` and `apps/web/app/[lang]/[city]/[category]/page.tsx` to handle language-specific prepositions for "In" (e.g., PL: "w" vs "we", BG: "в" vs "във").
-  - **Rules**: Prepositions change based on the first letter of the city name for specific languages:
-    - **BG**: Modified ("във") if city starts with 'в', 'ф', 'v', 'f'.
-    - **CS/SK**: Modified ("ve") if city starts with 'v', 'f'.
-    - **PL**: Modified ("we") if city starts with 'w', 'v'.
-    - **RU/UK**: Modified ("во") if city starts with 'в', 'v'.
-  - **Keys**: Uses `preposition_base` and `preposition_modified` from the relevant namespace (`city` or `category`).
-  - **Metadata & UI**: Applied to page titles, descriptions, headings, and footer links to ensure grammatically correct content across 34 languages.
-  - **Helper Function**: Refactored into `getLocalizedCityText` in `apps/web/lib/cityHelpers.ts` for consistent application across metadata, JSON-LD, and UI components.
+- **Dynamic Preposition & Declension Logic (May 2026)**:
+  - **Implementation**: Enhanced `getLocalizedCityText` in `apps/web/lib/cityHelpers.ts` to handle both language-specific prepositions (e.g., PL: "w" vs "we") and grammatical declension for specific languages (e.g., Polish locative and genitive forms).
+  - **Rules**:
+    - **Prepositions**: Change based on the first letter of the city name (BG: в/във, PL: w/we, etc.).
+    - **Declension (Polish)**: 
+      - **Locative**: Used for "in {city}" context (e.g., Warszawa → Warszawie).
+      - **Genitive**: Used for "from {city}" context (e.g., Warszawa → Warszawy).
+  - **Keys**: Uses `locative_form` and `genitive_form` from the `city` translation namespace.
+  - **Helper Function**: `getLocalizedCityText(text, lang, cityName, cityT, grammaticalCase)` handles the replacement of `{city}` and the adjustment of surrounding prepositions.
   - **Seed Scripts**: 
-    - `apps/api/scripts/seed_city_preposition_translations.py` - Seeds city preposition keys for all 34 languages
-    - `apps/api/scripts/seed_category_preposition_translations.py` - Seeds category preposition keys for all 34 languages
+    - `apps/api/scripts/seed_city_preposition_translations.py` - Seeds preposition and declension keys for all 34 languages.
+  - **Current Implementation Status (May 2026)**:
+    - **✅ Completed**: Polish homepage (/pl) - All declension and dynamic prepositions working correctly
+    - **✅ Completed**: Polish city page (/pl/warszawa) - All declension and dynamic prepositions working correctly
+    - **✅ Completed**: Bulgarian and English regression tests - Passing
+    - **✅ Completed**: Seed script executed and database populated
+    - **✅ Completed**: cityHelpers.ts extended with grammaticalCase parameter
+    - **✅ Completed**: Homepage and city page components updated
+    - **❌ Outstanding Issues**: Polish category pages (/pl/warszawa/sprzatanie, /pl/warszawa/hydraulik, /pl/warszawa/masaz):
+      - Meta titles showing "we Warszawa" instead of "we Warszawie" (wrong case)
+      - Hero headings showing English "in" instead of Polish prepositions
+      - FAQ sections showing English text
+      - Related links showing "w Warszawie" instead of "we Warszawie" (missing w→we)
+      - Bottom CTA showing "w Warszawie" instead of "we Warszawie"
+  - **Metadata & UI Integration**:
+    - **Homepage** (`apps/web/app/[lang]/page.tsx`): Fully integrated for meta tags, heroes, categories grid, SEO content blocks, and footer links
+    - **City Page** (`apps/web/app/[lang]/[city]/page.tsx`): Fully integrated for all UI elements
+    - **Category Pages** (`apps/web/app/[lang]/[city]/[category]/page.tsx`): NOT yet updated - requires separate task
+  - **Scope**: Currently only Warsaw (Warszawa) has declension forms seeded. Adding declension forms for other cities requires running the seed script with city-specific data.
 - **City Placeholder System (May 2, 2026)**:
   - **Purpose**: Replaced hardcoded city names in homepage translations with a dynamic `{city}` placeholder that resolves based on user context.
   - **Files Created**:

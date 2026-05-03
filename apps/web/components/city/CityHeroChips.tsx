@@ -9,6 +9,9 @@ interface CityHeroChipsProps {
   citySlug: string
   lang: string
   countryCode?: string
+  cityName?: string
+  cityTranslations?: Record<string, string>
+  grammaticalCase?: 'nominative' | 'locative' | 'genitive'
 }
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -35,6 +38,9 @@ export default function CityHeroChips({
   citySlug,
   lang,
   countryCode,
+  cityName,
+  cityTranslations,
+  grammaticalCase,
 }: CityHeroChipsProps) {
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null)
 
@@ -72,6 +78,9 @@ export default function CityHeroChips({
             citySlug={citySlug}
             lang={lang}
             countryCode={countryCode}
+            cityName={cityName}
+            cityTranslations={cityTranslations}
+            grammaticalCase={grammaticalCase}
             onReset={() => {
               setSelectedSlug(null);
               setTimeout(() => {
