@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug, ServiceOut } from '@/lib/api';
 import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd } from '@/lib/seo';
 import { fetchTranslations } from '@/lib/ui-translations';
+import { getLocalizedCityText } from '@/lib/cityHelpers';
 import { JsonLd } from '@/components/JsonLd';
 import LeadForm from '@/components/category/LeadForm';
 import CategoryPageClient from '@/components/category/CategoryPageClient';
@@ -400,30 +401,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { lang, city, category } = await params;
   const categoryT = await fetchTranslations(lang, 'category');
   const homepageT = await fetchTranslations(lang, 'homepage');
+  const cityT = await fetchTranslations(lang, 'city');
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+  const grammaticalCase = lang === 'pl' ? 'locative' : 'nominative';
   const catKey = getCategoryTranslationKey(category);
   const catNameKey = `cat_${catKey}_name` as const;
-  const categoryName = (homepageT[catNameKey] || catKey).replace(/{city}/g, cityName);
+  const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase);
 
-  // Dynamic preposition logic for "In"
-  const prepBase = categoryT['preposition_base'] || 'in';
-  const prepModified = categoryT['preposition_modified'] || prepBase;
-  const firstChar = cityName.charAt(0).toLowerCase();
-  let preposition = prepBase;
-
-  if (lang === 'bg' && (firstChar === 'в' || firstChar === 'ф' || firstChar === 'v' || firstChar === 'f')) {
-    preposition = prepModified;
-  } else if ((lang === 'cs' || lang === 'sk') && (firstChar === 'v' || firstChar === 'f')) {
-    preposition = prepModified;
-  } else if (lang === 'pl' && (firstChar === 'w' || firstChar === 'v')) {
-    preposition = prepModified;
-  } else if ((lang === 'ru' || lang === 'uk') && (firstChar === 'в' || firstChar === 'v')) {
-    preposition = prepModified;
-  }
-
-  const title = `${categoryName} ${preposition} ${cityName}`;
-  const baseDescription = (categoryT[`subtitle_${catKey}`] || '').replace(/{city}/g, cityName);
+  const title = getLocalizedCityText(`${categoryName} in {city}`, lang, cityName, cityT, grammaticalCase);
+  const baseDescription = getLocalizedCityText((categoryT[`subtitle_${catKey}`] || ''), lang, cityName, cityT, grammaticalCase);
   
   // Fetch price range for metadata
   const apiSlug = getApiSlug(category);
@@ -499,46 +486,48 @@ export default async function CategoryPage({ params }: PageProps) {
   const { lang, city, category } = await params;
   const categoryT = await fetchTranslations(lang, 'category');
   const homepageT = await fetchTranslations(lang, 'homepage');
+  const cityT = await fetchTranslations(lang, 'city');
   const apiSlug = getApiSlug(category);
   const catKey = getCategoryTranslationKey(category);
 
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+  const grammaticalCase = lang === 'pl' ? 'locative' : 'nominative';
 
   const catNameKey = `cat_${catKey}_name` as const;
-  const categoryName = (homepageT[catNameKey] || catKey).replace(/{city}/g, cityName);
+  const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase);
 
   const content = getCategoryContent(category, cityName, categoryName, lang, city);
 
-  const heading = (categoryT[`h1_${catKey}`] || `${categoryName} in ${cityName}`).replace(/{city}/g, cityName);
-  const subtitle = (categoryT[`subtitle_${catKey}`] || '').replace(/{city}/g, cityName);
+  const heading = getLocalizedCityText((categoryT[`h1_${catKey}`] || `${categoryName} in {city}`), lang, cityName, cityT, grammaticalCase);
+  const subtitle = getLocalizedCityText((categoryT[`subtitle_${catKey}`] || ''), lang, cityName, cityT, grammaticalCase);
   const providerCardTexts: ProviderCardTexts = {
-    defaultDescription: (categoryT['provider_desc_fallback'] || 'Проверен специалист в {city}. Изпратете кратко запитване и изчакайте връзка.').replace(/{city}/g, cityName),
-    jobsCompleted: (categoryT['provider_jobs_completed'] || 'completed jobs').replace(/{city}/g, cityName),
-    lastRequest: (categoryT['provider_last_request'] || 'Last request').replace(/{city}/g, cityName),
-    directContact: (categoryT['provider_direct_contact'] || 'Direct contact').replace(/{city}/g, cityName),
-    sendRequest: (categoryT['form_btn'] || 'Send request').replace(/{city}/g, cityName),
-    verifiedSpecialist: (categoryT['provider_verified_specialist'] || 'Verified specialist').replace(/{city}/g, cityName),
-    freeNoObligation: (categoryT['provider_free_no_obligation'] || 'Free • No obligation').replace(/{city}/g, cityName),
-    peopleSought: (categoryT['provider_people_sought'] || 'people sought this specialist').replace(/{city}/g, cityName),
-    recentlyRequested: (categoryT['provider_recently_requested'] || 'recently made a request').replace(/{city}/g, cityName),
-    reviews: (categoryT['provider_reviews'] || 'reviews').replace(/{city}/g, cityName),
-    onRequest: (categoryT['provider_on_request'] || categoryT['price_on_request'] || 'Price on request').replace(/{city}/g, cityName),
-    moreServices: (categoryT['provider_more_services'] || 'и още {n} услуги').replace(/{city}/g, cityName),
+    defaultDescription: getLocalizedCityText((categoryT['provider_desc_fallback'] || 'Проверен специалист в {city}. Изпратете кратко запитване и изчакайте връзка.'), lang, cityName, cityT, grammaticalCase),
+    jobsCompleted: getLocalizedCityText((categoryT['provider_jobs_completed'] || 'completed jobs'), lang, cityName, cityT, grammaticalCase),
+    lastRequest: getLocalizedCityText((categoryT['provider_last_request'] || 'Last request'), lang, cityName, cityT, grammaticalCase),
+    directContact: getLocalizedCityText((categoryT['provider_direct_contact'] || 'Direct contact'), lang, cityName, cityT, grammaticalCase),
+    sendRequest: getLocalizedCityText((categoryT['form_btn'] || 'Send request'), lang, cityName, cityT, grammaticalCase),
+    verifiedSpecialist: getLocalizedCityText((categoryT['provider_verified_specialist'] || 'Verified specialist'), lang, cityName, cityT, grammaticalCase),
+    freeNoObligation: getLocalizedCityText((categoryT['provider_free_no_obligation'] || 'Free • No obligation'), lang, cityName, cityT, grammaticalCase),
+    peopleSought: getLocalizedCityText((categoryT['provider_people_sought'] || 'people sought this specialist'), lang, cityName, cityT, grammaticalCase),
+    recentlyRequested: getLocalizedCityText((categoryT['provider_recently_requested'] || 'recently made a request'), lang, cityName, cityT, grammaticalCase),
+    reviews: getLocalizedCityText((categoryT['provider_reviews'] || 'reviews'), lang, cityName, cityT, grammaticalCase),
+    onRequest: getLocalizedCityText((categoryT['provider_on_request'] || categoryT['price_on_request'] || 'Price on request'), lang, cityName, cityT, grammaticalCase),
+    moreServices: getLocalizedCityText((categoryT['provider_more_services'] || 'и още {n} услуги'), lang, cityName, cityT, grammaticalCase),
   };
 
   const relatedLinksByCategory: Record<CategoryKey, Array<{ href: string; label: string }>> = {
     massage: [
-      { href: `/${lang}/${city}/cleaning`, label: (categoryT['h1_cleaning'] || `Cleaning in ${cityName}`).replace(/{city}/g, cityName) },
-      { href: `/${lang}/${city}/plumbing`, label: (categoryT['h1_plumbing'] || `Plumbing in ${cityName}`).replace(/{city}/g, cityName) },
+      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning in {city}`), lang, cityName, cityT, grammaticalCase) },
+      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing in {city}`), lang, cityName, cityT, grammaticalCase) },
     ],
     cleaning: [
-      { href: `/${lang}/${city}/massage`, label: (categoryT['h1_massage'] || `Massage in ${cityName}`).replace(/{city}/g, cityName) },
-      { href: `/${lang}/${city}/plumbing`, label: (categoryT['h1_plumbing'] || `Plumbing in ${cityName}`).replace(/{city}/g, cityName) },
+      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage in {city}`), lang, cityName, cityT, grammaticalCase) },
+      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing in {city}`), lang, cityName, cityT, grammaticalCase) },
     ],
     plumbing: [
-      { href: `/${lang}/${city}/massage`, label: (categoryT['h1_massage'] || `Massage in ${cityName}`).replace(/{city}/g, cityName) },
-      { href: `/${lang}/${city}/cleaning`, label: (categoryT['h1_cleaning'] || `Cleaning in ${cityName}`).replace(/{city}/g, cityName) },
+      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage in {city}`), lang, cityName, cityT, grammaticalCase) },
+      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning in {city}`), lang, cityName, cityT, grammaticalCase) },
     ],
   };
   const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.cleaning;
@@ -559,8 +548,8 @@ export default async function CategoryPage({ params }: PageProps) {
     const qKey = `faq_${catKey}_q${i}`;
     const aKey = `faq_${catKey}_a${i}`;
     
-    let question = categoryT[qKey]?.replace(/{city}/g, cityName) || '';
-    let answer = categoryT[aKey]?.replace(/{city}/g, cityName) || '';
+    let question = getLocalizedCityText((categoryT[qKey] || ''), lang, cityName, cityT, grammaticalCase);
+    let answer = getLocalizedCityText((categoryT[aKey] || ''), lang, cityName, cityT, grammaticalCase);
 
     // Fallback to dynamic content if DB translation is missing
     if (!question || !answer) {
@@ -581,6 +570,11 @@ export default async function CategoryPage({ params }: PageProps) {
         .replace(/{city}/g, cityName)
         .replace(/{category}/g, categoryName)
         .replace(/{category_name}/g, categoryName);
+      
+      // Apply getLocalizedCityText for city placeholders after other replacements
+      if (result.includes('{city}')) {
+        result = getLocalizedCityText(result, lang, cityName, cityT, grammaticalCase);
+      }
 
       if (hasValidPrice) {
         result = result
@@ -652,9 +646,9 @@ export default async function CategoryPage({ params }: PageProps) {
   const visibleProviders = providers.slice(0, 20);
   const hiddenProviders = providers.slice(20);
   const hiddenCount = hiddenProviders.length;
-  const trustSpecialistsText = `${allCount > 0 ? allCount : 14} ${(categoryT['trust_specialists'] || 'specialists').replace(/{city}/g, cityName)}`;
-  const trustRatingText = `${averageRating.toFixed(1)} ${(categoryT['trust_rating'] || 'rating').replace(/{city}/g, cityName)}`;
-  const trustLeadsText = `120 ${(categoryT['trust_requests'] || 'requests this month').replace(/{city}/g, cityName)}`;
+  const trustSpecialistsText = `${allCount > 0 ? allCount : 14} ${getLocalizedCityText((categoryT['trust_specialists'] || 'specialists'), lang, cityName, cityT, grammaticalCase)}`;
+  const trustRatingText = `${averageRating.toFixed(1)} ${getLocalizedCityText((categoryT['trust_rating'] || 'rating'), lang, cityName, cityT, grammaticalCase)}`;
+  const trustLeadsText = `120 ${getLocalizedCityText((categoryT['trust_requests'] || 'requests this month'), lang, cityName, cityT, grammaticalCase)}`;
   const faqJsonLd = buildFaqJsonLd(faqItems);
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
@@ -730,7 +724,7 @@ export default async function CategoryPage({ params }: PageProps) {
               <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
             </Link>
             <Link href={`/${lang}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
-              {categoryT['nav_link']?.replace(/{city}/g, cityName) || 'Become a specialist'}
+              {getLocalizedCityText((categoryT['nav_link'] || 'Become a specialist'), lang, cityName, cityT, grammaticalCase)}
             </Link>
           </div>
         </header>
@@ -758,7 +752,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-orange-400">
                   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
-                {(categoryT['trust_response'] || 'Avg. response: ~30 min').replace(/{city}/g, cityName)}
+                {getLocalizedCityText((categoryT['trust_response'] || 'Avg. response: ~30 min'), lang, cityName, cityT, grammaticalCase)}
               </span>
             </div>
           </section>
@@ -770,10 +764,10 @@ export default async function CategoryPage({ params }: PageProps) {
                 <div className="rounded-xl border border-gray-100 bg-white px-6 py-12 text-center shadow-sm">
                   <div className="border-l-4 border-orange-400 pl-4 py-2 mb-4 text-left inline-block">
                     <p className="font-semibold text-gray-800 text-sm">
-                      {(categoryT['no_providers_title'] || 'Be the first to request this service in your area').replace(/{city}/g, cityName)}
+                      {getLocalizedCityText((categoryT['no_providers_title'] || 'Be the first to request this service in your area'), lang, cityName, cityT, grammaticalCase)}
                     </p>
                     <p className="text-sm text-gray-500 mt-0.5">
-                      {(categoryT['no_providers_subtitle'] || 'Providers joining Nevumo will see your request and contact you').replace(/{city}/g, cityName)}
+                      {getLocalizedCityText((categoryT['no_providers_subtitle'] || 'Providers joining Nevumo will see your request and contact you'), lang, cityName, cityT, grammaticalCase)}
                     </p>
                   </div>
                 </div>
@@ -786,7 +780,7 @@ export default async function CategoryPage({ params }: PageProps) {
                   {hiddenCount > 0 && (
                     <details className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
                       <summary className="cursor-pointer list-none text-center text-sm font-semibold text-orange-600">
-                        {(categoryT['show_more'] || 'Show more').replace(/{city}/g, cityName)}
+                        {getLocalizedCityText((categoryT['show_more'] || 'Show more'), lang, cityName, cityT, grammaticalCase)}
                       </summary>
                       <div className="mt-4 space-y-4">
                         {hiddenProviders.map((provider) => {
@@ -808,16 +802,16 @@ export default async function CategoryPage({ params }: PageProps) {
                 cityName={cityName}
                 services={services}
                 cityCountryCode={cityCountryCode}
-                stickyButtonLabel={(categoryT['sticky_btn'] || 'Get offers — Free').replace(/{city}/g, cityName)}
+                stickyButtonLabel={getLocalizedCityText((categoryT['sticky_btn'] || 'Get offers — Free'), lang, cityName, cityT, grammaticalCase)}
               />
 
               <section className="mt-8 rounded-xl bg-gray-50 p-6 sm:p-8">
-                <h2 className="text-2xl font-bold text-gray-900">{categoryT[`seo_${catKey}_h2`]?.replace(/{city}/g, cityName) || ''}</h2>
-                <p className="mt-4 text-base leading-7 text-gray-700">{categoryT[`seo_${catKey}_p1`]?.replace(/{city}/g, cityName) || ''}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{categoryT[`seo_${catKey}_h3_1`]?.replace(/{city}/g, cityName) || ''}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{categoryT[`seo_${catKey}_p2`]?.replace(/{city}/g, cityName) || ''}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{categoryT[`seo_${catKey}_h3_2`]?.replace(/{city}/g, cityName) || ''}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{categoryT[`seo_${catKey}_p3`]?.replace(/{city}/g, cityName) || ''}</p>
+                <h2 className="text-2xl font-bold text-gray-900">{getLocalizedCityText((categoryT[`seo_${catKey}_h2`] || ''), lang, cityName, cityT, grammaticalCase)}</h2>
+                <p className="mt-4 text-base leading-7 text-gray-700">{getLocalizedCityText((categoryT[`seo_${catKey}_p1`] || ''), lang, cityName, cityT, grammaticalCase)}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{getLocalizedCityText((categoryT[`seo_${catKey}_h3_1`] || ''), lang, cityName, cityT, grammaticalCase)}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{getLocalizedCityText((categoryT[`seo_${catKey}_p2`] || ''), lang, cityName, cityT, grammaticalCase)}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{getLocalizedCityText((categoryT[`seo_${catKey}_h3_2`] || ''), lang, cityName, cityT, grammaticalCase)}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{getLocalizedCityText((categoryT[`seo_${catKey}_p3`] || ''), lang, cityName, cityT, grammaticalCase)}</p>
                 {priceText && (
                   <p className="mt-4 text-base leading-7 text-gray-700">{priceText}</p>
                 )}
@@ -825,7 +819,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 {faqItems.length > 0 && (
                   <div className="mt-10 border-t border-gray-100 pt-10">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                      {(categoryT['faq_title'] || homepageT['faq_title'] || 'Frequently Asked Questions').replace(/{city}/g, cityName)}
+                      {getLocalizedCityText((categoryT['faq_title'] || homepageT['faq_title'] || 'Frequently Asked Questions'), lang, cityName, cityT, grammaticalCase)}
                     </h2>
                     <div className="space-y-6 text-left">
                       {faqItems.map((item, index) => (
@@ -839,7 +833,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 )}
 
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-gray-700">
-                  <span>{(categoryT['also_check'] || 'See also:').replace(/{city}/g, cityName)}</span>
+                  <span>{getLocalizedCityText((categoryT['also_check'] || 'See also:'), lang, cityName, cityT, grammaticalCase)}</span>
                   {relatedLinks.map((link, index) => (
                     <span key={link.href}>
                       <Link href={link.href} className="font-medium text-orange-600 underline underline-offset-2">
@@ -864,7 +858,7 @@ export default async function CategoryPage({ params }: PageProps) {
                     cityName={cityName}
                     services={services}
                     countryCode={cityCountryCode}
-                    title={(categoryT['form_btn'] || 'Get offers').replace(/{city}/g, cityName)}
+                    title={getLocalizedCityText((categoryT['form_btn'] || 'Get offers'), lang, cityName, cityT, grammaticalCase)}
                   />
                 </div>
               </div>
@@ -873,10 +867,10 @@ export default async function CategoryPage({ params }: PageProps) {
 
           <section className="mt-12 rounded-xl bg-gray-50 border-t border-gray-200 px-6 py-8 text-center">
             <p className="text-sm text-gray-500">
-              {(categoryT['provider_cta_prefix'] || 'Do you offer').replace(/{city}/g, cityName)} {categoryName} {(categoryT['provider_cta_suffix'] || `in ${cityName}?`).replace(/{city}/g, cityName)}
+              {getLocalizedCityText((categoryT['provider_cta_prefix'] || 'Do you offer'), lang, cityName, cityT, grammaticalCase)} {categoryName} {getLocalizedCityText((categoryT['provider_cta_suffix'] || `in {city}?`), lang, cityName, cityT, grammaticalCase)}
             </p>
             <Link href={`/${lang}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
-              {(categoryT['provider_cta_link'] || 'Join for free →').replace(/{city}/g, cityName)}
+              {getLocalizedCityText((categoryT['provider_cta_link'] || 'Join for free →'), lang, cityName, cityT, grammaticalCase)}
             </Link>
           </section>
         </main>

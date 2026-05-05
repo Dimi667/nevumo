@@ -2,10 +2,10 @@ import { getCityPreference } from './city-preference';
 import { getCityBySlug } from './api';
 
 const LANGUAGE_TO_CITY: Record<string, string> = {
-  pl: 'warszawa',
+  pl: 'sofia',
 };
 
-const DEFAULT_CITY = 'warszawa';
+const DEFAULT_CITY = 'sofia';
 
 export async function resolveDefaultCity(lang: string): Promise<string> {
   // 1. User preference

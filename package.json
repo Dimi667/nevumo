@@ -29,10 +29,14 @@
     "turbo": "^2.8.14",
     "typescript": "5.9.2"
   },
+  "dependencies": {},
+  "optionalDependencies": {
+    "lightningcss": "^1.29.1",
+    "lightningcss-linux-x64-musl": "^1.29.1"
+  },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@11.11.0",
   "workspaces": [
     "apps/*",
     "packages/*"

@@ -12,7 +12,7 @@ interface StatusBadgeProps {
 export default function StatusBadge({ status }: StatusBadgeProps) {
   const { t } = useDashboardI18n();
 
-  const config: Record<BadgeStatus, { label: string; className: string }> = {
+  const config: Partial<Record<BadgeStatus, { label: string; className: string }>> = {
     new: { label: t('status_new', 'New'), className: 'bg-blue-50 text-blue-700' },
     created: { label: t('status_new', 'New'), className: 'bg-blue-50 text-blue-700' },
     contacted: { label: t('status_contacted', 'Contacted'), className: 'bg-orange-50 text-orange-700' },

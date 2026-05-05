@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:22-slim
 
 WORKDIR /workspace
 
@@ -11,8 +11,13 @@ COPY packages/ui/package.json ./packages/ui/package.json
 
 RUN npm install
 
+# Copy source code before installing platform-specific dependencies
 COPY apps/web ./apps/web
 COPY packages ./packages
+
+# Reinstall lightningcss to get the correct platform-specific binary for Debian
+RUN npm uninstall lightningcss-linux-x64-musl
+RUN npm install
 
 WORKDIR /workspace/apps/web
 

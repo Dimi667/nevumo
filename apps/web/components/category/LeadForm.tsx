@@ -125,7 +125,7 @@ export default function LeadForm({
       // Check for API error response
       if ('success' in result && !result.success) {
         if (result.error?.code === 'RATE_LIMIT_EXCEEDED') {
-          if (result.lead_id) setLeadId(result.lead_id);
+          if ('lead_id' in result && result.lead_id) setLeadId(result.lead_id as string);
           setIsSuccess(true);
           setSuccessStep('sent');
         } else {

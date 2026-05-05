@@ -77,3 +77,23 @@
 **Status:** Resolved
 
 ## След всеки seed на преводи → docker restart nevumo-web
+
+## 2026-05-05 — LightningCSS Build Error in Docker Container
+
+**Проблем:** `Error: Cannot find module '../lightningcss.linux-x64-musl.node'` в apps/web Docker контейнер при зареждане на http://localhost:3000/pl/warszawa/cleaning
+
+**Root cause:** Alpine Linux (node:22-alpine) използва musl libc, но lightningcss-linux-x64-musl пакетът не се инсталираше правилно поради конфликти между host (macOS) и container (Linux) node_modules чрез Docker volume mounts. LightningCSS модулът очакваше .node файла на специфична позиция относно своята директория.
+
+**Решение:**
+1. **package.json** — Премахнах `lightningcss-linux-x64-musl` от `dependencies` и добавих `lightningcss` и `lightningcss-linux-x64-musl` в `optionalDependencies` за да се инсталира правилната архитектура автоматично
+2. **docker-compose.yml** — Промених volumes да монтират само конкретни директории (`./apps/web`, `./packages`, `.env.local`) вместо целия workspace, и добавих named volume `web_node_modules:/workspace/node_modules` за да се предотврати override на container-ните node_modules от host-а
+3. **Dockerfile** — Смених base image от `node:22-alpine` на `node:22-slim` (Debian с glibc libc), което позволи на npm да инсталира правилната платформено-специфична версия (lightningcss-linux-x64-gnu вместо musl)
+
+**Файлове:**
+- `/Users/dimitardimitrov/nevumo/package.json`
+- `/Users/dimitardimitrov/nevumo/docker-compose.yml`
+- `/Users/dimitardimitrov/nevumo/apps/web/Dockerfile`
+
+**Тестван — PASS** (http://localhost:3000/pl/warszawa/cleaning се зарежда коректно)
+
+**Урок:** Alpine Linux (musl libc) не е съвместим с всички npm native modules. За сложни native dependencies като lightningcss, Debian (glibc) е по-надежден избор.

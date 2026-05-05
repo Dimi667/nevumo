@@ -12,7 +12,12 @@ This document reflects the major architectural optimization performed in April 2
 ### 2. Docker & Containerization Strategy
 - **Optimized Dockerfiles**: Implemented multi-stage builds (Build-stage + Run-stage) to minimize image size and maximize build speed.
 - **Docker Compose Orchestration**: The root `docker-compose.yml` manages `nevumo-api`, `nevumo-web`, `nevumo-postgres`, and `nevumo-redis`.
-- **Volume Mapping**: Local development uses volume mapping (`./:/workspace`) to ensure hot-reload works correctly across the monorepo.
+- **Volume Mapping (May 5, 2026)**: Local development for the web service now uses selective volume mounting to prevent host node_modules from overriding container-specific native dependencies:
+  - `./apps/web:/workspace/apps/web` — Source code hot-reload
+  - `./packages:/workspace/packages` — Shared packages
+  - `./apps/web/.env.local:/workspace/apps/web/.env.local` — Environment variables
+  - `web_node_modules:/workspace/node_modules` — Named volume to preserve container node_modules (prevents host override)
+- **Base Image Selection (May 5, 2026)**: The web service uses `node:22-slim` (Debian with glibc) instead of Alpine to ensure compatibility with native npm modules like lightningcss that require glibc. Alpine's musl libc is incompatible with certain native dependencies.
 - **Static File Routing (April 20, 2026)**: The static file mount point was changed from `/static/provider_images` to `/api/v1/static/provider_images` to bring it under the versioned API namespace. The `STATIC_FILES_BASE_URL` is now an empty string by default to support relative routing when served from the same domain/proxy.
 
 ### 3. SQLAlchemy & Models (The 'Base' Fix)
