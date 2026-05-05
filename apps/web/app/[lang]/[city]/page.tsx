@@ -47,7 +47,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cityT = await fetchTranslations(lang, 'city');
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
-  const grammaticalCase = lang === 'pl' ? 'locative' : 'nominative';
+  // Slavic languages that use grammatical cases (locative/genitive)
+  const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
+  const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
 
   const baseTitle = t(cityT, 'seo_title', '{city} — Local Services | Nevumo');
   const title = getLocalizedCityText(baseTitle, lang, cityName, cityT, grammaticalCase);
@@ -79,7 +81,9 @@ export default async function CityPage({ params }: PageProps) {
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
   const cityCountryCode = cityData?.country_code ?? 'BG';
-  const grammaticalCase = lang === 'pl' ? 'locative' : 'nominative';
+  // Slavic languages that use grammatical cases (locative/genitive)
+  const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
+  const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
 
   // Fetch city stats
   let cityStats = { provider_count: 0, request_count: 0, average_rating: 0 };

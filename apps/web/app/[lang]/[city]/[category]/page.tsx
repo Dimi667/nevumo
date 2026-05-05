@@ -404,7 +404,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const cityT = await fetchTranslations(lang, 'city');
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
-  const grammaticalCase = lang === 'pl' ? 'locative' : 'nominative';
+  // Slavic languages that use grammatical cases (locative/genitive)
+  const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
+  const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
   const catKey = getCategoryTranslationKey(category);
   const catNameKey = `cat_${catKey}_name` as const;
   const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase);
@@ -492,7 +494,9 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
-  const grammaticalCase = lang === 'pl' ? 'locative' : 'nominative';
+  // Slavic languages that use grammatical cases (locative/genitive)
+  const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
+  const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
 
   const catNameKey = `cat_${catKey}_name` as const;
   const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase);

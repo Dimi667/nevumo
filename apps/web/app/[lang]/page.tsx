@@ -25,19 +25,23 @@ export async function generateMetadata({ params }: PageProps) {
   const cityData = await getCityBySlug(citySlug, lang);
   const cityName = cityData?.city || 'Warsaw';
 
+  // Slavic languages that use grammatical cases (locative/genitive)
+  const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
+  const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
+
   const title = getLocalizedCityText(
     t(homepageT, 'meta_title', 'Get clients for your services'),
     lang,
     cityName,
     cityT,
-    lang === 'pl' ? 'locative' : 'nominative'
+    grammaticalCase
   );
   const description = getLocalizedCityText(
     t(homepageT, 'meta_description', 'Free registration. No commission.'),
     lang,
     cityName,
     cityT,
-    lang === 'pl' ? 'locative' : 'nominative'
+    grammaticalCase
   );
 
   return {
@@ -78,6 +82,10 @@ export default async function Homepage({ params }: PageProps) {
   const citySlug = await resolveDefaultCity(lang);
   const cityData = await getCityBySlug(citySlug, lang);
   const cityName = cityData?.city || 'Warsaw';
+
+  // Slavic languages that use grammatical cases (locative/genitive)
+  const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
+  const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
 
   const organizationJsonLd = generateOrganizationJsonLd();
   const websiteJsonLd = generateWebSiteJsonLd(lang);
@@ -125,7 +133,7 @@ export default async function Homepage({ params }: PageProps) {
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             {t(homepageT, 'hero_prefix', 'Get clients for')}{' '}
             <RotatingCategory categories={rotatingCategories} />
-            {' '}{getLocalizedCityText(t(homepageT, 'hero_suffix', 'in Warsaw'), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
+            {' '}{getLocalizedCityText(t(homepageT, 'hero_suffix', 'in Warsaw'), lang, cityName, cityT, grammaticalCase)}
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-white">
             {t(homepageT, 'hero_subtitle', 'Free. No commission. Direct contact.')}
@@ -144,7 +152,7 @@ export default async function Homepage({ params }: PageProps) {
           </div>
           
           <div className="text-lg mb-10 text-orange-100">
-            {getLocalizedCityText(t(homepageT, 'social_proof', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
+            {getLocalizedCityText(t(homepageT, 'social_proof', ''), lang, cityName, cityT, grammaticalCase)}
           </div>
           
           <AuthIntentButton
@@ -240,26 +248,26 @@ export default async function Homepage({ params }: PageProps) {
       {/* LIVE ACTIVITY FEED */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_title', 'Recent requests'), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_title', 'Recent requests'), lang, cityName, cityT, grammaticalCase)}</h2>
           <div className="space-y-4">
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_1', ''), lang, cityName, cityT, lang === 'pl' ? 'genitive' : 'nominative')}</span>
+                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_1', ''), lang, cityName, cityT, slavicLanguagesWithDeclension.includes(lang) ? 'genitive' : 'nominative')}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_1_time', '')}</span>
             </div>
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_2', ''), lang, cityName, cityT, lang === 'pl' ? 'genitive' : 'nominative')}</span>
+                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_2', ''), lang, cityName, cityT, slavicLanguagesWithDeclension.includes(lang) ? 'genitive' : 'nominative')}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_2_time', '')}</span>
             </div>
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_3', ''), lang, cityName, cityT, lang === 'pl' ? 'genitive' : 'nominative')}</span>
+                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_3', ''), lang, cityName, cityT, slavicLanguagesWithDeclension.includes(lang) ? 'genitive' : 'nominative')}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_3_time', '')}</span>
             </div>
@@ -312,18 +320,18 @@ export default async function Homepage({ params }: PageProps) {
       {/* FOOTER */}
       <footer className="py-12 px-6 bg-gray-50 border-t border-gray-200">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="mb-6 text-gray-700">{getLocalizedCityText(t(homepageT, 'footer_title', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}</p>
+          <p className="mb-6 text-gray-700">{getLocalizedCityText(t(homepageT, 'footer_title', ''), lang, cityName, cityT, grammaticalCase)}</p>
           <div className="flex flex-wrap justify-center gap-4 mb-6 text-sm">
             <Link href={`/${normalizedLang}/${citySlug}/sprzatanie`} className="text-gray-700 transition-colors">
-              {getLocalizedCityText(t(homepageT, 'footer_link_cleaning', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
+              {getLocalizedCityText(t(homepageT, 'footer_link_cleaning', ''), lang, cityName, cityT, grammaticalCase)}
             </Link>
             <span className="text-gray-500">|</span>
             <Link href={`/${normalizedLang}/${citySlug}/hydraulik`} className="text-gray-700 transition-colors">
-              {getLocalizedCityText(t(homepageT, 'footer_link_plumbing', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
+              {getLocalizedCityText(t(homepageT, 'footer_link_plumbing', ''), lang, cityName, cityT, grammaticalCase)}
             </Link>
             <span className="text-gray-500">|</span>
             <Link href={`/${normalizedLang}/${citySlug}/masaz`} className="text-gray-700 transition-colors">
-              {getLocalizedCityText(t(homepageT, 'footer_link_massage', ''), lang, cityName, cityT, lang === 'pl' ? 'locative' : 'nominative')}
+              {getLocalizedCityText(t(homepageT, 'footer_link_massage', ''), lang, cityName, cityT, grammaticalCase)}
             </Link>
           </div>
           <p className="text-gray-500 text-sm">
