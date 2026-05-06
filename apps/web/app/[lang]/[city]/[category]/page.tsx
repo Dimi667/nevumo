@@ -411,7 +411,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const catNameKey = `cat_${catKey}_name` as const;
   const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase);
 
-  const title = getLocalizedCityText(`${categoryName} in {city}`, lang, cityName, cityT, grammaticalCase);
+  const prepBase = categoryT['preposition_base'] || 'in';
+  const title = getLocalizedCityText(`${categoryName} ${prepBase} {city}`, lang, cityName, categoryT, grammaticalCase);
   const baseDescription = getLocalizedCityText((categoryT[`subtitle_${catKey}`] || ''), lang, cityName, cityT, grammaticalCase);
   
   // Fetch price range for metadata
@@ -503,7 +504,8 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const content = getCategoryContent(category, cityName, categoryName, lang, city);
 
-  const heading = getLocalizedCityText((categoryT[`h1_${catKey}`] || `${categoryName} in {city}`), lang, cityName, cityT, grammaticalCase);
+  const prepBaseCat = categoryT['preposition_base'] || 'in';
+  const heading = getLocalizedCityText((categoryT[`h1_${catKey}`] || `${categoryName} ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase);
   const subtitle = getLocalizedCityText((categoryT[`subtitle_${catKey}`] || ''), lang, cityName, cityT, grammaticalCase);
   const providerCardTexts: ProviderCardTexts = {
     defaultDescription: getLocalizedCityText((categoryT['provider_desc_fallback'] || 'Проверен специалист в {city}. Изпратете кратко запитване и изчакайте връзка.'), lang, cityName, cityT, grammaticalCase),
@@ -522,16 +524,16 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const relatedLinksByCategory: Record<CategoryKey, Array<{ href: string; label: string }>> = {
     massage: [
-      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning in {city}`), lang, cityName, cityT, grammaticalCase) },
-      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing in {city}`), lang, cityName, cityT, grammaticalCase) },
+      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
+      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
     ],
     cleaning: [
-      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage in {city}`), lang, cityName, cityT, grammaticalCase) },
-      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing in {city}`), lang, cityName, cityT, grammaticalCase) },
+      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
+      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
     ],
     plumbing: [
-      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage in {city}`), lang, cityName, cityT, grammaticalCase) },
-      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning in {city}`), lang, cityName, cityT, grammaticalCase) },
+      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
+      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
     ],
   };
   const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.cleaning;
@@ -871,7 +873,7 @@ export default async function CategoryPage({ params }: PageProps) {
 
           <section className="mt-12 rounded-xl bg-gray-50 border-t border-gray-200 px-6 py-8 text-center">
             <p className="text-sm text-gray-500">
-              {getLocalizedCityText((categoryT['provider_cta_prefix'] || 'Do you offer'), lang, cityName, cityT, grammaticalCase)} {categoryName} {getLocalizedCityText((categoryT['provider_cta_suffix'] || `in {city}?`), lang, cityName, cityT, grammaticalCase)}
+              {getLocalizedCityText((categoryT['provider_cta_prefix'] || 'Do you offer'), lang, cityName, cityT, grammaticalCase)} {categoryName} {getLocalizedCityText((categoryT['provider_cta_suffix'] || `${prepBaseCat} {city}?`), lang, cityName, categoryT, grammaticalCase)}
             </p>
             <Link href={`/${lang}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
               {getLocalizedCityText((categoryT['provider_cta_link'] || 'Join for free →'), lang, cityName, cityT, grammaticalCase)}

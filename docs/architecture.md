@@ -75,6 +75,7 @@ This document reflects the major architectural optimization performed in April 2
     - **✅ Completed**: Seed script executed and database populated with all language forms
     - **✅ Completed**: cityHelpers.ts extended with grammaticalCase parameter for all Slavic languages
     - **✅ Completed**: Homepage, city page, and category page components updated with Slavic language support
+    - **✅ Completed (May 6, 2026)**: Category page preposition logic fix - Changed from hardcoded "in" to dynamic `prepBase` from `categoryT` namespace; Updated title, heading, related links, and provider CTA to use `categoryT` instead of `cityT` for preposition logic; Added regex-based replacement in cityHelpers.ts to handle prepositions without leading space
   - **Metadata & UI Integration**:
     - **Homepage** (`apps/web/app/[lang]/page.tsx`): Fully integrated for meta tags, heroes, categories grid, SEO content blocks, and footer links with Slavic language support
     - **City Page** (`apps/web/app/[lang]/[city]/page.tsx`): Fully integrated for all UI elements with Slavic language support

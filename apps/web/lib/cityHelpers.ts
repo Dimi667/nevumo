@@ -44,6 +44,8 @@ export function getLocalizedCityText(
     if (result.startsWith(`${prepBase} `)) {
       result = preposition + result.slice(prepBase.length);
     }
+    // Handle "in" without leading space but with trailing space or end (e.g., "Category in {city}")
+    result = result.replace(new RegExp(`\\b${prepBase}\\b`, 'g'), preposition);
   }
 
   return result;
