@@ -417,7 +417,8 @@ CREATE INDEX idx_translations_key ON translations(key);
 
 ### Current Seeded Data (April 4, 2026)
 - **homepage namespace**: 45 keys × 34 languages = 1,530 rows
-- **category namespace**: 44 UI keys × 34 languages + 18 SEO keys (pl/bg/en only) = 1,496 + 54 = 1,550 rows
+- **category namespace**: 44 UI keys × 34 languages + 6 SEO keys × 34 languages = 1,496 + 204 = 1,700 rows
+  SEO keys: seo_cleaning_h2, seo_cleaning_h3_1, seo_cleaning_h3_2, seo_cleaning_p1, seo_cleaning_p2, seo_cleaning_p3
 - **category form keys (April 2026)**: 15 new keys × 34 languages = 510 rows
   Keys added: no_providers_title, no_providers_subtitle, form_subtext,
   how_it_works_label, how_step_1, how_step_2, how_step_3, what_need_label,
@@ -425,6 +426,9 @@ CREATE INDEX idx_translations_key ON translations(key);
   trust_multiple, trust_response, sticky_btn
 - **category preposition keys (May 2026)**: 2 new keys × 34 languages = 68 rows
   Keys added: preposition_base, preposition_modified (for dynamic preposition logic)
+- **category FAQ keys (May 2026)**: 7 new keys × 34 languages = 238 rows
+  Keys added: faq_title, faq_cleaning_q1, faq_cleaning_q2, faq_cleaning_q3, faq_cleaning_a1, faq_cleaning_a2, faq_cleaning_a3
+- **category price_on_request key (May 2026)**: 1 key × 34 languages = 34 rows
 - **city namespace**: 24 keys × 34 languages = 816 rows (includes 10 hero keys added April 21, 2026)
 - **city preposition keys (May 2026)**: 3 new keys × 34 languages = 102 rows
   Keys added: preposition_base, preposition_modified, footer_in (for dynamic preposition logic)

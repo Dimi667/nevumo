@@ -549,6 +549,11 @@ export default async function CategoryPage({ params }: PageProps) {
     (cityCountryCode === 'BG' && isAfterEuroAdoption ? '€' : 'BGN')
   );
 
+  // Helper function to replace {city} variable
+  const replaceCity = (str: string) => {
+    return str.replace(/{city}/g, cityName);
+  };
+
   // FAQ items generation with dynamic translations and fallback
   const faqItems = [1, 2, 3].map(i => {
     const qKey = `faq_${catKey}_q${i}`;
@@ -655,7 +660,6 @@ export default async function CategoryPage({ params }: PageProps) {
   const trustSpecialistsText = `${allCount > 0 ? allCount : 14} ${getLocalizedCityText((categoryT['trust_specialists'] || 'specialists'), lang, cityName, cityT, grammaticalCase)}`;
   const trustRatingText = `${averageRating.toFixed(1)} ${getLocalizedCityText((categoryT['trust_rating'] || 'rating'), lang, cityName, cityT, grammaticalCase)}`;
   const trustLeadsText = `120 ${getLocalizedCityText((categoryT['trust_requests'] || 'requests this month'), lang, cityName, cityT, grammaticalCase)}`;
-  const faqJsonLd = buildFaqJsonLd(faqItems);
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
   const organizationJsonLd = generateOrganizationJsonLd();
@@ -718,7 +722,6 @@ export default async function CategoryPage({ params }: PageProps) {
 
   return (
     <>
-      <JsonLd data={faqJsonLd} />
       <JsonLd data={organizationJsonLd} />
       <JsonLd data={websiteJsonLd} />
       <JsonLd data={localBusinessJsonLd} />
@@ -812,30 +815,14 @@ export default async function CategoryPage({ params }: PageProps) {
               />
 
               <section className="mt-8 rounded-xl bg-gray-50 p-6 sm:p-8">
-                <h2 className="text-2xl font-bold text-gray-900">{getLocalizedCityText((categoryT[`seo_${catKey}_h2`] || ''), lang, cityName, cityT, grammaticalCase)}</h2>
-                <p className="mt-4 text-base leading-7 text-gray-700">{getLocalizedCityText((categoryT[`seo_${catKey}_p1`] || ''), lang, cityName, cityT, grammaticalCase)}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{getLocalizedCityText((categoryT[`seo_${catKey}_h3_1`] || ''), lang, cityName, cityT, grammaticalCase)}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{getLocalizedCityText((categoryT[`seo_${catKey}_p2`] || ''), lang, cityName, cityT, grammaticalCase)}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{getLocalizedCityText((categoryT[`seo_${catKey}_h3_2`] || ''), lang, cityName, cityT, grammaticalCase)}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{getLocalizedCityText((categoryT[`seo_${catKey}_p3`] || ''), lang, cityName, cityT, grammaticalCase)}</p>
+                <h2 className="text-2xl font-bold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h2`] || ''), lang, cityName, cityT, grammaticalCase))}</h2>
+                <p className="mt-4 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p1`] || ''), lang, cityName, cityT, grammaticalCase))}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h3_1`] || ''), lang, cityName, cityT, grammaticalCase))}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p2`] || ''), lang, cityName, cityT, grammaticalCase))}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h3_2`] || ''), lang, cityName, cityT, grammaticalCase))}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p3`] || ''), lang, cityName, cityT, grammaticalCase))}</p>
                 {priceText && (
                   <p className="mt-4 text-base leading-7 text-gray-700">{priceText}</p>
-                )}
-
-                {faqItems.length > 0 && (
-                  <div className="mt-10 border-t border-gray-100 pt-10">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                      {getLocalizedCityText((categoryT['faq_title'] || homepageT['faq_title'] || 'Frequently Asked Questions'), lang, cityName, cityT, grammaticalCase)}
-                    </h2>
-                    <div className="space-y-6 text-left">
-                      {faqItems.map((item, index) => (
-                        <div key={index} className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-                          <h3 className="text-lg font-bold text-gray-900 mb-2">{item.question}</h3>
-                          <p className="text-gray-700 leading-relaxed">{item.answer}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 )}
 
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-gray-700">

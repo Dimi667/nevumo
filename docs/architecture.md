@@ -55,6 +55,8 @@ This document reflects the major architectural optimization performed in April 2
   - **Placeholder Safety (May 2, 2026)**: Implemented aggressive regex-based removal of price placeholders when no valid price data is available. If `hasValidPrice` is false, any phrase containing `{min_price}`, `{max_price}`, or `{currency}` is automatically replaced with the "Price on request" translation.
   - **Fallback Chain**: Database translation → Hardcoded `CATEGORY_CONTENT` fallback → `getPriceText` (for empty price-related answers).
   - **SEO Synchronization**: The same translated and interpolated FAQ items are used for both the visual UI section and the `FAQPage` JSON-LD schema, ensuring consistency for both users and search engines.
+  - **FAQ Section Removal (May 6, 2026)**: Removed the FAQ section rendering block from category pages due to content duplication with the SEO section. The SEO section now provides all necessary content without redundancy.
+  - **SEO Section {city} Variable Replacement (May 6, 2026)**: Added `replaceCity` helper function to replace `{city}` placeholder with actual city name in SEO section translations. This ensures dynamic city names appear correctly in all SEO content across all languages.
 - **Dynamic Preposition & Declension Logic (May 2026)**:
   - **Implementation**: Enhanced `getLocalizedCityText` in `apps/web/lib/cityHelpers.ts` to handle both language-specific prepositions (e.g., PL: "w" vs "we") and grammatical declension for specific languages (e.g., Polish locative and genitive forms).
   - **Rules**:

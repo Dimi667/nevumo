@@ -198,6 +198,14 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - Bottom CTA showing "w Warszawie" instead of "we Warszawie"
   - **Next Steps**: Category pages require separate task to integrate getLocalizedCityText with grammaticalCase parameter
   - **Scope**: Currently only Warsaw (Warszawa) has declension forms seeded
+- **SEO Translation Fixes (May 6, 2026)** — COMPLETE:
+  - Added SEO cleaning keys for all 34 languages (not just bg/en/pl)
+  - Added FAQ title key for all 34 languages
+  - Added category.price_on_request key for all 34 languages
+  - Fixed Polish SEO keys (removed pl from LANGUAGES_WITH_FULL_KEYS, deleted empty p3, re-seeded)
+  - Removed duplicate FAQ section that was duplicating SEO content
+  - Added {city} variable replacement to SEO section
+  - All 34 languages now have complete SEO cleaning keys (6 keys each: h2, h3_1, h3_2, p1, p2, p3)
 - **FAQ Price Placeholder Fix (May 2, 2026)** — COMPLETE:
   - **Problem**: Users saw raw placeholders like `{min_price}` in FAQ answers when no price data was available.
   - **Fix**: Implemented aggressive placeholder removal and replacement with "Price on request" in `apps/web/app/[lang]/[city]/[category]/page.tsx`.
