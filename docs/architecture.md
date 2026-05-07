@@ -263,22 +263,27 @@ The automated SEO infrastructure is designed for:
 - **Performance**: JSON-LD and canonical tags are generated server-side (SSR) for optimal page load speed
 - **Compliance**: Follows Google's structured data guidelines and SEO best practices
 
-### Docker Environment Variable Pattern (April 27, 2026)
+### Docker Environment Variable Pattern (May 7, 2026)
 Next.js in Docker requires two separate environment variables to handle server-side and client-side API communication correctly:
 
 - **API_URL=http://nevumo-api:8000** — Used server-side (SSR, Next.js rewrites) for container-to-container communication within the Docker network
-- **NEXT_PUBLIC_API_URL=http://localhost:8000** — Used client-side (browser) for API calls from the user's browser
+- **NEXT_PUBLIC_API_URL=** (empty) — Used client-side (browser) for API calls; empty string enables relative URLs (browser uses current domain automatically)
 
 This pattern is applied in:
-- **docker-compose.yml**: Both `API_URL` and `NEXT_PUBLIC_API_URL` are defined in the web service environment section
-- **apps/web/lib/api.ts**: `API_BASE` checks `process.env.API_URL` first, then falls back to `NEXT_PUBLIC_API_URL`
+- **docker-compose.yml**: `API_URL` is defined for server-side, `NEXT_PUBLIC_API_URL` is set to empty string to override .env file
+- **apps/web/.env.local**: `NEXT_PUBLIC_API_URL=` is set to empty string for local development
+- **apps/web/lib/api.ts**: `API_BASE` checks `process.env.API_URL` first, then falls back to `NEXT_PUBLIC_API_URL` for server-side; uses empty string for client-side
 - **apps/web/lib/ui-translations.ts**: Same fallback pattern for translation fetching
-- **apps/web/next.config.mjs**: Rewrites use `process.env.API_URL || process.env.NEXT_PUBLIC_API_URL`
+- **apps/web/lib/locales.ts**: Updated to use `API_URL || NEXT_PUBLIC_API_URL` fallback for server-side fetch
+- **apps/web/app/[lang]/claim/[token]/page.tsx**: Server component uses `API_URL || NEXT_PUBLIC_API_URL` for API calls
 
 This separation ensures that:
-- Server-side rendering can reach the backend container via Docker network
-- Client-side browser requests reach the backend via localhost port forwarding
-- Development and production environments work consistently without hardcoded URLs
+- Server-side rendering can reach the backend container via Docker network (API_URL)
+- Client-side browser requests use relative URLs automatically (empty NEXT_PUBLIC_API_URL)
+- Works in local network (laptop + phones) without hardcoded IP addresses
+- Independent of OrbStack network configuration changes
+- Production-ready with environment variable changes only
+- .env.example documents environment-specific configuration (Docker, local dev, production)
 - **Client Notes Feature (April 21, 2026)** — COMPLETE:
   - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
   - **Backend:**

@@ -27,7 +27,7 @@ function getInitials(name: string): string {
 
 async function fetchProviderByToken(token: string): Promise<ApiResponse> {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
     const response = await fetch(
       `${apiUrl}/api/v1/providers/by-claim-token/${token}`,
       { cache: 'no-store' }
