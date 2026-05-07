@@ -415,10 +415,13 @@ CREATE INDEX idx_translations_key ON translations(key);
 - **Validation**: **Mandatory namespacing**. Keys must contain at least one dot and cannot start or end with a dot. Enforced at the ORM layer (SQLAlchemy `@validates`) to ensure cache consistency and avoid flat keys.
 - **Namespace separation**: Different feature areas use different namespaces for organization.
 
-### Current Seeded Data (April 4, 2026)
+### Current Seeded Data (May 7, 2026)
 - **homepage namespace**: 45 keys × 34 languages = 1,530 rows
-- **category namespace**: 44 UI keys × 34 languages + 6 SEO keys × 34 languages = 1,496 + 204 = 1,700 rows
-  SEO keys: seo_cleaning_h2, seo_cleaning_h3_1, seo_cleaning_h3_2, seo_cleaning_p1, seo_cleaning_p2, seo_cleaning_p3
+- **category namespace**: 44 UI keys × 34 languages + 18 SEO keys × 34 languages = 1,496 + 612 = 2,108 rows
+  SEO keys:
+  - Cleaning: seo_cleaning_h2, seo_cleaning_h3_1, seo_cleaning_h3_2, seo_cleaning_p1, seo_cleaning_p2, seo_cleaning_p3 (6 keys)
+  - Massage: seo_massage_h2, seo_massage_h3_1, seo_massage_h3_2, seo_massage_p1, seo_massage_p2, seo_massage_p3 (6 keys)
+  - Plumbing: seo_plumbing_h2, seo_plumbing_h3_1, seo_plumbing_h3_2, seo_plumbing_p1, seo_plumbing_p2, seo_plumbing_p3 (6 keys)
 - **category form keys (April 2026)**: 15 new keys × 34 languages = 510 rows
   Keys added: no_providers_title, no_providers_subtitle, form_subtext,
   how_it_works_label, how_step_1, how_step_2, how_step_3, what_need_label,

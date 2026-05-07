@@ -206,6 +206,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Removed duplicate FAQ section that was duplicating SEO content
   - Added {city} variable replacement to SEO section
   - All 34 languages now have complete SEO cleaning keys (6 keys each: h2, h3_1, h3_2, p1, p2, p3)
+- **Phase 3B Part 1 SEO Translation Completion (May 7, 2026)** — COMPLETE:
+  - Added missing SEO massage and plumbing keys for 15 languages (cs, da, de, el, es, et, fi, fr, ga, hr, hu, is, it, lb, lt)
+  - Seed script: apps/api/scripts/seed_phase3b_part1_seo_keys.py
+  - 136 translation rows inserted (9 keys per language: 5 massage + 4 plumbing)
+  - All 34 languages now have complete SEO keys for cleaning, massage, and plumbing (18 keys total per category)
+  - Redis cache cleared and servers restarted
 - **FAQ Price Placeholder Fix (May 2, 2026)** — COMPLETE:
   - **Problem**: Users saw raw placeholders like `{min_price}` in FAQ answers when no price data was available.
   - **Fix**: Implemented aggressive placeholder removal and replacement with "Price on request" in `apps/web/app/[lang]/[city]/[category]/page.tsx`.
