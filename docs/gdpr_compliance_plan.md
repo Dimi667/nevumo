@@ -86,7 +86,7 @@ save_preferences, cookie_settings_link, last_updated
 ## ЗАДАЧА 2 — Data Portability Endpoint
 **Приоритет:** 🔴 КРИТИЧНО — преди launch  
 **Тип:** Backend (код)  
-**Статус:** ⬜ Не започнато
+**Статус:** ✅ Завършено
 
 ### Изисквания (GDPR чл. 20)
 - `GET /api/v1/user/export` — JWT protected
@@ -101,6 +101,14 @@ save_preferences, cookie_settings_link, last_updated
 - `apps/api/services/export_service.py` — нов service
 - `apps/web/app/[lang]/provider/dashboard/settings/page.tsx` — бутон "Изтегли данните ми"
 - `apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx` — същото
+
+### Имплементация — резюме (May 8, 2026)
+- `GET /api/v1/user/export` — JWT protected
+- Rate limit: 1 заявка / 24ч per user (Redis key: `export_rl:{user_id}`, TTL 86400)
+- Cache-Control: no-store на response (Safari fix)
+- 429 → frontend показва `settings.export_rate_limited` 
+- Бутон в client dashboard settings + provider dashboard settings
+- 7 translation keys под namespace `settings` (34 езика)
 
 ---
 
@@ -334,8 +342,8 @@ PL, EN, BG — задължително
 GDPR Compliance Progress:
 [✅] Task 1  — Cookie Consent Banner
 [✅] Task 2  — GA4 Consent Mode v2
-[⬜] Task 3  — Consent Audit Log
-[⬜] Task 4  — Data Export Endpoint
+[✅] Task 3  — Consent Audit Log
+[✅] Task 4  — Data Export Endpoint
 [⬜] Task 5  — Privacy Policy текст
 [⬜] Task 6  — Cookie Policy текст
 [⬜] Task 7  — T&C клиенти

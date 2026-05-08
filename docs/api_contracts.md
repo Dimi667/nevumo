@@ -362,6 +362,96 @@ Response: same shape as GET
 Errors:
   422 INVALID_PHONE — phone format invalid
 
+### GET /api/v1/user/export
+**Purpose:** GDPR Article 20 - Right to Data Portability. Exports all user data in machine-readable JSON format.
+
+**Auth:** JWT token required (Authorization: Bearer <JWT>)
+
+**Rate Limit:** 1 request per 24 hours per user (Redis key: `export_rl:{user_id}`, TTL 86400)
+
+**Response Headers:**
+- `Cache-Control: no-store` (Safari fix)
+
+**Success Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "profile": {
+      "id": "uuid",
+      "email": "user@example.com",
+      "name": "Maria",
+      "phone": "+48 123 456 789",
+      "country_code": "PL",
+      "role": "provider",
+      "created_at": "2026-01-15T10:30:00Z"
+    },
+    "leads_submitted": [
+      {
+        "id": "uuid",
+        "category": "Massage",
+        "city": "Warszawa",
+        "description": "...",
+        "status": "done",
+        "created_at": "2026-01-15T10:30:00Z"
+      }
+    ],
+    "services_listed": [
+      {
+        "id": "uuid",
+        "title": "Relax Massage",
+        "category": "Massage",
+        "price_type": "fixed",
+        "base_price": 50.0,
+        "currency": "EUR"
+      }
+    ],
+    "reviews": [
+      {
+        "id": "uuid",
+        "provider_id": "uuid",
+        "rating": 5,
+        "comment": "Great service!",
+        "created_at": "2026-01-15T10:30:00Z"
+      }
+    ],
+    "consent_log": [
+      {
+        "policy_version": "2026-05-01",
+        "categories": {
+          "necessary": true,
+          "functional": true,
+          "analytics": false,
+          "marketing": false
+        },
+        "created_at": "2026-01-15T10:30:00Z"
+      }
+    ]
+  }
+}
+```
+
+**Error Response (429):**
+```json
+{
+  "success": false,
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "You can export your data once every 24 hours"
+  }
+}
+```
+
+**Errors:**
+- 401 UNAUTHORIZED — missing or invalid JWT
+- 429 RATE_LIMIT_EXCEEDED — too many requests (1 per 24h)
+
+**Notes:**
+- Returns all data associated with the authenticated user
+- Includes profile, leads, services (if provider), reviews, and consent history
+- Frontend displays `settings.export_rate_limited` translation key on 429
+- Implemented in `apps/api/services/export_service.py`
+
 ---
 
 # 🔹 PROVIDER DASHBOARD ENDPOINTS (JWT Required)

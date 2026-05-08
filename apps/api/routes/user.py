@@ -1,12 +1,16 @@
+import json
 import re
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+import redis as redis_lib
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from apps.api.dependencies import get_current_user, get_db
+from apps.api.dependencies import get_current_user, get_db, get_redis
 from apps.api.exceptions import INVALID_PHONE
+from apps.api.services.export_service import export_user_data
 
 router = APIRouter(prefix="/api/v1/user", tags=["user"])
 
@@ -94,3 +98,40 @@ def update_user_profile(
             "role": current_user.role
         }
     }
+
+
+@router.get("/export")
+def export_user_data_endpoint(
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db),
+    redis_client: Optional[redis_lib.Redis] = Depends(get_redis)
+):
+    """Export all user data (GDPR Article 20)."""
+    # Rate limit check
+    rate_limit_key = f"export_rl:{current_user.id}"
+    if redis_client and redis_client.exists(rate_limit_key):
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "export_rate_limit_exceeded"}
+        )
+
+    # Collect user data
+    data = export_user_data(current_user.id, db)
+
+    # Set rate limit key (24 hours)
+    if redis_client:
+        redis_client.setex(rate_limit_key, 86400, "1")
+
+    # Return JSON file
+    json_data = json.dumps(data, ensure_ascii=False, indent=2)
+
+    return JSONResponse(
+        content=json_data,
+        media_type="application/json",
+        headers={
+            "Content-Disposition": 'attachment; filename="nevumo_export.json"',
+            "Cache-Control": "no-store, no-cache, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
+    )

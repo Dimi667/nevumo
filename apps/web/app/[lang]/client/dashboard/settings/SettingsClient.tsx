@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { clearAuth, getAuthToken, getAuthUser, saveAuth } from '@/lib/auth-store';
 import { getReviewPreferences, updateReviewPreferences, type ReviewPreferences } from '@/lib/client-api';
 import { switchRole } from '@/lib/provider-api';
+import { exportUserData } from '@/lib/api';
 import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { useTranslation } from '@/lib/use-translation';
@@ -25,6 +26,9 @@ export default function SettingsClient({ lang }: { lang: string }) {
   const [phoneSaved, setPhoneSaved] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteError, setDeleteError] = useState('');
+  const [exporting, setExporting] = useState(false);
+  const [exportSuccess, setExportSuccess] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
   const { t } = useTranslation('client_dashboard', lang);
   const { phone: savedPhone, savePhone } = usePhone();
 
@@ -53,6 +57,7 @@ export default function SettingsClient({ lang }: { lang: string }) {
 
     void loadPreferences();
   }, [savedPhone]);
+
 
   if (loading) {
     return (
@@ -139,6 +144,32 @@ export default function SettingsClient({ lang }: { lang: string }) {
       }
     } catch {
       setDeleteError('Could not delete account. Please try again.');
+    }
+  }
+
+  async function handleExportData() {
+    const token = getAuthToken();
+    if (!token) {
+      setExportError('export_failed');
+      return;
+    }
+
+    setExporting(true);
+    setExportError(null);
+    setExportSuccess(false);
+
+    try {
+      await exportUserData(token);
+      setExportSuccess(true);
+      setTimeout(() => setExportSuccess(false), 3000);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setExportError(e.message);
+      } else {
+        setExportError('export_failed');
+      }
+    } finally {
+      setExporting(false);
     }
   }
 
@@ -257,6 +288,32 @@ export default function SettingsClient({ lang }: { lang: string }) {
           className="inline-flex items-center gap-2 px-4 py-2 border border-red-200 text-red-600 hover:bg-red-50 text-sm font-medium rounded-lg transition-colors"
         >
           {t('nav_logout', 'Logout')}
+        </button>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
+        <h2 className="text-sm font-semibold text-gray-800">{t('settings.export_title', 'Export Your Data')}</h2>
+        <p className="text-sm text-gray-500">
+          {t('settings.export_description', 'Download all your data in JSON format.')}
+        </p>
+        {exportError && (
+          <div className="text-xs text-red-600">
+            {exportError === 'rate_limited'
+              ? t('settings.export_rate_limited', 'Too many requests. Please try again later.')
+              : t('settings.export_error', 'Failed to export data. Please try again.')}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={handleExportData}
+          disabled={exporting}
+          className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+        >
+          {exporting
+            ? t('settings.export_loading', 'Exporting...')
+            : exportSuccess
+            ? t('settings.export_success', 'Exported!')
+            : t('settings.export_button', 'Download my data')}
         </button>
       </div>
 

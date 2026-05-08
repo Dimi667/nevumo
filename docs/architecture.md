@@ -386,6 +386,38 @@ This separation ensures that:
 
 ---
 
+## Data Export Endpoint (GDPR Article 20 - Right to Portability) — May 8, 2026
+
+### Backend Implementation
+- **Endpoint**: `GET /api/v1/user/export` (JWT protected)
+- **Service**: `apps/api/services/export_service.py`
+- **Rate Limiting**: 1 request per 24 hours per user (Redis key: `export_rl:{user_id}`, TTL 86400)
+- **Response Headers**: `Cache-Control: no-store` (Safari fix for download behavior)
+- **Error Handling**: 429 status returns `RATE_LIMIT_EXCEEDED` error code
+
+### Data Exported
+- User profile (id, email, name, phone, country_code, role, created_at)
+- Leads submitted (category, city, description, status, created_at)
+- Services listed (if provider: title, category, price_type, base_price, currency)
+- Reviews (rating, comment, created_at)
+- Consent log (policy_version, categories, created_at)
+
+### Frontend Integration
+- **Client Dashboard**: "Download my data" button in settings page
+- **Provider Dashboard**: "Download my data" button in settings page
+- **Error Display**: Shows `settings.export_rate_limited` translation key on 429 response
+- **Translation Keys**: 7 keys in `settings` namespace × 34 languages = 238 rows
+  - export_title, export_description, export_button, export_success
+  - export_error, export_rate_limited, export_format
+
+### Compliance Notes
+- Implements GDPR Article 20 (Right to Data Portability)
+- Machine-readable JSON format
+- Immediate response for datasets under 2MB
+- Audit trail via rate limiting logs in Redis
+
+---
+
 ## Core Marketplace Model
 
 Nevumo използва **Hybrid Marketplace Model**:

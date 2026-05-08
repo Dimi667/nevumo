@@ -414,3 +414,31 @@ export async function getPriceRange(
     return null;
   }
 }
+
+export async function exportUserData(token: string): Promise<void> {
+  const API_BASE_URL = typeof window === 'undefined'
+    ? (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
+    : '';
+
+  const response = await fetch(`${API_BASE_URL}/api/v1/user/export`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 429) {
+    throw new Error('rate_limited');
+  }
+  if (!response.ok) {
+    throw new Error('export_failed');
+  }
+
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'nevumo_export.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}

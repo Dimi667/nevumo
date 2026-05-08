@@ -183,6 +183,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Data Export Endpoint (GDPR Article 20 - Right to Portability) — May 8, 2026** — COMPLETE:
+  - **Backend**: Implemented `GET /api/v1/user/export` endpoint in `apps/api/routes/user.py` with `apps/api/services/export_service.py`
+  - **Rate Limiting**: 1 request per 24 hours per user (Redis key: `export_rl:{user_id}`, TTL 86400)
+  - **Response Headers**: `Cache-Control: no-store` for Safari download fix
+  - **Data Exported**: User profile, leads submitted, services listed (if provider), reviews, consent log
+  - **Frontend**: "Download my data" buttons in client dashboard settings and provider dashboard settings
+  - **Translations**: 7 keys in `settings` namespace × 34 languages = 238 rows seeded
+  - **Keys**: export_title, export_description, export_button, export_success, export_error, export_rate_limited, export_format
+  - **Error Handling**: 429 response displays `settings.export_rate_limited` translation key
 - **Polish City Declension - Homepage & City Pages (May 2026)** — PARTIALLY COMPLETE:
   - **Completed**: Polish homepage (/pl) - All declension and dynamic prepositions working correctly
   - **Completed**: Polish city page (/pl/warszawa) - All declension and dynamic prepositions working correctly

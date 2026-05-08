@@ -10,6 +10,7 @@ import {
   updateProviderProfile,
   switchRole,
 } from '@/lib/provider-api';
+import { exportUserData } from '@/lib/api';
 import type { AvailabilityStatus, ProviderProfile } from '@/types/provider';
 import { getSlugValidationError, sanitizeSlug } from '@/lib/slug-utils';
 import { usePhone } from '@/hooks/usePhone';
@@ -52,6 +53,9 @@ export default function SettingsPage() {
   const [switchError, setSwitchError] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteError, setDeleteError] = useState('');
+  const [exporting, setExporting] = useState(false);
+  const [exportSuccess, setExportSuccess] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
   const slugChangesRemaining = profile
     ? Math.max(0, MAX_SLUG_CHANGES - profile.slug_change_count)
     : MAX_SLUG_CHANGES;
@@ -66,6 +70,7 @@ export default function SettingsPage() {
       .catch(() => { /* non-fatal, settings still usable */ })
       .finally(() => setLoadingProfile(false));
   }, []);
+
 
   useEffect(() => {
     if (savedPhone && !phoneValue) {
@@ -273,6 +278,32 @@ export default function SettingsPage() {
       }
     } catch {
       setDeleteError('Could not delete account. Please try again.');
+    }
+  }
+
+  async function handleExportData() {
+    const token = getAuthToken();
+    if (!token) {
+      setExportError('export_failed');
+      return;
+    }
+
+    setExporting(true);
+    setExportError(null);
+    setExportSuccess(false);
+
+    try {
+      await exportUserData(token);
+      setExportSuccess(true);
+      setTimeout(() => setExportSuccess(false), 3000);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setExportError(e.message);
+      } else {
+        setExportError('export_failed');
+      }
+    } finally {
+      setExporting(false);
     }
   }
 
@@ -516,6 +547,32 @@ export default function SettingsPage() {
             <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
           {t('btn_log_out', 'Log out')}
+        </button>
+      </div>
+
+      <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
+        <h2 className="text-sm font-semibold text-gray-800">{t('settings.export_title', 'Export Your Data')}</h2>
+        <p className="text-sm text-gray-500">
+          {t('settings.export_description', 'Download all your data in JSON format.')}
+        </p>
+        {exportError && (
+          <div className="text-xs text-red-600">
+            {exportError === 'rate_limited'
+              ? t('settings.export_rate_limited', 'Too many requests. Please try again later.')
+              : t('settings.export_error', 'Failed to export data. Please try again.')}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={handleExportData}
+          disabled={exporting}
+          className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
+        >
+          {exporting
+            ? t('settings.export_loading', 'Exporting...')
+            : exportSuccess
+            ? t('settings.export_success', 'Exported!')
+            : t('settings.export_button', 'Download my data')}
         </button>
       </div>
 

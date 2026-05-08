@@ -2,7 +2,7 @@
 """
 Seed provider dashboard translations.
 Namespace: provider_dashboard
-Keys: 341 | Languages: 34
+Keys: 348 | Languages: 34
 Run: python scripts/seed_provider_dashboard_translations.py
 """
 
@@ -3377,6 +3377,87 @@ TRANSLATIONS["msg_failed_switch_role"] = row(
     "Nepavyko pakeisti vaidmens", "Neizdevās nomainīt lomu", "Неуспешно менување на улогата", "Ma setgħetx tinbidel ir-rwol", "Rol wisselen mislukt", "Kunne ikke bytte rolle",
     "Nie udało się zmienić roli", "Falha ao mudar a função", "Falha ao mudar a função", "Schimbarea rolului a eșuat", "Не удалось сменить роль", "Nepodarilo sa zmeniť rolu",
     "Preklop vloge ni uspel", "Ndryshimi i rolit dështoi", "Промена улоге није успела", "Det gick inte att byta roll", "Rol değiştirilemedi", "Не вдалося змінити роль",
+)
+
+TRANSLATIONS["settings.export_title"] = row(
+    "Export Your Data", "Експортирай данните си", "Exportovat vaše data", "Eksportér dine data", "Ihre Daten exportieren",
+    "Εξαγωγή δεδομένων σας", "Exportar tus datos", "Ekspordi oma andmed", "Vie tietosi", "Exporter vos données",
+    "Easpórtáil do chuid sonraí", "Izvezi svoje podatke", "Adataid exportálása", "Flytja út gögn þín", "Esporta i tuoi dati",
+    " Är Daten exportéieren", "Eksportuoti savo duomenis", "Eksportēt savus datus", "Извези ги твоите податоци", "Esporta d-dejta tiegħek",
+    "Uw gegevens exporteren", "Eksporter dataene dine", "Exportar seus dados", "Exportar os seus dados", "Exportați datele dvs.",
+    "Экспортировать мои данные", "Exportovať vaše dáta", "Izvozi svoje podatke", "Eksporto të dhënat tuaja", "Извези своје податке",
+    "Exportera dina data", "Verilerini dışa aktar", "Експортувати свої дані",
+)
+
+TRANSLATIONS["settings.export_description"] = row(
+    "Download all your data in JSON format.", "Изтеглете всичките си данни в JSON формат.", "Stáhněte všechna svá data ve formátu JSON.",
+    "Download alle dine data i JSON-format.", "Laden Sie alle Ihre Daten im JSON-Format herunter.", "Κατεβάστε όλα τα δεδομένα σας σε μορφή JSON.",
+    "Descarga todos tus datos en formato JSON.", "Laadi alla kõik oma andmed JSON-vormingus.", "Lataa kaikki tietosi JSON-muodossa.",
+    "Téléchargez toutes vos données au format JSON.", "Íoslódáil do chuid sonraí ar fad i bhformáid JSON.", "Preuzmite sve svoje podatke u JSON formatu.",
+    "Töltse le az összes adatát JSON formátumban.", "Sæktu öll gögn þín á JSON-sniði.", "Scarica tutti i tuoi dati in formato JSON.",
+    "Luet all Är Daten am JSON-Format erof.", "Atsisiųskite visus savo duomenis JSON formatu.", "Lejupielādējiet visus savus datus JSON formātā.",
+    "Преземете ги сите ваши податоци во JSON формат.", "Niżżel id-dejta kollha tiegħek fil-format JSON.", "Download al uw gegevens in JSON-formaat.",
+    "Last ned alle dataene dine i JSON-format.", "Baixe todos os seus dados no formato JSON.", "Descarregue todos os seus dados em formato JSON.",
+    "Descărcați toate datele dvs. în format JSON.", "Загрузите все свои данные в формате JSON.", "Stiahnite všetky svoje dáta vo formáte JSON.",
+    "Prenesite vse svoje podatke v formatu JSON.", "Shkarkoni të gjitha të dhënat tuaja në formatin JSON.", "Преузмите све своје податке у JSON формату.",
+    "Ladda ner alla dina data i JSON-format.", "Tüm verilerinizi JSON formatında indirin.", "Завантажте всі свої дані у форматі JSON.",
+)
+
+TRANSLATIONS["settings.export_button"] = row(
+    "Download my data", "Изтегли данните ми", "Stáhnout moje data", "Download mine data", "Meine Daten herunterladen",
+    "Λήψη των δεδομένων μου", "Descargar mis datos", "Laadi alla minu andmed", "Lataa tietoni", "Télécharger mes données",
+    "Íoslódáil mo chuid sonraí", "Preuzmi moje podatke", "Adataim letöltése", "Sækja gögn mín", "Scarica i miei dati",
+    "Meng Daten eroflueden", "Atsisiųsti mano duomenis", "Lejupielādēt manus datus", "Преземи ги моите податоци", "Niżżel id-dejta tiegħi",
+    "Mijn gegevens downloaden", "Last ned mine data", "Baixar meus dados", "Descarregar os meus dados", "Descarcă datele mele",
+    "Скачать мои данные", "Stiahnuť moje dáta", "Prenesi moje podatke", "Shkarko të dhënat e mia", "Преузми моје податке",
+    "Ladda ner mina data", "Verilerimi indir", "Завантажити мої дані",
+)
+
+TRANSLATIONS["settings.export_loading"] = row(
+    "Exporting...", "Експортиране...", "Eksportowanie...", "Eksporterer...", "Wird exportiert...", "Εξαγωγή...",
+    "Exportando...", "Eksportimine...", "Viedään...", "Exportation en cours...", "Ag easpórtáil...", "Izvoz u tijeku...", "Exportálás...",
+    "Flytur út...", "Esportazione in corso...", "Exportéiert...", "Eksportuojama...", "Eksportē...", "Извозување...",
+    "Qed jesporta...", "Exporteren...", "Eksporterer...", "Exportando...", "A exportar...", "Se exportă...",
+    "Экспортирование...", "Exportuje sa...", "Izvažanje...", "Duke eksportuar...", "Извоз у току...", "Exporterar...", "Dışa aktarılıyor...",
+    "Експортування...",
+)
+
+TRANSLATIONS["settings.export_success"] = row(
+    "Exported!", "Експортирано!", "Wyeksportowano!", "Eksporteret!", "Exportiert!", "Εξήχθη!", "¡Exportado!",
+    "Eksporditud!", "Viety!", "Exporté !", "Easpórtáilte!", "Izvezeno!", "Exportálva!", "Útflutt!", "Esportato!",
+    "Exportéiert!", "Eksportuota!", "Eksportēts!", "Извезено!", "Esportat!", "Geëxporteerd!", "Eksportert!", "Exportado!",
+    "Exportado!", "Exportat!", "Экспортировано!", "Exportované!", "Izvoženo!", "Eksportuar!", "Извезено!", "Exporterat!",
+    "Dışa aktarıldı!", "Експортовано!",
+)
+
+TRANSLATIONS["settings.export_rate_limited"] = row(
+    "Too many requests. Please try again later.", "Твърде много заявки. Моля, опитайте отново по-късно.", "Zbyt wiele żądań. Spróbuj ponownie później.",
+    "Příliš mnoho požadavků. Zkuste to prosím znovu později.", "For mange forespørgsler. Prøv venligst igen senere.", "Zu viele Anfragen. Bitte versuchen Sie es später erneut versuchen.",
+    "Πολλά αιτήματα. Παρακαλώ δοκιμάστε ξανά αργότερα.", "Demasiadas solicitudes. Por favor, inténtalo de nuevo más tarde.",
+    "Liiga palju päringuid. Palun proovige hiljem uuesti.", "Liian monta pyyntöä. Yritä myöhemmin uudelleen.", "Trop de requêtes. Veuillez réessayer plus tard.",
+    "An iomarca iarratas. Déan iarracht arís níos déanaí.", "Previše zahtjeva. Pokušajte ponovo kasnije.", "Túl sok kérés. Kérjük, próbálja újra később.",
+    "Of margar beiðnir. Reyndu aftur síðar.", "Troppe richieste. Riprova più tardi.", "Zu vill Ufroe. Probéiert et méi spéit nach eng Kéier.",
+    "Per daug užklausų. Bandykite dar kartą vėliau.", "Pārāk daudz pieprasījumu. Lūdzu, mēģiniet vēlāk.", "Премногу барања. Ве молам обидете се повторно подоцна.",
+    "Wisq talbiet. Jekk jogħġbok erġa' pprova aktar tard.", "Te veel verzoeken. Probeer het later opnieuw.", "For mange forespørsler. Prøv igjen senere.",
+    "Muitas solicitações. Por favor, tente novamente mais tarde.", "Demasiados pedidos. Por favor, tente novamente mais tarde.", "Prea multe cereri. Vă rugăm să încercați din nou mai târziu.",
+    "Слишком много запросов. Пожалуйста, повторите попытку позже.", "Príliš veľa požiadaviek. Skúste to prosím neskôr.", "Preveč zahtev. Prosimo, poskusite znova kasneje.",
+    "Shumë kërkesa. Ju lutemi provoni përsëri më vonë.", "Превише захтева. Молимо покушајте поново касније.", "För många förfrågningar. Försök igen senere.",
+    "Çok fazla istek. Lütfen daha sonra tekrar deneyin.", "Занадто багато запитів. Будь ласка, спробуйте пізніше.",
+)
+
+TRANSLATIONS["settings.export_error"] = row(
+    "Failed to export data. Please try again.", "Грешка при експортиране. Моля, опитайте отново.", "Eksport nie powiódł się. Spróbuj ponownie.",
+    "Export se nezdařil. Zkuste to prosím znovu.", "Eksport mislykkedes. Prøv venligst igen.", "Export fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    "Η εξαγωγή απέτυχε. Παρακαλώ δοκιμάστε ξανά.", "Error al exportar datos. Por favor, inténtalo de nuevo.",
+    "Eksport ebaõnnestus. Palun proovige uuesti.", "Vienti epäonnistui. Yritä uudelleen.", "Échec de l'exportation. Veuillez réessayer.",
+    "Theip ar an easpórtáil. Déan iarracht arís.", "Izvoz nije uspio. Pokušajte ponovo.", "Az export sikertelen. Kérjük, próbálja újra.",
+    "Útflutningur mistókst. Reyndu aftur.", "Esportazione fallita. Riprova.", "Export fehlgeschloen. Probéiert et nach eng Kéier.",
+    "Eksportavimas nepavyko. Bandykite dar kartą.", "Eksports neizdevās. Lūdzu, mēģiniet vēlreiz.", "Извозот не успеа. Ве молам обидете се повторно.",
+    "L-esportazzjoni falliet. Jekk jogħġbok erġa' pprova.", "Exporteren mislukt. Probeer het opnieuw.", "Eksport mislyktes. Prøv igjen.",
+    "Falha ao exportar dados. Por favor, tente novamente.", "Falha ao exportar dados. Tente novamente.", "Eșec la exportarea datelor. Încercați din nou.",
+    "Ошибка экспорта данных. Пожалуйста, повторите попытку.", "Export zlyhal. Skúste to prosím znova.", "Izvoz podatkov ni uspel. Prosimo, poskusite znova.",
+    "Dështoi eksportimi i të dhënave. Provo përsëri.", "Неуспешан извоз података. Покушајте поново.", "Export misslyckades. Försök igen.",
+    "Veri dışa aktarılamadı. Lütfen tekrar deneyin.", "Помилка експорту даних. Будь ласка, спробуйте знову.",
 )
 
 TRANSLATIONS["msg_switch_role_description"] = {
