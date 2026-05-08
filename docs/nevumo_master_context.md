@@ -449,7 +449,8 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Database**: New `consent_logs` table for GDPR audit trail (24-month retention)
   - **Migration**: Alembic migration `20260508_add_consent_logs` executed successfully
   - **Testing**: 7/7 automated Playwright tests passed (banner visibility, Reject All, Accept All, Customize, no banner on repeat visit, footer link, Polish language)
-  - **Pending Items**: GA4 Consent Mode v2 integration (Task 2), Stripe.js conditional loading, mobile touch targets verification (44×44px), 12-month re-prompt logic
+  - **GA4 Consent Mode v2 (May 8, 2026)**: gtag('consent','update') integrated in useCookieConsent.ts. Fires on acceptAll/rejectAll/savePreferences. PASS verified via Playwright.
+  - **Pending Items**: Stripe.js conditional loading, mobile touch targets verification (44×44px), 12-month re-prompt logic
   - **Status**: Core cookie consent functionality complete, backend audit trail operational. Advanced GA4 integration and Stripe management deferred to future tasks.
     - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
     - **Backend:**
