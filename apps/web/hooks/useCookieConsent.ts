@@ -26,6 +26,17 @@ export function useCookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
   const [mounted, setMounted] = useState(false);
 
+  const updateGtag = (categories: ConsentCategories): void => {
+    if (typeof window === 'undefined' || typeof (window as Window & { gtag?: Function }).gtag !== 'function') return;
+    const gtag = (window as Window & { gtag: Function }).gtag;
+    gtag('consent', 'update', {
+      analytics_storage: categories.analytics ? 'granted' : 'denied',
+      ad_storage: categories.marketing ? 'granted' : 'denied',
+      ad_user_data: categories.marketing ? 'granted' : 'denied',
+      ad_personalization: categories.marketing ? 'granted' : 'denied',
+    });
+  };
+
   const getCookie = (name: string): string | null => {
     if (typeof window === 'undefined') return null;
     const value = `; ${document.cookie}`;
@@ -39,6 +50,11 @@ export function useCookieConsent() {
     document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
   };
 
+  const deleteCookie = (name: string) => {
+    if (typeof window === 'undefined') return;
+    document.cookie = `${name}=; path=/; max-age=0; SameSite=Lax`;
+  };
+
   useEffect(() => {
     setMounted(true);
     const cookie = getCookie(COOKIE_NAME);
@@ -49,9 +65,11 @@ export function useCookieConsent() {
 
     try {
       const data: ConsentData = JSON.parse(decodeURIComponent(cookie));
-      const daysSinceConsent = (Date.now() - data.ts) / (1000 * 60 * 60 * 24);
+      const timeSinceConsent = Date.now() - data.ts;
+      const twelveMonthsInMs = 365 * 24 * 60 * 60 * 1000;
       
-      if (daysSinceConsent > RE_PROMPT_DAYS || data.v !== 2) {
+      if (timeSinceConsent > twelveMonthsInMs || data.v !== 2) {
+        deleteCookie(COOKIE_NAME);
         setShowBanner(true);
       } else {
         setConsentData(data);
@@ -79,7 +97,7 @@ export function useCookieConsent() {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('nevumo_auth_token');
       const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      
+
       fetch(`${apiBase}/api/v1/consent`, {
         method: 'POST',
         headers: {
@@ -94,6 +112,8 @@ export function useCookieConsent() {
         console.error('Failed to save consent to server:', err);
       });
     }
+
+    updateGtag(categories);
   }, []);
 
   const acceptAll = useCallback(async () => {

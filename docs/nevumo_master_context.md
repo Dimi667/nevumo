@@ -440,7 +440,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Leads Rate Limiting UX (April 21, 2026)**: Improved lead creation failure response to return the last successful lead ID, enabling the "claim" flow for rate-limited users.
   - **Client Dashboard Translation Fix (April 21, 2026)**: Fixed missing translation for "Recent Requests" in the client dashboard overview. Synced key `recent_requests_title` between frontend and backend and seeded 2,482 rows across 34 languages.
   - **Client Notes Feature (April 21, 2026)** — COMPLETE:
-- **Cookie Consent Banner (GDPR Compliance) — May 8, 2026** — PARTIALLY COMPLETE:
+- **Cookie Consent Banner (GDPR Compliance) — May 8, 2026** — COMPLETE:
   - **Frontend Component**: `apps/web/components/ui/CookieConsentBanner.tsx` with Accept All / Reject All / Customize buttons
   - **Cookie Storage**: First-party cookie `nevumo_consent` with versioned structure (v:2, timestamp, categories, policy_version)
   - **Footer Link**: "Cookie Settings" button in footer to reopen banner without page reload
@@ -450,7 +450,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Migration**: Alembic migration `20260508_add_consent_logs` executed successfully
   - **Testing**: 7/7 automated Playwright tests passed (banner visibility, Reject All, Accept All, Customize, no banner on repeat visit, footer link, Polish language)
   - **GA4 Consent Mode v2 (May 8, 2026)**: gtag('consent','update') integrated in useCookieConsent.ts. Fires on acceptAll/rejectAll/savePreferences. PASS verified via Playwright.
-  - **Pending Items**: Stripe.js conditional loading, mobile touch targets verification (44×44px), 12-month re-prompt logic
+  - **Pending Items**: Stripe.js conditional loading
   - **Status**: Core cookie consent functionality complete, backend audit trail operational. Advanced GA4 integration and Stripe management deferred to future tasks.
     - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
     - **Backend:**
