@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import { getDictionary } from "@/lib/locales";
+import { generateHreflangAlternates } from "@/lib/seo";
 import { LoginCards } from "./LoginCards";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
@@ -16,7 +17,10 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
   return {
     title: { absolute: metaTitle },
     description: metaDescription,
-    alternates: { canonical: fullUrl },
+    alternates: {
+      canonical: fullUrl,
+      languages: generateHreflangAlternates('/login'),
+    },
     robots: { index: false, follow: true },
     openGraph: {
       title: metaTitle,

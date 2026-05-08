@@ -1,7 +1,23 @@
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
+import { generateHreflangAlternates } from '@/lib/seo';
+import { Metadata } from 'next';
 
 interface PageProps {
   params: Promise<{ lang: string; token: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang, token } = await params;
+
+  return {
+    title: 'Claim Your Profile | Nevumo',
+    description: 'Claim your business profile on Nevumo and start receiving client requests.',
+    alternates: {
+      canonical: `/${lang}/claim/${token}`,
+      languages: generateHreflangAlternates(`/claim/${token}`),
+    },
+    robots: { index: false, follow: true },
+  };
 }
 
 interface ProviderData {

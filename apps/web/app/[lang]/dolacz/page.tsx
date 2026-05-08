@@ -1,3 +1,5 @@
+import { generateHreflangAlternates } from '@/lib/seo';
+
 interface PageProps {
   params: Promise<{ lang: string }>;
 }
@@ -8,6 +10,10 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title: 'Zdobywaj klientów na usługi w Warszawie — Nevumo',
     description: 'Dołącz do Nevumo i otrzymuj zapytania od klientów bezpośrednio na swój telefon. Bezpłatnie, bez prowizji.',
+    alternates: {
+      canonical: `/${lang}/dolacz`,
+      languages: generateHreflangAlternates('/dolacz'),
+    },
   };
 }
 

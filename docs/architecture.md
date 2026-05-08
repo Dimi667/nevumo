@@ -30,7 +30,6 @@ This document reflects the major architectural optimization performed in April 2
 - **Key Environment Variables**:
   - `APP_URL`: The public base URL of the frontend application (e.g., `http://localhost:3000` in dev). Used for generating magic links, reset emails, and QR codes.
   - `STATIC_FILES_BASE_URL`: The public base URL of the API server. Used for generating absolute URLs for uploaded images and other static assets.
-  - `NEXT_PUBLIC_API_URL`: The URL used by the frontend to communicate with the backend. In SSR, this might be an internal Docker URL (e.g., `http://nevumo-api:8000`), while in the browser, it is the public API URL.
 - **Inter-container Communication**: Containers in Docker Compose communicate using service names (e.g., `nevumo-api`, `nevumo-postgres`) rather than `localhost`.
 - **CORS Configuration (April 2026)**: Added `CORSMiddleware` to `apps/api/main.py` using a configurable `CORS_ORIGINS` setting from `.env` (via `load_dotenv()`) to allow secure communication from the frontend domain.
 
@@ -168,6 +167,17 @@ This document reflects the major architectural optimization performed in April 2
 
 ### Automated SEO Infrastructure (April 30, 2026)
 The system now implements a fully automated SEO strategy for City Landing pages, ensuring production-ready technical SEO across all 34 supported languages:
+
+- **Hreflang Coverage (May 8, 2026)**: All public pages now have complete hreflang tags for all 34 supported languages via `generateHreflangAlternates`:
+  - Homepage (`/[lang]/page.tsx`)
+  - City pages (`/[lang]/[city]/page.tsx`)
+  - Category pages (`/[lang]/[city]/[category]/page.tsx`)
+  - Provider pages (`/[lang]/[city]/[category]/[providerPage]/page.tsx`)
+  - City selection (`/[lang]/izberi-grad/page.tsx`)
+  - Login page (`/[lang]/login/page.tsx`)
+  - Polish landing page (`/[lang]/dolacz/page.tsx`)
+  - Claim page (`/[lang]/claim/[token]/page.tsx`)
+  - Request form (`/[lang]/[city]/request/page.tsx`)
 
 - **Provider Page SEO Optimization (April 30, 2026)**:
   - **Dynamic Robots Meta**: Implemented conditional `robots` tag logic based on the `embed=1` query parameter. Embedded views are set to `noindex, nofollow` to prevent duplicate content, while full pages are set to `index, follow`.

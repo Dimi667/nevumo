@@ -1,7 +1,23 @@
 import Link from 'next/link';
+import { generateHreflangAlternates } from '@/lib/seo';
+import { Metadata } from 'next';
 
 interface Props {
   params: Promise<{ lang: string; city: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang, city } = await params;
+
+  return {
+    title: `Request Services in ${city} | Nevumo`,
+    description: `Submit a service request in ${city}. Connect with local service providers.`,
+    alternates: {
+      canonical: `/${lang}/${city}/request`,
+      languages: generateHreflangAlternates(`/${city}/request`),
+    },
+    robots: { index: false, follow: true },
+  };
 }
 
 export default async function RequestPage({ params }: Props) {
