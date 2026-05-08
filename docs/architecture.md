@@ -284,6 +284,14 @@ This separation ensures that:
 - Independent of OrbStack network configuration changes
 - Production-ready with environment variable changes only
 - .env.example documents environment-specific configuration (Docker, local dev, production)
+- **API_BASE Fix (May 8, 2026)**: Fixed client dashboard API returning HTML instead of JSON by ensuring `API_BASE` always uses the full API URL (http://localhost:8000 in local dev) instead of empty string in browser context. This prevents requests from being sent to the Next.js frontend instead of the actual API server.
+- **Provider Photo Loading Fix (May 8, 2026)**: Fixed provider photo not loading on provider pages by using absolute URLs constructed from `API_BASE` for `profile_image_url` in `ProviderWidget.tsx`. The component now converts relative paths (`/api/v1/static/...`) to absolute URLs (`http://localhost:8000/api/v1/static/...`) to avoid issues with Next.js rewrites.
+- **Next.js Config Fix (May 8, 2026)**: Fixed 404 errors on provider and client dashboard pages by removing invalid `loaderScript` configuration from `next.config.mjs`. The invalid configuration was causing the Next.js dev server to crash with "Unrecognized key(s) in object: 'loaderScript'" error.
+- **OG Image Runtime & Font (May 8, 2026)**:
+  - Changed OG image runtime from `edge` to `nodejs` in all opengraph-image.tsx files to enable custom font loading with `fs.readFileSync`.
+  - Downloaded valid Noto Sans Bold font file (NotoSans-Bold.ttf, 575740 bytes) from GitHub to `apps/web/public/fonts/`.
+  - Updated `BaseOGImage` component to load Noto Sans Bold font and apply it to the CTA button with `fontWeight: 700` for proper bold rendering.
+  - Previous Inter-Bold.ttf file was corrupted causing "Unsupported OpenType signature" errors.
 - **Client Notes Feature (April 21, 2026)** — COMPLETE:
   - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
   - **Backend:**

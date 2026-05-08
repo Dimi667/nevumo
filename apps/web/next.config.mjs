@@ -14,22 +14,23 @@ const nextConfig = {
   transpilePackages: ["@repo/ui"],
   turbopack: {},
   async rewrites() {
+    const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     return [
       {
         source: '/api/v1/:path*',
-        destination: `${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
+        destination: `${apiUrl}/api/v1/:path*`,
       },
       {
         source: '/api/:path*',
-        destination: `${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
+        destination: `${apiUrl}/api/v1/:path*`,
       },
       {
         source: '/:lang/api/v1/:path*',
-        destination: `${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
+        destination: `${apiUrl}/api/v1/:path*`,
       },
       {
         source: '/:lang/api/:path*',
-        destination: `${process.env.API_URL || process.env.NEXT_PUBLIC_API_URL}/api/v1/:path*`,
+        destination: `${apiUrl}/api/v1/:path*`,
       },
     ];
   },
@@ -45,11 +46,6 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'localhost',
         port: '8000',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'i.pravatar.cc',
         pathname: '/**',
       },
     ],

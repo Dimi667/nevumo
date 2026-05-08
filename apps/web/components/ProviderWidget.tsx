@@ -9,6 +9,7 @@ import { getPhonePrefix } from '@/lib/phoneUtils';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 import { getCurrency, formatCurrency } from '@/lib/currency';
 import { JsonLd } from '@/components/JsonLd';
+import { API_BASE } from '@/lib/api';
 
 interface ProviderWidgetProps {
   provider: ProviderDetail;
@@ -91,11 +92,10 @@ function RecentRequestBlock({
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center overflow-hidden flex-shrink-0 relative">
           {latestLeadPreview.client_image_url ? (
-            <Image
+            <img
               src={latestLeadPreview.client_image_url}
               alt={latestLeadPreview.client_name}
-              fill
-              className="object-cover"
+              className="w-full h-full object-cover"
             />
           ) : (
             <span className="text-orange-600 text-sm font-bold">
@@ -220,6 +220,18 @@ export default function ProviderWidget({
   const phoneDigitsCount = phoneValue.replace(/\D/g, '').length;
   const isPhoneValid = phoneDigitsCount >= 7;
   const isPrefixOnlyPhone = phoneValue.trim() === phonePrefix.trim();
+
+  // Use absolute URL for provider image to avoid rewrite issues
+  const profileImageUrl = provider.profile_image_url?.startsWith('/api/v1/static/')
+    ? `${API_BASE}${provider.profile_image_url}`
+    : provider.profile_image_url;
+
+  // Debug log
+  console.log('[ProviderWidget Image URL]', { 
+    original: provider.profile_image_url,
+    final: profileImageUrl,
+    apiBase: API_BASE
+  });
 
   useEffect(() => {
     if (savedPhone && (!phoneValue || phoneValue.trim() === phonePrefix.trim())) {
@@ -558,12 +570,12 @@ export default function ProviderWidget({
       <div className="px-6 pt-4 text-center">
         {/* Avatar */}
         <div className="w-[200px] h-[200px] rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4 overflow-hidden relative">
-          {provider.profile_image_url ? (
-            <Image
-              src={provider.profile_image_url}
+          {profileImageUrl ? (
+            <img
+              src={profileImageUrl}
               alt={provider.business_name}
-              fill
-              className="object-cover"
+              className="w-full h-full object-cover"
+              crossOrigin="anonymous"
             />
           ) : (
             <span className="text-orange-600 text-4xl font-bold">

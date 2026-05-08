@@ -1,0 +1,130 @@
+import { ImageResponse } from '@vercel/og';
+import fs from 'fs';
+import path from 'path';
+
+export interface BaseOGImageProps {
+  title: string;
+  description: string;
+  ctaText?: string;
+  logoUrl?: string;
+}
+
+/**
+ * Base OG Image generator component with Node.js runtime font loading
+ */
+export async function BaseOGImage({
+  title,
+  description,
+  ctaText,
+  logoUrl,
+}: BaseOGImageProps): Promise<ImageResponse> {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
+  const defaultLogoUrl = `${siteUrl}/Nevumo_logo.svg`;
+
+  // Load Inter Bold font using fs.readFileSync for Node.js runtime
+  const fontData = fs.readFileSync(path.join(process.cwd(), 'public/fonts/Inter-Bold.ttf'));
+
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#ffffff',
+          backgroundImage: 'linear-gradient(135deg, #fff5eb 0%, #ffffff 100%)',
+          fontFamily: 'Inter',
+        }}
+      >
+        {/* Header with brand logo */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '60px',
+          }}
+        >
+          <img
+            src={logoUrl || defaultLogoUrl}
+            width="180"
+            height="30"
+            alt="Nevumo"
+          />
+        </div>
+
+        {/* Main content */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            padding: '0 80px',
+          }}
+        >
+          {/* Title */}
+          <div
+            style={{
+              fontSize: '64px',
+              fontWeight: '800',
+              color: '#1a1a1a',
+              lineHeight: '1.1',
+              marginBottom: '32px',
+              maxWidth: '900px',
+              fontFamily: 'Inter',
+            }}
+          >
+            {title}
+          </div>
+
+          {/* Description */}
+          <div
+            style={{
+              fontSize: '28px',
+              color: '#666666',
+              lineHeight: '1.4',
+              maxWidth: '800px',
+              marginBottom: '40px',
+              fontFamily: 'Inter',
+            }}
+          >
+            {description}
+          </div>
+
+          {/* CTA Button */}
+          {ctaText && (
+            <div
+              style={{
+                backgroundColor: '#f97316',
+                color: '#ffffff',
+                padding: '32px 80px',
+                borderRadius: '9999px',
+                fontSize: '36px',
+                fontWeight: 700,
+                fontFamily: 'Inter',
+                boxShadow: '0 10px 30px rgba(249, 115, 22, 0.7)',
+              }}
+            >
+              {ctaText}
+            </div>
+          )}
+        </div>
+      </div>
+    ),
+    {
+      width: 1200,
+      height: 630,
+      fonts: [
+        {
+          name: 'Inter',
+          data: fontData,
+          style: 'normal',
+          weight: 700,
+        },
+      ],
+    }
+  );
+}

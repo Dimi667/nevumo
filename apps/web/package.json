@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@repo/ui": "*",
+    "@vercel/og": "^0.11.1",
     "lucide-react": "^1.7.0",
     "next": "16.1.5",
     "react": "^18.3.1",
