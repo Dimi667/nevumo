@@ -9,6 +9,7 @@ import {
   normalizeLanguage,
 } from "../lib/locales";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 
 // Глобалните стилове с Tailwind
 import "./globals.css";
@@ -80,9 +81,30 @@ export default async function RootLayout({
 
   return (
     <html lang={lang}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f9f9f9]`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', {
+    analytics_storage: 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    region: ['EEA', 'GB'],
+    wait_for_update: 500
+  });
+`,
+          }}
+        />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f9f9f9]`}
+      >
         <GoogleAnalytics />
         {children}
+        <CookieConsentBanner lang={lang} />
       </body>
     </html>
   );

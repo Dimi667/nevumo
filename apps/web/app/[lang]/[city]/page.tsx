@@ -77,6 +77,7 @@ export default async function CityPage({ params }: PageProps) {
   const { lang, city } = await params;
   const cityT = await fetchTranslations(lang, 'city');
   const categoryT = await fetchTranslations(lang, 'category');
+  const cookieT = await fetchTranslations(lang, 'cookie_banner');
   const categories = await getCategories(lang);
   const cityData = await getCityBySlug(city, lang);
   const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);

@@ -289,6 +289,50 @@ Handles client-only, provider-only, and dual-role accounts.
 
 ---
 
+## 🔹 CONSENT ENDPOINTS (GDPR Compliance)
+
+### POST /api/v1/consent
+
+**Purpose:** Logs cookie consent decisions for GDPR compliance audit trail.
+
+**Headers:**
+- `X-Session-ID` (optional) — Session identifier for anonymous users
+
+**Body:**
+```json
+{
+  "categories": {
+    "necessary": true,
+    "functional": boolean,
+    "analytics": boolean,
+    "marketing": boolean
+  },
+  "policy_version": "2026-05-01"
+}
+```
+
+**Response (201):**
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "created_at": "2026-05-08T14:00:00Z"
+  }
+}
+```
+
+**Behavior:**
+- Records consent decision with anonymized session hash and IP hash
+- If user is authenticated (JWT), links log to user_id
+- If anonymous, creates session hash from X-Session-ID header or generates new UUID
+- IP is hashed for privacy compliance
+- Retention: 24 months
+
+**Note:** No authentication required — works for both authenticated and anonymous users.
+
+---
+
 ## 🔹 USER PROFILE ENDPOINTS (JWT Required)
 
 ### GET /api/v1/user/profile

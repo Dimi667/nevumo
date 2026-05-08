@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import (
     String, Text, ForeignKey, Integer, Boolean,
-    Numeric, CheckConstraint, UniqueConstraint, Index
+    Numeric, CheckConstraint, UniqueConstraint, Index, func, DateTime
 )
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID, JSONB, INET
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, validates
@@ -592,4 +592,25 @@ class AuthRateLimit(Base):
     __table_args__ = (
         Index("idx_auth_rate_limits_ip_action", "ip", "action"),
         Index("idx_auth_rate_limits_created", "created_at"),
+    )
+
+
+# -------------------------
+# Consent Logs (GDPR)
+# -------------------------
+
+class ConsentLog(Base):
+    __tablename__ = "consent_logs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    session_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    ip_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    categories: Mapped[dict] = mapped_column(JSONB, nullable=False)
+    policy_version: Mapped[str] = mapped_column(String(20), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (
+        Index("ix_consent_logs_user_id", "user_id"),
+        Index("ix_consent_logs_created_at", "created_at"),
     )

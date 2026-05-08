@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import { getDictionary } from "@/lib/locales";
+import { fetchTranslations, t } from "@/lib/ui-translations";
 import { generateHreflangAlternates } from "@/lib/seo";
 import { LoginCards } from "./LoginCards";
 
@@ -35,8 +36,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 export default async function LoginPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   const dictionary = await getDictionary(lang);
+  const cookieT = await fetchTranslations(lang, 'cookie_banner');
   const login = dictionary.login ?? {};
-
   return (
     <main className="flex flex-col items-center justify-start min-h-screen bg-[#f9f9f9] pt-20 px-4">
       <div className="w-full max-w-[400px] flex flex-col items-center">

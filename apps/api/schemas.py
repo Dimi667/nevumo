@@ -811,3 +811,26 @@ class TranslationCreate(BaseModel):
 class TranslationResponse(BaseModel):
     success: bool = True
     data: List[TranslationOut]
+
+
+# -------------------------
+# Consent (GDPR)
+# -------------------------
+
+class ConsentCategoriesSchema(BaseModel):
+    necessary: bool = True
+    functional: bool
+    analytics: bool
+    marketing: bool
+
+
+class ConsentLogCreate(BaseModel):
+    categories: ConsentCategoriesSchema
+    policy_version: str
+
+
+class ConsentLogResponse(BaseModel):
+    id: int
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)

@@ -43,6 +43,7 @@ export default async function ChooseCityPage({ params }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await fetchTranslations(normalizedLang, 'city_selection');
+  const cookieT = await fetchTranslations(normalizedLang, 'cookie_banner');
   const cities = await getActiveCities(normalizedLang);
 
   const jsonLd = {
@@ -118,7 +119,7 @@ export default async function ChooseCityPage({ params }: PageProps) {
       {/* FOOTER */}
       <footer className="py-12 px-6 bg-gray-50 border-t border-gray-200 mt-auto">
         <div className="max-w-4xl mx-auto text-center">
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-sm mb-4">
             {t(dict, 'footer_text')}
           </p>
         </div>

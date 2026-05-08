@@ -3,7 +3,7 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug, ServiceOut } from '@/lib/api';
 import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd } from '@/lib/seo';
-import { fetchTranslations } from '@/lib/ui-translations';
+import { fetchTranslations, t } from '@/lib/ui-translations';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
 import { JsonLd } from '@/components/JsonLd';
 import LeadForm from '@/components/category/LeadForm';
@@ -490,6 +490,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const categoryT = await fetchTranslations(lang, 'category');
   const homepageT = await fetchTranslations(lang, 'homepage');
   const cityT = await fetchTranslations(lang, 'city');
+  const cookieT = await fetchTranslations(lang, 'cookie_banner');
   const apiSlug = getApiSlug(category);
   const catKey = getCategoryTranslationKey(category);
 

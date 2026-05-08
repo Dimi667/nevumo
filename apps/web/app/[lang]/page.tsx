@@ -10,6 +10,7 @@ import RotatingCategory from '@/components/homepage/RotatingCategory';
 import { AuthIntentButton } from './AuthIntentButton';
 import CategoryIntentButton from '@/components/homepage/CategoryIntentButton';
 import MobileStickyCTA from '@/components/homepage/MobileStickyCTA';
+import Footer from '@/components/homepage/Footer';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -76,6 +77,7 @@ export default async function Homepage({ params }: PageProps) {
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'en';
   const homepageT = await fetchTranslations(lang, 'homepage');
   const cityT = await fetchTranslations(lang, 'city');
+  const cookieT = await fetchTranslations(lang, 'cookie_banner');
   const rotatingCategories = t(homepageT, 'rotating_categories', 'Massage,Cleaning,Plumbing').split(',');
 
   // Resolve city for dynamic translations
@@ -318,27 +320,15 @@ export default async function Homepage({ params }: PageProps) {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-12 px-6 bg-gray-50 border-t border-gray-200">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="mb-6 text-gray-700">{getLocalizedCityText(t(homepageT, 'footer_title', ''), lang, cityName, cityT, grammaticalCase)}</p>
-          <div className="flex flex-wrap justify-center gap-4 mb-6 text-sm">
-            <Link href={`/${normalizedLang}/${citySlug}/sprzatanie`} className="text-gray-700 transition-colors">
-              {getLocalizedCityText(t(homepageT, 'footer_link_cleaning', ''), lang, cityName, cityT, grammaticalCase)}
-            </Link>
-            <span className="text-gray-500">|</span>
-            <Link href={`/${normalizedLang}/${citySlug}/hydraulik`} className="text-gray-700 transition-colors">
-              {getLocalizedCityText(t(homepageT, 'footer_link_plumbing', ''), lang, cityName, cityT, grammaticalCase)}
-            </Link>
-            <span className="text-gray-500">|</span>
-            <Link href={`/${normalizedLang}/${citySlug}/masaz`} className="text-gray-700 transition-colors">
-              {getLocalizedCityText(t(homepageT, 'footer_link_massage', ''), lang, cityName, cityT, grammaticalCase)}
-            </Link>
-          </div>
-          <p className="text-gray-500 text-sm">
-            {getLocalizedCityText(t(homepageT, 'footer_popular', ''), lang, cityName, cityT, 'nominative')}
-          </p>
-        </div>
-      </footer>
+      <Footer 
+        lang={normalizedLang}
+        citySlug={citySlug}
+        footerTitle={getLocalizedCityText(t(homepageT, 'footer_title', ''), normalizedLang, cityName, cityT, grammaticalCase)}
+        footerLinkCleaning={getLocalizedCityText(t(homepageT, 'footer_link_cleaning', ''), normalizedLang, cityName, cityT, grammaticalCase)}
+        footerLinkPlumbing={getLocalizedCityText(t(homepageT, 'footer_link_plumbing', ''), normalizedLang, cityName, cityT, grammaticalCase)}
+        footerLinkMassage={getLocalizedCityText(t(homepageT, 'footer_link_massage', ''), normalizedLang, cityName, cityT, grammaticalCase)}
+        footerPopular={getLocalizedCityText(t(homepageT, 'footer_popular', ''), normalizedLang, cityName, cityT, 'nominative')}
+      />
 
       {/* MOBILE STICKY CTA */}
       <MobileStickyCTA>

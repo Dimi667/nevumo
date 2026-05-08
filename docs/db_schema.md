@@ -397,7 +397,38 @@ CREATE INDEX idx_auth_rate_limits_created ON auth_rate_limits(created_at);
 
 ---
 
-## 17. Translations (i18n)
+## 17. Consent Logs (GDPR Compliance)
+
+CREATE TABLE consent_logs (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    session_hash VARCHAR(64) NOT NULL,
+    ip_hash VARCHAR(64) NOT NULL,
+    categories JSONB NOT NULL,
+    policy_version VARCHAR(20) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX ix_consent_logs_user_id ON consent_logs(user_id);
+CREATE INDEX ix_consent_logs_created_at ON consent_logs(created_at);
+
+### Purpose
+GDPR compliance tracking for cookie consent decisions. Records all user consent choices with anonymized session and IP hashes for audit purposes. Retention: 24 months.
+
+### Categories Structure
+JSONB field stores consent state:
+```json
+{
+  "necessary": true,
+  "functional": boolean,
+  "analytics": boolean,
+  "marketing": boolean
+}
+```
+
+---
+
+## 18. Translations (i18n)
 
 CREATE TABLE translations (
     id SERIAL PRIMARY KEY,

@@ -348,6 +348,42 @@ This separation ensures that:
 
 ---
 
+## Cookie Consent Banner (GDPR Compliance) — May 8, 2026
+
+### Component Structure
+- **Location**: `apps/web/components/ui/CookieConsentBanner.tsx`
+- **Hook**: `apps/web/hooks/useCookieConsent.ts`
+- **Integration**: Added to `apps/web/app/layout.tsx` for global banner display
+
+### Features Implemented
+- **Banner Display**: Accept All / Reject All / Customize buttons on first visit
+- **Cookie Storage**: First-party cookie `nevumo_consent` with structure:
+  ```json
+  {
+    "v": 2,
+    "ts": timestamp,
+    "categories": {
+      "necessary": true,
+      "functional": boolean,
+      "analytics": boolean,
+      "marketing": boolean
+    },
+    "policy_version": "2026-05-01"
+  }
+  ```
+- **Footer Link**: "Cookie Settings" button in footer to reopen banner without reload
+- **Localization**: Supported in EN, PL, BG (cookie_banner namespace)
+- **Backend Logging**: POST /api/v1/consent endpoint logs consent decisions to consent_logs table
+- **Audit Trail**: Anonymized session_hash and ip_hash for GDPR compliance (24-month retention)
+
+### Pending Items (Future Tasks)
+- GA4 Consent Mode v2 integration (Task 2)
+- Stripe.js conditional loading
+- Mobile touch targets verification (44×44px)
+- 12-month re-prompt logic
+
+---
+
 ## Core Marketplace Model
 
 Nevumo използва **Hybrid Marketplace Model**:
