@@ -746,7 +746,7 @@ export default async function CategoryPage({ params }: PageProps) {
             <p className="mt-3 max-w-3xl text-base text-gray-600 sm:text-lg">
               {subtitle}
             </p>
-            <div className="mt-5 inline-flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full bg-gray-50 px-4 py-3 text-sm text-gray-700 max-w-full w-full">
+            <div className="mt-5 mb-6 inline-flex flex-wrap items-center gap-x-3 gap-y-2 rounded-full bg-gray-50 px-4 py-3 text-sm text-gray-700 max-w-full w-full">
               <span>{trustSpecialistsText}</span>
               <span className="text-gray-400">•</span>
               <span className="flex items-center gap-1">
