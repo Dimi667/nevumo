@@ -164,3 +164,64 @@ def delete_user_account(db: Session, user: User) -> dict:
         db.rollback()
         logger.error(f"Account deletion failed for user {user.id}: {e}")
         return {"success": False, "error": {"code": "DELETE_FAILED", "message": str(e)}}
+
+
+def get_or_create_oauth_user(email: str, name: str, oauth_provider: str, oauth_id: str, db: Session) -> tuple[User, str]:
+    """
+    Get or create a user from OAuth credentials.
+    Returns (user, jwt_token).
+    """
+    # Try to find user by oauth_provider + oauth_id
+    user = db.query(User).filter(
+        User.oauth_provider == oauth_provider,
+        User.oauth_id == oauth_id
+    ).first()
+
+    if user:
+        # Link pending claims for existing OAuth user
+        try:
+            link_pending_claims(user.id, user.email, user.phone, db)
+        except Exception:
+            pass
+        token = create_jwt(user.id, user.email, user.role)
+        return user, token
+
+    # Try to find user by email
+    user = db.query(User).filter(User.email == email).first()
+
+    if user:
+        # Update existing user with OAuth info
+        user.oauth_provider = oauth_provider
+        user.oauth_id = oauth_id
+        db.commit()
+        # Link pending claims
+        try:
+            link_pending_claims(user.id, user.email, user.phone, db)
+        except Exception:
+            pass
+        token = create_jwt(user.id, user.email, user.role)
+        return user, token
+
+    # Create new user
+    user = User(
+        email=email,
+        name=name,
+        oauth_provider=oauth_provider,
+        oauth_id=oauth_id,
+        role="client",
+        password_hash=None,
+        is_active=True,
+        locale="en",
+    )
+    db.add(user)
+    db.flush()
+
+    # Link pending claims
+    try:
+        link_pending_claims(user.id, user.email, user.phone, db)
+    except Exception:
+        pass
+
+    db.commit()
+    token = create_jwt(user.id, user.email, user.role)
+    return user, token

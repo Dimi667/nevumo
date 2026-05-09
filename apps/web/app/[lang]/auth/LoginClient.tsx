@@ -136,6 +136,13 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
   useEffect(() => {
     const stored = getStoredIntent();
     const urlEmail = searchParams.get('email');
+    const oauthError = searchParams.get('error');
+
+    // Handle OAuth error
+    if (oauthError === 'oauth_failed') {
+      setState(s => ({ ...s, socialToast: t(authDict, 'oauth_error', 'OAuth login failed. Please try again.') }));
+      setTimeout(() => setState(s => ({ ...s, socialToast: null })), 3000);
+    }
     
     // Claim token forces provider intent
     const resolvedIntent: 'client' | 'provider' | null = claimToken
@@ -241,9 +248,12 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
 
     if (isAuthenticated() && !force) {
       const user = getAuthUser();
-      window.location.href = user?.role === 'provider'
-        ? `/${lang}/provider/dashboard`
-        : `/${lang}/client/dashboard`;
+      if (user?.role === 'provider') {
+        window.location.href = `/${lang}/provider/dashboard`;
+      } else {
+        const citySlug = (user as any)?.city_slug;
+        window.location.href = citySlug ? `/${lang}/${citySlug}` : `/${lang}/izberi-grad`;
+      }
       return;
     }
 
@@ -283,9 +293,11 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
       }
 
       const role = result.user.role;
-      window.location.href = role === 'provider'
-        ? `/${lang}/provider/dashboard`
-        : `/${lang}/client/dashboard`;
+      if (role === 'provider') {
+        window.location.href = `/${lang}/provider/dashboard`;
+      } else {
+        window.location.href = `/${lang}/client/dashboard`;
+      }
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'INVALID_CREDENTIALS' || err.message.includes('Invalid credentials')) {
@@ -484,7 +496,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
             </p>
             <div className="flex flex-col gap-[10px]">
               <button
-                onClick={() => handleSocialClick('google')}
+                onClick={() => { window.location.href = `${API_BASE}/api/v1/auth/google?lang=${lang}` }}
                 className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <GoogleIcon />
@@ -493,6 +505,7 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
               <button
                 onClick={() => handleSocialClick('facebook')}
                 className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                style={{ display: 'none' }}
               >
                 <FacebookIcon />
                 {t(authDict, 'facebook_btn', "Sign in with Facebook")}

@@ -24,6 +24,11 @@ class Settings(BaseSettings):
     # Local storage for uploads
     UPLOADS_DIR: str = "uploads"
 
+    # Google OAuth
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+    OAUTH_REDIRECT_BASE: str = "http://localhost:3000"
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 

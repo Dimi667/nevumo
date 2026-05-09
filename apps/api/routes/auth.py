@@ -1,14 +1,16 @@
+import json
 from datetime import datetime, timedelta
 from secrets import token_hex
 from typing import Optional
 
+import httpx
 from fastapi import APIRouter, Depends, Query, Request, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from sqlalchemy.orm import Session
 
 from apps.api.config import settings
 from apps.api.dependencies import get_db, get_current_user
-from apps.api.models import MagicLinkToken, PasswordResetToken, Provider, User
+from apps.api.models import Location, MagicLinkToken, PasswordResetToken, Provider, User
 from apps.api.schemas import (
     AuthTokenResponse,
     CheckEmailRequest,
@@ -31,6 +33,7 @@ from apps.api.services.auth_service import (
     delete_user_account,
     generate_reset_token,
     get_dummy_hash,
+    get_or_create_oauth_user,
     hash_password,
     hash_token,
     link_pending_claims,
@@ -153,6 +156,11 @@ async def login(
 
     user = db.query(User).filter(User.email == body.email).first()
 
+    city_slug = None
+    if user.city_id:
+        location = db.query(Location).filter(Location.id == user.city_id).first()
+        city_slug = location.slug if location else None
+
     # Always run bcrypt verify to prevent timing-based email enumeration.
     candidate_hash = (user.password_hash if (user and user.password_hash) else get_dummy_hash())
     valid = verify_password(body.password, candidate_hash)
@@ -177,7 +185,7 @@ async def login(
     token = create_jwt(user.id, user.email, user.role)
     return AuthTokenResponse(data={
         "token": token,
-        "user": {"id": str(user.id), "email": user.email, "role": user.role},
+        "user": {"id": str(user.id), "email": user.email, "role": user.role, "city_slug": city_slug},
     })
 
 
@@ -423,3 +431,92 @@ async def delete_account(
     if result["success"]:
         return JSONResponse(status_code=200, content=result)
     return JSONResponse(status_code=500, content=result)
+
+
+@router.get("/google")
+async def google_oauth(lang: str = Query(default="en")) -> RedirectResponse:
+    """Redirect to Google OAuth consent page."""
+    redirect_uri = f"{settings.OAUTH_REDIRECT_BASE}/api/v1/auth/google/callback"
+    oauth_url = (
+        f"https://accounts.google.com/o/oauth2/v2/auth?"
+        f"client_id={settings.GOOGLE_CLIENT_ID}&"
+        f"redirect_uri={redirect_uri}&"
+        f"response_type=code&"
+        f"scope=openid email profile&"
+        f"access_type=offline&"
+        f"prompt=consent&"
+        f"state={lang}"
+    )
+    return RedirectResponse(url=oauth_url)
+
+
+@router.get("/google/callback")
+async def google_oauth_callback(
+    code: str = Query(...),
+    state: str = Query(default="en"),
+    db: Session = Depends(get_db),
+) -> RedirectResponse:
+    """Handle Google OAuth callback."""
+    try:
+        # Exchange code for access token
+        redirect_uri = f"{settings.OAUTH_REDIRECT_BASE}/api/v1/auth/google/callback"
+        token_url = "https://oauth2.googleapis.com/token"
+        token_data = {
+            "code": code,
+            "client_id": settings.GOOGLE_CLIENT_ID,
+            "client_secret": settings.GOOGLE_CLIENT_SECRET,
+            "redirect_uri": redirect_uri,
+            "grant_type": "authorization_code",
+        }
+
+        async with httpx.AsyncClient() as client:
+            token_response = await client.post(token_url, data=token_data)
+            token_response.raise_for_status()
+            token_json = token_response.json()
+            access_token = token_json["access_token"]
+
+            # Get user info
+            user_info_url = "https://www.googleapis.com/oauth2/v3/userinfo"
+            user_info_response = await client.get(
+                user_info_url,
+                headers={"Authorization": f"Bearer {access_token}"}
+            )
+            user_info_response.raise_for_status()
+            user_info = user_info_response.json()
+
+        email = user_info["email"]
+        name = user_info.get("name", "")
+        oauth_id = user_info["sub"]
+
+        # Get or create user
+        user, jwt_token = get_or_create_oauth_user(
+            email=email,
+            name=name,
+            oauth_provider="google",
+            oauth_id=oauth_id,
+            db=db,
+        )
+
+        # Redirect to frontend with token
+        user_data = json.dumps({
+            "id": str(user.id),
+            "email": user.email,
+            "role": user.role,
+            "locale": user.locale,
+        })
+
+        # Determine redirect based on role
+        if user.role == "provider":
+            redirect = f"/{state}/provider/dashboard"
+        else:  # client
+            redirect = f"/{state}/client/dashboard"
+
+        redirect_url = f"{settings.OAUTH_REDIRECT_BASE}/{state}/auth/oauth-callback?token={jwt_token}&user={user_data}&redirect={redirect}"
+        return RedirectResponse(url=redirect_url)
+
+    except Exception as e:
+        # On any error, redirect to auth page with error
+        logger = __import__("logging").getLogger(__name__)
+        logger.error(f"Google OAuth error: {e}")
+        error_redirect = f"{settings.OAUTH_REDIRECT_BASE}/en/auth?error=oauth_failed"
+        return RedirectResponse(url=error_redirect)

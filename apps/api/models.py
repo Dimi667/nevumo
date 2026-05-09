@@ -41,6 +41,10 @@ class User(Base):
     # Phone number (optional)
     phone: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
+    # OAuth fields
+    oauth_provider: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
+    oauth_id: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+
     city_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("locations.id"), nullable=True)
 
     provider: Mapped["Provider"] = relationship(back_populates="user", uselist=False)
@@ -48,6 +52,7 @@ class User(Base):
 
     __table_args__ = (
         CheckConstraint("role IN ('client', 'provider')", name="ck_users_role"),
+        UniqueConstraint("oauth_provider", "oauth_id", name="uq_users_oauth"),
         Index("idx_users_role", "role"),
         Index("idx_users_review_reply_email", "review_reply_email_enabled"),
         Index("idx_users_phone", "phone"),
