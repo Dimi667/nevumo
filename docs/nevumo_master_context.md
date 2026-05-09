@@ -45,7 +45,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Redis (caching layer)
 
 ### Tracking
-- Google Analytics 4 (GA4) — G-HKW6GBJJCK
+- Google Analytics 4 (GA4) — G-3PYNQ1Y2V9
 - Custom DB events — page_events таблица + /api/v1/page-events endpoint
 - Shared utility: lib/tracking.ts — trackPageEvent()
 
