@@ -1705,6 +1705,58 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 
 ---
 
+## Authentication Phase 2 — Google OAuth (May 9, 2026)
+
+### Overview
+Backend OAuth flow — Google OAuth се управлява от FastAPI, не от Next.js.
+
+### New Files & Changes
+- **apps/api/routes/auth.py** — 2 нови endpoint-а:
+  - `GET /api/v1/auth/google` — redirect към Google consent page, приема `lang` query param, подава го като `state`
+  - `GET /api/v1/auth/google/callback` — обработва callback, създава/намира user, издава JWT, redirect към frontend
+- **apps/api/services/auth_service.py** — нова функция `get_or_create_oauth_user(email, name, oauth_provider, oauth_id, db)`:
+  - Търси по oauth_provider + oauth_id → по email → създава нов user
+  - Нови users получават role="client" по подразбиране
+  - Извиква link_pending_claims() след create/login
+- **apps/api/config.py** — нови settings: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, OAUTH_REDIRECT_BASE
+- **apps/web/app/[lang]/auth/oauth-callback/page.tsx** — нова страница, чете token + redirect params, извиква saveAuth(), redirect по role
+- **apps/web/app/[lang]/auth/LoginClient.tsx** — Google бутон активиран с `?lang={lang}` param
+
+### DB Migration
+- Migration: `1433ea08e073_add_oauth_fields_to_users.py`
+- Нови колони в users: `oauth_provider VARCHAR(20)`, `oauth_id VARCHAR(255)`
+- Constraint: `uq_users_oauth UNIQUE (oauth_provider, oauth_id)`
+
+### OAuth Flow
+1. User натиска "Sign in with Google" → `GET /api/v1/auth/google?lang=bg`
+2. Backend redirect към Google с `state=bg`
+3. Google callback → `GET /api/v1/auth/google/callback?code=...&state=bg`
+4. Backend: token exchange → user info → get_or_create_oauth_user()
+5. Redirect към `/{lang}/auth/oauth-callback?token={jwt}&redirect=/{lang}/client/dashboard`
+6. Frontend: saveAuth() → redirect по role
+
+### Redirect Logic (Post-Login)
+| Role | Redirect |
+|------|----------|
+| client | /{lang}/client/dashboard |
+| provider | /{lang}/provider/dashboard |
+
+### Translation Keys Added
+- `auth.oauth_error` — 34 езика, seed: `apps/api/scripts/seed_auth_translations.py`
+
+### Env Variables Required
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+OAUTH_REDIRECT_BASE=http://localhost:3000
+В apps/web/.env.local:
+NEXTAUTH_SECRET=...
+NEXTAUTH_URL=http://localhost:3000
+
+### Facebook OAuth
+Деактивиран за сега — добавяне след Warsaw launch с Meta Business верификация.
+
+---
+
 ## Lead Capture → Account Linking Flow
 
 ### Overview
