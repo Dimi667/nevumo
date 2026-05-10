@@ -3,6 +3,8 @@ import { getCityBySlug } from './api';
 
 const LANGUAGE_TO_CITY: Record<string, string> = {
   pl: 'warsaw',
+  bg: 'sofia',
+  sr: 'belgrade',
 };
 
 const DEFAULT_CITY = 'warsaw';

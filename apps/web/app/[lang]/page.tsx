@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps) {
   // Resolve city for dynamic translations
   const citySlug = await resolveDefaultCity(lang);
   const cityData = await getCityBySlug(citySlug, lang);
-  const cityName = cityData?.city || 'Warsaw';
+  const cityName = cityData?.city || citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
 
   // Slavic languages that use grammatical cases (locative/genitive)
   const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
@@ -35,14 +35,16 @@ export async function generateMetadata({ params }: PageProps) {
     lang,
     cityName,
     cityT,
-    grammaticalCase
+    grammaticalCase,
+    { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }
   );
   const description = getLocalizedCityText(
     t(homepageT, 'meta_description', 'Free registration. No commission.'),
     lang,
     cityName,
     cityT,
-    grammaticalCase
+    grammaticalCase,
+    { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }
   );
 
   return {
@@ -83,7 +85,7 @@ export default async function Homepage({ params }: PageProps) {
   // Resolve city for dynamic translations
   const citySlug = await resolveDefaultCity(lang);
   const cityData = await getCityBySlug(citySlug, lang);
-  const cityName = cityData?.city || 'Warsaw';
+  const cityName = cityData?.city || citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
 
   // Slavic languages that use grammatical cases (locative/genitive)
   const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
@@ -135,7 +137,7 @@ export default async function Homepage({ params }: PageProps) {
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             {t(homepageT, 'hero_prefix', 'Get clients for')}{' '}
             <RotatingCategory categories={rotatingCategories} />
-            {' '}{getLocalizedCityText(t(homepageT, 'hero_suffix', 'in Warsaw'), lang, cityName, cityT, grammaticalCase)}
+            {' '}{getLocalizedCityText(t(homepageT, 'hero_suffix', 'in Warsaw'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-white">
             {t(homepageT, 'hero_subtitle', 'Free. No commission. Direct contact.')}
@@ -154,7 +156,7 @@ export default async function Homepage({ params }: PageProps) {
           </div>
           
           <div className="text-lg mb-10 text-orange-100">
-            {getLocalizedCityText(t(homepageT, 'social_proof', ''), lang, cityName, cityT, grammaticalCase)}
+            {getLocalizedCityText(t(homepageT, 'social_proof', ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
           </div>
           
           <AuthIntentButton
@@ -250,26 +252,26 @@ export default async function Homepage({ params }: PageProps) {
       {/* LIVE ACTIVITY FEED */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_title', 'Recent requests'), lang, cityName, cityT, grammaticalCase)}</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_title', 'Recent requests'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}</h2>
           <div className="space-y-4">
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_1', ''), lang, cityName, cityT, slavicLanguagesWithDeclension.includes(lang) ? 'genitive' : 'nominative')}</span>
+                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_1', ''), lang, cityName, cityT, slavicLanguagesWithDeclension.includes(lang) ? 'genitive' : 'nominative', { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_1_time', '')}</span>
             </div>
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_2', ''), lang, cityName, cityT, slavicLanguagesWithDeclension.includes(lang) ? 'genitive' : 'nominative')}</span>
+                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_2', ''), lang, cityName, cityT, slavicLanguagesWithDeclension.includes(lang) ? 'genitive' : 'nominative', { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_2_time', '')}</span>
             </div>
             <div className="nevumo-card flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-red-500">🔴</span>
-                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_3', ''), lang, cityName, cityT, slavicLanguagesWithDeclension.includes(lang) ? 'genitive' : 'nominative')}</span>
+                <span className="text-gray-900">{getLocalizedCityText(t(homepageT, 'activity_3', ''), lang, cityName, cityT, slavicLanguagesWithDeclension.includes(lang) ? 'genitive' : 'nominative', { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}</span>
               </div>
               <span className="text-gray-500 text-sm">{t(homepageT, 'activity_3_time', '')}</span>
             </div>
@@ -323,11 +325,11 @@ export default async function Homepage({ params }: PageProps) {
       <Footer 
         lang={normalizedLang}
         citySlug={citySlug}
-        footerTitle={getLocalizedCityText(t(homepageT, 'footer_title', ''), normalizedLang, cityName, cityT, grammaticalCase)}
-        footerLinkCleaning={getLocalizedCityText(t(homepageT, 'footer_link_cleaning', ''), normalizedLang, cityName, cityT, grammaticalCase)}
-        footerLinkPlumbing={getLocalizedCityText(t(homepageT, 'footer_link_plumbing', ''), normalizedLang, cityName, cityT, grammaticalCase)}
-        footerLinkMassage={getLocalizedCityText(t(homepageT, 'footer_link_massage', ''), normalizedLang, cityName, cityT, grammaticalCase)}
-        footerPopular={getLocalizedCityText(t(homepageT, 'footer_popular', ''), normalizedLang, cityName, cityT, 'nominative')}
+        footerTitle={getLocalizedCityText(t(homepageT, 'footer_title', ''), normalizedLang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
+        footerLinkCleaning={getLocalizedCityText(t(homepageT, 'footer_link_cleaning', ''), normalizedLang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
+        footerLinkPlumbing={getLocalizedCityText(t(homepageT, 'footer_link_plumbing', ''), normalizedLang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
+        footerLinkMassage={getLocalizedCityText(t(homepageT, 'footer_link_massage', ''), normalizedLang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
+        footerPopular={getLocalizedCityText(t(homepageT, 'footer_popular', ''), normalizedLang, cityName, cityT, 'nominative', { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
       />
 
       {/* MOBILE STICKY CTA */}

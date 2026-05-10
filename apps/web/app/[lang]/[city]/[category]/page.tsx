@@ -409,11 +409,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
   const catKey = getCategoryTranslationKey(category);
   const catNameKey = `cat_${catKey}_name` as const;
-  const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase);
+  const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
 
   const prepBase = categoryT['preposition_base'] || 'in';
-  const title = getLocalizedCityText(`${categoryName} ${prepBase} {city}`, lang, cityName, categoryT, grammaticalCase);
-  const baseDescription = getLocalizedCityText((categoryT[`subtitle_${catKey}`] || ''), lang, cityName, cityT, grammaticalCase);
+  const title = getLocalizedCityText(`${categoryName} ${prepBase} {city}`, lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
+  const baseDescription = getLocalizedCityText((categoryT[`subtitle_${catKey}`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
   
   // Fetch price range for metadata
   const apiSlug = getApiSlug(category);
@@ -501,40 +501,40 @@ export default async function CategoryPage({ params }: PageProps) {
   const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
 
   const catNameKey = `cat_${catKey}_name` as const;
-  const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase);
+  const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
 
   const content = getCategoryContent(category, cityName, categoryName, lang, city);
 
   const prepBaseCat = categoryT['preposition_base'] || 'in';
-  const heading = getLocalizedCityText((categoryT[`h1_${catKey}`] || `${categoryName} ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase);
-  const subtitle = getLocalizedCityText((categoryT[`subtitle_${catKey}`] || ''), lang, cityName, cityT, grammaticalCase);
+  const heading = getLocalizedCityText((categoryT[`h1_${catKey}`] || `${categoryName} ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
+  const subtitle = getLocalizedCityText((categoryT[`subtitle_${catKey}`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
   const providerCardTexts: ProviderCardTexts = {
-    defaultDescription: getLocalizedCityText((categoryT['provider_desc_fallback'] || 'Проверен специалист в {city}. Изпратете кратко запитване и изчакайте връзка.'), lang, cityName, cityT, grammaticalCase),
-    jobsCompleted: getLocalizedCityText((categoryT['provider_jobs_completed'] || 'completed jobs'), lang, cityName, cityT, grammaticalCase),
-    lastRequest: getLocalizedCityText((categoryT['provider_last_request'] || 'Last request'), lang, cityName, cityT, grammaticalCase),
-    directContact: getLocalizedCityText((categoryT['provider_direct_contact'] || 'Direct contact'), lang, cityName, cityT, grammaticalCase),
-    sendRequest: getLocalizedCityText((categoryT['form_btn'] || 'Send request'), lang, cityName, cityT, grammaticalCase),
-    verifiedSpecialist: getLocalizedCityText((categoryT['provider_verified_specialist'] || 'Verified specialist'), lang, cityName, cityT, grammaticalCase),
-    freeNoObligation: getLocalizedCityText((categoryT['provider_free_no_obligation'] || 'Free • No obligation'), lang, cityName, cityT, grammaticalCase),
-    peopleSought: getLocalizedCityText((categoryT['provider_people_sought'] || 'people sought this specialist'), lang, cityName, cityT, grammaticalCase),
-    recentlyRequested: getLocalizedCityText((categoryT['provider_recently_requested'] || 'recently made a request'), lang, cityName, cityT, grammaticalCase),
-    reviews: getLocalizedCityText((categoryT['provider_reviews'] || 'reviews'), lang, cityName, cityT, grammaticalCase),
-    onRequest: getLocalizedCityText((categoryT['provider_on_request'] || categoryT['price_on_request'] || 'Price on request'), lang, cityName, cityT, grammaticalCase),
-    moreServices: getLocalizedCityText((categoryT['provider_more_services'] || 'и още {n} услуги'), lang, cityName, cityT, grammaticalCase),
+    defaultDescription: getLocalizedCityText((categoryT['provider_desc_fallback'] || 'Проверен специалист в {city}. Изпратете кратко запитване и изчакайте връзка.'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    jobsCompleted: getLocalizedCityText((categoryT['provider_jobs_completed'] || 'completed jobs'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    lastRequest: getLocalizedCityText((categoryT['provider_last_request'] || 'Last request'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    directContact: getLocalizedCityText((categoryT['provider_direct_contact'] || 'Direct contact'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    sendRequest: getLocalizedCityText((categoryT['form_btn'] || 'Send request'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    verifiedSpecialist: getLocalizedCityText((categoryT['provider_verified_specialist'] || 'Verified specialist'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    freeNoObligation: getLocalizedCityText((categoryT['provider_free_no_obligation'] || 'Free • No obligation'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    peopleSought: getLocalizedCityText((categoryT['provider_people_sought'] || 'people sought this specialist'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    recentlyRequested: getLocalizedCityText((categoryT['provider_recently_requested'] || 'recently made a request'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    reviews: getLocalizedCityText((categoryT['provider_reviews'] || 'reviews'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    onRequest: getLocalizedCityText((categoryT['provider_on_request'] || categoryT['price_on_request'] || 'Price on request'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    moreServices: getLocalizedCityText((categoryT['provider_more_services'] || 'и още {n} услуги'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
   };
 
   const relatedLinksByCategory: Record<CategoryKey, Array<{ href: string; label: string }>> = {
     massage: [
-      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
-      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
+      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
+      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
     ],
     cleaning: [
-      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
-      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
+      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
+      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
     ],
     plumbing: [
-      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
-      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase) },
+      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
+      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
     ],
   };
   const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.cleaning;
@@ -560,8 +560,8 @@ export default async function CategoryPage({ params }: PageProps) {
     const qKey = `faq_${catKey}_q${i}`;
     const aKey = `faq_${catKey}_a${i}`;
     
-    let question = getLocalizedCityText((categoryT[qKey] || ''), lang, cityName, cityT, grammaticalCase);
-    let answer = getLocalizedCityText((categoryT[aKey] || ''), lang, cityName, cityT, grammaticalCase);
+    let question = getLocalizedCityText((categoryT[qKey] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
+    let answer = getLocalizedCityText((categoryT[aKey] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
 
     // Fallback to dynamic content if DB translation is missing
     if (!question || !answer) {
@@ -585,7 +585,7 @@ export default async function CategoryPage({ params }: PageProps) {
       
       // Apply getLocalizedCityText for city placeholders after other replacements
       if (result.includes('{city}')) {
-        result = getLocalizedCityText(result, lang, cityName, cityT, grammaticalCase);
+        result = getLocalizedCityText(result, lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
       }
 
       if (hasValidPrice) {
@@ -658,9 +658,9 @@ export default async function CategoryPage({ params }: PageProps) {
   const visibleProviders = providers.slice(0, 20);
   const hiddenProviders = providers.slice(20);
   const hiddenCount = hiddenProviders.length;
-  const trustSpecialistsText = `${allCount > 0 ? allCount : 14} ${getLocalizedCityText((categoryT['trust_specialists'] || 'specialists'), lang, cityName, cityT, grammaticalCase)}`;
-  const trustRatingText = `${averageRating.toFixed(1)} ${getLocalizedCityText((categoryT['trust_rating'] || 'rating'), lang, cityName, cityT, grammaticalCase)}`;
-  const trustLeadsText = `120 ${getLocalizedCityText((categoryT['trust_requests'] || 'requests this month'), lang, cityName, cityT, grammaticalCase)}`;
+  const trustSpecialistsText = `${allCount > 0 ? allCount : 14} ${getLocalizedCityText((categoryT['trust_specialists'] || 'specialists'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}`;
+  const trustRatingText = `${averageRating.toFixed(1)} ${getLocalizedCityText((categoryT['trust_rating'] || 'rating'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}`;
+  const trustLeadsText = `120 ${getLocalizedCityText((categoryT['trust_requests'] || 'requests this month'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}`;
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
   const organizationJsonLd = generateOrganizationJsonLd();
@@ -734,7 +734,7 @@ export default async function CategoryPage({ params }: PageProps) {
               <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
             </Link>
             <Link href={`/${lang}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
-              {getLocalizedCityText((categoryT['nav_link'] || 'Become a specialist'), lang, cityName, cityT, grammaticalCase)}
+              {getLocalizedCityText((categoryT['nav_link'] || 'Become a specialist'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
             </Link>
           </div>
         </header>
@@ -762,7 +762,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="text-orange-400">
                   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
-                {getLocalizedCityText((categoryT['trust_response'] || 'Avg. response: ~30 min'), lang, cityName, cityT, grammaticalCase)}
+                {getLocalizedCityText((categoryT['trust_response'] || 'Avg. response: ~30 min'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
               </span>
             </div>
           </section>
@@ -774,10 +774,10 @@ export default async function CategoryPage({ params }: PageProps) {
                 <div className="rounded-xl border border-gray-100 bg-white px-6 py-12 text-center shadow-sm">
                   <div className="border-l-4 border-orange-400 pl-4 py-2 mb-4 text-left inline-block">
                     <p className="font-semibold text-gray-800 text-sm">
-                      {getLocalizedCityText((categoryT['no_providers_title'] || 'Be the first to request this service in your area'), lang, cityName, cityT, grammaticalCase)}
+                      {getLocalizedCityText((categoryT['no_providers_title'] || 'Be the first to request this service in your area'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
                     </p>
                     <p className="text-sm text-gray-500 mt-0.5">
-                      {getLocalizedCityText((categoryT['no_providers_subtitle'] || 'Providers joining Nevumo will see your request and contact you'), lang, cityName, cityT, grammaticalCase)}
+                      {getLocalizedCityText((categoryT['no_providers_subtitle'] || 'Providers joining Nevumo will see your request and contact you'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
                     </p>
                   </div>
                 </div>
@@ -790,7 +790,7 @@ export default async function CategoryPage({ params }: PageProps) {
                   {hiddenCount > 0 && (
                     <details className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
                       <summary className="cursor-pointer list-none text-center text-sm font-semibold text-orange-600">
-                        {getLocalizedCityText((categoryT['show_more'] || 'Show more'), lang, cityName, cityT, grammaticalCase)}
+                        {getLocalizedCityText((categoryT['show_more'] || 'Show more'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
                       </summary>
                       <div className="mt-4 space-y-4">
                         {hiddenProviders.map((provider) => {
@@ -812,22 +812,22 @@ export default async function CategoryPage({ params }: PageProps) {
                 cityName={cityName}
                 services={services}
                 cityCountryCode={cityCountryCode}
-                stickyButtonLabel={getLocalizedCityText((categoryT['sticky_btn'] || 'Get offers — Free'), lang, cityName, cityT, grammaticalCase)}
+                stickyButtonLabel={getLocalizedCityText((categoryT['sticky_btn'] || 'Get offers — Free'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
               />
 
               <section className="mt-8 rounded-xl bg-gray-50 p-6 sm:p-8">
-                <h2 className="text-2xl font-bold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h2`] || ''), lang, cityName, cityT, grammaticalCase))}</h2>
-                <p className="mt-4 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p1`] || ''), lang, cityName, cityT, grammaticalCase))}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h3_1`] || ''), lang, cityName, cityT, grammaticalCase))}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p2`] || ''), lang, cityName, cityT, grammaticalCase))}</p>
-                <h3 className="mt-6 text-xl font-semibold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h3_2`] || ''), lang, cityName, cityT, grammaticalCase))}</h3>
-                <p className="mt-3 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p3`] || ''), lang, cityName, cityT, grammaticalCase))}</p>
+                <h2 className="text-2xl font-bold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h2`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</h2>
+                <p className="mt-4 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p1`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h3_1`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p2`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</p>
+                <h3 className="mt-6 text-xl font-semibold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h3_2`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</h3>
+                <p className="mt-3 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p3`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</p>
                 {priceText && (
                   <p className="mt-4 text-base leading-7 text-gray-700">{priceText}</p>
                 )}
 
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm text-gray-700">
-                  <span>{getLocalizedCityText((categoryT['also_check'] || 'See also:'), lang, cityName, cityT, grammaticalCase)}</span>
+                  <span>{getLocalizedCityText((categoryT['also_check'] || 'See also:'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}</span>
                   {relatedLinks.map((link, index) => (
                     <span key={link.href}>
                       <Link href={link.href} className="font-medium text-orange-600 underline underline-offset-2">
@@ -852,7 +852,7 @@ export default async function CategoryPage({ params }: PageProps) {
                     cityName={cityName}
                     services={services}
                     countryCode={cityCountryCode}
-                    title={getLocalizedCityText((categoryT['form_btn'] || 'Get offers'), lang, cityName, cityT, grammaticalCase)}
+                    title={getLocalizedCityText((categoryT['form_btn'] || 'Get offers'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
                   />
                 </div>
               </div>
@@ -861,10 +861,10 @@ export default async function CategoryPage({ params }: PageProps) {
 
           <section className="mt-12 rounded-xl bg-gray-50 border-t border-gray-200 px-6 py-8 text-center">
             <p className="text-sm text-gray-500">
-              {getLocalizedCityText((categoryT['provider_cta_prefix'] || 'Do you offer'), lang, cityName, cityT, grammaticalCase)} {categoryName} {getLocalizedCityText((categoryT['provider_cta_suffix'] || `${prepBaseCat} {city}?`), lang, cityName, categoryT, grammaticalCase)}
+              {getLocalizedCityText((categoryT['provider_cta_prefix'] || 'Do you offer'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })} {categoryName} {getLocalizedCityText((categoryT['provider_cta_suffix'] || `${prepBaseCat} {city}?`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
             </p>
             <Link href={`/${lang}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
-              {getLocalizedCityText((categoryT['provider_cta_link'] || 'Join for free →'), lang, cityName, cityT, grammaticalCase)}
+              {getLocalizedCityText((categoryT['provider_cta_link'] || 'Join for free →'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
             </Link>
           </section>
         </main>

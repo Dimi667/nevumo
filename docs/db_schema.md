@@ -172,16 +172,20 @@ CREATE TABLE location_translations (
     location_id INT NOT NULL REFERENCES locations(id) ON DELETE CASCADE,
     lang TEXT NOT NULL,
     city_name TEXT NOT NULL,
+    locative_form TEXT,    -- grammatical locative case (e.g., Sofia → Sofii in PL)
+    genitive_form TEXT,    -- grammatical genitive case (e.g., Sofia → Sofii in PL)
     UNIQUE(location_id, lang)
 );
 
 CREATE INDEX idx_location_translations_location ON location_translations(location_id);
 CREATE INDEX idx_location_translations_lang ON location_translations(lang);
 
-### Seeded Data (April 2026)
+### Seeded Data (May 2026)
 - 3 cities × 34 languages = 102 rows
 - Sofia (BG), Belgrade (RS), Warszawa (PL)
-- Seed script: apps/api/scripts/seed_location_translations.py
+- locative_form and genitive_form added May 2026 (Alembic: 20260510_add_locative_genitive_forms)
+- Seed script: apps/api/scripts/seed_location_declension.py
+- Славянски езици: хардкоднати форми; останалите: locative_form = genitive_form = city_name
 
 ---
 

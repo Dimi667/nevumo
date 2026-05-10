@@ -30,14 +30,16 @@ export default async function OGImage({ params }: OGImageProps) {
     lang,
     cityName,
     cityT,
-    grammaticalCase
+    grammaticalCase,
+    { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }
   );
   const description = getLocalizedCityText(
     t(homepageT, 'category_meta_description', 'Find {category} services in {city}').replace('{category}', category),
     lang,
     cityName,
     cityT,
-    grammaticalCase
+    grammaticalCase,
+    { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }
   );
   const ctaText = t(homepageT, 'og_cta', 'Start for free');
   

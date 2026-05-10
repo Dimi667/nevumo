@@ -55,7 +55,7 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s: %(message)s",
 )
 
-app = FastAPI(title="Nevumo API", default_response_class=UnescapedJSONResponse)
+app = FastAPI(title="Nevumo API", default_response_class=UnescapedJSONResponse, redirect_slashes=False)
 
 init_db()
 

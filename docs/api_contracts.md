@@ -1373,7 +1373,9 @@ Check if a slug redirects to another slug without following the redirect. Used b
       "city": "Sofia",
       "city_en": "Sofia",
       "country_code": "BG",
-      "currency": "EUR"
+      "currency": "EUR",
+      "locative_form": "Sofii",
+      "genitive_form": "Sofii"
     },
     {
       "id": 2,
@@ -1381,7 +1383,9 @@ Check if a slug redirects to another slug without following the redirect. Used b
       "city": "Belgrade",
       "city_en": "Belgrade",
       "country_code": "RS",
-      "currency": "RSD"
+      "currency": "RSD",
+      "locative_form": "Beogradu",
+      "genitive_form": "Beograda"
     }
   ]
 }
@@ -1427,7 +1431,9 @@ Same format as `GET /api/v1/cities`.
   "city": "Варшава",
   "city_en": "Warszawa",
   "country_code": "PL",
-  "currency": "PLN"
+  "currency": "PLN",
+  "locative_form": "Warszawie",
+  "genitive_form": "Warszawy"
 }
 ```
 

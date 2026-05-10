@@ -32,6 +32,8 @@ class CityOut(BaseModel):
     city_en: str
     country_code: str
     currency: str
+    locative_form: Optional[str] = None
+    genitive_form: Optional[str] = None
 
 
 class CitiesResponse(BaseModel):

@@ -170,6 +170,8 @@ export interface CityOut {
   city_en: string;
   country_code: string;
   currency: string;
+  locative_form?: string | null;
+  genitive_form?: string | null;
 }
 
 export interface LeadCreateInput {

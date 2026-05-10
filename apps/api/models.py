@@ -159,6 +159,8 @@ class LocationTranslation(Base):
     location_id: Mapped[int] = mapped_column(ForeignKey("locations.id", ondelete="CASCADE"), nullable=False)
     lang: Mapped[str] = mapped_column(String, nullable=False)
     city_name: Mapped[str] = mapped_column(String, nullable=False)
+    locative_form: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    genitive_form: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     location: Mapped["Location"] = relationship(back_populates="translations")
 

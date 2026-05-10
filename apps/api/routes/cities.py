@@ -43,12 +43,16 @@ async def list_active_cities(
     for loc in rows:
         # Get translated city name with fallback
         translated_name = None
+        locative_form = None
+        genitive_form = None
         if loc.translations:
             for translation in loc.translations:
                 if translation.lang == lang:
                     translated_name = translation.city_name
+                    locative_form = translation.locative_form
+                    genitive_form = translation.genitive_form
                     break
-        
+
         # Fallback: translation -> city_en -> city
         city_display = translated_name if translated_name else (loc.city_en if loc.city_en else loc.city)
         city_en_display = loc.city_en if loc.city_en else loc.city
@@ -60,7 +64,9 @@ async def list_active_cities(
                 city=city_display,
                 city_en=city_en_display,
                 country_code=loc.country_code,
-                currency=COUNTRY_CURRENCY_MAP.get(loc.country_code, DEFAULT_CURRENCY)
+                currency=COUNTRY_CURRENCY_MAP.get(loc.country_code, DEFAULT_CURRENCY),
+                locative_form=locative_form,
+                genitive_form=genitive_form
             )
         )
 
@@ -97,12 +103,16 @@ async def list_cities(
     for loc in rows:
         # Get translated city name with fallback
         translated_name = None
+        locative_form = None
+        genitive_form = None
         if loc.translations:
             for translation in loc.translations:
                 if translation.lang == lang:
                     translated_name = translation.city_name
+                    locative_form = translation.locative_form
+                    genitive_form = translation.genitive_form
                     break
-        
+
         # Fallback: translation -> city_en -> city
         city_display = translated_name if translated_name else (loc.city_en if loc.city_en else loc.city)
         city_en_display = loc.city_en if loc.city_en else loc.city
@@ -114,7 +124,9 @@ async def list_cities(
                 city=city_display,
                 city_en=city_en_display,
                 country_code=loc.country_code,
-                currency=COUNTRY_CURRENCY_MAP.get(loc.country_code, DEFAULT_CURRENCY)
+                currency=COUNTRY_CURRENCY_MAP.get(loc.country_code, DEFAULT_CURRENCY),
+                locative_form=locative_form,
+                genitive_form=genitive_form
             )
         )
 
@@ -153,6 +165,8 @@ async def get_city_by_slug(
     # Fallback: translation -> city_en -> city
     city_display = translation.city_name if translation else (location.city_en if location.city_en else location.city)
     city_en_display = location.city_en if location.city_en else location.city
+    locative_form = translation.locative_form if translation else None
+    genitive_form = translation.genitive_form if translation else None
 
     data = CityOut(
         id=location.id,
@@ -160,7 +174,9 @@ async def get_city_by_slug(
         city=city_display,
         city_en=city_en_display,
         country_code=location.country_code,
-        currency=COUNTRY_CURRENCY_MAP.get(location.country_code, DEFAULT_CURRENCY)
+        currency=COUNTRY_CURRENCY_MAP.get(location.country_code, DEFAULT_CURRENCY),
+        locative_form=locative_form,
+        genitive_form=genitive_form
     )
 
     if redis_client:

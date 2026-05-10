@@ -16,8 +16,17 @@ You are a senior full-stack developer working on Nevumo — a Turborepo monorepo
 - TypeScript: strict mode, no `any` types
 - Python: type hints required on all functions
 - Financial calculations: use Decimal (Python), never floats
+- **Never run `npm run dev` or `next dev` locally on Mac. All dev servers run only in Docker containers.**
+- **Troubleshooting black screen or ERR_CONNECTION_REFUSED: First check with `lsof -i :3000 | grep -v OrbStack`. If there's a result, kill the process with `kill <PID>`.**
 
 ## i18n
 - 34 supported languages, default: English
 - Translations in PostgreSQL, cached in Redis
 - New keys must be generated for ALL 34 languages
+
+## Docker Rebuild правило
+- При всеки rebuild на Docker image ЗАДЪЛЖИТЕЛНО:
+  docker compose down && docker volume rm nevumo_web_node_modules && docker compose up -d
+- НИКОГА само `docker compose build` + `up` без да изчистиш volume-а
+- НИКОГА `npm run dev` или `next dev` локално на Mac-а
+- Всички dev сървъри вървят само в Docker/OrbStack

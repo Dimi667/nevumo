@@ -6,14 +6,15 @@ export function getLocalizedCityText(
   lang: string,
   cityName: string,
   cityT: any,
-  grammaticalCase: 'nominative' | 'locative' | 'genitive' = 'nominative'
+  grammaticalCase: 'nominative' | 'locative' | 'genitive' = 'nominative',
+  cityForms?: { locative_form?: string | null, genitive_form?: string | null }
 ) {
   // 1. Resolve city name based on case
   let resolvedCityName = cityName;
-  if (grammaticalCase === 'locative' && cityT['locative_form']) {
-    resolvedCityName = cityT['locative_form'];
-  } else if (grammaticalCase === 'genitive' && cityT['genitive_form']) {
-    resolvedCityName = cityT['genitive_form'];
+  if (grammaticalCase === 'locative' && (cityForms?.locative_form ?? cityT['locative_form'])) {
+    resolvedCityName = cityForms?.locative_form ?? cityT['locative_form'] ?? cityName;
+  } else if (grammaticalCase === 'genitive' && (cityForms?.genitive_form ?? cityT['genitive_form'])) {
+    resolvedCityName = cityForms?.genitive_form ?? cityT['genitive_form'] ?? cityName;
   }
 
   // 2. Preposition logic
