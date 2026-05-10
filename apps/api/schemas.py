@@ -68,12 +68,26 @@ class ServiceOut(BaseModel):
 # Providers
 # -------------------------
 
+class LatestLeadPreview(BaseModel):
+    client_name: str
+    city_name: str
+    created_at: datetime
+    client_image_url: Optional[str] = None
+
+
 class ProviderListItem(BaseModel):
     id: UUID
     business_name: str
     rating: float
     verified: bool
     slug: str
+    profile_image_url: Optional[str] = None
+    description: Optional[str] = None
+    jobs_completed: int = 0
+    leads_received: int = 0
+    review_count: int = 0
+    latest_lead_preview: Optional[LatestLeadPreview] = None
+    services: List[ServiceOut] = []
 
     @field_validator("rating", mode="before")
     @classmethod
@@ -86,13 +100,6 @@ class ProviderListItem(BaseModel):
 class ProviderListResponse(BaseModel):
     success: bool = True
     data: List[ProviderListItem]
-
-
-class LatestLeadPreview(BaseModel):
-    client_name: str
-    city_name: str
-    created_at: datetime
-    client_image_url: Optional[str] = None
 
 
 class ProviderDetail(BaseModel):

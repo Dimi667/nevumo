@@ -1080,6 +1080,7 @@ Updates client's email notification preferences.
 
 ### Response
 
+```json
 {
   "success": true,
   "data": [
@@ -1088,10 +1089,44 @@ Updates client's email notification preferences.
       "business_name": "Maria Massage",
       "rating": 4.8,
       "verified": true,
-      "slug": "maria-petrova"
+      "slug": "maria-petrova",
+      "profile_image_url": "/api/v1/static/provider_images/uuid.webp",
+      "description": "Professional massage therapy services",
+      "jobs_completed": 120,
+      "leads_received": 128,
+      "review_count": 45,
+      "latest_lead_preview": {
+        "client_name": "Anna",
+        "city_name": "Sofia",
+        "created_at": "2025-04-02T14:30:00",
+        "client_image_url": null
+      },
+      "services": [
+        {
+          "id": "uuid",
+          "title": "Relax Massage",
+          "description": "Relaxing full-body massage",
+          "price_type": "fixed",
+          "base_price": 50.0,
+          "category_slug": "massage",
+          "currency": "EUR"
+        }
+      ]
     }
   ]
 }
+```
+
+### Notes
+- All fields except `id`, `business_name`, `rating`, `verified`, `slug` are optional with default values (null, 0, or empty array)
+- `description` is fetched from `provider_translations` for the requested language, with fallback to English
+- `jobs_completed` is calculated from leads with status='done' (batch query)
+- `leads_received` is the total count of leads for the provider (batch query)
+- `review_count` is the total count of reviews for the provider (batch query)
+- `latest_lead_preview` contains the most recent lead preview-safe data; `client_name` uses `users.name` or falls back to "Client" (never email)
+- `services[]` only includes services for the requested `category_slug` (batch query)
+- Service titles are localized for scraped providers using `category_translations`
+- Redis cache key: `providers:{category_slug}:{city_slug}:{lang}` (TTL: 3600s)
 
 ---
 

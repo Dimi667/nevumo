@@ -444,34 +444,29 @@ async function getEnrichedProviders(
 ): Promise<{ allCount: number; providers: EnrichedProvider[]; averageRating: number }> {
   const listItems = await getProviders(category, city, lang);
 
-  const details = await Promise.all(
-    listItems.map(async (provider) => {
-      const detail = await getProviderBySlug(provider.slug, lang, city);
-      return {
-        id: provider.id,
-        slug: provider.slug,
-        businessName: provider.business_name,
-        rating: detail?.rating ?? provider.rating,
-        profileImageUrl: detail?.profile_image_url ?? null,
-        description: detail?.description ?? null,
-        jobsCompleted: detail?.jobs_completed ?? 0,
-        leadsReceived: detail?.leads_received ?? 0,
-        reviewCount: detail?.review_count ?? 0,
-        latestLeadPreviewCreatedAt: detail?.latest_lead_preview?.created_at ?? null,
-        latestLeadPreviewClientName: detail?.latest_lead_preview?.client_name ?? null,
-        services: (detail?.services ?? [])
-          .filter((s: ServiceOut) => s.category_slug === category)
-          .map((s: ServiceOut) => ({
-            id: s.id,
-            title: s.title,
-            priceType: s.price_type,
-            basePrice: s.base_price,
-            currency: s.currency ?? 'PLN',
-            description: s.description ?? null,
-          })),
-      } satisfies EnrichedProvider;
-    }),
-  );
+  const details = listItems.map((provider) => ({
+    id: provider.id,
+    slug: provider.slug,
+    businessName: provider.business_name,
+    rating: provider.rating,
+    profileImageUrl: provider.profile_image_url ?? null,
+    description: provider.description ?? null,
+    jobsCompleted: provider.jobs_completed ?? 0,
+    leadsReceived: provider.leads_received ?? 0,
+    reviewCount: provider.review_count ?? 0,
+    latestLeadPreviewCreatedAt: provider.latest_lead_preview?.created_at ?? null,
+    latestLeadPreviewClientName: provider.latest_lead_preview?.client_name ?? null,
+    services: (provider.services ?? [])
+      .filter((s: ServiceOut) => s.category_slug === category)
+      .map((s: ServiceOut) => ({
+        id: s.id,
+        title: s.title,
+        priceType: s.price_type,
+        basePrice: s.base_price,
+        currency: s.currency ?? 'PLN',
+        description: s.description ?? null,
+      })),
+  })) satisfies EnrichedProvider[];
 
   const ratedProviders = listItems.filter((provider) => provider.rating > 0);
   const averageRating = ratedProviders.length > 0

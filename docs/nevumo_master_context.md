@@ -183,6 +183,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **N+1 Fix — Category Page Performance** — COMPLETE:
+  - `GET /api/v1/providers` обогатен с batch данни: profile_image_url, description, jobs_completed, leads_received, review_count, latest_lead_preview, services[]
+  - Redis cache key обновен: `providers:{category_slug}:{city_slug}:{lang}`, TTL 3600s
+  - Category page: премахнат Promise.all с N x getProviderBySlug() извиквания
+  - apps/web/lib/api.ts: API_BASE обновен да използва API_URL (Docker SSR) преди NEXT_PUBLIC_API_URL
+  - .env: добавен API_URL=http://nevumo-api:8000 за SSR в Docker
 - **Data Export Endpoint (GDPR Article 20 - Right to Portability) — May 8, 2026** — COMPLETE:
   - **Backend**: Implemented `GET /api/v1/user/export` endpoint in `apps/api/routes/user.py` with `apps/api/services/export_service.py`
   - **Rate Limiting**: 1 request per 24 hours per user (Redis key: `export_rl:{user_id}`, TTL 86400)

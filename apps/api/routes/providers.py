@@ -1,15 +1,17 @@
 import json
 from typing import Optional
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
+from sqlalchemy import func, and_
 import redis as redis_lib
 
 from apps.api.config import settings
 from apps.api.dependencies import get_db, get_redis
 from apps.api.exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
-from apps.api.models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation
+from apps.api.models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation, Lead, Review, User
 from apps.api.schemas import (
     ProviderListItem,
     ProviderListResponse,
@@ -76,7 +78,7 @@ async def list_providers(
     db: Session = Depends(get_db),
     redis_client: Optional[redis_lib.Redis] = Depends(get_redis),
 ) -> ProviderListResponse:
-    cache_key = f"providers:{category_slug}:{city_slug}"
+    cache_key = f"providers:{category_slug}:{city_slug}:{lang}"
 
     if redis_client:
         cached = redis_client.get(cache_key)
@@ -105,21 +107,169 @@ async def list_providers(
         .all()
     )
 
-    data = [
-        ProviderListItem(
-            id=p.id,
-            business_name=p.business_name,
-            rating=p.rating,
-            verified=p.verified,
-            slug=p.slug,
+    if not providers:
+        return ProviderListResponse(data=[])
+
+    provider_ids: list[UUID] = [p.id for p in providers]
+
+    # Batch query for descriptions (from provider_translations)
+    descriptions: dict[UUID, str] = {}
+    if provider_ids:
+        # Try requested language first
+        pt_rows = db.query(ProviderTranslation).filter(
+            ProviderTranslation.provider_id.in_(provider_ids),
+            ProviderTranslation.field == "description",
+            ProviderTranslation.lang == lang
+        ).all()
+        for pt in pt_rows:
+            descriptions[pt.provider_id] = pt.value
+
+        # Fallback to English for missing ones
+        missing_ids = [pid for pid in provider_ids if pid not in descriptions]
+        if missing_ids and lang != "en":
+            pt_en_rows = db.query(ProviderTranslation).filter(
+                ProviderTranslation.provider_id.in_(missing_ids),
+                ProviderTranslation.field == "description",
+                ProviderTranslation.lang == "en"
+            ).all()
+            for pt in pt_en_rows:
+                descriptions[pt.provider_id] = pt.value
+
+    # Batch query for jobs_completed (leads with status='done')
+    jobs_completed: dict[UUID, int] = {}
+    if provider_ids:
+        jc_rows = db.query(Lead.provider_id, func.count(Lead.id)).filter(
+            Lead.provider_id.in_(provider_ids),
+            Lead.status == "done"
+        ).group_by(Lead.provider_id).all()
+        jobs_completed = {row[0]: row[1] for row in jc_rows}
+
+    # Batch query for leads_received (total leads count)
+    leads_received: dict[UUID, int] = {}
+    if provider_ids:
+        lr_rows = db.query(Lead.provider_id, func.count(Lead.id)).filter(
+            Lead.provider_id.in_(provider_ids)
+        ).group_by(Lead.provider_id).all()
+        leads_received = {row[0]: row[1] for row in lr_rows}
+
+    # Batch query for review_count
+    review_count: dict[UUID, int] = {}
+    if provider_ids:
+        rc_rows = db.query(Review.provider_id, func.count(Review.id)).filter(
+            Review.provider_id.in_(provider_ids)
+        ).group_by(Review.provider_id).all()
+        review_count = {row[0]: row[1] for row in rc_rows}
+
+    # Batch query for latest_lead_preview
+    latest_lead_previews: dict[UUID, dict] = {}
+    if provider_ids:
+        # Subquery to get latest lead created_at per provider
+        subq = db.query(
+            Lead.provider_id,
+            func.max(Lead.created_at).label('max_created_at')
+        ).filter(
+            Lead.provider_id.in_(provider_ids)
+        ).group_by(Lead.provider_id).subquery()
+
+        llp_rows = db.query(
+            Lead.provider_id,
+            Lead.created_at,
+            User.name.label('client_name'),
+            Location.city.label('city_name')
+        ).join(
+            User, Lead.client_id == User.id, isouter=True
+        ).join(
+            Location, Lead.city_id == Location.id
+        ).join(
+            subq, and_(
+                Lead.provider_id == subq.c.provider_id,
+                Lead.created_at == subq.c.max_created_at
+            )
+        ).all()
+
+        for row in llp_rows:
+            latest_lead_previews[row.provider_id] = {
+                'created_at': row.created_at,
+                'client_name': row.client_name if row.client_name else "Client",
+                'city_name': row.city_name
+            }
+
+    # Batch query for services (filtered by category_slug)
+    services_by_provider: dict[UUID, list[ServiceOut]] = {}
+    if provider_ids and category:
+        service_rows = db.query(Service).filter(
+            Service.provider_id.in_(provider_ids),
+            Service.category_id == category.id
+        ).all()
+
+        for s in service_rows:
+            if s.provider_id not in services_by_provider:
+                services_by_provider[s.provider_id] = []
+
+            # Localize service title for scraped providers
+            service_title = s.title
+            provider = next((p for p in providers if p.id == s.provider_id), None)
+            if provider and provider.data_source == "scraped":
+                ct = db.query(CategoryTranslation).filter(
+                    CategoryTranslation.category_id == s.category_id,
+                    CategoryTranslation.lang == lang
+                ).first()
+                if ct:
+                    service_title = ct.name
+                else:
+                    ct_en = db.query(CategoryTranslation).filter(
+                        CategoryTranslation.category_id == s.category_id,
+                        CategoryTranslation.lang == "en"
+                    ).first()
+                    if ct_en:
+                        service_title = ct_en.name
+
+            services_by_provider[s.provider_id].append(
+                ServiceOut(
+                    id=s.id,
+                    title=service_title,
+                    description=s.description,
+                    price_type=s.price_type,
+                    base_price=s.base_price,
+                    category_slug=category.slug,
+                    currency=s.currency,
+                )
+            )
+
+    # Build response with all batched data
+    data = []
+    for p in providers:
+        latest_lead_preview_obj = None
+        if p.id in latest_lead_previews:
+            llp_data = latest_lead_previews[p.id]
+            latest_lead_preview_obj = LatestLeadPreview(
+                client_name=llp_data['client_name'],
+                city_name=llp_data['city_name'],
+                created_at=llp_data['created_at'],
+                client_image_url=None
+            )
+
+        data.append(
+            ProviderListItem(
+                id=p.id,
+                business_name=p.business_name,
+                rating=p.rating,
+                verified=p.verified,
+                slug=p.slug,
+                profile_image_url=p.profile_image_url,
+                description=descriptions.get(p.id),
+                jobs_completed=jobs_completed.get(p.id, 0),
+                leads_received=leads_received.get(p.id, 0),
+                review_count=review_count.get(p.id, 0),
+                latest_lead_preview=latest_lead_preview_obj,
+                services=services_by_provider.get(p.id, []),
+            )
         )
-        for p in providers
-    ]
 
     if redis_client and data:
         redis_client.setex(
             cache_key,
-            600,
+            3600,
             json.dumps([d.model_dump(mode="json") for d in data]),
         )
 
