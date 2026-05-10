@@ -9,6 +9,7 @@ import { getPhonePrefix } from '@/lib/phoneUtils';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 import { getCurrency, formatCurrency } from '@/lib/currency';
 import { JsonLd } from '@/components/JsonLd';
+import { resolveStaticUrl } from '@/lib/urlUtils';
 
 interface ProviderWidgetProps {
   provider: ProviderDetail;
@@ -220,16 +221,13 @@ export default function ProviderWidget({
   const isPhoneValid = phoneDigitsCount >= 7;
   const isPrefixOnlyPhone = phoneValue.trim() === phonePrefix.trim();
 
-  // Use absolute URL for provider image to avoid rewrite issues
-  const profileImageUrl = provider.profile_image_url?.startsWith('/api/v1/static/')
-    ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}${provider.profile_image_url}`
-    : provider.profile_image_url;
+  // Use runtime URL resolution for provider image
+  const profileImageUrl = resolveStaticUrl(provider.profile_image_url);
 
   // Debug log
   console.log('[ProviderWidget Image URL]', { 
     original: provider.profile_image_url,
     final: profileImageUrl,
-    apiBase: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
   });
 
   useEffect(() => {

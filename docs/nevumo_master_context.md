@@ -189,6 +189,13 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Category page: премахнат Promise.all с N x getProviderBySlug() извиквания
   - apps/web/lib/api.ts: API_BASE обновен да използва API_URL (Docker SSR) преди NEXT_PUBLIC_API_URL
   - .env: добавен API_URL=http://nevumo-api:8000 за SSR в Docker
+- **Provider Image Hydration Mismatch Fix (May 10, 2026)** — COMPLETE:
+  - Fixed React hydration mismatch for provider images by implementing `resolveStaticUrl()` utility in `apps/web/lib/urlUtils.ts`
+  - Utility uses relative URLs for local development (works on localhost:3000 and 192.168.0.15:3000)
+  - Absolute URLs for production CDN (when backend returns them via `STATIC_FILES_BASE_URL`)
+  - Eliminates hydration mismatch by ensuring server and client render identical HTML
+  - Added `NEXT_PUBLIC_STATIC_URL` to `.env.example` documentation
+  - Backend `STATIC_FILES_BASE_URL` config supports CDN/S3 in production
 - **Data Export Endpoint (GDPR Article 20 - Right to Portability) — May 8, 2026** — COMPLETE:
   - **Backend**: Implemented `GET /api/v1/user/export` endpoint in `apps/api/routes/user.py` with `apps/api/services/export_service.py`
   - **Rate Limiting**: 1 request per 24 hours per user (Redis key: `export_rl:{user_id}`, TTL 86400)
