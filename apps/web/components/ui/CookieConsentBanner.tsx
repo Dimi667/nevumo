@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useCookieConsent, type ConsentCategories } from '@/hooks/useCookieConsent';
 import { useTranslation } from '@/lib/use-translation';
 import { CookieSettingsButton } from '@/components/ui/CookieSettingsButton';
@@ -77,7 +78,12 @@ export default function CookieConsentBanner({ lang }: CookieConsentBannerProps) 
             <div className="flex-1 text-center md:text-left">
               <h3 className="text-lg font-bold mb-1">{t('cookie_title', 'We value your privacy')}</h3>
               <p className="text-sm text-gray-300">
-                {t('cookie_description', 'We use cookies to enhance your browsing experience and analyze our traffic.')}
+                <span>
+                  {t('cookie_description', 'We use cookies and similar technologies to improve your experience.')}{' '}
+                  <Link href={`/${lang}/privacy`} className="underline hover:text-orange-600">
+                    {t('cookie_privacy_link', 'Privacy Policy')}
+                  </Link>
+                </span>
               </p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2 w-full md:w-auto">

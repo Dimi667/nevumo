@@ -90,9 +90,14 @@ Nevumo е уеб платформа за marketplace на услуги.
 ### Privacy Policy (завършено 2026-05-11)
 - Route: `/[lang]/privacy` — SSG, 34 езика
 - Текст: EN + BG + PL
-- Компонент: `apps/web/app/[lang]/privacy/page.tsx` 
+- Компонент: `apps/web/app/[lang]/privacy/page.tsx`
 - Seed: `apps/api/scripts/seed_privacy_translations.py` (53 ключа)
 - Namespace: `privacy`
+
+### Privacy Policy — достъпност (2026-05-11)
+- Футър: `GlobalFooter.tsx` — линк `footer.privacy_policy_link` (namespace `footer`) ✅
+- Регистрация: `LoginClient.tsx` — линк под бутона за регистрация ✅
+- Cookie Banner: `CookieConsentBanner.tsx` — линк в описанието ✅
 
 ### Cookie/Storage Registry
 | Ключ | Тип | Цел | Retention | Основа |
@@ -138,6 +143,14 @@ Nevumo е уеб платформа за marketplace на услуги.
 - ГРЕШНО: `t(dict, 'privacy.heading')`
 - Причина: API-то връща ключовете без namespace префикс (strips автоматично)
 - Това важи за ВСИЧКИ namespaces в проекта
+
+### Namespace `footer` (seed: `seed_footer_translations.py`)
+- Глобален namespace за футър линкове и правни бележки
+- Текущи ключове: `privacy_policy_link`, `cookies_link`, `terms_link`, `register_privacy_note`, `register_privacy_link`
+- 34 езика с реални преводи
+
+### Namespace `cookie_banner` (seed: `seed_cookie_banner_translations_1/2/3.py`)
+- Добавен ключ `cookie_privacy_link` (2026-05-11) — 34 езика
 
 ### SEO & Internationalization Infrastructure
 - **Автоматизация**: Автоматично генериране на `hreflang` за всички 34 езика чрез `generateHreflangAlternates`.

@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { useTranslation } from '@/lib/use-translation';
 import {
   SUPPORTED_LANGUAGES,
   LANGUAGE_DISPLAY_NAMES,
@@ -20,6 +22,7 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation('footer', lang);
 
   const currentYear = new Date().getFullYear();
 
@@ -49,7 +52,7 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
   const handleLanguageChange = (newLang: string) => {
     // Replace lang segment in pathname
     const pathSegments = pathname.split('/').filter(Boolean);
-    if (pathSegments.length > 0 && SUPPORTED_LANGUAGES.includes(pathSegments[0])) {
+    if (pathSegments.length > 0 && SUPPORTED_LANGUAGES.includes(pathSegments[0] as string)) {
       pathSegments[0] = newLang;
     } else {
       pathSegments.unshift(newLang);
@@ -78,6 +81,14 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
         {!minimal && (
           <div className="text-gray-600 text-sm">
             © {currentYear} Nevumo
+          </div>
+        )}
+
+        {!minimal && (
+          <div className="flex flex-wrap justify-center gap-2 text-sm">
+            <Link href={`/${lang}/privacy`} className="text-gray-700 transition-colors hover:text-orange-600">
+              {t('privacy_policy_link', 'Privacy Policy')}
+            </Link>
           </div>
         )}
 

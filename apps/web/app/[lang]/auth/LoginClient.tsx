@@ -3,6 +3,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useSearchParams, useParams } from "next/navigation";
+import Link from "next/link";
 import { trackPageEvent } from "@/lib/tracking";
 import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
 import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@/lib/auth-api";
@@ -84,9 +85,10 @@ interface LoginClientProps {
   lang: string;
   initialRole: string | null;
   authDict: Record<string, string>;
+  footerDict: Record<string, string>;
 }
 
-export default function LoginClient({ lang, initialRole, authDict }: LoginClientProps) {
+export default function LoginClient({ lang, initialRole, authDict, footerDict }: LoginClientProps) {
   console.log('[AuthPage] authDict keys:', Object.keys(authDict));
   console.log('[AuthPage] authDict sample:', authDict);
   const t = (dict: Record<string, string>, key: string, fallback: string): string => dict[key] ?? fallback;
@@ -659,6 +661,13 @@ export default function LoginClient({ lang, initialRole, authDict }: LoginClient
                 {state.loading ? t(authDict, 'registering_btn', 'Creating...') : claimToken ? t(authDict, 'claim_cta_btn', "Claim profile") : t(authDict, 'continue_btn', "Continue")}
               </button>
             </form>
+
+            <p className="text-xs text-gray-500 text-center mt-2">
+              {t(footerDict, 'register_privacy_note', 'By registering you agree to our')}{' '}
+              <Link href={`/${lang}/privacy`} className="underline hover:text-orange-600">
+                {t(footerDict, 'register_privacy_link', 'Privacy Policy')}
+              </Link>
+            </p>
 
             {state.registerSuccess && (
               <div className="bg-green-50 text-green-700 text-sm p-2.5 rounded-lg text-center mt-3">

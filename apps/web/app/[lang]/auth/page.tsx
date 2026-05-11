@@ -29,5 +29,6 @@ export default async function AuthPage({
   const { lang } = await params;
   const { role } = await searchParams;
   const authDict = await fetchTranslations(lang, "auth");
-  return <LoginClient lang={lang} initialRole={role ?? null} authDict={authDict} />;
+  const footerDict = await fetchTranslations(lang, "footer");
+  return <LoginClient lang={lang} initialRole={role ?? null} authDict={authDict} footerDict={footerDict} />;
 }
