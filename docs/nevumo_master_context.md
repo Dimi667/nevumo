@@ -7,6 +7,14 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Платформата е мултиезична (34 езика)
 - Основен фокус: scalability, SEO, conversion
 
+### Фирмени данни
+- **Юридическо наименование:** „ФИЛИПС ЦЕНТЬР БЪЛГАРИЯ" ООД
+- **ЕИК:** 175369610
+- **Адрес:** бул. Петко Каравелов бл. 77, вх. А, ап. 19, р-н Триадица, п.к. 1408, гр. София, България
+- **Privacy email:** privacy@nevumo.com
+- **Бранд:** Nevumo
+- **Забележка:** Предстои преименуване — при промяна актуализирай всички правни документи
+
 ---
 
 ## Tech Stack
@@ -44,6 +52,19 @@ Nevumo е уеб платформа за marketplace на услуги.
 - PostgreSQL (nevumo_leads)
 - Redis (caching layer)
 
+### Хостинг инфраструктура (планирана — 2026-05-11)
+| Компонент | Доставчик | Цена старт |
+|-----------|-----------|------------|
+| Frontend | Vercel Inc. | $0 (free tier) |
+| Backend API | Railway Corp. | $5/мес |
+| PostgreSQL | Neon Inc. | $0 (free tier) |
+| Redis кеш | Upstash Inc. | $0 (free tier) |
+| Снимки/Storage | Cloudflare Inc. (R2) | $0 (free tier) |
+| **Общо** | | **$0–5/мес при launch** |
+
+Бележка: Всички са в USA — трансфери покрити с SCCs. Cloudflare + DPF.
+Миграция от локален Docker: след Warsaw launch stabilization.
+
 ### Tracking
 - Google Analytics 4 (GA4) — G-3PYNQ1Y2V9
 - Custom DB events — page_events таблица + /api/v1/page-events endpoint
@@ -61,6 +82,26 @@ Nevumo е уеб платформа за marketplace на услуги.
 ### Shared
 - packages/ui (shared UI components)
 - packages/typescript-config (shared TS config)
+
+---
+
+## GDPR / Правни документи
+
+### Privacy Policy (завършено 2026-05-11)
+- Route: `/[lang]/privacy` — SSG, 34 езика
+- Текст: EN + BG + PL
+- Компонент: `apps/web/app/[lang]/privacy/page.tsx` 
+- Seed: `apps/api/scripts/seed_privacy_translations.py` (53 ключа)
+- Namespace: `privacy`
+
+### Cookie/Storage Registry
+| Ключ | Тип | Цел | Retention | Основа |
+|------|-----|-----|-----------|--------|
+| `lang` | Cookie | Избран език от dropdown | 30 дни | Functional |
+| `nevumo_city_preference` | localStorage | Предпочитан град | Indefinite | Functional |
+| `nevumo_auth_email` | sessionStorage | Email при auth flow | Session (tab) | Договор |
+
+Пълният актуален списък (11 entries) е в `docs/gdpr_compliance_plan.md` ЗАДАЧА 4.
 
 ---
 
@@ -90,6 +131,13 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Redis кешира преводите
 - UI copy за homepage и category страниците вече се подава от PostgreSQL през namespaced endpoint (`homepage.*`, `category.*`)
 - **Source of Truth за езици**: `apps/web/lib/locales.ts` (34 поддържани езика)
+
+### Важно правило за t() функцията
+- Ключовете се подават БЕЗ namespace префикс
+- Правилно: `t(dict, 'heading')`
+- ГРЕШНО: `t(dict, 'privacy.heading')`
+- Причина: API-то връща ключовете без namespace префикс (strips автоматично)
+- Това важи за ВСИЧКИ namespaces в проекта
 
 ### SEO & Internationalization Infrastructure
 - **Автоматизация**: Автоматично генериране на `hreflang` за всички 34 езика чрез `generateHreflangAlternates`.
