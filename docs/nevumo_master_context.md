@@ -486,6 +486,18 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Leads Rate Limiting UX (April 21, 2026)**: Improved lead creation failure response to return the last successful lead ID, enabling the "claim" flow for rate-limited users.
   - **Client Dashboard Translation Fix (April 21, 2026)**: Fixed missing translation for "Recent Requests" in the client dashboard overview. Synced key `recent_requests_title` between frontend and backend and seeded 2,482 rows across 34 languages.
   - **Client Notes Feature (April 21, 2026)** — COMPLETE:
+- **Mobile Sticky Footer Fix (May 2026)** — COMPLETE:
+  - **Проблем:** Sticky бутоните на homepage, category и provider страниците покриваха GlobalFooter и dropdown-а за смяна на езици на мобилен екран.
+  - **Решение:** Добавен динамичен paddingBottom на document.body равен на височината на sticky бутона — footer-ът се повдига и е достъпен при скрол до дъното.
+  - **Засегнати файлове:**
+    - apps/web/components/category/StickyLeadFormButton.tsx — добавен useEffect с paddingBottom логика
+    - apps/web/components/ProviderWidget.tsx — добавен useRef + useEffect с paddingBottom логика; премахнат статичен pb-16
+    - apps/web/components/homepage/MobileStickyCTA.tsx — добавен paddingBottom useEffect + заменен second-cta observer с hero-section observer (threshold: 0.1) + добавен footer observer (threshold: 0.01)
+    - apps/web/app/[lang]/page.tsx — добавен id="hero-section" на hero секцията
+  - **Логика на MobileStickyCTA:**
+    - Hero-section видима → бутонът се скрива
+    - Hero-section невидима → бутонът се показва
+    - Footer видим → бутонът се показва (override)
 - **Cookie Consent Banner (GDPR Compliance) — May 8, 2026** — COMPLETE:
   - **Frontend Component**: `apps/web/components/ui/CookieConsentBanner.tsx` with Accept All / Reject All / Customize buttons
   - **Cookie Storage**: First-party cookie `nevumo_consent` with versioned structure (v:2, timestamp, categories, policy_version)

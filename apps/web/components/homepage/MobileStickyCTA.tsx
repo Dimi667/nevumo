@@ -13,23 +13,62 @@ export default function MobileStickyCTA({ children }: MobileStickyCTAProps) {
 
   useEffect(() => {
     setIsMounted(true);
+    const heroSection = document.getElementById('hero-section');
+    const footer = document.querySelector('footer');
+    if (!mobileRef.current) return;
 
-    const secondCTA = document.getElementById('second-cta');
-    if (!secondCTA || !mobileRef.current) return;
+    let heroSectionVisible = false;
+    let footerVisible = false;
 
-    const observer = new IntersectionObserver(
+    const update = () => {
+      if (footerVisible) {
+        setTransform('translateY(0)');
+      } else if (heroSectionVisible) {
+        setTransform('translateY(100%)');
+      } else {
+        setTransform('translateY(0)');
+      }
+    };
+
+    const ctaObserver = heroSection ? new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          setTransform(entry.isIntersecting ? 'translateY(100%)' : 'translateY(0)');
-        });
+        heroSectionVisible = entries[0]?.isIntersecting ?? false;
+        update();
       },
       { threshold: 0.1 }
-    );
+    ) : null;
 
-    observer.observe(secondCTA);
+    const footerObserver = footer ? new IntersectionObserver(
+      (entries) => {
+        footerVisible = entries[0]?.isIntersecting ?? false;
+        update();
+      },
+      { threshold: 0.01 }
+    ) : null;
+
+    if (heroSection && ctaObserver) ctaObserver.observe(heroSection);
+    if (footer && footerObserver) footerObserver.observe(footer);
 
     return () => {
-      observer.disconnect();
+      ctaObserver?.disconnect();
+      footerObserver?.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const btn = mobileRef.current;
+    if (!btn) return;
+
+    // Check if button is visible (mobile only)
+    const isMobile = window.getComputedStyle(btn).display !== 'none';
+    if (!isMobile) return;
+
+    // Get button height and add padding to body
+    const height = btn.offsetHeight;
+    document.body.style.paddingBottom = `${height}px`;
+
+    return () => {
+      document.body.style.paddingBottom = '';
     };
   }, []);
 

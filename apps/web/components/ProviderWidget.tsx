@@ -208,6 +208,7 @@ export default function ProviderWidget({
   const [phoneValue, setPhoneValue] = useState('');
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const phoneRef = useRef<HTMLDivElement>(null);
+  const stickyDivRef = useRef<HTMLDivElement>(null);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [descriptionValue, setDescriptionValue] = useState('');
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
@@ -313,11 +314,30 @@ export default function ProviderWidget({
       setCityInfo(city);
     };
     fetchCityInfo();
-    
+
     // Check if user is logged in
     const token = localStorage.getItem('nevumo_auth_token');
     setIsLoggedIn(!!token);
   }, [citySlug]);
+
+  // Set body padding for sticky element on mobile
+  useEffect(() => {
+    const stickyDiv = stickyDivRef.current;
+    if (!stickyDiv) return;
+
+    const setBodyPadding = () => {
+      if (window.innerWidth < 768) {
+        const height = stickyDiv.offsetHeight;
+        document.body.style.paddingBottom = height + 'px';
+      }
+    };
+
+    setBodyPadding();
+
+    return () => {
+      document.body.style.paddingBottom = '';
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -715,7 +735,7 @@ export default function ProviderWidget({
           )}
 
           {/* Sticky button mobile / inline desktop */}
-          <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-100 md:static md:p-0 md:bg-transparent md:border-0">
+          <div ref={stickyDivRef} className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-100 md:static md:p-0 md:bg-transparent md:border-0">
             <button
               type="submit"
               disabled={loading}
@@ -726,7 +746,7 @@ export default function ProviderWidget({
           </div>
         </form>
 
-        <p className="text-sm text-gray-400 text-center mt-4 md:mt-4 pb-16 md:pb-0">
+        <p className="text-sm text-gray-400 text-center mt-4 md:mt-4 md:pb-0">
           {t('disclaimer', undefined, 'Free request • No obligation')}
         </p>
       </div>

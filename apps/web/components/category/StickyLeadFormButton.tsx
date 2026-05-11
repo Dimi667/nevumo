@@ -31,6 +31,23 @@ export default function StickyLeadFormButton({
     return () => window.removeEventListener('scroll', checkScroll)
   }, [formId])
 
+  useEffect(() => {
+    const btn = btnRef.current
+    if (!btn) return
+
+    // Check if button is visible (mobile only)
+    const isMobile = window.getComputedStyle(btn).display !== 'none'
+    if (!isMobile) return
+
+    // Get button height and add padding to body
+    const height = btn.offsetHeight
+    document.body.style.paddingBottom = `${height}px`
+
+    return () => {
+      document.body.style.paddingBottom = ''
+    }
+  }, [])
+
   return (
     <div
       ref={btnRef}
