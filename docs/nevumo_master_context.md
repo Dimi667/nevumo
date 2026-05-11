@@ -91,13 +91,37 @@ Nevumo е уеб платформа за marketplace на услуги.
 - UI copy за homepage и category страниците вече се подава от PostgreSQL през namespaced endpoint (`homepage.*`, `category.*`)
 - **Source of Truth за езици**: `apps/web/lib/locales.ts` (34 поддържани езика)
 
-### SEO Infrastructure (April 2026)
+### SEO & Internationalization Infrastructure
 - **Автоматизация**: Автоматично генериране на `hreflang` за всички 34 езика чрез `generateHreflangAlternates`.
 - **Метаданни**: Използване на Metadata Template (`%s | Nevumo`). Преводите в БД са без бранд суфикси.
 - **Structured Data**: JSON-LD схеми (`Organization`, `WebSite`, `LocalBusiness`) през `lib/seo.ts`. Динамична адаптация според езика.
 - **Валидация**: Playwright + Phoenix за SEO одит на рендериран код.
 - **Canonical Tags**: Автоматично генериране на абсолютни canonical URLs за всички City Landing страници чрез `NEXT_PUBLIC_SITE_URL`.
 - **Universal Slug Logic**: Унифицирана логика за генериране на slugs между Frontend (`apps/web/lib/slug-utils.ts`) и Backend (`apps/api/services/provider_service.py`), поддържаща специални символи за 34 езика (Turkish İ/ı, German ü/ö, Icelandic ð/þ, Cyrillic).
+
+### Global Language Switcher (May 2026)
+
+Имплементиран глобален превключвател на езика достъпен на всички страници.
+
+**Архитектура:**
+- `proxy.ts` — вече съдържаше пълна language detection логика (без промени):
+  - URL сегмент → cookie `lang` → Accept-Language header → fallback `en` 
+- `apps/web/lib/locales.ts` — добавени два нови обекта:
+  - `LANGUAGE_DISPLAY_NAMES` — имена на 34 езика на собствения им език
+  - `LANGUAGE_FLAGS` — emoji флагове за всеки език
+- `apps/web/components/GlobalFooter.tsx` — нов компонент с props `{ lang: string; minimal?: boolean }`:
+  - Пълна версия: copyright + Language Switcher
+  - Минимална версия: само Language Switcher
+  - Dropdown: searchable, отваря се нагоре (bottom-full), показва флаг + име
+  - При смяна: записва cookie `lang` (30 дни) + router.push() към новия URL
+- `apps/web/components/SmartGlobalFooter.tsx` — wrapper компонент:
+  - Автоматично избира minimal=true за /dashboard URLs, minimal=false за останалите
+- `apps/web/app/[lang]/layout.tsx` — нов файл, рендерира SmartGlobalFooter за всички публични страници
+- Dashboard layouts (provider и client) — НЕ съдържат собствен Footer; покриват се от [lang]/layout.tsx
+
+**GDPR:** Cookie `lang` е strictly necessary functional storage — не изисква consent.
+
+**Скейлинг:** Нов език = един ред в SUPPORTED_LANGUAGES + LANGUAGE_DISPLAY_NAMES + LANGUAGE_FLAGS.
 
 ### Production Ready Status (April 30, 2026)
 - **Technical SEO**: Системата е напълно готова за производство по отношение на техническото SEO
