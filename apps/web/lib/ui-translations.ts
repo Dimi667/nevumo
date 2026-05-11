@@ -10,7 +10,7 @@ export async function fetchTranslations(
 
   const apiBase = typeof window === 'undefined'
     ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
-    : (process.env.NEXT_PUBLIC_API_URL || '');
+    : '';
 
   try {
     const res = await fetch(

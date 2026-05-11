@@ -510,6 +510,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **GA4 Consent Mode v2 (May 8, 2026)**: gtag('consent','update') integrated in useCookieConsent.ts. Fires on acceptAll/rejectAll/savePreferences. PASS verified via Playwright.
   - **Pending Items**: Stripe.js conditional loading
   - **Status**: Core cookie consent functionality complete, backend audit trail operational. Advanced GA4 integration and Stripe management deferred to future tasks.
+  - **Bug Fix (May 11, 2026)**: Cookie banner показваше English на /bg route от мобилни устройства в локална мрежа. Root cause: `useCookieConsent.ts` и `ui-translations.ts` използваха `process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'` като client-side apiBase — абсолютен localhost URL заобикаляше Next.js proxy и се чупеше на устройства различни от localhost. Fix: `apps/web/hooks/useCookieConsent.ts` ред 99 и `apps/web/lib/ui-translations.ts` ред 13 — client клоновете сетнати на `''` (относителен URL). Next.js rewrites в next.config.mjs проксират `/api/v1/*` към FastAPI — работи от всяко устройство.
     - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
     - **Backend:**
       - New endpoint: `PATCH /api/v1/client/leads/{lead_id}/notes` (ownership check: lead.client_id == user.id)

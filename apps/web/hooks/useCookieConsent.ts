@@ -96,7 +96,7 @@ export function useCookieConsent() {
     // POST to /api/v1/consent (fire-and-forget)
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('nevumo_auth_token');
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const apiBase = '';
 
       fetch(`${apiBase}/api/v1/consent`, {
         method: 'POST',
