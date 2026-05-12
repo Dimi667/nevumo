@@ -215,6 +215,7 @@ save_preferences, cookie_settings_link, last_updated
 **Приоритет:** 🔴 КРИТИЧНО — преди launch  
 **Тип:** Страница + текст  
 **Статус:** ⬜ Не започнато
+**Статус:** ✅ Текст завършен — 2026-05-12
 
 ### Route
 `/[lang]/cookies`
@@ -238,6 +239,16 @@ save_preferences, cookie_settings_link, last_updated
 
 ### Езици
 PL, EN, BG — задължително
+
+### Резултат
+- Текстът е написан на три езика: EN, PL, BG
+- Файл: docs/cookie_policy_nevumo_final.md
+- Пълна таблица: 12 entries (cookies + localStorage + sessionStorage)
+- Включени: nevumo_consent, lang, _ga, _ga_[ID], __stripe_mid, __stripe_sid, nevumo_auth_token, nevumo_auth_user, nevumo_phone, nevumo_intent, nevumo_city_preference, nevumo_auth_email
+- GA4 Advanced Consent Mode v2 — изрично оповестен
+- Hosting инфраструктура — изрично оповестена в секция Международни трансфери (7 доставчика)
+- Фирмени данни: „ФИЛИПС ЦЕНТЬР БЪЛГАРИЯ" ООД, ЕИК 175369610
+- Следваща стъпка: Task 10 — имплементация на /[lang]/cookies страница (Kimi-2.6)
 
 ---
 
@@ -393,7 +404,7 @@ GDPR Compliance Progress:
 [✅] Task 3  — Consent Audit Log
 [✅] Task 4  — Data Export Endpoint
 [✅] Task 5  — Privacy Policy текст + страница /[lang]/privacy
-[⬜] Task 6  — Cookie Policy текст
+[✅] Task 6  — Cookie Policy текст
 [⬜] Task 7  — T&C клиенти
 [⬜] Task 8  — Regulamin доставчици
 [⬜] Task 9  — Withdrawal Form PL
