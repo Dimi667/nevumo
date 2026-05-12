@@ -297,7 +297,13 @@ PL, EN, BG — задължително
 ## ЗАДАЧА 6 — Regulamin за Доставчици
 **Приоритет:** 🔴 КРИТИЧНО — преди launch  
 **Тип:** Страница + текст  
-**Статус:** ⬜ Не започнато
+**Статус:** ✅ Завършено (2026-05-12)
+
+### Резултат
+- Файл: docs/terms_conditions_providers_nevumo.md
+- Три езика: EN (Terms & Conditions for Service Providers) + PL (Regulamin dla Dostawców Usług) + BG (Общи условия за Доставчици)
+- Включено: intermediary клауза, P2B Regulation compliance, основания за спиране/ограничаване/прекратяване (конкретни), 30 дни предизвестие за прекратяване, 15 дни предизвестие за промяна на условията, ranking прозрачност + "плащането не влияе", вътрешна система за жалби (безплатна, 30 дни отговор), минимум 2 медиатора (ZPP + KIG за PL; НИПА + БТПП за BG/other), KYC декларация + NIP/REGON за PL, достъп до данни + GDPR Art. 20, Claimed Profiles → Art. 14 GDPR, UŚUDE клауза, без ODR линк
+- Следваща стъпка: Task 9 — Withdrawal Form (PL)
 
 ### Route
 `/[lang]/terms-provider`
@@ -414,7 +420,7 @@ GDPR Compliance Progress:
 [✅] Task 5  — Privacy Policy текст + страница /[lang]/privacy
 [✅] Task 6  — Cookie Policy текст
 [✅] Task 7  — T&C клиенти
-[⬜] Task 8  — Regulamin доставчици
+[✅] Task 8  — Regulamin доставчици
 [⬜] Task 9  — Withdrawal Form PL
 [⬜] Task 10 — Frontend страници
 [⬜] Task 11 — DSA страница
