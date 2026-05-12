@@ -253,9 +253,17 @@ PL, EN, BG — задължително
 ---
 
 ## ЗАДАЧА 5 — Terms & Conditions (Клиенти)
+**Статус:** ✅ Завършено (2026-05-12)
+
+### Резултат
+- Файл: docs/terms_conditions_clients_nevumo.md
+- Три езика: EN (Terms & Conditions) + PL (Regulamin) + BG (Общи условия)
+- Включено: intermediary клауза, ranking прозрачност, BLIK/Przelewy24 (PL), право на отказ 14 дни, ADR Inspekcja Handlowa, без ODR линк, 30-дни notice за платени функции
+- Приложение 1: формуляр само за договори с Nevumo (не за доставчици)
+- Следваща стъпка: Task 8 — Regulamin за Доставчици
+
 **Приоритет:** 🔴 КРИТИЧНО — преди launch  
-**Тип:** Страница + текст  
-**Статус:** ⬜ Не започнато
+**Тип:** Страница + текст
 
 ### Route
 `/[lang]/terms`
@@ -405,7 +413,7 @@ GDPR Compliance Progress:
 [✅] Task 4  — Data Export Endpoint
 [✅] Task 5  — Privacy Policy текст + страница /[lang]/privacy
 [✅] Task 6  — Cookie Policy текст
-[⬜] Task 7  — T&C клиенти
+[✅] Task 7  — T&C клиенти
 [⬜] Task 8  — Regulamin доставчици
 [⬜] Task 9  — Withdrawal Form PL
 [⬜] Task 10 — Frontend страници
