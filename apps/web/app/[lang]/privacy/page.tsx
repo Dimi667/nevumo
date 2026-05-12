@@ -109,44 +109,44 @@ export default async function PrivacyPage({ params }: PageProps) {
             
             <h3 className="text-lg font-semibold mt-6 mb-2">{t(dict, 'section_3_1_title', '3.1 Account Registration')}</h3>
             <Table 
-              headers={['Data', 'Purpose', 'Legal Basis']}
+              headers={[t(dict, 'col_data', 'Data'), t(dict, 'col_purpose', 'Purpose'), t(dict, 'col_legal_basis', 'Legal Basis')]}
               rows={[
-                ['Email address', 'Account creation, login', 'Contract — Art. 6(1)(b)'],
-                ['Password (bcrypt hash)', 'Account security', 'Contract — Art. 6(1)(b)'],
-                ['Role (client / provider)', 'Platform functionality', 'Contract — Art. 6(1)(b)'],
-                ['Age confirmation (18+)', 'Legal requirement', 'Legal obligation — Art. 6(1)(c)']
+                [t(dict, 't31_email_data', 'Email address'), t(dict, 't31_email_purpose', 'Account creation, login'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't31_password_data', 'Password (bcrypt hash)'), t(dict, 't31_password_purpose', 'Account security'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't31_role_data', 'Role (client / provider)'), t(dict, 't31_role_purpose', 'Platform functionality'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't31_age_data', 'Age confirmation (18+)'), t(dict, 't31_age_purpose', 'Legal requirement'), t(dict, 'legal_obligation_c', 'Legal obligation — Art. 6(1)(c)')]
               ]}
             />
 
             <h3 className="text-lg font-semibold mt-6 mb-2">{t(dict, 'section_3_2_title', '3.2 Provider Profile')}</h3>
             <Table 
-              headers={['Data', 'Purpose', 'Legal Basis']}
+              headers={[t(dict, 'col_data', 'Data'), t(dict, 'col_purpose', 'Purpose'), t(dict, 'col_legal_basis', 'Legal Basis')]}
               rows={[
-                ['Name, description, category', 'Public profile', 'Contract — Art. 6(1)(b)'],
-                ['Profile photo (optional)', 'Public display', 'Contract — Art. 6(1)(b)'],
-                ['Phone number', 'Lead delivery, communication', 'Contract — Art. 6(1)(b)'],
-                ['Location / city', 'Service area matching', 'Contract — Art. 6(1)(b)'],
-                ['Services and prices', 'Marketplace listing', 'Contract — Art. 6(1)(b)']
+                [t(dict, 't32_name_data', 'Name, description, category'), t(dict, 't32_name_purpose', 'Public profile'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't32_photo_data', 'Profile photo (optional)'), t(dict, 't32_photo_purpose', 'Public display'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't32_phone_data', 'Phone number'), t(dict, 't32_phone_purpose', 'Lead delivery, communication'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't32_location_data', 'Location / city'), t(dict, 't32_location_purpose', 'Service area matching'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't32_services_data', 'Services and prices'), t(dict, 't32_services_purpose', 'Marketplace listing'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')]
               ]}
             />
 
             <h3 className="text-lg font-semibold mt-6 mb-2">{t(dict, 'section_3_3_title', '3.3 Service Requests (Leads)')}</h3>
             <Table 
-              headers={['Data', 'Purpose', 'Legal Basis']}
+              headers={[t(dict, 'col_data', 'Data'), t(dict, 'col_purpose', 'Purpose'), t(dict, 'col_legal_basis', 'Legal Basis')]}
               rows={[
-                ['Request details', 'Client-provider matching', 'Contract — Art. 6(1)(b)'],
-                ['Contact information', 'Communication', 'Contract — Art. 6(1)(b)'],
-                ['Lead status history', 'Functionality & disputes', 'Contract — Art. 6(1)(b)']
+                [t(dict, 't33_request_data', 'Request details'), t(dict, 't33_request_purpose', 'Client-provider matching'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't33_contact_data', 'Contact information'), t(dict, 't33_contact_purpose', 'Communication'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't33_status_data', 'Lead status history'), t(dict, 't33_status_purpose', 'Functionality & disputes'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')]
               ]}
             />
 
             <h3 className="text-lg font-semibold mt-6 mb-2">{t(dict, 'section_3_4_title', '3.4 Security and Technical Data')}</h3>
             <Table 
-              headers={['Data', 'Purpose', 'Legal Basis']}
+              headers={[t(dict, 'col_data', 'Data'), t(dict, 'col_purpose', 'Purpose'), t(dict, 'col_legal_basis', 'Legal Basis')]}
               rows={[
-                ['IP address (hashed)', 'Security, rate limiting', 'Legitimate interest — Art. 6(1)(f)'],
-                ['User agent', 'Security & diagnostics', 'Legitimate interest — Art. 6(1)(f)'],
-                ['Auth logs', 'Security monitoring', 'Legitimate interest — Art. 6(1)(f)']
+                [t(dict, 't34_ip_data', 'IP address (hashed)'), t(dict, 't34_ip_purpose', 'Security, rate limiting'), t(dict, 'legal_legitimate_f', 'Legitimate interest — Art. 6(1)(f)')],
+                [t(dict, 't34_agent_data', 'User agent'), t(dict, 't34_agent_purpose', 'Security & diagnostics'), t(dict, 'legal_legitimate_f', 'Legitimate interest — Art. 6(1)(f)')],
+                [t(dict, 't34_authlogs_data', 'Auth logs'), t(dict, 't34_authlogs_purpose', 'Security monitoring'), t(dict, 'legal_legitimate_f', 'Legitimate interest — Art. 6(1)(f)')]
               ]}
             />
 
@@ -172,19 +172,19 @@ export default async function PrivacyPage({ params }: PageProps) {
               {t(dict, 'section_4_intro')}
             </p>
             <Table 
-              headers={['Key', 'Type', 'Purpose', 'Retention', 'Basis']}
+              headers={[t(dict, 'col_key', 'Key'), t(dict, 'col_type', 'Type'), t(dict, 'col_purpose', 'Purpose'), t(dict, 'col_retention', 'Retention'), t(dict, 'col_basis', 'Basis')]}
               rows={[
-                ['nevumo_consent', 'Cookie', 'Cookie consent record', '12 months', 'Necessary'],
-                ['lang', 'Cookie', 'Language preference', '30 days', 'Functional'],
-                ['_ga, _ga_*', 'Cookie', 'GA4 analytics', '13 months', 'Consent'],
-                ['__stripe_mid', 'Cookie', 'Stripe fraud prevention (checkout)', '1 year', 'Necessary'],
-                ['__stripe_sid', 'Cookie', 'Stripe fraud prevention (checkout)', '30 min', 'Necessary'],
-                ['nevumo_auth_token', 'localStorage', 'Auth JWT', '30 days', 'Contract'],
-                ['nevumo_auth_user', 'localStorage', 'User info cache', '30 days', 'Contract'],
-                ['nevumo_phone', 'localStorage', 'Phone autofill', 'Indefinite', 'Legitimate interest'],
-                ['nevumo_intent', 'localStorage', 'UX role at login', 'Session', 'Functional'],
-                ['nevumo_city_preference', 'localStorage', 'Preferred city', 'Indefinite', 'Functional'],
-                ['nevumo_auth_email', 'sessionStorage', 'Email during registration', 'Session (tab)', 'Contract']
+                ['nevumo_consent', 'Cookie', t(dict, 't4_purpose_consent_record', 'Cookie consent record'), t(dict, 't4_ret_12m', '12 months'), t(dict, 't4_basis_necessary', 'Necessary')],
+                ['lang', 'Cookie', t(dict, 't4_purpose_lang_pref', 'Language preference'), t(dict, 't4_ret_30d', '30 days'), t(dict, 't4_basis_functional', 'Functional')],
+                ['_ga, _ga_*', 'Cookie', t(dict, 't4_purpose_ga4', 'GA4 analytics'), t(dict, 't4_ret_13m', '13 months'), t(dict, 't4_basis_consent', 'Consent')],
+                ['__stripe_mid', 'Cookie', t(dict, 't4_purpose_stripe_fraud', 'Stripe fraud prevention (checkout)'), t(dict, 't4_ret_1y', '1 year'), t(dict, 't4_basis_necessary', 'Necessary')],
+                ['__stripe_sid', 'Cookie', t(dict, 't4_purpose_stripe_fraud', 'Stripe fraud prevention (checkout)'), t(dict, 't4_ret_30min', '30 min'), t(dict, 't4_basis_necessary', 'Necessary')],
+                ['nevumo_auth_token', 'localStorage', t(dict, 't4_purpose_auth_jwt', 'Auth JWT'), t(dict, 't4_ret_30d', '30 days'), t(dict, 't4_basis_contract', 'Contract')],
+                ['nevumo_auth_user', 'localStorage', t(dict, 't4_purpose_user_cache', 'User info cache'), t(dict, 't4_ret_30d', '30 days'), t(dict, 't4_basis_contract', 'Contract')],
+                ['nevumo_phone', 'localStorage', t(dict, 't4_purpose_phone_autofill', 'Phone autofill'), t(dict, 't4_ret_indefinite', 'Indefinite'), t(dict, 't4_basis_legint', 'Legitimate interest')],
+                ['nevumo_intent', 'localStorage', t(dict, 't4_purpose_ux_role', 'UX role at login'), t(dict, 't4_ret_session', 'Session'), t(dict, 't4_basis_functional', 'Functional')],
+                ['nevumo_city_preference', 'localStorage', t(dict, 't4_purpose_city_pref', 'Preferred city'), t(dict, 't4_ret_indefinite', 'Indefinite'), t(dict, 't4_basis_functional', 'Functional')],
+                ['nevumo_auth_email', 'sessionStorage', t(dict, 't4_purpose_email_reg', 'Email during registration'), t(dict, 't4_ret_session_tab', 'Session (tab)'), t(dict, 't4_basis_contract', 'Contract')]
               ]}
             />
             <Link href={`/${normalizedLang}/cookies`} className="text-orange-600 hover:underline">
@@ -198,16 +198,16 @@ export default async function PrivacyPage({ params }: PageProps) {
               {t(dict, 'section_5_note')}
             </p>
             <Table 
-              headers={['Processor', 'Purpose', 'Country', 'Safeguard']}
+              headers={[t(dict, 'col_processor', 'Processor'), t(dict, 'col_purpose', 'Purpose'), t(dict, 'col_country', 'Country'), t(dict, 'col_safeguard', 'Safeguard')]}
               rows={[
-                ['Google LLC (GA4)', 'Analytics', 'USA', 'SCCs + DPF'],
-                ['Stripe, Inc.', 'Payments (BLIK, Przelewy24)', 'USA', 'SCCs + DPF'],
-                ['Resend, Inc.', 'Transactional emails', 'USA', 'SCCs'],
-                ['Vercel Inc.', 'Frontend hosting', 'USA', 'SCCs'],
-                ['Railway Corp.', 'Backend API hosting', 'USA', 'SCCs'],
-                ['Neon Inc.', 'Database (PostgreSQL)', 'USA', 'SCCs'],
-                ['Upstash Inc.', 'Redis cache', 'USA', 'SCCs'],
-                ['Cloudflare Inc.', 'File/image storage (R2)', 'USA', 'SCCs + DPF']
+                ['Google LLC (GA4)', t(dict, 't5_analytics', 'Analytics'), t(dict, 't5_usa', 'USA'), t(dict, 't5_sccs_dpf', 'SCCs + DPF')],
+                ['Stripe, Inc.', t(dict, 't5_payments', 'Payments (BLIK, Przelewy24)'), t(dict, 't5_usa', 'USA'), t(dict, 't5_sccs_dpf', 'SCCs + DPF')],
+                ['Resend, Inc.', t(dict, 't5_emails', 'Transactional emails'), t(dict, 't5_usa', 'USA'), t(dict, 't5_sccs', 'SCCs')],
+                ['Vercel Inc.', t(dict, 't5_frontend', 'Frontend hosting'), t(dict, 't5_usa', 'USA'), t(dict, 't5_sccs', 'SCCs')],
+                ['Railway Corp.', t(dict, 't5_backend', 'Backend API hosting'), t(dict, 't5_usa', 'USA'), t(dict, 't5_sccs', 'SCCs')],
+                ['Neon Inc.', t(dict, 't5_database', 'Database (PostgreSQL)'), t(dict, 't5_usa', 'USA'), t(dict, 't5_sccs', 'SCCs')],
+                ['Upstash Inc.', t(dict, 't5_redis', 'Redis cache'), t(dict, 't5_usa', 'USA'), t(dict, 't5_sccs', 'SCCs')],
+                ['Cloudflare Inc.', t(dict, 't5_storage', 'File/image storage (R2)'), t(dict, 't5_usa', 'USA'), t(dict, 't5_sccs_dpf', 'SCCs + DPF')]
               ]}
             />
           </section>
@@ -229,15 +229,15 @@ export default async function PrivacyPage({ params }: PageProps) {
           <section className="mb-8">
             <h2 className="text-xl font-bold mb-4">{t(dict, 'section_8_title', '8. How Long We Keep Your Data')}</h2>
             <Table 
-              headers={['Data', 'Retention']}
+              headers={[t(dict, 'col_data', 'Data'), t(dict, 'col_retention', 'Retention')]}
               rows={[
-                ['Active account', 'Until deletion'],
-                ['Data after deletion', 'Max 30 days (encrypted backups)'],
-                ['Financial / Stripe records', '10 years'],
-                ['Security logs (hashed IP)', '90 days'],
-                ['GA4 analytics', '14 months'],
-                ['Cookie consent records', '24 months'],
-                ['Marketing consent', 'Until withdrawal + 3 years']
+                [t(dict, 't8_active_account', 'Active account'), t(dict, 't8_until_deletion', 'Until deletion')],
+                [t(dict, 't8_data_after_deletion', 'Data after deletion'), t(dict, 't8_ret_30days_backups', 'Max 30 days (encrypted backups)')],
+                [t(dict, 't8_financial_records', 'Financial / Stripe records'), t(dict, 't8_ret_10years', '10 years')],
+                [t(dict, 't8_security_logs', 'Security logs (hashed IP)'), t(dict, 't8_ret_90days', '90 days')],
+                [t(dict, 't8_ga4_analytics', 'GA4 analytics'), t(dict, 't8_ret_14months', '14 months')],
+                [t(dict, 't8_cookie_consent_records', 'Cookie consent records'), t(dict, 't8_ret_24months', '24 months')],
+                [t(dict, 't8_marketing_consent', 'Marketing consent'), t(dict, 't8_ret_withdrawal_3y', 'Until withdrawal + 3 years')]
               ]}
             />
           </section>

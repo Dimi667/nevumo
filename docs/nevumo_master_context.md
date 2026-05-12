@@ -91,7 +91,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Route: `/[lang]/privacy` — SSG, 34 езика
 - Текст: EN + BG + PL
 - Компонент: `apps/web/app/[lang]/privacy/page.tsx`
-- Seed: `apps/api/scripts/seed_privacy_translations.py` (53 ключа)
+- Seed: `apps/api/scripts/seed_privacy_translations.py` (121 ключа — включва всички таблични стрингове в секции 3.1–3.4, 4, 5, 8). Допълнителни скриптове: seed_privacy_table_part1-5.py (сийдват EN+BG+PL), seed_privacy_corrections.py (коригира 8 правни citation ключа). Таблиците са напълно преводими на всички 34 езика; BG и PL имат пълни преводи, останалите 31 fallback-ват към EN.
 - Namespace: `privacy`
 
 ### Privacy Policy — достъпност (2026-05-11)
