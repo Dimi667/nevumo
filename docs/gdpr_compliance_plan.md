@@ -323,11 +323,18 @@ PL, EN, BG — задължително
 ## ЗАДАЧА 7 — Формуляр за отказ (Withdrawal Form)
 **Приоритет:** 🔴 КРИТИЧНО — за PL  
 **Тип:** Текст (PDF/HTML annex)  
-**Статус:** ⬜ Не започнато
+**Статус:** ✅ Завършено (2026-05-12)
 
 ### Стандартна форма по Annex I, Part B на CRA
 Задължително на **полски език**. Приложена като Annex 1 към T&C клиенти.
 Достъпна и за download.
+
+### Резултат
+- Файл: `docs/withdrawal_form_nevumo.md` (v1.1)
+- Три езика: **PL** (правно задължителна, Załącznik nr 2 — Ustawa o prawach konsumenta) + **EN** + **BG**
+- **Уводна бележка** (⚠️ блок) на трите езика, непосредствено преди стандартния текст: „Формулярът се отнася единствено до договора между потребителя и Nevumo. Не се отнася до договори между клиенти и доставчици на услуги." — критично за предотвратяване на грешни подавания на отказ от услуга на доставчик
+- Placeholder: `legal@nevumo.com` — провери при launch дали е конфигуриран; резервен: `privacy@nevumo.com`
+- Формулярът е само за договора с **Nevumo като платформа** — не за договорите между клиент и доставчик (Nevumo е intermediary)
 
 ---
 
@@ -343,6 +350,16 @@ PL, EN, BG — задължително
 - Единна точка за контакт с власти и потребители (DSA чл. 11)
 - Email за: privacy, abuse reports, law enforcement requests
 - Процедура за notice-and-takedown (DSA чл. 16)
+
+---
+
+## БЕЛЕЖКИ ЗА TASK 10 — Frontend имплементация на правните страници
+*(важи за `/[lang]/terms`, `/[lang]/terms-provider`, `/[lang]/cookies`, `/[lang]/privacy`, `/[lang]/withdrawal`)*
+
+- **Withdrawal Form като Annex 1:** Включи формуляра от `docs/withdrawal_form_nevumo.md` в края на `/[lang]/terms` страницата. Уводната ⚠️ бележка трябва да се рендира като **визуален alert box** (жълт/оранжев) — не като обикновен текст
+- **Отделна страница `/[lang]/withdrawal`:** HTML версия на формуляра с submit бутон, който изпраща имейл до `legal@nevumo.com` с тема „Odstąpienie od umowy / Withdrawal from contract / Отказ от договор"
+- **Сваляем PDF:** Осигури `/legal/withdrawal-form.pdf` достъпен за download от `/[lang]/terms`
+- **Език:** Показвай езиковата версия на формуляра спрямо `[lang]` параметъра на URL-а, не browser locale
 
 ---
 
@@ -421,7 +438,7 @@ GDPR Compliance Progress:
 [✅] Task 6  — Cookie Policy текст
 [✅] Task 7  — T&C клиенти
 [✅] Task 8  — Regulamin доставчици
-[⬜] Task 9  — Withdrawal Form PL
+[✅] Task 9  — Withdrawal Form PL ✅ (2026-05-12)
 [⬜] Task 10 — Frontend страници
 [⬜] Task 11 — DSA страница
 [⬜] Task 12 — Вътрешни docs

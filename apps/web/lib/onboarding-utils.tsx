@@ -152,12 +152,14 @@ export interface StepIndicatorProps {
   isProfileComplete: boolean;
   isServiceComplete: boolean;
   compact?: boolean;
+  t: (key: string, fallback?: string) => string;
 }
 
 export function StepIndicator({ 
   isProfileComplete, 
   isServiceComplete,
-  compact = false 
+  compact = false,
+  t
 }: StepIndicatorProps) {
   const sizeClasses = compact 
     ? 'w-4 h-4 text-[8px]' 
@@ -182,7 +184,7 @@ export function StepIndicator({
         <span className={`text-xs font-medium mt-1 ${
           isProfileComplete ? 'text-gray-700' : 'text-orange-600'
         }`}>
-          Profile
+          {t('step_profile', 'Profile')}
         </span>
       </div>
 
@@ -205,7 +207,7 @@ export function StepIndicator({
         <span className={`text-xs font-medium mt-1 ${
           isProfileComplete && !isServiceComplete ? 'text-orange-600' : 'text-gray-400'
         }`}>
-          Service
+          {t('step_service', 'Service')}
         </span>
       </div>
     </div>

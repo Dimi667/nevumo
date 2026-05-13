@@ -351,11 +351,39 @@ export async function getProviderAnalytics(period: 7 | 30): Promise<AnalyticsDat
 // Role Switch
 // ---------------------------------------------------------------------------
 
+// Helper to decode JWT payload without signature validation
+function decodeJWTPayload(token: string): any | null {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const payload = parts[1];
+    const decoded = atob(payload);
+    return JSON.parse(decoded);
+  } catch {
+    return null;
+  }
+}
+
 export async function switchRole(
   role: 'provider' | 'client',
   businessName?: string,
   preferredSlug?: string
 ): Promise<{ token: string; user: UserInfo }> {
+  const token = getAuthToken();
+  
+  if (token) {
+    const payload = decodeJWTPayload(token);
+    if (payload && payload.role === role) {
+      const lang = window.location.pathname.split('/')[1];
+      if (role === 'provider') {
+        window.location.href = `/${lang}/provider/dashboard`;
+      } else {
+        window.location.href = `/${lang}/client/dashboard/overview`;
+      }
+      return { token, user: payload };
+    }
+  }
+  
   const body: any = { role };
   if (businessName) body.business_name = businessName;
   if (preferredSlug) body.preferred_slug = preferredSlug;

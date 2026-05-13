@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { getAuthToken, getAuthUser, clearAuth, saveAuth } from '@/lib/auth-store';
-import { switchRole } from '@/lib/provider-api';
+import { switchRole, ProviderApiError } from '@/lib/provider-api';
 import { getClientDashboard, type ClientDashboardData } from '@/lib/client-api';
 import { useTranslation } from '@/lib/use-translation';
 
@@ -243,11 +243,33 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
             onClick={async () => {
               setSwitchingRole(true);
               setSwitchError(null);
+
+              // Check if user is already a provider
+              const token = getAuthToken();
+              if (token) {
+                try {
+                  const payloadBase64 = token.split('.')[1];
+                  if (payloadBase64) {
+                    const decodedPayload = JSON.parse(atob(payloadBase64));
+                    if (decodedPayload.role === 'provider') {
+                      router.replace(`/${lang}/provider/dashboard`);
+                      return;
+                    }
+                  }
+                } catch (e) {
+                  console.error('Error decoding token:', e);
+                }
+              }
+
               try {
                 const result = await switchRole('provider');
                 saveAuth(result.token, result.user);
                 router.push(`/${lang}/provider/dashboard`);
               } catch (e: unknown) {
+                if (e instanceof ProviderApiError && e.code === 'ALREADY_IN_ROLE') {
+                  router.replace(`/${lang}/provider/dashboard`);
+                  return;
+                }
                 setSwitchError(e instanceof Error ? e.message : 'Неуспешна смяна на роля.');
                 setSwitchingRole(false);
               }

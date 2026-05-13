@@ -349,6 +349,11 @@ This separation ensures that:
 - **Client Components in Server Pages (April 2026)**: Interactive elements that require browser APIs (e.g., `IntersectionObserver`, DOM manipulation) must be extracted into dedicated `'use client'` components. Inline `<script>` tags with `dangerouslySetInnerHTML` that mutate DOM outside React cause hydration mismatches. Use `useRef`, `useEffect`, and an `isMounted` state pattern to ensure client-only behavior while preserving SSR output. Reference implementation: `apps/web/components/homepage/MobileStickyCTA.tsx`.
 - **Namespaced Translations Validator**: Implemented a mandatory `namespace.key` pattern at the ORM layer to ensure all UI copy is properly organized and to avoid cache conflicts.
 - **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.
+- **Translation Seed Script Separation (May 13, 2026)**: To prevent language mixing issues, translation keys must not be duplicated across seed scripts. Each seed script should have exclusive ownership of its keys:
+  - `seed_provider_dashboard_translations.py`: Contains general provider dashboard UI translations
+  - `seed_onboarding_hero_v2.py`: Contains onboarding hero banner translations (setup_title, setup_subtitle, btn_complete_setup, step_profile, step_service, etc.)
+  - When keys are duplicated with `row_bg()` (incomplete translations) in one script and full translations in another, executing the incomplete script will overwrite the good translations with English fallback text for non-EN/BG languages
+  - Solution: Remove duplicate keys from the script that uses `row_bg()` and let the specialized script handle those keys with full 34-language translations
 
 ---
 
