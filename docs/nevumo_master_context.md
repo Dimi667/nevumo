@@ -567,6 +567,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Backend Logging**: POST /api/v1/consent endpoint in `apps/api/routes/consent.py`
   - **Database**: New `consent_logs` table for GDPR audit trail (24-month retention)
   - **Migration**: Alembic migration `20260508_add_consent_logs` executed successfully
+- **Provider Cancelled Status Translation Fix — May 13, 2026** — COMPLETE:
+  - **Problem**: English text "Cancelled" displayed on provider dashboard leads page when Bulgarian language was selected
+  - **Root Cause**: Missing translation key `status_cancelled` in PROVIDER_DASHBOARD_KEYS and RAW_PROVIDER_DATA
+  - **Fix**: Added `status_cancelled` key to `apps/api/scripts/seed_status_translations.py` with full 34-language translations (including Bulgarian "Отказана")
+  - **Component**: `apps/web/app/[lang]/provider/dashboard/leads/LeadsClient.tsx` uses `t('status_cancelled', 'Cancelled')`
+  - **Verification**: Seed script executed successfully (782 rows seeded), Redis cache flushed, Bulgarian now displays "Отказана" instead of "Cancelled"
   - **Testing**: 7/7 automated Playwright tests passed (banner visibility, Reject All, Accept All, Customize, no banner on repeat visit, footer link, Polish language)
   - **GA4 Consent Mode v2 (May 8, 2026)**: gtag('consent','update') integrated in useCookieConsent.ts. Fires on acceptAll/rejectAll/savePreferences. PASS verified via Playwright.
   - **Pending Items**: Stripe.js conditional loading
