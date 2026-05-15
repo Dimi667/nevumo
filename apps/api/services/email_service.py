@@ -1,5 +1,6 @@
 """Email service for review-related notifications."""
 
+from datetime import date
 from typing import Optional
 from uuid import UUID
 
@@ -143,6 +144,115 @@ You can manage your email preferences in your account settings.
 
         return self._send_email(
             to_email=client.email,
+            subject=subject,
+            text_body=text_body,
+            html_body=html_body
+        )
+
+    def send_withdrawal_form_email(
+        self,
+        service_description: str,
+        contract_date: date,
+        consumer_name: str,
+        consumer_address: str,
+        account_id: Optional[str],
+        email: str,
+        submission_date: date,
+        lang: str = "en"
+    ) -> bool:
+        """Send withdrawal form submission email to legal@nevumo.com.
+
+        Args:
+            service_description: Description of the service
+            contract_date: Date of the contract
+            consumer_name: Name of the consumer
+            consumer_address: Address of the consumer
+            account_id: Optional account ID
+            email: Consumer's email address
+            submission_date: Date of form submission
+            lang: Language code for email formatting (en, bg, pl)
+
+        Returns:
+            True if email was sent successfully, False otherwise
+        """
+        # Get language-specific subject
+        subjects = {
+            "en": "Withdrawal from contract",
+            "bg": "Отказ от договор",
+            "pl": "Odstąpienie od umowy"
+        }
+        subject = subjects.get(lang, subjects["en"])
+
+        # Build text email body
+        text_body = f"""Withdrawal Form Submission
+
+Service Description:
+{service_description}
+
+Contract Date:
+{contract_date}
+
+Consumer Name:
+{consumer_name}
+
+Consumer Address:
+{consumer_address}
+
+Account ID:
+{account_id or 'Not provided'}
+
+Email:
+{email}
+
+Submission Date:
+{submission_date}
+
+---
+This withdrawal form was submitted via the Nevumo online form.
+"""
+
+        # Build HTML email body
+        html_body = f"""<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{subject}</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #dc2626;">{subject}</h2>
+
+        <div style="background: #fef2f2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #dc2626;">
+            <h3 style="margin-top: 0;">Withdrawal Form Submission</h3>
+
+            <p><strong>Service Description:</strong></p>
+            <p style="background: white; padding: 10px; border-radius: 4px; margin: 10px 0;">{service_description}</p>
+
+            <p><strong>Contract Date:</strong> {contract_date}</p>
+
+            <p><strong>Consumer Name:</strong> {consumer_name}</p>
+
+            <p><strong>Consumer Address:</strong></p>
+            <p style="background: white; padding: 10px; border-radius: 4px; margin: 10px 0;">{consumer_address}</p>
+
+            <p><strong>Account ID:</strong> {account_id or 'Not provided'}</p>
+
+            <p><strong>Email:</strong> {email}</p>
+
+            <p><strong>Submission Date:</strong> {submission_date}</p>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 30px 0;">
+
+        <p style="font-size: 12px; color: #6b7280;">
+            This withdrawal form was submitted via the Nevumo online form.
+        </p>
+    </div>
+</body>
+</html>"""
+
+        return self._send_email(
+            to_email="legal@nevumo.com",
             subject=subject,
             text_body=text_body,
             html_body=html_body

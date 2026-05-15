@@ -7,7 +7,10 @@ interface PageProps {
   params: Promise<{ lang: string }>;
 }
 
-const API_BASE = typeof window === 'undefined' ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000') : '';
+const API_BASE = typeof window === 'undefined' ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000') : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000');
+
+// For PDF button, always use browser-accessible URL
+const PDF_API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 async function getTranslations(lang: string): Promise<TranslationDict> {
   try {
@@ -127,8 +130,8 @@ export default async function TermsPage({ params }: PageProps) {
 
           <div className="mt-6 flex flex-col sm:flex-row gap-4">
             <a
-              href="/legal/withdrawal-form.pdf"
-              download
+              href={`${PDF_API_BASE}/api/v1/legal/withdrawal-form/${normalizedLang}`}
+              download={`withdrawal-form-${normalizedLang}.pdf`}
               className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
             >
               <svg className="-ml-1 mr-2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

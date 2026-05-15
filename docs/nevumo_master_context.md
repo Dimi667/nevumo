@@ -206,6 +206,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `816` rows in `translations` for city namespace across 34 languages (includes preposition keys: +102 rows)
   - `2,856` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 10 keys × 34 languages = 340 rows)
   - `340` rows in `translations` for `widget` namespace across 34 languages (relative time translations: 8 keys × 34 languages = 272 rows; error messages: 2 keys × 34 languages = 68 rows)
+  - `646` rows in `translations` for `withdrawal` namespace across 34 languages (19 keys × 34 languages) — seed script: `seed_withdrawal_translations_4.py` (May 15, 2026)
     - New error keys: `widget.phone_error` (phone validation error message) and `widget.error_message` (general form error message)
   - **Dynamic Preposition & Declension Logic (May 2026)**: Added preposition and grammatical declension support (e.g., PL: w/we, Warszawa → Warszawie/Warszawy)
     - City namespace: preposition_base, preposition_modified, footer_in, locative_form, genitive_form

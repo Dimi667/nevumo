@@ -306,6 +306,15 @@ This separation ensures that:
   - Changed OG image runtime from `edge` to `nodejs` in all opengraph-image.tsx files to enable custom font loading with `fs.readFileSync`.
   - Downloaded valid Noto Sans Bold font file (NotoSans-Bold.ttf, 575740 bytes) from GitHub to `apps/web/public/fonts/`.
   - Updated `BaseOGImage` component to load Noto Sans Bold font and apply it to the CTA button with `fontWeight: 700` for proper bold rendering.
+
+### 6. PDF Generation with Cyrillic Support (May 15, 2026)
+- **PDF Service**: `apps/api/services/pdf_service.py` generates withdrawal form PDFs from markdown content
+- **Font Registration**: NotoSans-Regular.ttf and NotoSans-Bold.ttf registered in ReportLab for proper Cyrillic character rendering
+- **Font Location**: `apps/api/fonts/` directory
+- **Supported Languages**: en, bg, pl (extracts language-specific sections from `docs/withdrawal_form_nevumo.md`)
+- **API Endpoint**: `GET /api/v1/legal/withdrawal-form/{lang}` returns binary PDF
+- **Markdown Parsing**: Converts markdown bold syntax (`**text**`) to HTML tags (`<b>text</b>`) using regex
+- **Styles**: Custom ParagraphStyle instances with NotoSans font for headings and body text
   - Previous Inter-Bold.ttf file was corrupted causing "Unsupported OpenType signature" errors.
 - **Client Notes Feature (April 21, 2026)** — COMPLETE:
   - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7

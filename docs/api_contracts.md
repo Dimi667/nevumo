@@ -1063,7 +1063,34 @@ Updates client's email notification preferences.
 
 ---
 
-## 1. Get Providers by Category + City
+## 1. Get Withdrawal Form PDF
+
+### GET
+/api/v1/legal/withdrawal-form/{lang}
+
+### Query Params
+- lang (required): Language code (en, bg, pl)
+
+### Example
+/api/v1/legal/withdrawal-form/bg
+
+### Response
+Content-Type: application/pdf
+Binary PDF file (withdrawal form for contract cancellation)
+
+### Description
+Generates a downloadable PDF withdrawal form for contract cancellation with Nevumo.
+The PDF is generated from the markdown file at `docs/withdrawal_form_nevumo.md` and uses NotoSans fonts for proper Cyrillic character rendering.
+Supported languages: en, bg, pl.
+
+### Errors
+- 400 INVALID_LANGUAGE — Language not supported
+- 404 MARKDOWN_NOT_FOUND — Withdrawal form markdown file not found
+- 500 PDF_GENERATION_ERROR — Failed to generate PDF
+
+---
+
+## 2. Get Providers by Category + City
 
 ### GET
 /api/v1/providers
