@@ -365,6 +365,36 @@ This separation ensures that:
   - When keys are duplicated with `row_bg()` (incomplete translations) in one script and full translations in another, executing the incomplete script will overwrite the good translations with English fallback text for non-EN/BG languages
   - Solution: Remove duplicate keys from the script that uses `row_bg()` and let the specialized script handle those keys with full 34-language translations
 - **Mobile Language Dropdown Fix (May 15, 2026)**: Fixed language dropdown in GlobalFooter component that was going off-screen on mobile devices (375px width). Changed positioning from `right-0` to responsive `left-0 md:right-0 md:left-auto` to ensure dropdown stays within viewport bounds on small screens while maintaining right alignment on desktop.
+- **Terms & Conditions Page (May 15, 2026)** — COMPLETE:
+  - **Frontend**: Server component at `apps/web/app/[lang]/terms/page.tsx`
+  - **Features**:
+    - Renders 15 articles + Annex 1 with full legal content
+    - Dynamic content rendering with Polish-specific [PL] markers for conditional display
+    - PDF download button for withdrawal form (links to `/api/v1/legal/withdrawal-form/{lang}`)
+    - Online withdrawal form link (links to `/[lang]/withdrawal`)
+    - Translations fetched from `/api/v1/translations/terms?lang={lang}`
+    - SEO metadata with dynamic title and description
+  - **Backend**: Multiple seed scripts for terms translations:
+    - `seed_terms_p1.py` - Article 1 titles and buttons
+    - `seed_terms_p1_bodies.py` through `seed_terms_p15_bodies.py` - Article bodies (15 articles)
+    - `seed_terms_annex_bodies.py` - Annex 1 content
+    - `seed_terms_buttons.py` - Button translations
+  - **Namespace**: `terms` with keys: page_title, meta_description, effective_date, version, pl_notice, art1_title through art15_title, art1_body through art15_body, annex1_title, annex1_body, download_pdf, online_form, back_to_home
+- **Withdrawal Form Page (May 15, 2026)** — COMPLETE:
+  - **Frontend**: Client component at `apps/web/app/[lang]/withdrawal/page.tsx`
+  - **Features**:
+    - Interactive form with validation for all required fields
+    - Real-time error messages for each field
+    - Success state with confirmation message
+    - Translations fetched from `/api/v1/translations/withdrawal?lang={lang}`
+    - Form submission to `POST /api/v1/legal/withdrawal`
+    - Cancel button linking back to terms page
+  - **Backend**:
+    - New endpoint: `POST /api/v1/legal/withdrawal` in `apps/api/routes/legal.py`
+    - Email service integration: sends withdrawal form data to legal@nevumo.com
+    - Validation: service_description, contract_date, consumer_name, consumer_address, email (required), account_id (optional)
+    - Seed script: `seed_withdrawal_translations_4.py` (19 keys × 34 languages = 646 rows)
+  - **Namespace**: `withdrawal` with keys: page_title, page_description, label_service_description, label_contract_date, label_consumer_name, label_consumer_address, label_account_id, label_email, label_submission_date, optional, cancel, submit, submitting, error_* (7 error keys), success_title, success_message, back_to_home
 
 ---
 

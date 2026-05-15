@@ -450,7 +450,7 @@ CREATE INDEX idx_translations_key ON translations(key);
 - **Validation**: **Mandatory namespacing**. Keys must contain at least one dot and cannot start or end with a dot. Enforced at the ORM layer (SQLAlchemy `@validates`) to ensure cache consistency and avoid flat keys.
 - **Namespace separation**: Different feature areas use different namespaces for organization.
 
-### Current Seeded Data (May 7, 2026)
+### Current Seeded Data (May 15, 2026)
 - **homepage namespace**: 45 keys × 34 languages = 1,530 rows
 - **category namespace**: 44 UI keys × 34 languages + 18 SEO keys × 34 languages = 1,496 + 612 = 2,108 rows
   SEO keys:
@@ -481,7 +481,15 @@ CREATE INDEX idx_translations_key ON translations(key);
 - **provider_dashboard namespace**: 168 keys × 34 languages = 5,712 rows (includes 8 onboarding hero keys added April 10, 2026)
   Keys include: nav_overview, nav_analytics, nav_leads, nav_qr_code, nav_reviews,
   nav_services, nav_settings, nav_profile, and all dashboard UI strings
-- **Total rows**: 8,000+ translations across all namespaces
+- **terms namespace (May 15, 2026)**: Terms & Conditions page translations
+  - Keys: page_title, meta_description, effective_date, version, pl_notice, art1_title through art15_title, art1_body through art15_body, annex1_title, annex1_body, download_pdf, online_form, back_to_home
+  - Total: 20+ keys × 34 languages = 680+ rows
+  - Seed scripts: seed_terms_p1.py, seed_terms_p1_bodies.py through seed_terms_p15_bodies.py, seed_terms_annex_bodies.py, seed_terms_buttons.py
+- **withdrawal namespace (May 15, 2026)**: Withdrawal form page translations
+  - Keys: page_title, page_description, label_service_description, label_contract_date, label_consumer_name, label_consumer_address, label_account_id, label_email, label_submission_date, optional, cancel, submit, submitting, error_service_description_required, error_contract_date_required, error_consumer_name_required, error_consumer_address_required, error_email_required, error_email_invalid, error_submission_date_required, success_title, success_message, back_to_home
+  - Total: 19 keys × 34 languages = 646 rows
+  - Seed script: seed_withdrawal_translations_4.py
+- **Total rows**: 9,000+ translations across all namespaces
 
 ### Redis Caching
 - **Cache key pattern**: `translations:{lang}:{namespace}`

@@ -94,6 +94,29 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Seed: `apps/api/scripts/seed_privacy_translations.py` (121 ключа — включва всички таблични стрингове в секции 3.1–3.4, 4, 5, 8). Допълнителни скриптове: seed_privacy_table_part1-5.py (сийдват EN+BG+PL), seed_privacy_corrections.py (коригира 8 правни citation ключа). Таблиците са напълно преводими на всички 34 езика; BG и PL имат пълни преводи, останалите 31 fallback-ват към EN.
 - Namespace: `privacy`
 
+### Terms & Conditions (завършено 2026-05-15)
+- Route: `/[lang]/terms` — SSG, 34 езика
+- Текст: EN + BG + PL (15 статии + Annex 1)
+- Компонент: `apps/web/app/[lang]/terms/page.tsx`
+- Seed: Множество скриптове за terms преводи:
+  - seed_terms_p1.py - Article 1 titles and buttons
+  - seed_terms_p1_bodies.py through seed_terms_p15_bodies.py - Article bodies (15 articles)
+  - seed_terms_annex_bodies.py - Annex 1 content
+  - seed_terms_buttons.py - Button translations
+- Namespace: `terms`
+- Keys: page_title, meta_description, effective_date, version, pl_notice, art1_title through art15_title, art1_body through art15_body, annex1_title, annex1_body, download_pdf, online_form, back_to_home
+- PDF download: Links to `/api/v1/legal/withdrawal-form/{lang}` for downloadable PDF withdrawal form
+
+### Withdrawal Form (завършено 2026-05-15)
+- Route: `/[lang]/withdrawal` — Client component, 34 езика
+- Компонент: `apps/web/app/[lang]/withdrawal/page.tsx`
+- Backend: `POST /api/v1/legal/withdrawal` endpoint in `apps/api/routes/legal.py`
+- Seed: `apps/api/scripts/seed_withdrawal_translations_4.py` (19 ключа × 34 езика = 646 rows)
+- Namespace: `withdrawal`
+- Keys: page_title, page_description, label_service_description, label_contract_date, label_consumer_name, label_consumer_address, label_account_id, label_email, label_submission_date, optional, cancel, submit, submitting, error_* (7 error keys), success_title, success_message, back_to_home
+- Email integration: Sends withdrawal form data to legal@nevumo.com via email service
+- Validation: All required fields validated for non-empty values and proper format
+
 ### Privacy Policy — достъпност (2026-05-11)
 - Футър: `GlobalFooter.tsx` — линк `footer.privacy_policy_link` (namespace `footer`) ✅
 - Регистрация: `LoginClient.tsx` — линк под бутона за регистрация ✅

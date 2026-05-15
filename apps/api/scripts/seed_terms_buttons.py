@@ -1,6 +1,6 @@
 """
 seed_terms_buttons.py  —  Nevumo | namespace: terms
-Keys: download_pdf, online_form (34 езика)
+Keys: download_pdf, online_form, back_to_home (34 езика)
 Run : docker exec nevumo-api python -m apps.api.scripts.seed_terms_buttons
 """
 import os
@@ -90,6 +90,43 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "tr": "Çevrimiçi form",
         "uk": "Онлайн-форма",
     },
+
+    "back_to_home": {
+        "bg": "Начало",
+        "cs": "Zpět na úvod",
+        "da": "Tilbage til forsiden",
+        "de": "Zurück zur Startseite",
+        "el": "Επιστροφή στην αρχική",
+        "en": "Back to home",
+        "es": "Volver al inicio",
+        "et": "Tagasi avalehele",
+        "fi": "Takaisin alkuun",
+        "fr": "Retour à l'accueil",
+        "ga": "Ar ais go dtí an baile",
+        "hr": "Povratak na početnu",
+        "hu": "Vissza a főoldalra",
+        "is": "Til baka á forsíðu",
+        "it": "Torna alla home",
+        "lb": "Zréck op d'Haaptsäit",
+        "lt": "Grįžti į pradžią",
+        "lv": "Atpakaļ uz sākumu",
+        "mk": "Назад кон почетната",
+        "mt": "Lura lejn il-home",
+        "nl": "Terug naar home",
+        "no": "Tilbake til forsiden",
+        "pl": "Powrót do strony głównej",
+        "pt": "Voltar ao início",
+        "pt-PT": "Voltar ao início",
+        "ro": "Înapoi la început",
+        "ru": "На главную",
+        "sk": "Späť na domov",
+        "sl": "Nazaj na prvo stran",
+        "sq": "Kthehu në kryefaqe",
+        "sr": "Повратак на почетну",
+        "sv": "Tillbaka till start",
+        "tr": "Ana sayfaya dön",
+        "uk": "На головну",
+    },
 }
 
 
@@ -112,7 +149,7 @@ def seed() -> None:
                 )
                 count += 1
         session.commit()
-        print(f"✅ seed_terms_buttons: {count} rows upserted ({NAMESPACE}, 2 keys × 34 langs)")
+        print(f"✅ seed_terms_buttons: {count} rows upserted ({NAMESPACE}, 3 keys × 34 langs)")
 
     engine.dispose()
 

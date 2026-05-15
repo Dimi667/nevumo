@@ -1090,6 +1090,50 @@ Supported languages: en, bg, pl.
 
 ---
 
+## 2. Submit Withdrawal Form
+
+### POST
+/api/v1/legal/withdrawal
+
+### Body
+```json
+{
+  "service_description": "Massage therapy services",
+  "contract_date": "2026-01-15",
+  "consumer_name": "Maria Petrova",
+  "consumer_address": "Sofia, Bulgaria, bul. Vitosha 100",
+  "account_id": "optional-account-id",
+  "email": "maria@example.com",
+  "submission_date": "2026-05-15",
+  "lang": "en"
+}
+```
+
+### Response (200)
+```json
+{
+  "success": true,
+  "message": "Withdrawal form submitted successfully"
+}
+```
+
+### Description
+Submits the withdrawal form electronically and sends the data via email to legal@nevumo.com.
+All required fields are validated for non-empty values. Email format is validated via EmailStr type.
+Language must be one of: en, bg, pl.
+
+### Validation
+- `service_description`, `consumer_name`, `consumer_address`: Cannot be empty or whitespace only
+- `email`: Must be valid email format
+- `lang`: Must be one of en, bg, pl
+- `account_id`: Optional field
+
+### Errors
+- 400 VALIDATION_ERROR — Required field empty or invalid format
+- 500 EMAIL_SEND_FAILED — Failed to send withdrawal form email
+
+---
+
 ## 2. Get Providers by Category + City
 
 ### GET
