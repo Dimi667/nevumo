@@ -1,0 +1,193 @@
+# -*- coding: utf-8 -*-
+"""
+seed_cookies_p11.py — namespace 'cookies', keys 1-5
+cookies.page_title, cookies.effective_date, cookies.s1_title,
+cookies.s2_title, cookies.s3_title
+Run: docker exec nevumo-api python -m apps.api.scripts.seed_cookies_p11
+"""
+
+import os
+from sqlalchemy import create_engine, text
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+engine = create_engine(DATABASE_URL)
+
+TRANSLATIONS = {
+    "cookies.page_title": {
+        "en": "Cookie Policy", "bg": "Политика за бисквитки", "cs": "Zasady cookies",
+        "da": "Cookiepolitik", "de": "Cookie-Richtlinie", "el": "Politiki Cookies",
+        "es": "Politica de cookies", "et": "Kupsiste poliitika", "fi": "Evastekaytanto",
+        "fr": "Politique des cookies", "ga": "Polasai Fianan", "hr": "Pravila o kolacicima",
+        "hu": "Sutikezelesi szabalyzat", "is": "Vafrakokustefna", "it": "Politica sui cookie",
+        "lb": "Cookie-Politik", "lt": "Slapuku politika", "lv": "Sikdatnu politika",
+        "mk": "Politika za kolacinja", "mt": "Politika tal-Cookies", "nl": "Cookiebeleid",
+        "no": "Informasjonskapselpolicy", "pl": "Polityka plikow cookie", "pt": "Politica de Cookies",
+        "pt-PT": "Politica de Cookies", "ro": "Politica privind cookie-urile",
+        "ru": "Politika ispolzovaniya cookies", "sk": "Zasady pouzivania cookies",
+        "sl": "Politika piskotkov", "sq": "Politika e Cookies", "sr": "Politika kolacica",
+        "sv": "Cookiepolicy", "tr": "Cerez Politikasi", "uk": "Polityka vykorystannya fayliv cookie",
+    },
+    "cookies.effective_date": {
+        "en": "Effective date: 1 May 2026 | Version: 2.0",
+        "bg": "Data na vlizane v sila: 1 may 2026 g. | Versiya: 2.0",
+        "cs": "Datum ucinnosti: 1. kvetna 2026 | Verze: 2.0",
+        "da": "Ikrafttraedelsesdato: 1. maj 2026 | Version: 2.0",
+        "de": "Datum des Inkrafttretens: 1. Mai 2026 | Version: 2.0",
+        "el": "Imerominia ischyos: 1 Maiou 2026 | Ekdosi: 2.0",
+        "es": "Fecha de entrada en vigor: 1 de mayo de 2026 | Version: 2.0",
+        "et": "Joustumiskuupaev: 1. mai 2026 | Versioon: 2.0",
+        "fi": "Voimaantulopaiva: 1. toukokuuta 2026 | Versio: 2.0",
+        "fr": "Date d'entree en vigueur : 1er mai 2026 | Version : 2.0",
+        "ga": "Data efeachtach: 1 Bealtaine 2026 | Leagan: 2.0",
+        "hr": "Datum stupanja na snagu: 1. svibnja 2026. | Verzija: 2.0",
+        "hu": "Hatalyba lepes: 2026. majus 1. | Verzio: 2.0",
+        "is": "Gildistokudagur: 1. mai 2026 | Utgafa: 2.0",
+        "it": "Data di entrata in vigore: 1 maggio 2026 | Versione: 2.0",
+        "lb": "Datum vum Inkraafttriede: 1. Mee 2026 | Versioun: 2.0",
+        "lt": "Isigaliojimo data: 2026 m. geguzes 1 d. | Versija: 2.0",
+        "lv": "Speka stasanas datums: 2026. gada 1. maijs | Versija: 2.0",
+        "mk": "Datum na vleguvawe vo sila: 1 maj 2026 | Verzija: 2.0",
+        "mt": "Data ta' dhul fis-sehh: 1 ta' Mejju 2026 | Verzjoni: 2.0",
+        "nl": "Datum van inwerkingtreding: 1 mei 2026 | Versie: 2.0",
+        "no": "Ikrafttredelsesdato: 1. mai 2026 | Versjon: 2.0",
+        "pl": "Data wejscia w zycie: 1 maja 2026 r. | Wersja: 2.0",
+        "pt": "Data de entrada em vigor: 1 de maio de 2026 | Versao: 2.0",
+        "pt-PT": "Data de entrada em vigor: 1 de maio de 2026 | Versao: 2.0",
+        "ro": "Data intrarii in vigoare: 1 mai 2026 | Versiunea: 2.0",
+        "ru": "Data vstupleniya v silu: 1 maya 2026 g. | Versiya: 2.0",
+        "sk": "Datum ucinnosti: 1. maja 2026 | Verzia: 2.0",
+        "sl": "Datum zacetka veljavnosti: 1. maj 2026 | Razlicica: 2.0",
+        "sq": "Data e hyrjes ne fuqi: 1 maj 2026 | Versioni: 2.0",
+        "sr": "Datum stupanja na snagu: 1. maj 2026. | Verzija: 2.0",
+        "sv": "Ikrafttradadandedatum: 1 maj 2026 | Version: 2.0",
+        "tr": "Yururluk tarihi: 1 Mayis 2026 | Surum: 2.0",
+        "uk": "Data nabrannya chynnosti: 1 travnya 2026 r. | Versiya: 2.0",
+    },
+    "cookies.s1_title": {
+        "en": "1. What Are Cookies and Browser Storage?",
+        "bg": "1. Kakvo predstavlyavat biskvitките i brauzarnoto hranilishte?",
+        "cs": "1. Co jsou soubory cookie a uloziste prohlizece?",
+        "da": "1. Hvad er cookies og browserlagring?",
+        "de": "1. Was sind Cookies und Browser-Speicher?",
+        "el": "1. Ti einai ta Cookies kai i Apothikeysi Programmatos Perigisis;",
+        "es": "1. Que son las cookies y el almacenamiento del navegador?",
+        "et": "1. Mis on kupsised ja brauseri salvestusruum?",
+        "fi": "1. Mita ovat evasteet ja selaimen tallennustila?",
+        "fr": "1. Que sont les cookies et le stockage du navigateur ?",
+        "ga": "1. Cad is Fianain agus Storailt Brabhsalai ann?",
+        "hr": "1. Sto su kolacici i pohrana preglednika?",
+        "hu": "1. Mik a sutik es a bongeszo tarhelye?",
+        "is": "1. Hvad eru vafrakokur og vafrageymsla?",
+        "it": "1. Cosa sono i cookie e l'archiviazione del browser?",
+        "lb": "1. Was sinn Cookies a Browser-Spaeicher?",
+        "lt": "1. Kas yra slapukai ir narskykles saugykla?",
+        "lv": "1. Kas ir sikdatnes un parlukprogrammas kratuve?",
+        "mk": "1. Shto se kolacinja i skladiranje vo prelistuvacot?",
+        "mt": "1. X'inhuma l-Cookies u l-Hazna tal-Browser?",
+        "nl": "1. Wat zijn cookies en browseropslag?",
+        "no": "1. Hva er informasjonskapsler og nettleserlagring?",
+        "pl": "1. Czym sa pliki cookie i pamiec przegladarki?",
+        "pt": "1. O que sao cookies e armazenamento do navegador?",
+        "pt-PT": "1. O que sao cookies e armazenamento do navegador?",
+        "ro": "1. Ce sunt cookie-urile si stocarea in browser?",
+        "ru": "1. Chto takoe fayly cookie i khranilishche brauzera?",
+        "sk": "1. Co su subory cookie a ulozisko prehliadaca?",
+        "sl": "1. Kaj so piskotki in shranjevanje brskalnika?",
+        "sq": "1. Cfare jane cookies-at dhe ruajtja e shfletuesit?",
+        "sr": "1. Sta su kolacici i skladistenje pregledaca?",
+        "sv": "1. Vad ar cookies och webblaserlagring?",
+        "tr": "1. Cerezler ve Tarayici Depolama Nedir?",
+        "uk": "1. Shcho take fayly cookie ta skhovyshche brauzera?",
+    },
+    "cookies.s2_title": {
+        "en": "2. Who Uses These Technologies?",
+        "bg": "2. Koj izpolzva tezi tekhnologii?",
+        "cs": "2. Kdo tyto technologie pouziva?",
+        "da": "2. Hvem bruger disse teknologier?",
+        "de": "2. Wer verwendet diese Technologien?",
+        "el": "2. Poios chrisimopoiei aftes tis technologies;",
+        "es": "2. Quien utiliza estas tecnologias?",
+        "et": "2. Kes neid tehnoloogiaid kasutab?",
+        "fi": "2. Kuka kayttaa naita teknologioita?",
+        "fr": "2. Qui utilise ces technologies ?",
+        "ga": "2. Ce a Usaideann na Teicneolaiochta Seo?",
+        "hr": "2. Tko koristi ove tehnologije?",
+        "hu": "2. Ki hasznalja ezeket a technologiakat?",
+        "is": "2. Hver notar thessar taekni?",
+        "it": "2. Chi utilizza queste tecnologie?",
+        "lb": "2. Wien benotzt des Technologien?",
+        "lt": "2. Kas naudoja sias technologijas?",
+        "lv": "2. Kas izmanto sas tehnologijas?",
+        "mk": "2. Koj gi koristi ovie tekhnologii?",
+        "mt": "2. Min Juza Dawn it-Teknologiji?",
+        "nl": "2. Wie gebruikt deze technologieen?",
+        "no": "2. Hvem bruker disse teknologiene?",
+        "pl": "2. Kto uzywa tych technologii?",
+        "pt": "2. Quem usa essas tecnologias?",
+        "pt-PT": "2. Quem utiliza estas tecnologias?",
+        "ro": "2. Cine utilizeaza aceste tehnologii?",
+        "ru": "2. Kto ispolzuet eti tekhnologii?",
+        "sk": "2. Kto pouziva tieto technologie?",
+        "sl": "2. Kdo uporablja te tehnologije?",
+        "sq": "2. Kush i perdor keto teknologji?",
+        "sr": "2. Ko koristi ove tehnologije?",
+        "sv": "2. Vem anvander dessa teknologier?",
+        "tr": "2. Bu Teknolojileri Kim Kullaniyor?",
+        "uk": "2. Khto vykorystovuye tsi tekhnolohiyi?",
+    },
+    "cookies.s3_title": {
+        "en": "3. Categories of Cookies We Use",
+        "bg": "3. Kategorii biskvitki, koito izpolzvame",
+        "cs": "3. Kategorie souboru cookie, ktere pouzivame",
+        "da": "3. Kategorier af cookies, vi bruger",
+        "de": "3. Kategorien der von uns verwendeten Cookies",
+        "el": "3. Kategorias Cookies pou Chrisimopoioume",
+        "es": "3. Categorias de cookies que utilizamos",
+        "et": "3. Meie kasutatavate kupsiste kategooriad",
+        "fi": "3. Kayttamiemme evasteiden kategoriat",
+        "fr": "3. Categories de cookies que nous utilisons",
+        "ga": "3. Catagoiri Fianan a Usaidimid",
+        "hr": "3. Kategorije kolacica koje koristimo",
+        "hu": "3. Az altalunk hasznalt sutik kategoriaj",
+        "is": "3. Flokkar vafrakakar sem vid notum",
+        "it": "3. Categorie di cookie che utilizziamo",
+        "lb": "3. Kategorien vu Cookies, dei mir benotzen",
+        "lt": "3. Musu naudojamu slapuku kategorijos",
+        "lv": "3. Musu izmantoto sikdatnu kategorijas",
+        "mk": "3. Kategorii kolacinja koi gi koristime",
+        "mt": "3. Kategoriji ta' Cookies li Nuzaw",
+        "nl": "3. Categorieen cookies die wij gebruiken",
+        "no": "3. Kategorier av informasjonskapsler vi bruker",
+        "pl": "3. Kategorie plikow cookie, ktorych uzywamy",
+        "pt": "3. Categorias de cookies que usamos",
+        "pt-PT": "3. Categorias de cookies que utilizamos",
+        "ro": "3. Categoriile de cookie-uri pe care le folosim",
+        "ru": "3. Kategorii ispolzuemykh faylov cookie",
+        "sk": "3. Kategorie suborov cookie, ktore pouzivame",
+        "sl": "3. Kategorije piskotkov, ki jih uporabljamo",
+        "sq": "3. Kategoritë e cookies-ave qe perdorim",
+        "sr": "3. Kategorije kolacica koje koristimo",
+        "sv": "3. Kategorier av cookies vi anvander",
+        "tr": "3. Kullandigimiz Cerez Kategorileri",
+        "uk": "3. Katehoriyi fayliv cookie, yaki my vykorystovuyemo",
+    },
+}
+
+
+def seed():
+    with engine.begin() as conn:
+        for key, translations in TRANSLATIONS.items():
+            for lang, value in translations.items():
+                conn.execute(
+                    text("""
+                        INSERT INTO translations (key, lang, value)
+                        VALUES (:key, :lang, :value)
+                        ON CONFLICT (lang, key) DO UPDATE SET value = EXCLUDED.value
+                    """),
+                    {"key": key, "lang": lang, "value": value},
+                )
+    print(f"Seeded {len(TRANSLATIONS)} keys x 34 languages")
+
+
+if __name__ == "__main__":
+    seed()

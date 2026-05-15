@@ -274,7 +274,7 @@ The automated SEO infrastructure is designed for:
 - **Performance**: JSON-LD and canonical tags are generated server-side (SSR) for optimal page load speed
 - **Compliance**: Follows Google's structured data guidelines and SEO best practices
 
-### Docker Environment Variable Pattern (May 7, 2026 - Updated May 8, 2026)
+### Docker Environment Variable Pattern (May 7, 2026 - Updated May 15, 2026)
 Next.js in Docker requires two separate environment variables to handle server-side and client-side API communication correctly:
 
 - **API_URL=http://nevumo-api:8000** — Used server-side (SSR, Next.js rewrites) for container-to-container communication within the Docker network
@@ -287,6 +287,7 @@ This pattern is applied in:
 - **apps/web/lib/ui-translations.ts**: Same fallback pattern for translation fetching
 - **apps/web/lib/locales.ts**: Updated to use `API_URL || NEXT_PUBLIC_API_URL` fallback for server-side fetch
 - **apps/web/app/[lang]/claim/[token]/page.tsx**: Server component uses `API_URL || NEXT_PUBLIC_API_URL` for API calls
+- **apps/web/app/[lang]/terms/page.tsx**: Server component uses `API_URL || NEXT_PUBLIC_API_URL || 'http://localhost:8000'` for translation API calls (May 15, 2026)
 - **apps/web/components/ProviderWidget.tsx**: Client component uses `process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'` for image URLs to avoid hydration mismatches
 
 This separation ensures that:
