@@ -117,6 +117,21 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Email integration: Sends withdrawal form data to legal@nevumo.com via email service
 - Validation: All required fields validated for non-empty values and proper format
 
+### Cookie Policy (завършено 2026-05-16)
+- Route: `/[lang]/cookies` — Server component, 34 езика
+- Компонент: `apps/web/app/[lang]/cookies/page.tsx`
+- Seed: Множество скриптове за cookies преводи:
+  - seed_cookies_p21.py (11 ключа × 34 езика = 374 rows)
+  - seed_cookies_p22.py (9 ключа × 34 езика = 306 rows)
+  - seed_cookies_p23.py (8 ключа × 34 езика = 272 rows)
+  - seed_cookies_p24.py (12 ключа × 34 езика = 408 rows)
+  - seed_cookies_table_data_p1.py (12 ключа EN only = 23 rows)
+  - seed_cookies_browser_paths_p2.py (4 ключа × 17 езика = 68 rows)
+  - seed_cookies_browser_paths_p3.py (4 ключа × 17 езика = 68 rows)
+- Namespace: `cookies`
+- Keys: s1_title, s1_text, s2_title, s2_text, s3_title, s3_text, s4_title, s4_text, s5_title, s5_text, s5_p_consent, s5_p_lang, s5_p_ga, s5_p_ga_id, s5_p_stripe_mid, s5_p_stripe_sid, s5_p_auth_token, s5_p_auth_user, s5_p_phone, s5_p_intent, s5_p_city, s5_p_auth_email, s5_type_cookie_1p, s5_type_cookie_3p, s5_type_localstorage, s5_type_sessionstorage, s5_ret_12mo, s5_ret_13mo, s5_ret_1y, s5_ret_30d, s5_ret_30min, s5_ret_sess_30d, s5_ret_cleared, s5_ret_session, s5_ret_session_tab, s6_chrome_path, s6_firefox_path, s6_safari_path, s6_edge_path, s7_role_google, s7_role_stripe, s7_role_vercel, s7_role_railway, s7_role_neon, s7_role_upstash, s7_role_cloudflare, s8_safeguard_sccs_dpf, s8_safeguard_sccs, s8_country_usa, s9_title, s9_text, s10_title, s10_text, s11_title, s11_authority_bg, s11_authority_pl, last_updated
+- Total: 1,508 rows (40 ключа × 34 езика + 12 ключа EN only + 4 ключа × 34 езика)
+
 ### Privacy Policy — достъпност (2026-05-11)
 - Футър: `GlobalFooter.tsx` — линк `footer.privacy_policy_link` (namespace `footer`) ✅
 - Регистрация: `LoginClient.tsx` — линк под бутона за регистрация ✅
