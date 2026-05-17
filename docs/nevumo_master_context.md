@@ -621,6 +621,13 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Pending Items**: Stripe.js conditional loading
   - **Status**: Core cookie consent functionality complete, backend audit trail operational. Advanced GA4 integration and Stripe management deferred to future tasks.
   - **Bug Fix (May 11, 2026)**: Cookie banner показваше English на /bg route от мобилни устройства в локална мрежа. Root cause: `useCookieConsent.ts` и `ui-translations.ts` използваха `process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'` като client-side apiBase — абсолютен localhost URL заобикаляше Next.js proxy и се чупеше на устройства различни от localhost. Fix: `apps/web/hooks/useCookieConsent.ts` ред 99 и `apps/web/lib/ui-translations.ts` ред 13 — client клоновете сетнати на `''` (относителен URL). Next.js rewrites в next.config.mjs проксират `/api/v1/*` към FastAPI — работи от всяко устройство.
+- **Mobile Network API URL Configuration Fix (May 17, 2026)** — COMPLETE:
+  - **Problem**: Frontend API calls failed when accessing from mobile devices in local network (e.g., http://192.168.0.15:3000/bg/auth) because `NEXT_PUBLIC_API_URL` was hardcoded to `http://localhost:8000` in docker-compose.yml
+  - **Root cause**: `localhost` on mobile device refers to the mobile device itself, not the laptop running the API server
+  - **Solution**: Made `NEXT_PUBLIC_API_URL` configurable via environment variable with fallback:
+    - `.env`: Set `NEXT_PUBLIC_API_URL=http://192.168.0.15:8000` for local network testing
+    - `docker-compose.yml`: Changed from hardcoded value to `${NEXT_PUBLIC_API_URL:-http://localhost:8000}`
+  - **Benefits**: Global and scalable solution - works in all environments (dev, staging, production) via environment variables without code changes
     - **DB:** New column `leads.client_notes TEXT` (nullable) — migration r2s3t4u5v6w7
     - **Backend:**
       - New endpoint: `PATCH /api/v1/client/leads/{lead_id}/notes` (ownership check: lead.client_id == user.id)
