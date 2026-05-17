@@ -1,0 +1,897 @@
+"""
+seed_provider_terms_p20_art13_14_body.py  —  Nevumo | namespace: provider_terms
+Key: art13_body, art14_body  (2 keys x 34 langs = 68 rows)
+Run: docker exec nevumo-api python -m apps.api.scripts.seed_provider_terms_p20_art13_14_body
+"""
+import os
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://nevumo:nevumo@postgres:5432/nevumo_leads",
+)
+
+NAMESPACE = "provider_terms"
+
+TRANSLATIONS: dict[str, dict[str, str]] = {
+    "art13_body": {
+        "en": (
+            "13.1 In the event that a dispute between a Provider and Nevumo cannot be resolved through the internal complaint procedure (Section 12), either party may request mediation.\n\n"
+            "13.2 Nevumo designates the following as mediators for the purposes of Article 12 of the P2B Regulation:\n\n"
+            "**For Providers based in Poland:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**For Providers based in Bulgaria and all other countries:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — National Institute for Conciliation and Arbitration**\n"
+            "   ул. Леге 4, 1000 София, България | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 София, България | www.bcci.bg\n\n"
+            "13.3 Mediation is voluntary for both parties. The costs of mediation shall be borne by the parties as agreed, or as determined by the mediator. Nevumo will not seek to impose disproportionate costs on Providers in mediation proceedings.\n\n"
+            "13.4 Mediation does not affect either party's right to bring proceedings before a court of competent jurisdiction."
+        ),
+        "bg": (
+            "1. В случай, че спор между Доставчик и Nevumo не може да бъде решен чрез вътрешната процедура за разглеждане на жалби (чл. 12), всяка от страните може да поиска провеждане на медиация.\n\n"
+            "2. В съответствие с чл. 12 от Регламент P2B, Nevumo посочва следните медиатори:\n\n"
+            "**За Доставчици, установени в Полша:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa, Полша | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa, Полша | www.sakig.pl\n\n"
+            "**За Доставчици, установени в България и всички останали страни:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА)**\n"
+            "   ул. Леге 4, 1000 София, България | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 София, България | www.bcci.bg\n\n"
+            "3. Медиацията е доброволна за двете страни. Разходите за медиация се поемат от страните по споразумение или по преценка на медиатора. Nevumo няма да налага непропорционални разходи на Доставчиците в медиационни производства.\n\n"
+            "4. Медиацията не засяга правото на нито една от страните да предяви иск пред компетентен съд."
+        ),
+        "pl": (
+            "1. W przypadku gdy sporu pomiędzy Dostawcą a Nevumo nie uda się rozwiązać w drodze wewnętrznej procedury skargowej (§12), każda ze stron może wnioskować o przeprowadzenie mediacji.\n\n"
+            "2. Zgodnie z art. 12 Rozporządzenia P2B, Nevumo wskazuje następujących mediatorów:\n\n"
+            "**Dla Dostawców z siedzibą w Polsce:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Dla Dostawców z siedzibą w Bułgarii i we wszystkich pozostałych krajach:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА)**\n"
+            "   ul. Lege 4, 1000 Sofia, Bułgaria | www.nipa.bg\n"
+            "2. **Медиационен център przy Българска търговско-промишлена палата (БТПП)**\n"
+            "   ul. Iskar 9, 1058 Sofia, Bułgaria | www.bcci.bg\n\n"
+            "3. Mediacja jest dobrowolna dla obu stron. Koszty mediacji ponoszą strony zgodnie z ustaleniami lub zgodnie z decyzją mediatora. Nevumo nie będzie dążyło do nałożenia na Dostawców nieproporcjonalnych kosztów w postępowaniu mediacyjnym.\n\n"
+            "4. Mediacja nie pozbawia żadnej ze stron prawa do dochodzenia roszczeń przed właściwym sądem."
+        ),
+        "de": (
+            "13.1 Falls ein Streit zwischen einem Anbieter und Nevumo nicht durch das interne Beschwerdeverfahren (Abschnitt 12) gelöst werden kann, kann jede Partei eine Mediation beantragen.\n\n"
+            "13.2 Nevumo benennt die folgenden Mediatoren für die Zwecke von Artikel 12 der P2B-Verordnung:\n\n"
+            "**Für Anbieter mit Sitz in Polen:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Für Anbieter mit Sitz in Bulgarien und allen anderen Ländern:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nationales Institut für Schlichtung und Schiedsgerichtsbarkeit**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgarien | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgarien | www.bcci.bg\n\n"
+            "13.3 Die Mediation ist für beide Parteien freiwillig. Die Kosten der Mediation werden von den Parteien wie vereinbart oder wie vom Mediator festgelegt getragen. Nevumo wird nicht versuchen, den Anbietern in Mediationsverfahren unverhältnismäßige Kosten aufzuerlegen.\n\n"
+            "13.4 Die Mediation berührt nicht das Recht einer der Parteien, ein Verfahren vor einem zuständigen Gericht einzuleiten."
+        ),
+        "fr": (
+            "13.1 Dans le cas où un litige entre un Fournisseur et Nevumo ne pourrait être résolu par la procédure de plainte interne (Section 12), l'une ou l'autre des parties peut demander une médiation.\n\n"
+            "13.2 Nevumo désigne les médiateurs suivants aux fins de l'Article 12 du Règlement P2B :\n\n"
+            "**Pour les Fournisseurs basés en Pologne :**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Pour les Fournisseurs basés en Bulgarie et dans tous les autres pays :**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Institut national de conciliation et d'arbitrage**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgarie | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgarie | www.bcci.bg\n\n"
+            "13.3 La médiation est volontaire pour les deux parties. Les frais de médiation sont supportés par les parties comme convenu, ou comme déterminé par le médiateur. Nevumo ne cherchera pas à imposer des coûts disproportionnés aux Fournisseurs dans les procédures de médiation.\n\n"
+            "13.4 La médiation n'affecte pas le droit de chaque partie d'engager une procédure devant un tribunal compétent."
+        ),
+        "es": (
+            "13.1 En caso de que una disputa entre un Proveedor y Nevumo no pueda resolverse a través del procedimiento de queja interna (Sección 12), cualquiera de las partes puede solicitar mediación.\n\n"
+            "13.2 Nevumo designa a los siguientes como mediadores a los efectos del Artículo 12 del Reglamento P2B:\n\n"
+            "**Para Proveedores con sede en Polonia:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Para Proveedores con sede en Bulgaria y todos los demás países:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Instituto Nacional de Conciliación y Arbitraje**\n"
+            "   ул. Леге 4, 1000 Sofía, Bulgaria | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofía, Bulgaria | www.bcci.bg\n\n"
+            "13.3 La mediación es voluntaria para ambas partes. Los costos de la mediación correrán a cargo de las partes según lo acordado, o según lo determine el mediador. Nevumo no intentará imponer costos desproporcionados a los Proveedores en los procedimientos de mediación.\n\n"
+            "13.4 La mediación no afecta el derecho de ninguna de las partes a iniciar procedimientos ante un tribunal de jurisdicción competente."
+        ),
+        "it": (
+            "13.1 Nel caso in cui una controversia tra un Fornitore e Nevumo non possa essere risolta tramite la procedura di reclamo interna (Sezione 12), entrambe le parti possono richiedere la mediazione.\n\n"
+            "13.2 Nevumo designa i seguenti mediatori ai fini dell'Articolo 12 del Regolamento P2B:\n\n"
+            "**Per i Fornitori con sede in Polonia:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Per i Fornitori con sede in Bulgaria e in tutti gli altri Paesi:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Istituto Nazionale per la Conciliazione e l'Arbitrato**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgaria | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgaria | www.bcci.bg\n\n"
+            "13.3 La mediazione è volontaria per entrambe le parti. I costi della mediazione saranno sostenuti dalle parti come concordato o come stabilito dal mediatore. Nevumo non cercherà di imporre costi sproporzionati ai Fornitori nei procedimenti di mediazione.\n\n"
+            "13.4 La mediazione non pregiudica il diritto di ciascuna delle parti di avviare un procedimento dinanzi a un tribunale della giurisdizione competente."
+        ),
+        "nl": (
+            "13.1 In het geval dat een geschil tussen een Dienstverlener en Nevumo niet kan worden opgelost via de interne klachtenprocedure (Sectie 12), kan elk van de partijen om bemiddeling verzoeken.\n\n"
+            "13.2 Nevumo wijst het volgende aan als bemiddelaars voor de doeleinden van Artikel 12 van de P2B-verordening:\n\n"
+            "**Voor Dienstverleners gevestigd in Polen:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Voor Dienstverleners gevestigd in Bulgarije en alle andere landen:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nationaal Instituut voor Verzoening en Arbitrage**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgarije | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgarije | www.bcci.bg\n\n"
+            "13.3 Bemiddeling is vrijwillig voor beide partijen. De kosten van bemiddeling worden gedragen door de partijen zoals overeengekomen, of zoals bepaald door de bemiddelaar. Nevumo zal niet proberen onevenredige kosten op te leggen aan Dienstverleners in bemiddelingsprocedures.\n\n"
+            "13.4 Bemiddeling laat het recht van beide partijen onverlet om een procedure aan te spannen bij een rechtbank met een bevoegde jurisdictie."
+        ),
+        "pt": (
+            "13.1 No caso de um litígio entre um Prestador e a Nevumo não poder ser resolvido através do procedimento interno de reclamação (Secção 12), qualquer uma das partes pode solicitar mediação.\n\n"
+            "13.2 A Nevumo designa os seguintes como mediadores para efeitos do Artigo 12.º do Regulamento P2B:\n\n"
+            "**Para Prestadores sediados na Polónia:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Para Prestadores sediados na Bulgária e em todos os outros países:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Instituto Nacional de Conciliação e Arbitragem**\n"
+            "   ул. Леге 4, 1000 Sófia, Bulgária | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sófia, Bulgária | www.bcci.bg\n\n"
+            "13.3 A mediação é voluntária para ambas as partes. Os custos da mediação serão suportados pelas partes conforme acordado, ou conforme determinado pelo mediador. A Nevumo não procurará impor custos desproporcionados aos Prestadores em processos de mediação.\n\n"
+            "13.4 A mediação não afeta o direito de qualquer uma das partes de intentar ações perante um tribunal de jurisdição competente."
+        ),
+        "pt-PT": (
+            "13.1 No caso de um litígio entre um Prestador e a Nevumo não poder ser resolvido através do procedimento interno de reclamação (Secção 12), qualquer uma das partes pode solicitar mediação.\n\n"
+            "13.2 A Nevumo designa os seguintes como mediadores para efeitos do Artigo 12.º do Regulamento P2B:\n\n"
+            "**Para Prestadores sediados na Polónia:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Para Prestadores sediados na Bulgária e em todos os outros países:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Instituto Nacional de Conciliação e Arbitragem**\n"
+            "   ул. Леге 4, 1000 Sófia, Bulgária | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sófia, Bulgária | www.bcci.bg\n\n"
+            "13.3 A mediação é voluntária para ambas as partes. Os custos da mediação serão suportados pelas partes conforme acordado, ou conforme determinado pelo mediador. A Nevumo não procurará impor custos desproporcionados aos Prestadores em processos de mediação.\n\n"
+            "13.4 A mediação não afeta o direito de qualquer uma das partes de intentar ações perante um tribunal de jurisdição competente."
+        ),
+        "ro": (
+            "13.1 În cazul în care un litigiu între un Furnizor și Nevumo nu poate fi soluționat prin procedura internă de soluționare a plângerilor (Secțiunea 12), oricare dintre părți poate solicita medierea.\n\n"
+            "13.2 Nevumo desemnează următoarele persoane ca mediatori în sensul Articolului 12 din Regulamentul P2B:\n\n"
+            "**Pentru Furnizorii cu sediul în Polonia:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Pentru Furnizorii cu sediul în Bulgaria și în toate celelalte țări:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Institutul Național pentru Conciliere și Arbitraj**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgaria | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgaria | www.bcci.bg\n\n"
+            "13.3 Medierea este voluntară pentru ambele părți. Costurile medierii vor fi suportate de părți așa cum s-a convenit sau așa cum a fost stabilit de mediator. Nevumo nu va încerca să impună costuri disproporționate Furnizorilor în procedurile de mediere.\n\n"
+            "13.4 Medierea nu afectează dreptul niciunei părți de a introduce proceduri în fața unei instanțe de jurisdicție competentă."
+        ),
+        "ru": (
+            "13.1 В случае, если спор между Поставщиком и Nevumo не может быть разрешен с помощью внутренней процедуры рассмотрения жалоб (Раздел 12), любая из сторон может запросить посредничество.\n\n"
+            "13.2 Nevumo назначает следующих посредников для целей Статьи 12 Регламента P2B:\n\n"
+            "**Для Поставщиков из Польши:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Для Поставщиков из Болгарии и всех остальных стран:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Национальный институт примирения и арбитража**\n"
+            "   ул. Леге 4, 1000 София, Болгария | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 София, Болгария | www.bcci.bg\n\n"
+            "13.3 Посредничество является добровольным для обеих сторон. Расходы на посредничество несут стороны по согласованию или по решению посредника. Nevumo не будет пытаться возложить непропорциональные расходы на Поставщиков в процедурах посредничества.\n\n"
+            "13.4 Посредничество не влияет на право любой из сторон возбуждать дело в суде компетентной юрисдикции."
+        ),
+        "uk": (
+            "13.1 У разі, якщо спір між Постачальником і Nevumo не може бути вирішений за допомогою внутрішньої процедури розгляду скарг (Розділ 12), будь-яка зі сторін може запросити медіацію.\n\n"
+            "13.2 Nevumo призначає наступних медіаторів для цілей Статті 12 Регламенту P2B:\n\n"
+            "**Для Постачальників з Польщі:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Для Постачальників з Болгарії та всіх інших країн:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Національний інститут примирення та арбітражу**\n"
+            "   ул. Леге 4, 1000 Софія, Болгарія | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Софія, Болгарія | www.bcci.bg\n\n"
+            "13.3 Медіація є добровільною для обох сторін. Витрати на медіацію несуть сторони за погодженням або за рішенням медіатора. Nevumo не намагатиметься покласти непропорційні витрати на Постачальників у процедурах медіації.\n\n"
+            "13.4 Медіація не впливає на право будь-якої зі сторін порушувати справу в суді компетентної юрисдикції."
+        ),
+        "cs": (
+            "13.1 V případě, že spor mezi poskytovatelem a společností Nevumo nelze vyřešit prostřednictvím interního postupu pro podávání stížností (oddíl 12), může kterákoli strana požádat o mediaci.\n\n"
+            "13.2 Společnost Nevumo určuje pro účely článku 12 nařízení P2B následující mediátory:\n\n"
+            "**Pro poskytovatele se sídlem v Polsku:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Pro poskytovatele se sídlem v Bulharsku a všech ostatních zemích:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Národní institut pro smírčí řízení a rozhodčí soudnictví**\n"
+            "   ул. Леге 4, 1000 Sofie, Bulharsko | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofie, Bulharsko | www.bcci.bg\n\n"
+            "13.3 Mediace je pro obě strany dobrovolná. Náklady na mediaci nesou strany podle dohody nebo podle určení mediátora. Společnost Nevumo se nebude snažit uvalit na poskytovatele v mediačních řízeních nepřiměřené náklady.\n\n"
+            "13.4 Mediace nemá vliv na právo kterékoli strany zahájit řízení u příslušného soudu."
+        ),
+        "da": (
+            "13.1 I tilfælde af, at en tvist mellem en udbyder og Nevumo ikke kan løses gennem den interne klageprocedure (afsnit 12), kan enhver af parterne anmode om mægling.\n\n"
+            "13.2 Nevumo udpeger følgende som mæglere med henblik på artikel 12 i P2B-forordningen:\n\n"
+            "**For udbydere baseret i Polen:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**For udbydere baseret i Bulgarien og alle andre lande:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nationalt institut for mægling og voldgift**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgarien | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgarien | www.bcci.bg\n\n"
+            "13.3 Mægling er frivillig for begge parter. Omkostningerne ved mægling afholdes af parterne som aftalt eller som bestemt af mægleren. Nevumo vil ikke forsøge at pålægge udbydere uforholdsmæssige omkostninger i mæglingsprocedurer.\n\n"
+            "13.4 Mægling påvirker ikke nogen af parternes ret til at anlægge sag ved en domstol med kompetent jurisdiktion."
+        ),
+        "sv": (
+            "13.1 I händelse av att en tvist mellan en leverantör och Nevumo inte kan lösas genom det interna klagomålsförfarandet (avsnitt 12), kan endera parten begära medling.\n\n"
+            "13.2 Nevumo utser följande som medlare för tillämpningen av artikel 12 i P2B-förordningen:\n\n"
+            "**För leverantörer baserade i Polen:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**För leverantörer baserade i Bulgarien och alla andra länder:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nationella institutet för förlikning och skiljedom**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgarien | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgarien | www.bcci.bg\n\n"
+            "13.3 Medling är frivilligt för båda parter. Kostnaderna för medling ska bäras av parterna enligt överenskommelse, eller som bestäms av medlaren. Nevumo kommer inte att försöka pålägga leverantörer oproportionerliga kostnader i medlingsförfaranden.\n\n"
+            "13.4 Medling påverkar inte endera partens rätt att väcka talan vid en domstol med behörig jurisdiktion."
+        ),
+        "no": (
+            "13.1 I tilfelle en tvist mellom en leverandør og Nevumo ikke kan løses gjennom den interne klageprosedyren (seksjon 12), kan enhver av partene be om mekling.\n\n"
+            "13.2 Nevumo utpeker følgende som meglere for formålene med artikkel 12 i P2B-forordningen:\n\n"
+            "**For leverandører basert i Polen:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**For leverandører basert i Bulgaria og alle andre land:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nasjonalt institutt for mekling og voldgift**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgaria | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgaria | www.bcci.bg\n\n"
+            "13.3 Mekling er frivillig for begge parter. Kostnadene ved mekling skal bæres av partene som avtalt, eller som bestemt av megleren. Nevumo vil ikke forsøke å pålegge leverandører uforholdsmessige kostnader i meklingsprosedyrer.\n\n"
+            "13.4 Mekling påvirker ikke noen av partenes rett til å reise sak for en domstol med kompetent jurisdiksjon."
+        ),
+        "fi": (
+            "13.1 Siinä tapauksessa, että palveluntarjoajan ja Nevumon välistä riitaa ei voida ratkaista sisäisen valitusmenettelyn kautta (osio 12), kumpi tahansa osapuoli voi pyytää sovittelua.\n\n"
+            "13.2 Nevumo nimeää seuraavat sovittelijoiksi P2B-asetuksen 12 artiklan tarkoituksia varten:\n\n"
+            "**Puolaan sijoittautuneille palveluntarjoajille:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Bulgariaan ja kaikkiin muihin maihin sijoittautuneille palveluntarjoajille:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Kansallinen sovittelu- ja välimiesinstituutti**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgaria | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgaria | www.bcci.bg\n\n"
+            "13.3 Sovittelu on molemmille osapuolille vapaaehtoista. Osapuolet vastaavat sovittelun kustannuksista sovitulla tai sovittelijan määräämällä tavalla. Nevumo ei pyri asettamaan palveluntarjoajille suhteettomia kustannuksia sovittelumenettelyissä.\n\n"
+            "13.4 Sovittelu ei vaikuta kummankaan osapuolen oikeuteen nostaa kanne toimivaltaisessa tuomioistuimessa."
+        ),
+        "et": (
+            "13.1 Juhul, kui teenusepakkuja ja Nevumo vahelist vaidluste ei suudeta lahendada sisemise kaebuste lahendamise menetluse (jaotis 12) kaudu, võib kumbki pool taotleda lepitust.\n\n"
+            "13.2 Nevumo määrab P2B-määruse artikli 12 kohaldamiseks lepitajateks järgmised asutused:\n\n"
+            "**Poolas asuvatele teenusepakkujatele:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Bulgaarias ja kõigis teistes riikides asuvatele teenusepakkujatele:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Riiklik lepitus- ja vahekohtuinstituut**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgaaria | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgaaria | www.bcci.bg\n\n"
+            "13.3 Lepitus on mõlemale poolele vabatahtlik. Lepituskulud kannavad pooled vastavalt kokkuleppele või vastavalt lepitaja otsusele. Nevumo ei püüa panna teenusepakkujatele lepitusmenetluses ebaproportsionaalseid kulusid.\n\n"
+            "13.4 Lepitus ei mõjuta kummagi poole õigust pöörduda pädeva kohtu poole."
+        ),
+        "lt": (
+            "13.1 Tuo atveju, kai paslaugų teikėjo ir „Nevumo“ ginčo nepavyksta išspręsti taikant vidinę skundų nagrinėjimo procedūrą (12 skirsnis), bet kuri šalis gali prašyti tarpininkavimo.\n\n"
+            "13.2 „Nevumo“ paskiria šiuos tarpininkus P2B reglamento 12 straipsnio taikymo tikslais:\n\n"
+            "**Lenkijoje įsisteigusiems paslaugų teikėjams:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Bulgarijoje ir visose kitose šalyse įsisteigusiems paslaugų teikėjams:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nacionalinis taikinimo ir arbitražo institutas**\n"
+            "   ул. Леге 4, 1000 Sofija, Bulgarija | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofija, Bulgarija | www.bcci.bg\n\n"
+            "13.3 Tarpininkavimas abiems šalims yra savanoriškas. Tarpininkavimo išlaidas šalys padengia pagal susitarimą arba kaip nustato tarpininkas. „Nevumo“ nesieks primesti neproporcingų išlaidų paslaugų teikėjams tarpininkavimo procesuose.\n\n"
+            "13.4 Tarpininkavimas neturi įtakos nė vienos iš šalių teisei kreiptis į kompetentingą teismą."
+        ),
+        "lv": (
+            "13.1 Gadījumā, ja strīdu starp Pakalpojumu sniedzēju un Nevumo nevar atrisināt, izmantojot iekšējo sūdzību izskatīšanas procedūru (12. sadaļa), jebkura no pusēm var pieprasīt mediāciju.\n\n"
+            "13.2 Nevumo nosaka šādus mediatorus P2B regulas 12. panta izpratnē:\n\n"
+            "**Pakalpojumu sniedzējiem, kas reģistrēti Polijā:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Pakalpojumu sniedzējiem, kas reģistrēti Bulgārijā un visās citās valstīs:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nacionālais izlīguma un šķīrējtiesas institūts**\n"
+            "   ул. Леге 4, 1000 Sofija, Bulgārija | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofija, Bulgārija | www.bcci.bg\n\n"
+            "13.3 Mediācija abām pusēm ir brīvprātīga. Mediācijas izmaksas sedz puses saskaņā ar vienošanos vai kā to nosaka mediators. Nevumo necentīsies uzlikt nesamērīgas izmaksas Pakalpojumu sniedzējiem mediācijas procedūrās.\n\n"
+            "13.4 Mediācija neietekmē nevienas puses tiesības vērsties kompetentā tiesā."
+        ),
+        "hu": (
+            "13.1 Abban az esetben, ha a Szolgáltató és a Nevumo közötti vita nem oldható meg a belső panaszkezelési eljáráson keresztül (12. szakasz), bármelyik fél kérheti a közvetítést.\n\n"
+            "13.2 A Nevumo a P2B rendelet 12. cikkének alkalmazásában a következőket jelöli ki közvetítőnek:\n\n"
+            "**Lengyelországban székhellyel rendelkező Szolgáltatók esetén:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Bulgáriában és minden más országban székhellyel rendelkező Szolgáltatók esetén:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nemzeti Békéltető és Választottbírósági Intézet**\n"
+            "   ул. Леге 4, 1000 Szófia, Bulgária | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Szófia, Bulgária | www.bcci.bg\n\n"
+            "13.3 A közvetítés mindkét fél számára önkéntes. A közvetítés költségeit a felek megállapodásuk szerint, vagy a közvetítő által meghatározott módon viselik. A Nevumo nem törekszik aránytalan költségek kivetésére a Szolgáltatókra a közvetítési eljárások során.\n\n"
+            "13.4 A közvetítés nem érinti a felek azon jogát, hogy illetékes bírósághoz forduljanak."
+        ),
+        "hr": (
+            "13.1 U slučaju da se spor između Pružatelja usluga i tvrtke Nevumo ne može riješiti kroz interni postupak rješavanja pritužbi (Odjeljak 12), bilo koja strana može zatražiti mirenje.\n\n"
+            "13.2 Nevumo imenuje sljedeće kao miritelje za svrhe Članka 12. Uredbe P2B:\n\n"
+            "**Za Pružatelje usluga sa sjedištem u Poljskoj:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Za Pružatelje usluga sa sjedištem u Bugarskoj i svim drugim zemljama:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nacionalni institut za mirenje i arbitražu**\n"
+            "   ул. Леге 4, 1000 Sofija, Bugarska | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofija, Bugarska | www.bcci.bg\n\n"
+            "13.3 Mirenje je dobrovoljno za obje strane. Troškove mirenja snosit će strane kako je dogovoreno ili kako to odredi miritelj. Nevumo neće pokušavati nametnuti nerazmjerne troškove Pružateljima usluga u postupcima mirenja.\n\n"
+            "13.4 Mirenje ne utječe na pravo bilo koje strane da pokrene postupak pred sudom nadležne jurisdikcije."
+        ),
+        "sk": (
+            "13.1 V prípade, že spor medzi poskytovateľom a spoločnosťou Nevumo nemožno vyriešiť prostredníctvom interného postupu podávania sťažností (oddiel 12), môže ktorákoľvek strana požiadať o mediáciu.\n\n"
+            "13.2 Spoločnosť Nevumo určuje pre účely článku 12 nariadenia P2B nasledujúcich mediátorov:\n\n"
+            "**Pre poskytovateľov so sídlom v Poľsku:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Pre poskytovateľov so sídlom v Bulharsku a všetkých ostatných krajinách:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Národný inštitút pre zmierovacie konanie a rozhodcovské súdnictvo**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulharsko | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulharsko | www.bcci.bg\n\n"
+            "13.3 Mediácia je pre obe strany dobrovoľná. Náklady na mediáciu znášajú strany podľa dohody alebo podľa určenia mediátora. Spoločnosť Nevumo sa nebude snažiť uvaliť na poskytovateľov v mediačných konaniach neprimerané náklady.\n\n"
+            "13.4 Mediácia nemá vplyv na právo ktorejkoľvek strany začať konanie na príslušnom súde."
+        ),
+        "sl": (
+            "13.1 V primeru, da spora med ponudnikom in podjetjem Nevumo ni mogoče rešiti z notranjim pritožbenim postopkom (razdelek 12), lahko katera koli stranka zahteva mediacijo.\n\n"
+            "13.2 Nevumo določa naslednje kot mediatorje za namene člena 12 Uredbe P2B:\n\n"
+            "**Za ponudnike s sedežem na Poljskem:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Za ponudnike s sedežem v Bolgariji in vseh drugih državah:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nacionalni inštitut za spravo in arbitražo**\n"
+            "   ул. Леге 4, 1000 Sofija, Bolgarija | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofija, Bolgarija | www.bcci.bg\n\n"
+            "13.3 Mediacija je za obe stranki prostovoljna. Stroške mediacije nosita stranki po dogovoru ali kot določi mediator. Nevumo ponudnikom v postopkih mediacije ne bo poskušal naložiti nesorazmernih stroškov.\n\n"
+            "13.4 Mediacija ne vpliva na pravico nobene od strank, da sproži postopek pred pristojnim sodiščem."
+        ),
+        "el": (
+            "13.1 Σε περίπτωση που μια διαφορά μεταξύ ενός Παρόχου και της Nevumo δεν μπορεί να επιλυθεί μέσω της εσωτερικής διαδικασίας παραπόνων (Ενότητα 12), οποιοδήποτε μέρος μπορεί να ζητήσει διαμεσολάβηση.\n\n"
+            "13.2 Η Nevumo ορίζει τους ακόλουθους ως διαμεσολαβητές για τους σκοπούς του Άρθρου 12 του Κανονισμού P2B:\n\n"
+            "**Για Παρόχους με έδρα την Πολωνία:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Για Παρόχους με έδρα τη Βουλγαρία και όλες τις άλλες χώρες:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Εθνικό Ινστιτούτο Συμβιβασμού και Διαιτησίας**\n"
+            "   ул. Леге 4, 1000 Σόφια, Βουλγαρία | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Σόφια, Βουλγαρία | www.bcci.bg\n\n"
+            "13.3 Η διαμεσολάβηση είναι εθελοντική και για τα δύο μέρη. Το κόστος της διαμεσολάβησης θα βαρύνει τα μέρη όπως έχει συμφωνηθεί ή όπως θα καθοριστεί από τον διαμεσολαβητή. Η Nevumo δεν θα επιδιώξει να επιβάλει δυσανάλογο κόστος στους Παρόχους σε διαδικασίες διαμεσολάβησης.\n\n"
+            "13.4 Η διαμεσολάβηση δεν επηρεάζει το δικαίωμα κανενός μέρους να κινήσει διαδικασίες ενώπιον αρμόδιου δικαστηρίου."
+        ),
+        "tr": (
+            "13.1 Bir Sağlayıcı ile Nevumo arasındaki bir anlaşmazlığın dahili şikayet prosedürü (Bölüm 12) aracılığıyla çözülememesi durumunda, taraflardan herhangi biri arabuluculuk talep edebilir.\n\n"
+            "13.2 Nevumo, P2B Yönetmeliğinin 12. Maddesi uyarınca aşağıdakileri arabulucu olarak atamaktadır:\n\n"
+            "**Polonya merkezli Sağlayıcılar için:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Bulgaristan ve diğer tüm ülkeler merkezli Sağlayıcılar için:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Ulusal Uzlaştırma ve Tahkim Enstitüsü**\n"
+            "   ул. Леге 4, 1000 Sofya, Bulgaristan | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofya, Bulgaristan | www.bcci.bg\n\n"
+            "13.3 Arabuluculuk her iki taraf için de isteğe bağlıdır. Arabuluculuk masrafları, anlaşıldığı üzere veya arabulucu tarafından belirlendiği şekilde taraflarca karşılanacaktır. Nevumo, arabuluculuk süreçlerinde Sağlayıcılara orantısız maliyetler yüklemeye çalışmayacaktır.\n\n"
+            "13.4 Arabuluculuk, taraflardan herhangi birinin yetkili bir mahkeme nezdinde dava açma hakkını etkilemez."
+        ),
+        "ga": (
+            "13.1 I gcás nach féidir díospóid idir Soláthraí agus Nevumo a réiteach tríd an nós imeachta gearán inmheánach (Roinn 12), féadfaidh ceachtar páirtí idirghabháil a iarraidh.\n\n"
+            "13.2 Ainmníonn Nevumo na daoine seo a leanas mar idirghabhálaithe chun críocha Airteagal 12 den Rialachán P2B:\n\n"
+            "**Do Sholáthraithe atá lonnaithe sa Pholainn:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Do Sholáthraithe atá lonnaithe sa Bhulgáir agus i ngach tír eile:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — An Institiúid Náisiúnta um Idir-réiteach agus Eadráin**\n"
+            "   ул. Леге 4, 1000 Sóifia, An Bhulgáir | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sóifia, An Bhulgáir | www.bcci.bg\n\n"
+            "13.3 Tá idirghabháil deonach don dá pháirtí. Is iad na páirtithe a íocfaidh costais na hidirghabhála de réir mar a chomhaontaítear, nó de réir mar a chinnfidh an t-idirghabhálaí. Ní dhéanfaidh Nevumo iarracht costais dhíréireacha a ghearradh ar Sholáthraithe in imeachtaí idirghabhála.\n\n"
+            "13.4 Ní chuireann idirghabháil isteach ar cheart ceachtar páirtí imeachtaí a thabhairt os comhair cúirte le dlínse inniúil."
+        ),
+        "is": (
+            "13.1 Í þeim tilvikum sem ekki er hægt að leysa ágreining milli þjónustuveitanda og Nevumo í gegnum innra kvörtunarferlið (hluti 12), getur hvor aðilinn sem er beðið um sáttameðferð.\n\n"
+            "13.2 Nevumo tilnefnir eftirfarandi sem sáttamenn í tilgangi 12. greinar P2B reglugerðarinnar:\n\n"
+            "**Fyrir þjónustuveitendur með aðsetur í Póllandi:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Fyrir þjónustuveitendur með aðsetur í Búlgaríu og öllum öðrum löndum:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Landsstofnun um sáttamiðlun og gerðardóm**\n"
+            "   ул. Леге 4, 1000 Sófía, Búlgaría | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sófía, Búlgaría | www.bcci.bg\n\n"
+            "13.3 Sáttameðferð er valfrjáls fyrir báða aðila. Kostnaður við sáttameðferð skal borinn af aðilum samkvæmt samkomulagi eða eins og sáttamaður ákveður. Nevumo mun ekki reyna að leggja óhóflegan kostnað á þjónustuveitendur í sáttameðferð.\n\n"
+            "13.4 Sáttameðferð hefur ekki áhrif á rétt hvors aðila um sig til að höfða mál fyrir dómstóli með lögbæru lögsögu."
+        ),
+        "lb": (
+            "13.1 Am Fall wou e Sträit tëscht engem Ubidder an Nevumo net duerch déi intern Reklamatiounsprozedur (Sektioun 12) geléist ka ginn, kann all Partei eng Mediatioun ufroen.\n\n"
+            "13.2 Nevumo nennt déi folgend Mediatore fir den Zwecker vum Artikel 12 vun der P2B-Reglementatioun:\n\n"
+            "**Fir Ubidder mat Sëtz a Polen:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Fir Ubidder mat Sëtz a Bulgarien an allen anere Länner:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nationaalt Institut fir Schlichtung a Schiedsgeriichtsbarkeet**\n"
+            "   ул. Леге 4, 1000 Sofia, Bulgarien | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Bulgarien | www.bcci.bg\n\n"
+            "13.3 D'Mediatioun ass fir béid Parteie fräiwëlleg. D'Käschte vun der Mediatioun ginn vun de Parteien gedroen wéi ofgemaach, oder wéi vum Mediator festgeluecht. Nevumo wäert net probéieren den Ubidder a Mediatiounsprozeduren onverhältnisméisseg Käschten opzeleeën.\n\n"
+            "13.4 D'Mediatioun beaflosst net d'Recht vun all Partei eng Prozedur virun engem zoustännege Geriicht anzeleeden."
+        ),
+        "mk": (
+            "13.1 Во случај кога спор помеѓу Давател и Nevumo не може да се реши преку внатрешната процедура за поплаки (Дел 12), секоја од страните може да побара медијација.\n\n"
+            "13.2 Nevumo ги назначува следните како медијатори за целите на Член 12 од Регулативата P2B:\n\n"
+            "**За Даватели со седиште во Полска:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**За Даватели со седиште во Бугарија и сите други земји:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Национален институт за помирување и арбитража**\n"
+            "   ул. Леге 4, 1000 Софија, Бугарија | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Софија, Бугарија | www.bcci.bg\n\n"
+            "13.3 Медијацијата е доброволна за двете страни. Трошоците за медијација ги сносат страните според договор, или како што ќе одреди медијаторот. Nevumo нема да се обиде да им наметне несразмерни трошоци на Давателите во постапките за медијација.\n\n"
+            "13.4 Медијацијата не влијае на правото на ниту една од страните да покрене постапка пред надлежен суд."
+        ),
+        "mt": (
+            "13.1 Fil-każ li tilwima bejn Fornitur u Nevumo ma tistax tiġi riżolta permezz tal-proċedura interna tal-ilmenti (Taqsima 12), kwalunkwe parti tista' titlob medjazzjoni.\n\n"
+            "13.2 Nevumo jaħtar dan li ġej bħala medjaturi għall-finijiet tal-Artikolu 12 tar-Regolament P2B:\n\n"
+            "**Għal Fornituri bbażati fil-Polonja:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Għal Fornituri bbażati fil-Bulgarija u l-pajjiżi l-oħra kollha:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Istitut Nazzjonali għall-Konċiljazzjoni u l-Arbitraġġ**\n"
+            "   ул. Леге 4, 1000 Sofia, Il-Bulgarija | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofia, Il-Bulgarija | www.bcci.bg\n\n"
+            "13.3 Il-medjazzjoni hija volontarja għaż-żewġ partijiet. L-ispejjeż tal-medjazzjoni għandhom jitħallsu mill-partijiet kif miftiehem, jew kif determinat mill-medjatur. Nevumo m'għandux ifittex li jimponi spejjeż sproporzjonati fuq il-Fornituri fi proċedimenti ta' medjazzjoni.\n\n"
+            "13.4 Il-medjazzjoni ma taffettwax id-dritt ta' kwalunkwe parti li tressaq proċedimenti quddiem qorti ta' ġuriżdizzjoni kompetenti."
+        ),
+        "sq": (
+            "13.1 Në rast se një mosmarrëveshje midis një Ofruesi dhe Nevumo nuk mund të zgjidhet përmes procedurës së brendshme të ankesave (Seksioni 12), secila palë mund të kërkojë ndërmjetësim.\n\n"
+            "13.2 Nevumo përcakton si ndërmjetësues të mëposhtmit për qëllimet e Nenit 12 të Rregullores P2B:\n\n"
+            "**Për Ofruesit me seli në Poloni:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Për Ofruesit me seli në Bullgari dhe të gjitha vendet e tjera:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Instituti Kombëtar për Pajtim dhe Arbitrazh**\n"
+            "   ул. Леге 4, 1000 Sofje, Bullgari | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofje, Bullgari | www.bcci.bg\n\n"
+            "13.3 Ndërmjetësimi është vullnetar për të dyja palët. Kostot e ndërmjetësimit do të përballohen nga palët sipas marrëveshjes, ose siç përcaktohet nga ndërmjetësi. Nevumo nuk do të kërkojë të vendosë kosto joproporcionale ndaj Ofruesve në procedurat e ndërmjetësimit.\n\n"
+            "13.4 Ndërmjetësimi nuk ndikon në të drejtën e secilës palë për të nisur procedura para një gjykate me juridiksion kompetent."
+        ),
+        "sr": (
+            "13.1 U slučaju da se spor između Pružaoca usluga i kompanije Nevumo ne može rešiti kroz interni postupak rešavanja pritužbi (Odeljak 12), bilo koja strana može zatražiti posredovanje.\n\n"
+            "13.2 Nevumo imenuje sledeće kao posrednike za svrhe Člana 12 Uredbe P2B:\n\n"
+            "**Za Pružaoce usluga sa sedištem u Poljskoj:**\n"
+            "1. **Centrum Mediacji przy Związku Przedsiębiorców i Pracodawców (ZPP)**\n"
+            "   ul. Brukselska 7, 03-973 Warszawa | www.zpp.net.pl\n"
+            "2. **Centrum Mediacji Sądu Arbitrażowego przy Krajowej Izbie Gospodarczej (KIG)**\n"
+            "   ul. Trębacka 4, 00-074 Warszawa | www.sakig.pl\n\n"
+            "**Za Pružaoce usluga sa sedištem u Bugarskoj i svim drugim zemljama:**\n"
+            "1. **Национален институт за помирение и арбитраж (НИПА) — Nacionalni institut za pomirenje i arbitražu**\n"
+            "   ул. Леге 4, 1000 Sofija, Bugarska | www.nipa.bg\n"
+            "2. **Медиационен център при Българска търговско-промишлена палата (БТПП)**\n"
+            "   ул. Искър 9, 1058 Sofija, Bugarska | www.bcci.bg\n\n"
+            "13.3 Posredovanje je dobrovoljno za obe strane. Troškove posredovanja snosiće strane kako je dogovoreno, ili kako odredi posrednik. Nevumo neće pokušavati da nametne neproporcionalne troškove Pružaocima usluga u postupcima posredovanja.\n\n"
+            "13.4 Posredovanje ne utiče na pravo bilo koje strane da pokrene postupak pred sudom nadležne jurisdikcije."
+        ),
+    },
+    "art14_body": {
+        "en": (
+            "14.1 Nevumo is not liable for:\n"
+            "- the quality, legality, safety, or execution of services provided by Providers;\n"
+            "- any damage arising from a Provider's failure to hold required licences or permits;\n"
+            "- any direct or indirect loss suffered by a Provider as a result of Platform downtime, technical failures, or force majeure events beyond Nevumo's reasonable control;\n"
+            "- the accuracy of any automatically translated content on the Platform.\n\n"
+            "14.2 Nevumo's aggregate liability to a Provider arising from or related to these Provider Terms shall not exceed the total commissions paid by that Provider to Nevumo in the 12 months preceding the event giving rise to the claim, or EUR 100 (whichever is greater).\n\n"
+            "14.3 Nothing in this section limits Nevumo's liability for any liability that cannot be excluded under applicable law."
+        ),
+        "bg": (
+            "1. Nevumo не носи отговорност за:\n"
+            "- качеството, законността, безопасността или изпълнението на услугите, предоставяни от Доставчиците;\n"
+            "- каквито и да е вреди, произтичащи от липсата на изисквани лицензи или разрешителни от страна на Доставчика;\n"
+            "- каквито и да е преки или косвени загуби, понесени от Доставчика в резултат на недостъпност на Платформата, технически повреди или форсмажорни обстоятелства, излизащи извън разумния контрол на Nevumo;\n"
+            "- точността на автоматично преведено съдържание в Платформата.\n\n"
+            "2. Съвкупната отговорност на Nevumo към Доставчика, произтичаща от или свързана с настоящите Условия за Доставчици, не може да надвишава общия размер на комисионните, платени от този Доставчик на Nevumo през 12-те месеца, предхождащи събитието, пораждащо претенцията, или 100 EUR (в зависимост от това коя стойност е по-висока).\n\n"
+            "3. Нищо в настоящия член не ограничава отговорността на Nevumo за отговорност, която не може да бъде изключена по силата на приложимото законодателство."
+        ),
+        "pl": (
+            "1. Nevumo nie ponosi odpowiedzialności za:\n"
+            "- jakość, legalność, bezpieczeństwo ani realizację usług świadczonych przez Dostawców;\n"
+            "- jakiekolwiek szkody wynikające z braku po stronie Dostawcy wymaganych licencji lub zezwoleń;\n"
+            "- jakiekolwiek bezpośrednie lub pośrednie straty poniesione przez Dostawcę w wyniku niedostępności Platformy, awarii technicznych lub zdarzeń siły wyższej pozostających poza rozsądną kontrolą Nevumo;\n"
+            "- dokładność jakichkolwiek automatycznie tłumaczonych treści na Platformie.\n\n"
+            "2. Łączna odpowiedzialność Nevumo wobec Dostawcy wynikająca z niniejszego Regulaminu Dostawców lub z nim związana nie przekroczy sumy prowizji uiszczonych przez tego Dostawcę na rzecz Nevumo w ciągu 12 miesięcy poprzedzających zdarzenie stanowiące podstawę roszczenia, lub kwoty 100 EUR (w zależności od tego, która wartość jest wyższa).\n\n"
+            "3. Żadne postanowienie niniejszego paragrafu nie ogranicza odpowiedzialności Nevumo za odpowiedzialność, której nie można wyłączyć na mocy obowiązujących przepisów prawa."
+        ),
+        "de": (
+            "14.1 Nevumo haftet nicht für:\n"
+            "- die Qualität, Rechtmäßigkeit, Sicherheit oder Ausführung von Dienstleistungen, die von Anbietern erbracht werden;\n"
+            "- Schäden, die sich aus dem Fehlen der erforderlichen Lizenzen oder Genehmigungen seitens eines Anbieters ergeben;\n"
+            "- direkte oder indirekte Verluste, die einem Anbieter infolge von Ausfallzeiten der Plattform, technischen Störungen oder Fällen höherer Gewalt außerhalb der angemessenen Kontrolle von Nevumo entstehen;\n"
+            "- die Genauigkeit automatisch übersetzter Inhalte auf der Plattform.\n\n"
+            "14.2 Die Gesamthaftung von Nevumo gegenüber einem Anbieter, die sich aus oder im Zusammenhang mit diesen Anbieterbedingungen ergibt, übersteigt nicht die Gesamtprovisionen, die dieser Anbieter in den 12 Monaten vor dem Ereignis, das Anlass zur Forderung gibt, an Nevumo gezahlt hat, oder 100 EUR (je nachdem, welcher Betrag höher ist).\n\n"
+            "14.3 Nichts in diesem Abschnitt beschränkt die Haftung von Nevumo für eine Haftung, die nach geltendem Recht nicht ausgeschlossen werden kann."
+        ),
+        "fr": (
+            "14.1 Nevumo n'est pas responsable de :\n"
+            "- la qualité, la légalité, la sécurité ou l'exécution des services fournis par les Fournisseurs ;\n"
+            "- tout dommage résultant du fait qu'un Fournisseur ne détient pas les licences ou permis requis ;\n"
+            "- toute perte directe ou indirecte subie par un Fournisseur à la suite de temps d'arrêt de la Plateforme, de pannes techniques ou d'événements de force majeure échappant au contrôle raisonnable de Nevumo ;\n"
+            "- l'exactitude de tout contenu automatiquement traduit sur la Plateforme.\n\n"
+            "14.2 La responsabilité globale de Nevumo envers un Fournisseur découlant de ou liée à ces Conditions pour les Fournisseurs ne dépassera pas le total des commissions payées par ce Fournisseur à Nevumo au cours des 12 mois précédant l'événement donnant lieu à la réclamation, ou 100 EUR (le montant le plus élevé étant retenu).\n\n"
+            "14.3 Rien dans la présente section ne limite la responsabilité de Nevumo pour toute responsabilité qui ne peut être exclue en vertu de la loi applicable."
+        ),
+        "es": (
+            "14.1 Nevumo no es responsable de:\n"
+            "- la calidad, legalidad, seguridad o ejecución de los servicios proporcionados por los Proveedores;\n"
+            "- cualquier daño derivado del hecho de que un Proveedor no posea las licencias o permisos requeridos;\n"
+            "- cualquier pérdida directa o indirecta sufrida por un Proveedor como resultado de la inactividad de la Plataforma, fallas técnicas o eventos de fuerza mayor más allá del control razonable de Nevumo;\n"
+            "- la exactitud de cualquier contenido traducido automáticamente en la Plataforma.\n\n"
+            "14.2 La responsabilidad total de Nevumo hacia un Proveedor derivada de o relacionada con estas Condiciones para Proveedores no excederá las comisiones totales pagadas por ese Proveedor a Nevumo en los 12 meses anteriores al evento que dio lugar a la reclamación, o 100 EUR (la cantidad que sea mayor).\n\n"
+            "14.3 Nada en esta sección limita la responsabilidad de Nevumo por cualquier responsabilidad que no pueda ser excluida bajo la ley aplicable."
+        ),
+        "it": (
+            "14.1 Nevumo non è responsabile per:\n"
+            "- la qualità, legalità, sicurezza o esecuzione dei servizi forniti dai Fornitori;\n"
+            "- eventuali danni derivanti dalla mancata titolarità da parte del Fornitore delle licenze o dei permessi richiesti;\n"
+            "- qualsiasi perdita diretta o indiretta subita da un Fornitore a seguito di tempi di inattività della Piattaforma, guasti tecnici o eventi di forza maggiore che sfuggono al ragionevole controllo di Nevumo;\n"
+            "- l'accuratezza di qualsiasi contenuto tradotto automaticamente sulla Piattaforma.\n\n"
+            "14.2 La responsabilità complessiva di Nevumo verso un Fornitore derivante da o correlata a queste Condizioni per i Fornitori non supererà le commissioni totali pagate da tale Fornitore a Nevumo nei 12 mesi precedenti l'evento che ha dato origine al reclamo, o 100 EUR (quale che sia l'importo maggiore).\n\n"
+            "14.3 Nulla nella presente sezione limita la responsabilità di Nevumo per qualsiasi responsabilità che non può essere esclusa ai sensi della legge applicabile."
+        ),
+        "nl": (
+            "14.1 Nevumo is niet aansprakelijk voor:\n"
+            "- de kwaliteit, wettigheid, veiligheid of uitvoering van diensten geleverd door Dienstverleners;\n"
+            "- eventuele schade die voortvloeit uit het feit dat een Dienstverlener niet beschikt over de vereiste licenties of vergunningen;\n"
+            "- eventuele directe of indirecte verliezen geleden door een Dienstverlener als gevolg van uitvaltijd van het Platform, technische storingen of overmachtsituaties buiten de redelijke controle van Nevumo;\n"
+            "- de nauwkeurigheid van eventueel automatisch vertaalde inhoud op het Platform.\n\n"
+            "14.2 De totale aansprakelijkheid van Nevumo jegens een Dienstverlener die voortvloeit uit of verband houdt met deze Voorwaarden voor Dienstverleners zal de totale commissies die door die Dienstverlener aan Nevumo zijn betaald in de 12 maanden voorafgaand aan de gebeurtenis die aanleiding geeft tot de claim, of EUR 100 (afhankelijk van welk bedrag hoger is) niet overschrijden.\n\n"
+            "14.3 Niets in deze sectie beperkt de aansprakelijkheid van Nevumo voor eventuele aansprakelijkheid die onder de toepasselijke wetgeving niet kan worden uitgesloten."
+        ),
+        "pt": (
+            "14.1 A Nevumo não é responsável por:\n"
+            "- a qualidade, legalidade, segurança ou execução dos serviços prestados pelos Prestadores;\n"
+            "- quaisquer danos decorrentes da falta de licenças ou autorizações exigidas por parte de um Prestador;\n"
+            "- qualquer perda direta ou indireta sofrida por um Prestador como resultado do tempo de inatividade da Plataforma, falhas técnicas ou eventos de força maior fora do controlo razoável da Nevumo;\n"
+            "- a precisão de qualquer conteúdo traduzido automaticamente na Plataforma.\n\n"
+            "14.2 A responsabilidade global da Nevumo perante um Prestador decorrente de ou relacionada com estes Termos para Prestadores não excederá o total de comissões pagas por esse Prestador à Nevumo nos 12 meses anteriores ao evento que deu origem à reclamação, ou 100 EUR (o que for maior).\n\n"
+            "14.3 Nada nesta secção limita a responsabilidade da Nevumo por qualquer responsabilidade que não possa ser excluída ao abrigo da lei aplicável."
+        ),
+        "pt-PT": (
+            "14.1 A Nevumo não é responsável por:\n"
+            "- a qualidade, legalidade, segurança ou execução dos serviços prestados pelos Prestadores;\n"
+            "- quaisquer danos decorrentes da falta de licenças ou autorizações exigidas por parte de um Prestador;\n"
+            "- qualquer perda direta ou indireta sofrida por um Prestador como resultado do tempo de inatividade da Plataforma, falhas técnicas ou eventos de força maior fora do controlo razoável da Nevumo;\n"
+            "- a precisão de qualquer conteúdo traduzido automaticamente na Plataforma.\n\n"
+            "14.2 A responsabilidade global da Nevumo perante um Prestador decorrente de ou relacionada com estes Termos para Prestadores não excederá o total de comissões pagas por esse Prestador à Nevumo nos 12 meses anteriores ao evento que deu origem à reclamação, ou 100 EUR (o que for maior).\n\n"
+            "14.3 Nada nesta secção limita a responsabilidade da Nevumo por qualquer responsabilidade que não possa ser excluída ao abrigo da lei aplicável."
+        ),
+        "ro": (
+            "14.1 Nevumo nu este responsabilă pentru:\n"
+            "- calitatea, legalitatea, siguranța sau executarea serviciilor furnizate de Furnizori;\n"
+            "- orice daune rezultate din nedeținerea de către un Furnizor a licențelor sau a permiselor necesare;\n"
+            "- orice pierdere directă sau indirectă suferită de un Furnizor ca urmare a timpului de nefuncționare a Platformei, a defecțiunilor tehnice sau a evenimentelor de forță majoră care depășesc controlul rezonabil al Nevumo;\n"
+            "- acuratețea oricărui conținut tradus automat pe Platformă.\n\n"
+            "14.2 Răspunderea agregată a Nevumo față de un Furnizor care decurge din sau are legătură cu acești Termeni pentru Furnizori nu va depăși totalul comisioanelor plătite de acel Furnizor către Nevumo în cele 12 luni premergătoare evenimentului care a dat naștere revendicării, sau 100 EUR (oricare dintre acestea este mai mare).\n\n"
+            "14.3 Nimic din această secțiune nu limitează răspunderea Nevumo pentru nicio răspundere care nu poate fi exclusă în conformitate cu legea aplicabilă."
+        ),
+        "ru": (
+            "14.1 Nevumo не несет ответственности за:\n"
+            "- качество, законность, безопасность или выполнение услуг, предоставляемых Поставщиками;\n"
+            "- любой ущерб, возникший в результате отсутствия у Поставщика необходимых лицензий или разрешений;\n"
+            "- любые прямые или косвенные убытки, понесенные Поставщиком в результате простоя Платформы, технических сбоев или форс-мажорных обстоятельств, не зависящих от Nevumo;\n"
+            "- точность любого автоматически переведенного контента на Платформе.\n\n"
+            "14.2 Совокупная ответственность Nevumo перед Поставщиком, вытекающая из настоящих Условий для Поставщиков или связанная с ними, не должна превышать общую сумму комиссионных, уплаченных этим Поставщиком Nevumo за 12 месяцев, предшествующих событию, послужившему основанием для претензии, или 100 евро (в зависимости от того, какая сумма больше).\n\n"
+            "14.3 Ничто в этом разделе не ограничивает ответственность Nevumo за любую ответственность, которая не может быть исключена в соответствии с применимым законодательством."
+        ),
+        "uk": (
+            "14.1 Nevumo не несе відповідальності за:\n"
+            "- якість, законність, безпеку або виконання послуг, що надаються Постачальниками;\n"
+            "- будь-яку шкоду, що виникла в результаті відсутності у Постачальника необхідних ліцензій або дозволів;\n"
+            "- будь-які прямі або непрямі збитки, понесені Постачальником в результаті простою Платформи, технічних збоїв або форс-мажорних обставин, що не залежать від Nevumo;\n"
+            "- точність будь-якого автоматично перекладеного контенту на Платформі.\n\n"
+            "14.2 Сукупна відповідальність Nevumo перед Постачальником, що випливає з цих Умов для Постачальників або пов'язана з ними, не повинна перевищувати загальну суму комісійних, сплачених цим Постачальником Nevumo за 12 місяців, що передують події, яка стала підставою для претензії, або 100 євро (залежно від того, яка сума більша).\n\n"
+            "14.3 Ніщо в цьому розділі не обмежує відповідальність Nevumo за будь-яку відповідальність, яка не може бути виключена відповідно до чинного законодавства."
+        ),
+        "cs": (
+            "14.1 Společnost Nevumo nenese odpovědnost za:\n"
+            "- kvalitu, zákonnost, bezpečnost nebo provádění služeb poskytovaných poskytovateli;\n"
+            "- jakoukoli škodu vzniklou v důsledku toho, že poskytovatel nedrží požadované licence nebo povolení;\n"
+            "- jakoukoli přímou nebo nepřímou ztrátu, kterou poskytovatel utrpí v důsledku prostojů platformy, technických poruch nebo událostí vyšší moci, které společnost Nevumo nemůže přiměřeně ovlivnit;\n"
+            "- přesnost jakéhokoli automaticky překládaného obsahu na platformě.\n\n"
+            "14.2 Celková odpovědnost společnosti Nevumo vůči poskytovateli vyplývající z těchto podmínek pro poskytovatele nebo v souvislosti s nimi nepřesáhne celkové provize zaplacené tímto poskytovatelem společnosti Nevumo za 12 měsíců předcházejících události, která vedla ke vzniku nároku, nebo 100 EUR (podle toho, která částka je vyšší).\n\n"
+            "14.3 Nic v tomto oddílu neomezuje odpovědnost společnosti Nevumo za jakoukoli odpovědnost, kterou nelze vyloučit podle platných právních předpisů."
+        ),
+        "da": (
+            "14.1 Nevumo er ikke ansvarlig for:\n"
+            "- kvaliteten, lovligheden, sikkerheden eller udførelsen af tjenester leveret af udbydere;\n"
+            "- enhver skade, der opstår som følge af en udbyders manglende overholdelse af krævede licenser eller tilladelser;\n"
+            "- ethvert direkte eller indirekte tab lidt af en udbyder som følge af nedetid på platformen, tekniske fejl eller force majeure-begivenheder uden for Nevumos rimelige kontrol;\n"
+            "- nøjagtigheden af automatisk oversat indhold på platformen.\n\n"
+            "14.2 Nevumos samlede ansvar over for en udbyder, der opstår som følge af eller relateret til disse vilkår for udbydere, må ikke overstige de samlede provisioner betalt af den pågældende udbyder til Nevumo i de 12 måneder forud for den begivenhed, der gav anledning til kravet, eller 100 EUR (hvilket beløb der end er størst).\n\n"
+            "14.3 Intet i dette afsnit begrænser Nevumos ansvar for ethvert ansvar, der ikke kan udelukkes i henhold til gældende lov."
+        ),
+        "sv": (
+            "14.1 Nevumo ansvarar inte för:\n"
+            "- kvaliteten, lagligheten, säkerheten eller utförandet av tjänster som tillhandahålls av leverantörer;\n"
+            "- någon skada som uppstår på grund av att en leverantör inte innehar de nödvändiga licenserna eller tillstånden;\n"
+            "- någon direkt eller indirekt förlust som en leverantör lider av till följd av plattformens nedtid, tekniska fel eller force majeure-händelser utanför Nevumos rimliga kontroll;\n"
+            "- noggrannheten i något automatiskt översatt innehåll på plattformen.\n\n"
+            "14.2 Nevumos sammanlagda ansvar gentemot en leverantör som uppstår från eller är relaterat till dessa villkor för leverantörer ska inte överstiga de totala provisionerna som betalats av den leverantören till Nevumo under de 12 månaderna som föregick händelsen som gav upphov till kravet, eller 100 EUR (det högsta beloppet gäller).\n\n"
+            "14.3 Inget i detta avsnitt begränsar Nevumos ansvar för något ansvar som inte kan uteslutas enligt tillämplig lag."
+        ),
+        "no": (
+            "14.1 Nevumo er ikke ansvarlig for:\n"
+            "- kvaliteten, lovligheten, sikkerheten eller utførelsen av tjenester levert av leverandører;\n"
+            "- skade som oppstår fra en leverandørs manglende evne til å inneha de nødvendige lisensene eller tillatelsene;\n"
+            "- direkte eller indirekte tap lidt av en leverandør som følge av nedetid på plattformen, tekniske feil eller force majeure-hendelser utenfor Nevumos rimelige kontroll;\n"
+            "- nøyaktigheten av automatisk oversatt innhold på plattformen.\n\n"
+            "14.2 Nevumos samlede ansvar overfor en leverandør som oppstår fra eller er relatert til disse vilkårene for leverandører skal ikke overstige de totale provisjonene som den leverandøren har betalt til Nevumo i de 12 månedene før hendelsen som ga opphav til kravet, eller 100 EUR (det høyeste beløpet gjelder).\n\n"
+            "14.3 Ingenting i denne delen begrenser Nevumos ansvar for noe ansvar som ikke kan utelukkes under gjeldende lov."
+        ),
+        "fi": (
+            "14.1 Nevumo ei ole vastuussa:\n"
+            "- palveluntarjoajien tarjoamien palveluiden laadusta, laillisuudesta, turvallisuudesta tai suorittamisesta;\n"
+            "- vahingoista, jotka johtuvat siitä, että palveluntarjoajalla ei ole vaadittuja lisenssejä tai lupia;\n"
+            "- mistään suorista tai välillisistä menetyksistä, joita palveluntarjoajalle aiheutuu alustan käyttökatkoista, teknisistä vioista tai ylivoimaisista esteistä, jotka eivät ole kohtuudella Nevumon hallinnassa;\n"
+            "- alustan automaattisesti käännetyn sisällön tarkkuudesta.\n\n"
+            "14.2 Nevumon kokonaisvastuu palveluntarjoajalle, joka johtuu näistä palveluntarjoajien ehdoista tai liittyy niihin, ei saa ylittää kyseisen palveluntarjoajan Nevumolle maksamia kokonaispalkkioita vaatimuksen perusteena olevaa tapahtumaa edeltäneiden 12 kuukauden aikana, tai 100 euroa (sen mukaan, kumpi on suurempi).\n\n"
+            "14.3 Mikään tässä osiossa ei rajoita Nevumon vastuuta sellaisesta vastuusta, jota ei voida sulkea pois sovellettavan lain nojalla."
+        ),
+        "et": (
+            "14.1 Nevumo ei vastuta:\n"
+            "- teenusepakkujate pakutavate teenuste kvaliteedi, seaduslikkuse, ohutuse või teostamise eest;\n"
+            "- kahju eest, mis tuleneb sellest, et teenusepakkujal ei ole nõutavaid litsentse või lubasid;\n"
+            "- otsese või kaudse kahju eest, mida teenusepakkuja kannab platvormi seisakute, tehniliste rikete või vääramatu jõu sündmuste tagajärjel, mis ei ole Nevumo mõistliku kontrolli all;\n"
+            "- platvormil oleva automaatselt tõlgitud sisu täpsuse eest.\n\n"
+            "14.2 Nevumo koguvastutus teenusepakkuja ees, mis tuleneb nendest teenusepakkujate tingimustest või on nendega seotud, ei ületa kogu vahendustasu, mida see teenusepakkuja on Nevumole maksnud nõude aluseks olevale sündmusele eelnenud 12 kuu jooksul, või 100 eurot (olenevalt sellest, kumb on suurem).\n\n"
+            "14.3 Miski selles jaotises ei piira Nevumo vastutust mis tahes vastutuse osas, mida ei saa kohaldatava seaduse kohaselt välistada."
+        ),
+        "lt": (
+            "14.1 „Nevumo“ neatsako už:\n"
+            "- paslaugų teikėjų teikiamų paslaugų kokybę, teisėtumą, saugumą ar atlikimą;\n"
+            "- bet kokią žalą, atsiradusią dėl to, kad paslaugų teikėjas neturi reikiamų licencijų ar leidimų;\n"
+            "- bet kokius tiesioginius ar netiesioginius nuostolius, kuriuos paslaugų teikėjas patiria dėl platformos prastovos, techninių gedimų ar nenugalimos jėgos aplinkybių, kurių „Nevumo“ negali protingai kontroliuoti;\n"
+            "- bet kokio automatiškai išversto turinio platformoje tikslumą.\n\n"
+            "14.2 Bendra „Nevumo“ atsakomybė paslaugų teikėjui, kylanti iš šių Paslaugų teikėjų sąlygų ar su jomis susijusi, neviršys visų komisinių mokesčių, kuriuos tas paslaugų teikėjas sumokėjo „Nevumo“ per 12 mėnesių iki įvykio, dėl kurio buvo pateiktas reikalavimas, arba 100 EUR (nelygu, kuri suma yra didesnė).\n\n"
+            "14.3 Niekas šiame skirsnyje neapriboja „Nevumo“ atsakomybės už jokią atsakomybę, kurios negalima atmesti pagal taikomus įstatymus."
+        ),
+        "lv": (
+            "14.1 Nevumo nav atbildīgs par:\n"
+            "- Pakalpojumu sniedzēju sniegto pakalpojumu kvalitāti, tiesiskumu, drošību vai izpildi;\n"
+            "- jebkādiem zaudējumiem, kas rodas tāpēc, ka Pakalpojumu sniedzējam nav nepieciešamo licenču vai atļauju;\n"
+            "- jebkādiem tiešiem vai netiešiem zaudējumiem, ko Pakalpojumu sniedzējs cieta Platformas dīkstāves, tehnisku kļūmju vai nepārvaramas varas apstākļu dēļ, kas nav saprātīgā Nevumo kontrolē;\n"
+            "- jebkura automātiski tulkota satura precizitāti Platformā.\n\n"
+            "14.2 Nevumo kopējā atbildība pret Pakalpojumu sniedzēju, kas izriet no šiem Pakalpojumu sniedzēju noteikumiem vai ir saistīta ar tiem, nedrīkst pārsniegt kopējās komisijas maksas, ko šis Pakalpojumu sniedzējs ir samaksājis Nevumo 12 mēnešu laikā pirms notikuma, kas ir pamatā prasībai, vai 100 EUR (atkarībā no tā, kura summa ir lielāka).\n\n"
+            "14.3 Nekas šajā sadaļā neierobežo Nevumo atbildību par jebkādu atbildību, ko nevar izslēgt saskaņā ar piemērojamiem tiesību aktiem."
+        ),
+        "hu": (
+            "14.1 A Nevumo nem vállal felelősséget:\n"
+            "- a Szolgáltatók által nyújtott szolgáltatások minőségéért, jogszerűségéért, biztonságáért vagy végrehajtásáért;\n"
+            "- a Szolgáltató szükséges engedélyeinek hiányából eredő károkért;\n"
+            "- a Szolgáltató által elszenvedett olyan közvetlen vagy közvetett veszteségekért, amelyek a Platform leállásából, műszaki hibákból vagy a Nevumo ésszerű befolyásán kívül eső vis maior eseményekből erednek;\n"
+            "- a Platformon automatikusan lefordított tartalmak pontosságáért.\n\n"
+            "14.2 A Nevumo Szolgáltató felé fennálló teljes felelőssége a jelen Szolgáltatói Feltételekből eredően vagy azokkal kapcsolatban nem haladhatja meg azt a teljes jutalékösszeget, amelyet a Szolgáltató a Nevumo-nak a követelést megalapozó eseményt megelőző 12 hónapban fizetett, vagy a 100 eurót (amelyik a kettő közül magasabb).\n\n"
+            "14.3 E szakasz egyetlen rendelkezése sem korlátozza a Nevumo felelősségét olyan esetekben, ahol a felelősséget az alkalmazandó jog szerint nem lehet kizárni."
+        ),
+        "hr": (
+            "14.1 Nevumo nije odgovoran za:\n"
+            "- kvalitetu, zakonitost, sigurnost ili izvođenje usluga koje pružaju Pružatelji usluga;\n"
+            "- bilo kakvu štetu nastalu zbog toga što Pružatelj usluga ne posjeduje potrebne licence ili dozvole;\n"
+            "- bilo kakav izravan ili neizravan gubitak koji pretrpi Pružatelj usluga kao rezultat zastoja Platforme, tehničkih kvarova ili događaja više sile izvan razumne kontrole tvrtke Nevumo;\n"
+            "- točnost bilo kojeg automatski prevedenog sadržaja na Platformi.\n\n"
+            "14.2 Ukupna odgovornost tvrtke Nevumo prema Pružatelju usluga koja proizlazi iz ili je povezana s ovim Uvjetima za pružatelje usluga neće premašiti ukupne provizije koje je taj Pružatelj usluga platio tvrtki Nevumo u 12 mjeseci prije događaja koji je doveo do zahtjeva, ili 100 EUR (što god je veće).\n\n"
+            "14.3 Ništa u ovom odjeljku ne ograničava odgovornost tvrtke Nevumo za bilo kakvu odgovornost koja se ne može isključiti prema primjenjivom zakonu."
+        ),
+        "sk": (
+            "14.1 Spoločnosť Nevumo nenesie zodpovednosť za:\n"
+            "- kvalitu, zákonnosť, bezpečnosť alebo vykonávanie služieb poskytovaných poskytovateľmi;\n"
+            "- akúkoľvek škodu vzniknutú v dôsledku toho, že poskytovateľ nedrží požadované licencie alebo povolenia;\n"
+            "- akúkoľvek priamu alebo nepriamu stratu, ktorú poskytovateľ utrpí v dôsledku prestojov platformy, technických porúch alebo udalostí vyššej moci, ktoré spoločnosť Nevumo nemôže primerane ovplyvniť;\n"
+            "- presnosť akéhokoľvek automaticky prekladaného obsahu na platforme.\n\n"
+            "14.2 Celková zodpovednosť spoločnosti Nevumo voči poskytovateľovi vyplývajúca z týchto podmienok pre poskytovateľov alebo v súvislosti s nimi nepresiahne celkové provízie zaplatené týmto poskytovateľom spoločnosti Nevumo za 12 mesiacov predchádzajúcich udalosti, ktorá viedla k vzniku nároku, alebo 100 EUR (podľa toho, ktorá suma je vyššia).\n\n"
+            "14.3 Nič v tomto oddiele neobmedzuje zodpovednosť spoločnosti Nevumo za akúkoľvek zodpovednosť, ktorú nemožno vylúčiť podľa platných právnych predpisov."
+        ),
+        "sl": (
+            "14.1 Nevumo ne odgovarja za:\n"
+            "- kakovost, zakonitost, varnost ali izvedbo storitev, ki jih zagotavljajo ponudniki;\n"
+            "- kakršno koli škodo, ki izhaja iz ponudnikove neizpolnitve zahtev po licencah ali dovoljenjih;\n"
+            "- kakršno koli neposredno ali posredno izgubo, ki jo utrpi ponudnik zaradi nedelovanja platforme, tehničnih napak ali dogodkov višje sile, na katere Nevumo nima razumnega vpliva;\n"
+            "- natančnost katere koli samodejno prevedene vsebine na platformi.\n\n"
+            "14.2 Skupna odgovornost podjetja Nevumo do ponudnika, ki izhaja iz teh pogojev za ponudnike ali je z njimi povezana, ne bo presegla skupnih provizij, ki jih je ta ponudnik plačal podjetju Nevumo v 12 mesecih pred dogodkom, ki je bil razlog za zahtevek, ali 100 EUR (karkoli je večje).\n\n"
+            "14.3 Nič v tem razdelku ne omejuje odgovornosti podjetja Nevumo za kakršno koli odgovornost, ki je ni mogoče izključiti v skladu z veljavno zakonodajo."
+        ),
+        "el": (
+            "14.1 Η Nevumo δεν φέρει ευθύνη για:\n"
+            "- την ποιότητα, τη νομιμότητα, την ασφάλεια ή την εκτέλεση των υπηρεσιών που παρέχονται από τους Παρόχους.\n"
+            "- οποιαδήποτε ζημία προκύψει από την αποτυχία ενός Παρόχου να κατέχει τις απαιτούμενες άδειες.\n"
+            "- οποιαδήποτε άμεση ή έμμεση απώλεια που υπέστη ένας Πάροχος ως αποτέλεσμα διακοπής λειτουργίας της Πλατφόρμας, τεχνικών βλαβών ή γεγονότων ανωτέρας βίας πέρα από τον εύλογο έλεγχο της Nevumo.\n"
+            "- την ακρίβεια οποιουδήποτε αυτόματα μεταφρασμένου περιεχομένου στην Πλατφόρμα.\n\n"
+            "14.2 Η συνολική ευθύνη της Nevumo έναντι ενός Παρόχου που προκύπτει από ή σχετίζεται με αυτούς τους Όρους Παρόχου δεν θα υπερβαίνει τις συνολικές προμήθειες που κατέβαλε αυτός ο Πάροχος στη Nevumo τους 12 μήνες που προηγήθηκαν του γεγονότος που προκάλεσε την αξίωση, ή τα 100 EUR (όποιο είναι μεγαλύτερο).\n\n"
+            "14.3 Τίποτα σε αυτήν την ενότητα δεν περιορίζει την ευθύνη της Nevumo για οποιαδήποτε ευθύνη δεν μπορεί να αποκλειστεί βάσει της ισχύουσας νομοθεσίας."
+        ),
+        "tr": (
+            "14.1 Nevumo aşağıdakilerden sorumlu değildir:\n"
+            "- Sağlayıcılar tarafından sağlanan hizmetlerin kalitesi, yasallığı, güvenliği veya yürütülmesi;\n"
+            "- bir Sağlayıcının gerekli lisansları veya izinleri elinde bulundurmamasından kaynaklanan herhangi bir hasar;\n"
+            "- Platformun kapalı kalması, teknik arızalar veya Nevumo'nun makul kontrolü dışındaki mücbir sebep olayları sonucunda bir Sağlayıcının uğradığı doğrudan veya dolaylı kayıplar;\n"
+            "- Platformda otomatik olarak çevrilen herhangi bir içeriğin doğruluğu.\n\n"
+            "14.2 Nevumo'nun bir Sağlayıcıya karşı bu Sağlayıcı Şartlarından kaynaklanan veya bunlarla ilgili toplam sorumluluğu, talebe yol açan olaydan önceki 12 ay içinde o Sağlayıcı tarafından Nevumo'ya ödenen toplam komisyonları veya 100 EUR'yu (hangisi daha büyükse) aşamaz.\n\n"
+            "14.3 Bu bölümdeki hiçbir şey, geçerli yasa uyarınca hariç tutulamayacak herhangi bir sorumluluk için Nevumo'nun sorumluluğunu sınırlamaz."
+        ),
+        "ga": (
+            "14.1 Níl Nevumo faoi dhliteanas i leith:\n"
+            "- cáilíocht, dlíthiúlacht, sábháilteacht, nó forghníomhú seirbhísí arna soláthar ag Soláthraithe;\n"
+            "- aon damáiste a éiríonn as mainneachtain Soláthraí na ceadúnais nó na ceadanna riachtanacha a bheith aige;\n"
+            "- aon chaillteanas díreach nó indíreach a d'fhulaing Soláthraí mar thoradh ar aga neamhfhónaimh an Ardáin, teipeanna teicniúla, nó imeachtaí force majeure nach bhfuil smacht réasúnach ag Nevumo orthu;\n"
+            "- cruinneas aon ábhar a aistrítear go huathoibríoch ar an Ardán.\n\n"
+            "14.2 Ní sháróidh dliteanas comhiomlán Nevumo do Sholáthraí a éiríonn as na Téarmaí Soláthraí seo nó a bhaineann leo na coimisiúin iomlána a d'íoc an Soláthraí sin le Nevumo sna 12 mhí roimh an imeacht as a d'eascair an t-éileamh, nó EUR 100 (cibé acu is mó).\n\n"
+            "14.3 Ní chuireann aon rud sa roinn seo teorainn le dliteanas Nevumo i leith aon dliteanas nach féidir a eisiamh faoin dlí is infheidhme."
+        ),
+        "is": (
+            "14.1 Nevumo ber ekki ábyrgð á:\n"
+            "- gæðum, lögmæti, öryggi eða framkvæmd þjónustu sem þjónustuveitendur veita;\n"
+            "- neinu tjóni sem hlýst af því að þjónustuveitandi hefur ekki tilskilin leyfi eða heimildir;\n"
+            "- neinu beinu eða óbeinu tapi sem þjónustuveitandi verður fyrir vegna niðritíma á vettvangi, tæknilegra bilana eða óviðráðanlegra atburða utan skynsamlegrar stjórnar Nevumo;\n"
+            "- nákvæmni sjálfkrafa þýdds efnis á vettvangnum.\n\n"
+            "14.2 Heildarábyrgð Nevumo gagnvart þjónustuveitanda sem rís af eða tengist þessum skilmálum fyrir þjónustuveitendur skal ekki fara yfir heildarþóknun sem sá þjónustuveitandi greiddi Nevumo á þeim 12 mánuðum sem fóru á undan þeim atburði sem leiddi til kröfunnar, eða 100 EUR (hvort sem er hærra).\n\n"
+            "14.3 Ekkert í þessum hluta takmarkar ábyrgð Nevumo á neinni ábyrgð sem ekki er hægt að útiloka samkvæmt gildandi lögum."
+        ),
+        "lb": (
+            "14.1 Nevumo ass net verantwortlech fir:\n"
+            "- d'Qualitéit, d'Legalitéit, d'Sécherheet oder d'Ausféierung vun de Servicer, déi vun den Ubidder ugebuede ginn;\n"
+            "- all Schued, deen entstinn duerch d'Feele vun den néidege Lizenzen oder Genehmegungen vun engem Ubidder;\n"
+            "- all direkten oder indirekten Verloscht, deen en Ubidder erlieft huet als Resultat vun Ausfallzäiten vun der Plattform, technesche Feeler oder Force Majeure Eventer ausserhalb vun der vernünfteger Kontroll vum Nevumo;\n"
+            "- d'Genauegkeet vun automatesch iwwersaten Inhalt op der Plattform.\n\n"
+            "14.2 Déi aggregéiert Haftung vum Nevumo vis-à-vis vun engem Ubidder, déi aus oder am Zesummenhang mat dësen Ubidderbedéngungen entsteet, wäert net déi total Kommissiounen iwwerschreiden, déi dësen Ubidder un Nevumo bezuelt huet an den 12 Méint virum Event, dat zu der Fuerderung gefouert huet, oder 100 EUR (jee nodeem wéi eng Zomm méi héich ass).\n\n"
+            "14.3 Näischt an dëser Sektioun limitéiert d'Haftung vum Nevumo fir eng Haftung déi ënner dem uwendbare Gesetz net ausgeschloss ka ginn."
+        ),
+        "mk": (
+            "14.1 Nevumo не е одговорен за:\n"
+            "- квалитетот, легалноста, безбедноста или извршувањето на услугите обезбедени од Давателите;\n"
+            "- каква било штета што произлегува од тоа што Давателот не ги поседува потребните лиценци или дозволи;\n"
+            "- каква било директна или индиректна загуба што ја претрпел Давателот како резултат на недостапност на Платформата, технички дефекти или настани на виша сила надвор од разумната контрола на Nevumo;\n"
+            "- точноста на која било автоматски преведена содржина на Платформата.\n\n"
+            "14.2 Севкупната одговорност на Nevumo кон Давател што произлегува од или е поврзана со овие Услови за Даватели нема да ги надмине вкупните провизии што тој Давател ги платил на Nevumo во 12-те месеци што му претходат на настанот што е причина за барањето, или 100 евра (која сума е поголема).\n\n"
+            "14.3 Ништо во овој дел не ја ограничува одговорноста на Nevumo за каква било одговорност што не може да се исклучи според применливиот закон."
+        ),
+        "mt": (
+            "14.1 Nevumo mhuwiex responsabbli għal:\n"
+            "- il-kwalità, il-legalità, is-sigurtà, jew l-eżekuzzjoni tas-servizzi pprovduti mill-Fornituri;\n"
+            "- kwalunkwe ħsara li tirriżulta minn nuqqas ta' Fornitur li jkollu l-liċenzji jew il-permessi meħtieġa;\n"
+            "- kwalunkwe telf dirett jew indirett imġarrab minn Fornitur bħala riżultat ta' perijodi ta' waqfien tal-Pjattaforma, ħsarat tekniċi, jew avvenimenti ta' force majeure lil hinn mill-kontroll raġonevoli ta' Nevumo;\n"
+            "- l-akkuratezza ta' kwalunkwe kontenut tradott awtomatikament fuq il-Pjattaforma.\n\n"
+            "14.2 Ir-responsabbiltà aggregata ta' Nevumo lejn Fornitur li tirriżulta minn jew relatata ma' dawn it-Termini għall-Fornituri m'għandhiex taqbeż il-kummissjonijiet totali mħallsa minn dak il-Fornitur lil Nevumo fit-12-il xahar qabel l-avveniment li jwassal għat-talba, jew EUR 100 (liema minnhom ikun l-akbar).\n\n"
+            "14.3 Xejn f'din it-taqsima ma jillimita r-responsabbiltà ta' Nevumo għal kwalunkwe responsabbiltà li ma tistax tiġi eskluża taħt il-liġi applikabbli."
+        ),
+        "sq": (
+            "14.1 Nevumo nuk mban përgjegjësi për:\n"
+            "- cilësinë, ligjshmërinë, sigurinë ose ekzekutimin e shërbimeve të ofruara nga Ofruesit;\n"
+            "- çdo dëm që rrjedh nga dështimi i një Ofruesi për të mbajtur licencat ose lejet e kërkuara;\n"
+            "- çdo humbje të drejtpërdrejtë ose të tërthortë të pësuar nga një Ofrues si rezultat i ndërprerjes së Platformës, dështimeve teknike ose ngjarjeve të forcës madhore përtej kontrollit të arsyeshëm të Nevumo;\n"
+            "- saktësinë e ndonjë përmbajtjeje të përkthyer automatikisht në Platformë.\n\n"
+            "14.2 Përgjegjësia e përgjithshme e Nevumo ndaj një Ofruesi që rrjedh nga ose lidhet me këto Kushte për Ofruesit nuk do të kalojë totalin e komisioneve të paguara nga ai Ofrues tek Nevumo në 12 muajt para ngjarjes që i jep shkas kërkesës, ose 100 EUR (cila do të jetë më e madhe).\n\n"
+            "14.3 Asgjë në këtë seksion nuk kufizon përgjegjësinë e Nevumo për çdo përgjegjësi që nuk mund të përjashtohet sipas ligjit të zbatueshëm."
+        ),
+        "sr": (
+            "14.1 Nevumo nije odgovoran za:\n"
+            "- kvalitet, zakonitost, bezbednost ili izvršenje usluga koje pružaju Pružaoci usluga;\n"
+            "- bilo kakvu štetu nastalu usled toga što Pružalac usluga ne poseduje potrebne licence ili dozvole;\n"
+            "- bilo kakav direktan ili indirektan gubitak koji pretrpi Pružalac usluga kao rezultat zastoja Platforme, tehničkih kvarova ili događaja više sile izvan razumne kontrole kompanije Nevumo;\n"
+            "- tačnost bilo kog automatski prevedenog sadržaja na Platformi.\n\n"
+            "14.2 Ukupna odgovornost kompanije Nevumo prema Pružaocu usluga koja proizilazi iz ili je povezana sa ovim Uslovima za pružaoce usluga neće premašiti ukupne provizije koje je taj Pružalac usluga platio kompaniji Nevumo u 12 meseci pre događaja koji je doveo do zahteva, ili 100 EUR (šta god je veće).\n\n"
+            "14.3 Ništa u ovom odeljku ne ograničava odgovornost kompanije Nevumo za bilo kakvu odgovornost koja se ne može isključiti prema primenljivom zakonu."
+        ),
+    },
+}
+
+def seed() -> None:
+    engine = create_engine(DATABASE_URL, echo=False)
+    Session = sessionmaker(bind=engine)
+
+    with Session() as session:
+        count = 0
+        for key, lang_values in TRANSLATIONS.items():
+            db_key = f"{NAMESPACE}.{key}"
+            
+            for lang, text_val in lang_values.items():
+                query = text("""
+                    INSERT INTO translations (key, lang, value)
+                    VALUES (:k, :l, :v)
+                    ON CONFLICT (key, lang)
+                    DO UPDATE SET value = EXCLUDED.value
+                """)
+                session.execute(query, {"k": db_key, "l": lang, "v": text_val})
+                count += 1
+
+        session.commit()
+        print(f"✅ Seeded {count} translations for {NAMESPACE}.art13_body and {NAMESPACE}.art14_body")
+
+if __name__ == "__main__":
+    seed()

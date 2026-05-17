@@ -493,7 +493,35 @@ CREATE INDEX idx_translations_key ON translations(key);
   - Keys: s1_title, s1_text, s2_title, s2_text, s3_title, s3_text, s4_title, s4_text, s5_title, s5_text, s5_p_consent, s5_p_lang, s5_p_ga, s5_p_ga_id, s5_p_stripe_mid, s5_p_stripe_sid, s5_p_auth_token, s5_p_auth_user, s5_p_phone, s5_p_intent, s5_p_city, s5_p_auth_email, s5_type_cookie_1p, s5_type_cookie_3p, s5_type_localstorage, s5_type_sessionstorage, s5_ret_12mo, s5_ret_13mo, s5_ret_1y, s5_ret_30d, s5_ret_30min, s5_ret_sess_30d, s5_ret_cleared, s5_ret_session, s5_ret_session_tab, s6_chrome_path, s6_firefox_path, s6_safari_path, s6_edge_path, s7_role_google, s7_role_stripe, s7_role_vercel, s7_role_railway, s7_role_neon, s7_role_upstash, s7_role_cloudflare, s8_safeguard_sccs_dpf, s8_safeguard_sccs, s8_country_usa, s9_title, s9_text, s10_title, s10_text, s11_title, s11_authority_bg, s11_authority_pl, last_updated, back_to_home
   - Total: 41 keys × 34 languages + 12 keys (EN only table data) + 4 keys × 34 languages (browser paths) = 1,394 + 12 + 136 = 1,542 rows
   - Seed scripts: seed_cookies_p21.py (374 rows), seed_cookies_p22.py (306 rows), seed_cookies_p23.py (272 rows), seed_cookies_p24.py (408 rows), seed_cookies_table_data_p1.py (23 rows), seed_cookies_browser_paths_p2.py (68 rows), seed_cookies_browser_paths_p3.py (68 rows), seed_cookies_back_to_home.py (34 rows)
-- **Total rows**: 10,500+ translations across all namespaces
+- **provider_terms namespace (May 17, 2026)**: Terms & Conditions for Service Providers page translations
+  - Keys: page_title, meta_description, effective_date, version, pl_notice, art1_title through art18_title, art1_body through art18_body, annex1_title, annex1_body, annex2_title, annex2_body, footer
+  - Total: 50+ keys × 34 languages = 1,700+ rows
+  - Seed scripts: 23 scripts (seed_provider_terms_p1_meta.py through seed_provider_terms_p23_footer.py)
+    - p1_meta: page_title, meta_description, effective_date, version (4 keys × 34 langs = 136 rows)
+    - p2_ui: pl_notice (1 key × 34 langs = 34 rows)
+    - p3_titles1: art1_title through art5_title (5 keys × 34 langs = 170 rows)
+    - p4_titles2: art6_title through art10_title (5 keys × 34 langs = 170 rows)
+    - p5_titles3: art11_title through art15_title (5 keys × 34 langs = 170 rows)
+    - p6_titles4: art16_title through art18_title (3 keys × 34 langs = 102 rows)
+    - p7_titles5: annex1_title, annex2_title (2 keys × 34 langs = 68 rows)
+    - p8_art1_body: art1_body (1 key × 34 langs = 34 rows)
+    - p9_art2_body: art2_body (1 key × 34 langs = 34 rows)
+    - p10_art3_body: art3_body (1 key × 34 langs = 34 rows)
+    - p11_art4_body: art4_body (1 key × 34 langs = 34 rows)
+    - p12_art5_body: art5_body (1 key × 34 langs = 34 rows)
+    - p13_art6_body: art6_body (1 key × 34 langs = 34 rows)
+    - p14_art7_body: art7_body (1 key × 34 langs = 34 rows)
+    - p15_art8_body: art8_body (1 key × 34 langs = 34 rows)
+    - p16_art9_body: art9_body (1 key × 34 langs = 34 rows)
+    - p17_art10_body: art10_body (1 key × 34 langs = 34 rows)
+    - p18_art11_body: art11_body (1 key × 34 langs = 34 rows)
+    - p19_art12_body: art12_body (1 key × 34 langs = 34 rows)
+    - p20_art13_14_body: art13_body, art14_body (2 keys × 34 langs = 68 rows)
+    - p21_art15_16_body: art15_body, art16_body (2 keys × 34 langs = 68 rows)
+    - p22_art17_18_body: art17_body, art18_body (2 keys × 34 langs = 68 rows)
+    - p23_footer: annex1_body, annex2_body, footer (3 keys × 34 langs = 102 rows)
+  - Documentation: Full legal content in docs/terms_conditions_providers_nevumo.md (EN + BG + PL versions)
+- **Total rows**: 12,200+ translations across all namespaces
 
 ### Redis Caching
 - **Cache key pattern**: `translations:{lang}:{namespace}`

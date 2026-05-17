@@ -136,6 +136,30 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Note: s1_title values have "1. " prefix removed (e.g., "1. What Are Cookies" → "What Are Cookies") — updated in both DB and seed file (2026-05-16)
 - Note: s3_1_title, s3_2_title, s3_3_title, s3_4_title Bulgarian translations corrected from Latin to Cyrillic (e.g., "Zadulzhitelno neobhodimi" → "Задължително необходими") — seed_cookies_p12.py updated (2026-05-16)
 
+### Terms & Conditions for Service Providers (завършено 2026-05-17)
+- Route: `/[lang]/provider-terms` — Server component, 34 езика
+- Текст: EN + BG + PL (18 статии + Annex 1 + Annex 2)
+- Компонент: `apps/web/app/[lang]/provider-terms/page.tsx`
+- Seed: 23 скрипта за provider_terms преводи:
+  - seed_provider_terms_p1_meta.py (4 ключа × 34 езика = 136 rows) — page_title, meta_description, effective_date, version
+  - seed_provider_terms_p2_ui.py (1 ключ × 34 езика = 34 rows) — pl_notice (Polish-specific notice)
+  - seed_provider_terms_p3_titles1.py (5 ключа × 34 езика = 170 rows) — art1_title through art5_title
+  - seed_provider_terms_p4_titles2.py (5 ключа × 34 езика = 170 rows) — art6_title through art10_title
+  - seed_provider_terms_p5_titles3.py (5 ключа × 34 езика = 170 rows) — art11_title through art15_title
+  - seed_provider_terms_p6_titles4.py (3 ключа × 34 езика = 102 rows) — art16_title through art18_title
+  - seed_provider_terms_p7_titles5.py (2 ключа × 34 езика = 68 rows) — annex1_title, annex2_title
+  - seed_provider_terms_p8_art1_body.py through seed_provider_terms_p22_art17_18_body.py — Article bodies (18 articles, 1-2 keys per script)
+  - seed_provider_terms_p23_footer.py (3 ключа × 34 езика = 102 rows) — annex1_body, annex2_body, footer
+- Namespace: `provider_terms`
+- Keys: page_title, meta_description, effective_date, version, pl_notice, art1_title through art18_title, art1_body through art18_body, annex1_title, annex1_body, annex2_title, annex2_body, footer
+- Total: 50+ keys × 34 languages = 1,700+ rows
+- Documentation: Full legal content in docs/terms_conditions_providers_nevumo.md (EN + BG + PL versions with 18 articles + Annex 1 + Annex 2)
+- Legal content structure:
+  - English version: 18 articles covering General Provisions, Definitions, Registration, Profile, Ranking, Commission, Provider Obligations, Account Suspension, KYC, Amendments, Data Access, Complaints, Mediation, Liability, IP, Data Protection, Applicable Law, Final Provisions
+  - Polish version (WERSJA POLSKA): Complete translation with Polish-specific legal terminology and structure
+  - Bulgarian version: Complete translation with Bulgarian-specific legal terminology and structure
+- P2B Regulation compliance: Document drawn up in compliance with Regulation (EU) 2019/1150 on promoting fairness and transparency for business users of online intermediation services
+
 ### Privacy Policy — достъпност (2026-05-11)
 - Футър: `GlobalFooter.tsx` — линк `footer.privacy_policy_link` (namespace `footer`) ✅
 - Регистрация: `LoginClient.tsx` — линк под бутона за регистрация ✅

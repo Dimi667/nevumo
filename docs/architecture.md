@@ -370,6 +370,19 @@ This separation ensures that:
   - **Features**:
     - Renders 15 articles + Annex 1 with full legal content
     - Dynamic content rendering with Polish-specific [PL] markers for conditional display
+- **Terms & Conditions for Service Providers Page (May 17, 2026)** — COMPLETE:
+  - **Frontend**: Server component at `apps/web/app/[lang]/provider-terms/page.tsx`
+  - **Features**:
+    - Renders 18 articles + Annex 1 + Annex 2 with full legal content for service providers
+    - Supports all 34 languages with translations from `provider_terms` namespace
+    - Dynamic content rendering with Polish-specific [PL] markers for conditional display
+    - Legal compliance: P2B Regulation (EU) 2019/1150 compliance
+  - **Backend**: 23 seed scripts in `apps/api/scripts/` for provider_terms translations
+    - seed_provider_terms_p1_meta.py through seed_provider_terms_p23_footer.py
+    - Total: 50+ keys × 34 languages = 1,700+ rows
+  - **Documentation**: Full legal content in `docs/terms_conditions_providers_nevumo.md` (EN + BG + PL versions)
+  - **Namespace**: `provider_terms`
+  - **Keys**: page_title, meta_description, effective_date, version, pl_notice, art1_title through art18_title, art1_body through art18_body, annex1_title, annex1_body, annex2_title, annex2_body, footer
     - PDF download button for withdrawal form (links to `/api/v1/legal/withdrawal-form/{lang}`)
     - Online withdrawal form link (links to `/[lang]/withdrawal`)
     - Translations fetched from `/api/v1/translations/terms?lang={lang}`
