@@ -728,8 +728,11 @@ export default async function CategoryPage({ params }: PageProps) {
             <Link href={`/${lang}`} className="inline-flex items-center">
               <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
             </Link>
-            <Link href={`/${lang}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
-              {getLocalizedCityText((categoryT['nav_link'] || 'Become a specialist'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
+            <Link href={`/${lang}/auth?mode=register&role=provider&city=${city}&category=${category}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
+              <span className="flex flex-col items-end text-right text-sm font-semibold">
+                <span>{categoryT['nav_cta_line1'] || 'Do you offer'} {categoryName}?</span>
+                <span>{categoryT['nav_cta_line2'] || 'Join for free!'} →</span>
+              </span>
             </Link>
           </div>
         </header>

@@ -384,6 +384,14 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
         }
       }
 
+      // Save city and category to localStorage for providers
+      if (result.user.role === 'provider') {
+        const cityParam = searchParams.get('city');
+        const categoryParam = searchParams.get('category');
+        if (cityParam) localStorage.setItem('nevumo_selected_city', cityParam);
+        if (categoryParam) localStorage.setItem('nevumo_selected_category', categoryParam);
+      }
+
       const redirectPath = result.user.role === 'provider'
         ? `/${lang}/provider/dashboard/profile`
         : `/${lang}/client/dashboard`;

@@ -336,6 +336,11 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Provider CTA with City/Category Pre-fill (May 2026)** — COMPLETE:
+  - **Category page header CTA**: Replaced static "Become a specialist" link with 2-line dynamic CTA using new translation keys `nav_cta_line1` and `nav_cta_line2` (category namespace, 68 rows × 34 languages). Href updated to `/${lang}/auth?mode=register&role=provider&city=${citySlug}&category=${categorySlug}`
+  - **Auth flow**: `LoginClient.tsx` now saves `city` and `category` query params to localStorage (`nevumo_selected_city`, `nevumo_selected_category`) after successful provider registration
+  - **Onboarding Step 2**: `profile/page.tsx` reads `nevumo_selected_city` from localStorage in a separate `useEffect([cities])` and pre-fills city dropdown. Fix: city.id cast to `String()` to match `cityOptions` value type (string[])
+  - **Seed script**: `apps/api/scripts/seed_nav_cta_translations.py`
 - **Legal & Compliance (May 2026)** — COMPLETE:
   - /[lang]/terms страница с онлайн форма и PDF изтегляне на withdrawal form
   - /[lang]/terms-provider страница (Общи условия за доставчици)

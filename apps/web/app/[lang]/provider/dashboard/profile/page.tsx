@@ -340,6 +340,7 @@ export default function ProfilePage({ params }: PageProps) {
             return f;
           });
         }
+
         setIsComplete(dashboard.profile.is_complete);
         setProviderId(dashboard.profile.id.toString());
         
@@ -390,6 +391,17 @@ export default function ProfilePage({ params }: PageProps) {
       .catch((e: Error) => setLoadError(e.message))
       .finally(() => setLoading(false));
   }, [lang]);
+
+  useEffect(() => {
+    if (cities.length === 0) return;
+    const cityParam = localStorage.getItem('nevumo_selected_city');
+    if (cityParam) {
+      const city = cities.find(c => c.slug === cityParam);
+      if (city) {
+        setStep2(f => f.city_ids.length === 0 ? { ...f, city_ids: [String(city.id)] } : f);
+      }
+    }
+  }, [cities]);
 
   async function runStep1SlugCheck(candidate: string): Promise<boolean> {
     const trimmed = candidate.trim();

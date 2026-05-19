@@ -470,7 +470,7 @@ GDPR Compliance Progress:
 [✅] Task 7  — T&C клиенти
 [✅] Task 8  — Regulamin доставчици
 [✅] Task 9  — Withdrawal Form PL ✅ (2026-05-12)
-[⬜] Task 10 — Frontend страници
+[✅] Task 10 — Frontend страници
 [⬜] Task 11 — DSA страница
 [⬜] Task 12 — Вътрешни docs
 [⬜] Task 13 — DPA подписване
