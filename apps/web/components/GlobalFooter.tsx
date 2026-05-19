@@ -89,6 +89,18 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
             <Link href={`/${lang}/privacy`} className="text-gray-700 transition-colors hover:text-orange-600">
               {t('privacy_policy_link', 'Privacy Policy')}
             </Link>
+            <Link href={`/${lang}/cookies`} className="text-gray-700 transition-colors hover:text-orange-600">
+              {t('cookies_link', 'Cookie Policy')}
+            </Link>
+            <Link href={`/${lang}/terms`} className="text-gray-700 transition-colors hover:text-orange-600">
+              {t('terms_link', 'Terms & Conditions')}
+            </Link>
+            <Link href={`/${lang}/provider-terms`} className="text-gray-700 transition-colors hover:text-orange-600">
+              {t('provider_terms_link', 'Terms for Providers')}
+            </Link>
+            <Link href={`/${lang}/withdrawal`} className="text-gray-700 transition-colors hover:text-orange-600">
+              {t('withdrawal_link', 'Withdrawal Form')}
+            </Link>
           </div>
         )}
 

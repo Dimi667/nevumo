@@ -500,6 +500,10 @@ Nevumo implements three main legal pages with a modal-based preview system:
    - Translations from `cookies` namespace
    - Includes GA4 Advanced Consent Mode v2 disclosure
 
+### Footer Legal Links
+- provider_terms_link → /[lang]/provider-terms ✅
+- withdrawal_link → /[lang]/withdrawal ✅
+
 ### ?modal=true Mechanism
 All legal pages support a `?modal=true` query parameter for iframe embedding:
 - When loaded with `?modal=true`, the page detects it's in an iframe context

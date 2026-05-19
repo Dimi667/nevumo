@@ -386,6 +386,12 @@ PL, EN, BG — задължително
 - **Сваляем PDF:** Осигури `/legal/withdrawal-form.pdf` достъпен за download от `/[lang]/terms`
 - **Език:** Показвай езиковата версия на формуляра спрямо `[lang]` параметъра на URL-а, не browser locale
 
+### Footer правни линкове
+- footer.cookies_link → /[lang]/cookies ✅
+- footer.terms_link → /[lang]/terms ✅
+- footer.provider_terms_link → /[lang]/provider-terms ✅ (нов ключ, seed_footer_translations_p2.py)
+- footer.withdrawal_link → /[lang]/withdrawal ✅ (нов ключ, seed_footer_translations_p2.py)
+
 ---
 
 ## ЗАДАЧА 9 — Вътрешни compliance документи (не публични)

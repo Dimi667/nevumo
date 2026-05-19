@@ -212,8 +212,9 @@ Nevumo е уеб платформа за marketplace на услуги.
 
 ### Namespace `footer` (seed: `seed_footer_translations.py`)
 - Глобален namespace за футър линкове и правни бележки
-- Текущи ключове: `privacy_policy_link`, `cookies_link`, `terms_link`, `register_privacy_note`, `register_privacy_link`
+- Текущи ключове: `privacy_policy_link`, `cookies_link`, `terms_link`, `register_privacy_note`, `register_privacy_link`, `provider_terms_link`, `withdrawal_link`
 - 34 езика с реални преводи
+- seed_footer_translations_p2.py съдържа provider_terms_link и withdrawal_link (2 ключа × 34 езика = 68 rows, добавен 2026-05-19)
 
 ### Namespace `cookie_banner` (seed: `seed_cookie_banner_translations_1/2/3.py`)
 - Добавен ключ `cookie_privacy_link` (2026-05-11) — 34 езика
