@@ -479,6 +479,58 @@ This separation ensures that:
 
 ---
 
+## Legal Pages & Compliance
+
+### Legal Pages Architecture
+Nevumo implements three main legal pages with a modal-based preview system:
+
+1. **Terms & Conditions (Clients)** — `/[lang]/terms`
+   - Server component rendering 15 articles + Annex 1
+   - Supports PDF download of withdrawal form
+   - Online withdrawal form link
+   - Translations from `terms` namespace
+
+2. **Terms & Conditions (Providers)** — `/[lang]/terms-provider`
+   - Server component rendering 18 articles + Annex 1 + Annex 2
+   - P2B Regulation (EU) 2019/1150 compliance
+   - Translations from `provider_terms` namespace
+
+3. **Cookie Policy** — `/[lang]/cookies`
+   - Server component with full cookie/storage registry
+   - Translations from `cookies` namespace
+   - Includes GA4 Advanced Consent Mode v2 disclosure
+
+### ?modal=true Mechanism
+All legal pages support a `?modal=true` query parameter for iframe embedding:
+- When loaded with `?modal=true`, the page detects it's in an iframe context
+- SmartGlobalFooter is automatically hidden via `isInIframe` detection
+- This allows LegalModal to display legal content without user leaving the /auth flow
+- The iframe approach ensures clean separation of concerns and proper URL-based navigation
+
+### LegalModal Component
+- **Location**: `apps/web/components/auth/LegalModal.tsx`
+- **Purpose**: Allows users to review legal documents without leaving the /auth page
+- **Implementation**: Uses iframe approach with `?modal=true` parameter
+- **Features**:
+  - Displays Terms, Privacy Policy, or Provider Terms in a modal
+  - SmartGlobalFooter hidden in iframe context via detection
+  - Maintains auth flow context while providing legal document access
+  - Used in email registration (LoginClient.tsx) with different documents for client/provider
+
+### OAuth Terms Flow
+- **oauth-terms Page**: `apps/web/app/[lang]/auth/oauth-terms/page.tsx`
+  - Dedicated page for Google OAuth terms acceptance
+  - Forces users to accept T&C before account creation
+  - Client component: `OAuthTermsClient.tsx`
+
+- **OAuth Flow Updates**:
+  - State parameter now carries: `lang|intent|category|city`
+  - Backend checks if user exists before creating account
+  - New providers automatically receive providers record
+  - `OAUTH_REDIRECT_BASE` added to root .env and apps/api/config.py as configurable variable
+
+---
+
 ## Core Marketplace Model
 
 Nevumo използва **Hybrid Marketplace Model**:

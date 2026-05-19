@@ -6,6 +6,7 @@ import { generateHreflangAlternates } from '@/lib/seo';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
+  searchParams: Promise<{ modal?: string }>;
 }
 
 export async function generateStaticParams() {
@@ -66,15 +67,18 @@ function renderBodyText(text: string, lang: string): JSX.Element[] {
   });
 }
 
-export default async function TermsProviderPage({ params }: PageProps) {
+export default async function TermsProviderPage({ params, searchParams }: PageProps) {
   const { lang } = await params;
+  const { modal } = await searchParams;
+  const isModal = modal === 'true';
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await fetchTranslations(normalizedLang, 'provider_terms');
 
   return (
     <div className="min-h-screen bg-white">
       {/* NAVBAR */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-gray-100">
+      {!isModal && (
+        <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-gray-100">
         <Link href={`/${normalizedLang}`} className="inline-flex items-center">
           <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
         </Link>
@@ -82,6 +86,7 @@ export default async function TermsProviderPage({ params }: PageProps) {
           {t(dict, 'back_to_home', 'Back to home')}
         </Link>
       </nav>
+      )}
 
       <main>
         <article className="max-w-3xl mx-auto px-4 py-12">

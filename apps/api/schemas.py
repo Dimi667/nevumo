@@ -359,6 +359,14 @@ class SwitchRoleRequest(BaseModel):
         return v
 
 
+class GoogleOAuthCompleteRequest(BaseModel):
+    email: str
+    name: str
+    oauth_id: str
+    lang: str = "en"
+    intent: str = "client"
+
+
 # -------------------------
 # Provider Dashboard Schemas
 # -------------------------

@@ -10,6 +10,7 @@ import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@
 import { saveAuth, isAuthenticated, getAuthUser } from "@/lib/auth-store";
 import { ApiError, API_BASE, getCityBySlug } from "@/lib/api";
 import { saveCredentials } from '@/lib/password-save';
+import LegalModal from '@/components/auth/LegalModal';
 
 // ---------------------------------------------------------------------------
 // Icons (inline SVG — no external deps)
@@ -111,6 +112,10 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
     intent: null,
   });
 
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [legalModalOpen, setLegalModalOpen] = useState(false);
+  const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy'>('terms');
+
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const isEmailValid = EMAIL_RE.test(state.email);
@@ -133,6 +138,11 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
     return () => window.removeEventListener('pageshow', checkAuth);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
+
+  // Reset terms accepted when step changes
+  useEffect(() => {
+    setTermsAccepted(false);
+  }, [state.step]);
 
   // On mount: restore intent + email, fire auth_view event
   useEffect(() => {
@@ -498,7 +508,12 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
             </p>
             <div className="flex flex-col gap-[10px]">
               <button
-                onClick={() => { window.location.href = `${API_BASE}/api/v1/auth/google?lang=${lang}` }}
+                onClick={() => {
+                  const intent = state.intent ?? 'client';
+                  const category = searchParams.get('category') ?? '';
+                  const city = citySlug ?? '';
+                  window.location.href = `${API_BASE}/api/v1/auth/google?lang=${lang}&intent=${intent}&category=${category}&city=${city}`;
+                }}
                 className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
               >
                 <GoogleIcon />
@@ -654,20 +669,50 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
 
               <button
                 type="submit"
-                disabled={state.password.length === 0 || state.loading}
+                disabled={!state.password || state.loading || !termsAccepted}
                 className={`w-full py-2.5 rounded-lg text-base font-semibold text-white transition-colors mt-4
-                  ${state.password.length > 0 && !state.loading ? 'bg-orange-500 hover:bg-orange-600 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}
+                  ${state.password && !state.loading && termsAccepted ? 'bg-orange-500 hover:bg-orange-600 cursor-pointer' : 'bg-gray-300 cursor-not-allowed'}`}
               >
                 {state.loading ? t(authDict, 'registering_btn', 'Creating...') : claimToken ? t(authDict, 'claim_cta_btn', "Claim profile") : t(authDict, 'continue_btn', "Continue")}
               </button>
             </form>
 
-            <p className="text-xs text-gray-500 text-center mt-2">
-              {t(footerDict, 'register_privacy_note', 'By registering you agree to our')}{' '}
-              <Link href={`/${lang}/privacy`} className="underline hover:text-orange-600">
-                {t(footerDict, 'register_privacy_link', 'Privacy Policy')}
-              </Link>
-            </p>
+            <div className="mt-3 space-y-2">
+              <label className="flex items-start gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                  className="mt-0.5 h-4 w-4 accent-orange-500 cursor-pointer flex-shrink-0"
+                />
+                <span className="text-xs text-gray-500">
+                  {t(authDict, 'terms_accept_prefix', 'I accept the')}{' '}
+                  <button type="button" className="text-orange-500 underline" onClick={() => { setLegalModalType('terms'); setLegalModalOpen(true); }}>
+                    {t(authDict, 'terms_link', 'Terms of Service')}
+                  </button>
+                  {state.intent === 'provider' && (
+                    <>
+                      {', '}
+                      <button type="button" className="text-orange-500 underline" onClick={() => { setLegalModalType('terms-provider'); setLegalModalOpen(true); }}>
+                        {t(authDict, 'terms_provider_link', 'Provider Terms')}
+                      </button>
+                    </>
+                  )}
+                  {' '}{t(authDict, 'terms_and', 'and')}{' '}
+                  <button type="button" className="text-orange-500 underline" onClick={() => { setLegalModalType('privacy'); setLegalModalOpen(true); }}>
+                    {t(authDict, 'privacy_link', 'Privacy Policy')}
+                  </button>
+                </span>
+              </label>
+            </div>
+
+            <LegalModal
+              isOpen={legalModalOpen}
+              onClose={() => setLegalModalOpen(false)}
+              lang={lang}
+              type={legalModalType}
+              authDict={authDict}
+            />
 
             {state.registerSuccess && (
               <div className="bg-green-50 text-green-700 text-sm p-2.5 rounded-lg text-center mt-3">

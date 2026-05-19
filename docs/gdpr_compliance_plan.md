@@ -214,8 +214,7 @@ save_preferences, cookie_settings_link, last_updated
 ## ЗАДАЧА 4 — Cookie Policy страница
 **Приоритет:** 🔴 КРИТИЧНО — преди launch  
 **Тип:** Страница + текст  
-**Статус:** ⬜ Не започнато
-**Статус:** ✅ Текст завършен — 2026-05-12
+**Статус:** ✅ Завършено — 2026-05-12
 
 ### Route
 `/[lang]/cookies`
@@ -254,6 +253,16 @@ PL, EN, BG — задължително
 
 ## ЗАДАЧА 5 — Terms & Conditions (Клиенти)
 **Статус:** ✅ Завършено (2026-05-12)
+
+### Checkbox за приемане на T&C при email регистрация
+**Статус:** ✅ Завършено
+- Показва различни документи за client/provider
+- LegalModal компонент за преглед без напускане на /auth
+
+### Checkbox за приемане на T&C при Google OAuth регистрация
+**Статус:** ✅ Завършено
+- oauth-terms страница за приемане на условия
+- OAuthTermsClient компонент
 
 ### Резултат
 - Файл: docs/terms_conditions_clients_nevumo.md
@@ -350,6 +359,22 @@ PL, EN, BG — задължително
 - Единна точка за контакт с власти и потребители (DSA чл. 11)
 - Email за: privacy, abuse reports, law enforcement requests
 - Процедура за notice-and-takedown (DSA чл. 16)
+
+---
+
+## Нови компоненти и файлове
+
+### LegalModal компонент
+- **Файл:** `apps/web/components/auth/LegalModal.tsx`
+- **Функция:** Modal за преглед на Terms/Privacy/Provider Terms без напускане на /auth
+
+### OAuth Terms страница
+- **Файл:** `apps/web/app/[lang]/auth/oauth-terms/page.tsx`
+- **Функция:** Страница за приемане на условия при Google OAuth регистрация
+
+### OAuth Terms Client компонент
+- **Файл:** `apps/web/app/[lang]/auth/oauth-terms/OAuthTermsClient.tsx`
+- **Функция:** Client компонент за OAuth Terms страница
 
 ---
 
@@ -479,6 +504,7 @@ GDPR Compliance Progress:
 - Адвокат прави **финален преглед** (~200–400 EUR) — препоръчително, не блокиращо
 - Полският **Regulamin** е правно обвързващ за PL потребители, дори ако регистрацията е в BG
 - **ODR линк НЕ се добавя** — платформата е закрита от 20.07.2025
+- **EU ODR платформата НЕ трябва да се включва — затворена от 20 юли 2025**
 - За PL маркетинг имейли: отделен **PKE consent checkbox** — НЕ е включен в T&C acceptance
 
 ### Технически

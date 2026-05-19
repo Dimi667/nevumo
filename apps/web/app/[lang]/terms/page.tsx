@@ -5,6 +5,7 @@ import { t, type TranslationDict } from '@/lib/ui-translations';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
+  searchParams: { modal?: string };
 }
 
 const API_BASE = typeof window === 'undefined' ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000') : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000');
@@ -44,8 +45,10 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-export default async function TermsPage({ params }: PageProps) {
+export default async function TermsPage({ params, searchParams }: PageProps) {
   const { lang } = await params;
+  const { modal } = await searchParams;
+  const isModal = modal === 'true';
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await getTranslations(normalizedLang);
 
@@ -83,7 +86,8 @@ export default async function TermsPage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-white">
       {/* NAVBAR */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-gray-100">
+      {!isModal && (
+        <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-gray-100">
         <Link href={`/${normalizedLang}`} className="inline-flex items-center">
           <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
         </Link>
@@ -91,6 +95,7 @@ export default async function TermsPage({ params }: PageProps) {
           {t(dict, 'back_to_home', 'Back to home')}
         </Link>
       </nav>
+      )}
 
       <main className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">{t(dict, 'page_title', 'Terms & Conditions')}</h1>

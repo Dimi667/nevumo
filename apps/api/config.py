@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     # Google OAuth
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""
-    OAUTH_REDIRECT_BASE: str = "http://localhost:3000"
+    OAUTH_REDIRECT_BASE: str = ""
 
     model_config = {"env_file": ".env", "extra": "ignore"}
 

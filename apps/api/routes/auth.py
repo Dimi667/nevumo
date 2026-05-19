@@ -1,4 +1,5 @@
 import json
+import urllib.parse
 from datetime import datetime, timedelta
 from secrets import token_hex
 from typing import Optional
@@ -17,6 +18,7 @@ from apps.api.schemas import (
     CheckEmailResponse,
     ForgotPasswordRequest,
     ForgotPasswordResponse,
+    GoogleOAuthCompleteRequest,
     LoginRequest,
     MagicLinkRequest,
     RegisterRequest,
@@ -434,7 +436,12 @@ async def delete_account(
 
 
 @router.get("/google")
-async def google_oauth(lang: str = Query(default="en")) -> RedirectResponse:
+async def google_oauth(
+    lang: str = Query(default="en"),
+    intent: str = Query(default="client"),
+    category: str = Query(default=""),
+    city: str = Query(default=""),
+) -> RedirectResponse:
     """Redirect to Google OAuth consent page."""
     redirect_uri = f"{settings.OAUTH_REDIRECT_BASE}/api/v1/auth/google/callback"
     oauth_url = (
@@ -445,7 +452,7 @@ async def google_oauth(lang: str = Query(default="en")) -> RedirectResponse:
         f"scope=openid email profile&"
         f"access_type=offline&"
         f"prompt=consent&"
-        f"state={lang}"
+        f"state={lang}|{intent}|{category}|{city}"
     )
     return RedirectResponse(url=oauth_url)
 
@@ -457,6 +464,13 @@ async def google_oauth_callback(
     db: Session = Depends(get_db),
 ) -> RedirectResponse:
     """Handle Google OAuth callback."""
+    # Parse state
+    parts = state.split("|")
+    lang = parts[0] if len(parts) > 0 else "en"
+    intent = parts[1] if len(parts) > 1 else "client"
+    category = parts[2] if len(parts) > 2 else ""
+    city = parts[3] if len(parts) > 3 else ""
+
     try:
         # Exchange code for access token
         redirect_uri = f"{settings.OAUTH_REDIRECT_BASE}/api/v1/auth/google/callback"
@@ -488,6 +502,25 @@ async def google_oauth_callback(
         name = user_info.get("name", "")
         oauth_id = user_info["sub"]
 
+        # Check if user exists
+        existing_user = db.query(User).filter(
+            (User.oauth_provider == "google") & (User.oauth_id == oauth_id) |
+            (User.email == email)
+        ).first()
+
+        # If user does NOT exist → redirect to terms page
+        if not existing_user:
+            params = urllib.parse.urlencode({
+                "email": email,
+                "name": name,
+                "oauth_id": oauth_id,
+                "lang": lang,
+                "intent": intent,
+                "category": category,
+                "city": city
+            })
+            return RedirectResponse(url=f"{settings.OAUTH_REDIRECT_BASE}/{lang}/auth/oauth-terms?{params}")
+
         # Get or create user
         user, jwt_token = get_or_create_oauth_user(
             email=email,
@@ -507,11 +540,11 @@ async def google_oauth_callback(
 
         # Determine redirect based on role
         if user.role == "provider":
-            redirect = f"/{state}/provider/dashboard"
+            redirect = f"/{lang}/provider/dashboard"
         else:  # client
-            redirect = f"/{state}/client/dashboard"
+            redirect = f"/{lang}/client/dashboard"
 
-        redirect_url = f"{settings.OAUTH_REDIRECT_BASE}/{state}/auth/oauth-callback?token={jwt_token}&user={user_data}&redirect={redirect}"
+        redirect_url = f"{settings.OAUTH_REDIRECT_BASE}/{lang}/auth/oauth-callback?token={jwt_token}&user={user_data}&redirect={redirect}"
         return RedirectResponse(url=redirect_url)
 
     except Exception as e:
@@ -520,3 +553,78 @@ async def google_oauth_callback(
         logger.error(f"Google OAuth error: {e}")
         error_redirect = f"{settings.OAUTH_REDIRECT_BASE}/en/auth?error=oauth_failed"
         return RedirectResponse(url=error_redirect)
+
+
+@router.post("/google/complete", response_model=AuthTokenResponse)
+async def google_oauth_complete(
+    body: GoogleOAuthCompleteRequest,
+    db: Session = Depends(get_db),
+) -> AuthTokenResponse:
+    """Complete Google OAuth after terms acceptance."""
+    # Check if user exists (protection against duplicate calls)
+    existing_user = db.query(User).filter(
+        (User.oauth_provider == "google") & (User.oauth_id == body.oauth_id) |
+        (User.email == body.email)
+    ).first()
+
+    # If user exists → return JWT token directly
+    if existing_user:
+        if body.intent == "provider":
+            from apps.api.models import Provider
+            existing_provider = db.query(Provider).filter(Provider.user_id == existing_user.id).first()
+            if not existing_provider:
+                from secrets import token_hex
+                draft_slug = f"draft{token_hex(6)}"
+                provider = Provider(
+                    user_id=existing_user.id,
+                    business_name=existing_user.email,
+                    slug=draft_slug,
+                    rating=0,
+                    verified=False,
+                    availability_status="active",
+                )
+                db.add(provider)
+                db.commit()
+        token = create_jwt(existing_user.id, existing_user.email, existing_user.role)
+        return AuthTokenResponse(data={
+            "token": token,
+            "user": {"id": str(existing_user.id), "email": existing_user.email, "role": existing_user.role},
+        })
+
+    # If not exists → create user
+    user = User(
+        email=body.email,
+        name=body.name,
+        oauth_provider="google",
+        oauth_id=body.oauth_id,
+        role="provider" if body.intent == "provider" else "client",
+        password_hash=None,
+        is_active=True,
+        locale=body.lang,
+    )
+    db.add(user)
+    db.flush()
+    link_pending_claims(user.id, user.email, user.phone, db)
+    db.commit()
+
+    if body.intent == "provider":
+        from secrets import token_hex
+        from apps.api.models import Provider
+        draft_slug = f"draft{token_hex(6)}"
+        provider = Provider(
+            user_id=user.id,
+            business_name=user.email,
+            slug=draft_slug,
+            rating=0,
+            verified=False,
+            availability_status="active",
+        )
+        db.add(provider)
+        db.commit()
+
+    # Return JWT token
+    token = create_jwt(user.id, user.email, user.role)
+    return AuthTokenResponse(data={
+        "token": token,
+        "user": {"id": str(user.id), "email": user.email, "role": user.role},
+    })

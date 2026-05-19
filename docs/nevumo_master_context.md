@@ -335,6 +335,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Legal & Compliance (May 2026)** — COMPLETE:
+  - /[lang]/terms страница с онлайн форма и PDF изтегляне на withdrawal form
+  - /[lang]/terms-provider страница (Общи условия за доставчици)
+  - /[lang]/cookies страница (Cookie Policy)
+  - LegalModal компонент (apps/web/components/auth/LegalModal.tsx) — преглед на документи без напускане на /auth, iframe подход с ?modal=true параметър, SmartGlobalFooter скрит в iframe чрез isInIframe detection
+  - Checkbox за T&C при email регистрация в LoginClient.tsx — различни документи за client/provider
+  - oauth-terms страница и OAuthTermsClient.tsx — приемане на условия при Google OAuth преди създаване на акаунт
+  - Google OAuth flow обновен: state параметърът носи lang|intent|category|city, backend проверява дали user съществува преди създаване, новите провайдъри получават автоматично providers запис
+  - OAUTH_REDIRECT_BASE добавен в root .env и apps/api/config.py като конфигурируема променлива
 - **N+1 Fix — Category Page Performance** — COMPLETE:
   - `GET /api/v1/providers` обогатен с batch данни: profile_image_url, description, jobs_completed, leads_received, review_count, latest_lead_preview, services[]
   - Redis cache key обновен: `providers:{category_slug}:{city_slug}:{lang}`, TTL 3600s
