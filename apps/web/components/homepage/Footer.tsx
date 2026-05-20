@@ -27,15 +27,15 @@ export default function Footer({
       <div className="max-w-4xl mx-auto text-center">
         <p className="mb-6 text-gray-700">{footerTitle}</p>
         <div className="flex flex-wrap justify-center gap-4 mb-6 text-sm">
-          <Link href={`/${lang}/${citySlug}/sprzatanie`} className="text-gray-700 transition-colors">
+          <Link href={`/${lang}/${citySlug}/cleaning`} className="text-gray-700 transition-colors">
             {footerLinkCleaning}
           </Link>
           <span className="text-gray-500">|</span>
-          <Link href={`/${lang}/${citySlug}/hydraulik`} className="text-gray-700 transition-colors">
+          <Link href={`/${lang}/${citySlug}/plumbing`} className="text-gray-700 transition-colors">
             {footerLinkPlumbing}
           </Link>
           <span className="text-gray-500">|</span>
-          <Link href={`/${lang}/${citySlug}/masaz`} className="text-gray-700 transition-colors">
+          <Link href={`/${lang}/${citySlug}/massage`} className="text-gray-700 transition-colors">
             {footerLinkMassage}
           </Link>
           <span className="text-gray-500">|</span>

@@ -30,7 +30,7 @@ export default async function DolaczPage({ params }: PageProps) {
             <span className="font-bold text-xl text-gray-900">evumo</span>
           </span>
           <a
-            href={`/${lang}/warszawa/sprzatanie`}
+            href={`/${lang}/warszawa/cleaning`}
             className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
           >
             Szukasz usługi?
