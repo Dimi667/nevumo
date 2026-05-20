@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { CookieSettingsLink } from '@/components/ui/CookieSettingsLink';
 
 interface FooterProps {
   lang: string;
@@ -38,8 +37,6 @@ export default function Footer({
           <Link href={`/${lang}/${citySlug}/massage`} className="text-gray-700 transition-colors">
             {footerLinkMassage}
           </Link>
-          <span className="text-gray-500">|</span>
-          <CookieSettingsLink lang={lang} />
         </div>
         <p className="text-gray-500 text-sm">
           {footerPopular}

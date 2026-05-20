@@ -10,6 +10,7 @@ import {
   LANGUAGE_FLAGS,
   LANGUAGE_COOKIE_NAME,
 } from '@/lib/locales';
+import { CookieSettingsLink } from '@/components/ui/CookieSettingsLink';
 
 interface GlobalFooterProps {
   lang: string;
@@ -101,10 +102,11 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
             <Link href={`/${lang}/withdrawal`} className="text-gray-700 transition-colors hover:text-orange-600">
               {t('withdrawal_link', 'Withdrawal Form')}
             </Link>
+            <CookieSettingsLink lang={lang} />
           </div>
         )}
 
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative ml-auto" ref={dropdownRef}>
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
@@ -131,7 +133,7 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
           </button>
 
           {isOpen && (
-            <div className="absolute bottom-full left-0 md:right-0 md:left-auto mb-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+            <div className="absolute bottom-full right-0 mb-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
               <div className="p-3 border-b border-gray-100">
                 <input
                   type="text"

@@ -445,6 +445,18 @@ This separation ensures that:
 - Mobile touch targets verification (44×44px)
 - 12-month re-prompt logic
 
+- **Cookie Settings Link — Global Footer Fix (May 20, 2026)** — COMPLETE:
+  - **Проблем:** "Настройки на бисквитките" линкът се показваше само на homepage, вместо на всяка страница
+  - **Причина:** CookieSettingsLink компонентът беше в apps/web/components/homepage/Footer.tsx (само homepage), не в GlobalFooter
+  - **Решение:**
+    - Добавен import и <CookieSettingsLink lang={lang} /> в apps/web/components/GlobalFooter.tsx след withdrawal линка (!minimal блок)
+    - Премахнат CookieSettingsLink от apps/web/components/homepage/Footer.tsx
+  - **Бонус fix:** Language dropdown излизаше извън екрана на мобилен — оправен чрез right-0 на dropdown контейнера и ml-auto на wrapper div-а
+  - **Засегнати файлове:**
+    - apps/web/components/GlobalFooter.tsx
+    - apps/web/components/homepage/Footer.tsx
+  - **Резултат:** Cookie Settings е достъпен от footer-а на всяка страница в системата
+
 ---
 
 ## Data Export Endpoint (GDPR Article 20 - Right to Portability) — May 8, 2026
