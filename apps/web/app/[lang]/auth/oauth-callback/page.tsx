@@ -14,6 +14,8 @@ export default function OAuthCallbackPage() {
   useEffect(() => {
     const token = searchParams.get('token');
     const userParam = searchParams.get('user');
+    const category = searchParams.get('category') || '';
+    const city = searchParams.get('city') || '';
 
     if (!token) {
       window.location.href = `/${lang}/auth?error=oauth_failed`;
@@ -36,6 +38,9 @@ export default function OAuthCallbackPage() {
         : parsedUser.role === 'provider'
         ? `/${lang}/provider/dashboard`
         : `/${lang}/izberi-grad`;
+
+      if (city) localStorage.setItem('nevumo_selected_city', city);
+      if (category) localStorage.setItem('nevumo_selected_category', category);
 
       setTimeout(() => {
         window.location.href = redirectPath;

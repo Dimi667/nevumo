@@ -350,6 +350,11 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - oauth-terms страница и OAuthTermsClient.tsx — приемане на условия при Google OAuth преди създаване на акаунт
   - Google OAuth flow обновен: state параметърът носи lang|intent|category|city, backend проверява дали user съществува преди създаване, новите провайдъри получават автоматично providers запис
   - OAUTH_REDIRECT_BASE добавен в root .env и apps/api/config.py като конфигурируема променлива
+- **Google OAuth City/Category Pre-fill Fix (May 2026)** — COMPLETE:
+  - OAuthTermsClient.tsx: reads `city` and `category` from searchParams, saves to localStorage before redirect
+  - oauth-callback/page.tsx: reads `city` and `category` from searchParams, saves to localStorage before redirect
+  - Both email and Google OAuth registration now correctly pre-fill city and category dropdowns in onboarding Step 2
+  - Root cause: city/category params were passed through OAuth flow but never written to localStorage on frontend
 - **N+1 Fix — Category Page Performance** — COMPLETE:
   - `GET /api/v1/providers` обогатен с batch данни: profile_image_url, description, jobs_completed, leads_received, review_count, latest_lead_preview, services[]
   - Redis cache key обновен: `providers:{category_slug}:{city_slug}:{lang}`, TTL 3600s

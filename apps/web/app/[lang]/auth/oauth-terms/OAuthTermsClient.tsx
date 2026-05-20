@@ -20,6 +20,8 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
   const name = searchParams.get('name') || '';
   const oauth_id = searchParams.get('oauth_id') || '';
   const intent = searchParams.get('intent') ?? 'client';
+  const category = searchParams.get('category') || '';
+  const city = searchParams.get('city') || '';
   
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [legalModalOpen, setLegalModalOpen] = useState(false);
@@ -61,6 +63,8 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
 
       const result = await res.json();
       saveAuth(result.data.token, result.data.user);
+      if (city) localStorage.setItem('nevumo_selected_city', city);
+      if (category) localStorage.setItem('nevumo_selected_category', category);
       window.location.href = intent === 'provider' ? `/${lang}/provider/dashboard` : `/${lang}/client/dashboard`;
     } catch {
       setError(t(authDict, 'oauth_error_generic', 'An error occurred. Please try again.'));
