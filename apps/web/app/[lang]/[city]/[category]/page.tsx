@@ -858,7 +858,7 @@ export default async function CategoryPage({ params }: PageProps) {
             <p className="text-sm text-gray-500">
               {getLocalizedCityText((categoryT['provider_cta_prefix'] || 'Do you offer'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })} {categoryName} {getLocalizedCityText((categoryT['provider_cta_suffix'] || `${prepBaseCat} {city}?`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
             </p>
-            <Link href={`/${lang}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
+            <Link href={`/${lang}/auth?mode=register&role=provider&city=${city}&category=${category}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
               {getLocalizedCityText((categoryT['provider_cta_link'] || 'Join for free →'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
             </Link>
           </section>

@@ -524,7 +524,11 @@ CREATE INDEX idx_translations_key ON translations(key);
 - **city nav CTA keys (May 20, 2026)**: 2 new keys × 34 languages = 68 rows
   Keys added: nav_cta_line1, nav_cta_line2 (for city page "Become a Specialist" CTA link)
   Seed script: apps/api/scripts/seed_city_nav_cta_translations.py
-- **Total rows**: 12,200+ translations across all namespaces
+- **contact_dsa namespace (May 21, 2026)**: 9 keys × 34 languages = 306 rows
+  Keys added: s3_title, s3_what_to_include_title, s4_title, s5_title, back_to_home, s3_body, s3_what_to_include_body, s4_body, s5_body
+  Purpose: DSA (Digital Services Act) Contact Point page - Article 11 compliance
+  Seed scripts: seed_contact_dsa_p1.py, seed_contact_dsa_p2.py
+- **Total rows**: 12,500+ translations across all namespaces
 
 ### Redis Caching
 - **Cache key pattern**: `translations:{lang}:{namespace}`
