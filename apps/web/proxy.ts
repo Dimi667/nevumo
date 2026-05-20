@@ -27,7 +27,9 @@ export default function proxy(request: NextRequest) {
     /^\/[a-z]{2,5}\/api\//.test(pathname) ||
     STATIC_EXT_PATTERN.test(pathname)
   ) {
-    return NextResponse.next();
+    const response = NextResponse.next();
+    response.headers.set('x-pathname', pathname);
+    return response;
   }
 
   // 2. Resolve language from path, cookies, or headers
@@ -53,6 +55,7 @@ export default function proxy(request: NextRequest) {
       maxAge: LANGUAGE_COOKIE_MAX_AGE,
     });
     response.cookies.delete(LANGUAGE_REDIRECT_COOKIE_NAME);
+    response.headers.set('x-pathname', redirectUrl.pathname);
     return response;
   }
 
@@ -66,6 +69,8 @@ export default function proxy(request: NextRequest) {
         headers: requestHeaders,
       },
     });
+
+    response.headers.set('x-pathname', pathname);
 
     if (savedLang !== lang || redirectedLang === lang) {
       response.cookies.set(LANGUAGE_COOKIE_NAME, lang, {
@@ -89,8 +94,9 @@ export default function proxy(request: NextRequest) {
 
   const redirectUrl = request.nextUrl.clone();
   redirectUrl.pathname = pathname === "/" ? `/${targetLang}` : `/${targetLang}${pathname}`;
-  
+
   const response = NextResponse.redirect(redirectUrl);
+  response.headers.set('x-pathname', redirectUrl.pathname);
 
   if (savedLang) {
     response.cookies.delete(LANGUAGE_REDIRECT_COOKIE_NAME);

@@ -1,3 +1,4 @@
+import { headers } from 'next/headers';
 import SmartGlobalFooter from '@/components/SmartGlobalFooter';
 import GlobalHeader from '@/components/GlobalHeader';
 
@@ -10,11 +11,15 @@ interface LangLayoutProps {
 export default async function LangLayout({ children, params, searchParams }: LangLayoutProps) {
   const { lang } = await params;
   const { modal, embed } = await searchParams || {};
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || '';
+  const isDashboard = pathname.includes('/client/dashboard/') || pathname.includes('/provider/dashboard/');
+
   return (
     <>
-      {modal !== 'true' && embed !== '1' && <GlobalHeader lang={lang} />}
+      {!isDashboard && modal !== 'true' && embed !== '1' && <GlobalHeader lang={lang} />}
       {children}
-      {modal !== 'true' && <SmartGlobalFooter lang={lang} />}
+      {!isDashboard && modal !== 'true' && <SmartGlobalFooter lang={lang} />}
     </>
   );
 }

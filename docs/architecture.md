@@ -365,6 +365,17 @@ This separation ensures that:
   - When keys are duplicated with `row_bg()` (incomplete translations) in one script and full translations in another, executing the incomplete script will overwrite the good translations with English fallback text for non-EN/BG languages
   - Solution: Remove duplicate keys from the script that uses `row_bg()` and let the specialized script handle those keys with full 34-language translations
 - **Mobile Language Dropdown Fix (May 15, 2026)**: Fixed language dropdown in GlobalFooter component that was going off-screen on mobile devices (375px width). Changed positioning from `right-0` to responsive `left-0 md:right-0 md:left-auto` to ensure dropdown stays within viewport bounds on small screens while maintaining right alignment on desktop.
+- **Dashboard Header Duplication Fix (May 20, 2026)** — COMPLETE:
+  - **PROBLEM:** GlobalHeader from base layout was showing on dashboard pages (`/client/dashboard/*` and `/provider/dashboard/*`), causing logo duplication since dashboard layouts have their own sidebars with logos.
+  - **SOLUTION:**
+    - Added `x-pathname` header to all responses in `apps/web/proxy.ts` (Next.js 16 uses proxy.ts instead of deprecated middleware.ts)
+    - Modified `apps/web/app/[lang]/layout.tsx` to read pathname from headers and skip rendering GlobalHeader/SmartGlobalFooter on dashboard routes
+    - Used `headers().get('x-pathname')` in server component to detect dashboard paths
+  - **Implementation Details:**
+    - Added `response.headers.set('x-pathname', pathname)` to all response cases in proxy.ts (static routes, language propagation, redirects)
+    - Added `isDashboard` check in layout.tsx: `pathname.includes('/client/dashboard/') || pathname.includes('/provider/dashboard/')`
+    - Existing modal/embed logic preserved: `{!isDashboard && modal !== 'true' && embed !== '1' && <GlobalHeader lang={lang} />}`
+  - **Result:** Dashboard pages no longer show duplicate header/logo; normal pages continue to show GlobalHeader as expected.
 - **Terms & Conditions Page (May 15, 2026)** — COMPLETE:
   - **Frontend**: Server component at `apps/web/app/[lang]/terms/page.tsx`
   - **Features**:
