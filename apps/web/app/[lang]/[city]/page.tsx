@@ -147,8 +147,11 @@ export default async function CityPage({ params }: PageProps) {
       <div className="min-h-screen bg-white">
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <Link href={`/${lang}/auth?mode=register&role=provider`} className="text-sm text-gray-600 transition-colors hover:text-orange-600">
-          {t(cityT, 'nav_link', 'Become a specialist')}
+        <Link href={`/${lang}/auth?mode=register&role=provider&city=${city}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
+          <span className="flex flex-col items-end text-right text-sm font-semibold md:flex-row md:items-center md:gap-1">
+            <span>{cityT['nav_cta_line1'] || 'Do you offer services in'} {cityName}?</span>
+            <span>{cityT['nav_cta_line2'] || 'Join for free!'} →</span>
+          </span>
         </Link>
       </nav>
 

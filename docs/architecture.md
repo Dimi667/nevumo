@@ -365,6 +365,16 @@ This separation ensures that:
   - When keys are duplicated with `row_bg()` (incomplete translations) in one script and full translations in another, executing the incomplete script will overwrite the good translations with English fallback text for non-EN/BG languages
   - Solution: Remove duplicate keys from the script that uses `row_bg()` and let the specialized script handle those keys with full 34-language translations
 - **Mobile Language Dropdown Fix (May 15, 2026)**: Fixed language dropdown in GlobalFooter component that was going off-screen on mobile devices (375px width). Changed positioning from `right-0` to responsive `left-0 md:right-0 md:left-auto` to ensure dropdown stays within viewport bounds on small screens while maintaining right alignment on desktop.
+- **City Page CTA Link Enhancement (May 20, 2026)** — COMPLETE:
+  - **PROBLEM:** City pages had a simple "Become a specialist" link that didn't pass city information for pre-population during registration, unlike category pages which passed both city and category.
+  - **SOLUTION:**
+    - Updated `apps/web/app/[lang]/[city]/page.tsx` to use responsive design (two-line on mobile, one-line on desktop)
+    - Added new translation keys `city.nav_cta_line1` and `city.nav_cta_line2` for all 34 languages
+    - Link now passes `city=${city}` parameter to auth page for automatic city pre-population
+    - Arrow `→` is hardcoded in frontend (not part of translations)
+    - Text structure: "{nav_cta_line1} {cityName}? {nav_cta_line2} →"
+    - Seed script: `apps/api/scripts/seed_city_nav_cta_translations.py`
+  - **Result:** City page CTA link now matches category page functionality with city pre-population and responsive design.
 - **Dashboard Header Duplication Fix (May 20, 2026)** — COMPLETE:
   - **PROBLEM:** GlobalHeader from base layout was showing on dashboard pages (`/client/dashboard/*` and `/provider/dashboard/*`), causing logo duplication since dashboard layouts have their own sidebars with logos.
   - **SOLUTION:**

@@ -521,6 +521,9 @@ CREATE INDEX idx_translations_key ON translations(key);
     - p22_art17_18_body: art17_body, art18_body (2 keys × 34 langs = 68 rows)
     - p23_footer: annex1_body, annex2_body, footer (3 keys × 34 langs = 102 rows)
   - Documentation: Full legal content in docs/terms_conditions_providers_nevumo.md (EN + BG + PL versions)
+- **city nav CTA keys (May 20, 2026)**: 2 new keys × 34 languages = 68 rows
+  Keys added: nav_cta_line1, nav_cta_line2 (for city page "Become a Specialist" CTA link)
+  Seed script: apps/api/scripts/seed_city_nav_cta_translations.py
 - **Total rows**: 12,200+ translations across all namespaces
 
 ### Redis Caching
