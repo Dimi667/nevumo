@@ -350,15 +350,21 @@ PL, EN, BG — задължително
 ## ЗАДАЧА 8 — DSA Contact Point страница
 **Приоритет:** 🟡 Важно  
 **Тип:** Страница  
-**Статус:** ⬜ Не започнато
+**Статус:** ✅ Завършено (2026-05-20)
 
 ### Route
-`/[lang]/legal` или `/[lang]/contact-dsa`
+`/[lang]/contact-dsa`
 
 ### Съдържание
 - Единна точка за контакт с власти и потребители (DSA чл. 11)
 - Email за: privacy, abuse reports, law enforcement requests
 - Процедура за notice-and-takedown (DSA чл. 16)
+
+### Имплементация
+- Създадена страница /[lang]/contact-dsa ✅
+- Namespace: contact_dsa, 17 ключа, seed скриптове: seed_contact_dsa_p1.py + seed_contact_dsa_p2.py ✅
+- Footer линк: contact_dsa_link → /[lang]/contact-dsa ✅ (seed_footer_translations_p3.py)
+- EN/BG/PL имат пълни преводи; останалите 31 езика fallback към EN за body текстове ✅
 
 ---
 
@@ -470,8 +476,17 @@ GDPR Compliance Progress:
 [✅] Task 7  — T&C клиенти
 [✅] Task 8  — Regulamin доставчици
 [✅] Task 9  — Withdrawal Form PL ✅ (2026-05-12)
-[✅] Task 10 — Frontend страници
-[⬜] Task 11 — DSA страница
+[✅] Task 10 — Frontend правни страници ✅ (2026-05-20)
+- /[lang]/privacy ✅
+- /[lang]/cookies ✅
+- /[lang]/terms ✅
+- /[lang]/provider-terms ✅
+- /[lang]/withdrawal ✅
+- /[lang]/contact-dsa ✅
+- Footer линкове: всички 6 правни линка ✅
+- LegalModal ✅
+- T&C checkbox при регистрация ✅
+[✅] Task 11 — DSA Contact Point страница ✅ (2026-05-20)
 [⬜] Task 12 — Вътрешни docs
 [⬜] Task 13 — DPA подписване
 [⬜] Task 14 — Юридически преглед

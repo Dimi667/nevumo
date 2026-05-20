@@ -102,6 +102,9 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
             <Link href={`/${lang}/withdrawal`} className="text-gray-700 transition-colors hover:text-orange-600">
               {t('withdrawal_link', 'Withdrawal Form')}
             </Link>
+            <Link href={`/${lang}/contact-dsa`} className="text-gray-700 transition-colors hover:text-orange-600">
+              {t('contact_dsa_link', 'DSA Contact Point')}
+            </Link>
             <CookieSettingsLink lang={lang} />
           </div>
         )}

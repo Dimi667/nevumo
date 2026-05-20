@@ -512,9 +512,19 @@ Nevumo implements three main legal pages with a modal-based preview system:
    - Translations from `cookies` namespace
    - Includes GA4 Advanced Consent Mode v2 disclosure
 
+4. **DSA Contact Point** — `/[lang]/contact-dsa`
+   - Server component for DSA Article 11 compliance
+   - Translations from `contact_dsa` namespace
+   - EN/BG/PL full translations, others fallback to EN for body texts
+
 ### Footer Legal Links
+- privacy_policy_link → /[lang]/privacy ✅
+- cookies_link → /[lang]/cookies ✅
+- terms_link → /[lang]/terms ✅
 - provider_terms_link → /[lang]/provider-terms ✅
 - withdrawal_link → /[lang]/withdrawal ✅
+- contact_dsa_link → /[lang]/contact-dsa ✅
+- Footer contains 6 legal links: privacy, cookies, terms, provider-terms, withdrawal, contact-dsa ✅
 
 ### ?modal=true Mechanism
 All legal pages support a `?modal=true` query parameter for iframe embedding:
