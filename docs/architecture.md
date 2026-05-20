@@ -548,12 +548,49 @@ All legal pages support a `?modal=true` query parameter for iframe embedding:
   - Dedicated page for Google OAuth terms acceptance
   - Forces users to accept T&C before account creation
   - Client component: `OAuthTermsClient.tsx`
+  - select_role step shown only when nevumo_intent is missing
 
 - **OAuth Flow Updates**:
   - State parameter now carries: `lang|intent|category|city`
   - Backend checks if user exists before creating account
   - New providers automatically receive providers record
   - `OAUTH_REDIRECT_BASE` added to root .env and apps/api/config.py as configurable variable
+
+### GlobalHeader Component
+- **Location**: `apps/web/components/GlobalHeader.tsx`
+- **Purpose**: Site-wide header with logo and auth button
+- **Features**:
+  - Logo link to homepage with language context
+  - Auth button (AuthHeaderButtonWrapper) for login/signup
+  - Hides in iframe context via `window.self !== window.top` detection
+  - Client component with 'use client' directive
+  - Early return null when in iframe to prevent rendering
+- **Usage**: Imported directly in `apps/web/app/[lang]/layout.tsx` (no dynamic wrapper)
+
+### AuthHeaderButton Component
+- **Location**: `apps/web/components/AuthHeaderButtonWrapper.tsx`
+- **Purpose**: Auth button in GlobalHeader
+- **Features**:
+  - Hidden on auth routes (/auth/*) and dashboard routes (/client/dashboard, /provider/dashboard)
+  - Fixed positioning removed (no longer sticky/fixed)
+  - Conditionally rendered based on route path
+- **Usage**: Wrapped in GlobalHeader, rendered when `!hideAuthButton`
+
+### select_role Step Logic
+- **LoginClient**: `apps/web/app/[lang]/auth/LoginClient.tsx`
+  - select_role step shown only when nevumo_intent is missing from localStorage
+  - When intent exists (client or provider), skips role selection
+  - Intent cleared after successful auth (clearStoredIntent)
+- **OAuth Terms**: `apps/web/app/[lang]/auth/oauth-terms/page.tsx`
+  - select_role shown only when intent is missing in OAuth flow
+  - State parameter carries intent, used to determine if role selection needed
+
+### embed=1 Parameter
+- **Purpose**: Hides GlobalHeader via CSS for embedded views
+- **Implementation**: `data-global-header` attribute on header element
+- **CSS Rule**: `[data-global-header] { display: none; }` when embed=1
+- **Usage**: Provider pages support embed=1 query parameter for widget embedding
+- **Layout Integration**: `apps/web/app/[lang]/layout.tsx` checks embed parameter alongside modal
 
 ---
 

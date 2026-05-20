@@ -106,14 +106,6 @@ export default async function Homepage({ params }: PageProps) {
       />
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <Image 
-          src="/Nevumo_logo.svg" 
-          alt="Nevumo" 
-          width={120} 
-          height={36}
-          priority
-          className="mr-8 sm:mr-0"
-        />
         <div className="flex items-center gap-4 text-sm">
           <Link
             href={`/${normalizedLang}/${citySlug}`}

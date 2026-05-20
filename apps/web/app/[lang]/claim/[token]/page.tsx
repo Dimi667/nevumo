@@ -68,18 +68,6 @@ export default async function ClaimPage({ params }: PageProps) {
 
   return (
     <div className="bg-white">
-      {/* TOP BAR */}
-      <header className="border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center">
-          <a href={`/${normalizedLang}`} className="flex items-center">
-            <span className="text-2xl font-bold">
-              <span className="text-orange-500">N</span>
-              <span className="text-gray-900">evumo</span>
-            </span>
-          </a>
-        </div>
-      </header>
-
       {isValid && result.data ? (
         /* STATE A: Token valid */
         <main className="max-w-2xl mx-auto px-6 pt-6 pb-12">

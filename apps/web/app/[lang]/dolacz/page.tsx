@@ -22,22 +22,6 @@ export default async function DolaczPage({ params }: PageProps) {
 
   return (
     <div className="bg-white">
-      {/* TOP BAR */}
-      <header className="border-b border-gray-100 py-4 px-6">
-        <div className="flex justify-between items-center">
-          <span>
-            <span className="text-orange-500 font-bold text-xl">N</span>
-            <span className="font-bold text-xl text-gray-900">evumo</span>
-          </span>
-          <a
-            href={`/${lang}/warszawa/cleaning`}
-            className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            Szukasz usługi?
-          </a>
-        </div>
-      </header>
-
       {/* HERO SECTION */}
       <section className="bg-gradient-to-br from-orange-500 to-orange-600 text-white py-20 px-6 text-center">
         <div className="inline-block bg-white/20 rounded-full px-4 py-1 text-sm mb-6">

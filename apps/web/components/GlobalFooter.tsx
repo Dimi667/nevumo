@@ -96,7 +96,7 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
             <Link href={`/${lang}/terms`} className="text-gray-700 transition-colors hover:text-orange-600">
               {t('terms_link', 'Terms & Conditions')}
             </Link>
-            <Link href={`/${lang}/provider-terms`} className="text-gray-700 transition-colors hover:text-orange-600">
+            <Link href={`/${lang}/terms-provider`} className="text-gray-700 transition-colors hover:text-orange-600">
               {t('provider_terms_link', 'Terms for Providers')}
             </Link>
             <Link href={`/${lang}/withdrawal`} className="text-gray-700 transition-colors hover:text-orange-600">

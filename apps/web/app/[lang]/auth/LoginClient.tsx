@@ -59,7 +59,7 @@ function EyeOffIcon() {
 // Types
 // ---------------------------------------------------------------------------
 
-type AuthStep = 'initial' | 'login' | 'register' | 'forgot';
+type AuthStep = 'initial' | 'login' | 'register' | 'forgot' | 'select_role';
 
 interface AuthState {
   step: AuthStep;
@@ -72,6 +72,7 @@ interface AuthState {
   registerSuccess: boolean;
   socialToast: string | null;
   intent: 'client' | 'provider' | null;
+  _pendingGoogle?: boolean;
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -157,19 +158,18 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
     }
     
     // Claim token forces provider intent
+    const urlIntent = searchParams.get('intent') as 'client' | 'provider' | null;
+    const storedIntent = (stored.intent === 'client' || stored.intent === 'provider') ? stored.intent : null;
     const resolvedIntent: 'client' | 'provider' | null = claimToken
       ? 'provider'
-      : (searchParams.get('intent') as 'client' | 'provider') || 
-        stored.intent === 'client' || 
-        stored.intent === 'provider'
-        ? (searchParams.get('intent') as 'client' | 'provider') || stored.intent
-        : initialRole === 'provider'
-        ? 'provider'
-        : 'client';
+      : urlIntent ?? storedIntent ?? (initialRole === 'provider' ? 'provider' : null);
 
     const savedEmail = (urlEmail || sessionStorage.getItem(SESSION_EMAIL_KEY)) ?? '';
 
     setState(s => ({ ...s, intent: resolvedIntent, email: savedEmail }));
+    if (resolvedIntent && !storedIntent) {
+      localStorage.setItem('nevumo_intent', resolvedIntent);
+    }
     trackPageEvent('auth_view', 'auth', { intent: resolvedIntent ?? 'unknown' });
     
     // Fetch city ID if city slug is present in URL
@@ -204,7 +204,8 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
     try {
       const { exists } = await checkEmail(emailToCheck);
       trackPageEvent('auth_email_entered', 'auth', { is_new: String(!exists) });
-      const nextStep: AuthStep = exists ? 'login' : 'register';
+      const currentIntent = localStorage.getItem('nevumo_intent');
+      const nextStep: AuthStep = exists ? 'login' : (!currentIntent ? 'select_role' : 'register');
       trackPageEvent('auth_password_shown', 'auth', { step: nextStep });
       setState(s => ({ ...s, loading: false, step: nextStep, password: '' }));
     } catch {
@@ -247,7 +248,8 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
     try {
       const { exists } = await checkEmail(state.email);
       trackPageEvent('auth_email_entered', 'auth', { is_new: String(!exists) });
-      const nextStep: AuthStep = exists ? 'login' : 'register';
+      const currentIntent = localStorage.getItem('nevumo_intent');
+      const nextStep: AuthStep = exists ? 'login' : (!currentIntent ? 'select_role' : 'register');
       trackPageEvent('auth_password_shown', 'auth', { step: nextStep });
       setState(s => ({ ...s, loading: false, step: nextStep, password: '' }));
     } catch {
@@ -517,7 +519,8 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
             <div className="flex flex-col gap-[10px]">
               <button
                 onClick={() => {
-                  const intent = state.intent ?? 'client';
+                  const currentIntent = localStorage.getItem('nevumo_intent');
+                  const intent = currentIntent ?? '';
                   const category = searchParams.get('category') ?? '';
                   const city = citySlug ?? '';
                   window.location.href = `${API_BASE}/api/v1/auth/google?lang=${lang}&intent=${intent}&category=${category}&city=${city}`;
@@ -623,6 +626,64 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
             </form>
 
             {genericError}
+          </>
+        )}
+
+        {/* ---- SELECT ROLE STEP ---- */}
+        {state.step === 'select_role' && (
+          <>
+            {backBtn}
+            {emailPill}
+            <div className="mb-6 text-center">
+              <h2 className="text-[18px] font-bold text-[#171717] mb-1">
+                {t(authDict, 'select_role_title', 'How do you want to use Nevumo?')}
+              </h2>
+              <p className="text-sm text-gray-500">
+                {t(authDict, 'select_role_subtitle', 'Choose your account type — you can always change it later')}
+              </p>
+            </div>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  localStorage.setItem('nevumo_intent', 'client');
+                  if (state._pendingGoogle) {
+                    const category = searchParams.get('category') ?? '';
+                    const city = citySlug ?? '';
+                    window.location.href = `${API_BASE}/api/v1/auth/google?lang=${lang}&intent=client&category=${category}&city=${city}`;
+                  } else {
+                    setState(s => ({ ...s, intent: 'client', step: 'register', _pendingGoogle: false }));
+                  }
+                }}
+                className="w-full py-3 px-4 border-2 border-gray-200 hover:border-orange-400 rounded-xl text-left transition-colors"
+              >
+                <div className="font-semibold text-[15px] text-[#171717]">
+                  {t(authDict, 'select_role_client_title', 'I need a service')}
+                </div>
+                <div className="text-sm text-gray-500 mt-0.5">
+                  {t(authDict, 'select_role_client_subtitle', 'Find trusted professionals near you — fast and free')}
+                </div>
+              </button>
+              <button
+                onClick={() => {
+                  localStorage.setItem('nevumo_intent', 'provider');
+                  if (state._pendingGoogle) {
+                    const category = searchParams.get('category') ?? '';
+                    const city = citySlug ?? '';
+                    window.location.href = `${API_BASE}/api/v1/auth/google?lang=${lang}&intent=provider&category=${category}&city=${city}`;
+                  } else {
+                    setState(s => ({ ...s, intent: 'provider', step: 'register', _pendingGoogle: false }));
+                  }
+                }}
+                className="w-full py-3 px-4 border-2 border-gray-200 hover:border-orange-400 rounded-xl text-left transition-colors"
+              >
+                <div className="font-semibold text-[15px] text-[#171717]">
+                  {t(authDict, 'select_role_provider_title', 'I offer a service')}
+                </div>
+                <div className="text-sm text-gray-500 mt-0.5">
+                  {t(authDict, 'select_role_provider_subtitle', 'Get clients, grow your business and earn more')}
+                </div>
+              </button>
+            </div>
           </>
         )}
 

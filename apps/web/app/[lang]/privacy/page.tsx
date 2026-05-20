@@ -75,18 +75,6 @@ export default async function PrivacyPage({ params, searchParams }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* NAVBAR */}
-      {!isModal && (
-        <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-gray-100">
-        <Link href={`/${normalizedLang}`} className="inline-flex items-center">
-          <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
-        </Link>
-        <Link href={`/${normalizedLang}`} className="text-sm text-gray-600 transition-colors hover:text-orange-600">
-          {t(dict, 'back_to_home', 'Back to home')}
-        </Link>
-      </nav>
-      )}
-
       <main>
         <article className="max-w-3xl mx-auto px-4 py-12">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">{t(dict, 'heading', 'Privacy Policy')}</h1>

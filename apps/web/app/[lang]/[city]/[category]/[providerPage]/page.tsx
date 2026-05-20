@@ -120,17 +120,21 @@ export default async function Page(props: {
   // Embed mode - render widget only
   if (isEmbed) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4">
-        <div className="max-w-md mx-auto">
-          <ProviderWidget
-            provider={provider}
-            categoryName={categoryName}
-            categorySlug={category}
-            citySlug={city}
-            countryCode={cityCountryCode}
-          />
+      <>
+        <style>{`[data-global-header] { display: none !important; }`}</style>
+        <div className="min-h-screen bg-gray-50 p-4">
+          <div className="max-w-md mx-auto">
+            <ProviderWidget
+              provider={provider}
+              categoryName={categoryName}
+              categorySlug={category}
+              citySlug={city}
+              countryCode={cityCountryCode}
+              isEmbed={true}
+            />
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -151,6 +155,7 @@ export default async function Page(props: {
             categorySlug={category}
             citySlug={city}
             countryCode={cityCountryCode}
+            isEmbed={isEmbed}
           />
         </div>
       </div>

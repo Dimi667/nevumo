@@ -19,7 +19,10 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
   const email = searchParams.get('email') || '';
   const name = searchParams.get('name') || '';
   const oauth_id = searchParams.get('oauth_id') || '';
-  const intent = searchParams.get('intent') ?? 'client';
+  const rawIntent = searchParams.get('intent');
+  const [intent, setIntent] = useState<'client' | 'provider' | null>(
+    rawIntent === 'client' || rawIntent === 'provider' ? rawIntent : null
+  );
   const category = searchParams.get('category') || '';
   const city = searchParams.get('city') || '';
   
@@ -76,6 +79,42 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
   return (
     <div className="min-h-screen bg-[#f9f9f9] flex flex-col items-center justify-start pt-16 px-4 pb-16">
       <div className="w-full max-w-[400px] bg-white rounded-xl border border-gray-200 p-8">
+        {!intent && (
+          <div className="mb-6">
+            <h2 className="text-[18px] font-bold text-[#171717] mb-1 text-center">
+              {t(authDict, 'select_role_title', 'How do you want to use Nevumo?')}
+            </h2>
+            <p className="text-sm text-gray-500 text-center mb-4">
+              {t(authDict, 'select_role_subtitle', 'Choose your account type — you can always change it later')}
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => { localStorage.setItem('nevumo_intent', 'client'); setIntent('client'); }}
+                className="w-full py-3 px-4 border-2 border-gray-200 hover:border-orange-400 rounded-xl text-left transition-colors"
+              >
+                <div className="font-semibold text-[15px] text-[#171717]">
+                  {t(authDict, 'select_role_client_title', 'I need a service')}
+                </div>
+                <div className="text-sm text-gray-500 mt-0.5">
+                  {t(authDict, 'select_role_client_subtitle', 'Find trusted professionals near you — fast and free')}
+                </div>
+              </button>
+              <button
+                onClick={() => { localStorage.setItem('nevumo_intent', 'provider'); setIntent('provider'); }}
+                className="w-full py-3 px-4 border-2 border-gray-200 hover:border-orange-400 rounded-xl text-left transition-colors"
+              >
+                <div className="font-semibold text-[15px] text-[#171717]">
+                  {t(authDict, 'select_role_provider_title', 'I offer a service')}
+                </div>
+                <div className="text-sm text-gray-500 mt-0.5">
+                  {t(authDict, 'select_role_provider_subtitle', 'Get clients, grow your business and earn more')}
+                </div>
+              </button>
+            </div>
+          </div>
+        )}
+        {intent && (
+          <>
         {/* Nevumo Logo */}
         <div className="flex justify-center mb-6">
           <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
@@ -146,6 +185,8 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
           type={legalModalType}
           authDict={authDict}
         />
+          </>
+        )}
       </div>
     </div>
   );

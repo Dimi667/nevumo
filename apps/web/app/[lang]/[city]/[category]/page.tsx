@@ -725,11 +725,8 @@ export default async function CategoryPage({ params }: PageProps) {
       <div className="min-h-screen bg-white text-gray-900">
         <header className="border-b border-orange-100 bg-white/90 backdrop-blur">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-y-2">
-            <Link href={`/${lang}`} className="inline-flex items-center">
-              <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
-            </Link>
             <Link href={`/${lang}/auth?mode=register&role=provider&city=${city}&category=${category}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
-              <span className="flex flex-col items-end text-right text-sm font-semibold">
+              <span className="flex flex-col items-end text-right text-sm font-semibold md:flex-row md:items-center md:gap-1">
                 <span>{categoryT['nav_cta_line1'] || 'Do you offer'} {categoryName}?</span>
                 <span>{categoryT['nav_cta_line2'] || 'Join for free!'} →</span>
               </span>

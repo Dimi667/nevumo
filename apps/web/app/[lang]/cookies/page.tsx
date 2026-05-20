@@ -89,9 +89,6 @@ export default async function CookiesPage({ params }: PageProps) {
     <div className="min-h-screen bg-white">
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-gray-100">
-        <Link href={`/${normalizedLang}`} className="inline-flex items-center">
-          <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
-        </Link>
         <Link href={`/${normalizedLang}`} className="text-sm text-gray-600 transition-colors hover:text-orange-600">
           {t(cookiesT, 'back_to_home', 'Back to home')}
         </Link>

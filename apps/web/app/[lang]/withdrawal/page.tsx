@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
 import { t, type TranslationDict } from '@/lib/ui-translations';
 
@@ -146,9 +145,6 @@ export default function WithdrawalPage({ params }: PageProps) {
     return (
       <div className="min-h-screen bg-white">
         <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-gray-100">
-          <Link href={`/${lang}`} className="inline-flex items-center">
-            <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
-          </Link>
           <Link href={`/${lang}`} className="text-sm text-gray-600 transition-colors hover:text-orange-600">
             {t(dict, 'back_to_home', 'Back to home')}
           </Link>
@@ -181,9 +177,6 @@ export default function WithdrawalPage({ params }: PageProps) {
     <div className="min-h-screen bg-white">
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto border-b border-gray-100">
-        <Link href={`/${lang}`} className="inline-flex items-center">
-          <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
-        </Link>
         <Link href={`/${lang}`} className="text-sm text-gray-600 transition-colors hover:text-orange-600">
           {t(dict, 'back_to_home', 'Back to home')}
         </Link>

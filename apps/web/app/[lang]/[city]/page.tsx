@@ -147,9 +147,6 @@ export default async function CityPage({ params }: PageProps) {
       <div className="min-h-screen bg-white">
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <Link href={`/${lang}`} className="inline-flex items-center">
-          <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
-        </Link>
         <Link href={`/${lang}/auth?mode=register&role=provider`} className="text-sm text-gray-600 transition-colors hover:text-orange-600">
           {t(cityT, 'nav_link', 'Become a specialist')}
         </Link>

@@ -63,9 +63,6 @@ export default async function ChooseCityPage({ params }: PageProps) {
       />
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <Link href={`/${normalizedLang}`} className="inline-flex items-center">
-          <Image src="/Nevumo_logo.svg" alt="Nevumo" width={120} height={36} priority />
-        </Link>
         <Link href={`/${normalizedLang}/auth?mode=register&role=provider`} className="text-sm text-gray-600 transition-colors hover:text-orange-600">
           {t(dict, 'nav_link')}
         </Link>

@@ -17,6 +17,7 @@ interface ProviderWidgetProps {
   categorySlug: string;
   citySlug: string;
   countryCode?: string;
+  isEmbed?: boolean;
 }
 
 // Helper for compact relative time
@@ -179,6 +180,7 @@ export default function ProviderWidget({
   categorySlug,
   citySlug,
   countryCode,
+  isEmbed,
 }: ProviderWidgetProps) {
   const translations = provider.translations || {};
   const t = (key: string, replacements?: Record<string, string | number>, defaultValue?: string) => {
@@ -572,16 +574,18 @@ export default function ProviderWidget({
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
       <JsonLd data={serviceJsonLd} />
       {/* Logo */}
-      <div className="px-4 pt-6 pb-2 text-center">
-        <Image
-          src="/Nevumo_logo.svg"
-          alt="Nevumo"
-          width={120}
-          height={28}
-          className="mx-auto opacity-70 mb-4"
-          unoptimized
-        />
-      </div>
+      {isEmbed && (
+        <div className="px-4 pt-6 pb-2 text-center">
+          <Image
+            src="/Nevumo_logo.svg"
+            alt="Nevumo"
+            width={120}
+            height={28}
+            className="mx-auto opacity-70 mb-4"
+            unoptimized
+          />
+        </div>
+      )}
 
       {/* Provider Info */}
       <div className="px-6 pt-4 text-center">
