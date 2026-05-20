@@ -364,7 +364,7 @@ PL, EN, BG — задължително
 - Създадена страница /[lang]/contact-dsa ✅
 - Namespace: contact_dsa, 17 ключа, seed скриптове: seed_contact_dsa_p1.py + seed_contact_dsa_p2.py ✅
 - Footer линк: contact_dsa_link → /[lang]/contact-dsa ✅ (seed_footer_translations_p3.py)
-- EN/BG/PL имат пълни преводи; останалите 31 езика fallback към EN за body текстове ✅
+- Всички 34 езика имат пълни преводи; страницата е напълно завършена ✅
 
 ---
 
