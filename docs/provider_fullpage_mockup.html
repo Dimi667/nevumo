@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nevumo — Provider Full Page Mockup</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.x/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f9fafb;color:#111827;font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 24px}
+.bc{display:flex;align-items:center;gap:6px;font-size:12px;color:#6b7280;margin-bottom:16px}
+.bc a{color:#f97316;text-decoration:none}
+.tabs{display:flex;gap:8px;margin-bottom:16px}
+.tab{font-size:12px;padding:5px 14px;border:1px solid #e5e7eb;border-radius:20px;cursor:pointer;color:#6b7280;background:#fff}
+.tab.on{background:#111827;color:#fff;border-color:#111827}
+.pg{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+.left{display:flex;flex-direction:column;gap:14px}
+/* Cards */
+.card{background:#fff;border:1px solid #f3f4f6;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);overflow:hidden}
+.card-body{padding:18px 22px}
+.sec-title{font-size:13px;font-weight:600;color:#111827;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.sec-icon{color:#9ca3af;font-size:15px}
+/* Hero */
+.hero-cover{height:200px;overflow:hidden;display:none}
+.hero-cover img{width:100%;height:100%;object-fit:cover}
+.hero-body{padding:18px 22px}
+.hero-row{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
+.av{width:72px;height:72px;border-radius:50%;background:#fed7aa;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;color:#c2410c;border:3px solid #fff;flex-shrink:0}
+.av img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.hero-name{font-size:20px;font-weight:600;color:#111827}
+.hero-cat{font-size:13px;color:#6b7280;margin-top:2px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 10px;border-radius:20px;margin-top:8px}
+.b-new{background:#fef3c7;color:#92400e}
+.b-verified{background:#dcfce7;color:#166534}
+.b-top{background:#fef9c3;color:#854d0e}
+.stars-row{display:flex;align-items:center;gap:3px;font-size:12px;color:#6b7280;margin-top:8px}
+.si{color:#f97316}
+.meta-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #f3f4f6;margin-top:14px;padding-top:14px}
+.mi{display:flex;flex-direction:column;align-items:center;gap:2px;padding:0 6px}
+.mi+.mi{border-left:1px solid #f3f4f6}
+.mv{font-size:16px;font-weight:600;color:#111827}
+.ml{font-size:10px;color:#9ca3af;text-align:center}
+.action-row{display:flex;gap:8px;margin-top:12px}
+.abtn{font-size:11px;padding:5px 12px;border:1px solid #e5e7eb;border-radius:8px;color:#6b7280;cursor:pointer;background:#fff;display:inline-flex;align-items:center;gap:4px}
+/* Gallery */
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.gi{border-radius:8px;background:#f3f4f6;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:11px;color:#9ca3af;overflow:hidden}
+.gi.main{grid-column:span 2;grid-row:span 2;aspect-ratio:auto;min-height:140px}
+.gi img{width:100%;height:100%;object-fit:cover}
+/* About */
+.about-text{font-size:13px;color:#4b5563;line-height:1.7}
+.read-more{font-size:12px;color:#f97316;cursor:pointer;margin-top:6px;display:inline-block}
+/* Services */
+.svc-list{display:flex;flex-direction:column;gap:8px}
+.svc-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#f9fafb;border-radius:8px;border:1px solid transparent}
+.svc-item:hover{border-color:#e5e7eb}
+.svc-name{font-size:13px;font-weight:500;color:#374151}
+.svc-desc{font-size:11px;color:#9ca3af;margin-top:2px}
+.svc-price{font-size:13px;font-weight:600;color:#111827;white-space:nowrap}
+/* Reviews */
+.rev-overview{display:flex;align-items:center;gap:18px;padding:14px;background:#f9fafb;border-radius:8px;margin-bottom:12px}
+.big-r{font-size:32px;font-weight:700;color:#111827;line-height:1}
+.rbar{display:flex;align-items:center;gap:5px;font-size:10px;color:#9ca3af}
+.bt{width:80px;height:3px;background:#e5e7eb;border-radius:2px;overflow:hidden}
+.bf{height:100%;background:#f97316;border-radius:2px}
+.rev-item{padding:12px 14px;background:#f9fafb;border-radius:8px;margin-bottom:8px}
+.rav{width:32px;height:32px;border-radius:50%;background:#e0e7ff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#3730a3}
+.rname{font-size:12px;font-weight:500;color:#111827}
+.rdate{font-size:10px;color:#9ca3af}
+.rtext{font-size:12px;color:#4b5563;line-height:1.6;margin-top:6px}
+/* Panel */
+.panel{background:#fff;border:1px solid #f3f4f6;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);overflow:hidden;position:sticky;top:16px}
+.phdr{padding:14px 18px;border-bottom:1px solid #f3f4f6}
+.ptitle{font-size:14px;font-weight:600;color:#111827}
+.psub{font-size:11px;color:#9ca3af;margin-top:2px}
+.pbody{padding:14px 18px;display:flex;flex-direction:column;gap:12px}
+.flbl{font-size:11px;font-weight:500;color:#6b7280;margin-bottom:4px}
+.fi{width:100%;padding:9px 12px;border:1px solid #e5e7eb;border-radius:12px;font-size:13px;background:#fff;color:#111827;outline:none}
+.fi:focus{border-color:#f97316;box-shadow:0 0 0 3px rgba(249,115,22,0.1)}
+.fta{width:100%;padding:9px 12px;border:1px solid #e5e7eb;border-radius:12px;font-size:13px;background:#fff;color:#111827;height:70px;resize:none;outline:none;font-family:inherit}
+.fta:focus{border-color:#f97316;box-shadow:0 0 0 3px rgba(249,115,22,0.1)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11px;padding:5px 12px;border:1px solid #e5e7eb;border-radius:20px;cursor:pointer;color:#6b7280;background:#fff;transition:all .12s;user-select:none}
+.chip:hover{border-color:#f97316;color:#f97316}
+.chip.active{background:#f97316;color:#fff;border-color:#f97316}
+.chip-hint{font-size:11px;color:#9ca3af;margin-top:4px}
+.proof{background:#f9fafb;border-radius:8px;padding:8px 12px;font-size:12px;color:#4b5563;display:flex;align-items:center;gap:6px}
+.proof.demand{background:#dcfce7;color:#166534}
+.cta{width:100%;padding:14px;background:#f97316;border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s}
+.cta:hover{background:#ea6c0a}
+.trust-row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid #f3f4f6}
+.ti2{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 6px;text-align:center;font-size:10px;color:#9ca3af}
+.ti2+.ti2{border-left:1px solid #f3f4f6}
+.ti2 i{font-size:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="tabs">
+  <span class="tab on" onclick="setV('no')">Без галерия</span>
+  <span class="tab" onclick="setV('yes')">С галерия</span>
+  <span class="tab" onclick="setV('new')">Нов доставчик</span>
+  <span class="tab" onclick="setV('top')">Топ специалист</span>
+</div>
+
+<div class="bc">
+  <a href="#">Варшава</a><span>›</span>
+  <a href="#">Масаж</a><span>›</span>
+  <span>Maria Kowalska</span>
+</div>
+
+<div class="pg">
+  <div class="left">
+
+    <!-- HERO -->
+    <div class="card">
+      <div class="hero-cover" id="cover">
+        <img src="https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?w=900&q=80" alt="Корица">
+      </div>
+      <div class="hero-body">
+        <div class="hero-row">
+          <div class="av" id="av-initials">MK</div>
+          <div>
+            <div class="hero-name" id="prov-name">Maria Kowalska</div>
+            <div class="hero-cat">Масаж • Варшава</div>
+            <span class="badge b-verified" id="badge-el"><i class="ti ti-circle-check"></i> Верифициран специалист</span>
+            <div class="stars-row" id="stars-row">
+              <i class="ti ti-star-filled si"></i>
+              <i class="ti ti-star-filled si"></i>
+              <i class="ti ti-star-filled si"></i>
+              <i class="ti ti-star-filled si"></i>
+              <i class="ti ti-star si"></i>
+              <strong style="color:#111827;font-size:12px;margin-left:4px">4.8</strong>
+              <span style="margin-left:3px">(23 ревюта)</span>
+            </div>
+          </div>
+        </div>
+        <div class="meta-grid" id="meta-grid">
+          <div class="mi"><span class="mv" id="m-jobs">127</span><span class="ml">Завършени</span></div>
+          <div class="mi"><span class="mv">4</span><span class="ml">Услуги</span></div>
+          <div class="mi"><span class="mv">3</span><span class="ml">Града</span></div>
+          <div class="mi"><span class="mv">98%</span><span class="ml">Отговор</span></div>
+        </div>
+        <div class="action-row">
+          <button class="abtn"><i class="ti ti-share" style="font-size:13px"></i> Сподели</button>
+          <button class="abtn"><i class="ti ti-qrcode" style="font-size:13px"></i> QR код</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="card" id="gallery-card" style="display:none">
+      <div class="card-body">
+        <div class="sec-title"><i class="ti ti-photo sec-icon"></i> Галерия</div>
+        <div class="gallery-grid">
+          <div class="gi main"><img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=600&q=80" alt="1"></div>
+          <div class="gi"><img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=300&q=80" alt="2"></div>
+          <div class="gi"><img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=300&q=80" alt="3"></div>
+          <div class="gi"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=300&q=80" alt="4"></div>
+          <div class="gi"><img src="https://images.unsplash.com/photo-1576618148400-f54bed99fcfd?w=300&q=80" alt="5"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <div class="card">
+      <div class="card-body">
+        <div class="sec-title"><i class="ti ti-info-circle sec-icon"></i> За специалиста</div>
+        <div class="about-text">Имам 8 години опит в масажа. Специализирам в спортен масаж, релаксиращ масаж и дълбока тъканна терапия. Работя с клиенти от всички възрасти и адаптирам всеки сеанс спрямо нуждите. Сертифициран от Полската асоциация по масаж.</div>
+        <span class="read-more">Прочети повече ›</span>
+      </div>
+    </div>
+
+    <!-- SERVICES -->
+    <div class="card">
+      <div class="card-body">
+        <div class="sec-title"><i class="ti ti-list-check sec-icon"></i> Услуги и цени</div>
+        <div class="svc-list">
+          <div class="svc-item">
+            <div><div class="svc-name">Спортен масаж (60 мин.)</div><div class="svc-desc">Отпускане на мускулно напрежение след тренировка</div></div>
+            <span class="svc-price">80 zł</span>
+          </div>
+          <div class="svc-item">
+            <div><div class="svc-name">Релакс масаж (90 мин.)</div><div class="svc-desc">Пълно отпускане на тялото и ума</div></div>
+            <span class="svc-price">110 zł</span>
+          </div>
+          <div class="svc-item">
+            <div><div class="svc-name">Дълбока тъкан</div><div class="svc-desc">При хронично мускулно напрежение</div></div>
+            <span class="svc-price">95 zł</span>
+          </div>
+          <div class="svc-item">
+            <div><div class="svc-name">Лимфен дренаж</div><div class="svc-desc">Подобряване на лимфната циркулация</div></div>
+            <span class="svc-price">По запитване</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="card" id="reviews-card">
+      <div class="card-body">
+        <div class="sec-title"><i class="ti ti-star sec-icon"></i> Ревюта (23)</div>
+        <div class="rev-overview">
+          <div>
+            <div class="big-r">4.8</div>
+            <div class="stars-row" style="margin-top:6px">
+              <i class="ti ti-star-filled si"></i><i class="ti ti-star-filled si"></i>
+              <i class="ti ti-star-filled si"></i><i class="ti ti-star-filled si"></i>
+              <i class="ti ti-star si"></i>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div class="rbar"><span style="min-width:18px">5★</span><div class="bt"><div class="bf" style="width:78%"></div></div><span>18</span></div>
+            <div class="rbar"><span style="min-width:18px">4★</span><div class="bt"><div class="bf" style="width:17%"></div></div><span>4</span></div>
+            <div class="rbar"><span style="min-width:18px">3★</span><div class="bt"><div class="bf" style="width:4%"></div></div><span>1</span></div>
+            <div class="rbar"><span style="min-width:18px">2★</span><div class="bt"><div class="bf" style="width:0%"></div></div><span>0</span></div>
+            <div class="rbar"><span style="min-width:18px">1★</span><div class="bt"><div class="bf" style="width:0%"></div></div><span>0</span></div>
+          </div>
+        </div>
+        <div class="rev-item">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="rav">АИ</div>
+              <div><div class="rname">Анна И.</div><div class="rdate">15 май 2026</div></div>
+            </div>
+            <div style="color:#f97316;font-size:12px">★★★★★</div>
+          </div>
+          <div class="rtext">Страхотен масаж! Maria е много професионална и внимателна. Определено ще се върна.</div>
+        </div>
+        <div class="rev-item">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="rav" style="background:#fce7f3;color:#9d174d">ПК</div>
+              <div><div class="rname">Петър К.</div><div class="rdate">3 май 2026</div></div>
+            </div>
+            <div style="color:#f97316;font-size:12px">★★★★</div>
+          </div>
+          <div class="rtext">Добра услуга, спортният масаж помогна много след тренировка. Препоръчвам.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div>
+    <div class="panel">
+      <div class="phdr">
+        <div class="ptitle" id="panel-title">Изпратете заявка на Maria</div>
+        <div class="psub">✓ Безплатно • Без ангажимент</div>
+      </div>
+      <div class="pbody">
+        <div>
+          <div class="flbl">Изберете услуга</div>
+          <div class="chips">
+            <span class="chip" onclick="selChip(this)">Спортен масаж</span>
+            <span class="chip active" onclick="selChip(this)">Релакс масаж</span>
+            <span class="chip" onclick="selChip(this)">Дълбока тъкан</span>
+          </div>
+          <div class="chip-hint">Или изпратете обща заявка ↓</div>
+        </div>
+        <div>
+          <div class="flbl">Телефон <span style="color:#ef4444">*</span></div>
+          <input class="fi" type="tel" placeholder="Вашият телефон">
+        </div>
+        <div>
+          <div class="flbl">Бележки</div>
+          <textarea class="fta" placeholder="Опишете накратко какво ви трябва..."></textarea>
+        </div>
+        <div class="proof demand" id="proof-box">
+          <i class="ti ti-users" style="font-size:15px"></i>
+          <span id="proof-text">39 заявки за масаж в Варшава тази година</span>
+        </div>
+        <button class="cta">Заявете услуга</button>
+      </div>
+      <div class="trust-row">
+        <div class="ti2"><i class="ti ti-shield-check"></i>Верифициран</div>
+        <div class="ti2"><i class="ti ti-ban"></i>Без такса</div>
+        <div class="ti2"><i class="ti ti-message-circle"></i>Директен контакт</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function setV(v){
+  var tabs=document.querySelectorAll('.tab');
+  tabs.forEach(function(t){t.classList.remove('on')});
+  event.target.classList.add('on');
+  var cover=document.getElementById('cover');
+  var gallery=document.getElementById('gallery-card');
+  var badge=document.getElementById('badge-el');
+  var stars=document.getElementById('stars-row');
+  var meta=document.getElementById('meta-grid');
+  var jobs=document.getElementById('m-jobs');
+  var proof=document.getElementById('proof-box');
+  var proofTxt=document.getElementById('proof-text');
+  var reviews=document.getElementById('reviews-card');
+  if(v==='no'){
+    cover.style.display='none';
+    gallery.style.display='none';
+    badge.className='badge b-verified';
+    badge.innerHTML='<i class="ti ti-circle-check"></i> Верифициран специалист';
+    stars.style.display='flex';
+    jobs.textContent='127';
+    proof.className='proof demand';
+    proofTxt.textContent='39 заявки за масаж в Варшава тази година';
+    reviews.style.display='block';
+  } else if(v==='yes'){
+    cover.style.display='block';
+    gallery.style.display='block';
+    badge.className='badge b-verified';
+    badge.innerHTML='<i class="ti ti-circle-check"></i> Верифициран специалист';
+    stars.style.display='flex';
+    jobs.textContent='127';
+    proof.className='proof demand';
+    proofTxt.textContent='39 заявки за масаж в Варшава тази година';
+    reviews.style.display='block';
+  } else if(v==='new'){
+    cover.style.display='none';
+    gallery.style.display='none';
+    badge.className='badge b-new';
+    badge.innerHTML='⚡ Нов в Nevumo — отговаря бързо';
+    stars.style.display='none';
+    jobs.textContent='0';
+    proof.className='proof';
+    proofTxt.textContent='✓ Безплатна заявка • Без ангажимент • Директен контакт';
+    reviews.style.display='none';
+  } else if(v==='top'){
+    cover.style.display='block';
+    gallery.style.display='block';
+    badge.className='badge b-top';
+    badge.innerHTML='★ Топ специалист в Варшава';
+    stars.style.display='flex';
+    jobs.textContent='247';
+    proof.className='proof demand';
+    proofTxt.textContent='★★★★★ "Перфектен масаж!" — Анна И.';
+    reviews.style.display='block';
+  }
+}
+function selChip(el){
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active')});
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

@@ -2327,4 +2327,38 @@ python scripts/seed_review_translations.py
 - Explicit user consent required (opt-in)
 - No data persistence
 - Transparent purpose explanation
+
+---
+
+### Provider Full Page & Badge система (May 21, 2026)
+
+#### Badge система (verification_level)
+- Нова колона `verification_level INTEGER DEFAULT 0` в `providers` таблицата
+- Функция `calculate_verification_level(provider)` в `apps/api/services/provider_service.py`
+- Три нива: 0 = Нов (amber), 1 = Верифициран (green), 2 = Топ специалист (yellow)
+- Автоматично се преизчислява при: `PATCH /profile`, `POST /services`, `PATCH /leads/{id}` (status=done)
+- Badge downgrade работи в реално време — не само нагоре
+
+#### Нови компоненти
+- `apps/web/components/provider/ProviderFullPage.tsx` — Server Component, двуколонен десктоп layout (1fr + 340px sticky), едноколонен мобилен
+- `apps/web/components/provider/AboutSection.tsx` — Client Component, read_more toggle
+- `apps/web/components/provider/LeadPanel.tsx` — Client Component, sticky форма за заявка с ServiceChips, SocialProofSignal каскада и CTA
+- Условен render в `page.tsx`: `?embed=1` → ProviderWidget (непроменен), иначе → ProviderFullPage
+
+#### Gallery backend
+- Нова таблица `provider_images` (id, provider_id, url, position, created_at)
+- Endpoints: GET/POST/DELETE /api/v1/provider/images, PATCH /api/v1/provider/images/reorder
+- Storage: `uploads/provider_gallery/{provider_id}/{image_id}.webp`
+- Position 0 = корица (cover) в hero на ProviderFullPage
+- Cover image: фиксирана височина h-48, object-cover, object-top
+- Gallery секция: показва gallery.slice(1) — без корицата; видима само ако gallery.length > 1
+
+#### Category page badge актуализация
+- `apps/web/app/[lang]/[city]/[category]/page.tsx` актуализиран да ползва `verification_level` (0/1/2) вместо `is_verified`
+- Консистентни цветове: amber-100/text-amber-700 (Нов), green-100/text-green-700 (Верифициран), yellow-100/text-yellow-700 (Топ)
+
+#### Translation keys добавени
+- namespace `widget`: badge_new_provider, badge_verified, badge_top_specialist
+- namespace `provider_page`: section_gallery, section_about, section_services, section_reviews, read_more, read_less, completed_jobs, meta_services, meta_cities, reviews_count, request_panel_title, request_panel_free, request_panel_no_commitment, or_general_request, phone_placeholder, notes_placeholder, cta_button, trust_verified, trust_free, trust_direct
+- Seed скрипт: apps/api/scripts/seed_provider_page_translations.py
 - Easy opt-out mechanism

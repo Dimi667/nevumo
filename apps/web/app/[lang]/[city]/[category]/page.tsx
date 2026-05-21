@@ -45,6 +45,7 @@ interface EnrichedProvider {
   slug: string;
   businessName: string;
   rating: number;
+  verificationLevel: number;
   profileImageUrl: string | null;
   description: string | null;
   jobsCompleted: number;
@@ -108,14 +109,41 @@ function formatPrice(
   return price;
 }
 
+function getBadge(
+  verificationLevel: number,
+  cityName: string,
+  t: Record<string, string>
+): { label: string; className: string } {
+  if (verificationLevel === 2) {
+    return {
+      label: (t['widget.badge_top_specialist'] ?? '★ Топ специалист в {city}').replace('{city}', cityName),
+      className: 'bg-yellow-100 text-yellow-700',
+    };
+  }
+  if (verificationLevel === 1) {
+    return {
+      label: t['widget.badge_verified'] ?? '✓ Верифициран',
+      className: 'bg-green-100 text-green-700',
+    };
+  }
+  return {
+    label: t['widget.badge_new_provider'] ?? '⚡ Нов в Nevumo',
+    className: 'bg-amber-100 text-amber-800',
+  };
+}
+
 function ProviderCard({
   provider,
   href,
   texts,
+  cityName,
+  widgetT,
 }: {
   provider: EnrichedProvider;
   href: string;
   texts: ProviderCardTexts;
+  cityName: string;
+  widgetT: Record<string, string>;
 }) {
   const hasLeads = provider.leadsReceived > 0;
   const hasJobs = provider.jobsCompleted > 0;
@@ -124,11 +152,7 @@ function ProviderCard({
     isWithin90Days(provider.latestLeadPreviewCreatedAt) &&
     provider.latestLeadPreviewClientName !== null;
 
-  const providerState: 1 | 2 | 3 | 4 =
-    hasRating && hasJobs ? 4
-    : hasJobs ? 3
-    : hasLeads ? 2
-    : 1;
+  const badge = getBadge(provider.verificationLevel, cityName, widgetT);
 
   return (
     <article className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
@@ -183,62 +207,29 @@ function ProviderCard({
             );
           })()}
 
-          {providerState === 1 && (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
-              <span className="rounded-full bg-orange-50 px-3 py-1.5 text-orange-700">
-                ✓ {texts.verifiedSpecialist} • {texts.freeNoObligation}
-              </span>
-              <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✓ {texts.directContact}
-              </span>
-            </div>
-          )}
-
-          {providerState === 2 && (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
-              <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ⚡ {provider.leadsReceived} {texts.peopleSought}
-              </span>
-              <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✓ {texts.directContact}
-              </span>
-            </div>
-          )}
-
-          {providerState === 3 && (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
-              <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✅ {provider.jobsCompleted} {texts.jobsCompleted}
-              </span>
-              {hasRecentLead && (
-                <span className="rounded-full bg-gray-50 px-3 py-1.5 truncate">
-                  ⚡ {provider.latestLeadPreviewClientName} {texts.recentlyRequested}
-                </span>
-              )}
-              <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✓ {texts.directContact}
-              </span>
-            </div>
-          )}
-
-          {providerState === 4 && (
-            <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
+          <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
+            <span className={`rounded-full px-3 py-1.5 ${badge.className}`}>
+              {badge.label}
+            </span>
+            {hasRating && hasJobs && (
               <span className="rounded-full bg-amber-50 px-3 py-1.5 text-amber-700">
                 ⭐ {provider.rating.toFixed(1)} • {provider.reviewCount} {texts.reviews}
               </span>
+            )}
+            {hasJobs && (
               <span className="rounded-full bg-gray-50 px-3 py-1.5">
                 ✅ {provider.jobsCompleted} {texts.jobsCompleted}
               </span>
-              {hasRecentLead && (
-                <span className="rounded-full bg-gray-50 px-3 py-1.5 truncate">
-                  ⚡ {provider.latestLeadPreviewClientName} {texts.recentlyRequested}
-                </span>
-              )}
-              <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✓ {texts.directContact}
+            )}
+            {hasRecentLead && (
+              <span className="rounded-full bg-gray-50 px-3 py-1.5 truncate">
+                ⚡ {provider.latestLeadPreviewClientName} {texts.recentlyRequested}
               </span>
-            </div>
-          )}
+            )}
+            <span className="rounded-full bg-gray-50 px-3 py-1.5">
+              ✓ {texts.directContact}
+            </span>
+          </div>
 
           <Link
             href={href}
@@ -449,6 +440,7 @@ async function getEnrichedProviders(
     slug: provider.slug,
     businessName: provider.business_name,
     rating: provider.rating,
+    verificationLevel: provider.verification_level ?? 0,
     profileImageUrl: provider.profile_image_url ?? null,
     description: provider.description ?? null,
     jobsCompleted: provider.jobs_completed ?? 0,
@@ -486,6 +478,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const homepageT = await fetchTranslations(lang, 'homepage');
   const cityT = await fetchTranslations(lang, 'city');
   const cookieT = await fetchTranslations(lang, 'cookie_banner');
+  const widgetT = await fetchTranslations(lang, 'widget');
   const apiSlug = getApiSlug(category);
   const catKey = getCategoryTranslationKey(category);
 
@@ -780,7 +773,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <>
                   {visibleProviders.map((provider) => {
                     const providerHref = `/${lang}/${city}/${category}/${provider.slug}`;
-                    return <ProviderCard key={provider.id} provider={provider} href={providerHref} texts={providerCardTexts} />;
+                    return <ProviderCard key={provider.id} provider={provider} href={providerHref} texts={providerCardTexts} cityName={cityName} widgetT={widgetT} />;
                   })}
                   {hiddenCount > 0 && (
                     <details className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
@@ -790,7 +783,7 @@ export default async function CategoryPage({ params }: PageProps) {
                       <div className="mt-4 space-y-4">
                         {hiddenProviders.map((provider) => {
                           const providerHref = `/${lang}/${city}/${category}/${provider.slug}`;
-                          return <ProviderCard key={provider.id} provider={provider} href={providerHref} texts={providerCardTexts} />;
+                          return <ProviderCard key={provider.id} provider={provider} href={providerHref} texts={providerCardTexts} cityName={cityName} widgetT={widgetT} />;
                         })}
                       </div>
                     </details>

@@ -70,7 +70,8 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token) WHERE cl
 
 ### Промени в providers таблица (May 21, 2026)
 - Добавена колона: `verification_level INTEGER NOT NULL DEFAULT 0`
-- Index: `idx_providers_verification_level`
+- Index: `CREATE INDEX idx_providers_verification_level ON providers(verification_level);`
+- Изчислява се автоматично от `calculate_verification_level()` при всяка промяна на профила
 
 ---
 

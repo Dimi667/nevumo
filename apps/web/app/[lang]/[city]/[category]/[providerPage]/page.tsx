@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 import { getProviderBySlug, getCategories, resolveSlug, getCityBySlug } from '@/lib/api';
 import ProviderWidget from '@/components/ProviderWidget';
+import ProviderFullPage from '@/components/provider/ProviderFullPage';
 import ClaimProfileBanner from '@/components/ClaimProfileBanner';
 import { generateHreflangAlternates, generateLocalBusinessJsonLd } from '@/lib/seo';
 import { JsonLd } from '@/components/JsonLd';
@@ -138,27 +139,22 @@ export default async function Page(props: {
     );
   }
 
-  // Full page mode (existing logic)
+  // Full page mode - render ProviderFullPage
   return (
     <>
       <JsonLd data={generateLocalBusinessJsonLd(provider, category, cityName, cityCountryCode)} />
-      <div className="min-h-screen bg-gray-50 py-6 px-4">
-        <div className="max-w-md mx-auto">
-          {/* Claim profile banner for unclaimed providers */}
-          {provider.is_claimed === false && lang === 'pl' && (
-            <ClaimProfileBanner businessName={provider.business_name} lang={lang} />
-          )}
-
-          <ProviderWidget
-            provider={provider}
-            categoryName={categoryName}
-            categorySlug={category}
-            citySlug={city}
-            countryCode={cityCountryCode}
-            isEmbed={isEmbed}
-          />
-        </div>
-      </div>
+      <ProviderFullPage
+        provider={{
+          ...provider,
+          city_name: cityName,
+          category_name: categoryName,
+          category_slug: category,
+          city_slug: city,
+          lang,
+        }}
+        translations={{}}
+        lang={lang}
+      />
     </>
   );
 }

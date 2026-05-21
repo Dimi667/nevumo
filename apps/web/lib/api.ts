@@ -112,6 +112,7 @@ export interface ProviderListItem {
   business_name: string;
   rating: number;
   verified: boolean;
+  verification_level: number;
   slug: string;
   profile_image_url: string | null;
   description: string | null;
