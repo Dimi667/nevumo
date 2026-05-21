@@ -127,3 +127,9 @@ export interface ProviderSlugHistoryItem {
   ip_address: string | null;
   user_agent: string | null;
 }
+
+export interface GalleryImage {
+  id: number;
+  url: string;
+  position: number;
+}

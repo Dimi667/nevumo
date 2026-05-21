@@ -165,6 +165,12 @@ provider_images_dir = os.path.join(settings.UPLOADS_DIR, "provider_images")
 os.makedirs(provider_images_dir, exist_ok=True)
 app.mount("/api/v1/static/provider_images", StaticFiles(directory=provider_images_dir), name="provider_images")
 
+app.mount(
+    "/api/v1/static/provider_gallery",
+    StaticFiles(directory=os.path.join(settings.UPLOADS_DIR, "provider_gallery"), check_dir=False),
+    name="provider_gallery",
+)
+
 
 # Keep existing translations endpoint
 @app.get("/translations/{lang}")

@@ -365,6 +365,20 @@ This separation ensures that:
   - When keys are duplicated with `row_bg()` (incomplete translations) in one script and full translations in another, executing the incomplete script will overwrite the good translations with English fallback text for non-EN/BG languages
   - Solution: Remove duplicate keys from the script that uses `row_bg()` and let the specialized script handle those keys with full 34-language translations
 - **Mobile Language Dropdown Fix (May 15, 2026)**: Fixed language dropdown in GlobalFooter component that was going off-screen on mobile devices (375px width). Changed positioning from `right-0` to responsive `left-0 md:right-0 md:left-auto` to ensure dropdown stays within viewport bounds on small screens while maintaining right alignment on desktop.
+- **Header/Footer Visibility Logic (May 21, 2026)** — COMPLETE:
+  - **PROBLEM**: Header and footer visibility was inconsistent in dashboard pages. Server-side layout controlled initial render, but client-side navigation caused race conditions where header/footer wouldn't appear or disappear correctly.
+  - **SOLUTION**:
+    - Created shared `isDashboardPath()` utility in `apps/web/lib/dashboard-path.ts` for centralized dashboard path detection (`/client/dashboard/*` and `/provider/dashboard/*`)
+    - Modified `apps/web/app/[lang]/layout.tsx`: Removed server-side `!isDashboard` check, now relies on client-side control only (kept modal/embed checks)
+    - Modified `apps/web/components/SmartGlobalFooter.tsx`: Removed dashboard-specific hiding logic - footer now visible on all pages
+    - Modified `apps/web/components/GlobalHeader.tsx`: Added state-based re-rendering with useEffect and `forceUpdate` state to handle navigation changes
+    - **Key Decision**: Server-side layout doesn't control dashboard header visibility anymore - only client-side logic in GlobalHeader (modal/embed checks still apply in layout)
+  - **Logout Redirect Fix (May 21, 2026)** — COMPLETE:
+    - **PROBLEM**: Logout redirected to auth page instead of home page, and localStorage race condition prevented proper session clearing
+    - **SOLUTION**:
+      - Changed logout redirect from `/${lang}/auth` to `/${lang}` in `apps/web/components/dashboard/DashboardTopBar.tsx` and `apps/web/app/[lang]/client/dashboard/layout.tsx`
+      - Added `requestAnimationFrame()` after `clearAuth()` to ensure localStorage changes are processed before navigation
+  - **Result**: Header is hidden in dashboard pages, visible on home pages and non-dashboard pages, footer visible on all pages, logout redirects to home page with proper header visibility, works with all login methods (Google OAuth, email/password)
 - **City Page CTA Link Enhancement (May 20, 2026)** — COMPLETE:
   - **PROBLEM:** City pages had a simple "Become a specialist" link that didn't pass city information for pre-population during registration, unlike category pages which passed both city and category.
   - **SOLUTION:**
@@ -429,6 +443,50 @@ This separation ensures that:
     - Validation: service_description, contract_date, consumer_name, consumer_address, email (required), account_id (optional)
     - Seed script: `seed_withdrawal_translations_4.py` (19 keys × 34 languages = 646 rows)
   - **Namespace**: `withdrawal` with keys: page_title, page_description, label_service_description, label_contract_date, label_consumer_name, label_consumer_address, label_account_id, label_email, label_submission_date, optional, cancel, submit, submitting, error_* (7 error keys), success_title, success_message, back_to_home
+- **Provider Full Page — Задачи A, B, C (May 21, 2026)** — COMPLETE:
+  - **Задача A — Badge логика + DB migration:**
+    - Нова колона `verification_level INT DEFAULT 0` в таблица `providers`
+    - Alembic migration: `add_verification_level`
+    - Функция `calculate_verification_level(provider, db)` в `provider_service.py`
+      - Level 0: Нов (default)
+      - Level 1: Верифициран (1+ завършени заявки + пълен профил)
+      - Level 2: Топ специалист (10+ завършени заявки + рейтинг ≥ 4.5)
+    - Извиква се при: `update_provider_profile()`, `add_service()`, `change_lead_status()` (status=done)
+    - `verification_level` добавен в `ProviderDetail` и `ProviderListItem` schemas
+    - Backfill скрипт: `apps/api/scripts/backfill_verification_levels.py`
+    - Result: 152 providers Level 0, 1 provider Level 2
+  - **Задача B — Multi-image галерия:**
+    - Нова таблица `provider_images` (id, provider_id, url, position, created_at)
+    - Index: `idx_provider_images_provider_id`
+    - Alembic migration: `add_provider_gallery`
+    - Нов SQLAlchemy модел `ProviderImage` в `models.py`
+    - Relationship `gallery_images` в `Provider` модела
+    - Нов StaticFiles mount: `/api/v1/static/provider_gallery`
+    - Storage path: `uploads/provider_gallery/{provider_id}/{image_id}.webp`
+    - HEIC→WebP pipeline: max 1200px, 85% quality (идентичен с profile image pipeline)
+    - Максимум 8 снимки на доставчик
+    - Нови endpoints (JWT required):
+      - GET /api/v1/provider/images
+      - POST /api/v1/provider/images (multipart, max 5MB)
+      - DELETE /api/v1/provider/images/{id}
+      - PATCH /api/v1/provider/images/reorder
+    - `gallery: [{id, url, position}]` добавен в публичния ProviderDetail response
+  - **Задача C — Dashboard Gallery UI:**
+    - Нов компонент: `apps/web/components/dashboard/GallerySection.tsx`
+      - Grid: 4 колони десктоп / 2 колони мобилен
+      - HTML5 Drag-and-drop пренареждане (без external libraries)
+      - Upload: multiple files, HEIC/WebP/JPG/PNG, max 5MB
+      - Position 0 badge: "🖼 корица"
+      - Inline грешки
+    - Интегриран в EDIT MODE на `apps/web/app/[lang]/provider/dashboard/profile/page.tsx`
+    - Нови API функции в `apps/web/lib/provider-api.ts`:
+      - getGalleryImages(), uploadGalleryImage(), deleteGalleryImage(), reorderGalleryImages()
+    - Нов тип `GalleryImage` в `apps/web/types/provider.ts`
+    - Translation keys (namespace: provider_dashboard): gallery_title, gallery_subtitle, gallery_cover_hint, gallery_upload_btn, gallery_uploading, gallery_delete_confirm, gallery_max_reached, gallery_empty, gallery_drag_hint
+    - Seed скрипт: `apps/api/scripts/seed_provider_gallery_translations.py`
+  - **Важна бележка — seed скрипт правило:**
+    - Seed скриптовете НЕ трябва да съдържат `DELETE FROM translations WHERE key LIKE 'namespace.%'`
+    - Използват само `ON CONFLICT (lang, key) DO UPDATE SET value = EXCLUDED.value` или INSERT без предварително изтриване.
 
 ---
 

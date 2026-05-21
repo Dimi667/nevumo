@@ -472,6 +472,58 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Fix**: Added a frontend guard in `apps/web/app/[lang]/client/dashboard/layout.tsx`.
   - **Logic**: The guard decodes the JWT from `localStorage` and redirects any user with `role === 'provider'` to the provider dashboard.
   - **Implementation**: Uses `useEffect`, `getAuthToken`, and `router.replace` with manual JWT payload decoding.
+- **Provider Full Page — Задачи A, B, C (May 21, 2026)** — COMPLETE:
+  - **Задача A — Badge логика + DB migration:**
+    - Нова колона `verification_level INT DEFAULT 0` в таблица `providers`
+    - Alembic migration: `add_verification_level`
+    - Функция `calculate_verification_level(provider, db)` в `provider_service.py`
+      - Level 0: Нов (default)
+      - Level 1: Верифициран (1+ завършени заявки + пълен профил)
+      - Level 2: Топ специалист (10+ завършени заявки + рейтинг ≥ 4.5)
+    - Извиква се при: `update_provider_profile()`, `add_service()`, `change_lead_status()` (status=done)
+    - `verification_level` добавен в `ProviderDetail` и `ProviderListItem` schemas
+    - Backfill скрипт: `apps/api/scripts/backfill_verification_levels.py`
+    - Result: 152 providers Level 0, 1 provider Level 2
+  - **Задача B — Multi-image галерия:**
+    - Нова таблица `provider_images` (id, provider_id, url, position, created_at)
+    - Index: `idx_provider_images_provider_id`
+    - Alembic migration: `add_provider_gallery`
+    - Нов SQLAlchemy модел `ProviderImage` в `models.py`
+    - Relationship `gallery_images` в `Provider` модела
+    - Нов StaticFiles mount: `/api/v1/static/provider_gallery`
+    - Storage path: `uploads/provider_gallery/{provider_id}/{image_id}.webp`
+    - HEIC→WebP pipeline: max 1200px, 85% quality (идентичен с profile image pipeline)
+    - Максимум 8 снимки на доставчик
+    - Нови endpoints (JWT required):
+      - GET /api/v1/provider/images
+      - POST /api/v1/provider/images (multipart, max 5MB)
+      - DELETE /api/v1/provider/images/{id}
+      - PATCH /api/v1/provider/images/reorder
+    - `gallery: [{id, url, position}]` добавен в публичния ProviderDetail response
+  - **Задача C — Dashboard Gallery UI:**
+    - Нов компонент: `apps/web/components/dashboard/GallerySection.tsx`
+      - Grid: 4 колони десктоп / 2 колони мобилен
+      - HTML5 Drag-and-drop пренареждане (без external libraries)
+      - Upload: multiple files, HEIC/WebP/JPG/PNG, max 5MB
+      - Position 0 badge: "🖼 корица"
+      - Inline грешки
+    - Интегриран в EDIT MODE на `apps/web/app/[lang]/provider/dashboard/profile/page.tsx`
+    - Нови API функции в `apps/web/lib/provider-api.ts`:
+      - getGalleryImages(), uploadGalleryImage(), deleteGalleryImage(), reorderGalleryImages()
+    - Нов тип `GalleryImage` в `apps/web/types/provider.ts`
+    - Translation keys (namespace: provider_dashboard): gallery_title, gallery_subtitle, gallery_cover_hint, gallery_upload_btn, gallery_uploading, gallery_delete_confirm, gallery_max_reached, gallery_empty, gallery_drag_hint
+    - Seed скрипт: `apps/api/scripts/seed_provider_gallery_translations.py`
+  - **Важна бележка — seed скрипт правило:**
+    - Seed скриптовете НЕ трябва да съдържат `DELETE FROM translations WHERE key LIKE 'namespace.%'`
+    - Използват само `ON CONFLICT (lang, key) DO UPDATE SET value = EXCLUDED.value` или INSERT без предварително изтриване.
+  - **Следващи задачи от provider_fullpage_plan.md:**
+    - D (ProviderFullPage компонент)
+    - I (Category page badge)
+    - E (ShareButton)
+    - J (Mobile Sticky CTA)
+    - F (Seed scripts)
+    - H (Правен текст)
+    - G (Документация)
 - **Provider Dashboard Stats Fix (April 28, 2026)** — Retro-matched leads now counted:
   - **Problem**: Newly registered providers saw 0 on KPI cards (Total/New leads) despite retro-matched leads.
   - **Root cause**: `get_dashboard_stats()` in `apps/api/services/provider_service.py` only counted `Lead.provider_id == provider.id`. Retro-matched lives in `lead_matches` table.

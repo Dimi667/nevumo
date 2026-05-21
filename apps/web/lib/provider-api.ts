@@ -5,6 +5,7 @@ import type {
   AnalyticsData,
   CreateServiceInput,
   DashboardResponse,
+  GalleryImage,
   Lead,
   LeadStatus,
   LeadsFilters,
@@ -241,6 +242,58 @@ export async function uploadProviderImage(file: File): Promise<{ image_url: stri
       { rawBody: text.slice(0, 500) }
     );
   }
+}
+
+// ---------------------------------------------------------------------------
+// Gallery
+// ---------------------------------------------------------------------------
+
+export async function getGalleryImages(token: string): Promise<GalleryImage[]> {
+  const res = await fetch(`${API_BASE}/api/v1/provider/images`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error('Failed to load gallery');
+  const data = await res.json();
+  return data;
+}
+
+export async function uploadGalleryImage(token: string, file: File): Promise<GalleryImage> {
+  const formData = new FormData();
+  formData.append('file', file);
+  const res = await fetch(`${API_BASE}/api/v1/provider/images`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || 'Upload failed');
+  }
+  return res.json();
+}
+
+export async function deleteGalleryImage(token: string, imageId: number): Promise<void> {
+  const res = await fetch(`${API_BASE}/api/v1/provider/images/${imageId}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error('Delete failed');
+}
+
+export async function reorderGalleryImages(
+  token: string,
+  order: { id: number; position: number }[]
+): Promise<GalleryImage[]> {
+  const res = await fetch(`${API_BASE}/api/v1/provider/images/reorder`, {
+    method: 'PATCH',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(order),
+  });
+  if (!res.ok) throw new Error('Reorder failed');
+  return res.json();
 }
 
 // ---------------------------------------------------------------------------

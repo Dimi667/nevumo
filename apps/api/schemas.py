@@ -68,6 +68,13 @@ class ServiceOut(BaseModel):
 # Providers
 # -------------------------
 
+class ProviderImageItem(BaseModel):
+    id: int
+    url: str
+    position: int
+    model_config = ConfigDict(from_attributes=True)
+
+
 class LatestLeadPreview(BaseModel):
     client_name: str
     city_name: str
@@ -86,6 +93,7 @@ class ProviderListItem(BaseModel):
     jobs_completed: int = 0
     leads_received: int = 0
     review_count: int = 0
+    verification_level: int = 0
     latest_lead_preview: Optional[LatestLeadPreview] = None
     services: List[ServiceOut] = []
 
@@ -113,6 +121,7 @@ class ProviderDetail(BaseModel):
     profile_image_url: Optional[str] = None
     rating: float
     verified: bool
+    verification_level: int = 0
     availability_status: str
     created_at: datetime
     is_claimed: bool = False
@@ -127,6 +136,7 @@ class ProviderDetail(BaseModel):
     redirect_status: Optional[int] = None
     latest_lead_preview: Optional[LatestLeadPreview] = None
     latest_review: Optional["LatestReviewPreview"] = None
+    gallery: list[ProviderImageItem] = []
 
     @field_validator("rating", mode="before")
     @classmethod

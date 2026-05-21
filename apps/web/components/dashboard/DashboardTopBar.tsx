@@ -16,7 +16,10 @@ export default function DashboardTopBar({ onMenuClick, lang }: DashboardTopBarPr
 
   function handleLogout() {
     clearAuth();
-    router.push(`/${lang}/auth`);
+    // Ensure localStorage is cleared before redirect
+    requestAnimationFrame(() => {
+      router.push(`/${lang}`);
+    });
   }
 
   return (

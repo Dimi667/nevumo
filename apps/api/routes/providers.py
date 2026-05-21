@@ -20,6 +20,7 @@ from apps.api.schemas import (
     ServiceOut,
     LatestLeadPreview,
     LatestReviewPreview,
+    ProviderImageItem,
 )
 from apps.api.services.provider_service import (
     get_city_leads_count,
@@ -30,6 +31,7 @@ from apps.api.services.provider_service import (
     get_provider_review_count,
     resolve_provider_slug_safe,
     get_provider_by_claim_token,
+    get_provider_gallery,
 )
 from apps.api.services.review_service import get_public_latest_review_preview
 
@@ -261,6 +263,7 @@ async def list_providers(
                 jobs_completed=jobs_completed.get(p.id, 0),
                 leads_received=leads_received.get(p.id, 0),
                 review_count=review_count.get(p.id, 0),
+                verification_level=p.verification_level,
                 latest_lead_preview=latest_lead_preview_obj,
                 services=services_by_provider.get(p.id, []),
             )
@@ -446,6 +449,7 @@ async def get_provider(
         profile_image_url=provider.profile_image_url,
         rating=rating,
         verified=provider.verified,
+        verification_level=provider.verification_level,
         availability_status=provider.availability_status,
         created_at=provider.created_at,
         is_claimed=provider.is_claimed or False,
@@ -457,6 +461,7 @@ async def get_provider(
         translations=translations,
         latest_lead_preview=latest_lead_preview,
         latest_review=latest_review,
+        gallery=[ProviderImageItem.model_validate(img) for img in get_provider_gallery(db, provider.id)],
     )
 
     return ProviderDetailResponse(data=detail)

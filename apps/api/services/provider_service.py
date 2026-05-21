@@ -54,6 +54,7 @@ from apps.api.models import (
     Provider,
     ProviderSlugHistory,
     ProviderCity,
+    ProviderImage,
     Review,
     Service,
     ServiceCity,
@@ -95,6 +96,24 @@ def get_provider_jobs_completed(provider_id: UUID, db: Session) -> int:
     )
 
     return int(direct_done + match_done)
+
+
+def calculate_verification_level(provider: Provider, db: Session) -> int:
+    jobs = get_provider_jobs_completed(provider.id, db)
+    rating = float(provider.rating) if provider.rating else 0.0
+    
+    profile_complete = (
+        provider.profile_image_url is not None
+        and provider.description is not None
+        and len(provider.description) > 0
+        and len(provider.services) >= 1
+    )
+    
+    if jobs >= 10 and rating >= 4.5:
+        return 2  # Топ специалист
+    if jobs >= 1 and profile_complete:
+        return 1  # Верифициран
+    return 0  # Нов
 
 
 def get_provider_review_count(provider_id: UUID, db: Session) -> int:
@@ -315,6 +334,13 @@ def change_lead_status(
         match.status = new_status
 
     db.commit()
+    
+    if new_status == "done":
+        provider_obj = db.query(Provider).filter(Provider.id == provider_id).first()
+        if provider_obj:
+            provider_obj.verification_level = calculate_verification_level(provider_obj, db)
+            db.commit()
+    
     return {"lead_id": lead_id_str, "status": new_status}
 
 
@@ -478,6 +504,12 @@ def add_service(
 
     db.commit()
     db.refresh(service)
+    
+    provider = db.query(Provider).filter(Provider.id == provider_id).first()
+    if provider:
+        provider.verification_level = calculate_verification_level(provider, db)
+        db.commit()
+    
     return service
 
 
@@ -1011,6 +1043,7 @@ def update_provider_profile(
         if not existing_pc:
             db.add(ProviderCity(provider_id=provider.id, city_id=loc.id))
 
+    provider.verification_level = calculate_verification_level(provider, db)
     db.commit()
     db.refresh(provider)
     return provider
@@ -1781,6 +1814,97 @@ def claim_provider(claim_token: str, user: "User", db: Session) -> Provider:
 def get_provider_by_claim_token(token: str, db: Session) -> Optional[Provider]:
     """Get provider by claim token if not claimed."""
     return db.query(Provider).filter(
-        Provider.claim_token == token, 
+        Provider.claim_token == token,
         Provider.is_claimed == False
     ).first()
+
+
+# ---------------------------------------------------------------------------
+# Gallery images
+# ---------------------------------------------------------------------------
+
+MAX_GALLERY_IMAGES = 8
+GALLERY_MAX_PX = 1200
+GALLERY_QUALITY = 85
+
+
+def get_provider_gallery(db: Session, provider_id: UUID) -> list[ProviderImage]:
+    return (
+        db.query(ProviderImage)
+        .filter(ProviderImage.provider_id == provider_id)
+        .order_by(ProviderImage.position)
+        .all()
+    )
+
+
+def add_gallery_image(
+    db: Session,
+    provider_id: UUID,
+    file_bytes: bytes,
+    filename: str,
+    base_url: str,
+) -> ProviderImage:
+    existing = db.query(ProviderImage).filter(ProviderImage.provider_id == provider_id).count()
+    if existing >= MAX_GALLERY_IMAGES:
+        raise ValueError(f"Maximum {MAX_GALLERY_IMAGES} images allowed")
+
+    register_heif_opener()
+    img = Image.open(io.BytesIO(file_bytes))
+    if img.mode not in ("RGB", "RGBA"):
+        img = img.convert("RGB")
+    img.thumbnail((GALLERY_MAX_PX, GALLERY_MAX_PX), Image.LANCZOS)
+
+    provider_dir = Path(settings.UPLOADS_DIR) / "provider_gallery" / str(provider_id)
+    provider_dir.mkdir(parents=True, exist_ok=True)
+
+    next_position = existing
+    db_image = ProviderImage(provider_id=provider_id, url="", position=next_position)
+    db.add(db_image)
+    db.flush()
+
+    file_path = provider_dir / f"{db_image.id}.webp"
+    img.save(str(file_path), "WEBP", quality=GALLERY_QUALITY)
+
+    db_image.url = f"{base_url}/api/v1/static/provider_gallery/{provider_id}/{db_image.id}.webp"
+    db.commit()
+    db.refresh(db_image)
+    return db_image
+
+
+def delete_gallery_image(db: Session, provider_id: UUID, image_id: int) -> bool:
+    img = (
+        db.query(ProviderImage)
+        .filter(ProviderImage.id == image_id, ProviderImage.provider_id == provider_id)
+        .first()
+    )
+    if not img:
+        return False
+    file_path = Path(settings.UPLOADS_DIR) / "provider_gallery" / str(provider_id) / f"{image_id}.webp"
+    if file_path.exists():
+        file_path.unlink()
+    db.delete(img)
+    db.commit()
+    remaining = (
+        db.query(ProviderImage)
+        .filter(ProviderImage.provider_id == provider_id)
+        .order_by(ProviderImage.position)
+        .all()
+    )
+    for i, r in enumerate(remaining):
+        r.position = i
+    db.commit()
+    return True
+
+
+def reorder_gallery_images(
+    db: Session,
+    provider_id: UUID,
+    order: list[dict],
+) -> list[ProviderImage]:
+    for item in order:
+        db.query(ProviderImage).filter(
+            ProviderImage.id == item["id"],
+            ProviderImage.provider_id == provider_id,
+        ).update({"position": item["position"]})
+    db.commit()
+    return get_provider_gallery(db, provider_id)

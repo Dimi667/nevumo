@@ -21,6 +21,7 @@ from apps.api.schemas import (
     ProviderLeadsResponse,
     ProviderProfileUpdateRequest,
     ProviderProfileUpdateResponse,
+    ProviderImageItem,
     QRCodeResponse,
     EnhancedQRCodeRequest,
     EnhancedQRCodeResponse,
@@ -52,6 +53,10 @@ from apps.api.services.provider_service import (
     update_provider_profile,
     update_service,
     validate_slug,
+    get_provider_gallery,
+    add_gallery_image,
+    delete_gallery_image,
+    reorder_gallery_images,
 )
 
 router = APIRouter(prefix="/api/v1/provider", tags=["provider"])
@@ -226,11 +231,11 @@ async def upload_profile_image(
     # Priority: STATIC_FILES_BASE_URL env var > relative path (if empty)
     from apps.api.config import settings
     base_url = settings.STATIC_FILES_BASE_URL
-    
+
     allowed = {"image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"}
     # Also check by filename extension if content_type is missing or generic
     content = await file.read()
-    
+
     if file.content_type not in allowed:
         filename_lower = (file.filename or "").lower()
         is_heic_by_ext = filename_lower.endswith('.heic') or filename_lower.endswith('.heif')
@@ -252,6 +257,55 @@ async def upload_profile_image(
     db.commit()
 
     return {"success": True, "data": {"image_url": url}}
+
+
+# -------------------------
+# Gallery images
+# -------------------------
+
+
+@router.get("/images", response_model=list[ProviderImageItem])
+def list_gallery_images(
+    current_provider: Provider = Depends(get_current_provider),
+    db: Session = Depends(get_db),
+):
+    return get_provider_gallery(db, current_provider.id)
+
+
+@router.post("/images", response_model=ProviderImageItem, status_code=201)
+async def upload_gallery_image(
+    file: UploadFile = UploadFile(...),
+    current_provider: Provider = Depends(get_current_provider),
+    db: Session = Depends(get_db),
+    request: Request = None,
+):
+    if file.size and file.size > 5 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="File too large (max 5MB)")
+    file_bytes = await file.read()
+    base_url = str(request.base_url).rstrip("/")
+    try:
+        return add_gallery_image(db, current_provider.id, file_bytes, file.filename or "", base_url)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete("/images/{image_id}", status_code=204)
+def remove_gallery_image(
+    image_id: int,
+    current_provider: Provider = Depends(get_current_provider),
+    db: Session = Depends(get_db),
+):
+    if not delete_gallery_image(db, current_provider.id, image_id):
+        raise HTTPException(status_code=404, detail="Image not found")
+
+
+@router.patch("/images/reorder", response_model=list[ProviderImageItem])
+def reorder_images(
+    order: list[dict],
+    current_provider: Provider = Depends(get_current_provider),
+    db: Session = Depends(get_db),
+):
+    return reorder_gallery_images(db, current_provider.id, order)
 
 
 # -------------------------

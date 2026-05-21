@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import (
     String, Text, ForeignKey, Integer, Boolean,
-    Numeric, CheckConstraint, UniqueConstraint, Index, func, DateTime
+    Numeric, CheckConstraint, UniqueConstraint, Index, func, DateTime, TIMESTAMP
 )
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID, JSONB, INET
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, validates
@@ -78,6 +78,7 @@ class Provider(Base):
 
     rating: Mapped[float] = mapped_column(Numeric(2, 1), default=0)
     verified: Mapped[bool] = mapped_column(Boolean, default=False)
+    verification_level: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     availability_status: Mapped[str] = mapped_column(String, default="active")
 
@@ -100,6 +101,9 @@ class Provider(Base):
         back_populates="provider",
         cascade="all, delete-orphan",
     )
+    gallery_images: Mapped[list["ProviderImage"]] = relationship(
+        "ProviderImage", cascade="all, delete-orphan", order_by="ProviderImage.position"
+    )
 
     __table_args__ = (
         Index("idx_providers_rating", "rating"),
@@ -107,6 +111,16 @@ class Provider(Base):
         Index("idx_providers_is_claimed", "is_claimed"),
         Index("idx_providers_claim_token", "claim_token"),
     )
+
+
+class ProviderImage(Base):
+    __tablename__ = "provider_images"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    provider_id: Mapped[UUID] = mapped_column(ForeignKey("providers.id", ondelete="CASCADE"), nullable=False)
+    url: Mapped[str] = mapped_column(Text, nullable=False)
+    position: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.now())
 
 
 class ProviderTranslation(Base):

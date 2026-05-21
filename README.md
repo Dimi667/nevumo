@@ -201,6 +201,24 @@ docker compose exec api alembic upgrade head
 | `npm run check-types` | TypeScript type checking |
 | `npm run format` | Format code with Prettier |
 
+## Recent Changes
+
+### May 2026
+
+**Fixed Provider Dashboard Header and Footer Visibility**
+- Created shared `isDashboardPath()` utility in `apps/web/lib/dashboard-path.ts` for centralized dashboard path detection
+- Modified `apps/web/app/[lang]/layout.tsx`: Removed server-side `!isDashboard` check, now relies on client-side control only (kept modal/embed checks)
+- Modified `apps/web/components/SmartGlobalFooter.tsx`: Removed dashboard-specific hiding logic - footer now visible on all pages
+- Modified `apps/web/components/GlobalHeader.tsx`: Added state-based re-rendering with useEffect and `forceUpdate` state to handle navigation changes
+- Modified logout redirect in `apps/web/components/dashboard/DashboardTopBar.tsx` and `apps/web/app/[lang]/client/dashboard/layout.tsx`: Changed from `/${lang}/auth` to `/${lang}` and added `requestAnimationFrame` to handle localStorage race condition
+- **Result**: Header is hidden in dashboard pages (`/client/dashboard/*` and `/provider/dashboard/*`), visible on home pages and non-dashboard pages, footer visible on all pages, logout redirects to home page with proper header visibility
+
+**Fixed Gallery Text Loading Issue**
+- Resolved missing translation texts in Gallery section of provider dashboard profile
+- **Root Cause**: Redis cache key `trans:bg:provider_dashboard` contained stale data without newly added gallery translations
+- **Solution**: Cleared Redis cache key to force API to load fresh data from database
+- **Affected Keys**: gallery_title, gallery_subtitle, gallery_cover_hint, gallery_upload_btn, gallery_uploading, gallery_delete_confirm, gallery_max_reached, gallery_empty, gallery_drag_hint
+
 ## URLs
 
 | Service | URL |

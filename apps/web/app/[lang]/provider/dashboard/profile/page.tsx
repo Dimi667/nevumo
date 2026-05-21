@@ -14,7 +14,9 @@ import {
   createService,
   getProviderDashboard,
 } from '@/lib/provider-api';
+import { getAuthToken } from '@/lib/auth-store';
 import SearchInput from '@/components/dashboard/SearchInput';
+import GallerySection from '@/components/dashboard/GallerySection';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import { getSlugValidationError, sanitizeSlug, slugify } from '@/lib/slug-utils';
 import { deriveOnboardingState, getHeroContent, CompactStepIndicator, saveStep1Draft, loadStep1Draft, clearStep1Draft } from '@/lib/onboarding-utils';
@@ -1146,6 +1148,9 @@ export default function ProfilePage({ params }: PageProps) {
         <h2 className="text-sm font-semibold text-gray-800 mb-4">{t('label_profile_photo', 'Profile photo')}</h2>
         <AvatarUpload imageUrl={imageUrl} uploading={uploading} onFileChange={handleImageChange} t={t} />
       </div>
+
+      {/* Gallery */}
+      <GallerySection token={getAuthToken() || ''} t={t} />
 
       {/* Details */}
       <form noValidate onSubmit={e => e.preventDefault()} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">

@@ -68,6 +68,10 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token) WHERE cl
 - **rating**: calculated as AVG(reviews.rating) - updated in real-time via get_provider_rating()
 - **jobs_completed**: calculated as COUNT(leads.status='done') + COUNT(lead_matches.status='done') via get_provider_jobs_completed()
 
+### Промени в providers таблица (May 21, 2026)
+- Добавена колона: `verification_level INTEGER NOT NULL DEFAULT 0`
+- Index: `idx_providers_verification_level`
+
 ---
 
 ## 3. Provider Availability (Cities)
@@ -113,6 +117,25 @@ CREATE TABLE url_redirects (
 );
 
 CREATE INDEX idx_url_redirects_old_slug_active ON url_redirects(old_slug, active);
+
+---
+
+## 3c. Provider Images (Gallery)
+
+CREATE TABLE provider_images (
+    id          SERIAL PRIMARY KEY,
+    provider_id UUID NOT NULL REFERENCES providers(id) ON DELETE CASCADE,
+    url         TEXT NOT NULL,
+    position    INTEGER NOT NULL DEFAULT 0,
+    created_at  TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX idx_provider_images_provider_id ON provider_images(provider_id);
+
+Rules:
+- Maximum 8 images per provider
+- Position 0 = cover image (used in ProviderFullPage hero)
+- Images stored at: uploads/provider_gallery/{provider_id}/{image_id}.webp
+- Served via: /api/v1/static/provider_gallery/{provider_id}/{image_id}.webp
 
 ---
 
