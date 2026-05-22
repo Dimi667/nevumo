@@ -1,5 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import { getProviderBySlug, getCategories, resolveSlug, getCityBySlug } from '@/lib/api';
+import { fetchTranslations } from '@/lib/ui-translations';
 import ProviderWidget from '@/components/ProviderWidget';
 import ProviderFullPage from '@/components/provider/ProviderFullPage';
 import ClaimProfileBanner from '@/components/ClaimProfileBanner';
@@ -106,10 +107,11 @@ export default async function Page(props: {
   // Use the resolved slug consistently for provider lookups
   const slugToUse = slugResolution.found && slugResolution.slug ? slugResolution.slug : providerPage;
 
-  const [provider, categories, cityData] = await Promise.all([
+  const [provider, categories, cityData, providerPageT] = await Promise.all([
     getProviderBySlug(slugToUse, lang, city),
     getCategories(lang),
     getCityBySlug(city, lang),
+    fetchTranslations(lang, 'provider_page'),
   ]);
 
   if (!provider) return notFound();
@@ -152,7 +154,7 @@ export default async function Page(props: {
           city_slug: city,
           lang,
         }}
-        translations={{}}
+        translations={providerPageT}
         lang={lang}
       />
     </>

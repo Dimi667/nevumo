@@ -475,15 +475,24 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 
 #### Provider Full Page (May 21, 2026) — В ПРОГРЕС
 - Статус на задачите:
+  - ✅ Задача A — Backend: Badge логика + DB migration
+  - ✅ Задача B — Backend: Multi-image галерия
+  - ✅ Задача C — Dashboard Gallery UI
   - ✅ Задача E — ShareButton компонент (apps/web/components/shared/ShareButton.tsx)
   - ✅ Задача F — Seed scripts за namespace provider_page и widget badge ключове
-  - 🔄 Задача D — ProviderFullPage компонент (предстои)
-  - ⏳ Задача A — Backend: Badge логика + DB migration (предстои)
-  - ⏳ Задача B — Backend: Multi-image галерия (предстои)
-  - ⏳ Задача C — Dashboard Gallery UI (предстои)
+  - ✅ Задача D — ProviderFullPage компонент
   - ⏳ Задача H — Правен текст: Badge система (предстои)
   - ⏳ Задача I — Category page badge актуализация (предстои)
-  - ⏳ Задача J — Mobile Sticky CTA (предстои)
+  - ✅ Задача J — Mobile Sticky CTA за Provider страница — COMPLETE (May 22, 2026)
+    - Нов компонент: apps/web/components/provider/StickyProviderCTA.tsx
+    - Логика идентична с StickyLeadFormButton (md:hidden, isFormInView, paddingBottom)
+    - Target: id="provider-lead-form" в ProviderFullPage.tsx
+    - Translation key: cta_button (namespace: provider_page)
+    - Seed скрипт: apps/api/scripts/seed_provider_cta_button.py (34 езика)
+    - Изтрити грешно въведени zh преводи (24 реда)
+    - Bugs fixed по време на имплементацията:
+      - ProviderFullPage не зареждаше provider_page namespace (translations={} → translations={providerPageT})
+      - t['provider_page.KEY'] → t['KEY'] в ProviderFullPage.tsx и LeadPanel.tsx (18 замени)
 - Translation keys заредени в namespace provider_page: section_gallery, section_about, section_services, section_reviews, read_more, read_less, completed_jobs, meta_services, meta_cities, reviews_count, request_panel_title, request_panel_free, request_panel_no_commitment, or_general_request, phone_placeholder, notes_placeholder, cta_button, trust_verified, trust_free, trust_direct, share_button, link_copied, select_service, service_selected, meta_response_rate
 - Translation keys заредени в namespace widget: badge_new_provider, badge_verified, badge_top_specialist
 - Seed скриптове: seed_provider_page_translations_v2.py, seed_provider_page_translations_p2.py

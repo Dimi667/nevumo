@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import AboutSection from './AboutSection';
 import LeadPanel from './LeadPanel';
+import StickyProviderCTA from './StickyProviderCTA';
 
 interface GalleryImage {
   id: number;
@@ -185,7 +186,7 @@ function HeroSection({ provider, translations }: { provider: ProviderFullPagePro
           <StarRating rating={provider.rating} />
           <span className="font-semibold text-gray-900">{provider.rating.toFixed(1)}</span>
           <span className="text-gray-500">
-            ({provider.review_count} {t['provider_page.reviews_count'] ?? 'ревюта'})
+            ({provider.review_count} {t['reviews_count'] ?? 'ревюта'})
           </span>
         </div>
       )}
@@ -194,24 +195,24 @@ function HeroSection({ provider, translations }: { provider: ProviderFullPagePro
       <div className="grid grid-cols-4 gap-0 mt-4 pt-4 border-t border-gray-100">
         <div className="text-center">
           <div className="text-base font-semibold text-gray-900">{(provider.services ?? []).length}</div>
-          <div className="text-xs text-gray-500">{t['provider_page.meta_services'] ?? 'Услуги'}</div>
+          <div className="text-xs text-gray-500">{t['meta_services'] ?? 'Услуги'}</div>
         </div>
         {provider.jobs_completed > 0 && (
           <div className="text-center">
             <div className="text-base font-semibold text-gray-900">{provider.jobs_completed}</div>
-            <div className="text-xs text-gray-500">{t['provider_page.completed_jobs']?.replace('{count}', String(provider.jobs_completed)) ?? 'Завършени'}</div>
+            <div className="text-xs text-gray-500">{t['completed_jobs']?.replace('{count}', String(provider.jobs_completed)) ?? 'Завършени'}</div>
           </div>
         )}
         {(provider.cities ?? []).length > 1 && (
           <div className="text-center">
             <div className="text-base font-semibold text-gray-900">{(provider.cities ?? []).length}</div>
-            <div className="text-xs text-gray-500">{t['provider_page.meta_cities'] ?? 'Града'}</div>
+            <div className="text-xs text-gray-500">{t['meta_cities'] ?? 'Града'}</div>
           </div>
         )}
         {provider.review_count > 0 && (
           <div className="text-center">
             <div className="text-base font-semibold text-gray-900">{provider.review_count}</div>
-            <div className="text-xs text-gray-500">{t['provider_page.reviews_count'] ?? 'Ревюта'}</div>
+            <div className="text-xs text-gray-500">{t['reviews_count'] ?? 'Ревюта'}</div>
           </div>
         )}
       </div>
@@ -233,7 +234,7 @@ function GallerySection({ gallery, translations }: { gallery: GalleryImage[]; tr
   return (
     <section className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
       <h2 className="text-base font-semibold text-gray-900 mb-3">
-        {t['provider_page.section_gallery'] ?? 'Галерия'}
+        {t['section_gallery'] ?? 'Галерия'}
       </h2>
       <div className="grid grid-cols-4 gap-2">
         {sortedGallery.map((image, index) => (
@@ -264,7 +265,7 @@ function ServicesSection({ services, translations }: { services: ProviderService
   return (
     <section className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
       <h2 className="text-base font-semibold text-gray-900 mb-3">
-        {t['provider_page.section_services'] ?? 'Услуги и цени'}
+        {t['section_services'] ?? 'Услуги и цени'}
       </h2>
       <div className="space-y-2">
         {services.map((service) => (
@@ -318,7 +319,7 @@ function ReviewsSection({ reviews, reviewCount, businessName, translations }: {
   return (
     <section className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
       <h2 className="text-base font-semibold text-gray-900 mb-3">
-        {t['provider_page.section_reviews'] ?? 'Ревюта'} ({reviewCount})
+        {t['section_reviews'] ?? 'Ревюта'} ({reviewCount})
       </h2>
 
       {/* Rating overview */}
@@ -328,7 +329,7 @@ function ReviewsSection({ reviews, reviewCount, businessName, translations }: {
         </div>
         <div>
           <StarRating rating={averageRating} />
-          <p className="text-sm text-gray-500 mt-1">{reviewCount} {t['provider_page.reviews_count'] ?? 'ревюта'}</p>
+          <p className="text-sm text-gray-500 mt-1">{reviewCount} {t['reviews_count'] ?? 'ревюта'}</p>
         </div>
       </div>
 
@@ -416,6 +417,8 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
           </div>
         </div>
       </div>
+
+      <StickyProviderCTA lang={lang} translations={translations} />
     </div>
   );
 }

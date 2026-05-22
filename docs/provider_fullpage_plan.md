@@ -463,14 +463,19 @@ Badge-ът се сваля автоматично ако условията пр
 - Обновяване спрямо новата `verification_level` логика (0/1/2)
 - Amber badge за Нов, зелен за Верифициран, златен за Топ — навсякъде консистентно
 
-**Задача J — Mobile Sticky CTA за Provider страница**
+**Задача J — Mobile Sticky CTA за Provider страница — COMPLETE (May 22, 2026)**
 **Модел:** Kimi-2.6  
 **Зависимости:** Задача D (ProviderFullPage)
 
 - Нов компонент `apps/web/components/provider/StickyProviderCTA.tsx`
-- Логика идентична с `StickyLeadFormButton` от Category страницата
+- Логика идентична с `StickyLeadFormButton` от Category страницата (md:hidden, isFormInView, paddingBottom)
 - Target: `id="provider-lead-form"` на формата в sticky панела
-- Текст: translation key `provider_page.cta_button` → "Заявете услуга"
+- Translation key: `provider_page.cta_button` (namespace: provider_page)
+- Seed скрипт: apps/api/scripts/seed_provider_cta_button.py (34 езика)
+- Изтрити грешно въведени zh преводи (24 реда)
+- Bugs fixed по време на имплементацията:
+  - ProviderFullPage не зареждаше provider_page namespace (translations={} → translations={providerPageT})
+  - t['provider_page.KEY'] → t['KEY'] в ProviderFullPage.tsx и LeadPanel.tsx (18 замени)
 
 ---
 

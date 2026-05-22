@@ -77,10 +77,10 @@ export default function LeadPanel({
       {/* 1. Header */}
       <div className="px-5 py-4 border-b border-gray-100">
         <h2 className="text-sm font-semibold text-gray-900">
-          {t['provider_page.request_panel_title'] ?? 'Изпратете заявка на'} {providerName}
+          {t['request_panel_title'] ?? 'Изпратете заявка на'} {providerName}
         </h2>
         <p className="text-xs text-gray-400 mt-0.5">
-          ✓ {t['provider_page.request_panel_free'] ?? 'Безплатно'} • {t['provider_page.request_panel_no_commitment'] ?? 'Без ангажимент'}
+          ✓ {t['request_panel_free'] ?? 'Безплатно'} • {t['request_panel_no_commitment'] ?? 'Без ангажимент'}
         </p>
       </div>
 
@@ -105,7 +105,7 @@ export default function LeadPanel({
               ))}
             </div>
             <p className="text-xs text-gray-500">
-              {t['provider_page.or_general_request'] ?? 'Или изпратете обща заявка ↓'}
+              {t['or_general_request'] ?? 'Или изпратете обща заявка ↓'}
             </p>
           </div>
         )}
@@ -113,14 +113,14 @@ export default function LeadPanel({
         {/* PhoneField */}
         <input
           type="tel"
-          placeholder={t['provider_page.phone_placeholder'] ?? 'Вашият телефон'}
+          placeholder={t['phone_placeholder'] ?? 'Вашият телефон'}
           className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20"
         />
 
         {/* NotesField */}
         <textarea
           rows={3}
-          placeholder={t['provider_page.notes_placeholder'] ?? 'Опишете накратко какво ви трябва...'}
+          placeholder={t['notes_placeholder'] ?? 'Опишете накратко какво ви трябва...'}
           className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 resize-none"
         />
 
@@ -131,20 +131,20 @@ export default function LeadPanel({
 
         {/* CTAButton */}
         <button className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white text-base font-semibold rounded-xl transition-colors">
-          {t['provider_page.cta_button'] ?? 'Заявете услуга'}
+          {t['cta_button'] ?? 'Заявете услуга'}
         </button>
       </div>
 
       {/* TrustRow */}
       <div className="grid grid-cols-3 border-t border-gray-100">
         <div className="flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400">
-          <span>✓ {t['provider_page.trust_verified'] ?? 'Верифициран'}</span>
+          <span>✓ {t['trust_verified'] ?? 'Верифициран'}</span>
         </div>
         <div className="flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l border-gray-100">
-          <span>✓ {t['provider_page.trust_free'] ?? 'Без такса'}</span>
+          <span>✓ {t['trust_free'] ?? 'Без такса'}</span>
         </div>
         <div className="flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l border-gray-100">
-          <span>✓ {t['provider_page.trust_direct'] ?? 'Директен контакт'}</span>
+          <span>✓ {t['trust_direct'] ?? 'Директен контакт'}</span>
         </div>
       </div>
     </div>

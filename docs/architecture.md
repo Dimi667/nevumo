@@ -2359,6 +2359,17 @@ python scripts/seed_review_translations.py
 - `apps/web/app/[lang]/[city]/[category]/page.tsx` актуализиран да ползва `verification_level` (0/1/2) вместо `is_verified`
 - Консистентни цветове: amber-100/text-amber-700 (Нов), green-100/text-green-700 (Верифициран), yellow-100/text-yellow-700 (Топ)
 
+#### Mobile Sticky CTA за Provider страница (May 22, 2026) — COMPLETE
+- Нов компонент: `apps/web/components/provider/StickyProviderCTA.tsx`
+- Логика идентична с `StickyLeadFormButton` (md:hidden, isFormInView, paddingBottom)
+- Target: id="provider-lead-form" в ProviderFullPage.tsx
+- Translation key: cta_button (namespace: provider_page)
+- Seed скрипт: apps/api/scripts/seed_provider_cta_button.py (34 езика)
+- Изтрити грешно въведени zh преводи (24 реда)
+- Bugs fixed по време на имплементацията:
+  - ProviderFullPage не зареждаше provider_page namespace (translations={} → translations={providerPageT})
+  - t['provider_page.KEY'] → t['KEY'] в ProviderFullPage.tsx и LeadPanel.tsx (18 замени)
+
 #### Translation keys добавени
 - namespace `widget`: badge_new_provider, badge_verified, badge_top_specialist
 - namespace `provider_page`: section_gallery, section_about, section_services, section_reviews, read_more, read_less, completed_jobs, meta_services, meta_cities, reviews_count, request_panel_title, request_panel_free, request_panel_no_commitment, or_general_request, phone_placeholder, notes_placeholder, cta_button, trust_verified, trust_free, trust_direct
