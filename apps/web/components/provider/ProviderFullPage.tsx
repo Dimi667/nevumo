@@ -3,6 +3,7 @@ import Image from 'next/image';
 import AboutSection from './AboutSection';
 import LeadPanel from './LeadPanel';
 import StickyProviderCTA from './StickyProviderCTA';
+import { ShareButton } from '@/components/shared/ShareButton';
 
 interface GalleryImage {
   id: number;
@@ -215,6 +216,17 @@ function HeroSection({ provider, translations }: { provider: ProviderFullPagePro
             <div className="text-xs text-gray-500">{t['reviews_count'] ?? 'Ревюта'}</div>
           </div>
         )}
+      </div>
+
+      {/* Action Row */}
+      <div className="mt-4 pt-4 border-t border-gray-100">
+        <ShareButton
+          title={provider.business_name}
+          text={provider.category_name}
+          linkCopiedLabel={t['link_copied'] ?? 'Линкът е копиран!'}
+          label={t['share_button'] ?? 'Сподели'}
+          className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+        />
       </div>
     </section>
   );

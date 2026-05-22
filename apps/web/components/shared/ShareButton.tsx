@@ -31,13 +31,34 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
         // User cancelled share - ignore
       }
     } else {
-      // Desktop: copy URL to clipboard
-      try {
-        await navigator.clipboard.writeText(window.location.href);
-        setShowToast(true);
-        setTimeout(() => setShowToast(false), 2000);
-      } catch (error) {
-        console.error('Failed to copy URL:', error);
+      // Desktop / no Web Share API: copy URL to clipboard
+      const url = window.location.href;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(url);
+          setShowToast(true);
+          setTimeout(() => setShowToast(false), 2000);
+        } catch (error) {
+          console.error('Failed to copy URL:', error);
+        }
+      } else {
+        // Fallback for HTTP / non-secure context (e.g. local network)
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        textArea.style.top = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          setShowToast(true);
+          setTimeout(() => setShowToast(false), 2000);
+        } catch (error) {
+          console.error('Failed to copy URL:', error);
+        }
+        document.body.removeChild(textArea);
       }
     }
   };

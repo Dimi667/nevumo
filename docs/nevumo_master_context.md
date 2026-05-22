@@ -478,7 +478,10 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - ✅ Задача A — Backend: Badge логика + DB migration
   - ✅ Задача B — Backend: Multi-image галерия
   - ✅ Задача C — Dashboard Gallery UI
-  - ✅ Задача E — ShareButton компонент (apps/web/components/shared/ShareButton.tsx)
+  - ✅ Задача E — ShareButton интеграция в ProviderFullPage Hero секция → COMPLETE (May 22, 2026)
+    - ShareButton добавен в HeroSection ActionRow (apps/web/components/provider/ProviderFullPage.tsx)
+    - Translation keys share_button и link_copied вече заредени (seed_provider_page_translations_p2.py)
+    - Fallback fix: navigator.clipboard + document.execCommand за HTTP/non-secure контексти
   - ✅ Задача F — Seed scripts за namespace provider_page и widget badge ключове
   - ✅ Задача D — ProviderFullPage компонент
   - ⏳ Задача H — Правен текст: Badge система (предстои)

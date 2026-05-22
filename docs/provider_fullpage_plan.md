@@ -296,7 +296,7 @@ link_copied               → "Линкът е копиран!"
 
 ---
 
-### Задача E — Frontend + Backend: ShareButton компонент
+### ✅ Задача E — ShareButton интеграция → COMPLETE (May 22, 2026)
 **Модел:** Kimi-2.6  
 **Зависимости:** няма  
 
@@ -307,6 +307,11 @@ link_copied               → "Линкът е копиран!"
 - Desktop: копира URL в клипборда → toast "Линкът е копиран!"
 - GDPR-friendly: никакви social media tracker-и, никакви external scripts
 - Използва се на: Provider page (ProviderFullPage), Category page (опционално)
+
+**Implementation details:**
+- ShareButton добавен в HeroSection ActionRow в ProviderFullPage.tsx
+- Fallback fix: navigator.clipboard → document.execCommand за HTTP контексти
+- Translation keys: share_button, link_copied (вече заредени)
 
 ---
 
