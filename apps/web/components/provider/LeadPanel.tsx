@@ -73,7 +73,7 @@ export default function LeadPanel({
   };
 
   return (
-    <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+    <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden max-h-[calc(100vh-48px)] overflow-y-auto">
       {/* 1. Header */}
       <div className="px-5 py-4 border-b border-gray-100">
         <h2 className="text-sm font-semibold text-gray-900">

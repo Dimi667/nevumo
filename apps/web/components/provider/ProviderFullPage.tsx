@@ -389,10 +389,10 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
       {/* Breadcrumb */}
       <BreadcrumbSection provider={provider} lang={lang} />
       
-      {/* Two-column grid */}
-      <div className="max-w-6xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-[1fr_340px] gap-6">
+      {/* Two-column layout */}
+      <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
         {/* LEFT COLUMN */}
-        <div className="space-y-4">
+        <div className="flex-1 space-y-4">
           <HeroSection provider={provider} translations={t} />
           {(provider.gallery ?? []).length > 1 && <GallerySection gallery={(provider.gallery ?? []).slice(1)} translations={t} />}
           <AboutSection description={provider.description} translations={t} />
@@ -408,25 +408,23 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
         </div>
         
         {/* RIGHT COLUMN (sticky) */}
-        <div className="hidden md:block">
-          <div id="provider-lead-form" className="sticky top-6">
-            <LeadPanel
-              providerName={provider.business_name}
-              services={provider.services}
-              verificationLevel={provider.verification_level}
-              reviewCount={provider.review_count}
-              jobsCompleted={provider.jobs_completed}
-              cityLeads={provider.city_leads}
-              cityName={provider.city_name}
-              categoryName={provider.category_name}
-              latestReview={provider.latest_review}
-              latestLeadClientName={provider.latest_lead_client_name}
-              latestLeadCity={provider.latest_lead_city}
-              leadsReceived={provider.leads_received}
-              translations={translations}
-              lang={lang}
-            />
-          </div>
+        <div id="provider-lead-form" className="hidden md:block w-[340px] shrink-0 self-start sticky top-6">
+          <LeadPanel
+            providerName={provider.business_name}
+            services={provider.services}
+            verificationLevel={provider.verification_level}
+            reviewCount={provider.review_count}
+            jobsCompleted={provider.jobs_completed}
+            cityLeads={provider.city_leads}
+            cityName={provider.city_name}
+            categoryName={provider.category_name}
+            latestReview={provider.latest_review}
+            latestLeadClientName={provider.latest_lead_client_name}
+            latestLeadCity={provider.latest_lead_city}
+            leadsReceived={provider.leads_received}
+            translations={translations}
+            lang={lang}
+          />
         </div>
       </div>
 

@@ -365,6 +365,14 @@ This separation ensures that:
   - When keys are duplicated with `row_bg()` (incomplete translations) in one script and full translations in another, executing the incomplete script will overwrite the good translations with English fallback text for non-EN/BG languages
   - Solution: Remove duplicate keys from the script that uses `row_bg()` and let the specialized script handle those keys with full 34-language translations
 - **Mobile Language Dropdown Fix (May 15, 2026)**: Fixed language dropdown in GlobalFooter component that was going off-screen on mobile devices (375px width). Changed positioning from `right-0` to responsive `left-0 md:right-0 md:left-auto` to ensure dropdown stays within viewport bounds on small screens while maintaining right alignment on desktop.
+- **Sticky Positioning Fix (May 23, 2026)** — COMPLETE:
+  - **PROBLEM**: Right column (lead form with button) on provider page was not sticking to viewport when scrolling.
+  - **ROOT CAUSE**: `overflow-x: hidden` on `html` and `body` elements in `apps/web/app/globals.css` completely breaks `position: sticky` for all descendants.
+  - **SOLUTION**:
+    - Changed `overflow-x: hidden` to `overflow-x: clip` in both `html` and `body` selectors in `apps/web/app/globals.css`
+    - `overflow-x: clip` provides the same horizontal overflow prevention as `hidden` but does NOT break sticky positioning
+    - Also corrected invalid Tailwind class `align-self-start` to `self-start` in `apps/web/components/provider/ProviderFullPage.tsx`
+  - **Verification**: Tested with Playwright - element now sticks at exactly 24px (top-6) when scrolling instead of scrolling with page
 - **Header/Footer Visibility Logic (May 21, 2026)** — COMPLETE:
   - **PROBLEM**: Header and footer visibility was inconsistent in dashboard pages. Server-side layout controlled initial render, but client-side navigation caused race conditions where header/footer wouldn't appear or disappear correctly.
   - **SOLUTION**:
