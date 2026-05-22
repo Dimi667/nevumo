@@ -474,16 +474,19 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Implementation**: Uses `useEffect`, `getAuthToken`, and `router.replace` with manual JWT payload decoding.
 
 #### Provider Full Page (May 21, 2026) — В ПРОГРЕС
-- ✅ A — Backend: Badge логика + DB migration (verification_level)
-- ✅ B — Backend: Multi-image галерия (provider_images таблица + endpoints)
-- ✅ C — Frontend: Dashboard Gallery UI
-- ✅ D — Frontend: ProviderFullPage компонент (двуколонен layout, hero, gallery, about, services, reviews, sticky LeadPanel)
-- ✅ I — Category page: Badge актуализация (verification_level 0/1/2)
-- ⏳ E — ShareButton компонент (предстои)
-- ⏳ F — Seed scripts за всички нови translation keys (предстои — преводите са с временни fallback)
-- ⏳ H — Правен текст: Badge система (предстои)
-- ⏳ J — Mobile Sticky CTA (предстои)
-- ⏳ G — Документация финален update (предстои)
+- Статус на задачите:
+  - ✅ Задача E — ShareButton компонент (apps/web/components/shared/ShareButton.tsx)
+  - ✅ Задача F — Seed scripts за namespace provider_page и widget badge ключове
+  - 🔄 Задача D — ProviderFullPage компонент (предстои)
+  - ⏳ Задача A — Backend: Badge логика + DB migration (предстои)
+  - ⏳ Задача B — Backend: Multi-image галерия (предстои)
+  - ⏳ Задача C — Dashboard Gallery UI (предстои)
+  - ⏳ Задача H — Правен текст: Badge система (предстои)
+  - ⏳ Задача I — Category page badge актуализация (предстои)
+  - ⏳ Задача J — Mobile Sticky CTA (предстои)
+- Translation keys заредени в namespace provider_page: section_gallery, section_about, section_services, section_reviews, read_more, read_less, completed_jobs, meta_services, meta_cities, reviews_count, request_panel_title, request_panel_free, request_panel_no_commitment, or_general_request, phone_placeholder, notes_placeholder, cta_button, trust_verified, trust_free, trust_direct, share_button, link_copied, select_service, service_selected, meta_response_rate
+- Translation keys заредени в namespace widget: badge_new_provider, badge_verified, badge_top_specialist
+- Seed скриптове: seed_provider_page_translations_v2.py, seed_provider_page_translations_p2.py
 - **Provider Dashboard Stats Fix (April 28, 2026)** — Retro-matched leads now counted:
   - **Problem**: Newly registered providers saw 0 on KPI cards (Total/New leads) despite retro-matched leads.
   - **Root cause**: `get_dashboard_stats()` in `apps/api/services/provider_service.py` only counted `Lead.provider_id == provider.id`. Retro-matched lives in `lead_matches` table.

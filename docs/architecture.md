@@ -1283,11 +1283,13 @@ Adding new city: add entry to CITY_COUNTRY_MAP in:
 ### Components
 - PhoneInput: apps/web/components/ui/PhoneInput.tsx
   - Fully controlled, no internal state
-  - Props: value, onChange, countryCode, error, onValidChange, 
+  - Props: value, onChange, countryCode, error, onValidChange,
     errorMessage, label, placeholder, required
 - usePhone hook: apps/web/hooks/usePhone.ts
   - Manages sync between localStorage and DB
   - Returns: { phone, savePhone, clearPhone, loading }
+- ShareButton: apps/web/components/shared/ShareButton.tsx
+  - GDPR-friendly share компонент, Web Share API на mobile, Clipboard API на desktop, inline toast, без external dependencies
 
 ### Where Phone Appears
 | Location | countryCode source | Required |

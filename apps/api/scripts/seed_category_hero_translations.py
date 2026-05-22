@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from database import SessionLocal
+from apps.api.database import SessionLocal
 import subprocess
 
 HERO_TRANSLATIONS = [
