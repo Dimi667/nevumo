@@ -54,23 +54,38 @@
 - **Без галерия:** Бял фон — чисто, неутрално
 - **С галерия:** Първата снимка от галерията автоматично се използва като корица
 
-### Service карти — интерактивност (одобрено и изпълнено)
+### Service карти — интерактивност (одобрено и изпълнено — May 23, 2026)
 
 **Desktop:**
 - Hover → оранжев border + появяващ се бутон „Заяви услуга"
 - Click (карта или бутон) → scroll to sticky panel + активира съответния чип + pre-fill textarea
+- Selected card + hover → показва gray deselect button вместо orange select button
 
 **Mobile:**
 - Цялата карта е tappable
 - Тънък оранжев border по default (винаги видим)
 - Под цената: малък текст „Избери тази услуга →" (винаги видим)
 - Tap → scroll to sticky panel + активира чип + pre-fill textarea
+- Unselected → показва `select_this_service` текст
+- Selected → показва `service_selected_confirm` текст
 
-### Чипсове — toggle логика (одобрено и изпълнено)
+### Чипсове — toggle логика (одобрено и изпълнено — May 23, 2026)
 
 - Click неактивен чип → активира се (оранжев)
 - Click активен чип → деактивира се визуално (сивее), textarea НЕ се изчиства
 - Синхрон: кликната карта → съответният чип автоматично се активира
+- Shared state: И cards и chips използват същия `selectedService` state
+- Toggle logic: Click selected → deselect to null, click unselected → select
+- Translation keys (namespace: `provider_page`):
+  - `select_this_service` — показва се при unselected state на mobile
+  - `service_selected_confirm` — показва се при selected state на mobile
+  - `service_deselect` — за desktop deselect button text
+
+**Implementation Details:**
+- Seed script: `apps/api/scripts/seed_provider_page_service_select.py` (3 keys × 34 languages = 102 rows)
+- API function `get_namespaced_translations` strips namespace prefix от keys
+- Frontend използва keys БЕЗ prefix (напр. `select_this_service` NOT `provider_page.select_this_service`)
+- Redis cache flush required: `docker exec nevumo-redis redis-cli FLUSHALL`
 
 ---
 

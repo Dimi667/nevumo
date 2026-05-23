@@ -368,6 +368,14 @@ This separation ensures that:
   - When keys are duplicated with `row_bg()` (incomplete translations) in one script and full translations in another, executing the incomplete script will overwrite the good translations with English fallback text for non-EN/BG languages
   - Solution: Remove duplicate keys from the script that uses `row_bg()` and let the specialized script handle those keys with full 34-language translations
 - **Mobile Language Dropdown Fix (May 15, 2026)**: Fixed language dropdown in GlobalFooter component that was going off-screen on mobile devices (375px width). Changed positioning from `right-0` to responsive `left-0 md:right-0 md:left-auto` to ensure dropdown stays within viewport bounds on small screens while maintaining right alignment on desktop.
+- **Provider Page Service Selection Toggle (May 23, 2026)**: Implemented shared state and toggle functionality for service selection cards and chips in ProviderFullPage.tsx and LeadPanel.tsx.
+  - **Shared State Pattern**: Both cards and chips use the same `selectedService` state with toggle logic (click selected → deselect to null, click unselected → select)
+  - **Desktop Behavior**: Selected card + hover shows gray deselect button instead of orange select button
+  - **Mobile Behavior**: Unselected shows `select_this_service`, selected shows `service_selected_confirm`
+  - **Textarea Behavior**: Does NOT clear on deselect as per requirements
+  - **Translation Keys**: Added 3 new keys in `provider_page` namespace (`select_this_service`, `service_selected_confirm`, `service_deselect`) for all 34 languages
+  - **Seed Script**: `apps/api/scripts/seed_provider_page_service_select.py` (102 rows)
+  - **API Note**: `get_namespaced_translations` in `apps/web/lib/ui-translations.ts` strips namespace prefix from keys, so frontend uses keys WITHOUT prefix (e.g., `select_this_service` NOT `provider_page.select_this_service`)
 - **Provider Page Pricing Display (May 23, 2026)**: Implemented dynamic pricing logic in provider components based on service price_type (fixed, hourly, per_sqm, request) with proper currency and unit labels using translation keys.
   - **ProviderFullPage.tsx**: Added `currency: string` to ProviderService interface, replaced hardcoded currency with dynamic pricing logic based on price_type
   - **LeadPanel.tsx**: Updated services type to include base_price, price_type, currency; added formatServicePrice helper function; updated chip rendering

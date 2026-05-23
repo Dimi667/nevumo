@@ -340,11 +340,7 @@ export default function LeadPanel({
                   onClick={() => {
                     if (selectedService === service.id) {
                       // Deactivate without clearing textarea
-                      if (externalOnServiceDeselect) {
-                        externalOnServiceDeselect();
-                      } else {
-                        setInternalSelectedService(null);
-                      }
+                      setSelectedService(null);
                     } else {
                       // Activate and pre-fill textarea
                       setSelectedService(service.id);

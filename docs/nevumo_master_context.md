@@ -470,6 +470,16 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - **Provider Page Translation Fixes (May 23, 2026)** — COMPLETE:
   - **Problem**: Hardcoded Bulgarian texts appearing on provider page when Polish language was selected
   - **Solution**: Added provider_page.request_service translation key for all 34 languages to fix service card button text
+- **Provider Page Service Selection Toggle (May 23, 2026)** — COMPLETE:
+  - **Shared State Pattern**: Both service cards and chips use the same `selectedService` state with toggle logic
+  - **Toggle Logic**: Click selected → deselect to null, click unselected → select
+  - **Desktop Behavior**: Selected card + hover shows gray deselect button instead of orange select button
+  - **Mobile Behavior**: Unselected shows `select_this_service`, selected shows `service_selected_confirm`
+  - **Textarea Behavior**: Does NOT clear on deselect as per requirements
+  - **Translation Keys**: Added 3 new keys in `provider_page` namespace (`select_this_service`, `service_selected_confirm`, `service_deselect`) for all 34 languages
+  - **Seed Script**: `apps/api/scripts/seed_provider_page_service_select.py` (102 rows)
+  - **API Note**: `get_namespaced_translations` in `apps/web/lib/ui-translations.ts` strips namespace prefix from keys, so frontend uses keys WITHOUT prefix (e.g., `select_this_service` NOT `provider_page.select_this_service`)
+  - **Redis Cache Flush**: Required after seeding: `docker exec nevumo-redis redis-cli FLUSHALL`
   - **Seed script**: seed_provider_page_translations_p2.py (34 keys × 34 languages = 1,156 rows total including existing keys)
   - **Key pattern**: Translation keys must use namespace.prefix pattern (e.g., provider_page.request_service) to match frontend fetchTranslations() calls
   - **Solution**: Fixed translation namespace issue - API returns translations without namespace prefix (e.g., `price_per_hour`), but components were accessing them with full namespace (e.g., `provider_page.price_per_hour`)

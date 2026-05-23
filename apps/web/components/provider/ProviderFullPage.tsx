@@ -332,15 +332,24 @@ function ServicesSection({
                 <p className="text-sm font-semibold text-gray-900">
                   {formatPrice(service)}
                 </p>
-                {/* Desktop: Request button on hover */}
-                <button className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1.5 text-xs font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600">
-                  {t['request_service'] ?? 'Заяви услуга'}
-                </button>
+                {/* Desktop: Request button on hover OR deselect button when selected */}
+                {selectedService === service.id ? (
+                  <button className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300">
+                    {t['service_deselect'] ?? '✕ Премахни'}
+                  </button>
+                ) : (
+                  <button className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1.5 text-xs font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600">
+                    {t['request_service'] ?? 'Заяви услуга'}
+                  </button>
+                )}
               </div>
             </div>
-            {/* Mobile: Always visible select hint */}
+            {/* Mobile: Select hint based on selection state */}
             <p className="md:hidden text-xs text-orange-600 mt-2">
-              {t['select_this_service'] ?? 'Избери тази услуга →'}
+              {selectedService === service.id
+                ? (t['service_selected_confirm'] ?? '✓ Избрана')
+                : (t['select_this_service'] ?? 'Избери тази услуга →')
+              }
             </p>
           </div>
         ))}
@@ -434,11 +443,13 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
   const [selectedService, setSelectedService] = useState<number | null>(null);
 
   const handleServiceSelect = (serviceId: number) => {
-    setSelectedService(serviceId);
-    // Scroll to form
-    const formElement = document.getElementById('provider-lead-form');
-    if (formElement) {
-      formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setSelectedService(prev => prev === serviceId ? null : serviceId);
+    // Scroll to form only when selecting (not deselecting)
+    if (selectedService !== serviceId) {
+      const formElement = document.getElementById('provider-lead-form');
+      if (formElement) {
+        formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
   };
 

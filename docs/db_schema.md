@@ -552,10 +552,10 @@ CREATE INDEX idx_translations_key ON translations(key);
   Keys added: s3_title, s3_what_to_include_title, s4_title, s5_title, back_to_home, s3_body, s3_what_to_include_body, s4_body, s5_body
   Purpose: DSA (Digital Services Act) Contact Point page - Article 11 compliance
   Seed scripts: seed_contact_dsa_p1.py, seed_contact_dsa_p2.py
-- **provider_page namespace (May 23, 2026)**: 3 keys × 34 languages = 102 rows
-  Keys added: price_per_hour, price_on_request, request_service
-  Purpose: Provider page pricing display and service card button text
-  Seed scripts: seed_provider_page_price_units.py, seed_provider_page_translations_p2.py
+- **provider_page namespace (May 23, 2026)**: 6 keys × 34 languages = 204 rows
+  Keys added: price_per_hour, price_on_request, request_service, select_this_service, service_selected_confirm, service_deselect
+  Purpose: Provider page pricing display, service card button text, and service selection toggle UI
+  Seed scripts: seed_provider_page_price_units.py, seed_provider_page_translations_p2.py, seed_provider_page_service_select.py
 - **Total rows**: 12,500+ translations across all namespaces
 
 ### Redis Caching
