@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { createLead, claimLeadEmail } from '@/lib/api';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 
@@ -25,6 +25,7 @@ interface LeadPanelProps {
   selectedService?: number | null;
   onServiceSelect?: (serviceId: number) => void;
   onServiceDeselect?: () => void;
+  onServicePreFill?: (serviceId: number) => string;
 }
 
 function formatServicePrice(
@@ -59,6 +60,7 @@ export default function LeadPanel({
   selectedService: externalSelectedService,
   onServiceSelect: externalOnServiceSelect,
   onServiceDeselect: externalOnServiceDeselect,
+  onServicePreFill,
 }: LeadPanelProps) {
   const t = translations;
   const [internalSelectedService, setInternalSelectedService] = useState<number | null>(null);
@@ -66,8 +68,23 @@ export default function LeadPanel({
   const setSelectedService = externalOnServiceSelect ? externalOnServiceSelect : setInternalSelectedService;
   const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
+
+  // Handle pre-fill from service selection (chip click or external select)
+  useEffect(() => {
+    if (selectedService !== null) {
+      const service = services.find(s => s.id === selectedService);
+      if (service) {
+        const serviceText = onServicePreFill ? onServicePreFill(selectedService) : `${service.title} - ${formatServicePrice(service, t['price_per_hour'] ?? '/ч', t['price_on_request'] ?? 'По запитване')}`;
+        setNotes(serviceText);
+      }
+    } else {
+      // Clear notes on deselect
+      setNotes('');
+    }
+  }, [selectedService, services, onServicePreFill, t]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [serviceNoteError, setServiceNoteError] = useState<string | null>(null);
   const [step, setStep] = useState<'form' | 'success1' | 'success2'>('form');
   const [leadId, setLeadId] = useState<string | null>(null);
   const [email, setEmail] = useState('');
@@ -123,10 +140,17 @@ export default function LeadPanel({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
+    setServiceNoteError(null);
 
     if (!isValidPhone(phone)) {
       setSubmitError(t['error_phone_invalid'] ?? 'Invalid phone number');
       phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // Validate service or note
+    if (selectedService === null && notes.trim().length === 0) {
+      setServiceNoteError(t['error_service_or_note'] ?? 'Моля изберете услуга или напишете бележка');
       return;
     }
 
@@ -206,6 +230,7 @@ export default function LeadPanel({
     setEmail('');
     setSubmitError(null);
     setEmailError(null);
+    setServiceNoteError(null);
   };
 
   // Success Screen Step 1
@@ -338,15 +363,7 @@ export default function LeadPanel({
                   key={service.id}
                   type="button"
                   onClick={() => {
-                    if (selectedService === service.id) {
-                      // Deactivate without clearing textarea
-                      setSelectedService(null);
-                    } else {
-                      // Activate and pre-fill textarea
-                      setSelectedService(service.id);
-                      const serviceText = `${service.title} - ${formatServicePrice(service, t['price_per_hour'] ?? '/ч', t['price_on_request'] ?? 'По запитване')}`;
-                      setNotes(prev => prev ? `${prev}\n${serviceText}` : serviceText);
-                    }
+                    setSelectedService(service.id);
                   }}
                   className={`text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors ${
                     selectedService === service.id
@@ -358,6 +375,9 @@ export default function LeadPanel({
                 </button>
               ))}
             </div>
+            {serviceNoteError && (
+              <p className="text-xs text-red-600 mt-1">{serviceNoteError}</p>
+            )}
             <p className="text-xs text-gray-500">
               {t['or_general_request'] ?? 'Или изпратете обща заявка ↓'}
             </p>
@@ -381,7 +401,10 @@ export default function LeadPanel({
         <textarea
           rows={3}
           value={notes}
-          onChange={(e) => setNotes(e.target.value)}
+          onChange={(e) => {
+            setNotes(e.target.value);
+            if (serviceNoteError) setServiceNoteError(null);
+          }}
           placeholder={t['notes_placeholder'] ?? 'Опишете накратко какво ви трябва...'}
           className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 resize-none"
         />

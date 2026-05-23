@@ -526,6 +526,19 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - Bugs fixed по време на имплементацията:
       - ProviderFullPage не зареждаше provider_page namespace (translations={} → translations={providerPageT})
       - t['provider_page.KEY'] → t['KEY'] в ProviderFullPage.tsx и LeadPanel.tsx (18 замени)
+  - ✅ Задача K — Mobile Bottom Sheet Form — COMPLETE (May 23, 2026)
+    - Нов компонент: apps/web/components/provider/BottomSheetForm.tsx
+    - Slide-up анимация (translateY 100% → 0), overlay с click-to-close, X бутон горе дясно, body scroll lock
+    - PhoneInput с usePhone hook (auto-fill за логнати, auto-prefix за анонимни)
+    - Service chips, textarea за бележка, trust signal, submit бутон
+    - Валидация: phone задължително + (услуга ИЛИ бележка) — грешка `error_service_or_note`
+    - StickyProviderCTA.tsx обновен: onClick → onOpenSheet() prop вместо scroll
+    - ProviderFullPage.tsx: isSheetOpen state, споделен selectedService между LeadPanel и BottomSheetForm
+    - Pre-fill на notes при service card click: handleServicePreFill обвита в useCallback
+    - useEffect dependency fix: onServicePreFill премахнат от deps, предотвратява двойно изпълнение
+    - Select на услуга replace-ва notes (не append) — само една услуга активна едновременно
+    - Deselect изчиства notes
+    - Seed скрипт: apps/api/scripts/seed_provider_page_error_keys.py (1 ключ × 34 езика)
 - Translation keys заредени в namespace provider_page: section_gallery, section_about, section_services, section_reviews, read_more, read_less, completed_jobs, meta_services, meta_cities, reviews_count, request_panel_title, request_panel_free, request_panel_no_commitment, or_general_request, phone_placeholder, notes_placeholder, cta_button, trust_verified, trust_free, trust_direct, share_button, link_copied, select_service, service_selected, meta_response_rate
 - Translation keys заредени в namespace widget: badge_new_provider, badge_verified, badge_top_specialist
 - Seed скриптове: seed_provider_page_translations_v2.py, seed_provider_page_translations_p2.py

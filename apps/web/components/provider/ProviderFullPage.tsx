@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import AboutSection from './AboutSection';
 import LeadPanel from './LeadPanel';
 import StickyProviderCTA from './StickyProviderCTA';
+import BottomSheetForm from './BottomSheetForm';
 import { ShareButton } from '@/components/shared/ShareButton';
 
 interface GalleryImage {
@@ -441,17 +442,49 @@ function ReviewsSection({ reviews, reviewCount, businessName, translations }: {
 export default function ProviderFullPage({ provider, translations, lang }: ProviderFullPageProps) {
   const t = translations;
   const [selectedService, setSelectedService] = useState<number | null>(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  const formatServicePrice = (service: ProviderService) => {
+    if (!service.base_price || service.price_type === 'request') {
+      return t['price_on_request'] ?? 'По запитване';
+    }
+    if (service.price_type === 'hourly') {
+      return `${service.base_price} ${service.currency}${t['price_per_hour'] ?? '/ч'}`;
+    }
+    if (service.price_type === 'per_sqm') {
+      return `${service.base_price} ${service.currency}/m²`;
+    }
+    return `${service.base_price} ${service.currency}`;
+  };
 
   const handleServiceSelect = (serviceId: number) => {
+    const isSelecting = selectedService !== serviceId;
     setSelectedService(prev => prev === serviceId ? null : serviceId);
     // Scroll to form only when selecting (not deselecting)
-    if (selectedService !== serviceId) {
+    if (isSelecting) {
       const formElement = document.getElementById('provider-lead-form');
       if (formElement) {
         formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
+      // Pre-fill notes
+      const serviceText = handleServicePreFill(serviceId);
+      if (serviceText) {
+        handleNotesPreFill(serviceText);
+      }
     }
   };
+
+  const handleNotesPreFill = (text: string) => {
+    // This will be passed to LeadPanel/BottomSheetForm to pre-fill their notes state
+    // Components will handle adding this text to their local notes state
+  };
+
+  const handleServicePreFill = useCallback((serviceId: number) => {
+    const service = provider.services.find(s => s.id === serviceId);
+    if (!service) return;
+    const serviceText = `${service.title} - ${formatServicePrice(service)}`;
+    return serviceText;
+  }, [provider.services]);
 
   const handleServiceDeselect = () => {
     setSelectedService(null);
@@ -510,11 +543,40 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
             selectedService={selectedService}
             onServiceSelect={handleServiceSelect}
             onServiceDeselect={handleServiceDeselect}
+            onServicePreFill={handleServicePreFill}
+            onNotesPreFill={handleNotesPreFill}
           />
         </div>
       </div>
 
-      <StickyProviderCTA lang={lang} translations={translations} providerName={provider.business_name} />
+      <StickyProviderCTA lang={lang} translations={translations} providerName={provider.business_name} onOpenSheet={() => setIsSheetOpen(true)} />
+
+      <BottomSheetForm
+        providerName={provider.business_name}
+        providerSlug={provider.slug}
+        categorySlug={provider.category_slug}
+        citySlug={provider.city_slug}
+        services={provider.services}
+        verificationLevel={provider.verification_level}
+        reviewCount={provider.review_count}
+        jobsCompleted={provider.jobs_completed}
+        cityLeads={provider.city_leads}
+        cityName={provider.city_name}
+        categoryName={provider.category_name}
+        latestReview={provider.latest_review}
+        latestLeadClientName={provider.latest_lead_client_name}
+        latestLeadCity={provider.latest_lead_city}
+        leadsReceived={provider.leads_received}
+        translations={translations}
+        lang={lang}
+        selectedService={selectedService}
+        onServiceSelect={handleServiceSelect}
+        onServiceDeselect={handleServiceDeselect}
+        onServicePreFill={handleServicePreFill}
+        onNotesPreFill={handleNotesPreFill}
+        isOpen={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
+      />
     </div>
   );
 }

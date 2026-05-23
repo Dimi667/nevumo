@@ -551,3 +551,22 @@ Badge-ът се сваля автоматично ако условията пр
 Задача G  Документация update (nevumo_master_context, ARCHITECTURE, db_schema)
 ```
 
+---
+
+### Задача K — Mobile Bottom Sheet Form — COMPLETE (May 23, 2026)
+**Модел:** Kimi-2.6
+
+- Нов компонент `apps/web/components/provider/BottomSheetForm.tsx` 
+- Slide-up анимация, overlay с click-to-close, X бутон горе дясно, body scroll lock
+- PhoneInput с usePhone hook (auto-fill за логнати, auto-prefix за анонимни)
+- Service chips, textarea за бележка, trust signal, submit бутон
+- Валидация: phone задължително + (услуга ИЛИ бележка) — грешка `error_service_or_note` 
+- `StickyProviderCTA.tsx` обновен: onClick → onOpenSheet() prop вместо scroll
+- `ProviderFullPage.tsx`: isSheetOpen state, споделен selectedService между LeadPanel и BottomSheetForm
+- Pre-fill на notes при service card click: handleServicePreFill обвита в useCallback
+- useEffect dependency fix: onServicePreFill премахнат от deps, предотвратява двойно изпълнение
+- Select на услуга replace-ва notes (не append) — само една услуга активна едновременно
+- Deselect изчиства notes
+- Seed скрипт: `apps/api/scripts/seed_provider_page_error_keys.py` (1 ключ × 34 езика)
+
+

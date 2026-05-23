@@ -368,6 +368,17 @@ This separation ensures that:
   - When keys are duplicated with `row_bg()` (incomplete translations) in one script and full translations in another, executing the incomplete script will overwrite the good translations with English fallback text for non-EN/BG languages
   - Solution: Remove duplicate keys from the script that uses `row_bg()` and let the specialized script handle those keys with full 34-language translations
 - **Mobile Language Dropdown Fix (May 15, 2026)**: Fixed language dropdown in GlobalFooter component that was going off-screen on mobile devices (375px width). Changed positioning from `right-0` to responsive `left-0 md:right-0 md:left-auto` to ensure dropdown stays within viewport bounds on small screens while maintaining right alignment on desktop.
+- **Mobile Bottom Sheet Form (May 23, 2026)** — COMPLETE:
+  - **New Component**: `apps/web/components/provider/BottomSheetForm.tsx` with slide-up animation (translateY 100% → 0), overlay with click-to-close, X close button (top-right), body scroll lock
+  - **Form Features**: PhoneInput with usePhone hook (auto-fill for logged-in users, auto-prefix for anonymous), service chips, textarea for notes, trust signal, submit button
+  - **Validation Logic**: Phone required AND (selectedService !== null OR note.trim().length > 0) — error message shows as `error_service_or_note` under chips row
+  - **LeadPanel Update**: Added `serviceNoteError` state and validation check in handleSubmit
+  - **StickyProviderCTA Update**: Accepts `onOpenSheet` prop and calls it instead of scrolling to form
+  - **ProviderFullPage Integration**: Added `isSheetOpen` state, passes `isOpen/onClose` to BottomSheetForm, `onOpenSheet` to StickyProviderCTA, shares `selectedService` state between LeadPanel and BottomSheetForm
+  - **Pre-fill Behavior**: Selecting a service replaces notes content with service text (not append); deselecting clears notes
+  - **useCallback Fix**: handleServicePreFill wrapped in useCallback to prevent useEffect re-running on every render
+  - **Translation Key**: `error_service_or_note` from `provider_page` namespace (seed script: `apps/api/scripts/seed_provider_page_error_keys.py`)
+  - **X Button Fix**: Replaced drag handle with X close button positioned absolute top-4 right-4; fixed CSS positioning conflicts (removed `relative` class, switched to inline style for transform animation)
 - **Provider Page Service Selection Toggle (May 23, 2026)**: Implemented shared state and toggle functionality for service selection cards and chips in ProviderFullPage.tsx and LeadPanel.tsx.
   - **Shared State Pattern**: Both cards and chips use the same `selectedService` state with toggle logic (click selected → deselect to null, click unselected → select)
   - **Desktop Behavior**: Selected card + hover shows gray deselect button instead of orange select button

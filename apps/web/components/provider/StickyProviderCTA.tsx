@@ -6,12 +6,14 @@ interface StickyProviderCTAProps {
   lang: string
   translations: Record<string, string>
   providerName: string
+  onOpenSheet: () => void
 }
 
 export default function StickyProviderCTA({ 
   lang,
   translations,
-  providerName
+  providerName,
+  onOpenSheet
 }: StickyProviderCTAProps) {
   const btnRef = useRef<HTMLDivElement>(null)
   const formId = 'provider-lead-form'
@@ -61,12 +63,7 @@ export default function StickyProviderCTA({
       className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 p-4 md:hidden"
     >
       <button
-        onClick={() => {
-          const formEl = document.getElementById(formId)
-          if (formEl) {
-            formEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          }
-        }}
+        onClick={onOpenSheet}
         className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base truncate"
       >
         {translations['cta_button']} {providerName}
