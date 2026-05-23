@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { createLead, claimLeadEmail } from '@/lib/api';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 
@@ -45,7 +44,6 @@ export default function LeadPanel({
   lang,
 }: LeadPanelProps) {
   const t = translations;
-  const router = useRouter();
   const [selectedService, setSelectedService] = useState<number | null>(null);
   const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
@@ -173,7 +171,7 @@ export default function LeadPanel({
       localStorage.setItem('nevumo_pending_claim', JSON.stringify(pendingClaim));
 
       // Redirect to auth
-      router.push(`/${lang}/auth?email=${encodeURIComponent(email)}&intent=client`);
+      window.location.href = `/${lang}/auth?email=${encodeURIComponent(email)}&intent=client`;
     } catch (err) {
       setEmailError(t['error_generic'] ?? 'An error occurred. Please try again.');
     } finally {

@@ -484,6 +484,8 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - Fallback fix: navigator.clipboard + document.execCommand за HTTP/non-secure контексти
   - ✅ Задача F — Seed scripts за namespace provider_page и widget badge ключове
   - ✅ Задача D — ProviderFullPage компонент
+  - ✅ Задача G — Lead submission flow restoration in LeadPanel.tsx — COMPLETE
+    - LeadPanel.tsx contains full lead submission logic ported from ProviderWidget.tsx: lead API call, JWT linking, 429 handling, success screen Step1/Step2, email nudge, claim-email, localStorage, window.location.href redirect, phone validation, scrollIntoView, PWA install prompt
   - ⏳ Задача H — Правен текст: Badge система (предстои)
   - ⏳ Задача I — Category page badge актуализация (предстои)
   - ✅ Задача J — Mobile Sticky CTA за Provider страница — COMPLETE (May 22, 2026)

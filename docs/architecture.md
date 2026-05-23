@@ -2352,7 +2352,7 @@ python scripts/seed_review_translations.py
 #### Нови компоненти
 - `apps/web/components/provider/ProviderFullPage.tsx` — Server Component, двуколонен десктоп layout (1fr + 340px sticky), едноколонен мобилен
 - `apps/web/components/provider/AboutSection.tsx` — Client Component, read_more toggle
-- `apps/web/components/provider/LeadPanel.tsx` — Client Component, sticky форма за заявка с ServiceChips, SocialProofSignal каскада и CTA
+- `apps/web/components/provider/LeadPanel.tsx` — Client Component, full lead submission logic identical to ProviderWidget.tsx post-lead flow: success screen, email capture nudge, pending_lead_claim registration, PWA prompt trigger
 - Условен render в `page.tsx`: `?embed=1` → ProviderWidget (непроменен), иначе → ProviderFullPage
 
 #### Gallery backend
