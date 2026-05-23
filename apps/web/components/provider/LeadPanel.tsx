@@ -77,7 +77,7 @@ export default function LeadPanel({
     }
     // 2. reviewCount === 0 && jobsCompleted > 0
     if (reviewCount === 0 && jobsCompleted > 0) {
-      return <p>✓ {jobsCompleted} завършени услуги</p>;
+      return <p>✓ {jobsCompleted} {t['completed_jobs']}</p>;
     }
     // 3. reviewCount === 0 && jobsCompleted === 0 && cityLeads > 0
     if (reviewCount === 0 && jobsCompleted === 0 && cityLeads && cityLeads > 0) {
@@ -375,7 +375,7 @@ export default function LeadPanel({
           disabled={isSubmitting}
           className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white text-base font-semibold rounded-xl transition-colors truncate"
         >
-          {isSubmitting ? (t['sending'] ?? 'Изпращане...') : `Свържи ме с ${providerName}`}
+          {isSubmitting ? (t['sending'] ?? 'Изпращане...') : `${t['cta_button']} ${providerName}`}
         </button>
       </form>
 

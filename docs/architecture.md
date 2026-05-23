@@ -274,15 +274,18 @@ The automated SEO infrastructure is designed for:
 - **Performance**: JSON-LD and canonical tags are generated server-side (SSR) for optimal page load speed
 - **Compliance**: Follows Google's structured data guidelines and SEO best practices
 
-### Docker Environment Variable Pattern (May 7, 2026 - Updated May 15, 2026)
+### Docker Environment Variable Pattern (May 7, 2026 - Updated May 23, 2026)
 Next.js in Docker requires two separate environment variables to handle server-side and client-side API communication correctly:
 
 - **API_URL=http://nevumo-api:8000** — Used server-side (SSR, Next.js rewrites) for container-to-container communication within the Docker network
-- **NEXT_PUBLIC_API_URL=http://localhost:8000** — Used client-side (browser) for API calls; set to browser-accessible URL to avoid hydration mismatches
+- **NEXT_PUBLIC_API_URL** — Used client-side (browser) for API calls; set to browser-accessible URL to avoid hydration mismatches
+  - **Local Development**: Set to `http://192.168.0.15:8000` (host IP) in `.env.local` for local network access from other devices
+  - **Production**: Set to `https://api.nevumo.com` (production API domain) in `.env`
+  - **Pattern**: `.env` contains production-ready value, `.env.local` (gitignored) contains local dev override
 
 This pattern is applied in:
-- **docker-compose.yml**: `API_URL` is defined for server-side (Docker internal network), `NEXT_PUBLIC_API_URL` is set to `http://localhost:8000` for client-side browser access
-- **apps/web/.env.local**: `NEXT_PUBLIC_API_URL=http://localhost:8000` for local development
+- **docker-compose.yml**: `API_URL` is defined for server-side (Docker internal network), `NEXT_PUBLIC_API_URL` is set to `http://localhost:8000` as default with `${NEXT_PUBLIC_API_URL:-http://localhost:8000}` override
+- **apps/web/.env.local**: `NEXT_PUBLIC_API_URL=http://192.168.0.15:8000` for local network access (Mac + mobile devices)
 - **apps/web/lib/api.ts**: `API_BASE` checks `process.env.API_URL` first, then falls back to `NEXT_PUBLIC_API_URL` for server-side; uses `NEXT_PUBLIC_API_URL` for client-side
 - **apps/web/lib/ui-translations.ts**: Same fallback pattern for translation fetching
 - **apps/web/lib/locales.ts**: Updated to use `API_URL || NEXT_PUBLIC_API_URL` fallback for server-side fetch

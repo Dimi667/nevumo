@@ -117,21 +117,25 @@ function HeroSection({ provider, translations }: { provider: ProviderFullPagePro
     if (provider.verification_level === 0) {
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
-          ⚡ {t['widget.badge_new_provider'] ?? 'Нов в Nevumo'}
+          ⚡ {t['badge_new_provider'] ?? 'Нов в Nevumo'}
         </span>
       );
     }
     if (provider.verification_level === 1) {
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
-          ✓ {t['widget.badge_verified'] ?? 'Верифициран'}
+          ✓ {t['badge_verified'] ?? 'Верифициран'}
         </span>
       );
     }
     if (provider.verification_level === 2) {
+      const badgeText = t['badge_top_specialist'] ?? 'Топ специалист в {city}';
+      const displayText = badgeText.includes('{city}') 
+        ? badgeText.replace('{city}', provider.city_name)
+        : `${badgeText} ${provider.city_name}`;
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium">
-          ★ {(t['widget.badge_top_specialist'] ?? 'Топ специалист в {city}').replace('{city}', provider.city_name)}
+          ★ {displayText}
         </span>
       );
     }

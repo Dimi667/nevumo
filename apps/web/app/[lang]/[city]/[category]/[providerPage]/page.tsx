@@ -107,12 +107,15 @@ export default async function Page(props: {
   // Use the resolved slug consistently for provider lookups
   const slugToUse = slugResolution.found && slugResolution.slug ? slugResolution.slug : providerPage;
 
-  const [provider, categories, cityData, providerPageT] = await Promise.all([
+  const [provider, categories, cityData, providerPageT, categoryT, widgetT] = await Promise.all([
     getProviderBySlug(slugToUse, lang, city),
     getCategories(lang),
     getCityBySlug(city, lang),
     fetchTranslations(lang, 'provider_page'),
+    fetchTranslations(lang, 'category'),
+    fetchTranslations(lang, 'widget'),
   ]);
+  const mergedT = { ...categoryT, ...providerPageT, ...widgetT };
 
   if (!provider) return notFound();
 
@@ -154,7 +157,7 @@ export default async function Page(props: {
           city_slug: city,
           lang,
         }}
-        translations={providerPageT}
+        translations={mergedT}
         lang={lang}
       />
     </>

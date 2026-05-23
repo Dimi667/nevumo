@@ -69,7 +69,7 @@ export default function StickyProviderCTA({
         }}
         className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base truncate"
       >
-        Свържи ме с {providerName}
+        {translations['cta_button']} {providerName}
       </button>
     </div>
   )

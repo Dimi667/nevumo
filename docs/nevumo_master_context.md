@@ -467,11 +467,19 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Problem**: Clicking "Find Service" in the provider dashboard sidebar while already having a client role resulted in an `ALREADY_IN_ROLE` error (400) from the API.
   - **Fix**: Added a frontend check in `apps/web/components/dashboard/DashboardSidebar.tsx`.
   - **Logic**: If `user.role === 'client'`, the app now redirects directly to the client dashboard without calling the `switchRole` API.
-- **Client Dashboard Guard Fix (April 28, 2026)** — SUCCESSFUL:
-  - **Problem**: Users with `role="provider"` could land on the client dashboard. Clicking "Become a provider" resulted in an `ALREADY_IN_ROLE` error.
-  - **Fix**: Added a frontend guard in `apps/web/app/[lang]/client/dashboard/layout.tsx`.
-  - **Logic**: The guard decodes the JWT from `localStorage` and redirects any user with `role === 'provider'` to the provider dashboard.
-  - **Implementation**: Uses `useEffect`, `getAuthToken`, and `router.replace` with manual JWT payload decoding.
+- **Provider Page Translation Fixes (May 23, 2026)** — COMPLETE:
+  - **Problem**: Hardcoded Bulgarian texts appearing on provider page when Polish language was selected
+  - **Fixed texts**: "✓ {jobsCompleted} завършени услуги", "Свържи ме с {providerName}", "Топ специалист в {city}", "За специалиста"
+  - **Solution**: Replaced hardcoded texts with existing translation keys using dynamic injection
+  - **Components updated**: `LeadPanel.tsx`, `StickyProviderCTA.tsx`, `ProviderFullPage.tsx`, `AboutSection.tsx`
+  - **Translation keys used**: `provider_page.completed_jobs`, `provider_page.cta_button`, `widget.badge_top_specialist`, `provider_page.section_about`
+  - **Additional fix**: Added `widget` namespace to translation fetching in provider page
+  - **Badge logic**: Enhanced to handle both placeholder-based and direct city name appending
+- **Docker Environment Variable Pattern Update (May 23, 2026)** — COMPLETE:
+  - **Problem**: NEXT_PUBLIC_API_URL set to OrbStack internal IP (192.168.0.15:8000) which is not browser-accessible from Mac
+  - **Solution**: Updated `.env` to production value (https://api.nevumo.com) and `.env.local` to host IP (http://192.168.0.15:8000)
+  - **Benefit**: Enables local network access from other devices while maintaining production readiness
+  - **Pattern**: `.env` contains production-ready value, `.env.local` (gitignored) contains local dev override
 
 #### Provider Full Page (May 21, 2026) — В ПРОГРЕС
 - Статус на задачите:
