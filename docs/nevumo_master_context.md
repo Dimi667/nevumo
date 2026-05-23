@@ -469,6 +469,16 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Logic**: If `user.role === 'client'`, the app now redirects directly to the client dashboard without calling the `switchRole` API.
 - **Provider Page Translation Fixes (May 23, 2026)** — COMPLETE:
   - **Problem**: Hardcoded Bulgarian texts appearing on provider page when Polish language was selected
+  - **Solution**: Added provider_page.request_service translation key for all 34 languages to fix service card button text
+  - **Seed script**: seed_provider_page_translations_p2.py (34 keys × 34 languages = 1,156 rows total including existing keys)
+  - **Key pattern**: Translation keys must use namespace.prefix pattern (e.g., provider_page.request_service) to match frontend fetchTranslations() calls
+  - **Solution**: Fixed translation namespace issue - API returns translations without namespace prefix (e.g., `price_per_hour`), but components were accessing them with full namespace (e.g., `provider_page.price_per_hour`)
+  - **Changes**:
+    - Changed translation keys in ProviderFullPage.tsx and LeadPanel.tsx from `provider_page.price_on_request`/`provider_page.price_per_hour` to `price_on_request`/`price_per_hour` (without namespace prefix)
+    - Fixed merge order in page.tsx from `{ ...categoryT, ...providerPageT, ...widgetT }` to `{ ...categoryT, ...widgetT, ...providerPageT }` to ensure provider_page translations have priority
+    - Added dynamic pricing logic based on service price_type (fixed, hourly, per_sqm, request) with proper currency and unit labels
+    - Added `provider_page.price_per_hour` and `provider_page.price_on_request` translation keys for all 34 languages (seed script: seed_provider_page_price_units.py)
+  - **Verification**: Spanish page (http://localhost:3000/es/belgrade/cleaning/et-lili) now correctly displays "A consultar" and "/h" instead of Bulgarian "По запитване" and "/ч"
   - **Fixed texts**: "✓ {jobsCompleted} завършени услуги", "Свържи ме с {providerName}", "Топ специалист в {city}", "За специалиста"
   - **Solution**: Replaced hardcoded texts with existing translation keys using dynamic injection
   - **Components updated**: `LeadPanel.tsx`, `StickyProviderCTA.tsx`, `ProviderFullPage.tsx`, `AboutSection.tsx`

@@ -368,6 +368,12 @@ This separation ensures that:
   - When keys are duplicated with `row_bg()` (incomplete translations) in one script and full translations in another, executing the incomplete script will overwrite the good translations with English fallback text for non-EN/BG languages
   - Solution: Remove duplicate keys from the script that uses `row_bg()` and let the specialized script handle those keys with full 34-language translations
 - **Mobile Language Dropdown Fix (May 15, 2026)**: Fixed language dropdown in GlobalFooter component that was going off-screen on mobile devices (375px width). Changed positioning from `right-0` to responsive `left-0 md:right-0 md:left-auto` to ensure dropdown stays within viewport bounds on small screens while maintaining right alignment on desktop.
+- **Provider Page Pricing Display (May 23, 2026)**: Implemented dynamic pricing logic in provider components based on service price_type (fixed, hourly, per_sqm, request) with proper currency and unit labels using translation keys.
+  - **ProviderFullPage.tsx**: Added `currency: string` to ProviderService interface, replaced hardcoded currency with dynamic pricing logic based on price_type
+  - **LeadPanel.tsx**: Updated services type to include base_price, price_type, currency; added formatServicePrice helper function; updated chip rendering
+  - **Translation keys**: Added `provider_page.price_per_hour` and `provider_page.price_on_request` for all 34 languages (seed script: seed_provider_page_price_units.py)
+  - **Translation namespace fix**: Changed translation keys from `provider_page.price_on_request`/`provider_page.price_per_hour` to `price_on_request`/`price_per_hour` (without namespace prefix) to match API response format
+  - **Merge order fix**: Changed page.tsx merge order to `{ ...categoryT, ...widgetT, ...providerPageT }` to ensure provider_page translations have priority over category translations
 - **Sticky Positioning Fix (May 23, 2026)** — COMPLETE:
   - **PROBLEM**: Right column (lead form with button) on provider page was not sticking to viewport when scrolling.
   - **ROOT CAUSE**: `overflow-x: hidden` on `html` and `body` elements in `apps/web/app/globals.css` completely breaks `position: sticky` for all descendants.

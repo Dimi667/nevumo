@@ -115,7 +115,7 @@ export default async function Page(props: {
     fetchTranslations(lang, 'category'),
     fetchTranslations(lang, 'widget'),
   ]);
-  const mergedT = { ...categoryT, ...providerPageT, ...widgetT };
+  const mergedT = { ...categoryT, ...widgetT, ...providerPageT };
 
   if (!provider) return notFound();
 

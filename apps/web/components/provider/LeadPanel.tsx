@@ -9,7 +9,7 @@ interface LeadPanelProps {
   providerSlug: string;
   categorySlug: string;
   citySlug: string;
-  services: Array<{ id: number; title: string }>;
+  services: Array<{ id: number; title: string; base_price: number | null; price_type: string; currency: string }>;
   verificationLevel: number;
   reviewCount: number;
   jobsCompleted: number;
@@ -22,6 +22,20 @@ interface LeadPanelProps {
   leadsReceived?: number;
   translations: Record<string, string>;
   lang: string;
+  selectedService?: number | null;
+  onServiceSelect?: (serviceId: number) => void;
+  onServiceDeselect?: () => void;
+}
+
+function formatServicePrice(
+  service: { base_price: number | null; price_type: string; currency: string },
+  perHour: string,
+  onRequest: string
+): string {
+  if (!service.base_price || service.price_type === 'request') return onRequest;
+  if (service.price_type === 'hourly') return `${service.base_price} ${service.currency}${perHour}`;
+  if (service.price_type === 'per_sqm') return `${service.base_price} ${service.currency}/m²`;
+  return `${service.base_price} ${service.currency}`;
 }
 
 export default function LeadPanel({
@@ -42,9 +56,14 @@ export default function LeadPanel({
   leadsReceived,
   translations,
   lang,
+  selectedService: externalSelectedService,
+  onServiceSelect: externalOnServiceSelect,
+  onServiceDeselect: externalOnServiceDeselect,
 }: LeadPanelProps) {
   const t = translations;
-  const [selectedService, setSelectedService] = useState<number | null>(null);
+  const [internalSelectedService, setInternalSelectedService] = useState<number | null>(null);
+  const selectedService = externalSelectedService !== undefined ? externalSelectedService : internalSelectedService;
+  const setSelectedService = externalOnServiceSelect ? externalOnServiceSelect : setInternalSelectedService;
   const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -318,14 +337,28 @@ export default function LeadPanel({
                 <button
                   key={service.id}
                   type="button"
-                  onClick={() => setSelectedService(service.id)}
+                  onClick={() => {
+                    if (selectedService === service.id) {
+                      // Deactivate without clearing textarea
+                      if (externalOnServiceDeselect) {
+                        externalOnServiceDeselect();
+                      } else {
+                        setInternalSelectedService(null);
+                      }
+                    } else {
+                      // Activate and pre-fill textarea
+                      setSelectedService(service.id);
+                      const serviceText = `${service.title} - ${formatServicePrice(service, t['price_per_hour'] ?? '/ч', t['price_on_request'] ?? 'По запитване')}`;
+                      setNotes(prev => prev ? `${prev}\n${serviceText}` : serviceText);
+                    }
+                  }}
                   className={`text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors ${
                     selectedService === service.id
                       ? 'bg-orange-500 text-white border-orange-500'
                       : 'border-gray-200 text-gray-600 bg-white hover:border-orange-400 hover:text-orange-600'
                   }`}
                 >
-                  {service.title}
+                  {service.title}  {formatServicePrice(service, t['price_per_hour'] ?? '/ч', t['price_on_request'] ?? 'По запитване')}
                 </button>
               ))}
             </div>

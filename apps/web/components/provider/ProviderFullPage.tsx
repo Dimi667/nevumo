@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import AboutSection from './AboutSection';
@@ -16,6 +19,7 @@ interface ProviderService {
   title: string;
   base_price: number | null;
   price_type: string;
+  currency: string;
   description: string | null;
 }
 
@@ -271,12 +275,35 @@ function GallerySection({ gallery, translations }: { gallery: GalleryImage[]; tr
 }
 
 // Services Section
-function ServicesSection({ services, translations }: { services: ProviderService[]; translations: Record<string, string> }) {
+function ServicesSection({ 
+  services, 
+  translations, 
+  selectedService, 
+  onServiceSelect 
+}: { 
+  services: ProviderService[]; 
+  translations: Record<string, string>;
+  selectedService: number | null;
+  onServiceSelect: (serviceId: number) => void;
+}) {
   const t = translations;
 
   if (services.length === 0) {
     return null;
   }
+
+  const formatPrice = (service: ProviderService) => {
+    if (!service.base_price || service.price_type === 'request') {
+      return t['price_on_request'] ?? 'По запитване';
+    }
+    if (service.price_type === 'hourly') {
+      return `${service.base_price} ${service.currency}${t['price_per_hour'] ?? '/ч'}`;
+    }
+    if (service.price_type === 'per_sqm') {
+      return `${service.base_price} ${service.currency}/m²`;
+    }
+    return `${service.base_price} ${service.currency}`;
+  };
 
   return (
     <section className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
@@ -285,18 +312,35 @@ function ServicesSection({ services, translations }: { services: ProviderService
       </h2>
       <div className="space-y-2">
         {services.map((service) => (
-          <div key={service.id} className="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-lg border border-transparent hover:border-gray-200">
-            <div className="flex-1 min-w-0">
-              <h3 className="text-sm font-medium text-gray-700">{service.title}</h3>
-              {service.description && (
-                <p className="text-xs text-gray-500 mt-0.5">{service.description}</p>
-              )}
+          <div
+            key={service.id}
+            onClick={() => onServiceSelect(service.id)}
+            className={`group relative px-4 py-3 bg-gray-50 rounded-lg border transition-all cursor-pointer ${
+              selectedService === service.id
+                ? 'border-orange-400 bg-orange-50'
+                : 'border-transparent hover:border-orange-300 hover:bg-orange-50/50'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm font-medium text-gray-700">{service.title}</h3>
+                {service.description && (
+                  <p className="text-xs text-gray-500 mt-0.5">{service.description}</p>
+                )}
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <p className="text-sm font-semibold text-gray-900">
+                  {formatPrice(service)}
+                </p>
+                {/* Desktop: Request button on hover */}
+                <button className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity px-3 py-1.5 text-xs font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600">
+                  {t['request_service'] ?? 'Заяви услуга'}
+                </button>
+              </div>
             </div>
-            <p className="text-sm font-semibold text-gray-900 shrink-0">
-              {service.base_price !== null 
-                ? `${service.base_price} zł`
-                : (t['category.price_on_request'] ?? 'По запитване')
-              }
+            {/* Mobile: Always visible select hint */}
+            <p className="md:hidden text-xs text-orange-600 mt-2">
+              {t['select_this_service'] ?? 'Избери тази услуга →'}
             </p>
           </div>
         ))}
@@ -387,6 +431,20 @@ function ReviewsSection({ reviews, reviewCount, businessName, translations }: {
 
 export default function ProviderFullPage({ provider, translations, lang }: ProviderFullPageProps) {
   const t = translations;
+  const [selectedService, setSelectedService] = useState<number | null>(null);
+
+  const handleServiceSelect = (serviceId: number) => {
+    setSelectedService(serviceId);
+    // Scroll to form
+    const formElement = document.getElementById('provider-lead-form');
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  const handleServiceDeselect = () => {
+    setSelectedService(null);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -400,7 +458,14 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
           <HeroSection provider={provider} translations={t} />
           {(provider.gallery ?? []).length > 1 && <GallerySection gallery={(provider.gallery ?? []).slice(1)} translations={t} />}
           <AboutSection description={provider.description} translations={t} />
-          {(provider.services ?? []).length > 0 && <ServicesSection services={provider.services ?? []} translations={t} />}
+          {(provider.services ?? []).length > 0 && (
+            <ServicesSection 
+              services={provider.services ?? []} 
+              translations={t} 
+              selectedService={selectedService}
+              onServiceSelect={handleServiceSelect}
+            />
+          )}
           {provider.review_count > 0 && (
             <ReviewsSection 
               reviews={provider.reviews} 
@@ -431,6 +496,9 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
             leadsReceived={provider.leads_received}
             translations={translations}
             lang={lang}
+            selectedService={selectedService}
+            onServiceSelect={handleServiceSelect}
+            onServiceDeselect={handleServiceDeselect}
           />
         </div>
       </div>
