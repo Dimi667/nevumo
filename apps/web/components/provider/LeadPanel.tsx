@@ -1,9 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { createLead, claimLeadEmail } from '@/lib/api';
+import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 
 interface LeadPanelProps {
   providerName: string;
+  providerSlug: string;
+  categorySlug: string;
+  citySlug: string;
   services: Array<{ id: number; title: string }>;
   verificationLevel: number;
   reviewCount: number;
@@ -21,6 +27,9 @@ interface LeadPanelProps {
 
 export default function LeadPanel({
   providerName,
+  providerSlug,
+  categorySlug,
+  citySlug,
   services,
   verificationLevel,
   reviewCount,
@@ -36,7 +45,19 @@ export default function LeadPanel({
   lang,
 }: LeadPanelProps) {
   const t = translations;
+  const router = useRouter();
   const [selectedService, setSelectedService] = useState<number | null>(null);
+  const [phone, setPhone] = useState('');
+  const [notes, setNotes] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [step, setStep] = useState<'form' | 'success1' | 'success2'>('form');
+  const [leadId, setLeadId] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
+  const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+  const phoneRef = useRef<HTMLInputElement>(null);
 
   // Social proof signal cascade logic
   const getSocialProofSignal = () => {
@@ -72,6 +93,211 @@ export default function LeadPanel({
     return <p>✓ Безплатна заявка • Без ангажимент • Директен контакт</p>;
   };
 
+  const isValidPhone = (phone: string): boolean => {
+    const digits = phone.replace(/\D/g, '');
+    return digits.length >= 7;
+  };
+
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitError(null);
+
+    if (!isValidPhone(phone)) {
+      setSubmitError(t['error_phone_invalid'] ?? 'Invalid phone number');
+      phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const result = await createLead({
+        provider_slug: providerSlug,
+        category_slug: categorySlug,
+        city_slug: citySlug,
+        phone: phone.trim(),
+        description: notes || undefined,
+        source: 'panel',
+      });
+
+      if (result && 'lead_id' in result) {
+        setLeadId(result.lead_id);
+        setStep('success1');
+        setTimeout(() => { setShowPWAPrompt(true); }, 2000);
+      } else if (result && 'success' in result && !result.success && result.error.code === 'RATE_LIMIT_EXCEEDED') {
+        // Rate limited but still show success
+        const leadIdFromError = (result as any).lead_id;
+        if (leadIdFromError) {
+          setLeadId(leadIdFromError);
+        }
+        setStep('success1');
+        setTimeout(() => { setShowPWAPrompt(true); }, 2000);
+      } else {
+        setSubmitError(t['error_generic'] ?? 'An error occurred. Please try again.');
+      }
+    } catch (err) {
+      setSubmitError(t['error_generic'] ?? 'An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isValidEmail(email)) {
+      setEmailError(t['error_email_invalid'] ?? 'Invalid email address');
+      return;
+    }
+
+    if (!leadId) return;
+
+    setIsEmailSubmitting(true);
+    setEmailError(null);
+
+    try {
+      await claimLeadEmail(leadId, email, phone);
+
+      // Save to localStorage
+      const pendingClaim = {
+        lead_id: leadId,
+        email: email,
+        phone: phone,
+        submitted_at: new Date().toISOString(),
+      };
+      localStorage.setItem('nevumo_pending_claim', JSON.stringify(pendingClaim));
+
+      // Redirect to auth
+      router.push(`/${lang}/auth?email=${encodeURIComponent(email)}&intent=client`);
+    } catch (err) {
+      setEmailError(t['error_generic'] ?? 'An error occurred. Please try again.');
+    } finally {
+      setIsEmailSubmitting(false);
+    }
+  };
+
+  const handleNoThanks = () => {
+    setStep('form');
+    setPhone('');
+    setNotes('');
+    setLeadId(null);
+    setEmail('');
+    setSubmitError(null);
+    setEmailError(null);
+  };
+
+  // Success Screen Step 1
+  if (step === 'success1') {
+    return (
+      <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden max-h-[calc(100vh-48px)] overflow-y-auto">
+        <div className="px-5 py-8 flex flex-col items-center justify-center text-center">
+          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+            <span className="text-green-600 text-3xl">✓</span>
+          </div>
+          <h3 className="text-lg font-bold text-gray-900 mb-2">
+            {t['success_title'] ?? 'Заявката е изпратена!'}
+          </h3>
+          <p className="text-sm text-gray-500 mb-6">
+            {t['success_subtitle'] ?? 'Специалистите ще се свържат с вас.'}
+          </p>
+          <div className="border-t border-gray-200 my-4 w-full"></div>
+          <p className="text-sm font-medium text-gray-700 mb-3">
+            {t['success_track_title'] ?? 'Искате ли да следите заявката си?'}
+          </p>
+          <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left inline-block">
+            <li>• {t['success_bullet_responses'] ?? 'Вижте кой е отговорил'}</li>
+            <li>• {t['success_bullet_manage'] ?? 'Управлявайте заявките си'}</li>
+            <li>• {t['success_bullet_notifications'] ?? 'Получавайте известия'}</li>
+          </ul>
+          <button
+            onClick={() => setStep('success2')}
+            className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600"
+          >
+            {t['success_cta_email'] ?? 'Продължи с имейл →'}
+          </button>
+          <p className="mt-2 text-xs text-gray-400">
+            {t['success_free_label'] ?? 'Безплатно • Без регистрация'}
+          </p>
+          <button
+            onClick={handleNoThanks}
+            className="mt-4 text-sm text-gray-500 underline hover:text-gray-700"
+          >
+            {t['success_skip_link'] ?? 'Не, благодаря'}
+          </button>
+
+          {showPWAPrompt && (
+            <PWAInstallPrompt
+              trigger="lead_submit"
+              role="client"
+              onClose={() => setShowPWAPrompt(false)}
+              lang={lang}
+            />
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Success Screen Step 2 - Email Form
+  if (step === 'success2') {
+    return (
+      <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden max-h-[calc(100vh-48px)] overflow-y-auto">
+        <div className="px-5 py-6">
+          <button
+            onClick={() => setStep('success1')}
+            className="mb-4 text-sm text-gray-500 hover:text-gray-700 flex items-center"
+          >
+            {t['email_back_link'] ?? '← Назад'}
+          </button>
+          <form onSubmit={handleEmailSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                {t['email_label'] ?? 'Вашият имейл адрес'}
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (emailError) setEmailError(null);
+                }}
+                placeholder={t['email_placeholder'] ?? 'your@email.com'}
+                autoFocus
+                className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
+              />
+              {emailError && (
+                <p className="text-xs text-red-600 mt-1">{emailError}</p>
+              )}
+            </div>
+            <button
+              type="submit"
+              disabled={isEmailSubmitting}
+              className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
+            >
+              {isEmailSubmitting ? (t['sending'] ?? 'Изпращане...') : (t['email_cta_continue'] ?? 'Продължи →')}
+            </button>
+          </form>
+          <p className="mt-3 text-center text-xs text-gray-400">
+            {t['success_free_label'] ?? 'Безплатно • Без регистрация'}
+          </p>
+          <button
+            onClick={handleNoThanks}
+            className="mt-4 text-center text-sm text-gray-500 underline hover:text-gray-700"
+          >
+            {t['success_skip_link'] ?? 'Не, благодаря'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Form Step
   return (
     <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden max-h-[calc(100vh-48px)] overflow-y-auto">
       {/* 1. Header */}
@@ -85,7 +311,7 @@ export default function LeadPanel({
       </div>
 
       {/* 2. Panel Body */}
-      <div className="px-5 py-4 flex flex-col gap-3">
+      <form onSubmit={handleSubmit} className="px-5 py-4 flex flex-col gap-3">
         {/* ServiceChips */}
         {(services ?? []).length > 0 && (
           <div>
@@ -93,6 +319,7 @@ export default function LeadPanel({
               {(services ?? []).map((service) => (
                 <button
                   key={service.id}
+                  type="button"
                   onClick={() => setSelectedService(service.id)}
                   className={`text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors ${
                     selectedService === service.id
@@ -112,7 +339,13 @@ export default function LeadPanel({
 
         {/* PhoneField */}
         <input
+          ref={phoneRef}
           type="tel"
+          value={phone}
+          onChange={(e) => {
+            setPhone(e.target.value);
+            if (submitError) setSubmitError(null);
+          }}
           placeholder={t['phone_placeholder'] ?? 'Вашият телефон'}
           className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20"
         />
@@ -120,6 +353,8 @@ export default function LeadPanel({
         {/* NotesField */}
         <textarea
           rows={3}
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
           placeholder={t['notes_placeholder'] ?? 'Опишете накратко какво ви трябва...'}
           className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 resize-none"
         />
@@ -129,11 +364,22 @@ export default function LeadPanel({
           {getSocialProofSignal()}
         </div>
 
+        {/* Error Message */}
+        {submitError && (
+          <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+            {submitError}
+          </p>
+        )}
+
         {/* CTAButton */}
-        <button className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 text-white text-base font-semibold rounded-xl transition-colors">
-          {t['cta_button'] ?? 'Заявете услуга'}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white text-base font-semibold rounded-xl transition-colors truncate"
+        >
+          {isSubmitting ? (t['sending'] ?? 'Изпращане...') : `Свържи ме с ${providerName}`}
         </button>
-      </div>
+      </form>
 
       {/* TrustRow */}
       <div className="grid grid-cols-3 border-t border-gray-100">

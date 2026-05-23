@@ -5,11 +5,13 @@ import { useEffect, useRef } from 'react'
 interface StickyProviderCTAProps {
   lang: string
   translations: Record<string, string>
+  providerName: string
 }
 
 export default function StickyProviderCTA({ 
   lang,
-  translations 
+  translations,
+  providerName
 }: StickyProviderCTAProps) {
   const btnRef = useRef<HTMLDivElement>(null)
   const formId = 'provider-lead-form'
@@ -65,9 +67,9 @@ export default function StickyProviderCTA({
             formEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
           }
         }}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base"
+        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base truncate"
       >
-        {translations['cta_button'] ?? 'Заявете услуга'}
+        Свържи ме с {providerName}
       </button>
     </div>
   )

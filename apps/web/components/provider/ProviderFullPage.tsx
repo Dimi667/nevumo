@@ -411,6 +411,9 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
         <div id="provider-lead-form" className="hidden md:block w-[340px] shrink-0 self-start sticky top-6">
           <LeadPanel
             providerName={provider.business_name}
+            providerSlug={provider.slug}
+            categorySlug={provider.category_slug}
+            citySlug={provider.city_slug}
             services={provider.services}
             verificationLevel={provider.verification_level}
             reviewCount={provider.review_count}
@@ -428,7 +431,7 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
         </div>
       </div>
 
-      <StickyProviderCTA lang={lang} translations={translations} />
+      <StickyProviderCTA lang={lang} translations={translations} providerName={provider.business_name} />
     </div>
   );
 }
