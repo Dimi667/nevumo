@@ -97,3 +97,32 @@
 **Тестван — PASS** (http://localhost:3000/pl/warszawa/cleaning се зарежда коректно)
 
 **Урок:** Alpine Linux (musl libc) не е съвместим с всички npm native modules. За сложни native dependencies като lightningcss, Debian (glibc) е по-надежден избор.
+
+---
+
+## 2026-05-24 — Provider Dashboard Translation Keys Missing
+
+**Проблем:** 13 translation keys от `LeadsClient.tsx` и `LeadDetailModal.tsx` липсваха от `provider_dashboard` namespace след изтриване на translation записи от базата.
+
+**Root cause:** Инцидент с изтриване на translation записи от базата данни.
+
+**Диагностика:** Сравнение на три архива установи времевата линия:
+- Архив 23.05.2026 — 12 от 13 ключа липсват (след инцидента)
+- Архив 16.05.2026 — 12 от 13 ключа липсват (след инцидента)
+- Архив 07.05.2026 — 11 ключа налични с 34 езика (преди инцидента)
+- 2 ключа никога не са съществували в базата
+
+**Restore:**
+- 11 ключа извлечени от архив `nevumo_leads_20260507_155146.sql.gz` чрез `grep` + Python генератор на INSERT SQL
+- 2 нови ключа създадени чрез seed скрипт: `apps/api/scripts/seed_leads_missing_keys.py`
+
+**Засегнати ключове (13):**
+`aria_close`, `btn_close`, `btn_save_notes`, `label_cancelled_leads`, `label_client_message`, `label_notes_privacy_disclaimer`, `label_private_notes`, `lead_detail_title`, `msg_no_description`, `msg_notes_save_failed`, `msg_notes_saved`, `msg_saving`, `placeholder_private_notes`
+
+**Резултат:** Всички 13 ключа верифицирани с `lang_count = 34`. Redis cache изчистен за `provider_dashboard` namespace.
+
+**Файлове:**
+- `/tmp/restore_11_keys_raw.txt` — извлечени данни от архива
+- `/tmp/generate_restore_sql.py` — генератор на INSERT SQL
+- `/tmp/restore_11_keys.sql` — генериран SQL за restore
+- `apps/api/scripts/seed_leads_missing_keys.py` — seed скрипт за 2 нови ключа

@@ -1182,6 +1182,25 @@ The key `logo_pro` must remain untranslated as `"Pro"` in all 34 locales. This i
 - Profile
 - Settings / Sidebar (previously fixed and validated)
 
+#### Leads Modal Translation Restore (May 2026)
+
+**Incident:** Following a database deletion incident, 13 translation keys from `LeadsClient.tsx` and `LeadDetailModal.tsx` were missing from the `provider_dashboard` namespace.
+
+**Diagnosis:** Comparison of three database archives established the timeline:
+- Archive 23.05.2026 — 12 of 13 keys missing (post-incident)
+- Archive 16.05.2026 — 12 of 13 keys missing (post-incident)
+- Archive 07.05.2026 — 11 keys available with 34 languages (pre-incident)
+- 2 keys never existed in the database
+
+**Restore Process:**
+- 11 keys extracted from archive `nevumo_leads_20260507_155146.sql.gz` via `grep` + Python INSERT SQL generator
+- 2 new keys created via seed script: `apps/api/scripts/seed_leads_missing_keys.py`
+
+**Affected Keys (13):**
+`aria_close`, `btn_close`, `btn_save_notes`, `label_cancelled_leads`, `label_client_message`, `label_notes_privacy_disclaimer`, `label_private_notes`, `lead_detail_title`, `msg_no_description`, `msg_notes_save_failed`, `msg_notes_saved`, `msg_saving`, `placeholder_private_notes`
+
+**Result:** All 13 keys verified with `lang_count = 34`. Redis cache cleared for `provider_dashboard` namespace.
+
 #### Onboarding Hero Banner i18n (April 10, 2026)
 The onboarding hero banner on the dashboard overview page is now fully DB-backed. All 8 strings (titles, descriptions, CTAs, step labels) are stored in the `provider_dashboard` namespace and served via the standard translations endpoint. `getHeroContent()` and `CompactStepIndicator` in `apps/web/lib/onboarding-utils.tsx` accept a `dict` parameter and use `t()` for rendering. The dashboard page passes `dict` from `useDashboardI18n()` to both components.
 
