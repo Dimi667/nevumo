@@ -957,6 +957,33 @@ Returns a paginated list of leads created by the client.
 
 ---
 
+## PATCH /api/v1/client/leads/{lead_id}/status
+
+### Body
+```json
+{ "status": "done" }
+```
+Allowed values: `contacted` | `done` | `cancelled`
+
+### Response
+```json
+{ "success": true, "data": { "lead_id": "uuid", "status": "done" } }
+```
+
+### Description
+Updates lead status from the client's perspective. Allowed transitions:
+- `new` → `contacted`
+- `contacted` → `done`
+- `new` / `contacted` → `cancelled`
+
+**LeadMatch Synchronization**: When a lead has an assigned provider (`lead.provider_id` exists), the corresponding `LeadMatch` record is automatically synchronized with the new status (except for `cancelled`). This ensures review eligibility is correctly tracked since reviews require `LeadMatch.status IN ('contacted', 'done')`.
+
+### Errors
+- 404 LEAD_NOT_FOUND — lead doesn't exist or client doesn't own it
+- 400 INVALID_TRANSITION — invalid status change
+
+---
+
 ## PATCH /api/v1/client/leads/{lead_id}/notes
 
 ### Body

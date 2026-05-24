@@ -311,6 +311,12 @@ CREATE INDEX idx_lead_matches_lead ON lead_matches(lead_id);
 - Only leads with LeadMatch.status IN ('contacted', 'done') are eligible for review
 - This allows clients to review each provider who contacted them for a given lead
 
+### Status Synchronization (May 25, 2026)
+- When a client changes lead status via `PATCH /api/v1/client/leads/{lead_id}/status`, the corresponding `LeadMatch` record is automatically synchronized
+- Synchronization occurs when `lead.provider_id` exists and the new status is not `cancelled`
+- This ensures review eligibility is correctly tracked after client status changes
+- Implementation: `apps/api/routes/client.py` (lines 132-143)
+
 ---
 
 ## 10. Messages (Future)

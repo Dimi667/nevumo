@@ -340,6 +340,13 @@ This separation ensures that:
     - label_client_notes, placeholder_client_notes, btn_save_and_close, btn_add_note
     - (+ 2 existing reused: label_date, label_status)
     - Seed script: `apps/api/scripts/seed_client_notes_translations.py`
+- **Client Dashboard Review Eligibility Fix (May 25, 2026)** — COMPLETE:
+  - **Problem:** After introducing the shared status change system (migration 0535f00974f4), completed requests were not showing the Review button and not appearing in the "Pending Review" tab. Root cause was that the client status change endpoint was not synchronizing status updates to the `LeadMatch` table, which is required for review eligibility.
+  - **Solution:** Added `LeadMatch` synchronization in `apps/api/routes/client.py` (lines 132-143) to sync `match.status` with the new status when `lead.provider_id` exists. When a client changes a request status to "done", the corresponding `LeadMatch` record is also updated to "done", making the request eligible for review.
+  - **Status Transitions:** 
+    - Provider transitions: new → contacted/cancelled, contacted → cancelled
+    - Client transitions: new → contacted → done, new/c → cancelled
+  - **Review Eligibility:** Only leads with `LeadMatch.status IN ('contacted', 'done')` are eligible for review.
   - **Dual Role Architecture (April 2026)** — UPDATED:
   - **PROBLEM:** One user can be both provider and client simultaneously (two tabs open). However, a provider accidentally landing on the client dashboard and clicking "Become a provider" received an `ALREADY_IN_ROLE` error.
   - **SOLUTION:** 

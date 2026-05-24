@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 
 from apps.api.dependencies import get_current_user, get_db
-from apps.api.models import User
+from apps.api.models import User, Lead, LeadMatch
 from apps.api.schemas import (
     ClientDashboardResponse,
     ClientLeadNotesUpdate,
@@ -128,6 +128,19 @@ def update_lead_status(
         lead.cancelled_by = "client"
     else:
         lead.cancelled_by = None
+
+    # Sync status to LeadMatch if provider is assigned
+    if lead.provider_id:
+        match = (
+            db.query(LeadMatch)
+            .filter(
+                LeadMatch.lead_id == lead.id,
+                LeadMatch.provider_id == lead.provider_id,
+            )
+            .first()
+        )
+        if match and new_status != "cancelled":
+            match.status = new_status
 
     db.commit()
 
