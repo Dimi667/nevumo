@@ -60,6 +60,7 @@ Nevumo is registered in Bulgaria and subject to the supervision of the **Commiss
 | Phone number | Lead delivery, client-provider communication | Contract — Art. 6(1)(b) GDPR |
 | Location / city | Service area matching | Contract — Art. 6(1)(b) GDPR |
 | Services and prices | Marketplace listing | Contract — Art. 6(1)(b) GDPR |
+| Performance indicators (completed jobs count, average rating, verification level) | Automatic calculation of ranking position and public status badge | Contract — Art. 6(1)(b) GDPR |
 
 #### 3.3 Service Requests (Leads)
 
@@ -152,11 +153,29 @@ You may request a copy of the applicable safeguards by contacting us at **privac
 
 ---
 
-### 7. Automated Decision-Making
+### 7. Automated Processing
 
-Nevumo does not make fully automated decisions with significant legal effects on individuals.
+Nevumo uses automated processing of provider data in two systems. Neither system produces legal effects, but both may significantly affect a provider's commercial visibility on the Platform.
 
-**Stripe fraud detection:** When processing payments, Stripe uses automated fraud detection. You have the right to request human review of any automated decision by Stripe that significantly affects you.
+#### 7.1 Provider Ranking
+
+When displaying providers in search results and category listings, Nevumo's platform automatically calculates each provider's position based on the following parameters: profile completeness, average client rating, response rate and speed, recent activity, geographic match to the client's city, and account standing. No payment influences organic ranking position. Full details of the ranking parameters and their relative weights are published in the **Provider Terms**, Section 5.
+
+Legal basis: Contract performance — Art. 6(1)(b) GDPR.
+
+#### 7.2 Provider Status Badge
+
+Nevumo automatically calculates a status badge for each provider profile (⚡ New Provider / ✓ Verified Specialist / ★ Top Specialist) based on measurable platform activity data: number of completed service requests, average client rating, and profile completeness (photo, description, active service listing). The badge is recalculated in real time upon any change to the underlying data and is displayed publicly on the provider's profile. Criteria are fully transparent and published in the **Provider Terms**, Section 5. Providers can influence their badge at any time by completing service requests and maintaining a complete profile.
+
+Legal basis: Contract performance — Art. 6(1)(b) GDPR.
+
+#### 7.3 Payment Fraud Detection (Stripe)
+
+When processing payments, Stripe uses automated fraud detection. You have the right to request human review of any automated decision by Stripe that significantly affects you.
+
+---
+
+*These systems apply to provider accounts only. Client accounts are not subject to automated ranking or badge processing.*
 
 ---
 
@@ -273,6 +292,7 @@ Nevumo е регистрирано в България и подлежи на н
 | Телефонен номер | Доставка на поръчки, комуникация | Договор — чл. 6(1)(б) GDPR |
 | Местоположение / град | Съвпадение на услуги по район | Договор — чл. 6(1)(б) GDPR |
 | Услуги и цени | Обява в marketplace | Договор — чл. 6(1)(б) GDPR |
+| Показатели за активност (брой завършени запитвания, средна оценка, ниво на верификация) | Автоматично изчисляване на позицията в класирането и значката за статус | Договор — чл. 6, ал. 1, б. „б" ОРЗД |
 
 #### 3.3 Заявки за услуги (Leads)
 
@@ -359,9 +379,29 @@ Nevumo може да създаде профил въз основа на пуб
 
 ---
 
-### 7. Автоматизирано вземане на решения
+### 7. Автоматизирано обработване
 
-Nevumo не взема изцяло автоматизирани решения с правни последици за физически лица. Stripe използва автоматизирана детекция на измами при плащания — имате право да поискате проверка от човек при решение, което ви засяга.
+Nevumo прилага автоматизирано обработване на данни на Доставчиците в две системи. Нито една от тях не произвежда правни последици, но и двете могат значително да засегнат търговската видимост на Доставчика в Платформата.
+
+#### 7.1 Класиране на Доставчиците
+
+При показване на Доставчиците в резултатите от търсенето и в листингите по категории Платформата автоматично изчислява позицията на всеки Доставчик въз основа на следните параметри: пълнота на профила, средна оценка от клиенти, степен и скорост на отговор, скорошна активност в Платформата, географско съответствие с града на клиента и статус на акаунта. Плащането не влияе на органичната позиция в класирането. Пълна информация за параметрите за класиране и относителните им тежести е публикувана в **Условията за Доставчици**, чл. 5.
+
+Правно основание: изпълнение на договор — чл. 6, ал. 1, б. „б" от ОРЗД.
+
+#### 7.2 Значка за статус на Доставчика
+
+Nevumo автоматично изчислява значка за статус за всеки профил на Доставчик (⚡ Нов Доставчик / ✓ Верифициран специалист / ★ Топ специалист) въз основа на измерими данни за активност: брой завършени запитвания, средна оценка от клиенти и пълнота на профила (снимка, описание, активна обява за услуга). Значката се преизчислява в реално време при всяка промяна на изходните данни и се показва публично в профила на Доставчика. Критериите са напълно прозрачни и публикувани в **Условията за Доставчици**, чл. 5. Доставчикът може по всяко време да повлияе на своята значка, като изпълнява запитвания и поддържа попълнен профил.
+
+Правно основание: изпълнение на договор — чл. 6, ал. 1, б. „б" от ОРЗД.
+
+#### 7.3 Засичане на платежни измами (Stripe)
+
+При обработка на плащания Stripe използва автоматизирано засичане на измами. Имате право да поискате намеса на човек при всяко автоматизирано решение на Stripe, което ви засяга съществено.
+
+---
+
+*Системите по т. 7.1 и т. 7.2 се отнасят само за акаунти на Доставчици. Акаунтите на Клиенти не подлежат на автоматизирано класиране или присвояване на значки.*
 
 ---
 
@@ -477,6 +517,7 @@ Nevumo jest zarejestrowane w Bułgarii i podlega nadzorowi **Komisji Ochrony Dan
 | Numer telefonu | Dostarczanie zleceń, komunikacja | Umowa — art. 6 ust. 1 lit. b RODO |
 | Lokalizacja / miasto | Dopasowanie usług do obszaru | Umowa — art. 6 ust. 1 lit. b RODO |
 | Usługi i ceny | Ogłoszenie na marketplace | Umowa — art. 6 ust. 1 lit. b RODO |
+| Wskaźniki aktywności (liczba ukończonych zleceń, średnia ocena, poziom weryfikacji) | Automatyczne obliczanie pozycji w rankingu i odznaki statusu | Umowa — art. 6 ust. 1 lit. b RODO |
 
 #### 3.3 Zapytania o usługi (leads)
 
@@ -565,9 +606,29 @@ Kopię zabezpieczeń możesz uzyskać pod adresem **privacy@nevumo.com**.
 
 ---
 
-### 7. Zautomatyzowane podejmowanie decyzji
+### 7. Zautomatyzowane przetwarzanie
 
-Nevumo nie podejmuje w pełni zautomatyzowanych decyzji wywołujących istotne skutki prawne. Stripe używa automatycznego wykrywania oszustw przy płatnościach — masz prawo żądać interwencji człowieka.
+Nevumo stosuje zautomatyzowane przetwarzanie danych Dostawców w dwóch systemach. Żaden z nich nie wywołuje skutków prawnych, jednak oba mogą znacząco wpływać na widoczność handlową Dostawcy na Platformie.
+
+#### 7.1 Ranking Dostawców
+
+Przy wyświetlaniu Dostawców w wynikach wyszukiwania i listingach kategorii Platforma automatycznie oblicza pozycję każdego Dostawcy na podstawie następujących parametrów: kompletność profilu, średnia ocena klientów, wskaźnik i szybkość odpowiedzi, aktywność na Platformie, dopasowanie geograficzne do miasta klienta oraz status konta. Płatność nie wpływa na organiczną pozycję w rankingu. Pełne informacje o parametrach rankingowych i ich względnych wagach są opublikowane w **Regulaminie Dostawców**, §5.
+
+Podstawa prawna: wykonanie umowy — art. 6 ust. 1 lit. b RODO.
+
+#### 7.2 Odznaka statusu Dostawcy
+
+Nevumo automatycznie oblicza odznakę statusu dla każdego profilu Dostawcy (⚡ Nowy Dostawca / ✓ Zweryfikowany Specjalista / ★ Najlepszy Specjalista) na podstawie mierzalnych danych aktywności: liczby ukończonych zleceń, średniej oceny klientów oraz kompletności profilu (zdjęcie, opis, aktywna oferta usługi). Odznaka jest przeliczana w czasie rzeczywistym przy każdej zmianie danych źródłowych i wyświetlana publicznie na profilu Dostawcy. Kryteria są w pełni przejrzyste i opublikowane w **Regulaminie Dostawców**, §5. Dostawca może wpływać na swoją odznakę w dowolnym momencie, realizując zlecenia i uzupełniając profil.
+
+Podstawa prawna: wykonanie umowy — art. 6 ust. 1 lit. b RODO.
+
+#### 7.3 Wykrywanie oszustw płatniczych (Stripe)
+
+Stripe stosuje automatyczne wykrywanie oszustw przy płatnościach. Masz prawo żądać interwencji człowieka w przypadku zautomatyzowanej decyzji Stripe, która istotnie Cię dotyczy.
+
+---
+
+*Systemy opisane w pkt 7.1 i 7.2 dotyczą wyłącznie kont Dostawców. Konta Klientów nie podlegają zautomatyzowanemu rankingowi ani przyznawaniu odznak.*
 
 ---
 
@@ -641,7 +702,7 @@ E-mail: privacy@nevumo.com
 - ✅ Retention schedule
 - ✅ 7 права на субекта на данни
 - ✅ Право на жалба — КЗЛД + UODO
-- ✅ Автоматизирани решения (Stripe)
+- ✅ Автоматизирано обработване: Ranking (§5) + Badge (§5) + Stripe (7.1, 7.2, 7.3)
 - ✅ GA4 Advanced Consent Mode v2 disclosure
 - ✅ Article 14 (claimed profiles)
 - ✅ PKE consent бележка (Полша)

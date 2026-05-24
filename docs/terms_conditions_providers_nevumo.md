@@ -100,6 +100,22 @@
 
 5.4 Nevumo may modify the ranking algorithm periodically. Material changes to ranking parameters will be communicated to Providers via the notice procedure set out in Section 10.
 
+5.5 **Provider Status Badges**
+
+Nevumo automatically assigns a status badge to each Provider profile based on objective, measurable criteria. Badges are calculated by the Platform in real time.
+
+| Badge | Criteria |
+|-------|----------|
+| ⚡ **New Provider** — responds quickly | Provider has not yet completed their first service request via the Platform, OR the profile is incomplete (missing photo, description, or at least one active service listing) |
+| ✓ **Verified Specialist** | At least 1 service request completed via the Platform (status: done) + profile photo uploaded + profile description filled in + at least 1 active service listing |
+| ★ **Top Specialist** | At least 10 service requests completed via the Platform + average client rating of 4.5 or above |
+
+5.6 Badges are recalculated automatically upon any change to the Provider's completed jobs count, average rating, or profile data. The badge displayed on the Provider's public Profile is updated in real time.
+
+5.7 **Badge downgrade:** If a Provider ceases to meet the criteria for their current badge level, the badge is downgraded automatically and in real time. For example: if the average rating falls below 4.5, the Top Specialist badge is replaced by Verified Specialist; if the profile becomes incomplete, the Verified Specialist badge is replaced by New Provider.
+
+5.8 Providers may not purchase, transfer, or artificially obtain a badge. Any attempt to manipulate badge criteria constitutes a material breach of these Provider Terms and may result in account suspension or termination under Section 8. Nevumo reserves the right to modify badge criteria upon at least **15 days' prior notice** to Providers.
+
 ---
 
 ### 6. Commission, Payments, and Pricing
@@ -430,6 +446,22 @@ You may terminate your Provider account at any time by contacting us at legal@ne
 
 4. Nevumo może okresowo modyfikować algorytm rankingowy. O istotnych zmianach parametrów rankingowych Dostawcy zostaną poinformowani zgodnie z procedurą powiadomień określoną w §10.
 
+5. **Odznaki statusu Dostawcy**
+
+Nevumo automatycznie przypisuje każdemu profilowi Dostawcy odznakę statusu na podstawie obiektywnych, mierzalnych kryteriów. Odznaki są obliczane przez Platformę w czasie rzeczywistym.
+
+| Odznaka | Kryteria |
+|---------|----------|
+| ⚡ **Nowy Dostawca** — odpowiada szybko | Dostawca nie ukończył jeszcze pierwszego zlecenia za pośrednictwem Platformy LUB profil jest niekompletny (brak zdjęcia, opisu lub co najmniej jednej aktywnej oferty usługi) |
+| ✓ **Zweryfikowany Specjalista** | Co najmniej 1 zlecenie ukończone za pośrednictwem Platformy (status: zrealizowane) + przesłane zdjęcie profilowe + wypełniony opis profilu + co najmniej 1 aktywna oferta usługi |
+| ★ **Najlepszy Specjalista** | Co najmniej 10 zleceń ukończonych za pośrednictwem Platformy + średnia ocena klientów wynosząca 4,5 lub więcej |
+
+6. Odznaki są przeliczane automatycznie przy każdej zmianie liczby ukończonych zleceń, średniej oceny lub danych profilowych Dostawcy. Odznaka wyświetlana na publicznym Profilu Dostawcy jest aktualizowana w czasie rzeczywistym.
+
+7. **Obniżenie poziomu odznaki:** Jeżeli Dostawca przestaje spełniać kryteria dla posiadanej odznaki, odznaka jest automatycznie obniżana w czasie rzeczywistym. Przykładowo: jeżeli średnia ocena spadnie poniżej 4,5, odznaka Najlepszego Specjalisty zostaje zastąpiona odznaką Zweryfikowanego Specjalisty; jeżeli profil staje się niekompletny, odznaka Zweryfikowanego Specjalisty zostaje zastąpiona odznaką Nowego Dostawcy.
+
+8. Dostawcy nie mogą kupować, przekazywać ani w inny sposób sztucznie uzyskiwać odznak. Wszelkie próby manipulowania kryteriami odznak stanowią istotne naruszenie niniejszego Regulaminu Dostawców i mogą skutkować zawieszeniem lub rozwiązaniem konta zgodnie z §8. Nevumo zastrzega sobie prawo do modyfikacji kryteriów odznak z zachowaniem co najmniej **15-dniowego wyprzedzenia**.
+
 ---
 
 ### §6. Prowizje, płatności i cennik
@@ -757,6 +789,22 @@ Dostawca może w każdej chwili rozwiązać swoje konto Dostawcy, kontaktując s
 3. В бъдеще Nevumo може да предлага **платени рекламни позиции** (спонсорирани позиции). Такива позиции ще бъдат ясно обозначени като „Спонсориран" или „Промотиран". Въвеждането на платени промоции ще бъде обявено с предизвестие от поне **30 дни**.
 
 4. Nevumo може периодично да модифицира алгоритъма за класиране. Съществени промени в параметрите за класиране ще бъдат съобщавани на Доставчиците съгласно процедурата за уведомление, описана в чл. 10.
+
+5. **Значки за статус на Доставчика**
+
+Nevumo автоматично присвоява значка за статус на всеки профил на Доставчик въз основа на обективни, измерими критерии. Значките се изчисляват от Платформата в реално време.
+
+| Значка | Критерии |
+|--------|----------|
+| ⚡ **Нов Доставчик** — отговаря бързо | Доставчикът все още не е завършил първото си запитване чрез Платформата ИЛИ профилът е непълен (липсва снимка, описание или поне една активна обява за услуга) |
+| ✓ **Верифициран специалист** | Поне 1 завършено запитване чрез Платформата (статус: изпълнено) + качена профилна снимка + попълнено описание на профила + поне 1 активна обява за услуга |
+| ★ **Топ специалист** | Поне 10 завършени запитвания чрез Платформата + средна оценка от клиенти 4,5 или повече |
+
+6. Значките се преизчисляват автоматично при всяка промяна в броя на завършените запитвания, средната оценка или данните на профила на Доставчика. Значката, показвана в публичния Профил на Доставчика, се актуализира в реално време.
+
+7. **Понижаване на значката:** Ако Доставчикът престане да отговаря на критериите за притежаваната значка, значката се понижава автоматично и в реално време. Например: ако средната оценка спадне под 4,5, значката „Топ специалист" се заменя с „Верифициран специалист"; ако профилът стане непълен, значката „Верифициран специалист" се заменя с „Нов Доставчик".
+
+8. Доставчиците не могат да купуват, прехвърлят или по друг начин изкуствено да придобиват значки. Всеки опит за манипулиране на критериите за значки представлява съществено нарушение на настоящите Условия за Доставчици и може да доведе до спиране или прекратяване на акаунта съгласно чл. 8. Nevumo си запазва правото да промени критериите за значки с предизвестие от поне **15 дни**.
 
 ---
 

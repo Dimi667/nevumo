@@ -3113,7 +3113,15 @@ TRANSLATIONS.update({
     "btn_back": row_bg("← Back", "← Назад"),
     "btn_cancel": row_bg("Cancel", "Отказ"),
     "btn_change_photo": row_bg("Change photo", "Смени снимката"),
-    "btn_contact": row_bg("Contact", "Свържи се"),
+    "btn_complete_setup": row_bg("Complete setup", "Завърши настройката"),
+    "btn_contact": row(
+        "Contact", "Свържи се", "Kontakt", "Kontakt", "Kontakt", "Επικοινωνία",
+        "Contacto", "Kontakt", "Ota yhteyttä", "Contact", "Teagmháil", "Kontakt",
+        "Kapcsolat", "Hafa samband", "Contatta", "Kontakt", "Susisiekti",
+        "Sazināties", "Контакт", "Kuntatt", "Contact", "Kontakt", "Kontakt",
+        "Contato", "Contacto", "Contact", "Контакт", "Kontakt", "Kontakt",
+        "Kontakt", "Kontakt", "Kontakt", "İletişim", "Контакт",
+    ),
     "btn_continue": row_bg("Continue →", "Продължи →"),
     "btn_delete": row_bg("Delete", "Изтрий"),
     "btn_edit": row_bg("Edit", "Редактирай"),
@@ -3121,7 +3129,14 @@ TRANSLATIONS.update({
     "btn_find_service": row_bg("Find Service", "Намери услуга"),
     "btn_generate_qr_code": row_bg("Generate QR Code", "Генерирай QR код"),
     "btn_new_service": row_bg("New Service", "Нова услуга"),
-    "btn_reject": row_bg("Reject", "Отхвърли"),
+    "btn_reject": row(
+        "Reject", "Отхвърли", "Odmítnout", "Afvis", "Ablehnen", "Απόρριψη",
+        "Rechazar", "Keeldu", "Hylkää", "Rejeter", "Diúltaigh", "Odbij",
+        "Elutasítás", "Hafna", "Rifiuta", "Oflehnen", "Atmesti", "Noraidīt",
+        "Отфрли", "Irrifjuta", "Weigeren", "Avvis", "Odrzuć", "Rejeitar",
+        "Rejeitar", "Respinge", "Отклонить", "Odmietnuť", "Zavrni", "Refuzo",
+        "Odbij", "Avvisa", "Reddet", "Відхилити",
+    ),
     "btn_reply_to_review": row_bg("Reply to Review", "Отговори на отзива"),
     "btn_send_reply": row_bg("Send Reply", "Изпрати отговор"),
     "btn_skip_for_now": row_bg("Skip for now", "Пропусни засега"),
@@ -3326,10 +3341,48 @@ TRANSLATIONS.update({
     "msg_url_taken": row_bg("This URL is already taken", "Този URL адрес вече е зает"),
     "nav_reviews": row_bg("Reviews", "Отзиви"),
     "nav_settings": row_bg("Settings", "Настройки"),
-    "period_all_time": row_bg("All time", "За всички времена"),
-    "period_last_30_days": row_bg("Last 30 days", "Последните 30 дни"),
-    "period_last_7_days": row_bg("Last 7 days", "Последните 7 дни"),
-    "period_last_90_days": row_bg("Last 90 days", "Последните 90 дни"),
+    "period_all_time": row(
+        "All time", "За всички времена", "Za celou dobu", "Hele tiden", "Gesamte Zeit",
+        "Όλες οι εποχές", "Todo el tiempo", "Kogu aeg", "Koko aika", "Depuis toujours",
+        "An t-am ar fad", "Cijelo vrijeme", "Összes idő", "Allur tíminn", "Da sempre",
+        "All Zäit", "Visas laikas", "Viss laiks", "За цело време", "Il-ħin kollu",
+        "Alle tijden", "Hele tiden", "Cały czas", "Todo o tempo", "Todo o tempo",
+        "Din toate timpurile", "За все время", "Za celý čas", "Ves čas",
+        "Gjatë gjithë kohës", "Za sve vreme", "Hela tiden", "Tüm zamanlar", "За весь час",
+    ),
+    "period_last_30_days": row(
+        "Last 30 days", "Последните 30 дни", "Posledních 30 dní", "Seneste 30 dage",
+        "Letzte 30 Tage", "Τελευταίες 30 ημέρες", "Últimos 30 días", "Viimased 30 päeva",
+        "Viimeiset 30 päivää", "Les 30 derniers jours", "Le 30 lá anuas", "Posljednjih 30 dana",
+        "Elmúlt 30 nap", "Síðustu 30 dagar", "Ultimi 30 giorni", "Lescht 30 Deeg",
+        "Paskutinės 30 dienų", "Pēdējās 30 dienas", "Последните 30 дена", "L-aħħar 30 jum",
+        "Laatste 30 dagen", "Siste 30 dager", "Ostatnie 30 dni", "Últimos 30 dias",
+        "Últimos 30 dias", "Ultimele 30 zile", "Последние 30 дней", "Posledných 30 dní",
+        "Zadnjih 30 dni", "30 ditët e fundit", "Poslednjih 30 dana", "Senaste 30 dagarna",
+        "Son 30 gün", "Останні 30 днів",
+    ),
+    "period_last_7_days": row(
+        "Last 7 days", "Последните 7 дни", "Posledních 7 dní", "Seneste 7 dage",
+        "Letzte 7 Tage", "Τελευταίες 7 ημέρες", "Últimos 7 días", "Viimased 7 päeva",
+        "Viimeiset 7 päivää", "Les 7 derniers jours", "Le 7 lá anuas", "Posljednjih 7 dana",
+        "Elmúlt 7 nap", "Síðustu 7 dagar", "Ultimi 7 giorni", "Lescht 7 Deeg",
+        "Paskutinės 7 dienos", "Pēdējās 7 dienas", "Последните 7 дена", "L-aħħar 7 ijiem",
+        "Laatste 7 dagen", "Siste 7 dager", "Ostatnie 7 dni", "Últimos 7 dias",
+        "Últimos 7 dias", "Ultimele 7 zile", "Последние 7 дней", "Posledných 7 dní",
+        "Zadnjih 7 dni", "7 ditët e fundit", "Poslednjih 7 dana", "Senaste 7 dagarna",
+        "Son 7 gün", "Останні 7 днів",
+    ),
+    "period_last_90_days": row(
+        "Last 90 days", "Последните 90 дни", "Posledních 90 dní", "Seneste 90 dage",
+        "Letzte 90 Tage", "Τελευταίες 90 ημέρες", "Últimos 90 días", "Viimased 90 päeva",
+        "Viimeiset 90 päivää", "Les 90 derniers jours", "Le 90 lá anuas", "Posljednjih 90 dana",
+        "Elmúlt 90 nap", "Síðustu 90 dagar", "Ultimi 90 giorni", "Lescht 90 Deeg",
+        "Paskutinės 90 dienų", "Pēdējās 90 dienas", "Последните 90 дена", "L-aħħar 90 jum",
+        "Laatste 90 dagen", "Siste 90 dager", "Ostatnie 90 dni", "Últimos 90 dias",
+        "Últimos 90 dias", "Ultimele 90 zile", "Последние 90 дней", "Posledných 90 dní",
+        "Zadnjih 90 dni", "90 ditët e fundit", "Poslednjih 90 dana", "Senaste 90 dagarna",
+        "Son 90 gün", "Останні 90 днів",
+    ),
     "placeholder_business_description": row_bg("Describe your services, experience and what makes you different", "Опишете услугите си, опита си и с какво се отличавате"),
     "placeholder_business_name_example": row(
         "e.g. Maria's Massage Ltd or Maria Kowalska", "напр. Масажно студио Мария ЕООД или Мария Ковалска", "např. Maria's Massage s.r.o. nebo Maria Kowalska", "f.eks. Maria's Massage ApS eller Maria Kowalska", "z.B. Maria's Massage GmbH oder Maria Kowalska", "π.χ. Maria's Massage Ltd ή Maria Kowalska", "p. ej., Maria's Massage Ltd o Maria Kowalska", "nt Maria's Massage OÜ või Maria Kowalska", "esim. Maria's Massage Oy tai Maria Kowalska", "par ex. Maria's Massage SARL ou Maria Kowalska", "m.sh. Maria's Massage Ltd nó Maria Kowalska", "npr. Maria's Massage d.o.o. ili Maria Kowalska", "pl. Maria's Massage Kft. vagy Maria Kowalska", "t.d. Maria's Massage ehf. eða Maria Kowalska", "ad es. Maria's Massage S.r.l. o Maria Kowalska", "z. B. Maria's Massage SARL oder Maria Kowalska", "pvz., Maria's Massage UAB arba Maria Kowalska", "piem., Maria's Massage SIA vai Maria Kowalska", "напр. Масажно студио Марија ДООЕЛ или Марија Ковалска", "eż. Maria's Massage Ltd jew Maria Kowalska", "bijv. Maria's Massage B.V. of Maria Kowalska", "f.eks. Maria's Massage AS eller Maria Kowalska", "np. Maria's Massage Sp. z o.o. lub Maria Kowalska", "ex: Maria's Massage Ltda ou Maria Kowalska", "ex: Maria's Massage Lda ou Maria Kowalska", "de ex. Maria's Massage S.R.L. sau Maria Kowalska", "напр., ООО «Массаж Марии» или Мария Ковальска", "napr. Maria's Massage s.r.o. alebo Maria Kowalska", "npr. Maria's Massage d.o.o. ali Maria Kowalska", "p.sh. Maria's Massage sh.p.k. ose Maria Kowalska", "npr. Maria's Massage d.o.o. ili Marija Kovalska", "t.ex. Maria's Massage AB eller Maria Kowalska", "örn. Maria's Massage Ltd. Şti. veya Maria Kowalska", "напр., ТОВ «Масаж Марії» або Марія Ковальська",
@@ -3356,6 +3409,129 @@ TRANSLATIONS.update({
     "stat_total_leads": row_bg("Total Leads", "Общо запитвания"),
     "status_all": row_bg("All", "Всички"),
     "status_rejected": row_bg("Rejected", "Отхвърлен"),
+})
+
+# Additional keys restored from backup (previously missing)
+TRANSLATIONS.update({
+    "aria_close": row(
+        "Close", "Затвори", "Zavřít", "Luk", "Schließen", "Κλείσιμο", "Cerrar", "Sulge",
+        "Sulje", "Fermer", "Dún", "Zatvori", "Bezárás", "Loka", "Chiudi", "Zoumaachen",
+        "Uždaryti", "Aizvērt", "Затвори", "Agħlaq", "Sluiten", "Lukk", "Zamknij", "Fechar",
+        "Fechar", "Închide", "Закрыть", "Zavrieť", "Zapri", "Mbyll", "Zatvori", "Stäng",
+        "Kapat", "Закрити",
+    ),
+    "btn_close": row(
+        "Close", "Затвори", "Zavřít", "Luk", "Schließen", "Κλείσιμο", "Cerrar", "Sulge",
+        "Sulje", "Fermer", "Dún", "Zatvori", "Bezárás", "Loka", "Chiudi", "Zoumaachen",
+        "Uždaryti", "Aizvērt", "Затвори", "Agħlaq", "Sluiten", "Lukk", "Zamknij", "Fechar",
+        "Fechar", "Închide", "Закрыть", "Zavrieť", "Zapri", "Mbyll", "Zatvori", "Stäng",
+        "Kapat", "Закрити",
+    ),
+    "btn_save_notes": row(
+        "Save note", "Запази бележката", "Uložit poznámku", "Gem note", "Notiz speichern", "Αποθήκευση σημείωσης", "Guardar nota", "Salvesta märkus",
+        "Tallenna muistiinpano", "Enregistrer la note", "Sábháil nóta", "Spremi bilješku", "Megjegyzés mentése", "Vista nótu", "Salva nota", "Notiz späicheren",
+        "Išsaugoti pastabą", "Saglabāt piezīmi", "Зачувај белешка", "Issejvja n-nota", "Notitie opslaan", "Lagre notat", "Zapisz notatkę", "Salvar nota",
+        "Guardar nota", "Salvează nota", "Сохранить заметку", "Uložiť poznámku", "Shrani zapisek", "Ruaj shënimin", "Sačuvaj belešku", "Spara anteckning",
+        "Notu kaydet", "Зберегти нотатку",
+    ),
+    "label_cancelled_leads": row(
+        "Cancelled leads", "Отказани запитвания", "Zrušené poptávky", "Annullerede forespørgsler", "Stornierte Anfragen", "Ακυρωμένα αιτήματα", "Solicitudes canceladas", "Tühistatud päringud",
+        "Perutut kyselyt", "Demandes annulées", "Iarrataí cealaithe", "Otkazani upiti", "Visszavont érdeklődések", "Afturkallaðar fyrirspurnir", "Richieste annullate", "Ofgesot Ufroe",
+        "Atšaukti užklausos", "Atceltie pieprasījumi", "Откажани барања", "Talbiet mħassra", "Geannuleerde aanvragen", "Avbrutte forespørsler", "Anulowane zapytania", "Solicitações canceladas",
+        "Pedidos cancelados", "Solicitări anulate", "Отменённые заявки", "Zrušené dopyty", "Preklicane povpraševanja", "Kërkesat e anuluara", "Otkazani upiti", "Avbrutna förfrågningar",
+        "İptal edilen talepler", "Скасовані запити",
+    ),
+    "label_client_message": row(
+        "Client Message", "Съобщение от клиента", "Zpráva od klienta", "Besked fra klient", "Nachricht vom Kunden", "Μήνυμα πελάτη", "Mensaje del cliente", "Kliendi sõnum",
+        "Viesti asiakkaalta", "Message du client", "Teachtaireacht ón gcliant", "Poruka klijenta", "Ügyfél üzenete", "Skilaboð frá viðskiptavini", "Messaggio del cliente", "Noricht vum Client",
+        "Kliento žinutė", "Klienta ziņa", "Порака од клиентот", "Messaġġ mill-klijent", "Bericht van klant", "Melding fra kunde", "Wiadomość od klienta", "Mensagem do cliente",
+        "Mensagem do cliente", "Mesaj de la client", "Сообщение от клиента", "Správa od klienta", "Sporočilo stranke", "Mesazh nga klienti", "Poruka klijenta", "Meddelande från kund",
+        "Müşteri Mesajı", "Повідомлення від клієнта",
+    ),
+    "label_notes_privacy_disclaimer": row(
+        "Notes are visible only to you", "Бележките са видими само за Вас", "Poznámky jsou viditelné pouze pro vás", "Noter er kun synlige for dig", "Notizen sind nur für Sie sichtbar", "Οι σημειώσεις είναι ορατές μόνο σε εσάς", "Las notas solo son visibles para usted", "Märkmed on nähtavad ainult teile",
+        "Yksityiset muistiinpanot (vain sinulle)", "Notes privées (visible uniquement par vous)", "Nótaí príobháideacha (le feiceáil agat féin amháin)", "Privatne bilješke (vidljive samo vama)", "Privát megjegyzések (csak Ön láthatja)", "Einkanótur (aðeins sýnilegt þér)", "Note private (visibili solo a te)", "Privat Notizen (nëmmen fir Iech siichtbar)",
+        "Asmeninės pastabos (matomos tik jums)", "Privātās piezīmes (redzamas tikai jums)", "Приватни белешки (видливи само за вас)", "Noti privati (jidhru lilek biss)", "Privénotities (alleen zichtbaar voor jou)", "Private notater (kun synlig for deg)", "Prywatne notatki (widoczne tylko dla Ciebie)", "Notas privadas (visíveis apenas para você)",
+        "Notas privadas (visíveis apenas para si)", "Note private (vizibile doar pentru tine)", "Личные заметки (видимы только вам)", "Súkromné poznámky (viditeľné iba pre vás)", "Zasebni zapiski (vidni samo vam)", "Shënime private (duken vetëm nga ju)", "Privatne beleške (vidljive samo vama)", "Privata anteckningar (endast synliga för dig)",
+        "Özel notlar (yalnızca siz görebilirsiniz)", "Приватні нотатки (видимі лише вам)",
+    ),
+    "label_private_notes": row(
+        "Private notes (only visible to you)", "Лични бележки (виждате ги само вие)", "Soukromé poznámky (viditelné pouze pro vás)", "Private noter (kun synlige for dig)", "Private Notizen (nur für Sie sichtbar)", "Ιδιωτικές σημειώσεις (ορατές μόνο σε εσάς)", "Notas privadas (solo visibles para ti)", "Eramärkmed (nähtavad ainult teile)",
+        "Yksityiset muistiinpanot (vain sinulle)", "Notes privées (visible uniquement par vous)", "Nótaí príobháideacha (le feiceáil agat féin amháin)", "Privatne bilješke (vidljive samo vama)", "Privát megjegyzések (csak Ön láthatja)", "Einkanótur (aðeins sýnilegt þér)", "Note private (visibili solo a te)", "Privat Notizen (nëmmen fir Iech siichtbar)",
+        "Asmeninės pastabos (matomos tik jums)", "Privātās piezīmes (redzamas tikai jums)", "Приватни белешки (видливи само за вас)", "Noti privati (jidhru lilek biss)", "Privénotities (alleen zichtbaar voor jou)", "Private notater (kun synlig for deg)", "Prywatne notatki (widoczne tylko dla Ciebie)", "Notas privadas (visíveis apenas para você)",
+        "Notas privadas (visíveis apenas para si)", "Note private (vizibile doar pentru tine)", "Личные заметки (видимы только вам)", "Súkromné poznámky (viditeľné iba pre vás)", "Zasebni zapiski (vidni samo vam)", "Shënime private (duken vetëm nga ju)", "Privatne beleške (vidljive samo vama)", "Privata anteckningar (endast synliga för dig)",
+        "Özel notlar (yalnızca siz görebilirsiniz)", "Приватні нотатки (видимі лише вам)",
+    ),
+    "lead_detail_title": row(
+        "Note", "Бележка", "Poznámka", "Note", "Notiz", "Σημείωση", "Nota", "Märkus",
+        "Muistiinpano", "Note", "Nóta", "Bilješka", "Megjegyzés", "Nóta", "Nota", "Notiz",
+        "Pastaba", "Piezīme", "Белешка", "Nota", "Notitie", "Notat", "Notatka", "Nota",
+        "Nota", "Notă", "Заметка", "Poznámka", "Opomba", "Shënim", "Beleška", "Anteckning",
+        "Not", "Нотатка",
+    ),
+    "msg_no_description": row(
+        "No description provided", "Няма предоставено описание", "Popis nebyl zadán", "Ingen beskrivelse angivet", "Keine Beschreibung vorhanden", "Δεν παρέχεται περιγραφή", "No se proporcionó descripción", "Kirjeldus puudub",
+        "Kuvausta ei ole annettu", "Aucune description fournie", "Níl aon tuairisc curtha ar fáil", "Opis nije naveden", "Nincs leírás megadva", "Engin lýsing gefin", "Nessuna descrizione fornita", "Keng Beschreiwung uginn",
+        "Aprašymas nepateiktas", "Apraksts nav sniegts", "Нема опис", "L-ebda deskrizzjoni pprovduta", "Geen beschrijving opgegeven", "Ingen beskrivelse oppgitt", "Brak opisu", "Nenhuma descrição fornecida",
+        "Nenhuma descrição fornecida", "Nicio descriere furnizată", "Описание отсутствует", "Popis nebol zadaný", "Opis ni podan", "Nuk ka përshkrim", "Opis nije naveden", "Ingen beskrivning angiven",
+        "Açıklama belirtilmedi", "Опис відсутній",
+    ),
+    "msg_notes_save_failed": row(
+        "Failed to save note", "Грешка при запис на бележката", "Uložení poznámky se nezdařilo", "Kunne ikke gemme note", "Fehler beim Speichern der Notiz", "Αποτυχία αποθήκευσης σημείωσης", "Error al guardar la nota", "Märkuse salvestamine ebaõnnestus",
+        "Muistiinpanon tallennus epäonnistui", "Échec de l'enregistrement de la note", "Theip ar shábháil an nóta", "Pogreška pri spremanju bilješke", "Hiba a megjegyzés mentésekor", "Ekki tókst að vista nótu", "Errore nel salvataggio della nota", "Feeler beim Späichere vun der Notiz",
+        "Nepavyko išsaugoti pastabos", "Kļūda, saglabājot piezīmi", "Грешка при зачувување на белешката", "In-nota ma setgħetx tiġi ssejvjata", "Fout bij opslaan van notitie", "Kunne ikke lagre notat", "Błąd podczas zapisywania notatki", "Falha ao salvar nota",
+        "Falha ao guardar nota", "Eroare la salvarea notei", "Ошибка при сохранении заметки", "Uloženie poznámky zlyhalo", "Napaka pri shranjevanju zapiska", "Dështoi ruajtja e shënimit", "Greška pri čuvanju beleške", "Misslyckades med att spara anteckning",
+        "Not kaydedilemedi", "Помилка при збереженні нотатки",
+    ),
+    "msg_notes_saved": row(
+        "Note saved successfully", "Бележката е запазена успешно", "Poznámka byla úspěšně uložena", "Note gemt med succes", "Notiz erfolgreich gespeichert", "Η σημείωση αποθηκεύτηκε με επιτυχία", "Nota guardada con éxito", "Märkus edukalt salvestatud",
+        "Muistiinpano tallennettu onnistuneesti", "Note enregistrée avec succès", "Nóta sábháilte go rathúil", "Bilješka je uspješno spremljena", "Megjegyzés sikeresen mentve", "Nóta vistuð giftusamlega", "Nota salvata con successo", "Notiz erfollegräich gespäichert",
+        "Pastaba sėkmingai išsaugota", "Piezīme veiksmīgi saglabāta", "Белешката е успешно зачувана", "In-nota ġiet issejvjata b'suċċess", "Notitie succesvol opgeslagen", "Notat lagret", "Notatka zapisana pomyślnie", "Nota salva com sucesso",
+        "Nota guardada com sucesso", "Notă salvată cu succes", "Заметка успешно сохранена", "Poznámka bola úspešne uložená", "Zapisek uspešno shranjen", "Shënimi u ruajt me sukses", "Beleška je uspešno sačuvana", "Anteckning sparad",
+        "Not başarıyla kaydedildi", "Нотатку успішно збережено",
+    ),
+    "msg_saving": row(
+        "Saving...", "Запазване...", "Ukládání...", "Gemmer...", "Wird gespeichert...", "Αποθήκευση...", "Guardando...", "Salvestamine...",
+        "Tallennetaan...", "Enregistrement...", "Á shábháil...", "Spremanje...", "Mentés...", "Vistar...", "Salvataggio...", "Späicheren...",
+        "Saugoma...", "Saglabā...", "Зачувување...", "Issejvjar...", "Opslaan...", "Lagrer...", "Zapisywanie...", "Salvando...",
+        "A guardar...", "Se salvează...", "Сохранение...", "Ukladanie...", "Shranjevanje...", "Ruajtje...", "Čuvanje...", "Sparar...",
+        "Kaydediliyor...", "Збереження...",
+    ),
+    "placeholder_private_notes": row(
+        "Add a note for this lead...", "Добавете бележка за това запитване...", "Přidat poznámku k tomuto poptávce...", "Tilføj en note til denne lead...", "Notiz für diesen Lead hinzufügen...", "Προσθέστε μια σημείωση για αυτό το αίτημα...", "Añadir una nota para este lead...", "Lisa märkus selle päringu kohta...",
+        "Lisää muistiinpano tälle liidille...", "Ajouter une note pour ce lead...", "Cuir nóta leis an lead seo...", "Dodajte bilješku za ovaj upit...", "Megjegyzés hozzáadása ehhez a megkereséshez...", "Bæta við nótu fyrir þessa fyrirspurn...", "Aggiungi una nota per questo lead...", "Eng Notiz fir dëse Lead derbäisetzen...",
+        "Pridėti pastabą šiam užklausimui...", "Pievienot piezīmi šim pieteikumam...", "Додадете белешка за ова барање...", "Żid nota għal din it-talba...", "Voeg een notitie toe voor deze lead...", "Legg til et notat for denne leaden...", "Dodaj notatkę do tego zapytania...", "Adicionar uma nota para este lead...",
+        "Adicionar uma nota para este lead...", "Adaugă o notă pentru acest lead...", "Добавить заметку к этому запросу...", "Pridať poznámku k tomuto dopytu...", "Dodajte zapisek za to povpraševanje...", "Shto një shënim për këtë kërkesë...", "Dodajte belešku za ovaj upit...", "Lägg till en anteckning för detta ärende...",
+        "Bu talep için bir not ekleyin...", "Додати нотатку до цього запиту...",
+    ),
+    "status_cancelled": row(
+        "Rejected", "Отказана", "Odmítnuto", "Afvist", "Abgelehnt", "Απορρίφθηκε", "Rechazada", "Tagasi lükatud",
+        "Hylätty", "Refusée", "Diúltaithe", "Odbijeno", "Elutasítva", "Hafnað", "Rifiutata", "Ofgeleent",
+        "Atmesta", "Noraidīts", "Одбиена", "Miċħud", "Afgewezen", "Avvist", "Odrzucona", "Rejeitada",
+        "Rejeitada", "Respinsă", "Отклонена", "Zamietnuté", "Zavrnjeno", "Refuzuar", "Odbijena", "Avvisad",
+        "Reddedildi", "Відхилена",
+    ),
+    "qr_slogan_submit_request": row(
+        "Send a request in 30 sec!", "Пусни заявка за 30 сек!", "Pošlete požadavek za 30 sec!", "Send en anmodning på 30 sek!", "Anfrage in 30 Sek. senden!", "Στείλε αίτημα σε 30 δευτ.!", "¡Envía una solicitud en 30 seg!", "Saada päring 30 sekundiga!",
+        "Lähetä pyyntö 30 sekunnissa!", "Envoyez une demande en 30 sec!", "Seol iarratas in 30 soic!", "Pošaljite zahtjev za 30 sek!", "Küldj kérést 30 mp alatt!", "Sendu beiðni á 30 sek!", "Invia una richiesta in 30 sec!", "Schéck eng Ufro a 30 Sek!",
+        "Siųsk užklausą per 30 sek!", "Nosūti pieprasījumu 30 sek!", "Испрати барање за 30 сек!", "Ibgħat talba f'30 sekondi!", "Stuur een aanvraag in 30 sec!", "Send en forespørsel på 30 sek!", "Wyślij zapytanie w 30 sek!", "Envie uma solicitação em 30 seg!",
+        "Envie um pedido em 30 seg!", "Trimite o cerere în 30 sec!", "Отправь заявку за 30 сек!", "Pošlite požiadavku za 30 sek!", "Pošlji zahtevo v 30 sek!", "Dërgo një kërkesë në 30 sek!", "Pošalji zahtev za 30 sek!", "Skicka en förfrågan på 30 sek!",
+        "30 saniyede istek gönder!", "Надішли запит за 30 сек!",
+    ),
+    "status_label_cancelled_by_client": row(
+        "Client cancelled", "Клиентът отказа", "Klient zrušil", "Kunden annullerede", "Kunde hat storniert", "Ο πελάτης ακύρωσε", "El cliente canceló", "Klient tühistas",
+        "Asiakas peruutti", "Le client a annulé", "Dhiúltaigh an cliant", "Klijent je otkazao", "Az ügyfél lemondta", "Viðskiptavinurinn hætti við", "Il cliente ha annullato", "De Client huet annuléiert",
+        "Klientas atšaukė", "Klients atcēla", "Клиентот откажа", "Il-klijent ikkanċella", "Klant heeft geannuleerd", "Kunden avbestilte", "Klient anulował", "O cliente cancelou",
+        "O cliente cancelou", "Clientul a anulat", "Клиент отменил", "Klient zrušil", "Stranka je preklicala", "Klienti anuloi", "Клијент је отказао", "Kunden avbokade",
+        "Müşteri iptal etti", "Клієнт скасував",
+    ),
+    "status_label_cancelled_by_provider": row(
+        "Cancelled", "Отказана", "Zrušeno", "Annulleret", "Storniert", "Ακυρώθηκε", "Cancelada", "Tühistatud",
+        "Peruutettu", "Annulée", "Cealaithe", "Otkazano", "Lemondva", "Hætt við", "Annullata", "Annuléiert",
+        "Atšaukta", "Atcelts", "Откажана", "Ikkanċellata", "Geannuleerd", "Avbestilt", "Anulowane", "Cancelada",
+        "Cancelada", "Anulată", "Отменена", "Zrušené", "Preklicano", "Anuluar", "Отказано", "Avbokad",
+        "İptal edildi", "Скасовано",
+    ),
 })
 
 SAME_NAMESPACE_ALIASES = {
@@ -3710,6 +3886,13 @@ def main():
             raise
 
     # Count inserted rows
+    with engine.connect() as conn:
+        result = conn.execute(text(f"SELECT COUNT(*) FROM translations WHERE key LIKE '{NAMESPACE}.%'"))
+        count = result.scalar()
+        print(f"✓ Inserted {count} translation rows for namespace '{NAMESPACE}'")
+
+if __name__ == "__main__":
+    main()
     with engine.connect() as conn:
         result = conn.execute(text(f"SELECT COUNT(*) FROM translations WHERE key LIKE '{NAMESPACE}.%'"))
         count = result.scalar()

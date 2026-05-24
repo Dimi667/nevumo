@@ -119,7 +119,8 @@ export default async function PrivacyPage({ params, searchParams }: PageProps) {
                 [t(dict, 't32_photo_data', 'Profile photo (optional)'), t(dict, 't32_photo_purpose', 'Public display'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
                 [t(dict, 't32_phone_data', 'Phone number'), t(dict, 't32_phone_purpose', 'Lead delivery, communication'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
                 [t(dict, 't32_location_data', 'Location / city'), t(dict, 't32_location_purpose', 'Service area matching'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
-                [t(dict, 't32_services_data', 'Services and prices'), t(dict, 't32_services_purpose', 'Marketplace listing'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')]
+                [t(dict, 't32_services_data', 'Services and prices'), t(dict, 't32_services_purpose', 'Marketplace listing'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')],
+                [t(dict, 't32_performance_data', 'Performance indicators (completed jobs, rating, verification level)'), t(dict, 't32_performance_purpose', 'Automatic calculation of ranking position and public status badge'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b)')]
               ]}
             />
 
@@ -213,9 +214,36 @@ export default async function PrivacyPage({ params, searchParams }: PageProps) {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-xl font-bold mb-4">{t(dict, 'section_7_title', '7. Automated Decision-Making')}</h2>
-            <p className="text-gray-700 leading-relaxed">
-              {t(dict, 'section_7_body')}
+            <h2 className="text-xl font-bold mb-4">{t(dict, 'section_7_title', '7. Automated Processing')}</h2>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              {t(dict, 'section_7_intro')}
+            </p>
+
+            <h3 className="text-lg font-semibold mt-6 mb-2">{t(dict, 'section_7_1_title', '7.1 Provider Ranking')}</h3>
+            <p className="text-gray-700 leading-relaxed mb-2">
+              {t(dict, 'section_7_1_body')}
+            </p>
+            <p className="text-sm text-muted-foreground mb-6">
+              <span className="font-medium">{t(dict, 'section_7_legal_basis_label', 'Legal basis:')}</span>{' '}
+              {t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b) GDPR')}
+            </p>
+
+            <h3 className="text-lg font-semibold mt-6 mb-2">{t(dict, 'section_7_2_title', '7.2 Provider Status Badge')}</h3>
+            <p className="text-gray-700 leading-relaxed mb-2">
+              {t(dict, 'section_7_2_body')}
+            </p>
+            <p className="text-sm text-muted-foreground mb-6">
+              <span className="font-medium">{t(dict, 'section_7_legal_basis_label', 'Legal basis:')}</span>{' '}
+              {t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b) GDPR')}
+            </p>
+
+            <h3 className="text-lg font-semibold mt-6 mb-2">{t(dict, 'section_7_3_title', '7.3 Payment Fraud Detection (Stripe)')}</h3>
+            <p className="text-gray-700 leading-relaxed mb-4">
+              {t(dict, 'section_7_3_body')}
+            </p>
+
+            <p className="text-sm text-muted-foreground italic mt-6">
+              {t(dict, 'section_7_note')}
             </p>
           </section>
 
