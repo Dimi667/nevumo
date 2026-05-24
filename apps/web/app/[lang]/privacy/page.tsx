@@ -150,7 +150,14 @@ export default async function PrivacyPage({ params, searchParams }: PageProps) {
             </p>
 
             <h3 className="text-lg font-semibold mt-6 mb-2">{t(dict, 'section_3_6_title', '3.6 Communications')}</h3>
-            <p className="text-gray-700 leading-relaxed mb-4">
+            <Table
+              headers={[t(dict, 'col_data', 'Data'), t(dict, 'col_purpose', 'Purpose'), t(dict, 'col_legal_basis', 'Legal Basis')]}
+              rows={[
+                [t(dict, 't36_transactional_data', 'Transactional emails'), t(dict, 't36_transactional_purpose', 'Service delivery'), t(dict, 'legal_contract_b', 'Contract — Art. 6(1)(b) GDPR')],
+                [t(dict, 't36_marketing_data', 'Marketing emails'), t(dict, 't36_marketing_purpose', 'Marketing'), t(dict, 'legal_consent_a', 'Consent — Art. 6(1)(a) GDPR')]
+              ]}
+            />
+            <p className="text-sm text-muted-foreground mt-2">
               {t(dict, 'section_3_6_note')}
             </p>
 
