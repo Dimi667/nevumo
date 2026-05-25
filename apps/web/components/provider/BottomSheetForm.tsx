@@ -409,7 +409,7 @@ export default function BottomSheetForm({
             {t['form_title'] ?? 'Изпратете заявка'}
           </h2>
           <p className="text-xs text-gray-400 mt-0.5">
-            {t['form_free_label'] ?? 'Безплатно · Без ангажимент'}
+            {t['request_panel_free'] ?? 'Безплатно'} · {t['request_panel_no_commitment'] ?? 'Без ангажимент'}
           </p>
         </div>
 
@@ -465,7 +465,7 @@ export default function BottomSheetForm({
               setNotes(e.target.value);
               if (serviceNoteError) setServiceNoteError(null);
             }}
-            placeholder={t['form_note_placeholder'] ?? 'Опишете накратко какво ви трябва...'}
+            placeholder={t['notes_placeholder'] ?? 'Опишете накратко какво ви трябва...'}
             className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 resize-none"
           />
 

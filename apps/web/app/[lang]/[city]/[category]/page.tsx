@@ -79,170 +79,6 @@ function getCategoryTranslationKey(category: string): CategoryKey {
   return category as CategoryKey;
 }
 
-function isWithin90Days(dateStr: string | null): boolean {
-  if (!dateStr) return false;
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffDays = (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24);
-  return diffDays <= 90;
-}
-
-function getInitials(name: string): string {
-  return name
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part.charAt(0).toUpperCase())
-    .join('');
-}
-
-function formatPrice(
-  basePrice: number | null,
-  priceType: string | null,
-  currency: string,
-  onRequestLabel: string
-): string {
-  if (!basePrice || priceType === 'request') return onRequestLabel;
-  const price = `${basePrice} ${currency}`;
-  if (priceType === 'hourly') return `${price}/ч`;
-  if (priceType === 'per_sqm') return `${price}/м²`;
-  return price;
-}
-
-function getBadge(
-  verificationLevel: number,
-  cityName: string,
-  t: Record<string, string>
-): { label: string; className: string } {
-  if (verificationLevel === 2) {
-    return {
-      label: '★ ' + (t['badge_top_specialist'] ?? 'Top specialist') + ' – ' + cityName,
-      className: 'bg-orange-100 text-orange-700',
-    };
-  }
-  if (verificationLevel === 1) {
-    return {
-      label: '✓ ' + (t['badge_verified'] ?? 'Verified specialist'),
-      className: 'bg-green-100 text-green-700',
-    };
-  }
-  return {
-    label: '⚡ ' + (t['badge_new_provider'] ?? 'New to Nevumo'),
-    className: 'bg-blue-50 text-blue-400',
-  };
-}
-
-function ProviderCard({
-  provider,
-  href,
-  texts,
-  cityName,
-  widgetT,
-}: {
-  provider: EnrichedProvider;
-  href: string;
-  texts: ProviderCardTexts;
-  cityName: string;
-  widgetT: Record<string, string>;
-}) {
-  const hasLeads = provider.leadsReceived > 0;
-  const hasJobs = provider.jobsCompleted > 0;
-  const hasRating = provider.rating > 0;
-  const hasRecentLead =
-    isWithin90Days(provider.latestLeadPreviewCreatedAt) &&
-    provider.latestLeadPreviewClientName !== null;
-
-  const badge = getBadge(provider.verificationLevel, cityName, widgetT);
-
-  return (
-    <article className="rounded-xl border border-gray-100 bg-white p-5 shadow-sm">
-      <div className="flex items-start gap-4">
-        <Link href={href} className="shrink-0">
-          <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-orange-100 text-lg font-bold text-orange-600">
-            {provider.profileImageUrl ? (
-              <img
-                src={provider.profileImageUrl}
-                alt={provider.businessName}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <span>{getInitials(provider.businessName)}</span>
-            )}
-          </div>
-        </Link>
-
-        <div className="min-w-0 flex-1">
-          <Link href={href} className="block">
-            <h2 className="text-lg font-bold text-gray-900 transition hover:text-orange-600">
-              {provider.businessName}
-            </h2>
-          </Link>
-
-          {provider.services.length > 0 && (() => {
-            const hasAnyDescription = provider.services.some(s => s.description);
-            return (
-              <div className="mt-3 space-y-2">
-                {provider.services.slice(0, 2).map((service) => (
-                  <div key={service.id}>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-700 font-medium min-w-0 truncate">{service.title}</span>
-                      <span className="font-medium text-gray-900 shrink-0">
-                        {formatPrice(service.basePrice, service.priceType, service.currency, texts.onRequest)}
-                      </span>
-                    </div>
-                    {service.description && (
-                      <p className="text-xs text-gray-500 line-clamp-1 mt-0.5">{service.description}</p>
-                    )}
-                  </div>
-                ))}
-                {!hasAnyDescription && (
-                  <p className="text-xs text-gray-500 line-clamp-1">{texts.defaultDescription}</p>
-                )}
-                {provider.services.length > 2 && (
-                  <div className="text-xs text-orange-600 font-medium">
-                    {texts.moreServices.replace('{n}', String(provider.services.length - 2))}
-                  </div>
-                )}
-              </div>
-            );
-          })()}
-
-          <div className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-gray-600 max-w-full">
-            <span className={`rounded-full px-3 py-1.5 ${badge.className}`}>
-              {badge.label}
-            </span>
-            {hasRating && hasJobs && (
-              <span className="rounded-full bg-amber-50 px-3 py-1.5 text-amber-700">
-                ⭐ {provider.rating.toFixed(1)} • {provider.reviewCount} {texts.reviews}
-              </span>
-            )}
-            {hasJobs && (
-              <span className="rounded-full bg-gray-50 px-3 py-1.5">
-                ✅ {provider.jobsCompleted} {texts.jobsCompleted}
-              </span>
-            )}
-            {hasRecentLead && (
-              <span className="rounded-full bg-gray-50 px-3 py-1.5 truncate">
-                ⚡ {provider.latestLeadPreviewClientName} {texts.recentlyRequested}
-              </span>
-            )}
-            <span className="rounded-full bg-gray-50 px-3 py-1.5">
-              ✓ {texts.directContact}
-            </span>
-          </div>
-
-          <Link
-            href={href}
-            className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2"
-          >
-            {texts.sendRequest}
-          </Link>
-        </div>
-      </div>
-    </article>
-  );
-}
-
 function getCategoryContent(
   category: string,
   cityName: string,
@@ -501,7 +337,7 @@ export default async function CategoryPage({ params }: PageProps) {
     jobsCompleted: getLocalizedCityText((categoryT['provider_jobs_completed'] || 'completed jobs'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
     lastRequest: getLocalizedCityText((categoryT['provider_last_request'] || 'Last request'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
     directContact: getLocalizedCityText((categoryT['provider_direct_contact'] || 'Direct contact'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
-    sendRequest: getLocalizedCityText((categoryT['form_btn'] || 'Send request'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
+    sendRequest: getLocalizedCityText((categoryT['send_request_to_provider'] || 'Send request to'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
     verifiedSpecialist: getLocalizedCityText((categoryT['provider_verified_specialist'] || 'Verified specialist'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
     freeNoObligation: getLocalizedCityText((categoryT['provider_free_no_obligation'] || 'Free • No obligation'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
     peopleSought: getLocalizedCityText((categoryT['provider_people_sought'] || 'people sought this specialist'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
@@ -757,50 +593,28 @@ export default async function CategoryPage({ params }: PageProps) {
 
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="flex-1 min-w-0">
-              <section className="space-y-4">
-              {providers.length === 0 ? (
-                <div className="rounded-xl border border-gray-100 bg-white px-6 py-12 text-center shadow-sm">
-                  <div className="border-l-4 border-orange-400 pl-4 py-2 mb-4 text-left inline-block">
-                    <p className="font-semibold text-gray-800 text-sm">
-                      {getLocalizedCityText((categoryT['no_providers_title'] || 'Be the first to request this service in your area'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
-                    </p>
-                    <p className="text-sm text-gray-500 mt-0.5">
-                      {getLocalizedCityText((categoryT['no_providers_subtitle'] || 'Providers joining Nevumo will see your request and contact you'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  {visibleProviders.map((provider) => {
-                    const providerHref = `/${lang}/${city}/${category}/${provider.slug}`;
-                    return <ProviderCard key={provider.id} provider={provider} href={providerHref} texts={providerCardTexts} cityName={cityName} widgetT={widgetT} />;
-                  })}
-                  {hiddenCount > 0 && (
-                    <details className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-                      <summary className="cursor-pointer list-none text-center text-sm font-semibold text-orange-600">
-                        {categoryT['show_more'] || 'Show more'}
-                      </summary>
-                      <div className="mt-4 space-y-4">
-                        {hiddenProviders.map((provider) => {
-                          const providerHref = `/${lang}/${city}/${category}/${provider.slug}`;
-                          return <ProviderCard key={provider.id} provider={provider} href={providerHref} texts={providerCardTexts} cityName={cityName} widgetT={widgetT} />;
-                        })}
-                      </div>
-                    </details>
-                  )}
-                </>
-              )}
-
               {/* Mobile Lead Form and Sticky Button */}
               <CategoryPageClient
                 translations={categoryT}
                 categorySlug={apiSlug}
                 citySlug={city}
+                city={city}
+                category={category}
                 lang={lang}
                 cityName={cityName}
                 services={services}
                 cityCountryCode={cityCountryCode}
                 stickyButtonLabel={getLocalizedCityText((categoryT['sticky_btn'] || 'Get offers — Free'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
+                providers={providers}
+                visibleProviders={visibleProviders}
+                hiddenProviders={hiddenProviders}
+                hiddenCount={hiddenCount}
+                providerCardTexts={providerCardTexts}
+                widgetT={widgetT}
+                categoryT={categoryT}
+                cityT={cityT}
+                grammaticalCase={grammaticalCase}
+                cityData={cityData}
               />
 
               <section className="mt-8 rounded-xl bg-gray-50 p-6 sm:p-8">
@@ -826,8 +640,7 @@ export default async function CategoryPage({ params }: PageProps) {
                   ))}
                 </div>
               </section>
-            </section>
-          </div>
+            </div>
 
             <div className="hidden lg:block w-full lg:w-80 xl:w-96 shrink-0">
               <div className="sticky top-6">

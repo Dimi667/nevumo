@@ -224,12 +224,6 @@ function HeroSection({ provider, translations }: { provider: ProviderFullPagePro
             <div className="text-xs text-gray-500">{t['meta_cities'] ?? 'Града'}</div>
           </div>
         )}
-        {provider.review_count > 0 && (
-          <div className="text-center">
-            <div className="text-base font-semibold text-gray-900">{provider.review_count}</div>
-            <div className="text-xs text-gray-500">{t['reviews_count'] ?? 'Ревюта'}</div>
-          </div>
-        )}
       </div>
 
       {/* Action Row */}
