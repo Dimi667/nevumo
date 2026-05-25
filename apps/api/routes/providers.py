@@ -32,6 +32,8 @@ from apps.api.services.provider_service import (
     resolve_provider_slug_safe,
     get_provider_by_claim_token,
     get_provider_gallery,
+    get_providers_ratings_batch,
+    get_providers_review_counts_batch,
 )
 from apps.api.services.review_service import get_public_latest_review_preview
 
@@ -155,12 +157,10 @@ async def list_providers(
         leads_received = {row[0]: row[1] for row in lr_rows}
 
     # Batch query for review_count
-    review_count: dict[UUID, int] = {}
-    if provider_ids:
-        rc_rows = db.query(Review.provider_id, func.count(Review.id)).filter(
-            Review.provider_id.in_(provider_ids)
-        ).group_by(Review.provider_id).all()
-        review_count = {row[0]: row[1] for row in rc_rows}
+    review_count = get_providers_review_counts_batch(provider_ids, db) if provider_ids else {}
+
+    # Batch query for rating (calculated from reviews)
+    ratings = get_providers_ratings_batch(provider_ids, db) if provider_ids else {}
 
     # Batch query for latest_lead_preview
     latest_lead_previews: dict[UUID, dict] = {}
@@ -255,7 +255,7 @@ async def list_providers(
             ProviderListItem(
                 id=p.id,
                 business_name=p.business_name,
-                rating=p.rating,
+                rating=ratings.get(p.id, 0.0),
                 verified=p.verified,
                 slug=p.slug,
                 profile_image_url=p.profile_image_url,

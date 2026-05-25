@@ -220,7 +220,7 @@ export async function getProviders(
     const res = await fetch(`${API_BASE}/api/v1/providers?${params}`, {
       next: {
         tags: ['providers', `cat-${categorySlug}`, `city-${citySlug}`, `lang-${lang}`],
-        revalidate: 3600,
+        revalidate: 60,
       },
     });
     if (!res.ok) return [];

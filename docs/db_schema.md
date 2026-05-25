@@ -65,7 +65,8 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token) WHERE cl
 - **Auto-generation**: Created from business_name during registration if not provided
 
 ### Dynamic Fields (calculated, not stored)
-- **rating**: calculated as AVG(reviews.rating) - updated in real-time via get_provider_rating()
+- **rating**: calculated as AVG(reviews.rating) - updated in real-time via get_provider_rating() (May 25, 2026: removed cached column updates, all ratings now calculated dynamically from Review table)
+- **review_count**: calculated as COUNT(reviews) via get_provider_review_count() (May 25, 2026: added dynamic calculation)
 - **jobs_completed**: calculated as COUNT(leads.status='done') + COUNT(lead_matches.status='done') via get_provider_jobs_completed()
 
 ### Промени в providers таблица (May 21, 2026)

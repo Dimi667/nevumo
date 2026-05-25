@@ -100,7 +100,7 @@ def get_provider_jobs_completed(provider_id: UUID, db: Session) -> int:
 
 def calculate_verification_level(provider: Provider, db: Session) -> int:
     jobs = get_provider_jobs_completed(provider.id, db)
-    rating = float(provider.rating) if provider.rating else 0.0
+    rating = get_provider_rating(provider.id, db)
     
     profile_complete = (
         provider.profile_image_url is not None
@@ -125,6 +125,22 @@ def get_provider_review_count(provider_id: UUID, db: Session) -> int:
         or 0
     )
     return int(count)
+
+
+def get_providers_ratings_batch(provider_ids: list[UUID], db: Session) -> dict[UUID, float]:
+    """Batch calculate ratings for multiple providers from reviews."""
+    rating_rows = db.query(Review.provider_id, func.avg(Review.rating)).filter(
+        Review.provider_id.in_(provider_ids)
+    ).group_by(Review.provider_id).all()
+    return {row[0]: round(float(row[1]), 1) if row[1] else 0.0 for row in rating_rows}
+
+
+def get_providers_review_counts_batch(provider_ids: list[UUID], db: Session) -> dict[UUID, int]:
+    """Batch count reviews for multiple providers."""
+    count_rows = db.query(Review.provider_id, func.count(Review.id)).filter(
+        Review.provider_id.in_(provider_ids)
+    ).group_by(Review.provider_id).all()
+    return {row[0]: row[1] for row in count_rows}
 
 
 def get_provider_leads_received(provider_id: UUID, db: Session) -> int:
@@ -900,7 +916,7 @@ def get_provider_profile(provider: Provider, db: Optional[Session] = None) -> di
         "slug": provider.slug,
         "slug_change_count": provider.slug_change_count,
         "profile_image_url": provider.profile_image_url,
-        "rating": float(provider.rating or 0),
+        "rating": get_provider_rating(provider.id, db) if db else float(provider.rating or 0),
         "verified": provider.verified,
         "availability_status": provider.availability_status,
         "created_at": provider.created_at.isoformat(),

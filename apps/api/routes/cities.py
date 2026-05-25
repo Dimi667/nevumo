@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from apps.api.constants import COUNTRY_CURRENCY_MAP, DEFAULT_CURRENCY
 from apps.api.dependencies import get_db, get_redis
-from apps.api.models import Location, LocationTranslation, Service, ServiceCity, Lead, Provider, ProviderCity
+from apps.api.models import Location, LocationTranslation, Service, ServiceCity, Lead, Provider, ProviderCity, Review
 from apps.api.schemas import CitiesResponse, CityOut
 
 router = APIRouter(prefix="/api/v1", tags=["cities"])
@@ -227,14 +227,14 @@ async def get_city_stats(
         .scalar() or 0
     )
 
-    # average_rating: AVG of providers.rating WHERE providers.rating IS NOT NULL and 
-    # provider has service in this city; round to 1 decimal; return null if no ratings
+    # average_rating: AVG of reviews.rating for providers in this city
     avg_rating = (
-        db.query(func.avg(Provider.rating))
+        db.query(func.avg(Review.rating))
+        .join(Provider, Review.provider_id == Provider.id)
         .join(Service, Service.provider_id == Provider.id)
         .join(ServiceCity, ServiceCity.service_id == Service.id)
         .join(Location, Location.id == ServiceCity.city_id)
-        .filter(Location.slug == city_slug, Provider.rating.isnot(None))
+        .filter(Location.slug == city_slug)
         .scalar()
     )
 

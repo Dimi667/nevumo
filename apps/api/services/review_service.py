@@ -194,11 +194,10 @@ def create_review(
 
 def _update_provider_rating(provider_id: UUID, db: Session) -> None:
     """Recalculate and update provider's aggregate rating."""
-    avg_rating = get_provider_rating(provider_id, db)
-    provider = db.query(Provider).filter(Provider.id == provider_id).first()
-    if provider:
-        provider.rating = avg_rating
-        db.commit()
+    # No longer needed - ratings are calculated dynamically from Review table
+    # provider.rating = avg_rating
+    # db.commit()
+    pass
 
 
 def get_provider_reviews(
