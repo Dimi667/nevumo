@@ -468,6 +468,13 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Problem**: Clicking "Find Service" in the provider dashboard sidebar while already having a client role resulted in an `ALREADY_IN_ROLE` error (400) from the API.
   - **Fix**: Added a frontend check in `apps/web/components/dashboard/DashboardSidebar.tsx`.
   - **Logic**: If `user.role === 'client'`, the app now redirects directly to the client dashboard without calling the `switchRole` API.
+- **Category Page Badge Update (May 25, 2026)** — COMPLETE:
+  - Updated badge rendering in category page provider cards to use `verification_level` logic (0/1/2)
+  - Level 0 (New): Changed from amber to blue (`bg-blue-50 text-blue-400`)
+  - Level 1 (Verified): Green badge unchanged (`bg-green-100 text-green-700`)
+  - Level 2 (Top Specialist): Changed from yellow to orange (`bg-orange-100 text-orange-700`)
+  - Simplified Level 2 displayText logic to use ' – ' separator consistently
+  - Badge colors now consistent across ProviderFullPage and category page provider cards
 - **Provider Page Translation Fixes (May 23, 2026)** — COMPLETE:
   - **Problem**: Hardcoded Bulgarian texts appearing on provider page when Polish language was selected
   - **Solution**: Added provider_page.request_service translation key for all 34 languages to fix service card button text

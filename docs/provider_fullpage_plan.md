@@ -191,7 +191,7 @@ images.length = 0  → Секцията се скрива изцяло
 
 ## Декомпозиция на задачите
 
-### Задача A — Backend: Badge логика + DB migration
+### ✅ Задача A — Backend: Badge логика + DB migration — COMPLETE (May 25, 2026)
 **Модел:** SWE-1.6  
 **Зависимости:** няма  
 
@@ -211,7 +211,7 @@ badge_top_specialist      → "Топ специалист в {city}"
 
 ---
 
-### Задача B — Backend: Multi-image галерия
+### ✅ Задача B — Backend: Multi-image галерия — COMPLETE (May 25, 2026)
 **Модел:** SWE-1.6  
 **Зависимости:** Задача A (паралелно е възможно)  
 
@@ -245,7 +245,7 @@ CREATE INDEX idx_provider_images_provider_id ON provider_images(provider_id);
 
 ---
 
-### Задача C — Frontend: Provider Dashboard — Gallery UI
+### ✅ Задача C — Frontend: Provider Dashboard — Gallery UI — COMPLETE (May 25, 2026)
 **Модел:** Kimi-2.6  
 **Зависимости:** Задача B  
 
@@ -271,7 +271,7 @@ gallery_drag_hint         → "Плъзнете за пренареждане"
 
 ---
 
-### Задача D — Frontend: ProviderFullPage компонент
+### ✅ Задача D — Frontend: ProviderFullPage компонент — COMPLETE (May 25, 2026)
 **Модел:** Kimi-2.6  
 **Зависимости:** Задача A, Задача B  
 
@@ -356,7 +356,7 @@ link_copied               → "Линкът е копиран!"
 
 ---
 
-### Задача F — Seed scripts: нови translation keys
+### ✅ Задача F — Seed scripts: нови translation keys — COMPLETE (May 25, 2026)
 **Модел:** Kimi-2.6  
 **Зависимости:** Задача D, Задача C  
 
@@ -489,7 +489,7 @@ Badge-ът се сваля автоматично ако условията пр
 
 ### Нови задачи добавени към плана
 
-**Задача H — Правен текст: Badge система**
+**✅ Задача H — Правен текст: Badge система — COMPLETE (May 25, 2026)**
 **Модел:** Claude генерира → Димитров одобрява → Kimi-2.6 seed скрипт
 
 Отделен документ с пълния правен текст на трите езика (EN, PL, BG):
@@ -497,7 +497,7 @@ Badge-ът се сваля автоматично ако условията пр
 - Кратка добавка в `privacy_policy_nevumo_FINAL.md`: обработка на performance data
 - След одобрение: seed скрипт за translations таблицата ако текстът се показва в UI
 
-**Задача I — Category page: Badge актуализация**
+**✅ Задача I — Category page: Badge актуализация — COMPLETE (May 25, 2026)**
 **Модел:** Kimi-2.6  
 **Зависимости:** Задача A (Badge логика в backend)
 

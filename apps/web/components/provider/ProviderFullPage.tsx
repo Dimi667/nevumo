@@ -121,7 +121,7 @@ function HeroSection({ provider, translations }: { provider: ProviderFullPagePro
   const getBadge = () => {
     if (provider.verification_level === 0) {
       return (
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-sm font-medium">
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-50 text-blue-400 text-sm font-medium">
           ⚡ {t['badge_new_provider'] ?? 'Нов в Nevumo'}
         </span>
       );
@@ -134,12 +134,9 @@ function HeroSection({ provider, translations }: { provider: ProviderFullPagePro
       );
     }
     if (provider.verification_level === 2) {
-      const badgeText = t['badge_top_specialist'] ?? 'Топ специалист в {city}';
-      const displayText = badgeText.includes('{city}') 
-        ? badgeText.replace('{city}', provider.city_name)
-        : `${badgeText} ${provider.city_name}`;
+      const displayText = (t['badge_top_specialist'] ?? 'Top specialist') + ' – ' + provider.city_name;
       return (
-        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm font-medium">
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm font-medium">
           ★ {displayText}
         </span>
       );

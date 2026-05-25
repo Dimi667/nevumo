@@ -116,19 +116,19 @@ function getBadge(
 ): { label: string; className: string } {
   if (verificationLevel === 2) {
     return {
-      label: (t['widget.badge_top_specialist'] ?? '★ Топ специалист в {city}').replace('{city}', cityName),
-      className: 'bg-yellow-100 text-yellow-700',
+      label: '★ ' + (t['badge_top_specialist'] ?? 'Top specialist') + ' – ' + cityName,
+      className: 'bg-orange-100 text-orange-700',
     };
   }
   if (verificationLevel === 1) {
     return {
-      label: t['widget.badge_verified'] ?? '✓ Верифициран',
+      label: '✓ ' + (t['badge_verified'] ?? 'Verified specialist'),
       className: 'bg-green-100 text-green-700',
     };
   }
   return {
-    label: t['widget.badge_new_provider'] ?? '⚡ Нов в Nevumo',
-    className: 'bg-amber-100 text-amber-800',
+    label: '⚡ ' + (t['badge_new_provider'] ?? 'New to Nevumo'),
+    className: 'bg-blue-50 text-blue-400',
   };
 }
 
@@ -778,7 +778,7 @@ export default async function CategoryPage({ params }: PageProps) {
                   {hiddenCount > 0 && (
                     <details className="rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
                       <summary className="cursor-pointer list-none text-center text-sm font-semibold text-orange-600">
-                        {getLocalizedCityText((categoryT['show_more'] || 'Show more'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
+                        {categoryT['show_more'] || 'Show more'}
                       </summary>
                       <div className="mt-4 space-y-4">
                         {hiddenProviders.map((provider) => {
