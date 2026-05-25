@@ -159,6 +159,7 @@ Nevumo е уеб платформа за marketplace на услуги.
   - Polish version (WERSJA POLSKA): Complete translation with Polish-specific legal terminology and structure
   - Bulgarian version: Complete translation with Bulgarian-specific legal terminology and structure
 - P2B Regulation compliance: Document drawn up in compliance with Regulation (EU) 2019/1150 on promoting fairness and transparency for business users of online intermediation services
+- **Update (May 25, 2026)**: Fixed Polish typo in seed_provider_terms_p24_art5_badge_b.py (poşrednictwem → pośrednictwem) and re-seeded badge sections (art5_body, badge_a, badge_b)
 
 ### Privacy Policy — достъпност (2026-05-11)
 - Футър: `GlobalFooter.tsx` — линк `footer.privacy_policy_link` (namespace `footer`) ✅

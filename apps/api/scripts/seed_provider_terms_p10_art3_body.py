@@ -26,13 +26,13 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
             "3.5 The same user account may be used in both Provider and Client roles simultaneously. Switching between roles does not require separate registration."
         ),
         "pl": (
-            "3.1 Rejestracja na Platformie jako Dostawca jest dostepna dla:\n"
-            "- osob fizycznych, ktore w chwili rejestracji ukonczyly 18 lat;\n"
-            "- podmiotow prawnych dzialajacych przez nalezycieumocowanych przedstawicieli.\n\n"
-            "3.2 Podczas rejestracji Dostawca obowiazany jest podac prawdziwe, pelne i aktualne informacje. Dostawca ponosi odpowiedzialnosc za biezace utrzymywanie aktualnosci swoich danych.\n\n"
-            "3.3 Kazdy Dostawca moze posiadac wylacznie jedno konto Dostawcy. Zakladanie wielu kont w celu obejscia ograniczen lub zawieszen jest zabronione.\n\n"
-            "3.4 Dostawca odpowiada za zachowanie poufnosci danych logowania do swojego konta oraz za wszelkie dzialania podejmowane w ramach tego konta.\n\n"
-            "3.5 To samo konto uzytkownika moze byc uzywane jednoczesnie w roli Dostawcy i Klienta. Zmiana roli nie wymaga odrebnej rejestracji."
+            "3.1 Rejestracja na Platformie jako Dostawca jest dostępna dla:\n"
+            "- osób fizycznych, które w chwili rejestracji ukończyły 18 lat;\n"
+            "- podmiotów prawnych działających przez należycie umocowanych przedstawicieli.\n\n"
+            "3.2 Podczas rejestracji Dostawca obowiązany jest podać prawdziwe, pełne i aktualne informacje. Dostawca ponosi odpowiedzialność za bieżące utrzymywanie aktualności swoich danych.\n\n"
+            "3.3 Każdy Dostawca może posiadać wyłącznie jedno konto Dostawcy. Zakładanie wielu kont w celu obejścia ograniczeń lub zawieszeń jest zabronione.\n\n"
+            "3.4 Dostawca odpowiada za zachowanie poufności danych logowania do swojego konta oraz za wszelkie działania podejmowane w ramach tego konta.\n\n"
+            "3.5 To samo konto użytkownika może być używane jednocześnie w roli Dostawcy i Klienta. Zmiana roli nie wymaga odrębnej rejestracji."
         ),
         "bg": (
             "3.1 Регистрацията на Платформата като Доставчик е достъпна за:\n"

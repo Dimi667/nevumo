@@ -84,6 +84,12 @@ export default async function TermsProviderPage({ params, searchParams }: PagePr
             {t(dict, 'version', 'Version: 1.0')}
           </p>
 
+          {t(dict, 'operator_info') && (
+            <div className="bg-gray-50 border border-gray-200 rounded-md p-4 text-sm text-gray-700 mb-6">
+              {t(dict, 'operator_info')}
+            </div>
+          )}
+
           {normalizedLang === 'pl' && t(dict, 'pl_notice') && (
             <div className="bg-blue-50 border border-blue-200 rounded-md p-4 text-blue-900 text-sm my-6">
               {t(dict, 'pl_notice')}

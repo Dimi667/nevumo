@@ -28,15 +28,15 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
             "Trader — A Provider acting in the capacity of a business (self-employed person, company, etc.)."
         ),
         "pl": (
-            "Platforma — Serwis internetowy Nevumo dostepny pod adresem nevumo.com i jego poddomeny.\n\n"
-            "Dostawca — Osoba fizyczna w wieku co najmniej 18 lat lub podmiot prawny zarejestrowany na Platformie w celu oferowania uslug.\n\n"
-            "Klient — Osoba fizyczna zarejestrowana na Platformie w celu poszukiwania i zamawiania uslug.\n\n"
-            "Zapytanie (Lead) — Zapytanie o usluge zlozone przez Klienta za posrednictwem Platformy.\n\n"
-            "Profil — Publiczna strona Dostawcy na Platformie zawierajaca jego uslugi, opis i opinie.\n\n"
-            "Oferta Uslugi — Indywidualna usluga oferowana przez Dostawce w ramach jego Profilu.\n\n"
-            "Prowizja — Oplata pobierana przez Nevumo za uslugi posrednictwa, zgodnie z aktualnym Cennikiem.\n\n"
-            "Cennik — Dokument okreslajacy aktualne prowizje i oplaty, dostepny pod adresem nevumo.com/pricing.\n\n"
-            "Przedsiebiorca — Dostawca dzialajacy w charakterze prowadzacego dzialalnosc gospodarcza."
+            "Platforma — Serwis internetowy Nevumo dostępny pod adresem nevumo.com i jego poddomeny.\n\n"
+            "Dostawca — Osoba fizyczna w wieku co najmniej 18 lat lub podmiot prawny zarejestrowany na Platformie w celu oferowania usług.\n\n"
+            "Klient — Osoba fizyczna zarejestrowana na Platformie w celu poszukiwania i zamawiania usług.\n\n"
+            "Zapytanie (Lead) — Zapytanie o usługę złożone przez Klienta za pośrednictwem Platformy.\n\n"
+            "Profil — Publiczna strona Dostawcy na Platformie zawierająca jego usługi, opis i opinie.\n\n"
+            "Oferta Usługi — Indywidualna usługa oferowana przez Dostawcę w ramach jego Profilu.\n\n"
+            "Prowizja — Opłata pobierana przez Nevumo za usługi pośrednictwa, zgodnie z aktualnym Cennikiem.\n\n"
+            "Cennik — Dokument określający aktualne prowizje i opłaty, dostępny pod adresem nevumo.com/pricing.\n\n"
+            "Przedsiębiorca — Dostawca działający w charakterze prowadzącego działalność gospodarczą."
         ),
         "bg": (
             "Платформа — Уебсайтът и мобилното приложение на Nevumo, достъпни на nevumo.com и неговите поддомейни.\n\n"

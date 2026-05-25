@@ -14,6 +14,12 @@ DATABASE_URL = os.getenv(
 
 NAMESPACE = "provider_terms"
 
+# ВАЖНО: След изпълнение на този скрипт ЗАДЪЛЖИТЕЛНО изпълни:
+# python -m apps.api.scripts.seed_provider_terms_p24_art5_badge_a
+# python -m apps.api.scripts.seed_provider_terms_p24_art5_badge_b
+# Тези скриптове добавят секции 5.5-5.8 (badges) към art5_body.
+# Без тях badges ще липсват от базата данни!
+
 TRANSLATIONS: dict[str, dict[str, str]] = {
     "art5_body": {
         "en": (
@@ -29,16 +35,16 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
             "5.4 Nevumo may modify the ranking algorithm periodically. Material changes to ranking parameters will be communicated to Providers via the notice procedure set out in Section 10."
         ),
         "pl": (
-            "5.1 Nevumo wyswietla profile Dostawcow i Oferty Uslug w wynikach wyszukiwania oraz w listingach kategorii. Kolejnosc, w jakiej Dostawcy sa prezentowani (ranking), ustalana jest na podstawie nastepujacych parametrow:\n\n"
-            "- Kompletnosc profilu (wysoka waga): Profile z pelnymi informacjami, zdjeciem i zweryfikowanymi danymi kontaktowymi zajmuja wyzsze pozycje.\n"
-            "- Srednia ocena opinii (wysoka waga): Wyzsza srednia ocena od zweryfikowanych Klientow poprawia pozycje w rankingu.\n"
-            "- Wskaznik i szybkosc odpowiedzi (srednia waga): Dostawcy, ktorzy szybko odpowiadaja na Zapytania, zajmuja wyzsza pozycje.\n"
-            "- Aktywnosc na Platformie (srednia waga): Profile aktywne ostatnio maja przewage nad nieaktywnymi.\n"
-            "- Dopasowanie geograficzne uslugi (srednia waga): Bliskosc lub zgodnosc z miastem Klienta.\n"
-            "- Status konta (wysoka waga): Konta bez ostrzezen ani ograniczen zajmuja wyzsze pozycje.\n\n"
-            "5.2 Platnosc nie wplywa na organiczny ranking. Nevumo nie przyjmuje platnosci w zamian za poprawe pozycji w organicznych wynikach wyszukiwania.\n\n"
-            "5.3 W przyszlosci Nevumo moze oferowac platne pozycje promocyjne (pozycje sponsorowane). Takie pozycje beda wyraznie oznaczone jako Sponsorowane lub Promowane. O wprowadzeniu platnych promocji Dostawcy zostana poinformowani z wyprzedzeniem co najmniej 30 dni.\n\n"
-            "5.4 Nevumo moze okresowo modyfikowac algorytm rankingowy. O istotnych zmianach parametrow rankingowych Dostawcy zostana poinformowani zgodnie z procedura powiadomien okreslona w paragrafie 10."
+            "5.1 Nevumo wyświetla profile Dostawców i Oferty Usług w wynikach wyszukiwania oraz w listingach kategorii. Kolejność, w jakiej Dostawcy są prezentowani (ranking), ustalana jest na podstawie następujących parametrów:\n\n"
+            "- Kompletność profilu (wysoka waga): Profile z pełnymi informacjami, zdjęciem i zweryfikowanymi danymi kontaktowymi zajmują wyższe pozycje.\n"
+            "- Średnia ocena opinii (wysoka waga): Wyższa średnia ocena od zweryfikowanych Klientów poprawia pozycję w rankingu.\n"
+            "- Wskaźnik i szybkość odpowiedzi (średnia waga): Dostawcy, którzy szybko odpowiadają na Zapytania, zajmują wyższą pozycję.\n"
+            "- Aktywność na Platformie (średnia waga): Profile aktywne ostatnio mają przewagę nad nieaktywnymi.\n"
+            "- Dopasowanie geograficzne usługi (średnia waga): Bliskość lub zgodność z miastem Klienta.\n"
+            "- Status konta (wysoka waga): Konta bez ostrzeżeń ani ograniczeń zajmują wyższe pozycje.\n\n"
+            "5.2 Płatność nie wpływa na organiczny ranking. Nevumo nie przyjmuje płatności w zamian za poprawę pozycji w organicznych wynikach wyszukiwania.\n\n"
+            "5.3 W przyszłości Nevumo może oferować płatne pozycje promocyjne (pozycje sponsorowane). Takie pozycje będą wyraźnie oznaczone jako Sponsorowane lub Promowane. O wprowadzeniu płatnych promocji Dostawcy zostaną poinformowani z wyprzedzeniem co najmniej 30 dni.\n\n"
+            "5.4 Nevumo może okresowo modyfikować algorytm rankingowy. O istotnych zmianach parametrów rankingowych Dostawcy zostaną poinformowani zgodnie z procedurą powiadomień określoną w paragrafie 10."
         ),
         "bg": (
             "5.1 Nevumo показва профилите на Доставчиците и Обявите за услуги в резултатите от търсенето и в категорийните листинги. Редът, в който се показват Доставчиците (класиране), се определя от следните параметри:\n\n"

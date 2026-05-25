@@ -29,6 +29,8 @@
 
 1.6 These Provider Terms were drawn up in compliance with Regulation (EU) 2019/1150 on promoting fairness and transparency for business users of online intermediation services ("P2B Regulation").
 
+1.7 Providers are prohibited from submitting or publishing unlawful content on the Platform.
+
 ---
 
 ### 2. Definitions
@@ -363,7 +365,7 @@ You may terminate your Provider account at any time by contacting us at legal@ne
 
 1. Niniejszy Regulamin dla Dostawców Usług (dalej: „Regulamin Dostawców") określa zasady i warunki korzystania z platformy Nevumo przez użytkowników rejestrujących się jako dostawcy usług (dalej: „Dostawca", „Dostawcy").
 
-2. Nevumo prowadzi internetową platformę pośrednictwa usługowego dostępną pod adresem nevumo.com oraz jej poddomenwami językowymi (dalej: „Platforma"), która umożliwia Dostawcom prezentowanie swoich usług oraz łączy ich z klientami poszukującymi tych usług (dalej: „Klienci").
+2. Nevumo prowadzi internetową platformę pośrednictwa usługowego dostępną pod adresem nevumo.com oraz jej poddomenami językowymi (dalej: „Platforma"), która umożliwia Dostawcom prezentowanie swoich usług oraz łączy ich z klientami poszukującymi tych usług (dalej: „Klienci").
 
 3. Nevumo pełni wyłącznie rolę **pośrednika** i nie jest stroną żadnej umowy o świadczenie usług zawieranej pomiędzy Dostawcą a Klientem. Nevumo nie świadczy usług oferowanych przez Dostawców, nie zatrudnia Dostawców i nie ponosi odpowiedzialności za jakość, zakres ani terminowość wykonania usług.
 
@@ -718,6 +720,8 @@ Dostawca może w każdej chwili rozwiązać swoje konto Dostawcy, kontaktując s
 5. Условията за Доставчици се прилагат в допълнение към Общите условия на Nevumo за Потребители. При противоречие, Условията за Доставчици имат предимство по отношение на доставчическото правоотношение.
 
 6. Настоящите Условия за Доставчици са изготвени в съответствие с Регламент (ЕС) 2019/1150 на Европейския парламент и на Съвета от 20 юни 2019 г. за насърчаване на справедливост и прозрачност за бизнес ползвателите на онлайн посреднически услуги (по-нататък: „Регламент P2B").
+
+7. На Доставчиците е забранено да публикуват или предоставят незаконно съдържание на Платформата.
 
 ---
 

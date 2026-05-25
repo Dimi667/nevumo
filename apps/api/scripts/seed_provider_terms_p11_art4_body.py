@@ -28,15 +28,15 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
             "4.5 Claimed Profiles: If Nevumo has created a preliminary profile using publicly available information, you may claim this profile by completing the verification process. Upon claiming, you will receive a notification under Article 14 GDPR describing the personal data held about you and the legal basis for its processing."
         ),
         "pl": (
-            "4.1 Po zakonczeniu rejestracji Dostawca moze zalozyc Profil i dodawac Oferty Uslug. Kazda Oferta musi dokladnie opisywac oferowana usluge, jej zakres, cene i dostepnosc.\n\n"
-            "4.2 Dostawca zapewnia, ze wszystkie informacje opublikowane na jego Profilu i w Ofertach Uslug sa zgodne z prawda, dokladne i nie wprowadzaja w blad.\n\n"
-            "4.3 Dostawca nie moze publikowac tresci, ktore:\n"
-            "- sa niezgodne z prawem, obrazliwe, dyskryminujace lub naruszaja prawa osob trzecich;\n"
-            "- stanowia spam, wprowadzajaca w blad reklame lub zawieraja falszywe opinie;\n"
-            "- podszywaja sie pod inna osobe lub podmiot;\n"
-            "- naruszaja prawa wlasnosci intelektualnej.\n\n"
-            "4.4 Nevumo zastrzega sobie prawo do usuniecia lub edycji tresci naruszajacych niniejszy Regulamin Dostawcow lub obowiazujace przepisy prawa, bez uprzedniego powiadomienia.\n\n"
-            "4.5 Profile Przejete: Jezeli Nevumo utworzylo wstepny profil na podstawie publicznie dostepnych informacji, Dostawca moze go przejac w drodze procesu weryfikacji. Po przyjeciu Dostawca otrzyma powiadomienie zgodnie z art. 14 RODO opisujace przechowywane dane osobowe i podstawe prawna ich przetwarzania."
+            "4.1 Po zakończeniu rejestracji Dostawca może założyć Profil i dodawać Oferty Usług. Każda Oferta musi dokładnie opisywać oferowaną usługę, jej zakres, cenę i dostępność.\n\n"
+            "4.2 Dostawca zapewnia, że wszystkie informacje opublikowane na jego Profilu i w Ofertach Usług są zgodne z prawdą, dokładne i nie wprowadzają w błąd.\n\n"
+            "4.3 Dostawca nie może publikować treści, które:\n"
+            "- są niezgodne z prawem, obraźliwe, dyskryminujące lub naruszają prawa osób trzecich;\n"
+            "- stanowią spam, wprowadzającą w błąd reklamę lub zawierają fałszywe opinie;\n"
+            "- podszywają się pod inną osobę lub podmiot;\n"
+            "- naruszają prawa własności intelektualnej.\n\n"
+            "4.4 Nevumo zastrzega sobie prawo do usunięcia lub edycji treści naruszających niniejszy Regulamin Dostawców lub obowiązujące przepisy prawa, bez uprzedniego powiadomienia.\n\n"
+            "4.5 Profile Przejęte: Jeżeli Nevumo utworzyło wstępny profil na podstawie publicznie dostępnych informacji, Dostawca może go przejąć w drodze procesu weryfikacji. Po przejęciu Dostawca otrzyma powiadomienie zgodnie z art. 14 RODO opisujące przechowywane dane osobowe i podstawę prawną ich przetwarzania."
         ),
         "bg": (
             "4.1 След завършване на регистрацията можете да създадете Профил и да добавите Обяви за услуги. Всяка обява трябва точно да описва предлаганата услуга, нейния обхват, цена и наличност.\n\n"
