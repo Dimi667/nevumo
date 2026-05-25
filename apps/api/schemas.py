@@ -136,6 +136,7 @@ class ProviderDetail(BaseModel):
     redirect_status: Optional[int] = None
     latest_lead_preview: Optional[LatestLeadPreview] = None
     latest_review: Optional["LatestReviewPreview"] = None
+    reviews: List["ReviewConversationItem"] = []
     gallery: list[ProviderImageItem] = []
 
     @field_validator("rating", mode="before")

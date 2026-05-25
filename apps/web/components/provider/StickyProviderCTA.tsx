@@ -20,10 +20,18 @@ export default function StickyProviderCTA({
 
   useEffect(() => {
     const btn = btnRef.current
-    const formEl = document.getElementById(formId)
-    if (!btn || !formEl) return
+    if (!btn) return
 
     const checkScroll = () => {
+      const formEl = document.getElementById(formId)
+      // On mobile, form is hidden so button should always be visible
+      if (!formEl) {
+        if (btnRef.current) {
+          btnRef.current.style.transform = 'translateY(0)'
+        }
+        return
+      }
+      
       const rect = formEl.getBoundingClientRect()
       const isFormInView = rect.top < window.innerHeight && rect.bottom > 0
       if (btnRef.current) {

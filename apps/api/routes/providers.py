@@ -35,7 +35,7 @@ from apps.api.services.provider_service import (
     get_providers_ratings_batch,
     get_providers_review_counts_batch,
 )
-from apps.api.services.review_service import get_public_latest_review_preview
+from apps.api.services.review_service import get_public_latest_review_preview, get_provider_reviews
 
 
 def get_widget_translations(lang: str, db: Session) -> dict:
@@ -419,6 +419,23 @@ async def get_provider(
             created_at=latest_review_data["created_at"],
         )
 
+    # Get reviews for provider (limit to 10 most recent)
+    reviews_data = get_provider_reviews(provider.id, db, limit=10)
+    reviews = []
+    for review_dict in reviews_data.get("items", []):
+        reviews.append({
+            "id": str(review_dict["id"]),
+            "provider_id": str(review_dict["provider_id"]),
+            "client_id": str(review_dict["client_id"]),
+            "lead_id": str(review_dict["lead_id"]) if review_dict.get("lead_id") else None,
+            "rating": review_dict["rating"],
+            "comment": review_dict["comment"],
+            "created_at": review_dict["created_at"],
+            "provider_reply": review_dict.get("provider_reply"),
+            "provider_reply_at": review_dict.get("provider_reply_at"),
+            "client_name": review_dict.get("client_name"),
+        })
+
     latest_lead_preview = None
     if latest_lead_preview_data:
         latest_lead_preview = LatestLeadPreview(
@@ -461,6 +478,7 @@ async def get_provider(
         translations=translations,
         latest_lead_preview=latest_lead_preview,
         latest_review=latest_review,
+        reviews=reviews,
         gallery=[ProviderImageItem.model_validate(img) for img in get_provider_gallery(db, provider.id)],
     )
 

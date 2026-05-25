@@ -183,19 +183,27 @@ function HeroSection({ provider, translations }: { provider: ProviderFullPagePro
       </div>
 
       {/* Badge */}
-      <div className="mb-4">
+      <div className="mb-4 flex flex-wrap gap-2">
         {getBadge()}
       </div>
 
       {/* Rating Row */}
       {provider.rating > 0 && provider.review_count > 0 && (
-        <div className="flex items-center gap-2 mb-4">
+        <button
+          onClick={() => {
+            const reviewsSection = document.getElementById('reviews-section');
+            if (reviewsSection) {
+              reviewsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
+          className="flex items-center gap-2 mb-4 cursor-pointer hover:opacity-80 transition-opacity"
+        >
           <StarRating rating={provider.rating} />
           <span className="font-semibold text-gray-900">{provider.rating.toFixed(1)}</span>
           <span className="text-gray-500">
             ({provider.review_count} {t['reviews_count'] ?? 'ревюта'})
           </span>
-        </div>
+        </button>
       )}
 
       {/* Meta Row */}
@@ -357,8 +365,8 @@ function ServicesSection({
 }
 
 // Reviews Section
-function ReviewsSection({ reviews, reviewCount, businessName, translations }: { 
-  reviews: Review[]; 
+function ReviewsSection({ reviews = [], reviewCount, businessName, translations }: { 
+  reviews?: Review[]; 
   reviewCount: number; 
   businessName: string;
   translations: Record<string, string>;
@@ -384,7 +392,7 @@ function ReviewsSection({ reviews, reviewCount, businessName, translations }: {
   };
 
   return (
-    <section className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
+    <section id="reviews-section" className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
       <h2 className="text-base font-semibold text-gray-900 mb-3">
         {t['section_reviews'] ?? 'Ревюта'} ({reviewCount})
       </h2>

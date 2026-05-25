@@ -369,6 +369,18 @@ This separation ensures that:
 - **Client Components in Server Pages (April 2026)**: Interactive elements that require browser APIs (e.g., `IntersectionObserver`, DOM manipulation) must be extracted into dedicated `'use client'` components. Inline `<script>` tags with `dangerouslySetInnerHTML` that mutate DOM outside React cause hydration mismatches. Use `useRef`, `useEffect`, and an `isMounted` state pattern to ensure client-only behavior while preserving SSR output. Reference implementation: `apps/web/components/homepage/MobileStickyCTA.tsx`.
 - **Namespaced Translations Validator**: Implemented a mandatory `namespace.key` pattern at the ORM layer to ensure all UI copy is properly organized and to avoid cache conflicts.
 - **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.
+- **Provider Page Review Card Display Fix (May 25, 2026)** — COMPLETE:
+  - **Problem:** The review card in LeadPanel (right column) and BottomSheetForm (mobile) was not displaying comments correctly due to field name mismatch (`comment` vs `comment_preview` from API) and had broken UI (empty quotes, plain text initials).
+  - **Solution:**
+    - Fixed field name from `latestReview.comment` to `latestReview.comment_preview` in both LeadPanel.tsx and BottomSheetForm.tsx
+    - Added circular avatar for client initials (w-6 h-6 rounded-full bg-orange-100) instead of plain text
+    - Placed avatar on same line as comment text for better mobile layout
+    - Made quotes conditional - only show when comment exists and is not empty
+  - **Files Modified:** `apps/web/components/provider/LeadPanel.tsx`, `apps/web/components/provider/BottomSheetForm.tsx`
+- **Sticky CTA Mobile Visibility Fix (May 25, 2026)** — COMPLETE:
+  - **Problem:** The sticky "Свържи ме с [Provider]" button was not visible on mobile because the scroll check logic required the lead form to exist in DOM, but the form is hidden on mobile (`hidden md:block`).
+  - **Solution:** Moved the form element check inside the `checkScroll` function in StickyProviderCTA.tsx. When the form doesn't exist (mobile), the button is always shown with `transform: translateY(0)`.
+  - **File Modified:** `apps/web/components/provider/StickyProviderCTA.tsx`
 - **Next.js ISR Cache Strategy (May 25, 2026)**: Reduced revalidate time from 3600s to 60s for provider list endpoint (`getProviders` in apps/web/lib/api.ts) to ensure rating and review count data stays fresh. Dynamic ratings are calculated from Review table in real-time, so shorter cache times are appropriate for these frequently-changing metrics.
 - **Translation Seed Script Separation (May 13, 2026)**: To prevent language mixing issues, translation keys must not be duplicated across seed scripts. Each seed script should have exclusive ownership of its keys:
   - `seed_provider_dashboard_translations.py`: Contains general provider dashboard UI translations

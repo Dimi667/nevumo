@@ -164,7 +164,21 @@ export interface ProviderDetail {
   canonical_path?: string | null;
   latest_lead_preview?: LatestLeadPreview | null;
   latest_review?: LatestReviewPreview | null;
+  reviews: Review[];
   is_claimed: boolean;
+}
+
+export interface Review {
+  id: string;
+  provider_id: string;
+  client_id: string;
+  lead_id: string | null;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+  provider_reply: string | null;
+  provider_reply_at: string | null;
+  client_name: string;
 }
 
 export interface CategoryOut {
@@ -242,7 +256,7 @@ export async function getProviderBySlug(
     const response = await fetch(`${API_BASE}/api/v1/providers/${slug}?${params.toString()}`, {
       next: {
         tags: [`provider-${slug}`, `lang-${lang}`],
-        revalidate: 3600,
+        revalidate: 60,
       },
     });
     if (!response.ok) {

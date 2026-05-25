@@ -116,16 +116,22 @@ export default function BottomSheetForm({
   const getSocialProofSignal = () => {
     // 1. reviewCount > 0 && latestReview
     if (reviewCount > 0 && latestReview) {
-      const shortComment = latestReview.comment
-        ? latestReview.comment.slice(0, 80) + (latestReview.comment.length > 80 ? '...' : '')
-        : '';
+      const shortComment = latestReview.comment_preview && latestReview.comment_preview.trim()
+        ? latestReview.comment_preview.slice(0, 80) + (latestReview.comment_preview.length > 80 ? '...' : '')
+        : null;
       const initials = latestReview.client_name.split(' ').map(n => n[0]).join('.');
       return (
         <div className="flex items-start gap-2">
           <span className="text-yellow-400">★★★★★</span>
-          <div>
-            <p className="text-gray-700">"{shortComment}"</p>
-            <p className="text-gray-500 text-xs mt-1">— {initials}</p>
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center shrink-0">
+                <span className="text-orange-600 text-xs font-bold">
+                  {initials.charAt(0).toUpperCase()}
+                </span>
+              </div>
+              {shortComment && <p className="text-gray-700 text-sm">"{shortComment}"</p>}
+            </div>
           </div>
         </div>
       );
