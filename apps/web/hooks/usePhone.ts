@@ -12,9 +12,10 @@ interface UserProfile {
 const LOCAL_STORAGE_KEY = "nevumo_phone";
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
-export function usePhone() {
+export function usePhone(countryCode?: string) {
   const [phone, setPhoneState] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [isValid, setIsValid] = useState<boolean>(false);
 
   // Save phone to localStorage
   const savePhoneToStorage = (phoneValue: string) => {
@@ -133,6 +134,11 @@ export function usePhone() {
     setPhoneState(phoneValue);
     savePhoneToStorage(phoneValue);
     
+    // Validate phone
+    const { validatePhone } = require('@/lib/phoneUtils');
+    const validation = validatePhone(phoneValue, countryCode);
+    setIsValid(validation.isValid);
+    
     // If logged in, sync to profile in background
     const { token } = getCurrentAuth();
     if (token) {
@@ -157,5 +163,6 @@ export function usePhone() {
     savePhone,
     clearPhone,
     loading,
+    isValid,
   };
 }

@@ -46,8 +46,8 @@ export default function SettingsPage() {
   const [phoneValue, setPhoneValue] = useState('');
   const [savingPhone, setSavingPhone] = useState(false);
   const [phoneSaved, setPhoneSaved] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const slugCheckRequestRef = useRef(0);
-  const { phone: savedPhone, savePhone } = usePhone();
 
   const [switchingRole, setSwitchingRole] = useState(false);
   const [switchError, setSwitchError] = useState<string | null>(null);
@@ -72,11 +72,6 @@ export default function SettingsPage() {
   }, []);
 
 
-  useEffect(() => {
-    if (savedPhone && !phoneValue) {
-      setPhoneValue(savedPhone);
-    }
-  }, [savedPhone, phoneValue]);
 
   async function runSlugCheck(candidate: string): Promise<boolean> {
     const trimmed = candidate.trim();
@@ -224,19 +219,15 @@ export default function SettingsPage() {
 
   async function handleSavePhone() {
     if (savingPhone) return;
+    setFormSubmitted(true);
 
     setSavingPhone(true);
     setPhoneSaved(false);
     
-    try {
-      await savePhone(phoneValue);
-      setPhoneSaved(true);
-      setTimeout(() => setPhoneSaved(false), 3000);
-    } catch {
-      // Silent fail - usePhone hook handles errors internally
-    } finally {
-      setSavingPhone(false);
-    }
+    // Phone is now saved automatically by PhoneInput component
+    setPhoneSaved(true);
+    setTimeout(() => setPhoneSaved(false), 3000);
+    setSavingPhone(false);
   }
 
   async function handleSwitchToClient() {
@@ -338,11 +329,12 @@ export default function SettingsPage() {
         </div>
         <div className="space-y-2">
           <PhoneInput
-            value={phoneValue}
             onChange={setPhoneValue}
             countryCode={user?.country_code ?? 'BG'}
             label={t('label_phone', 'Phone')}
             className="pt-2"
+            lang={lang}
+            submitted={formSubmitted}
           />
           <div className="flex items-center gap-3">
             <button

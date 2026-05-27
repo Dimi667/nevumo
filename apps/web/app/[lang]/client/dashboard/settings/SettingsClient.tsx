@@ -29,8 +29,8 @@ export default function SettingsClient({ lang }: { lang: string }) {
   const [exporting, setExporting] = useState(false);
   const [exportSuccess, setExportSuccess] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const { t } = useTranslation('client_dashboard', lang);
-  const { phone: savedPhone, savePhone } = usePhone();
 
   useEffect(() => {
     async function loadPreferences() {
@@ -47,7 +47,6 @@ export default function SettingsClient({ lang }: { lang: string }) {
         setError(null);
         const response = await getReviewPreferences(token);
         setPreferences(response);
-        setPhoneValue(savedPhone || '');
       } catch (e: unknown) {
         setError(e instanceof Error ? e.message : 'Неуспешно зареждане на настройките.');
       } finally {
@@ -56,7 +55,7 @@ export default function SettingsClient({ lang }: { lang: string }) {
     }
 
     void loadPreferences();
-  }, [savedPhone]);
+  }, []);
 
 
   if (loading) {
@@ -124,19 +123,15 @@ export default function SettingsClient({ lang }: { lang: string }) {
 
   async function handleSavePhone() {
     if (savingPhone) return;
+    setFormSubmitted(true);
 
     setSavingPhone(true);
     setPhoneSaved(false);
     
-    try {
-      await savePhone(phoneValue);
-      setPhoneSaved(true);
-      setTimeout(() => setPhoneSaved(false), 3000);
-    } catch {
-      // Silent fail - usePhone hook handles errors internally
-    } finally {
-      setSavingPhone(false);
-    }
+    // Phone is now saved automatically by PhoneInput component
+    setPhoneSaved(true);
+    setTimeout(() => setPhoneSaved(false), 3000);
+    setSavingPhone(false);
   }
 
   function handleLogout() {
@@ -223,11 +218,12 @@ export default function SettingsClient({ lang }: { lang: string }) {
         </div>
         <div className="space-y-2">
           <PhoneInput
-            value={phoneValue}
             onChange={setPhoneValue}
             countryCode={user?.country_code ?? 'BG'}
             label={t('label_phone', 'Phone')}
             className="pt-2"
+            lang={lang}
+            submitted={formSubmitted}
           />
           <div className="flex items-center gap-3">
             <button

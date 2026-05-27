@@ -220,7 +220,6 @@ export default function ProviderWidget({
   const [error, setError] = useState(false);
   const [cityInfo, setCityInfo] = useState<CityOut | null>(null);
   const [phoneValue, setPhoneValue] = useState('');
-  const [phoneError, setPhoneError] = useState<string | null>(null);
   const phoneRef = useRef<HTMLDivElement>(null);
   const stickyDivRef = useRef<HTMLDivElement>(null);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
@@ -229,7 +228,7 @@ export default function ProviderWidget({
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy'>('terms');
-  const { phone: savedPhone, savePhone } = usePhone();
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const lang = propLang || (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
   const { dict: termsDict } = useTranslation('terms', lang);
   const { dict: termsProviderDict } = useTranslation('provider_terms', lang);
@@ -249,10 +248,6 @@ export default function ProviderWidget({
   };
   const effectiveCountryCode = countryCode ?? cityInfo?.country_code;
   const currency = provider.services[0]?.currency || getCurrency(effectiveCountryCode, cityInfo?.currency);
-  const phonePrefix = getPhonePrefix(cityInfo?.country_code);
-  const phoneDigitsCount = phoneValue.replace(/\D/g, '').length;
-  const isPhoneValid = phoneDigitsCount >= 7;
-  const isPrefixOnlyPhone = phoneValue.trim() === phonePrefix.trim();
 
   // Use runtime URL resolution for provider image
   const profileImageUrl = resolveStaticUrl(provider.profile_image_url);
@@ -263,18 +258,8 @@ export default function ProviderWidget({
     final: profileImageUrl,
   });
 
-  useEffect(() => {
-    if (savedPhone && (!phoneValue || phoneValue.trim() === phonePrefix.trim())) {
-      setPhoneValue(savedPhone);
-    }
-  }, [phonePrefix, phoneValue, savedPhone]);
-
   const handleChange = (value: string) => {
     setPhoneValue(value);
-
-    if (phoneError) {
-      setPhoneError(null);
-    }
   };
   const cityName = cityInfo?.city ?? citySlug;
   const jobsLabel = t('jobs_label', undefined, 'jobs completed');
@@ -386,9 +371,10 @@ export default function ProviderWidget({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setFormSubmitted(true);
 
-    if (isPrefixOnlyPhone || !isPhoneValid) {
-      setPhoneError(t('phone_error'));
+    // Validation is now handled by PhoneInput internally
+    if (!phoneValue || phoneValue.trim().length < 7) {
       phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setError(false);
       return;
@@ -402,7 +388,6 @@ export default function ProviderWidget({
 
     setLoading(true);
     setError(false);
-    setPhoneError(null);
     
     try {
       const result = await createLead({
@@ -419,10 +404,6 @@ export default function ProviderWidget({
         }
         setIsSuccess(true);
         setSuccessStep('sent');
-        // Save phone on successful submit
-        if (phoneValue.replace(/\D/g, '').length >= 7) {
-          savePhone(phoneValue.trim());
-        }
         // Show PWA prompt after 2 seconds
         setTimeout(() => { setShowPWAPrompt(true); }, 2000);
       } else {
@@ -763,13 +744,12 @@ export default function ProviderWidget({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div ref={phoneRef}>
             <PhoneInput
-              value={phoneValue}
               onChange={handleChange}
               countryCode={countryCode ?? cityInfo?.country_code}
-              error={phoneError}
-              errorMessage={t('phone_error')}
               label={t('phone_label', undefined, 'Phone')}
               required
+              lang={lang}
+              submitted={formSubmitted}
             />
           </div>
 

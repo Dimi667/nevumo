@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { createLead, claimLeadEmail } from '@/lib/api';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
+import PhoneInput from '@/components/ui/PhoneInput';
 
 interface LeadPanelProps {
   providerName: string;
@@ -66,7 +67,7 @@ export default function LeadPanel({
   const [internalSelectedService, setInternalSelectedService] = useState<number | null>(null);
   const selectedService = externalSelectedService !== undefined ? externalSelectedService : internalSelectedService;
   const setSelectedService = externalOnServiceSelect ? externalOnServiceSelect : setInternalSelectedService;
-  const [phone, setPhone] = useState('');
+  const [phoneValue, setPhoneValue] = useState('');
   const [notes, setNotes] = useState('');
 
   // Handle pre-fill from service selection (chip click or external select)
@@ -92,6 +93,7 @@ export default function LeadPanel({
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const phoneRef = useRef<HTMLInputElement>(null);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Social proof signal cascade logic
   const getSocialProofSignal = () => {
@@ -133,10 +135,6 @@ export default function LeadPanel({
     return <p>✓ Безплатна заявка • Без ангажимент • Директен контакт</p>;
   };
 
-  const isValidPhone = (phone: string): boolean => {
-    const digits = phone.replace(/\D/g, '');
-    return digits.length >= 7;
-  };
 
   const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -145,10 +143,12 @@ export default function LeadPanel({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormSubmitted(true);
     setSubmitError(null);
     setServiceNoteError(null);
 
-    if (!isValidPhone(phone)) {
+    // Validation is now handled by PhoneInput internally
+    if (!phoneValue || phoneValue.trim().length < 7) {
       setSubmitError(t['error_phone_invalid'] ?? 'Invalid phone number');
       phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
@@ -167,7 +167,7 @@ export default function LeadPanel({
         provider_slug: providerSlug,
         category_slug: categorySlug,
         city_slug: citySlug,
-        phone: phone.trim(),
+        phone: phoneValue.trim(),
         description: notes || undefined,
         source: 'panel',
       });
@@ -391,16 +391,14 @@ export default function LeadPanel({
         )}
 
         {/* PhoneField */}
-        <input
+        <PhoneInput
           ref={phoneRef}
-          type="tel"
-          value={phone}
-          onChange={(e) => {
-            setPhone(e.target.value);
-            if (submitError) setSubmitError(null);
-          }}
-          placeholder={t['phone_placeholder'] ?? 'Вашият телефон'}
-          className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20"
+          onChange={setPhoneValue}
+          countryCode={citySlug === 'warszawa' ? 'PL' : 'BG'}
+          required
+          label={t['phone_placeholder'] ?? 'Вашият телефон'}
+          lang={lang}
+          submitted={formSubmitted}
         />
 
         {/* NotesField */}

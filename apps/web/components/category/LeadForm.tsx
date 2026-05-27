@@ -2,9 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { createLead, claimLeadEmail } from '@/lib/api';
-import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
-import { getPhonePrefix } from '@/lib/phoneUtils';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 
@@ -45,7 +43,6 @@ export default function LeadForm({
   const [isSuccess, setIsSuccess] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [phoneValue, setPhoneValue] = useState('');
-  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [selectedChip, setSelectedChip] = useState<string | null>(null);
   const [showTextarea, setShowTextarea] = useState(true);
   const [leadId, setLeadId] = useState<string | null>(null);
@@ -54,30 +51,12 @@ export default function LeadForm({
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const phoneRef = useRef<HTMLDivElement>(null);
-  const { phone: savedPhone, savePhone, loading } = usePhone();
-  const phonePrefix = getPhonePrefix(countryCode);
-  const phoneDigitsCount = phoneValue.replace(/\D/g, '').length;
-  const isPhoneValid = phoneDigitsCount >= 7;
-  const isPrefixOnlyPhone = phoneValue.trim() === phonePrefix.trim();
-  
-  useEffect(() => {
-    if (
-      savedPhone &&
-      !phoneValue &&
-      savedPhone.trim().startsWith(phonePrefix.trim())
-    ) {
-      setPhoneValue(savedPhone);
-    }
-  }, [phonePrefix, phoneValue, savedPhone]);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   
   const resolvedTitle = title ?? translations['form_btn'] ?? 'Get offers';
   
   const handleChange = (value: string) => {
     setPhoneValue(value);
-
-    if (phoneError) {
-      setPhoneError(null);
-    }
   };
 
   const handleChipClick = (chipTitle: string) => {
@@ -93,9 +72,10 @@ export default function LeadForm({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setFormSubmitted(true);
 
-    if (isPrefixOnlyPhone || !isPhoneValid) {
-      setPhoneError(translations['error_phone_invalid'] || 'Enter a valid phone number');
+    // Validation is now handled by PhoneInput internally
+    if (!phoneValue || phoneValue.trim().length < 7) {
       setHasError(false);
       
       // Scroll to phone field so user sees the error
@@ -105,7 +85,6 @@ export default function LeadForm({
 
     setIsSubmitting(true);
     setHasError(false);
-    setPhoneError(null);
 
     try {
       const finalDescription = description.trim() || selectedChip || '';
@@ -407,12 +386,12 @@ export default function LeadForm({
       {/* Phone Field */}
       <div ref={phoneRef}>
         <PhoneInput
-          value={phoneValue}
           onChange={handleChange}
           countryCode={countryCode}
-          error={phoneError}
           label={translations['form_phone'] || 'Phone'}
           required
+          lang={lang}
+          submitted={formSubmitted}
         />
       </div>
 

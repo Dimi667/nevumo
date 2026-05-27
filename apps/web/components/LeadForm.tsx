@@ -16,6 +16,7 @@ export default function LeadForm({ categorySlug, citySlug, providerSlug, country
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
   const [phoneValue, setPhoneValue] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const { phone: savedPhone, savePhone, loading: phoneLoading } = usePhone();
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export default function LeadForm({ categorySlug, citySlug, providerSlug, country
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setFormSubmitted(true);
     setLoading(true);
     setError(false);
     
@@ -76,6 +78,7 @@ export default function LeadForm({ categorySlug, citySlug, providerSlug, country
         countryCode={countryCode}
         label="Phone"
         required
+        submitted={formSubmitted}
       />
 
       <div>

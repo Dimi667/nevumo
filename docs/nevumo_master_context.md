@@ -860,6 +860,10 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Auto-fill for anonymous (localStorage) and logged-in (DB) users
   - countryCode wired in: category pages, provider pages, 
     ProviderWidget, provider/client dashboard settings
+  - Error display logic: Error only shows when `!isValid && phone && (touched || submitted)`
+    - `touched`: Set to true when user interacts with the field (onChange or onBlur)
+    - `submitted`: Prop passed from parent form, set to true on form submission attempt
+    - This prevents premature error display on initial load with country code prefix
   - GDPR: Legitimate Interest basis, Privacy Policy update pending
 - **Lead Form Success Screen with Email Capture** — Post-submission two-step success flow:
   - Step 1: Shows success message + "Want to track your request?" with Continue/Skip CTAs

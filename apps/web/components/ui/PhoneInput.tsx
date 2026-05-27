@@ -1,70 +1,62 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { getPhonePlaceholder, getPhonePrefix, validatePhone } from '@/lib/phoneUtils';
+import { usePhone } from '@/hooks/usePhone';
+import { getPhonePlaceholder, getPhonePrefix } from '@/lib/phoneUtils';
+import { useTranslation } from '@/lib/use-translation';
 
 interface PhoneInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  countryCode?: string;        // e.g. "PL" — drives placeholder
-  error?: string | null;
-  onValidChange?: (isValid: boolean) => void;
-  errorMessage?: string;
-  label?: string;              // default: use translation or "Phone"
-  placeholder?: string;        // override auto placeholder
+  onChange?: (value: string) => void;  // optional callback when phone changes
+  countryCode?: string;               // e.g. "PL" — drives placeholder
+  label?: string;                     // default: use translation or "Phone"
+  placeholder?: string;                // override auto placeholder
   className?: string;
   required?: boolean;
+  lang?: string;                       // for translations
+  submitted?: boolean;                // whether parent form was submitted
 }
 
 export default function PhoneInput({
-  value,
   onChange,
   countryCode,
-  error,
-  onValidChange,
-  errorMessage = 'Enter a valid phone number',
-  label = "Phone",
+  label,
   placeholder,
   className = "",
   required = false,
+  lang = 'en',
+  submitted = false,
 }: PhoneInputProps) {
-  const [internalError, setInternalError] = useState<string | null>(null);
+  const { phone, savePhone, loading, isValid } = usePhone(countryCode);
+  const { t } = useTranslation('widget', lang);
   const prefix = useMemo(() => getPhonePrefix(countryCode), [countryCode]);
   const inputPlaceholder = placeholder || getPhonePlaceholder(countryCode);
+  const [touched, setTouched] = useState(false);
 
+  // Initialize with country prefix if empty
   useEffect(() => {
-    if (!value || value.trim() === '') {
-      onChange(prefix);
+    if (!loading && (!phone || phone.trim() === '')) {
+      savePhone(prefix);
     }
-  }, []); // empty dependency array — runs once on mount only
+  }, [loading, phone, prefix, savePhone]);
 
+  // Call external onChange callback when phone changes
   useEffect(() => {
-    if (error) {
-      const isValid = value.replace(/\D/g, '').length >= 7;
-      setInternalError(isValid ? null : errorMessage);
-      onValidChange?.(isValid);
+    if (onChange && phone) {
+      onChange(phone);
     }
-  }, [error, errorMessage, onValidChange, value]);
+  }, [phone, onChange]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (internalError) {
-      setInternalError(null);
-    }
-
-    onChange(e.target.value);
+    savePhone(e.target.value);
+    setTouched(true);
   };
 
   const handleBlur = () => {
-    if (!value || value.trim() === '') {
-      onChange(prefix);
-    }
-    
-    const isValid = value.replace(/\D/g, '').length >= 7;
-    setInternalError(isValid ? null : errorMessage);
-    onValidChange?.(isValid);
+    setTouched(true);
   };
 
-  const displayedError = internalError || error;
+  const errorMessage = t('phone_error') || 'Enter a valid phone number';
+  const showError = !isValid && phone && (touched || submitted);
 
   return (
     <div className={`space-y-1 ${className}`}>
@@ -77,22 +69,20 @@ export default function PhoneInput({
       
       <input
         type="tel"
-        value={value}
+        value={phone}
         onChange={handleChange}
         onBlur={handleBlur}
         placeholder={inputPlaceholder}
         required={required}
+        disabled={loading}
         className={`w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent text-sm transition-colors ${
-          displayedError ? 'border-red-400 focus:ring-red-300' : ''
+          showError ? 'border-red-400 focus:ring-red-300' : ''
         }`}
       />
       
-      {displayedError && (
-        <p className="text-xs text-red-500 mt-1">{internalError || error}</p>
+      {showError && (
+        <p className="text-xs text-red-500 mt-1">{errorMessage}</p>
       )}
     </div>
   );
 }
-
-// Re-export validatePhone for consumer convenience
-export { validatePhone };

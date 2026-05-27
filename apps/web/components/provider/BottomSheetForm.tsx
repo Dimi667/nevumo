@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { createLead, claimLeadEmail } from '@/lib/api';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
-import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 
 interface BottomSheetFormProps {
@@ -98,7 +97,8 @@ export default function BottomSheetForm({
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const phoneRef = useRef<HTMLInputElement>(null);
-  const { phone, savePhone } = usePhone();
+  const [phoneValue, setPhoneValue] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   // Prevent body scroll when sheet is open
   useEffect(() => {
@@ -152,10 +152,6 @@ export default function BottomSheetForm({
     return <p>✓ Безплатна заявка • Без ангажимент • Директен контакт</p>;
   };
 
-  const isValidPhone = (phone: string): boolean => {
-    const digits = phone.replace(/\D/g, '');
-    return digits.length >= 7;
-  };
 
   const isValidEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -164,12 +160,12 @@ export default function BottomSheetForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormSubmitted(true);
     setSubmitError(null);
     setServiceNoteError(null);
 
-    // Validate phone
-    if (!isValidPhone(phone)) {
-      setSubmitError(t['error_phone_invalid'] ?? 'Invalid phone number');
+    // Validation is now handled by PhoneInput internally
+    if (!phoneValue || phoneValue.trim().length < 7) {
       phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
@@ -187,7 +183,7 @@ export default function BottomSheetForm({
         provider_slug: providerSlug,
         category_slug: categorySlug,
         city_slug: citySlug,
-        phone: phone.trim(),
+        phone: phoneValue.trim(),
         description: notes || undefined,
         source: 'panel',
       });
@@ -448,13 +444,13 @@ export default function BottomSheetForm({
           {/* PhoneInput */}
           <PhoneInput
             ref={phoneRef}
-            value={phone}
-            onChange={savePhone}
+            onChange={setPhoneValue}
             countryCode={citySlug === 'warszawa' ? 'PL' : 'BG'}
-            error={submitError}
             required
             label={t['phone_label'] ?? 'Телефон'}
             className="mb-0"
+            lang={lang}
+            submitted={formSubmitted}
           />
 
           {/* NotesField */}

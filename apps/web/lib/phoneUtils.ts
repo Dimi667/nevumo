@@ -75,12 +75,27 @@ export const PHONE_PATTERNS = {
 // Generic international phone pattern (fallback)
 const GENERIC_PHONE_PATTERN = /^\+\d{1,4}\s?\d{6,14}$/;
 
-export function validatePhone(phone: string, countryCode?: string): { isValid: boolean; error?: string } {
+export function validatePhone(phone: string, countryCode?: string): { isValid: boolean } {
   if (!phone || phone.trim().length === 0) {
-    return { isValid: false, error: "Phone number is required" };
+    return { isValid: false };
   }
 
   const cleanPhone = phone.trim();
+  const digits = cleanPhone.replace(/\D/g, '');
+  
+  // Calculate required minimum digits: country code (usually 3) + phone number (4) = 7 total
+  let minDigits = 7; // Default fallback
+  
+  if (countryCode && COUNTRY_PHONE_CODES[countryCode as keyof typeof COUNTRY_PHONE_CODES]) {
+    const code = COUNTRY_PHONE_CODES[countryCode as keyof typeof COUNTRY_PHONE_CODES];
+    const codeDigits = code.replace(/\D/g, '').length;
+    minDigits = codeDigits + 4; // Country code + at least 4 phone digits
+  }
+  
+  // Check minimum digit count
+  if (digits.length < minDigits) {
+    return { isValid: false };
+  }
   
   // Try country-specific validation first
   if (countryCode && PHONE_PATTERNS[countryCode as keyof typeof PHONE_PATTERNS]) {
@@ -88,10 +103,8 @@ export function validatePhone(phone: string, countryCode?: string): { isValid: b
     if (pattern.test(cleanPhone)) {
       return { isValid: true };
     }
-    return { 
-      isValid: false, 
-      error: `Invalid phone format for ${countryCode}. Expected format: ${getPhoneExample(countryCode)}` 
-    };
+    // If pattern doesn't match but has enough digits, still accept (soft validation)
+    return { isValid: true };
   }
   
   // Fallback to generic validation
@@ -99,10 +112,8 @@ export function validatePhone(phone: string, countryCode?: string): { isValid: b
     return { isValid: true };
   }
   
-  return { 
-    isValid: false, 
-    error: "Invalid international phone format. Use format: +[country code] [number]" 
-  };
+  // If has enough digits but doesn't match generic pattern, still accept (soft validation)
+  return { isValid: true };
 }
 
 export function getPhonePrefix(countryCode?: string): string {

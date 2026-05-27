@@ -1427,15 +1427,21 @@ Adding new city: add entry to CITY_COUNTRY_MAP in:
 - Valid: total digits >= 7
 - Error: simple message below input
 - savePhone() only called when digits >= 7
+- Error display logic: Error only shows when `!isValid && phone && (touched || submitted)`
+  - `touched`: Set to true when user interacts with the field (onChange or onBlur)
+  - `submitted`: Prop passed from parent form, set to true on form submission attempt
+  - This prevents premature error display on initial load with country code prefix
 
 ### Components
 - PhoneInput: apps/web/components/ui/PhoneInput.tsx
-  - Fully controlled, no internal state
-  - Props: value, onChange, countryCode, error, onValidChange,
-    errorMessage, label, placeholder, required
+  - Uncontrolled component with internal state management via usePhone hook
+  - Props: onChange, countryCode, label, placeholder, className, required, lang, submitted
+  - Internal state: touched (tracks user interaction)
+  - Uses usePhone hook for all phone state management
 - usePhone hook: apps/web/hooks/usePhone.ts
   - Manages sync between localStorage and DB
-  - Returns: { phone, savePhone, clearPhone, loading }
+  - Returns: { phone, savePhone, clearPhone, loading, isValid }
+  - Auto-validates phone and provides isValid state
 - ShareButton: apps/web/components/shared/ShareButton.tsx
   - GDPR-friendly share компонент, Web Share API на mobile, Clipboard API на desktop, inline toast, без external dependencies
 
