@@ -808,7 +808,7 @@ export default function ProviderWidget({
           )}
 
           {/* Sticky button mobile / inline desktop */}
-          <div ref={stickyDivRef} className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-100 md:static md:p-0 md:bg-transparent md:border-0">
+          <div ref={stickyDivRef} className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-100">
             <button
               type="submit"
               disabled={loading}

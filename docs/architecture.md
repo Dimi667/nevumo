@@ -248,6 +248,7 @@ The ProviderWidget component implements comprehensive Schema.org structured data
   - Local business schema enables Google Maps integration
   - Structured data validation passes Google's Rich Results Test
 - **Integrity Requirement**: Any modifications to ProviderWidget must preserve JSON-LD structure and required fields to maintain SEO compliance
+- **Sticky Button Behavior (May 27, 2026)**: The CTA button in ProviderWidget is now fixed bottom-0 on all screen sizes (previously mobile-only with md:static on desktop). The stickyDivRef div uses `fixed bottom-0 left-0 right-0 z-50` without responsive breakpoints, ensuring consistent button visibility across all devices.
 
 #### Universal Multi-Language Slug Logic
 The slug generation system has been unified across the entire stack to support special characters from all 34 languages:
