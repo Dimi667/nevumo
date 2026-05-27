@@ -107,15 +107,16 @@ export default async function Page(props: {
   // Use the resolved slug consistently for provider lookups
   const slugToUse = slugResolution.found && slugResolution.slug ? slugResolution.slug : providerPage;
 
-  const [provider, categories, cityData, providerPageT, categoryT, widgetT] = await Promise.all([
+  const [provider, categories, cityData, providerPageT, categoryT, widgetT, footerT] = await Promise.all([
     getProviderBySlug(slugToUse, lang, city),
     getCategories(lang),
     getCityBySlug(city, lang),
     fetchTranslations(lang, 'provider_page'),
     fetchTranslations(lang, 'category'),
     fetchTranslations(lang, 'widget'),
+    fetchTranslations(lang, 'footer'),
   ]);
-  const mergedT = { ...categoryT, ...widgetT, ...providerPageT };
+  const mergedT = { ...categoryT, ...widgetT, ...providerPageT, ...footerT };
 
   if (!provider) return notFound();
 
@@ -127,7 +128,7 @@ export default async function Page(props: {
   if (isEmbed) {
     return (
       <>
-        <style>{`[data-global-header] { display: none !important; }`}</style>
+        <style>{`[data-global-header] { display: none !important; } [data-global-footer] { display: none !important; }`}</style>
         <div className="min-h-screen bg-gray-50 p-4">
           <div className="max-w-md mx-auto">
             <ProviderWidget
@@ -137,6 +138,8 @@ export default async function Page(props: {
               citySlug={city}
               countryCode={cityCountryCode}
               isEmbed={true}
+              translations={mergedT}
+              lang={lang}
             />
           </div>
         </div>

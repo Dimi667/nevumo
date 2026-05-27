@@ -11,6 +11,7 @@ import {
   LANGUAGE_COOKIE_NAME,
 } from '@/lib/locales';
 import { CookieSettingsLink } from '@/components/ui/CookieSettingsLink';
+import LegalModal from '@/components/auth/LegalModal';
 
 interface GlobalFooterProps {
   lang: string;
@@ -23,7 +24,11 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [legalModalOpen, setLegalModalOpen] = useState(false);
+  const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy' | 'cookies' | 'withdrawal' | 'contact-dsa'>('terms');
   const { t } = useTranslation('footer', lang);
+  const { t: authT } = useTranslation('auth', lang);
+  const translations = { ...t, ...authT };
 
   const currentYear = new Date().getFullYear();
 
@@ -77,7 +82,7 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
     : 'justify-between items-center flex-wrap gap-4';
 
   return (
-    <footer className={footerClasses}>
+    <footer className={footerClasses} data-global-footer>
       <div className={`flex ${footerFlexClasses}`}>
         {!minimal && (
           <div className="text-gray-600 text-sm">
@@ -87,24 +92,42 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
 
         {!minimal && (
           <div className="flex flex-wrap justify-center gap-2 text-sm">
-            <Link href={`/${lang}/privacy`} className="text-gray-700 transition-colors hover:text-orange-600">
+            <button
+              onClick={() => { setLegalModalType('privacy'); setLegalModalOpen(true); }}
+              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+            >
               {t('privacy_policy_link', 'Privacy Policy')}
-            </Link>
-            <Link href={`/${lang}/cookies`} className="text-gray-700 transition-colors hover:text-orange-600">
+            </button>
+            <button
+              onClick={() => { setLegalModalType('cookies'); setLegalModalOpen(true); }}
+              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+            >
               {t('cookies_link', 'Cookie Policy')}
-            </Link>
-            <Link href={`/${lang}/terms`} className="text-gray-700 transition-colors hover:text-orange-600">
+            </button>
+            <button
+              onClick={() => { setLegalModalType('terms'); setLegalModalOpen(true); }}
+              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+            >
               {t('terms_link', 'Terms & Conditions')}
-            </Link>
-            <Link href={`/${lang}/terms-provider`} className="text-gray-700 transition-colors hover:text-orange-600">
+            </button>
+            <button
+              onClick={() => { setLegalModalType('terms-provider'); setLegalModalOpen(true); }}
+              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+            >
               {t('provider_terms_link', 'Terms for Providers')}
-            </Link>
-            <Link href={`/${lang}/withdrawal`} className="text-gray-700 transition-colors hover:text-orange-600">
+            </button>
+            <button
+              onClick={() => { setLegalModalType('withdrawal'); setLegalModalOpen(true); }}
+              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+            >
               {t('withdrawal_link', 'Withdrawal Form')}
-            </Link>
-            <Link href={`/${lang}/contact-dsa`} className="text-gray-700 transition-colors hover:text-orange-600">
+            </button>
+            <button
+              onClick={() => { setLegalModalType('contact-dsa'); setLegalModalOpen(true); }}
+              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+            >
               {t('contact_dsa_link', 'DSA Contact Point')}
-            </Link>
+            </button>
             <CookieSettingsLink lang={lang} />
           </div>
         )}
@@ -175,6 +198,15 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
           )}
         </div>
       </div>
+
+      {/* Legal Modal */}
+      <LegalModal
+        isOpen={legalModalOpen}
+        onClose={() => setLegalModalOpen(false)}
+        lang={lang}
+        type={legalModalType}
+        authDict={translations}
+      />
     </footer>
   );
 }

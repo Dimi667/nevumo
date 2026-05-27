@@ -10,6 +10,7 @@ import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 import { getCurrency, formatCurrency } from '@/lib/currency';
 import { JsonLd } from '@/components/JsonLd';
 import { resolveStaticUrl } from '@/lib/urlUtils';
+import LegalModal from '@/components/auth/LegalModal';
 
 interface ProviderWidgetProps {
   provider: ProviderDetail;
@@ -18,6 +19,8 @@ interface ProviderWidgetProps {
   citySlug: string;
   countryCode?: string;
   isEmbed?: boolean;
+  translations?: Record<string, string>;
+  lang?: string;
 }
 
 // Helper for compact relative time
@@ -72,9 +75,15 @@ function formatTranslation(template: string, replacements: Record<string, string
   );
 }
 
-function formatServicePrice(price: number | null, priceType: string, currency: string, t: (key: string) => string): string {
-  if (priceType === 'request' || price === null) return t('price_on_request');
-  return formatCurrency(price, currency) + (priceType === 'hourly' ? '/h' : '');
+function formatServicePrice(
+  service: { base_price: number | null; price_type: string; currency: string },
+  perHour: string,
+  onRequest: string
+): string {
+  if (!service.base_price || service.price_type === 'request') return onRequest;
+  if (service.price_type === 'hourly') return `${service.base_price} ${service.currency}${perHour}`;
+  if (service.price_type === 'per_sqm') return `${service.base_price} ${service.currency}/m²`;
+  return `${service.base_price} ${service.currency}`;
 }
 
 function RecentRequestBlock({
@@ -181,8 +190,10 @@ export default function ProviderWidget({
   citySlug,
   countryCode,
   isEmbed,
+  translations: externalTranslations,
+  lang: propLang,
 }: ProviderWidgetProps) {
-  const translations = provider.translations || {};
+  const translations = externalTranslations || provider.translations || {};
   const t = (key: string, replacements?: Record<string, string | number>, defaultValue?: string) => {
     const template = translations[`widget.${key}`] || translations[key] || defaultValue || key;
     if (!replacements) return template;
@@ -213,10 +224,12 @@ export default function ProviderWidget({
   const stickyDivRef = useRef<HTMLDivElement>(null);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [descriptionValue, setDescriptionValue] = useState('');
+  const [serviceNoteError, setServiceNoteError] = useState<string | null>(null);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+  const [legalModalOpen, setLegalModalOpen] = useState(false);
+  const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy'>('terms');
   const { phone: savedPhone, savePhone } = usePhone();
-  const locale = (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
-  const lang = locale || 'en';
+  const lang = propLang || (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
   const effectiveCountryCode = countryCode ?? cityInfo?.country_code;
   const currency = provider.services[0]?.currency || getCurrency(effectiveCountryCode, cityInfo?.currency);
   const phonePrefix = getPhonePrefix(cityInfo?.country_code);
@@ -249,8 +262,8 @@ export default function ProviderWidget({
   const cityName = cityInfo?.city ?? citySlug;
   const jobsLabel = t('jobs_label', undefined, 'jobs completed');
   const cityLeadsText = t('city_leads_label', {
-      count: new Intl.NumberFormat(locale).format(provider.city_leads),
-      category: categoryName.toLocaleLowerCase(locale),
+      count: new Intl.NumberFormat(lang).format(provider.city_leads),
+      category: categoryName.toLocaleLowerCase(lang),
       city: cityName,
     }, '{count} requests for {category} in {city} this year');
 
@@ -261,13 +274,13 @@ export default function ProviderWidget({
         }, '{name} from {city} requested recently')
     : null;
   const checklistItems = [
-    t('free_request_no_obligation', undefined, 'Free request, no obligation'),
-    t('no_registration', undefined, 'No registration'),
-    t('direct_contact_with_provider', undefined, 'Direct contact with the provider'),
+    translations['trust_verified'] ?? 'Без регистрация',
+    translations['trust_free'] ?? 'Без разходи!',
+    translations['trust_direct'] ?? 'Директен контакт',
   ];
 
-  // Filter services by current category
-  const filteredServices = provider.services.filter(service => service.category_slug === categorySlug);
+  // Show all provider services (no category filter)
+  const filteredServices = provider.services;
 
   const serviceJsonLd = {
     '@context': 'https://schema.org',
@@ -298,16 +311,29 @@ export default function ProviderWidget({
     })),
   };
 
-  // Handle service card click
-  const handleServiceClick = (serviceId: string, serviceTitle: string) => {
-    setSelectedServiceId(serviceId);
-    setDescriptionValue(serviceTitle);
-    document.getElementById('widget-form')?.scrollIntoView({ behavior: 'smooth' });
+  // Handle service chip click with toggle logic
+  const handleServiceClick = (serviceId: string) => {
+    setServiceNoteError(null);
+    if (selectedServiceId === serviceId) {
+      // Deselect if already selected
+      setSelectedServiceId(null);
+      setDescriptionValue('');
+    } else {
+      // Select and auto-fill
+      setSelectedServiceId(serviceId);
+      const service = filteredServices.find(s => s.id === serviceId);
+      if (service) {
+        const serviceText = `${service.title} - ${formatServicePrice(service, t('price_per_hour', undefined, '/h'), t('price_on_request', undefined, 'Price on request'))}`;
+        setDescriptionValue(serviceText);
+      }
+      document.getElementById('widget-form')?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
   
   // Handle manual textarea input
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescriptionValue(e.target.value);
+    setServiceNoteError(null);
   };
 
   useEffect(() => {
@@ -350,7 +376,13 @@ export default function ProviderWidget({
       setError(false);
       return;
     }
-    
+
+    // Validate service or note
+    if (selectedServiceId === null && descriptionValue.trim().length === 0) {
+      setServiceNoteError(t['error_service_or_note'] ?? 'Моля изберете услуга или напишете бележка');
+      return;
+    }
+
     setLoading(true);
     setError(false);
     setPhoneError(null);
@@ -636,12 +668,32 @@ export default function ProviderWidget({
           />
         ) : null}
 
-        {/* Verified badge */}
-        {(
-          <span className="inline-flex items-center gap-1 text-base font-bold text-green-600">
-            {t('verified_label', undefined, 'Verified professional')}
-          </span>
-        )}
+        {/* Badge */}
+        {(() => {
+          if (provider.verification_level === 0) {
+            return (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-50 text-blue-400 text-sm font-medium">
+                ⚡ {t('badge_new_provider', undefined, 'New in Nevumo')}
+              </span>
+            );
+          }
+          if (provider.verification_level === 1) {
+            return (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm font-medium">
+                ✓ {t('badge_verified', undefined, 'Verified')}
+              </span>
+            );
+          }
+          if (provider.verification_level === 2) {
+            const displayText = (t('badge_top_specialist', undefined, 'Top specialist') + ' – ' + cityName);
+            return (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-sm font-medium">
+                ★ {displayText}
+              </span>
+            );
+          }
+          return null;
+        })()}
       </div>
 
       {provider.description && provider.description.trim() !== '' && (
@@ -650,46 +702,46 @@ export default function ProviderWidget({
         </p>
       )}
 
-      {/* Services Section */}
+      {/* Form Header */}
+      <div className="px-6 py-4 border-b border-gray-100">
+        <h2 className="text-base font-semibold text-gray-700 mb-2 text-center">
+          {t('send_request_to', undefined, 'Send request to')} {provider.business_name}
+        </h2>
+        <p className="text-sm text-gray-400 text-center">
+          {t('disclaimer', undefined, 'Free request • No obligation')}
+        </p>
+      </div>
+
+      {/* ServiceChips */}
       {filteredServices.length > 0 && (
-        <div className="px-6 py-5 border-b border-gray-100">
-          <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-3">
-            {t('services_label', undefined, 'Услуги')}
-          </h2>
-          <ul className="space-y-3">
+        <div className="px-6 py-4 mt-4">
+          <div className="flex flex-wrap gap-2 mb-2">
             {filteredServices.map((service) => (
-              <li 
-                key={service.id} 
-                onClick={() => handleServiceClick(service.id, service.title)}
-                className={`p-3 rounded-lg border-b border-gray-100 last:border-0 transition-all cursor-pointer ${
-                  selectedServiceId === service.id 
-                    ? 'border-l-4 border-orange-500 bg-orange-50' 
-                    : 'hover:bg-gray-50'
+              <button
+                key={service.id}
+                type="button"
+                onClick={() => handleServiceClick(service.id)}
+                className={`text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors ${
+                  selectedServiceId === service.id
+                    ? 'bg-orange-500 text-white border-orange-500'
+                    : 'border-gray-200 text-gray-600 bg-white hover:border-orange-400 hover:text-orange-600'
                 }`}
               >
-                <div className="flex justify-between items-center gap-2">
-                  <span className="font-semibold text-gray-800 text-sm">
-                    {service.title}
-                  </span>
-                  <span className="text-sm font-bold text-gray-700 whitespace-nowrap flex-shrink-0">
-                    {formatServicePrice(service.base_price, service.price_type, currency, t)}
-                    <span className="text-gray-400 text-lg ml-2 flex-shrink-0">›</span>
-                  </span>
-                </div>
-                {service.description && (
-                  <p className="text-xs text-gray-400 mt-0.5">{service.description}</p>
-                )}
-              </li>
+                {service.title} · {formatServicePrice(service, t('price_per_hour', undefined, '/h'), t('price_on_request', undefined, 'Price on request'))}
+              </button>
             ))}
-          </ul>
+          </div>
+          {serviceNoteError && (
+            <p className="text-xs text-red-600 mt-1">{serviceNoteError}</p>
+          )}
+          <p className="text-xs text-gray-500">
+            {t('or_general_request', undefined, 'Or send a general request ↓')}
+          </p>
         </div>
       )}
 
       {/* Form */}
       <div id="widget-form" className="px-6 py-6">
-        <h2 className="text-base font-semibold text-gray-700 mb-4 text-center">
-          {t('send_request_to', undefined, 'Send request to')} {provider.business_name}
-        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div ref={phoneRef}>
@@ -745,15 +797,49 @@ export default function ProviderWidget({
               disabled={loading}
               className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
             >
-              {loading ? (t('sending_button', undefined, 'Sending...')) : t('button_text', undefined, 'Request Service')}
+              {loading ? (translations['sending'] ?? 'Изпращане...') : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
             </button>
           </div>
         </form>
-
-        <p className="text-sm text-gray-400 text-center mt-4 md:mt-4 md:pb-0">
-          {t('disclaimer', undefined, 'Free request • No obligation')}
-        </p>
       </div>
+
+      {/* TrustRow */}
+      <div className="grid grid-cols-3 border-t border-gray-100">
+        <div className="flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400">
+          <span>✓ {translations['trust_verified'] ?? 'Verified'}</span>
+        </div>
+        <div className="flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l border-gray-100">
+          <span>✓ {translations['trust_free'] ?? 'Free'}</span>
+        </div>
+        <div className="flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l border-gray-100">
+          <span>✓ {translations['trust_direct'] ?? 'Direct contact'}</span>
+        </div>
+      </div>
+
+      {/* Privacy Notice */}
+      <div className="text-[10px] text-center text-gray-400 py-2.5 px-[18px]">
+        <button
+          onClick={() => { setLegalModalType('terms'); setLegalModalOpen(true); }}
+          className="underline hover:text-gray-600 mr-3 bg-transparent border-none cursor-pointer"
+        >
+          {t('terms_link', undefined, 'Terms & Conditions')}
+        </button>
+        <button
+          onClick={() => { setLegalModalType('privacy'); setLegalModalOpen(true); }}
+          className="underline hover:text-gray-600 bg-transparent border-none cursor-pointer"
+        >
+          {t('privacy_policy_link', undefined, 'Privacy Policy')}
+        </button>
+      </div>
+
+      {/* Legal Modal */}
+      <LegalModal
+        isOpen={legalModalOpen}
+        onClose={() => setLegalModalOpen(false)}
+        lang={lang}
+        type={legalModalType}
+        authDict={translations}
+      />
     </div>
   );
 }

@@ -6,7 +6,7 @@ interface LegalModalProps {
   isOpen: boolean;
   onClose: () => void;
   lang: string;
-  type: 'terms' | 'terms-provider' | 'privacy';
+  type: 'terms' | 'terms-provider' | 'privacy' | 'cookies' | 'withdrawal' | 'contact-dsa';
   authDict: Record<string, string>;
 }
 
@@ -22,6 +22,12 @@ export default function LegalModal({ isOpen, onClose, lang, type, authDict }: Le
         return authDict['modal_title_terms_provider'] || 'Provider Terms of Service';
       case 'privacy':
         return authDict['modal_title_privacy'] || 'Privacy Policy';
+      case 'cookies':
+        return authDict['modal_title_cookies'] || 'Cookie Policy';
+      case 'withdrawal':
+        return authDict['modal_title_withdrawal'] || 'Withdrawal Form';
+      case 'contact-dsa':
+        return authDict['modal_title_contact_dsa'] || 'DSA Contact Point';
       default:
         return '';
     }
@@ -62,7 +68,13 @@ export default function LegalModal({ isOpen, onClose, lang, type, authDict }: Le
                 ? `/${lang}/terms?modal=true`
                 : type === 'terms-provider'
                 ? `/${lang}/terms-provider?modal=true`
-                : `/${lang}/privacy?modal=true`}
+                : type === 'privacy'
+                ? `/${lang}/privacy?modal=true`
+                : type === 'cookies'
+                ? `/${lang}/cookies?modal=true`
+                : type === 'withdrawal'
+                ? `/${lang}/withdrawal?modal=true`
+                : `/${lang}/contact-dsa?modal=true`}
               width="100%"
               height="100%"
               style={{ border: 'none', minHeight: '60vh' }}

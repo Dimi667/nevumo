@@ -385,7 +385,7 @@ export default function LeadPanel({
               <p className="text-xs text-red-600 mt-1">{serviceNoteError}</p>
             )}
             <p className="text-xs text-gray-500">
-              {t['or_general_request'] ?? 'Или изпратете обща заявка ↓'}
+              {t['or_general_request'] ?? 'Or send a general request ↓'}
             </p>
           </div>
         )}

@@ -371,6 +371,22 @@ This separation ensures that:
   - **Change:** Provider cards on category pages now display up to 4 services instead of 2
   - **File:** `apps/web/components/category/CategoryPageClient.tsx`
   - **Implementation:** Changed `.slice(0, 2)` to `.slice(0, 4)` and updated "more services" condition from `> 2` to `> 4`
+- **Legal Document Modal System (May 27, 2026)** — COMPLETE:
+  - **Purpose:** Unified legal document display across the application using a modal instead of page navigation
+  - **Component:** `apps/web/components/auth/LegalModal.tsx`
+  - **Supported Document Types:** terms, terms-provider, privacy, cookies, withdrawal, contact-dsa
+  - **Implementation:**
+    - Modal displays legal documents in an iframe with `?modal=true` query parameter
+    - Uses translation keys for modal titles (e.g., `modal_title_terms`, `modal_title_privacy`)
+    - Props: `isOpen`, `onClose`, `lang`, `type`, `authDict`
+  - **Integration Points:**
+    - **ProviderWidget** (`apps/web/components/ProviderWidget.tsx`): Terms & Privacy links in widget footer now open modal
+    - **GlobalFooter** (`apps/web/components/GlobalFooter.tsx`): All 6 legal links now open modal instead of navigating to separate pages
+  - **Benefits:**
+    - Improved UX: Users stay on current page while viewing legal documents
+    - Consistent behavior across all legal document links
+    - No page reload or navigation context loss
+  - **CookieSettingsLink Exception:** Cookie Settings link uses custom event system (`open-cookie-settings`) instead of modal, as it opens the cookie banner UI
   - **UX Improvement:** Provides better visibility of provider offerings while maintaining progressive disclosure for providers with many services
   - **Note:** Services are filtered by category - on cleaning pages only cleaning services are shown per provider
 - **Namespaced Translations Validator**: Implemented a mandatory `namespace.key` pattern at the ORM layer to ensure all UI copy is properly organized and to avoid cache conflicts.

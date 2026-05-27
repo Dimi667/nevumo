@@ -15,7 +15,7 @@ export default async function LangLayout({ children, params, searchParams }: Lan
     <>
       {modal !== 'true' && embed !== '1' && <GlobalHeader lang={lang} />}
       {children}
-      {modal !== 'true' && <SmartGlobalFooter lang={lang} />}
+      {modal !== 'true' && <SmartGlobalFooter lang={lang} isEmbed={embed === '1'} />}
     </>
   );
 }
