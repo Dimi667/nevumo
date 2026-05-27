@@ -508,6 +508,10 @@ CREATE INDEX idx_translations_key ON translations(key);
   - Currently seeded only for Warsaw (Warszawa) - other cities require separate seed script execution
   - Seed script: apps/api/scripts/seed_city_declension_translations.py
 - **widget namespace**: 23 keys × 34 languages = 782 rows
+- **auth namespace (May 27, 2026)**: Authentication-related translations
+  - Keys: dismiss_button (added May 27, 2026 for LegalModal close button)
+  - Total: 1 key × 34 languages = 34 rows
+  - Seed script: seed_auth_translations.py (dismiss_button seeded from pwa.dismiss_button)
 - **client_dashboard namespace**: Client dashboard UI strings
 - **provider_dashboard namespace**: 168 keys × 34 languages = 5,712 rows (includes 8 onboarding hero keys added April 10, 2026)
   Keys include: nav_overview, nav_analytics, nav_leads, nav_qr_code, nav_reviews,

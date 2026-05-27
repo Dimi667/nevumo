@@ -11,6 +11,7 @@ import { saveAuth, isAuthenticated, getAuthUser } from "@/lib/auth-store";
 import { ApiError, API_BASE, getCityBySlug } from "@/lib/api";
 import { saveCredentials } from '@/lib/password-save';
 import LegalModal from '@/components/auth/LegalModal';
+import { useTranslation } from '@/lib/use-translation';
 
 // ---------------------------------------------------------------------------
 // Icons (inline SVG — no external deps)
@@ -116,6 +117,23 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy'>('terms');
+
+  const { dict: termsDict } = useTranslation('terms', lang);
+  const { dict: termsProviderDict } = useTranslation('provider_terms', lang);
+  const { dict: privacyDict } = useTranslation('privacy', lang);
+
+  const getDocDict = () => {
+    switch (legalModalType) {
+      case 'terms':
+        return termsDict;
+      case 'terms-provider':
+        return termsProviderDict;
+      case 'privacy':
+        return privacyDict;
+      default:
+        return {};
+    }
+  };
 
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -781,6 +799,7 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
               lang={lang}
               type={legalModalType}
               authDict={authDict}
+              docDict={getDocDict()}
             />
 
             {state.registerSuccess && (

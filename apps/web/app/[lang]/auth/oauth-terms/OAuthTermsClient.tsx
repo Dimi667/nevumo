@@ -6,6 +6,7 @@ import Image from "next/image";
 const API_BASE = '';
 import { saveAuth } from "@/lib/auth-store";
 import LegalModal from '@/components/auth/LegalModal';
+import { useTranslation } from '@/lib/use-translation';
 
 interface OAuthTermsClientProps {
   lang: string;
@@ -31,6 +32,23 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
   const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy'>('terms');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { dict: termsDict } = useTranslation('terms', lang);
+  const { dict: termsProviderDict } = useTranslation('provider_terms', lang);
+  const { dict: privacyDict } = useTranslation('privacy', lang);
+
+  const getDocDict = () => {
+    switch (legalModalType) {
+      case 'terms':
+        return termsDict;
+      case 'terms-provider':
+        return termsProviderDict;
+      case 'privacy':
+        return privacyDict;
+      default:
+        return {};
+    }
+  };
 
   // Redirect if missing required params
   useEffect(() => {
@@ -184,6 +202,7 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
           lang={lang}
           type={legalModalType}
           authDict={authDict}
+          docDict={getDocDict()}
         />
           </>
         )}

@@ -350,9 +350,19 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Seed script**: `apps/api/scripts/seed_nav_cta_translations.py`
 - **Legal & Compliance (May 2026)** — COMPLETE:
   - /[lang]/terms страница с онлайн форма и PDF изтегляне на withdrawal form
-  - /[lang]/terms-provider страница (Общи условия за доставчици)
+  - /[lang]/provider-terms страница (Общи условия за доставчици)
   - /[lang]/cookies страница (Cookie Policy)
-  - LegalModal компонент (apps/web/components/auth/LegalModal.tsx) — преглед на документи без напускане на /auth, iframe подход с ?modal=true параметър, SmartGlobalFooter скрит в iframe чрез isInIframe detection
+  - LegalModal компонент (apps/web/components/auth/LegalModal.tsx) — преглед на документи без напускане на текущата страница, iframe подход с ?modal=true параметър
+  - **Namespace Standardization (May 27, 2026):** Fixed namespace mismatches in LegalModal integration:
+    - `terms-provider` → `provider_terms` (matches document page namespace)
+    - `contact-dsa` → `contact_dsa` (matches document page namespace)
+  - **Dismiss Button Translation (May 27, 2026):** Added `dismiss_button` key to `auth` namespace for all 34 languages (seeded from `pwa.dismiss_button`)
+  - **Integration Points:**
+    - ProviderWidget: Terms & Privacy links open modal
+    - GlobalFooter: All 6 legal links open modal instead of page navigation
+    - LoginClient: Terms link uses `provider_terms` namespace
+    - OAuthTermsClient: Terms link uses `provider_terms` namespace
+  - **Embed Mode Support (May 27, 2026):** GlobalFooter hidden in embed mode via `[data-global-footer] { display: none !important; }` CSS rule
   - Checkbox за T&C при email регистрация в LoginClient.tsx — различни документи за client/provider
   - oauth-terms страница и OAuthTermsClient.tsx — приемане на условия при Google OAuth преди създаване на акаунт
   - Google OAuth flow обновен: state параметърът носи lang|intent|category|city, backend проверява дали user съществува преди създаване, новите провайдъри получават автоматично providers запис

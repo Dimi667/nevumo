@@ -8,26 +8,35 @@ interface LegalModalProps {
   lang: string;
   type: 'terms' | 'terms-provider' | 'privacy' | 'cookies' | 'withdrawal' | 'contact-dsa';
   authDict: Record<string, string>;
+  docDict: Record<string, string>;
 }
 
-export default function LegalModal({ isOpen, onClose, lang, type, authDict }: LegalModalProps) {
+export default function LegalModal({ isOpen, onClose, lang, type, authDict, docDict }: LegalModalProps) {
 
   if (!isOpen) return null;
 
   const getTitle = () => {
+    // Use page_title from document namespace (s1_title for cookies)
+    if (type === 'cookies') {
+      return docDict['s1_title'] || docDict['page_title'] || 'Cookie Policy';
+    }
+    return docDict['page_title'] || getTitleFallback();
+  };
+
+  const getTitleFallback = () => {
     switch (type) {
       case 'terms':
-        return authDict['modal_title_terms'] || 'Terms of Service';
+        return 'Terms of Service';
       case 'terms-provider':
-        return authDict['modal_title_terms_provider'] || 'Provider Terms of Service';
+        return 'Provider Terms of Service';
       case 'privacy':
-        return authDict['modal_title_privacy'] || 'Privacy Policy';
+        return 'Privacy Policy';
       case 'cookies':
-        return authDict['modal_title_cookies'] || 'Cookie Policy';
+        return 'Cookie Policy';
       case 'withdrawal':
-        return authDict['modal_title_withdrawal'] || 'Withdrawal Form';
+        return 'Withdrawal Form';
       case 'contact-dsa':
-        return authDict['modal_title_contact_dsa'] || 'DSA Contact Point';
+        return 'DSA Contact Point';
       default:
         return '';
     }
@@ -87,7 +96,7 @@ export default function LegalModal({ isOpen, onClose, lang, type, authDict }: Le
               onClick={onClose}
               className="w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              Разбрах
+              {authDict['dismiss_button'] || 'Got it'}
             </button>
           </div>
         </div>

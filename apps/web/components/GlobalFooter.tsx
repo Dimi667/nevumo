@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { useTranslation } from '@/lib/use-translation';
@@ -27,8 +27,33 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy' | 'cookies' | 'withdrawal' | 'contact-dsa'>('terms');
   const { t } = useTranslation('footer', lang);
-  const { t: authT } = useTranslation('auth', lang);
-  const translations = { ...t, ...authT };
+  const { dict: authDict } = useTranslation('auth', lang);
+  const { dict: termsDict } = useTranslation('terms', lang);
+  const { dict: termsProviderDict } = useTranslation('provider_terms', lang);
+  const { dict: privacyDict } = useTranslation('privacy', lang);
+  const { dict: cookiesDict } = useTranslation('cookies', lang);
+  const { dict: withdrawalDict } = useTranslation('withdrawal', lang);
+  const { dict: contactDsaDict } = useTranslation('contact_dsa', lang);
+  const translations = useMemo(() => ({ ...t, ...authDict }), [t, authDict]);
+
+  const getDocDict = () => {
+    switch (legalModalType) {
+      case 'terms':
+        return termsDict;
+      case 'terms-provider':
+        return termsProviderDict;
+      case 'privacy':
+        return privacyDict;
+      case 'cookies':
+        return cookiesDict;
+      case 'withdrawal':
+        return withdrawalDict;
+      case 'contact-dsa':
+        return contactDsaDict;
+      default:
+        return {};
+    }
+  };
 
   const currentYear = new Date().getFullYear();
 
@@ -206,6 +231,7 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
         lang={lang}
         type={legalModalType}
         authDict={translations}
+        docDict={getDocDict()}
       />
     </footer>
   );

@@ -11,6 +11,7 @@ import { getCurrency, formatCurrency } from '@/lib/currency';
 import { JsonLd } from '@/components/JsonLd';
 import { resolveStaticUrl } from '@/lib/urlUtils';
 import LegalModal from '@/components/auth/LegalModal';
+import { useTranslation } from '@/lib/use-translation';
 
 interface ProviderWidgetProps {
   provider: ProviderDetail;
@@ -230,6 +231,22 @@ export default function ProviderWidget({
   const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy'>('terms');
   const { phone: savedPhone, savePhone } = usePhone();
   const lang = propLang || (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
+  const { dict: termsDict } = useTranslation('terms', lang);
+  const { dict: termsProviderDict } = useTranslation('provider_terms', lang);
+  const { dict: privacyDict } = useTranslation('privacy', lang);
+
+  const getDocDict = () => {
+    switch (legalModalType) {
+      case 'terms':
+        return termsDict;
+      case 'terms-provider':
+        return termsProviderDict;
+      case 'privacy':
+        return privacyDict;
+      default:
+        return {};
+    }
+  };
   const effectiveCountryCode = countryCode ?? cityInfo?.country_code;
   const currency = provider.services[0]?.currency || getCurrency(effectiveCountryCode, cityInfo?.currency);
   const phonePrefix = getPhonePrefix(cityInfo?.country_code);
@@ -839,6 +856,7 @@ export default function ProviderWidget({
         lang={lang}
         type={legalModalType}
         authDict={translations}
+        docDict={getDocDict()}
       />
     </div>
   );

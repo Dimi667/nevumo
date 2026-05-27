@@ -374,23 +374,45 @@ This separation ensures that:
 - **Legal Document Modal System (May 27, 2026)** — COMPLETE:
   - **Purpose:** Unified legal document display across the application using a modal instead of page navigation
   - **Component:** `apps/web/components/auth/LegalModal.tsx`
-  - **Supported Document Types:** terms, terms-provider, privacy, cookies, withdrawal, contact-dsa
+  - **Supported Document Types:** terms, provider_terms, privacy, cookies, withdrawal, contact_dsa
   - **Implementation:**
     - Modal displays legal documents in an iframe with `?modal=true` query parameter
     - Uses translation keys for modal titles (e.g., `modal_title_terms`, `modal_title_privacy`)
     - Props: `isOpen`, `onClose`, `lang`, `type`, `authDict`
+    - **Namespace Standardization (May 27, 2026):** Fixed namespace mismatches:
+      - `terms-provider` → `provider_terms` (matches document page namespace)
+      - `contact-dsa` → `contact_dsa` (matches document page namespace)
+    - **Dismiss Button Translation (May 27, 2026):** Added `dismiss_button` key to `auth` namespace for all 34 languages (seeded from `pwa.dismiss_button`)
   - **Integration Points:**
     - **ProviderWidget** (`apps/web/components/ProviderWidget.tsx`): Terms & Privacy links in widget footer now open modal
     - **GlobalFooter** (`apps/web/components/GlobalFooter.tsx`): All 6 legal links now open modal instead of navigating to separate pages
+    - **LoginClient** (`apps/web/components/auth/LoginClient.tsx`): Terms link uses `provider_terms` namespace
+    - **OAuthTermsClient** (`apps/web/components/auth/OAuthTermsClient.tsx`): Terms link uses `provider_terms` namespace
   - **Benefits:**
     - Improved UX: Users stay on current page while viewing legal documents
     - Consistent behavior across all legal document links
     - No page reload or navigation context loss
   - **CookieSettingsLink Exception:** Cookie Settings link uses custom event system (`open-cookie-settings`) instead of modal, as it opens the cookie banner UI
+  - **Embed Mode Support (May 27, 2026):** GlobalFooter hidden in embed mode via `[data-global-footer] { display: none !important; }` CSS rule in provider page
   - **UX Improvement:** Provides better visibility of provider offerings while maintaining progressive disclosure for providers with many services
   - **Note:** Services are filtered by category - on cleaning pages only cleaning services are shown per provider
 - **Namespaced Translations Validator**: Implemented a mandatory `namespace.key` pattern at the ORM layer to ensure all UI copy is properly organized and to avoid cache conflicts.
 - **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.
+- **ProviderWidget Translation Fixes (May 27, 2026)** — COMPLETE:
+  - **Translation Key Mismatch Fix:** Fixed `mergedT` object in provider page - translations are merged without `footer.` prefix (keys are `terms_link`, `privacy_policy_link`), but ProviderWidget was looking for `footer.terms_link` and `footer.privacy_policy_link`. Removed the `footer.` prefix from t() function calls.
+  - **Hydration Mismatch Fix:** Fixed React hydration mismatch for provider images by implementing `resolveStaticUrl()` utility in `apps/web/lib/urlUtils.ts`. Uses relative URLs for local development and absolute URLs for production CDN.
+  - **Translation Syntax Fix:** Fixed incorrect syntax `t['or_general_request']` which returned undefined, triggering hardcoded Bulgarian fallback. Changed to `t('or_general_request', ...)` function call in:
+    - ProviderWidget.tsx (line 734)
+    - LeadPanel.tsx (line 388) - changed fallback to English
+    - BottomSheetForm.tsx (line 443) - changed fallback to English
+  - **Undefined Locale Fix:** Fixed undefined locale variable that was causing runtime errors in ProviderWidget
+  - **Footer Link Spacing Fix:** HTML spaces between links get compressed by browsers - fixed by using CSS margin instead of HTML spaces for proper spacing between "Общи условия" and "Политика за поверителност" links
+  - **Files Modified:**
+    - `apps/web/components/ProviderWidget.tsx` - translation keys, link formatting, translation syntax
+    - `apps/web/components/LeadPanel.tsx` - translation syntax fix
+    - `apps/web/components/provider/BottomSheetForm.tsx` - translation syntax fix
+    - `apps/web/components/GlobalFooter.tsx` - added data attribute for embed mode hiding
+    - `apps/web/app/[lang]/[city]/[category]/[providerPage]/page.tsx` - CSS rule for footer hiding in embed mode
 - **Provider Page Review Card Display Fix (May 25, 2026)** — COMPLETE:
   - **Problem:** The review card in LeadPanel (right column) and BottomSheetForm (mobile) was not displaying comments correctly due to field name mismatch (`comment` vs `comment_preview` from API) and had broken UI (empty quotes, plain text initials).
   - **Solution:**
