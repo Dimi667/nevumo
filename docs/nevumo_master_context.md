@@ -274,7 +274,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `26` category-page keys per language (includes preposition keys added May 2026)
   - `69` total UI keys per language
   - `2,856` rows in `translations` for homepage/category namespaces across 34 languages (includes preposition keys: +68 rows)
-  - `350` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services, lead search & notes, lead details modal)
+  - `351` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services, lead search & notes, lead details modal, TikTok share button)
   - `24` city-page keys per language (hero, search, CTA, empty state, how it works, SEO, prepositions)
   - `11,866` rows in `translations` for provider_dashboard namespace across 34 languages
   - `816` rows in `translations` for city namespace across 34 languages (includes preposition keys: +102 rows)

@@ -372,6 +372,12 @@ This separation ensures that:
   - **File:** `apps/web/components/category/CategoryPageClient.tsx`
   - **Implementation:** Changed `.slice(0, 2)` to `.slice(0, 4)` and updated "more services" condition from `> 2` to `> 4`
 - **Provider Dashboard Widget Page (May 27, 2026)** — COMPLETE:
+  - **TikTok Share Button (May 27, 2026)**: Added TikTok share button next to Instagram button in the share section
+    - Icon: Inline SVG TikTok logo
+    - Translation key: `provider_dashboard.widget_share_tiktok` (34 languages)
+    - Action: Copies public URL to clipboard with "Copied!" feedback
+    - Style: Black background with white text
+    - Seed script: `apps/api/scripts/seed_provider_dashboard_widget_part11.py`
   - **File:** `apps/web/app/[lang]/provider/dashboard/widget/page.tsx`
   - **Features:** 
     - Live iframe preview of provider's public profile
