@@ -21,10 +21,12 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
   const [ready, setReady] = useState(false);
   const [isOnboarding, setIsOnboarding] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+  const [dashboardData, setDashboardData] = useState<any>(null);
 
   const checkOnboardingStatus = useCallback(async (forceRefresh = false) => {
     try {
       const dashboard = await getProviderDashboard();
+      setDashboardData(dashboard);
       const newIsOnboarding = !dashboard.profile.is_complete;
       
       if (forceRefresh) {
@@ -120,6 +122,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
             open={sidebarOpen}
             onClose={() => setSidebarOpen(false)}
             lang={lang}
+            publicUrl={dashboardData?.public_url ?? undefined}
           />
         )}
 
@@ -129,6 +132,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
             <DashboardTopBar
               onMenuClick={() => setSidebarOpen(true)}
               lang={lang}
+              publicUrl={dashboardData?.public_url ?? undefined}
             />
           ) : (
             <div className="h-16 flex-shrink-0" /> // Spacer to maintain layout

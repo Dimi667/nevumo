@@ -92,9 +92,10 @@ interface DashboardSidebarProps {
   open: boolean;
   onClose: () => void;
   lang: string;
+  publicUrl?: string;
 }
 
-export default function DashboardSidebar({ open, onClose, lang }: DashboardSidebarProps) {
+export default function DashboardSidebar({ open, onClose, lang, publicUrl }: DashboardSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { t } = useDashboardI18n();
@@ -183,6 +184,20 @@ export default function DashboardSidebar({ open, onClose, lang }: DashboardSideb
 
         {/* Divider + НАМЕРИ УСЛУГА */}
         <div className="pt-5 mt-3 border-t border-gray-100">
+          {publicUrl && (
+            <a
+              href={publicUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="md:hidden flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-orange-600 hover:text-orange-700 hover:bg-orange-50 mb-4 transition-colors border border-orange-200 hover:border-orange-300"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              {t('btn_view_profile', 'View my profile')}
+            </a>
+          )}
           {switchError && (
             <p className="text-xs text-red-500 px-3 pb-2">{switchError}</p>
           )}

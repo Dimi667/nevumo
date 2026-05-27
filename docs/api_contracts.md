@@ -482,7 +482,19 @@ Provider must have a provider record (role=provider + completed registration).
       "slug": "maria-massage",
       "is_complete": true,
       "missing_fields": []
-    }
+    },
+    "analytics_summary": {
+      "period_days": 30,
+      "total_leads": 13,
+      "contacted_leads": 5,
+      "sources": {
+        "seo": 0,
+        "widget": 4,
+        "qr": 0,
+        "direct": 0
+      }
+    },
+    "public_url": "https://nevumo.com/en/sofia/massage/maria-massage"
   }
 }
 ```

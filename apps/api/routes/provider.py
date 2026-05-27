@@ -84,10 +84,15 @@ def get_dashboard(
         "contacted_leads": analytics["contacted_leads"],
         "sources": {k: v for k, v in analytics["sources"].items() if k != "other"},
     }
+    try:
+        _public_url = build_public_url(provider, db, settings.APP_URL) if profile.get("is_complete") else None
+    except Exception:
+        _public_url = None
     return ProviderDashboardResponse(data={
         "stats": stats,
         "profile": profile,
         "analytics_summary": analytics_summary,
+        "public_url": _public_url,
     })
 
 
@@ -101,7 +106,14 @@ def get_profile(
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ) -> ProviderProfileUpdateResponse:
-    return ProviderProfileUpdateResponse(data=get_provider_profile(provider, db))
+    profile_data = get_provider_profile(provider, db)
+    try:
+        is_complete, _ = check_onboarding_complete(db, provider.id)
+        _public_url = build_qr_public_url(provider, db, settings.APP_URL) if is_complete else None
+    except Exception:
+        _public_url = None
+    profile_data["public_url"] = _public_url
+    return ProviderProfileUpdateResponse(data=profile_data)
 
 
 @router.patch("/profile", response_model=ProviderProfileUpdateResponse)

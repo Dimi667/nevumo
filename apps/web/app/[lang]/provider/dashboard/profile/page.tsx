@@ -291,6 +291,7 @@ export default function ProfilePage({ params }: PageProps) {
   const [editSaving, setEditSaving] = useState(false);
   const [editSuccess, setEditSuccess] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
+  const [publicUrl, setPublicUrl] = useState<string | null>(null);
   const slugCheckRequestRef = useRef(0);
 
   // Draft persistence
@@ -331,6 +332,7 @@ export default function ProfilePage({ params }: PageProps) {
         setProfile(p);
         setCategories(cats);
         setCities([...bgCities, ...rsCities, ...plCities]);
+        setPublicUrl(dashboard.data?.public_url ?? null);
 
         // Pre-select category from localStorage if valid and not already selected
         const categoryParam = localStorage.getItem('nevumo_selected_category');
@@ -1189,6 +1191,20 @@ export default function ProfilePage({ params }: PageProps) {
           >
             {editSaving ? t('msg_saving', 'Saving…') : t('btn_save_changes', 'Save changes')}
           </button>
+          {publicUrl && (
+            <a
+              href={publicUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-orange-600 hover:text-orange-700 hover:bg-orange-50 rounded-lg transition-colors border border-orange-200 hover:border-orange-300"
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              {t('btn_view_profile', 'View your public page')}
+            </a>
+          )}
           {editSuccess && <span className="text-xs text-green-600 font-medium">{t('msg_saved', 'Saved!')}</span>}
         </div>
       </form>

@@ -1866,7 +1866,7 @@ get_current_user (HTTPBearer → JWT decode → User lookup) → get_current_pro
 Both in dependencies.py alongside existing get_db/get_redis.
 ### Provider Dashboard Frontend (COMPLETE)
 
-Layout: Sidebar (logo + nav links + "НАМЕРИ УСЛУГА" CTA) + TopBar with user info.
+Layout: Sidebar (logo + nav links + "View public profile" button on mobile + "НАМЕРИ УСЛУГА" CTA) + TopBar with user info + "View public profile" button on desktop.
 
 #### Pages (all under /[lang]/provider/dashboard/)
 
