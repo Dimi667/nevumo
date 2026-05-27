@@ -371,6 +371,23 @@ This separation ensures that:
   - **Change:** Provider cards on category pages now display up to 4 services instead of 2
   - **File:** `apps/web/components/category/CategoryPageClient.tsx`
   - **Implementation:** Changed `.slice(0, 2)` to `.slice(0, 4)` and updated "more services" condition from `> 2` to `> 4`
+- **Provider Dashboard Widget Page (May 27, 2026)** — COMPLETE:
+  - **File:** `apps/web/app/[lang]/provider/dashboard/widget/page.tsx`
+  - **Features:** 
+    - Live iframe preview of provider's public profile
+    - Size selector (Standard 360px / Wide 480px)
+    - Embed code generator with copy functionality
+    - "How it works" section with 3 steps
+    - Platform integration cards (WordPress, Wix, Squarespace)
+    - Link in bio information section
+    - Social sharing buttons (Facebook sharer, Instagram clipboard copy)
+  - **Sidebar Integration:** Added Widget nav item in `DashboardSidebar.tsx` before QR Code with `LayoutTemplate` icon
+  - **Translation Keys:** 15 keys in `provider_dashboard` namespace (widget_title, widget_subtitle, widget_size_standard, widget_size_wide, widget_preview_title, widget_code_title, widget_code_copy, widget_code_copied, widget_how_title, widget_how_step1, widget_how_step2, widget_how_step3, msg_failed_load_widget, msg_no_widget_data, nav_widget)
+  - **Additional Keys:** 10 keys for new sections (widget_site_title, widget_site_wordpress, widget_site_wix, widget_site_squarespace, widget_bio_title, widget_bio_description, widget_share_title, widget_share_facebook, widget_share_instagram)
+  - **Seed Scripts:** 10 parts with 780 translation rows across 34 languages (seed_provider_dashboard_widget_part1-10.py)
+  - **Build Error Fix:** lucide-react doesn't have Facebook/Instagram icons → replaced with inline SVGs
+  - **Iframe Network Fix:** Uses `window.location.origin` for embed code to work on local network (mobile devices accessing via IP)
+  - **API Endpoint:** Uses existing `GET /api/v1/provider/qr-code` endpoint
 - **Legal Document Modal System (May 27, 2026)** — COMPLETE:
   - **Purpose:** Unified legal document display across the application using a modal instead of page navigation
   - **Component:** `apps/web/components/auth/LegalModal.tsx`

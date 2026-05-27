@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
+import { LayoutTemplate } from 'lucide-react';
 import { saveAuth, getAuthUser } from '@/lib/auth-store';
 import { switchRole } from '@/lib/provider-api';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
@@ -110,6 +111,7 @@ export default function DashboardSidebar({ open, onClose, lang, publicUrl }: Das
     { label: t('nav_services', 'Services'), href: `${base}/services`, icon: <ServicesIcon /> },
     { label: t('nav_analytics', 'Analytics'), href: `${base}/analytics`, icon: <AnalyticsIcon /> },
     { label: t('nav_reviews', 'Reviews'), href: `${base}/reviews`, icon: <ReviewsIcon /> },
+    { label: t('nav_widget', 'Widget'), href: `${base}/widget`, icon: <LayoutTemplate size={18} /> },
     { label: t('nav_qr_code', 'QR Code'), href: `${base}/qr-code`, icon: <QrIcon /> },
     { label: t('nav_profile', 'Profile'), href: `${base}/profile`, icon: <ProfileIcon /> },
     { label: t('nav_settings', 'Settings'), href: `${base}/settings`, icon: <SettingsIcon /> },
