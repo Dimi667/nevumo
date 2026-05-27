@@ -109,8 +109,9 @@ async function authFetch<T>(
 // Dashboard
 // ---------------------------------------------------------------------------
 
-export async function getProviderDashboard(): Promise<DashboardResponse> {
-  return authFetch<DashboardResponse>('/api/v1/provider/dashboard');
+export async function getProviderDashboard(lang?: string): Promise<DashboardResponse> {
+  const url = lang ? `/api/v1/provider/dashboard?lang=${lang}` : '/api/v1/provider/dashboard';
+  return authFetch<DashboardResponse>(url);
 }
 
 // ---------------------------------------------------------------------------

@@ -71,6 +71,7 @@ router = APIRouter(prefix="/api/v1/provider", tags=["provider"])
 def get_dashboard(
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
+    lang: str = Query(default='en'),
 ) -> ProviderDashboardResponse:
     stats = get_dashboard_stats(provider, db)
     profile = get_provider_profile(provider, db)
@@ -85,7 +86,7 @@ def get_dashboard(
         "sources": {k: v for k, v in analytics["sources"].items() if k != "other"},
     }
     try:
-        _public_url = build_public_url(provider, db, settings.APP_URL) if profile.get("is_complete") else None
+        _public_url = build_public_url(provider, db, settings.APP_URL, lang) if profile.get("is_complete") else None
     except Exception:
         _public_url = None
     return ProviderDashboardResponse(data={
@@ -499,7 +500,7 @@ def get_qr_code(
     db: Session = Depends(get_db),
 ) -> QRCodeResponse:
     public_url = build_qr_public_url(provider, db, settings.APP_URL)
-    canonical_url = build_public_url(provider, db, settings.APP_URL)
+    canonical_url = build_public_url(provider, db, settings.APP_URL, lang)
     qr_data_uri = generate_qr_code_base64(public_url)
     return QRCodeResponse(data={
         "public_url": public_url,

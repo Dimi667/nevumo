@@ -366,6 +366,11 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Embed Mode Support (May 27, 2026):** GlobalFooter hidden in embed mode via `[data-global-footer] { display: none !important; }` CSS rule
   - Checkbox за T&C при email регистрация в LoginClient.tsx — различни документи за client/provider
   - oauth-terms страница и OAuthTermsClient.tsx — приемане на условия при Google OAuth преди създаване на акаунт
+- **Provider Dashboard Language Context Propagation (May 27, 2026)** — COMPLETE:
+  - Fixed language context propagation in provider dashboard to ensure widget preview and public profile links use the current dashboard language
+  - Backend: Added `lang` query parameter to `/api/v1/provider/dashboard` endpoint, passed to `build_public_url()` and `build_qr_public_url()`
+  - Frontend: Updated `getProviderDashboard()` to accept and forward `lang` parameter from dashboard layout
+  - Result: `/bg/provider/dashboard/widget` now shows Bulgarian widget preview, public profile link opens `/bg/...` instead of `/en/...`
   - Google OAuth flow обновен: state параметърът носи lang|intent|category|city, backend проверява дали user съществува преди създаване, новите провайдъри получават автоматично providers запис
   - OAUTH_REDIRECT_BASE добавен в root .env и apps/api/config.py като конфигурируема променлива
 - **Google OAuth City/Category Pre-fill Fix (May 2026)** — COMPLETE:

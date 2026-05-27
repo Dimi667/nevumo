@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Copy, Check } from 'lucide-react';
-import { getQRCode } from '@/lib/provider-api';
+import { getEnhancedQRCode } from '@/lib/provider-api';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 
 interface QRData {
@@ -27,8 +27,12 @@ export default function WidgetPage() {
       setLoading(true);
       setError(null);
       try {
-        const data = await getQRCode();
-        setQrData(data);
+        const data = await getEnhancedQRCode(lang);
+        setQrData({
+          public_url: data.public_url,
+          canonical_url: data.canonical_url,
+          qr_code: data.qr_code,
+        });
       } catch (e: unknown) {
         setError(e instanceof Error ? e.message : t('msg_failed_load_widget'));
       } finally {
@@ -37,7 +41,7 @@ export default function WidgetPage() {
     }
 
     fetchData();
-  }, [t]);
+  }, [t, lang]);
 
   // Extract relative path from absolute URL for local network compatibility
   const getRelativeUrl = (url: string): string => {

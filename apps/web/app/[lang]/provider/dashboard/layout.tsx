@@ -25,7 +25,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
 
   const checkOnboardingStatus = useCallback(async (forceRefresh = false) => {
     try {
-      const dashboard = await getProviderDashboard();
+      const dashboard = await getProviderDashboard(lang);
       setDashboardData(dashboard);
       const newIsOnboarding = !dashboard.profile.is_complete;
       
@@ -57,7 +57,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
 
       // Check if user has a provider profile via API
       try {
-        await getProviderDashboard();
+        await getProviderDashboard(lang);
         // Success - user has a provider profile, continue to onboarding check
         checkOnboardingStatus(true).then(() => setReady(true));
       } catch (error) {

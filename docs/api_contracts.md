@@ -463,6 +463,9 @@ Provider must have a provider record (role=provider + completed registration).
 
 ## GET /api/v1/provider/dashboard
 
+### Query Params
+- `lang` (optional, default: `en`) — Language code for the public_url (e.g., `bg`, `en`, `pl`)
+
 ### Response
 ```json
 {
@@ -494,10 +497,14 @@ Provider must have a provider record (role=provider + completed registration).
         "direct": 0
       }
     },
-    "public_url": "https://nevumo.com/en/sofia/massage/maria-massage"
+    "public_url": "https://nevumo.com/bg/sofia/massage/maria-massage"
   }
 }
 ```
+
+### Notes
+- The `public_url` in the response includes the language specified in the `lang` query parameter
+- If `lang` is not provided, defaults to `en`
 
 ### Onboarding Completeness (missing_fields)
 

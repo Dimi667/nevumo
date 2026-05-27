@@ -149,6 +149,11 @@ This document reflects the major architectural optimization performed in April 2
   - **Country Defaults**: RSD for RS (Serbia), PLN for PL (Poland), EUR for BG (Bulgaria).
 - **PRODUCTION_READY_AUTH**: Implemented session checks and BFCache (Back-Forward Cache) handling in the authentication flow. Replaced legacy hidden iframe hacks with the modern **Credential Management API** (`navigator.credentials.store`) for robust password saving across all modern browsers including iOS Safari.
 - **Client Dashboard Optimization (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page.
+- **Provider Dashboard Language Context Propagation (May 27, 2026)**: Fixed language context propagation in the provider dashboard to ensure that:
+  - Widget preview iframe displays content in the current dashboard language (e.g., `/bg/provider/dashboard/widget` shows Bulgarian widget preview)
+  - Public profile link ("View my profile") opens the public page in the current dashboard language
+  - Implementation: Added `lang` query parameter to `/api/v1/provider/dashboard` endpoint and passed it through `build_public_url()` and `build_qr_public_url()` functions
+  - Frontend: Updated `getProviderDashboard()` to accept and forward the `lang` parameter from the dashboard layout
 - **Dynamic User Intent Navigation (April 30, 2026)**: Implemented "City-First" navigation logic for clients. The "Find Service" button in the dashboard (Overview, Sidebar, Requests, and Reviews) now dynamically links based on the `last_city_slug` returned by the API via a multi-layer fallback chain:
    - **Fallback Chain**: 
      1. user.city_id
