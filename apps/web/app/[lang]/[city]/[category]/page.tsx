@@ -643,8 +643,8 @@ export default async function CategoryPage({ params }: PageProps) {
             </div>
 
             <div className="hidden lg:block w-full lg:w-80 xl:w-96 shrink-0">
-              <div className="sticky top-6">
-                <div id="lead-form" className="rounded-xl border border-orange-100 bg-white p-6 shadow-lg">
+              <div className="sticky top-6 max-h-[calc(100vh-48px)] flex flex-col overflow-hidden">
+                <div id="lead-form" className="rounded-xl border border-orange-100 bg-white shadow-lg flex flex-col min-h-0 overflow-hidden">
                   <LeadForm
                     translations={categoryT}
                     categorySlug={apiSlug}

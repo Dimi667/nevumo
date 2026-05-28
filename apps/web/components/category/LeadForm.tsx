@@ -60,9 +60,19 @@ export default function LeadForm({
   };
 
   const handleChipClick = (chipTitle: string) => {
+    const notSureText = translations['chip_not_sure'] || 'Not sure';
+    
+    // If clicking the same chip, deselect and clear
+    if (selectedChip === chipTitle) {
+      setSelectedChip(null);
+      setDescription('');
+      return;
+    }
+    
+    // Otherwise, select the chip
     setSelectedChip(chipTitle);
     setShowTextarea(true);
-    const notSureText = translations['chip_not_sure'] || 'Not sure';
+    
     if (chipTitle !== notSureText) {
       setDescription(chipTitle);
     } else {
@@ -327,102 +337,106 @@ export default function LeadForm({
 
   const notSureText = translations['chip_not_sure'] || 'Not sure';
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Header Section */}
-      <div>
-        <h2 className="text-xl font-bold text-gray-900">{resolvedTitle}</h2>
-        <p className="mt-1 text-sm text-gray-500">{translations['form_subtext']}</p>
-      </div>
-
-      {/* How It Works */}
-      <div>
-        <p className="text-sm font-medium text-gray-700 mb-2">{translations['how_it_works_label']}</p>
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-gray-500">
-          <span>1️⃣ {translations['how_step_1']}</span>
-          <span>2️⃣ {translations['how_step_2']}</span>
-          <span>3️⃣ {translations['how_step_3']}</span>
-        </div>
-      </div>
-
-      {/* What Do You Need - Chips */}
-      <div>
-        <p className="text-sm font-medium text-gray-700 mb-3">{translations['what_need_label']}</p>
-        <div className="flex flex-wrap gap-2">
-          {services?.map((service) => (
-            <button
-              key={service.id}
-              type="button"
-              onClick={() => handleChipClick(service.title)}
-              className={`px-3 py-2 rounded-full text-sm transition-colors ${
-                selectedChip === service.title
-                  ? 'bg-orange-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {service.title}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Description Textarea - Conditional */}
-      {showTextarea && (
+    <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
+      <div className="overflow-y-auto min-h-0 flex-1 px-6 pt-6 pb-2 space-y-6">
+        {/* Header Section */}
         <div>
-          <label htmlFor="description" className="sr-only">
-            {translations['details_label']}
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            rows={3}
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            placeholder={translations['details_placeholder']}
-            className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
+          <h2 className="text-xl font-bold text-gray-900">{resolvedTitle}</h2>
+          <p className="mt-1 text-sm text-gray-500">{translations['form_subtext']}</p>
+        </div>
+
+        {/* How It Works */}
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-2">{translations['how_it_works_label']}</p>
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs text-gray-500">
+            <span>1️⃣ {translations['how_step_1']}</span>
+            <span>2️⃣ {translations['how_step_2']}</span>
+            <span>3️⃣ {translations['how_step_3']}</span>
+          </div>
+        </div>
+
+        {/* What Do You Need - Chips */}
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-3">{translations['what_need_label']}</p>
+          <div className="flex flex-wrap gap-2">
+            {services?.map((service) => (
+              <button
+                key={service.id}
+                type="button"
+                onClick={() => handleChipClick(service.title)}
+                className={`px-3 py-2 rounded-full text-sm transition-colors ${
+                  selectedChip === service.title
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {service.title}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Description Textarea - Conditional */}
+        {showTextarea && (
+          <div>
+            <label htmlFor="description" className="sr-only">
+              {translations['details_label']}
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              rows={3}
+              value={description}
+              onChange={(event) => setDescription(event.target.value)}
+              placeholder={translations['details_placeholder']}
+              className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
+            />
+          </div>
+        )}
+
+        {/* Phone Field */}
+        <div ref={phoneRef}>
+          <PhoneInput
+            onChange={handleChange}
+            countryCode={countryCode}
+            label={translations['form_phone'] || 'Phone'}
+            required
+            lang={lang}
+            submitted={formSubmitted}
           />
         </div>
-      )}
-
-      {/* Phone Field */}
-      <div ref={phoneRef}>
-        <PhoneInput
-          onChange={handleChange}
-          countryCode={countryCode}
-          label={translations['form_phone'] || 'Phone'}
-          required
-          lang={lang}
-          submitted={formSubmitted}
-        />
       </div>
 
-      {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
-      >
-        {isSubmitting ? 'Sending...' : translations['get_offers_btn']}
-      </button>
+      <div className="px-6 pb-6 pt-3 border-t border-gray-100 bg-white">
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
+        >
+          {isSubmitting ? 'Sending...' : translations['get_offers_btn']}
+        </button>
 
-      {/* Error Message */}
-      {hasError && (
-        <p className="text-sm text-red-600">
-          {translations['error_generic'] || 'Something went wrong. Please try again.'}
-        </p>
-      )}
+        {/* Error Message */}
+        {hasError && (
+          <p className="text-sm text-red-600">
+            {translations['error_generic'] || 'Something went wrong. Please try again.'}
+          </p>
+        )}
 
-      {/* Trust Signals */}
-      <div className="mt-3 space-y-1 text-center">
-        <p className="text-sm text-gray-500">
-          ✓ {translations['form_trust_1'] ?? 'Free'} •
-          ✓ {translations['form_trust_2'] ?? 'No obligation'}
-        </p>
-        <p className="text-sm text-gray-500">
-          ✓ {translations['trust_multiple'] ?? 'Your request will be sent to multiple providers'}
-        </p>
-        <p className="text-sm text-gray-500">
-          ✓ {translations['trust_response'] ?? 'Response within 30 min'}
-        </p>
+        {/* Trust Signals */}
+        <div className="mt-3 space-y-1 text-center">
+          <p className="text-sm text-gray-500">
+            ✓ {translations['form_trust_1'] ?? 'Free'} •
+            ✓ {translations['form_trust_2'] ?? 'No obligation'}
+          </p>
+          <p className="text-sm text-gray-500">
+            ✓ {translations['trust_multiple'] ?? 'Your request will be sent to multiple providers'}
+          </p>
+          <p className="text-sm text-gray-500">
+            ✓ {translations['trust_response'] ?? 'Response within 30 min'}
+          </p>
+        </div>
       </div>
     </form>
   );
