@@ -280,32 +280,36 @@ The automated SEO infrastructure is designed for:
 - **Performance**: JSON-LD and canonical tags are generated server-side (SSR) for optimal page load speed
 - **Compliance**: Follows Google's structured data guidelines and SEO best practices
 
-### Docker Environment Variable Pattern (May 7, 2026 - Updated May 23, 2026)
+### Docker Environment Variable Pattern (May 7, 2026 - Updated May 28, 2026)
 Next.js in Docker requires two separate environment variables to handle server-side and client-side API communication correctly:
 
 - **API_URL=http://nevumo-api:8000** — Used server-side (SSR, Next.js rewrites) for container-to-container communication within the Docker network
-- **NEXT_PUBLIC_API_URL** — Used client-side (browser) for API calls; set to browser-accessible URL to avoid hydration mismatches
-  - **Local Development**: Set to `http://192.168.0.15:8000` (host IP) in `.env.local` for local network access from other devices
-  - **Production**: Set to `https://api.nevumo.com` (production API domain) in `.env`
+- **NEXT_PUBLIC_API_URL** — Used client-side (browser) for API calls; defaults to empty string to use relative URLs
+  - **Local Development**: Leave empty to use relative URLs (works automatically on localhost and local network)
+  - **Production**: Set to `https://api.nevumo.com` (production API domain) only if API is on a different domain
   - **Pattern**: `.env` contains production-ready value, `.env.local` (gitignored) contains local dev override
 
 This pattern is applied in:
-- **docker-compose.yml**: `API_URL` is defined for server-side (Docker internal network), `NEXT_PUBLIC_API_URL` is set to `http://localhost:8000` as default with `${NEXT_PUBLIC_API_URL:-http://localhost:8000}` override
-- **apps/web/.env.local**: `NEXT_PUBLIC_API_URL=http://192.168.0.15:8000` for local network access (Mac + mobile devices)
-- **apps/web/lib/api.ts**: `API_BASE` checks `process.env.API_URL` first, then falls back to `NEXT_PUBLIC_API_URL` for server-side; uses `NEXT_PUBLIC_API_URL` for client-side
+- **docker-compose.yml**: `API_URL` is defined for server-side (Docker internal network), `NEXT_PUBLIC_API_URL` defaults to empty string with `${NEXT_PUBLIC_API_URL:-}` override
+- **apps/web/.env.local**: Leave empty for local development (relative URLs work automatically)
+- **apps/web/lib/api.ts**: `API_BASE` checks `process.env.API_URL` first, then falls back to `NEXT_PUBLIC_API_URL` for server-side; uses `NEXT_PUBLIC_API_URL || ''` for client-side (relative URLs)
 - **apps/web/lib/ui-translations.ts**: Same fallback pattern for translation fetching
-- **apps/web/lib/locales.ts**: Updated to use `API_URL || NEXT_PUBLIC_API_URL` fallback for server-side fetch
+- **apps/web/lib/locales.ts**: Updated to use `API_URL || NEXT_PUBLIC_API_URL` fallback for server-side fetch; client-side uses `NEXT_PUBLIC_API_URL || ''`
+- **apps/web/hooks/usePhone.ts**: Updated to use `process.env.NEXT_PUBLIC_API_URL || ''` for client-side
 - **apps/web/app/[lang]/claim/[token]/page.tsx**: Server component uses `API_URL || NEXT_PUBLIC_API_URL` for API calls
 - **apps/web/app/[lang]/terms/page.tsx**: Server component uses `API_URL || NEXT_PUBLIC_API_URL || 'http://localhost:8000'` for translation API calls (May 15, 2026)
-- **apps/web/components/ProviderWidget.tsx**: Client component uses `process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'` for image URLs to avoid hydration mismatches
+- **apps/web/app/[lang]/cookies/page.tsx**: Server component uses `API_URL || NEXT_PUBLIC_API_URL || 'http://localhost:8000'` for server-side; client-side uses `NEXT_PUBLIC_API_URL || ''`
+- **apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx**: Client component uses `process.env.NEXT_PUBLIC_API_URL || ''` for API calls
+- **apps/web/app/[lang]/provider/dashboard/settings/page.tsx**: Client component uses `process.env.NEXT_PUBLIC_API_URL || ''` for API calls
 
 This separation ensures that:
 - Server-side rendering can reach the backend container via Docker network (API_URL)
-- Client-side browser requests use browser-accessible URLs (NEXT_PUBLIC_API_URL)
+- Client-side browser requests use relative URLs by default (NEXT_PUBLIC_API_URL empty)
+- Relative URLs work automatically on localhost, local network, and same-domain production
 - No hydration mismatches between server and client rendering
 - Works in local network (laptop + phones) without hardcoded IP addresses
 - Independent of OrbStack network configuration changes
-- Production-ready with environment variable changes only (set NEXT_PUBLIC_API_URL to production API domain)
+- Production-ready with environment variable changes only (set NEXT_PUBLIC_API_URL to production API domain for cross-domain scenarios)
 - .env.example documents environment-specific configuration (Docker, local dev, production)
 - **API_BASE Fix (May 8, 2026)**: Fixed client dashboard API returning HTML instead of JSON by ensuring `API_BASE` always uses the full API URL (http://localhost:8000 in local dev) instead of empty string in browser context. This prevents requests from being sent to the Next.js frontend instead of the actual API server.
 - **Provider Photo Loading Fix (May 8, 2026)**: Fixed provider photo not loading on provider pages by using absolute URLs constructed from `API_BASE` for `profile_image_url` in `ProviderWidget.tsx`. The component now converts relative paths (`/api/v1/static/...`) to absolute URLs (`http://localhost:8000/api/v1/static/...`) to avoid issues with Next.js rewrites.
@@ -315,6 +319,7 @@ This separation ensures that:
   - Changed OG image runtime from `edge` to `nodejs` in all opengraph-image.tsx files to enable custom font loading with `fs.readFileSync`.
   - Downloaded valid Noto Sans Bold font file (NotoSans-Bold.ttf, 575740 bytes) from GitHub to `apps/web/public/fonts/`.
   - Updated `BaseOGImage` component to load Noto Sans Bold font and apply it to the CTA button with `fontWeight: 700` for proper bold rendering.
+- **Dynamic API URL Resolution (May 28, 2026)**: Updated client-side API URL configuration to use relative URLs by default instead of hardcoded `http://localhost:8000`. This enables automatic support for local network access (mobile devices) without manual IP configuration. Changed `NEXT_PUBLIC_API_URL` default from `http://localhost:8000` to empty string in docker-compose.yml and .env.example. Client-side components now use `process.env.NEXT_PUBLIC_API_URL || ''` for relative URLs, which are rewritten by Next.js to the appropriate backend URL based on the current domain.
 
 ### 6. PDF Generation with Cyrillic Support (May 15, 2026)
 - **PDF Service**: `apps/api/services/pdf_service.py` generates withdrawal form PDFs from markdown content

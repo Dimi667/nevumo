@@ -300,6 +300,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Скриптовете за сийдване трябва да използват централизираната база данни и Redis чрез `apps.api.database` и `apps.api.dependencies`.
 - **Валидация на преводи**: Всички ключове в `translations` таблицата ЗАДЪЛЖИТЕЛНО трябва да следват патърна `namespace.key` (напр. `auth.login_title`). Валидацията е на ниво SQLAlchemy модел и Pydantic схема.
 - Винаги спазвай текущата архитектура
+- **API URL Configuration (May 28, 2026)**: Client-side API calls should use relative URLs by default (`process.env.NEXT_PUBLIC_API_URL || ''`) to support automatic local network access. Only set `NEXT_PUBLIC_API_URL` to an absolute URL for cross-domain production scenarios.
 
 ### TypeScript
 - Strict mode задължително

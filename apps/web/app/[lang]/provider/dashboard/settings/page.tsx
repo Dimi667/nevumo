@@ -255,7 +255,7 @@ export default function SettingsPage() {
       return;
     }
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/v1/auth/account`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/v1/auth/account`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
