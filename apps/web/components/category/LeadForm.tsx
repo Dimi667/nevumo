@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { createLead, claimLeadEmail } from '@/lib/api';
+import { checkEmail } from '@/lib/auth-api';
+import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
@@ -42,6 +44,7 @@ export default function LeadForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [serviceNoteError, setServiceNoteError] = useState<string | null>(null);
   const [phoneValue, setPhoneValue] = useState('');
   const [selectedChip, setSelectedChip] = useState<string | null>(null);
   const [showTextarea, setShowTextarea] = useState(true);
@@ -52,8 +55,15 @@ export default function LeadForm({
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const phoneRef = useRef<HTMLDivElement>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { savePhone } = usePhone();
   
   const resolvedTitle = title ?? translations['form_btn'] ?? 'Get offers';
+
+  useEffect(() => {
+    const token = localStorage.getItem('nevumo_auth_token');
+    setIsLoggedIn(!!token);
+  }, []);
   
   const handleChange = (value: string) => {
     setPhoneValue(value);
@@ -61,6 +71,7 @@ export default function LeadForm({
 
   const handleChipClick = (chipTitle: string) => {
     const notSureText = translations['chip_not_sure'] || 'Not sure';
+    setServiceNoteError(null);
     
     // If clicking the same chip, deselect and clear
     if (selectedChip === chipTitle) {
@@ -83,6 +94,7 @@ export default function LeadForm({
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormSubmitted(true);
+    setServiceNoteError(null);
 
     // Validation is now handled by PhoneInput internally
     if (!phoneValue || phoneValue.trim().length < 7) {
@@ -90,6 +102,11 @@ export default function LeadForm({
       
       // Scroll to phone field so user sees the error
       phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    if (!selectedChip && description.trim().length === 0) {
+      setServiceNoteError(translations['error_service_or_note'] ?? 'Моля изберете услуга или напишете бележка');
       return;
     }
 
@@ -172,24 +189,32 @@ export default function LeadForm({
 
     setIsEmailSubmitting(true);
 
-    // Call API to register the claim email
-    await claimLeadEmail(leadId, email, phoneValue);
+    try {
+      // Check if email already exists
+      const { exists } = await checkEmail(email);
 
-    // Save to localStorage
-    const pendingClaim = {
-      lead_id: leadId,
-      email: email,
-      phone: phoneValue,
-      submitted_at: Date.now(),
-    };
-    localStorage.setItem('nevumo_pending_claim', JSON.stringify(pendingClaim));
+      // Call API to register the claim email
+      await claimLeadEmail(leadId, email, phoneValue);
 
-    // Get lang from URL
-    const currentLang = window.location.pathname.split('/')[1] || 'en';
+      // Save to localStorage
+      const pendingClaim = {
+        lead_id: leadId,
+        email: email,
+        phone: phoneValue,
+        submitted_at: Date.now(),
+      };
+      localStorage.setItem('nevumo_pending_claim', JSON.stringify(pendingClaim));
 
-    // Redirect to auth with email in query string
-    const redirectUrl = `/${currentLang}/auth?email=${encodeURIComponent(email)}&intent=client`;
-    window.location.href = redirectUrl;
+      // Get lang from URL
+      const currentLang = window.location.pathname.split('/')[1] || 'en';
+
+      // Redirect to auth with email and mode based on whether user exists
+      const mode = exists ? 'login' : 'register';
+      const redirectUrl = `/${currentLang}/auth?email=${encodeURIComponent(email)}&intent=client&mode=${mode}`;
+      window.location.href = redirectUrl;
+    } catch {
+      setIsEmailSubmitting(false);
+    }
   };
 
   const handleNoThanks = () => {
@@ -204,11 +229,47 @@ export default function LeadForm({
     setDescription('');
     setSelectedChip(null);
     setShowTextarea(true);
-    setPhoneError(null);
+    setServiceNoteError(null);
+    setFormSubmitted(false);
     if (onReset) onReset();
   };
 
   if (isSuccess && successStep === 'sent') {
+    // If logged in, show simple success message
+    if (isLoggedIn) {
+      return (
+        <div className="text-center py-8">
+          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+            <span className="text-green-600 text-3xl">✓</span>
+          </div>
+          <p className="font-bold text-gray-900 text-lg mb-1">
+            {translations['success_title'] || 'Request sent!'}
+          </p>
+          <p className="text-sm text-gray-500 mb-6">
+            {cityTranslations 
+              ? getLocalizedCityText(translations['success_subtitle'] || 'Specialists in {city} will contact you.', lang, cityName, cityTranslations, grammaticalCase)
+              : (translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace(/{cityName}|{city}/g, cityName)}
+          </p>
+          <button
+            onClick={handleNoThanks}
+            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors text-base px-6"
+          >
+            {translations['new_request_button'] || 'New Request'}
+          </button>
+
+          {showPWAPrompt && (
+            <PWAInstallPrompt
+              trigger="lead_submit"
+              role="client"
+              onClose={() => setShowPWAPrompt(false)}
+              lang={lang}
+            />
+          )}
+        </div>
+      );
+    }
+
+    // If not logged in, show email collection screen
     return (
       <div className="flex flex-col items-center justify-center py-8 text-center px-4">
         {/* Large green checkmark */}
@@ -374,6 +435,9 @@ export default function LeadForm({
               </button>
             ))}
           </div>
+          {serviceNoteError && (
+            <p className="text-xs text-red-600 mt-1">{serviceNoteError}</p>
+          )}
         </div>
 
         {/* Description Textarea - Conditional */}
@@ -387,7 +451,10 @@ export default function LeadForm({
               name="description"
               rows={3}
               value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(event) => {
+                setDescription(event.target.value);
+                if (serviceNoteError) setServiceNoteError(null);
+              }}
               placeholder={translations['details_placeholder']}
               className="w-full resize-none rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
             />

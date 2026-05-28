@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { createLead, claimLeadEmail } from '@/lib/api';
+import { checkEmail } from '@/lib/auth-api';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 import PhoneInput from '@/components/ui/PhoneInput';
 
@@ -99,6 +100,13 @@ export default function BottomSheetForm({
   const phoneRef = useRef<HTMLInputElement>(null);
   const [phoneValue, setPhoneValue] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('nevumo_auth_token');
+    setIsLoggedIn(!!token);
+  }, []);
 
   // Prevent body scroll when sheet is open
   useEffect(() => {
@@ -224,6 +232,9 @@ export default function BottomSheetForm({
     setEmailError(null);
 
     try {
+      // Check if email already exists
+      const { exists } = await checkEmail(email);
+
       await claimLeadEmail(leadId, email, phone);
 
       // Save to localStorage
@@ -235,8 +246,9 @@ export default function BottomSheetForm({
       };
       localStorage.setItem('nevumo_pending_claim', JSON.stringify(pendingClaim));
 
-      // Redirect to auth
-      window.location.href = `/${lang}/auth?email=${encodeURIComponent(email)}&intent=client`;
+      // Redirect to auth with mode based on whether user exists
+      const mode = exists ? 'login' : 'register';
+      window.location.href = `/${lang}/auth?email=${encodeURIComponent(email)}&intent=client&mode=${mode}`;
     } catch (err) {
       setEmailError(t['error_generic'] ?? 'An error occurred. Please try again.');
     } finally {
@@ -252,6 +264,7 @@ export default function BottomSheetForm({
     setSubmitError(null);
     setEmailError(null);
     setServiceNoteError(null);
+    setFormSubmitted(false);
     onClose();
   };
 
@@ -259,6 +272,49 @@ export default function BottomSheetForm({
 
   // Success Screen Step 1
   if (step === 'success1') {
+    // If logged in, show simple success message
+    if (isLoggedIn) {
+      return (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black/50 z-50"
+            onClick={onClose}
+          />
+          {/* Sheet */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[90vh] overflow-y-auto transform transition-transform duration-300 ease-out">
+            <div className="px-5 py-8 flex flex-col items-center justify-center text-center">
+              <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                <span className="text-green-600 text-3xl">✓</span>
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                {t['success_title'] ?? 'Заявката е изпратена!'}
+              </h3>
+              <p className="text-sm text-gray-500 mb-6">
+                {t['success_subtitle'] ?? 'Специалистите ще се свържат с вас.'}
+              </p>
+              <button
+                onClick={handleNoThanks}
+                className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors text-base px-6"
+              >
+                {t['new_request_button'] ?? 'Нова заявка'}
+              </button>
+
+              {showPWAPrompt && (
+                <PWAInstallPrompt
+                  trigger="lead_submit"
+                  role="client"
+                  onClose={() => setShowPWAPrompt(false)}
+                  lang={lang}
+                />
+              )}
+            </div>
+          </div>
+        </>
+      );
+    }
+
+    // If not logged in, show email collection screen
     return (
       <>
         {/* Overlay */}

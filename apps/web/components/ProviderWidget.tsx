@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { createLead, claimLeadEmail, type ProviderDetail, getCityBySlug, type CityOut } from '@/lib/api';
+import { checkEmail } from '@/lib/auth-api';
 import { usePhone } from '@/hooks/usePhone';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getPhonePrefix } from '@/lib/phoneUtils';
@@ -436,24 +437,32 @@ export default function ProviderWidget({
 
     setIsEmailSubmitting(true);
 
-    // Call API to register the claim email
-    await claimLeadEmail(leadId, email, phoneValue);
+    try {
+      // Check if email already exists
+      const { exists } = await checkEmail(email);
 
-    // Save to localStorage
-    const pendingClaim = {
-      lead_id: leadId,
-      email: email,
-      phone: phoneValue,
-      submitted_at: Date.now(),
-    };
-    localStorage.setItem('nevumo_pending_claim', JSON.stringify(pendingClaim));
+      // Call API to register the claim email
+      await claimLeadEmail(leadId, email, phoneValue);
 
-    // Get lang from URL or state
-    const currentLang = lang;
+      // Save to localStorage
+      const pendingClaim = {
+        lead_id: leadId,
+        email: email,
+        phone: phoneValue,
+        submitted_at: Date.now(),
+      };
+      localStorage.setItem('nevumo_pending_claim', JSON.stringify(pendingClaim));
 
-    // Redirect to auth with email in query string
-    const redirectUrl = `/${currentLang}/auth?email=${encodeURIComponent(email)}&intent=client`;
-    window.location.href = redirectUrl;
+      // Get lang from URL or state
+      const currentLang = lang;
+
+      // Redirect to auth with email and mode based on whether user exists
+      const mode = exists ? 'login' : 'register';
+      const redirectUrl = `/${currentLang}/auth?email=${encodeURIComponent(email)}&intent=client&mode=${mode}`;
+      window.location.href = redirectUrl;
+    } catch {
+      setIsEmailSubmitting(false);
+    }
   };
 
   const handleNoThanks = () => {
@@ -466,7 +475,7 @@ export default function ProviderWidget({
     setSelectedServiceId(null);
     setDescriptionValue('');
     setPhoneValue('');
-    setPhoneError(null);
+    setFormSubmitted(false);
   };
 
   if (isSuccess) {
