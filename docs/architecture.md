@@ -185,6 +185,28 @@ The system now implements a fully automated SEO strategy for City Landing pages,
   - Claim page (`/[lang]/claim/[token]/page.tsx`)
   - Request form (`/[lang]/[city]/request/page.tsx`)
 
+- **Polish Landing Page SEO & UI Enhancements (May 28, 2026)**:
+  - **File**: `apps/web/app/[lang]/dolacz/page.tsx`
+  - **SEO Metadata**:
+    - Added `openGraph` fields (title, description, url, siteName, locale, type)
+    - Added `robots` meta (index: true, follow: true)
+    - Added JSON-LD Service schema with areaServed (Warszawa), provider (Nevumo), offers (free for 6 months)
+    - Updated canonical URL to use `process.env.NEXT_PUBLIC_SITE_URL` environment variable
+    - Fixed title duplication by removing "— Nevumo" from page title (global template appends " | Nevumo")
+  - **UI Enhancements**:
+    - CTA buttons (hero and final): Added shadow-lg and hover:shadow-xl with transition-all
+    - Icon wrappers in "Co otrzymujesz?" section: Changed from bg-orange-100 to bg-orange-500, icons from text-orange-500 to text-white
+    - Trust bar: Added third item "Rośniesz w rankingu" (🏆) with FOMO messaging
+    - New CTA section added after "Co otrzymujesz?" section
+    - FOMO text in Final CTA: "Im wcześniej dołączysz — tym wyżej w rankingu i tym bardziej widoczny w Google"
+  - **Category Icon Replacements**:
+    - Replaced emoji icons with SVG icons matching Bulgarian page structure
+    - Hydraulik: SVG with key
+    - Sprzątanie: SVG with star and sparkles
+    - Masaż: SVG with heart and hands
+  - **New Section**: "Co otrzymujesz?" added with 6 feature cards using lucide-react icons (BarChart2, Search, LayoutTemplate, QrCode, Star, BadgeCheck)
+  - **Trust Bar**: Expanded from 2 to 3 items with ranking growth messaging
+
 - **Provider Page SEO Optimization (April 30, 2026)**:
   - **Dynamic Robots Meta**: Implemented conditional `robots` tag logic based on the `embed=1` query parameter. Embedded views are set to `noindex, nofollow` to prevent duplicate content, while full pages are set to `index, follow`.
   - **Canonical URLs**: Added dynamic canonical tags that always point to the full page version (stripping the `embed` parameter) to consolidate SEO authority.
