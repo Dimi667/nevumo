@@ -21,3 +21,8 @@ test-results
 *.db
 *.sqlite
 *.sqlite3
+apps/api/uploads
+apps/api/__pycache__
+apps/api/data.db
+apps/api/*.png
+apps/api/tests

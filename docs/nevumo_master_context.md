@@ -1182,6 +1182,51 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - **Status Transitions:** Provider transitions: new → contacted/cancelled, contacted → cancelled. Client transitions: new → contacted → done, new/c → cancelled.
     - **Review Eligibility:** Only leads with `LeadMatch.status IN ('contacted', 'done')` are eligible for review.
 
+## Production Deployment
+
+### Инфраструктура (конфигурирана May 29, 2026)
+
+| Компонент | Платформа | URL/Endpoint | Статус |
+|-----------|-----------|--------------|--------|
+| Backend API | Railway (Hobby $5/мес) | api-production-7631.up.railway.app | ✅ Online |
+| Database | Neon (PostgreSQL 17, EU Frankfurt) | neon.com | ✅ Готов |
+| Redis Cache | Upstash (EU West, Free) | upstash.com | ✅ Готов |
+| Media Storage | Cloudflare R2 (EU, Free 10GB) | nevumo-images bucket | ✅ Готов |
+| Domain | nevumo.com (Cloudflare DNS) | — | ✅ Прехвърлен |
+| Frontend | Vercel | — | ⏳ Предстои |
+
+### Railway Configuration
+- **Service:** api
+- **Builder:** Dockerfile
+- **Dockerfile Path:** /apps/api/Dockerfile
+- **Region:** EU West (Amsterdam)
+- **Branch:** main (auto-deploy при push)
+- **GitHub Repo:** Dimi667/nevumo
+
+### Environment Variables (Railway)
+- DATABASE_URL — Neon connection string
+- REDIS_URL — Upstash Redis URL
+- R2_ACCESS_KEY_ID — Cloudflare R2
+- R2_SECRET_ACCESS_KEY — Cloudflare R2
+- R2_BUCKET_NAME — nevumo-images
+- R2_ENDPOINT_URL — Cloudflare R2 S3 endpoint
+
+### Deployment Workflow
+След всяка промяна на кода:
+```bash
+git add .
+git commit -m "описание на промяната"
+git push origin main
+# Railway автоматично deploy-ва
+git push nevumo-git main  # архив на SSD
+```
+
+### Предстои
+- Миграция на база данни от локален Mac към Neon
+- Deployment на frontend (Vercel)
+- DNS настройки за nevumo.com → Vercel
+- Custom domain за API: api.nevumo.com → Railway
+
 ### 🔮 Future
 - AI lead matching
 - Subscription / pay-per-lead billing
