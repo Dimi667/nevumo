@@ -1,0 +1,7 @@
+node_modules
+apps/api
+apps/docs
+apps/web/node_modules
+.next
+.git
+.turbo

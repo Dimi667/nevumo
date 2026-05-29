@@ -71,9 +71,49 @@ Nevumo е уеб платформа за marketplace на услуги.
 | Neon (PostgreSQL) | ✅ ГОТОВО | 27 таблици мигрирани от локален PostgreSQL. Alembic heads merge-нати (revision: 988cd791c762). |
 | Upstash (Redis) | ✅ ГОТОВО | Акаунт и база създадени, URL запазен |
 | Cloudflare | ✅ ГОТОВО | nevumo.com прехвърлен, R2 bucket `nevumo-images` създаден, API token запазен |
-| Railway (API) | ✅ ГОТОВО | Service `api` deployed и Online на `api-production-7631.up.railway.app` |
-| Vercel (Frontend) | ⏳ ПРЕДСТОИ | — |
-| DNS (nevumo.com) | ⏳ ПРЕДСТОИ | — |
+| Railway (API) | ✅ ГОТОВО | api.nevumo.com |
+| Vercel (Frontend) | ✅ ГОТОВО | www.nevumo.com |
+| DNS (Cloudflare) | ✅ ГОТОВО | — |
+| Custom domain api.nevumo.com | ✅ ГОТОВО | — |
+
+#### Deployment код промени (2026-05-29)
+
+**Frontend (apps/web)**
+- `app/[lang]/LayoutShell.tsx` — нов Client Component. Чете modal и embed от URL чрез useSearchParams(). Заменя searchParams prop в layout (несъвместим с Next.js 16).
+- `app/[lang]/layout.tsx` — премахнат searchParams prop, използва LayoutShell.
+- `lib/api.ts` — добавени verification_level: number и gallery: GalleryImage[] в ProviderDetail интерфейса.
+- `app/[lang]/[city]/[category]/[providerPage]/page.tsx` — подава verification_level, gallery, cities: [] към ProviderFullPage.
+- `app/[lang]/terms/page.tsx` и `cookies/page.tsx` — fetch cache сменен от no-store на { next: { revalidate: 3600 } }.
+
+**Backend (apps/api)**
+- `Dockerfile` — CMD използва ${PORT:-8000} за Railway PORT env variable.
+
+**Deployment конфигурация**
+- `.vercelignore` (root) — добавен за изключване на node_modules, apps/api, .turbo.
+- `apps/web/vercel.json` — опростен до framework: nextjs и outputDirectory: .next.
+
+#### Production инфраструктура (2026-05-29)
+
+**Environment Variables (Vercel)**
+- NEXT_PUBLIC_API_URL = https://api.nevumo.com
+- NEXT_PUBLIC_STATIC_URL = https://images.nevumo.com
+- NEXT_PUBLIC_SITE_URL = https://nevumo.com
+- NEXT_PUBLIC_GA_ID = G-3PYNQ1Y2V9
+
+**Railway variables**
+- SECRET_KEY — добавен
+- CORS_ORIGINS=https://www.nevumo.com,https://nevumo.com,https://nevumo.vercel.app
+- PORT = 8000
+
+**Cloudflare DNS**
+- api.nevumo.com CNAME → ntkked5p.up.railway.app (DNS only, не Proxied)
+- _railway-verify.api TXT запис добавен
+
+**Cloudflare R2**
+- Custom domain: images.nevumo.com
+
+#### Предстои
+- Тестване на www.nevumo.com
 
 ### Tracking
 - Google Analytics 4 (GA4) — G-3PYNQ1Y2V9

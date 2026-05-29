@@ -141,7 +141,49 @@ This document reflects the major architectural optimization performed in April 2
   - **Full Replacement on Null**: If `priceData` is null or invalid, the entire phrase must be swapped for the "Price on request" equivalent.
   - **Currency Removal**: When price data is missing, the `{currency}` placeholder must be removed entirely from the text, not just left empty or replaced with a symbol.
 
-### 7. Currency & Localization Logic
+### 7. Deployment Code Changes (2026-05-29)
+
+**Frontend (apps/web)**
+- `app/[lang]/LayoutShell.tsx` — нов Client Component. Чете modal и embed от URL чрез useSearchParams(). Заменя searchParams prop в layout (несъвместим с Next.js 16).
+- `app/[lang]/layout.tsx` — премахнат searchParams prop, използва LayoutShell.
+- `lib/api.ts` — добавени verification_level: number и gallery: GalleryImage[] в ProviderDetail интерфейса.
+- `app/[lang]/[city]/[category]/[providerPage]/page.tsx` — подава verification_level, gallery, cities: [] към ProviderFullPage.
+- `app/[lang]/terms/page.tsx` и `cookies/page.tsx` — fetch cache сменен от no-store на { next: { revalidate: 3600 } }.
+
+**Backend (apps/api)**
+- `Dockerfile` — CMD използва ${PORT:-8000} за Railway PORT env variable.
+
+**Deployment конфигурация**
+- `.vercelignore` (root) — добавен за изключване на node_modules, apps/api, .turbo.
+- `apps/web/vercel.json` — опростен до framework: nextjs и outputDirectory: .next.
+
+### 8. Deployment Status (2026-05-29)
+
+**Deployment статус — всичко ГОТОВО**
+- Vercel (Frontend) ✅ — www.nevumo.com
+- Railway (API) ✅ — api.nevumo.com
+- DNS (Cloudflare) ✅
+- Custom domain api.nevumo.com ✅
+
+**Railway Variables**
+- SECRET_KEY — добавен
+- CORS_ORIGINS=https://www.nevumo.com,https://nevumo.com,https://nevumo.vercel.app
+- PORT = 8000
+
+**Cloudflare DNS промени**
+- api.nevumo.com CNAME → ntkked5p.up.railway.app (DNS only, не Proxied)
+- _railway-verify.api TXT запис добавен
+
+**Vercel Environment Variables**
+- NEXT_PUBLIC_API_URL = https://api.nevumo.com
+- NEXT_PUBLIC_STATIC_URL = https://images.nevumo.com
+- NEXT_PUBLIC_SITE_URL = https://nevumo.com
+- NEXT_PUBLIC_GA_ID = G-3PYNQ1Y2V9
+
+**Предстои**
+- Тестване на www.nevumo.com
+
+### 9. Currency & Localization Logic
 - **Universal Currency Logic (April 30, 2026)**: Implemented a centralized currency determination system based on provider location.
   - **Source of Truth**: Currency is derived from `provider.services[0].currency` with fallback to `provider.city.country_code` via `apps/web/lib/currency.ts`.
   - **Fallback Chain**: Service currency → City country code → Country default → 'EUR'
