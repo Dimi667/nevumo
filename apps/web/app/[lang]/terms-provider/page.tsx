@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { generateHreflangAlternates } from '@/lib/seo';
+import { ReactNode } from 'react';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -39,7 +40,7 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-function renderBodyText(text: string, lang: string): JSX.Element[] {
+function renderBodyText(text: string, lang: string): ReactNode[] {
   const paragraphs = text.split('\n\n').filter(p => p.trim());
   
   return paragraphs.map((paragraph, index) => {

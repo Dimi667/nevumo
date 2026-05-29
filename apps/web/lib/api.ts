@@ -1,3 +1,5 @@
+import { GalleryImage } from '@/types/provider';
+
 export const API_BASE = typeof window === 'undefined'
   ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000')
   : (process.env.NEXT_PUBLIC_API_URL || '');
@@ -166,6 +168,8 @@ export interface ProviderDetail {
   latest_review?: LatestReviewPreview | null;
   reviews: Review[];
   is_claimed: boolean;
+  verification_level: number;
+  gallery: GalleryImage[];
 }
 
 export interface Review {

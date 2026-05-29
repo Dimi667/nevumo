@@ -411,6 +411,7 @@ function decodeJWTPayload(token: string): any | null {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
     const payload = parts[1];
+    if (!payload) return null;
     const decoded = atob(payload);
     return JSON.parse(decoded);
   } catch {

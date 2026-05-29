@@ -73,7 +73,6 @@ export default function LeadForm({ categorySlug, citySlug, providerSlug, country
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <PhoneInput
-        value={phoneValue}
         onChange={handleChange}
         countryCode={countryCode}
         label="Phone"

@@ -1,21 +1,15 @@
-import SmartGlobalFooter from '@/components/SmartGlobalFooter';
-import GlobalHeader from '@/components/GlobalHeader';
+import LayoutShell from './LayoutShell';
 
 interface LangLayoutProps {
   children: React.ReactNode;
   params: Promise<{ lang: string }>;
-  searchParams: Promise<{ modal?: string; embed?: string }>;
 }
 
-export default async function LangLayout({ children, params, searchParams }: LangLayoutProps) {
+export default async function LangLayout({ children, params }: LangLayoutProps) {
   const { lang } = await params;
-  const { modal, embed } = await searchParams || {};
-
   return (
-    <>
-      {modal !== 'true' && embed !== '1' && <GlobalHeader lang={lang} />}
+    <LayoutShell lang={lang}>
       {children}
-      {modal !== 'true' && <SmartGlobalFooter lang={lang} isEmbed={embed === '1'} />}
-    </>
+    </LayoutShell>
   );
 }

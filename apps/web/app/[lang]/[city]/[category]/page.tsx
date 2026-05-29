@@ -515,7 +515,10 @@ export default async function CategoryPage({ params }: PageProps) {
     leads_received: allCount * 5,
     city_leads: allCount * 5,
     translations: {},
-    is_claimed: true
+    is_claimed: true,
+    reviews: [],
+    verification_level: 0,
+    gallery: []
   };
 
   const localBusinessJsonLd = generateLocalBusinessJsonLd(categoryPseudoProvider, categoryName, cityName, cityCountryCode);
@@ -614,7 +617,10 @@ export default async function CategoryPage({ params }: PageProps) {
                 categoryT={categoryT}
                 cityT={cityT}
                 grammaticalCase={grammaticalCase}
-                cityData={cityData}
+                cityData={cityData ? {
+  locative_form: cityData.locative_form ?? undefined,
+  genitive_form: cityData.genitive_form ?? undefined,
+} : undefined}
               />
 
               <section className="mt-8 rounded-xl bg-gray-50 p-6 sm:p-8">

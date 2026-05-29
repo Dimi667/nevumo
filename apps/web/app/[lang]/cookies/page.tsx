@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
 import { t, type TranslationDict } from '@/lib/ui-translations';
 import { generateHreflangAlternates } from '@/lib/seo';
+import { ReactNode } from 'react';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -16,7 +17,7 @@ async function getTranslations(lang: string): Promise<TranslationDict> {
   try {
     const res = await fetch(
       `${API_BASE}/api/v1/translations/cookies?lang=${lang}`,
-      { cache: 'no-store', next: { revalidate: 0 } }
+      { next: { revalidate: 3600 } }
     );
     if (!res.ok) return {};
     return (await res.json()) as TranslationDict;
@@ -58,7 +59,7 @@ export default async function CookiesPage({ params }: PageProps) {
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const cookiesT = await getTranslations(normalizedLang);
 
-  const Table = ({ headers, rows }: { headers: string[], rows: (string | JSX.Element)[][] }) => (
+  const Table = ({ headers, rows }: { headers: string[], rows: (string | ReactNode)[][] }) => (
     <div className="overflow-x-auto my-6">
       <table className="w-full text-sm border-collapse">
         <thead>

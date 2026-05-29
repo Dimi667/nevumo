@@ -160,6 +160,11 @@ export default async function Page(props: {
           category_slug: category,
           city_slug: city,
           lang,
+          verification_level: provider.verification_level ?? 0,
+          gallery: provider.gallery ?? [],
+          cities: [],
+          services: provider.services.map(s => ({ ...s, id: parseInt(s.id) })),
+          latest_review: null,
         }}
         translations={mergedT}
         lang={lang}

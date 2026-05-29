@@ -130,7 +130,10 @@ export default async function CityPage({ params }: PageProps) {
     leads_received: cityStats.request_count,
     city_leads: cityStats.request_count,
     translations: {},
-    is_claimed: true
+    is_claimed: true,
+    reviews: [],
+    verification_level: 0,
+    gallery: []
   };
   const localBusinessJsonLd = generateLocalBusinessJsonLd(
     cityPseudoProvider,

@@ -147,10 +147,10 @@ function HeroSection({ provider, translations }: { provider: ProviderFullPagePro
   return (
     <section className="rounded-xl border border-gray-100 bg-white shadow-sm p-5">
       {/* Cover Image */}
-      {(provider.gallery ?? []).length > 0 && (
+      {coverImage && (
         <div className="h-48 w-full rounded-xl overflow-hidden mb-4">
           <img
-            src={provider.gallery[0].url}
+            src={coverImage.url}
             alt={`${provider.business_name} cover`}
             className="w-full h-full object-cover object-top"
           />
@@ -478,7 +478,7 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
     // Components will handle adding this text to their local notes state
   };
 
-  const handleServicePreFill = useCallback((serviceId: number) => {
+  const handleServicePreFill = useCallback((serviceId: number): string | undefined => {
     const service = provider.services.find(s => s.id === serviceId);
     if (!service) return;
     const serviceText = `${service.title} - ${formatServicePrice(service)}`;
@@ -543,7 +543,6 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
             onServiceSelect={handleServiceSelect}
             onServiceDeselect={handleServiceDeselect}
             onServicePreFill={handleServicePreFill}
-            onNotesPreFill={handleNotesPreFill}
           />
         </div>
       </div>
@@ -572,7 +571,6 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
         onServiceSelect={handleServiceSelect}
         onServiceDeselect={handleServiceDeselect}
         onServicePreFill={handleServicePreFill}
-        onNotesPreFill={handleNotesPreFill}
         isOpen={isSheetOpen}
         onClose={() => setIsSheetOpen(false)}
       />

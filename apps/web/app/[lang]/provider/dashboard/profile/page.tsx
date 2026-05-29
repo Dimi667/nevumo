@@ -332,7 +332,7 @@ export default function ProfilePage({ params }: PageProps) {
         setProfile(p);
         setCategories(cats);
         setCities([...bgCities, ...rsCities, ...plCities]);
-        setPublicUrl(dashboard.data?.public_url ?? null);
+        setPublicUrl(null);
 
         // Pre-select category from localStorage if valid and not already selected
         const categoryParam = localStorage.getItem('nevumo_selected_category');

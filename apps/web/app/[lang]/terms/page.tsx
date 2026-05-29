@@ -17,7 +17,7 @@ async function getTranslations(lang: string): Promise<TranslationDict> {
   try {
     const res = await fetch(
       `${API_BASE}/api/v1/translations/terms?lang=${lang}`,
-      { cache: 'no-store', next: { revalidate: 0 } }
+      { next: { revalidate: 3600 } }
     );
     if (!res.ok) return {};
     return (await res.json()) as TranslationDict;

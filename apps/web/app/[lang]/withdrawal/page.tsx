@@ -42,7 +42,7 @@ export default function WithdrawalPage({ params }: PageProps) {
     consumer_address: '',
     account_id: '',
     email: '',
-    submission_date: new Date().toISOString().split('T')[0]
+    submission_date: new Date().toISOString().split('T')[0] || ''
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -124,7 +124,7 @@ export default function WithdrawalPage({ params }: PageProps) {
         consumer_address: '',
         account_id: '',
         email: '',
-        submission_date: new Date().toISOString().split('T')[0]
+        submission_date: new Date().toISOString().split('T')[0] || ''
       });
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : 'An error occurred');

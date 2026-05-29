@@ -383,7 +383,7 @@ export default function ProviderWidget({
 
     // Validate service or note
     if (selectedServiceId === null && descriptionValue.trim().length === 0) {
-      setServiceNoteError(t['error_service_or_note'] ?? 'Моля изберете услуга или напишете бележка');
+      setServiceNoteError(t('error_service_or_note') ?? 'Моля изберете услуга или напишете бележка');
       return;
     }
 

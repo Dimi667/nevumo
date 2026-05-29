@@ -28,7 +28,7 @@ interface BottomSheetFormProps {
   selectedService?: number | null;
   onServiceSelect?: (serviceId: number) => void;
   onServiceDeselect?: () => void;
-  onServicePreFill?: (serviceId: number) => string;
+  onServicePreFill?: (serviceId: number) => string | undefined;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -80,7 +80,7 @@ export default function BottomSheetForm({
     if (selectedService !== null) {
       const service = services.find(s => s.id === selectedService);
       if (service) {
-        const serviceText = onServicePreFill ? onServicePreFill(selectedService) : `${service.title} - ${formatServicePrice(service, t['price_per_hour'] ?? '/ч', t['price_on_request'] ?? 'По запитване')}`;
+        const serviceText = onServicePreFill ? (onServicePreFill(selectedService) ?? '') : `${service.title} - ${formatServicePrice(service, t['price_per_hour'] ?? '/ч', t['price_on_request'] ?? 'По запитване')}`;
         setNotes(serviceText);
       }
     } else {
@@ -124,8 +124,8 @@ export default function BottomSheetForm({
   const getSocialProofSignal = () => {
     // 1. reviewCount > 0 && latestReview
     if (reviewCount > 0 && latestReview) {
-      const shortComment = latestReview.comment_preview && latestReview.comment_preview.trim()
-        ? latestReview.comment_preview.slice(0, 80) + (latestReview.comment_preview.length > 80 ? '...' : '')
+      const shortComment = latestReview.comment && latestReview.comment.trim()
+        ? latestReview.comment.slice(0, 80) + (latestReview.comment.length > 80 ? '...' : '')
         : null;
       const initials = latestReview.client_name.split(' ').map(n => n[0]).join('.');
       return (
@@ -235,13 +235,13 @@ export default function BottomSheetForm({
       // Check if email already exists
       const { exists } = await checkEmail(email);
 
-      await claimLeadEmail(leadId, email, phone);
+      await claimLeadEmail(leadId, email, phoneValue);
 
       // Save to localStorage
       const pendingClaim = {
         lead_id: leadId,
         email: email,
-        phone: phone,
+        phone: phoneValue,
         submitted_at: new Date().toISOString(),
       };
       localStorage.setItem('nevumo_pending_claim', JSON.stringify(pendingClaim));
@@ -498,16 +498,17 @@ export default function BottomSheetForm({
           )}
 
           {/* PhoneInput */}
-          <PhoneInput
-            ref={phoneRef}
-            onChange={setPhoneValue}
-            countryCode={citySlug === 'warszawa' ? 'PL' : 'BG'}
-            required
-            label={t['phone_label'] ?? 'Телефон'}
-            className="mb-0"
-            lang={lang}
-            submitted={formSubmitted}
-          />
+          <div ref={phoneRef}>
+            <PhoneInput
+              onChange={setPhoneValue}
+              countryCode={citySlug === 'warszawa' ? 'PL' : 'BG'}
+              required
+              label={t['phone_label'] ?? 'Телефон'}
+              className="mb-0"
+              lang={lang}
+              submitted={formSubmitted}
+            />
+          </div>
 
           {/* NotesField */}
           <textarea
