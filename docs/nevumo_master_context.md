@@ -52,7 +52,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 - PostgreSQL (nevumo_leads)
 - Redis (caching layer)
 
-### Хостинг инфраструктура (планирана — 2026-05-11)
+### Хостинг инфраструктура (deployment в прогрес — 2026-05-29)
 | Компонент | Доставчик | Цена старт |
 |-----------|-----------|------------|
 | Frontend | Vercel Inc. | $0 (free tier) |
@@ -63,7 +63,17 @@ Nevumo е уеб платформа за marketplace на услуги.
 | **Общо** | | **$0–5/мес при launch** |
 
 Бележка: Всички са в USA — трансфери покрити с SCCs. Cloudflare + DPF.
-Миграция от локален Docker: след Warsaw launch stabilization.
+Миграция от локален Docker: В ПРОГРЕС (2026-05-29)
+
+#### Deployment статус (2026-05-29)
+| Компонент | Статус | Бележки |
+|-----------|--------|---------|
+| Neon (PostgreSQL) | ✅ ГОТОВО | 27 таблици мигрирани от локален PostgreSQL. Alembic heads merge-нати (revision: 988cd791c762). |
+| Upstash (Redis) | ✅ ГОТОВО | Акаунт и база създадени, URL запазен |
+| Cloudflare | ✅ ГОТОВО | nevumo.com прехвърлен, R2 bucket `nevumo-images` създаден, API token запазен |
+| Railway (API) | ✅ ГОТОВО | Service `api` deployed и Online на `api-production-7631.up.railway.app` |
+| Vercel (Frontend) | ⏳ ПРЕДСТОИ | — |
+| DNS (nevumo.com) | ⏳ ПРЕДСТОИ | — |
 
 ### Tracking
 - Google Analytics 4 (GA4) — G-3PYNQ1Y2V9
