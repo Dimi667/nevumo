@@ -65,6 +65,13 @@ Nevumo е уеб платформа за marketplace на услуги.
 Бележка: Всички са в USA — трансфери покрити с SCCs. Cloudflare + DPF.
 Миграция от локален Docker: В ПРОГРЕС (2026-05-29)
 
+#### Deployment правила (от инцидент 2026-05-30)
+- **Cloudflare CNAME за Railway** → винаги **DNS only** (сив облак), никога Proxied
+- **Railway URL** → използвай service URL (`api-production-7631.up.railway.app`), не deployment URL — service URL е постоянен
+- **Нова env variable** → добавя се едновременно във Vercel Environment Variables И в `turbo.json` tasks.build.env масива
+- **Neon free tier** → задължително `NullPool` в `apps/api/database.py` (от `sqlalchemy.pool import NullPool`)
+- **Auto-deploy** → Vercel е свързан с GitHub (`Dimi667/nevumo`); всеки `git push origin main` тригерира автоматичен production deploy
+
 #### Deployment статус (2026-05-29)
 | Компонент | Статус | Бележки |
 |-----------|--------|---------|

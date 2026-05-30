@@ -1,5 +1,39 @@
 # Incident Logs
 
+---
+
+## 2026-05-30 — Production Site Down After First Deployment
+
+**Симптом:** nevumo.com не се зарежда. Vercel връща 504 GATEWAY_TIMEOUT на всички SSR страници.
+
+**Root causes (4 проблема в каскада):**
+
+1. **Cloudflare DNS сочеше към стар Railway URL** — при новия deploy Railway генерира нов service URL (`api-production-7631.up.railway.app`), а Cloudflare CNAME сочеше към стария (`ntkked5p.up.railway.app`). Допълнително Cloudflare proxy (оранжев облак) беше включен, което Railway не поддържа.
+
+2. **Липсваше `API_URL` environment variable във Vercel** — Next.js SSR fetch-овете използват `API_URL` за server-side заявки. Без нея SSR не можеше да достигне API-то и timeout-ваше след 300 секунди.
+
+3. **`API_URL` липсваше в `turbo.json` env масива** — Turbo не я подаваше към build процеса, което причиняваше build failure.
+
+4. **SQLAlchemy connection pool изчерпваше Neon free tier лимита** — при static generation Vercel генерира 210 страници едновременно, всяка правеше множество DB заявки. Neon free tier позволява 5 едновременни връзки, SQLAlchemy default pool (size=5, overflow=10) отваряше 15. Резултат: `QueuePool limit of size 5 overflow 10 reached`.
+
+**Решения:**
+
+1. **DNS fix:** Cloudflare CNAME за `api` → `api-production-7631.up.railway.app`, Proxy status → DNS only (сив облак). Използван Railway "One-click DNS Setup" за автоматично управление занапред.
+
+2. **Vercel env fix:** Добавена `API_URL=https://api.nevumo.com` в Vercel → Environment Variables → All Environments.
+
+3. **turbo.json fix:** Добавен `"API_URL"` в `tasks.build.env` масива в `turbo.json`.
+
+4. **NullPool fix:** В `apps/api/database.py` заменен default SQLAlchemy pool с `NullPool` — всяка връзка се отваря и веднага затваря, без pooling. Подходящо за Neon free tier и serverless среди.
+
+**Правила за бъдещи deployments:**
+- Cloudflare CNAME за Railway винаги трябва да е **DNS only** (не Proxied)
+- Всяка нова environment variable трябва да се добавя и в `turbo.json` env масива
+- Neon free tier = NullPool задължително
+- GitHub свързан с Vercel — всеки `git push origin main` тригерира автоматичен Vercel deploy
+
+---
+
 ## 2026-04-28 — Provider Dashboard Stats Excluded Retro-Matched Leads
 
 **Проблем:** Новорегистрирани провайдери виждат 0 на KPI картите (Общо/Нови запитвания) въпреки retro-matched leads.
