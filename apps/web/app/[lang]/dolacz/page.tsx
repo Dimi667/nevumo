@@ -160,8 +160,8 @@ export default async function DolaczPage({ params }: PageProps) {
             <div className="w-12 h-12 rounded-full bg-orange-500 flex items-center justify-center mb-3">
               <LayoutTemplate className="w-6 h-6 text-white" />
             </div>
-            <p className="font-semibold text-gray-900 text-sm">Widget na stronę</p>
-            <p className="text-gray-500 text-xs mt-1">Wstaw profil na swoją stronę lub Instagram bio</p>
+            <p className="font-semibold text-gray-900 text-sm">Widget na strony</p>
+            <p className="text-gray-500 text-xs mt-1">Przyjmuj zgłoszenia z wielu stron z łatwością</p>
           </div>
           {/* Card 4 */}
           <div className="flex flex-col items-center text-center p-4 rounded-xl border border-gray-100 shadow-sm">
