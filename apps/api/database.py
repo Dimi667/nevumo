@@ -2,6 +2,7 @@ import os
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 
 from apps.api.models import Base
 
@@ -13,6 +14,7 @@ DATABASE_URL = os.getenv(
 engine = create_engine(
     DATABASE_URL,
     connect_args={"options": "-c client_encoding=utf8"},
+    poolclass=NullPool,
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
