@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { getCategories, getCities, getProviders } from '@/lib/api';
+import { getCategories, getCitiesActive, getProviders } from '@/lib/api';
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const [categories, cities] = await Promise.all([
       getCategories('en'),
-      getCities('BG'),
+      getCitiesActive('en'),
     ]);
 
     const entries: MetadataRoute.Sitemap = [];
