@@ -33,6 +33,11 @@ This document reflects the major architectural optimization performed in April 2
   - `GOOGLE_CLIENT_ID`: Google OAuth 2.0 Client ID for social login (Google Cloud Console).
   - `GOOGLE_CLIENT_SECRET`: Google OAuth 2.0 Client Secret for social login (Google Cloud Console).
   - `OAUTH_REDIRECT_BASE`: Base URL for OAuth redirect callbacks (e.g., `http://localhost:3000` in dev, `https://www.nevumo.com` in production).
+  - `R2_ACCESS_KEY_ID`: Cloudflare R2 access key ID for image storage.
+  - `R2_SECRET_ACCESS_KEY`: Cloudflare R2 secret access key for image storage.
+  - `R2_BUCKET_NAME`: Cloudflare R2 bucket name for image storage (e.g., "nevumo-images").
+  - `R2_ENDPOINT_URL`: Cloudflare R2 endpoint URL (e.g., "https://<accountid>.r2.cloudflarestorage.com").
+  - `R2_PUBLIC_BASE_URL`: Public base URL for R2 images (e.g., "https://images.nevumo.com").
 - **Inter-container Communication**: Containers in Docker Compose communicate using service names (e.g., `nevumo-api`, `nevumo-postgres`) rather than `localhost`.
 - **CORS Configuration (April 2026)**: Added `CORSMiddleware` to `apps/api/main.py` using a configurable `CORS_ORIGINS` setting from `.env` (via `load_dotenv()`) to allow secure communication from the frontend domain.
 - **Google OAuth Setup (May 31, 2026)**: Implemented Google OAuth 2.0 for social login.

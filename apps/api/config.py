@@ -29,6 +29,13 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_SECRET: str = ""
     OAUTH_REDIRECT_BASE: str = ""
 
+    # Cloudflare R2
+    R2_ACCESS_KEY_ID: str = ""
+    R2_SECRET_ACCESS_KEY: str = ""
+    R2_BUCKET_NAME: str = ""
+    R2_ENDPOINT_URL: str = ""
+    R2_PUBLIC_BASE_URL: str = ""
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 

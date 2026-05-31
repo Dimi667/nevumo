@@ -45,8 +45,10 @@ Nevumo е уеб платформа за marketplace на услуги.
 - python-multipart (file upload support)
 - apscheduler>=3.10.0 (background jobs for magic link delivery)
 - tzlocal>=3.0 (timezone support for APScheduler)
+- boto3>=1.34.0 (Cloudflare R2 S3-compatible storage for images)
 - Backend packaging/runtime: absolute `apps.api.*` imports with module-based startup/scripts
 - STATIC_FILES_BASE_URL: Environment variable for proper static file URL generation (images, etc.)
+- R2 Integration: Image uploads (profile and gallery) use Cloudflare R2 with automatic fallback to local disk when R2_BUCKET_NAME is empty (local dev)
 
 ### Database & Caching
 - PostgreSQL (nevumo_leads)

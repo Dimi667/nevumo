@@ -212,8 +212,46 @@ def get_static_files_base_url() -> str:
     return settings.STATIC_FILES_BASE_URL
 
 
+def upload_to_r2(image_bytes: bytes, key: str) -> str:
+    """Upload image bytes to Cloudflare R2 and return public URL.
+    
+    Args:
+        image_bytes: Image bytes to upload
+        key: S3 key (e.g. "provider_gallery/123/abc.webp")
+    
+    Returns:
+        Full public URL (e.g. "https://images.nevumo.com/provider_gallery/123/abc.webp")
+    
+    Falls back to None if R2 is not configured (for local dev)."""
+    from apps.api.config import settings
+    
+    if not settings.R2_BUCKET_NAME:
+        return None
+    
+    import boto3
+    from botocore.client import Config
+    
+    s3_client = boto3.client(
+        's3',
+        endpoint_url=settings.R2_ENDPOINT_URL,
+        aws_access_key_id=settings.R2_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.R2_SECRET_ACCESS_KEY,
+        config=Config(signature_version='s3v4'),
+        region_name='auto'
+    )
+    
+    s3_client.put_object(
+        Bucket=settings.R2_BUCKET_NAME,
+        Key=key,
+        Body=image_bytes,
+        ContentType='image/webp'
+    )
+    
+    return f"{settings.R2_PUBLIC_BASE_URL.rstrip('/')}/{key}"
+
+
 def save_provider_image(provider_id: UUID, content: bytes, content_type: str, base_url: str | None = None) -> str:
-    """Save and optimize image to local filesystem. Returns full URL.
+    """Save and optimize image to local filesystem or R2. Returns full URL.
     Converts all images to WebP format with max 1200px resolution and 85% quality.
     
     Args:
@@ -222,9 +260,7 @@ def save_provider_image(provider_id: UUID, content: bytes, content_type: str, ba
         content_type: MIME type from upload
         base_url: Optional base URL (defaults to settings.STATIC_FILES_BASE_URL)
     
-    TODO: Replace with S3/R2 upload when migrating cloud storage."""
-    UPLOAD_BASE.mkdir(parents=True, exist_ok=True)
-    
+    Uploads to R2 if configured, otherwise falls back to local disk."""
     # Open image from bytes
     img = Image.open(io.BytesIO(content))
     img = ImageOps.exif_transpose(img)
@@ -245,7 +281,19 @@ def save_provider_image(provider_id: UUID, content: bytes, content_type: str, ba
             new_width = int(width * (max_dimension / height))
         img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
     
-    # Save as WebP with 85% quality
+    # Convert to WebP bytes
+    webp_buffer = io.BytesIO()
+    img.save(webp_buffer, 'WEBP', quality=85, method=6)
+    webp_bytes = webp_buffer.getvalue()
+    
+    # Try R2 upload first
+    r2_key = f"provider_images/{provider_id}.webp"
+    r2_url = upload_to_r2(webp_bytes, r2_key)
+    if r2_url:
+        return r2_url
+    
+    # Fallback to local disk
+    UPLOAD_BASE.mkdir(parents=True, exist_ok=True)
     filename = f"{provider_id}.webp"
     filepath = UPLOAD_BASE / filename
     img.save(filepath, 'WEBP', quality=85, method=6)
@@ -1870,18 +1918,29 @@ def add_gallery_image(
         img = img.convert("RGB")
     img.thumbnail((GALLERY_MAX_PX, GALLERY_MAX_PX), Image.LANCZOS)
 
-    provider_dir = Path(settings.UPLOADS_DIR) / "provider_gallery" / str(provider_id)
-    provider_dir.mkdir(parents=True, exist_ok=True)
-
     next_position = existing
     db_image = ProviderImage(provider_id=provider_id, url="", position=next_position)
     db.add(db_image)
     db.flush()
 
-    file_path = provider_dir / f"{db_image.id}.webp"
-    img.save(str(file_path), "WEBP", quality=GALLERY_QUALITY)
-
-    db_image.url = f"{base_url}/api/v1/static/provider_gallery/{provider_id}/{db_image.id}.webp"
+    # Convert to WebP bytes
+    webp_buffer = io.BytesIO()
+    img.save(webp_buffer, "WEBP", quality=GALLERY_QUALITY)
+    webp_bytes = webp_buffer.getvalue()
+    
+    # Try R2 upload first
+    r2_key = f"provider_gallery/{provider_id}/{db_image.id}.webp"
+    r2_url = upload_to_r2(webp_bytes, r2_key)
+    if r2_url:
+        db_image.url = r2_url
+    else:
+        # Fallback to local disk
+        provider_dir = Path(settings.UPLOADS_DIR) / "provider_gallery" / str(provider_id)
+        provider_dir.mkdir(parents=True, exist_ok=True)
+        file_path = provider_dir / f"{db_image.id}.webp"
+        img.save(str(file_path), "WEBP", quality=GALLERY_QUALITY)
+        db_image.url = f"{base_url}/api/v1/static/provider_gallery/{provider_id}/{db_image.id}.webp"
+    
     db.commit()
     db.refresh(db_image)
     return db_image

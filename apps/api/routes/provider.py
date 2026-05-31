@@ -295,7 +295,8 @@ async def upload_gallery_image(
     if file.size and file.size > 5 * 1024 * 1024:
         raise HTTPException(status_code=400, detail="File too large (max 5MB)")
     file_bytes = await file.read()
-    base_url = str(request.base_url).rstrip("/")
+    from apps.api.config import settings
+    base_url = settings.STATIC_FILES_BASE_URL
     try:
         return add_gallery_image(db, current_provider.id, file_bytes, file.filename or "", base_url)
     except ValueError as e:
