@@ -552,6 +552,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Updated badge rendering in category page provider cards to use `verification_level` logic (0/1/2)
   - Level 0 (New): Changed from amber to blue (`bg-blue-50 text-blue-400`)
   - Level 1 (Verified): Green badge unchanged (`bg-green-100 text-green-700`)
+- **Централизирана ctx система (nevumo_ctx) — May 31, 2026** — COMPLETE:
+  - Нов файл: apps/web/lib/ctx.ts — getCtx(), setCtx(), clearCtx()
+  - Нов компонент: apps/web/components/CtxCapture.tsx
+  - Заменени: nevumo_selected_city, nevumo_selected_category, nevumo_city_preference → nevumo_ctx
+  - CtxCapture добавен в: homepage, city page, dolacz page, CategoryPageClient
+  - Правило: всяка page с [city]/[category] в пътя задължително включва CtxCapture
+  - Seed fix: seed_onboarding_hero_v2.py и seed_delete_account_translations.py изпълнени срещу Neon
+  - Sitemap fix: getCitiesActive() заменя getCities('BG') — Warsaw вече в sitemap
+  - Google Search Console: верифициран, sitemap подаден (680 URLs, 31 май 2026)
   - Level 2 (Top Specialist): Changed from yellow to orange (`bg-orange-100 text-orange-700`)
   - Simplified Level 2 displayText logic to use ' – ' separator consistently
   - Badge colors now consistent across ProviderFullPage and category page provider cards
