@@ -79,7 +79,7 @@ export default async function DolaczPage({ params }: PageProps) {
         </p>
 
         <a
-          href={`/${lang}/auth?mode=register`}
+          href={`/${lang}/auth?mode=register&intent=provider`}
           className="mt-8 bg-white text-orange-600 font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:bg-orange-50 hover:shadow-xl transition-all inline-block"
         >
           Utwórz bezpłatny profil →
@@ -194,7 +194,7 @@ export default async function DolaczPage({ params }: PageProps) {
 
       <section className="py-8 px-4 text-center bg-white">
         <a
-          href={`/${lang}/auth?mode=register`}
+          href={`/${lang}/auth?mode=register&intent=provider`}
           className="bg-orange-500 text-white font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:bg-orange-600 hover:shadow-xl transition-all inline-block"
         >
           Utwórz bezpłatny profil →
@@ -222,7 +222,7 @@ export default async function DolaczPage({ params }: PageProps) {
             <h3 className="font-bold text-gray-900">Hydraulik</h3>
             <p className="text-sm text-gray-500 mt-1">Naprawy, instalacje, awarie 24h</p>
             <a
-              href={`/${lang}/auth?mode=register&category=plumbing`}
+              href={`/${lang}/auth?mode=register&category=plumbing&intent=provider`}
               className="mt-4 inline-block text-orange-500 text-sm font-medium hover:underline"
             >
               Dołącz jako hydraulik →
@@ -240,7 +240,7 @@ export default async function DolaczPage({ params }: PageProps) {
             <h3 className="font-bold text-gray-900">Sprzątanie</h3>
             <p className="text-sm text-gray-500 mt-1">Mieszkania, biura, po remoncie</p>
             <a
-              href={`/${lang}/auth?mode=register&category=cleaning`}
+              href={`/${lang}/auth?mode=register&category=cleaning&intent=provider`}
               className="mt-4 inline-block text-orange-500 text-sm font-medium hover:underline"
             >
               Dołącz jako firma sprzątająca →
@@ -260,7 +260,7 @@ export default async function DolaczPage({ params }: PageProps) {
             <h3 className="font-bold text-gray-900">Masaż</h3>
             <p className="text-sm text-gray-500 mt-1">Relaksacyjny, leczniczy, sportowy</p>
             <a
-              href={`/${lang}/auth?mode=register&category=massage`}
+              href={`/${lang}/auth?mode=register&category=massage&intent=provider`}
               className="mt-4 inline-block text-orange-500 text-sm font-medium hover:underline"
             >
               Dołącz jako masażysta →
@@ -306,7 +306,7 @@ export default async function DolaczPage({ params }: PageProps) {
         </p>
 
         <a
-          href={`/${lang}/auth?mode=register`}
+          href={`/${lang}/auth?mode=register&intent=provider`}
           className="mt-8 bg-white text-orange-600 font-bold text-lg px-10 py-4 rounded-xl shadow-lg hover:bg-orange-50 hover:shadow-xl transition-all inline-block"
         >
           Zacznij teraz — to nic nie kosztuje

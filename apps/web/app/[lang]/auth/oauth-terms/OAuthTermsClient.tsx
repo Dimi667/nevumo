@@ -87,7 +87,14 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
       saveAuth(result.data.token, result.data.user);
       if (city) setCtx({ city });
       if (category) setCtx({ category });
-      window.location.href = intent === 'provider' ? `/${lang}/provider/dashboard` : `/${lang}/client/dashboard`;
+      const isNewUser = result.data.is_new_user;
+      if (intent === 'provider') {
+        window.location.href = isNewUser
+          ? `/${lang}/provider/dashboard/profile`
+          : `/${lang}/provider/dashboard`;
+      } else {
+        window.location.href = `/${lang}/client/dashboard`;
+      }
     } catch {
       setError(t(authDict, 'oauth_error_generic', 'An error occurred. Please try again.'));
     } finally {

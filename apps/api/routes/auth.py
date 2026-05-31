@@ -589,6 +589,7 @@ async def google_oauth_complete(
         return AuthTokenResponse(data={
             "token": token,
             "user": {"id": str(existing_user.id), "email": existing_user.email, "role": existing_user.role},
+            "is_new_user": False,
         })
 
     # If not exists → create user
@@ -627,4 +628,5 @@ async def google_oauth_complete(
     return AuthTokenResponse(data={
         "token": token,
         "user": {"id": str(user.id), "email": user.email, "role": user.role},
+        "is_new_user": True,
     })
