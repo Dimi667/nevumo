@@ -8,6 +8,7 @@ import { getReviewPreferences, updateReviewPreferences, type ReviewPreferences }
 import { switchRole, ProviderApiError } from '@/lib/provider-api';
 import { exportUserData } from '@/lib/api';
 import { usePhone } from '@/hooks/usePhone';
+import { clearCategoryCtx } from '@/lib/ctx';
 import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { useTranslation } from '@/lib/use-translation';
@@ -159,7 +160,7 @@ export default function SettingsClient({ lang }: { lang: string }) {
       });
       if (response.ok) {
         clearAuth();
-        localStorage.removeItem('nevumo_selected_category');
+        clearCategoryCtx();
         localStorage.removeItem('nevumo_intent');
         router.push(`/${lang}`);
       } else {

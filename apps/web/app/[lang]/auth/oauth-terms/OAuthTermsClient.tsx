@@ -7,6 +7,7 @@ const API_BASE = '';
 import { saveAuth } from "@/lib/auth-store";
 import LegalModal from '@/components/auth/LegalModal';
 import { useTranslation } from '@/lib/use-translation';
+import { setCtx } from '@/lib/ctx';
 
 interface OAuthTermsClientProps {
   lang: string;
@@ -84,8 +85,8 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
 
       const result = await res.json();
       saveAuth(result.data.token, result.data.user);
-      if (city) localStorage.setItem('nevumo_selected_city', city);
-      if (category) localStorage.setItem('nevumo_selected_category', category);
+      if (city) setCtx({ city });
+      if (category) setCtx({ category });
       window.location.href = intent === 'provider' ? `/${lang}/provider/dashboard` : `/${lang}/client/dashboard`;
     } catch {
       setError(t(authDict, 'oauth_error_generic', 'An error occurred. Please try again.'));

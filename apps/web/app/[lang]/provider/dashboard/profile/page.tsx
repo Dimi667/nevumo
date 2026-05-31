@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import type { ProviderProfile, UpdateProfileInput, PriceType } from '@/types/provider';
 import type { CategoryOut, CityOut } from '@/lib/api';
 import { getCategories, getCities } from '@/lib/api';
+import { getCtx, setCtx, clearCategoryCtx } from '@/lib/ctx';
 import {
   ProviderApiError,
   checkSlugAvailability,
@@ -335,7 +336,7 @@ export default function ProfilePage({ params }: PageProps) {
         setPublicUrl(null);
 
         // Pre-select category from localStorage if valid and not already selected
-        const categoryParam = localStorage.getItem('nevumo_selected_category');
+        const categoryParam = getCtx().category;
         if (categoryParam && cats.some(c => c.slug === categoryParam)) {
           setStep2(f => {
             if (f.category_slug === '') {
@@ -398,7 +399,7 @@ export default function ProfilePage({ params }: PageProps) {
 
   useEffect(() => {
     if (cities.length === 0) return;
-    const cityParam = localStorage.getItem('nevumo_selected_city');
+    const cityParam = getCtx().city;
     if (cityParam) {
       const city = cities.find(c => c.slug === cityParam);
       if (city) {
@@ -698,7 +699,7 @@ export default function ProfilePage({ params }: PageProps) {
       }
 
       // Clear selected category from localStorage
-      localStorage.removeItem('nevumo_selected_category');
+      clearCategoryCtx();
 
       // Show PWA install prompt after onboarding complete (only once per session)
       if (!hasShownPWAPromptRef.current) {

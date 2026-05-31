@@ -2,7 +2,9 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useEffect } from 'react';
 import LeadForm from './LeadForm';
+import { setCtx } from '@/lib/ctx';
 
 // Dynamically import the sticky button to avoid SSR issues
 const StickyLeadFormButton = dynamic(() => import('./StickyLeadFormButton'), {
@@ -270,6 +272,10 @@ export default function CategoryPageClient({
   grammaticalCase,
   cityData
 }: CategoryPageClientProps) {
+  useEffect(() => {
+    setCtx({ city, category });
+  }, [city, category]);
+
   return (
     <>
       {/* Providers List - Client-side rendering to avoid hydration mismatch */}

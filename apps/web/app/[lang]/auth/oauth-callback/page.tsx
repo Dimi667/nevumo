@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useParams } from 'next/navigation';
 import { saveAuth } from '@/lib/auth-store';
 import type { UserInfo } from '@/lib/auth-types';
+import { setCtx } from '@/lib/ctx';
 
 export default function OAuthCallbackPage() {
   const searchParams = useSearchParams();
@@ -39,8 +40,8 @@ export default function OAuthCallbackPage() {
         ? `/${lang}/provider/dashboard`
         : `/${lang}/izberi-grad`;
 
-      if (city) localStorage.setItem('nevumo_selected_city', city);
-      if (category) localStorage.setItem('nevumo_selected_category', category);
+      if (city) setCtx({ city });
+      if (category) setCtx({ category });
 
       setTimeout(() => {
         window.location.href = redirectPath;

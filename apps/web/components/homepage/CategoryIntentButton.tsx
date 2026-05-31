@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { setCtx } from '@/lib/ctx';
 
 interface Props {
   href: string;
@@ -13,7 +14,7 @@ export default function CategoryIntentButton({ href, category, className, childr
   const router = useRouter();
 
   const handleClick = () => {
-    localStorage.setItem('nevumo_selected_category', category);
+    setCtx({ category });
     localStorage.setItem('nevumo_intent', 'provider');
     router.push(href);
   };

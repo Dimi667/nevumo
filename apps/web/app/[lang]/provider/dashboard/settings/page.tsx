@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { clearAuth, getAuthToken, getAuthUser, saveAuth } from '@/lib/auth-store';
+import { clearCategoryCtx } from '@/lib/ctx';
 import {
   ProviderApiError,
   checkSlugAvailability,
@@ -268,7 +269,7 @@ export default function SettingsPage() {
       });
       if (response.ok) {
         clearAuth();
-        localStorage.removeItem('nevumo_selected_category');
+        clearCategoryCtx();
         localStorage.removeItem('nevumo_intent');
         router.push(`/${lang}`);
       } else {

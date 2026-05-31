@@ -8,6 +8,7 @@ import { trackPageEvent } from "@/lib/tracking";
 import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
 import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@/lib/auth-api";
 import { saveAuth, isAuthenticated, getAuthUser } from "@/lib/auth-store";
+import { setCtx } from "@/lib/ctx";
 import { ApiError, API_BASE, getCityBySlug } from "@/lib/api";
 import { saveCredentials } from '@/lib/password-save';
 import LegalModal from '@/components/auth/LegalModal';
@@ -408,8 +409,8 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
       if (result.user.role === 'provider') {
         const cityParam = searchParams.get('city');
         const categoryParam = searchParams.get('category');
-        if (cityParam) localStorage.setItem('nevumo_selected_city', cityParam);
-        if (categoryParam) localStorage.setItem('nevumo_selected_category', categoryParam);
+        if (cityParam) setCtx({ city: cityParam });
+        if (categoryParam) setCtx({ category: categoryParam });
       }
 
       const redirectPath = result.user.role === 'provider'
