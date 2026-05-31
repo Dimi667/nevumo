@@ -14,6 +14,7 @@ import { exportUserData } from '@/lib/api';
 import type { AvailabilityStatus, ProviderProfile } from '@/types/provider';
 import { getSlugValidationError, sanitizeSlug } from '@/lib/slug-utils';
 import { usePhone } from '@/hooks/usePhone';
+import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 
@@ -48,6 +49,7 @@ export default function SettingsPage() {
   const [phoneSaved, setPhoneSaved] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const slugCheckRequestRef = useRef(0);
+  const { isValid } = usePhoneValidation(phoneValue, user?.country_code ?? 'BG');
 
   const [switchingRole, setSwitchingRole] = useState(false);
   const [switchError, setSwitchError] = useState<string | null>(null);
@@ -220,6 +222,11 @@ export default function SettingsPage() {
   async function handleSavePhone() {
     if (savingPhone) return;
     setFormSubmitted(true);
+
+    // Validate phone using isValid from usePhone
+    if (!isValid) {
+      return; // Don't save if invalid
+    }
 
     setSavingPhone(true);
     setPhoneSaved(false);

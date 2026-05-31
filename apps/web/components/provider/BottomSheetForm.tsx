@@ -6,6 +6,8 @@ import { createLead, claimLeadEmail } from '@/lib/api';
 import { checkEmail } from '@/lib/auth-api';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 import PhoneInput from '@/components/ui/PhoneInput';
+import { usePhone } from '@/hooks/usePhone';
+import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 
 interface BottomSheetFormProps {
   providerName: string;
@@ -101,6 +103,7 @@ export default function BottomSheetForm({
   const [phoneValue, setPhoneValue] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isValid } = usePhoneValidation(phoneValue, citySlug === 'warszawa' ? 'PL' : 'BG');
 
   // Check if user is logged in
   useEffect(() => {
@@ -172,8 +175,8 @@ export default function BottomSheetForm({
     setSubmitError(null);
     setServiceNoteError(null);
 
-    // Validation is now handled by PhoneInput internally
-    if (!phoneValue || phoneValue.trim().length < 7) {
+    // Validation using isValid from usePhone hook
+    if (!phoneValue || !isValid) {
       phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }

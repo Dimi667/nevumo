@@ -5,6 +5,8 @@ import { createLead, claimLeadEmail } from '@/lib/api';
 import { checkEmail } from '@/lib/auth-api';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
 import PhoneInput from '@/components/ui/PhoneInput';
+import { usePhone } from '@/hooks/usePhone';
+import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 
 interface LeadPanelProps {
   providerName: string;
@@ -70,6 +72,7 @@ export default function LeadPanel({
   const setSelectedService = externalOnServiceSelect ? externalOnServiceSelect : setInternalSelectedService;
   const [phoneValue, setPhoneValue] = useState('');
   const [notes, setNotes] = useState('');
+  const { isValid } = usePhoneValidation(phoneValue, citySlug === 'warszawa' ? 'PL' : 'BG');
 
   // Handle pre-fill from service selection (chip click or external select)
   useEffect(() => {
@@ -155,8 +158,8 @@ export default function LeadPanel({
     setSubmitError(null);
     setServiceNoteError(null);
 
-    // Validation is now handled by PhoneInput internally
-    if (!phoneValue || phoneValue.trim().length < 7) {
+    // Validation using isValid from usePhone hook
+    if (!phoneValue || !isValid) {
       setSubmitError(t['error_phone_invalid'] ?? 'Invalid phone number');
       phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;

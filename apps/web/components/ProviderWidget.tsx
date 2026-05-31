@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { createLead, claimLeadEmail, type ProviderDetail, getCityBySlug, type CityOut } from '@/lib/api';
 import { checkEmail } from '@/lib/auth-api';
 import { usePhone } from '@/hooks/usePhone';
+import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getPhonePrefix } from '@/lib/phoneUtils';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
@@ -223,6 +224,7 @@ export default function ProviderWidget({
   const [phoneValue, setPhoneValue] = useState('');
   const phoneRef = useRef<HTMLDivElement>(null);
   const stickyDivRef = useRef<HTMLDivElement>(null);
+  const { isValid } = usePhoneValidation(phoneValue, cityInfo?.country_code || 'BG');
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [descriptionValue, setDescriptionValue] = useState('');
   const [serviceNoteError, setServiceNoteError] = useState<string | null>(null);
@@ -374,8 +376,8 @@ export default function ProviderWidget({
     e.preventDefault();
     setFormSubmitted(true);
 
-    // Validation is now handled by PhoneInput internally
-    if (!phoneValue || phoneValue.trim().length < 7) {
+    // Validation using isValid from usePhone hook
+    if (!phoneValue || !isValid) {
       phoneRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setError(false);
       return;

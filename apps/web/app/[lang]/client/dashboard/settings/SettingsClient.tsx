@@ -8,6 +8,7 @@ import { getReviewPreferences, updateReviewPreferences, type ReviewPreferences }
 import { switchRole, ProviderApiError } from '@/lib/provider-api';
 import { exportUserData } from '@/lib/api';
 import { usePhone } from '@/hooks/usePhone';
+import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { useTranslation } from '@/lib/use-translation';
 
@@ -31,6 +32,7 @@ export default function SettingsClient({ lang }: { lang: string }) {
   const [exportError, setExportError] = useState<string | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const { t } = useTranslation('client_dashboard', lang);
+  const { isValid } = usePhoneValidation(phoneValue, user?.country_code ?? 'BG');
 
   useEffect(() => {
     async function loadPreferences() {
@@ -124,6 +126,11 @@ export default function SettingsClient({ lang }: { lang: string }) {
   async function handleSavePhone() {
     if (savingPhone) return;
     setFormSubmitted(true);
+
+    // Validate phone using isValid from usePhone
+    if (!isValid) {
+      return; // Don't save if invalid
+    }
 
     setSavingPhone(true);
     setPhoneSaved(false);

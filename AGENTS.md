@@ -24,6 +24,13 @@ You are a senior full-stack developer working on Nevumo — a Turborepo monorepo
 - Translations in PostgreSQL, cached in Redis
 - New keys must be generated for ALL 34 languages
 
+## Phone Validation
+- **ALWAYS use `usePhoneValidation` hook for phone validation in forms**
+- `usePhoneValidation(phoneValue, countryCode)` returns `isValid` state that updates in real-time
+- `usePhone` hook is ONLY for phone storage/sync (localStorage, API profile sync)
+- Never use manual validation checks like `phoneValue.trim().length < 7`
+- Never use `isValid` from `usePhone` hook - it doesn't update with form's phoneValue changes
+
 ## Docker Rebuild правило
 - При всеки rebuild на Docker image ЗАДЪЛЖИТЕЛНО:
   docker compose down && docker volume rm nevumo_web_node_modules && docker compose up -d

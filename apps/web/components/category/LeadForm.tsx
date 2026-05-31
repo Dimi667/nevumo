@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createLead, claimLeadEmail } from '@/lib/api';
 import { checkEmail } from '@/lib/auth-api';
 import { usePhone } from '@/hooks/usePhone';
+import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
@@ -56,7 +57,8 @@ export default function LeadForm({
   const phoneRef = useRef<HTMLDivElement>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { savePhone } = usePhone();
+  const { savePhone } = usePhone(countryCode);
+  const { isValid } = usePhoneValidation(phoneValue, countryCode);
   
   const resolvedTitle = title ?? translations['form_btn'] ?? 'Get offers';
 
@@ -96,8 +98,8 @@ export default function LeadForm({
     setFormSubmitted(true);
     setServiceNoteError(null);
 
-    // Validation is now handled by PhoneInput internally
-    if (!phoneValue || phoneValue.trim().length < 7) {
+    // Validation using isValid from usePhone hook
+    if (!phoneValue || !isValid) {
       setHasError(false);
       
       // Scroll to phone field so user sees the error
