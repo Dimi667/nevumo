@@ -37,3 +37,7 @@ You are a senior full-stack developer working on Nevumo — a Turborepo monorepo
 - НИКОГА само `docker compose build` + `up` без да изчистиш volume-а
 - НИКОГА `npm run dev` или `next dev` локално на Mac-а
 - Всички dev сървъри вървят само в Docker/OrbStack
+
+## Component Rules
+- **CtxCapture правило**: Всяка page.tsx която съдържа [city] или [category] в пътя си, или е landing page за конкретен град, ЗАДЪЛЖИТЕЛНО включва <CtxCapture> компонент от @/components/CtxCapture. Примери: /[lang]/[city]/page.tsx, /[lang]/[city]/[category]/page.tsx, /[lang]/dolacz/page.tsx
+- Виж apps/web/components/CtxCapture.tsx и apps/web/lib/ctx.ts

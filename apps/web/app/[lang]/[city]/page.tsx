@@ -8,6 +8,7 @@ import { JsonLd } from '@/components/JsonLd';
 import type { ProviderDetail, ServiceOut } from '@/lib/api';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
+import CtxCapture from '@/components/CtxCapture';
 
 interface PageProps {
   params: Promise<{ lang: string; city: string }>;
@@ -148,6 +149,7 @@ export default async function CityPage({ params }: PageProps) {
       <JsonLd data={websiteJsonLd} />
       <JsonLd data={localBusinessJsonLd} />
       <div className="min-h-screen bg-white">
+      <CtxCapture city={city} />
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
         <Link href={`/${lang}/auth?mode=register&role=provider&city=${city}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">

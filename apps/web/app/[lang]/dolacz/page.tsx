@@ -1,5 +1,6 @@
 import { generateHreflangAlternates } from '@/lib/seo';
 import { BarChart2, Search, LayoutTemplate, QrCode, Star, BadgeCheck } from 'lucide-react';
+import CtxCapture from '@/components/CtxCapture';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -35,6 +36,7 @@ export default async function DolaczPage({ params }: PageProps) {
 
   return (
     <div className="bg-white">
+      <CtxCapture city="warszawa" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

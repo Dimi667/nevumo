@@ -1547,6 +1547,39 @@ Adding new city: add entry to CITY_COUNTRY_MAP in:
 - usePhone hook: apps/web/hooks/usePhone.ts
   - Manages sync between localStorage and DB
   - Returns: { phone, savePhone, clearPhone, loading, isValid }
+
+---
+
+## CtxCapture & nevumo_ctx
+
+### localStorage ключ: nevumo_ctx
+Централизиран контекст за анонимни потребители.
+```json
+{ "city": "warszawa", "category": "cleaning" }
+```
+Управлява се от apps/web/lib/ctx.ts:
+- getCtx() — чете
+- setCtx(partial) — merge запис
+- clearCtx() — изтрива
+
+### Заменени ключове
+- nevumo_selected_city → getCtx().city
+- nevumo_selected_category → getCtx().category
+- nevumo_city_preference → getCtx().city
+
+### CtxCapture компонент
+Файл: apps/web/components/CtxCapture.tsx
+Невидим client компонент. Записва city/category в nevumo_ctx.
+
+ПРАВИЛО: Всяка page.tsx с [city] или [category] в пътя,
+или landing page за конкретен град, ЗАДЪЛЖИТЕЛНО включва:
+<CtxCapture city={citySlug} /> или <CtxCapture city={city} category={category} />
+
+Приложено на:
+- app/[lang]/page.tsx
+- app/[lang]/[city]/page.tsx
+- app/[lang]/[city]/[category]/page.tsx (през CategoryPageClient)
+- app/[lang]/dolacz/page.tsx
   - Auto-validates phone and provides isValid state
 - ShareButton: apps/web/components/shared/ShareButton.tsx
   - GDPR-friendly share компонент, Web Share API на mobile, Clipboard API на desktop, inline toast, без external dependencies

@@ -11,6 +11,7 @@ import { AuthIntentButton } from './AuthIntentButton';
 import CategoryIntentButton from '@/components/homepage/CategoryIntentButton';
 import MobileStickyCTA from '@/components/homepage/MobileStickyCTA';
 import Footer from '@/components/homepage/Footer';
+import CtxCapture from '@/components/CtxCapture';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -96,6 +97,7 @@ export default async function Homepage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white">
+      <CtxCapture city={citySlug} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
