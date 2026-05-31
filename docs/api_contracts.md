@@ -315,16 +315,16 @@ Handles Google OAuth callback. Exchanges authorization code for access token and
 ### Body
 ```json
 {
+  "email": "user@example.com",
+  "name": "User Name",
   "oauth_id": "google_user_id",
-  "role": "client | provider",
-  "city_id": 1,
-  "slug": "business-slug",
-  "business_name": "Business Name"
+  "lang": "en",
+  "intent": "client | provider"
 }
 ```
 
 ### Description
-Completes Google OAuth registration after user accepts terms. Creates user account and provider record (if role is provider).
+Completes Google OAuth registration after user accepts terms. Creates user account and provider record (if role is provider). Returns `is_new_user` flag to distinguish between new registrations and existing user logins.
 
 ### Response (201)
 ```json
@@ -335,12 +335,14 @@ Completes Google OAuth registration after user accepts terms. Creates user accou
     "user": {
       "id": "uuid",
       "email": "...",
-      "role": "client | provider",
-      "oauth_provider": "google",
-      "oauth_id": "google_user_id"
-    }
+      "role": "client | provider"
+    },
+    "is_new_user": true
   }
 }
+```
+
+**Note:** `is_new_user` is `true` for new registrations, `false` for existing users logging in via OAuth.
 ```
 
 ### Errors

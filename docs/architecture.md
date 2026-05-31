@@ -43,6 +43,7 @@ This document reflects the major architectural optimization performed in April 2
 - **Google OAuth Setup (May 31, 2026)**: Implemented Google OAuth 2.0 for social login.
   - **Endpoints**: `/api/v1/auth/google` (initiate), `/api/v1/auth/google/callback` (callback), `/api/v1/auth/google/complete` (complete after terms acceptance).
   - **Production Configuration**: Credentials stored in Railway (backend) and Vercel (frontend) environment variables. Redirect URIs configured for `api.nevumo.com`, `www.nevumo.com`, and `nevumo.com`.
+  - **Onboarding Redirect (May 31, 2026)**: Added `is_new_user` flag to `/api/v1/auth/google/complete` response. New providers (is_new_user=true) are redirected to `/provider/dashboard/profile` for onboarding, existing providers to `/provider/dashboard`.
 
 ### 5. Next.js & UI (Metadata + i18n)
 - **Universal Slug Generation (April 30, 2026)**: Unified URL slug generation logic between Frontend and Backend to support all 34 languages.
