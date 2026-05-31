@@ -193,6 +193,18 @@ This document reflects the major architectural optimization performed in April 2
 - **Conditional Success Screen with Login Check (May 29, 2026)**: Implemented conditional rendering for success screens in lead submission forms based on user login status. Logged-in users see a simple success message with "New Request" button, while non-logged-in users see email collection screen. Added `isLoggedIn` state and `useEffect` hook to check authentication token in localStorage for `LeadForm.tsx`, `BottomSheetForm.tsx`, and `LeadPanel.tsx`.
 - **Email Claim Flow with Login/Registration Check (May 29, 2026)**: Enhanced email submission flow in all lead forms to distinguish between login and registration flows. Uses existing `checkEmail` API (`/api/v1/auth/check-email`) to determine if email is already registered. If email exists, redirects to login flow (`mode=login`); if new, redirects to registration flow (`mode=register`). Consistent with existing `LoginClient.tsx` pattern. Applied to `LeadForm.tsx`, `ProviderWidget.tsx`, `BottomSheetForm.tsx`, and `LeadPanel.tsx`.
 - **Client Dashboard Optimization (April 2026)**: Resolved issues where client data was not loading correctly after a role switch, implemented robust status tracking for leads and reviews, synchronized missing translation keys for the dashboard overview, and integrated `ClientLeadDetailModal` into the requests page.
+- **Phone Validation System (May 2026)**: Implemented centralized phone validation across all lead submission forms using a new `usePhoneValidation` hook.
+  - **Root Cause**: Forms used `isValid` from `usePhone` hook, which had its own state that only updated via `savePhone` function. Forms didn't call `savePhone` on every change, so `isValid` was stale.
+  - **Solution**: Created `apps/web/hooks/usePhoneValidation.ts` hook that accepts `phoneValue` and `countryCode` and returns real-time `isValid` state.
+  - **Forms Updated**: All 6 lead submission forms now use `usePhoneValidation` hook:
+    - `apps/web/components/category/LeadForm.tsx` (category page request form)
+    - `apps/web/components/provider/LeadPanel.tsx` (provider lead panel)
+    - `apps/web/components/provider/BottomSheetForm.tsx` (bottom sheet form)
+    - `apps/web/components/ProviderWidget.tsx` (widget form)
+    - `apps/web/app/[lang]/provider/dashboard/settings/page.tsx` (provider dashboard settings)
+    - `apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx` (client dashboard settings)
+  - **Validation Logic**: Validates phone numbers must have at least 7 digits (excluding spaces, "+", etc.). Shows error message "Въведете валиден телефонен номер" and blocks submission for invalid numbers.
+  - **AGENTS.md Rule**: Added validation rule requiring use of `usePhoneValidation` hook for phone validation in forms (not `usePhone` hook or manual checks).
 - **Provider Dashboard Language Context Propagation (May 27, 2026)**: Fixed language context propagation in the provider dashboard to ensure that:
   - Widget preview iframe displays content in the current dashboard language (e.g., `/bg/provider/dashboard/widget` shows Bulgarian widget preview)
   - Public profile link ("View my profile") opens the public page in the current dashboard language
