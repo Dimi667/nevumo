@@ -106,11 +106,15 @@ Nevumo е уеб платформа за marketplace на услуги.
 - NEXT_PUBLIC_STATIC_URL = https://images.nevumo.com
 - NEXT_PUBLIC_SITE_URL = https://nevumo.com
 - NEXT_PUBLIC_GA_ID = G-3PYNQ1Y2V9
+- GOOGLE_CLIENT_ID = [Google OAuth Client ID from Google Cloud Console]
 
 **Railway variables**
 - SECRET_KEY — добавен
 - CORS_ORIGINS=https://www.nevumo.com,https://nevumo.com,https://nevumo.vercel.app
 - PORT = 8000
+- GOOGLE_CLIENT_ID = [Google OAuth Client ID from Google Cloud Console]
+- GOOGLE_CLIENT_SECRET = [Google OAuth Client Secret from Google Cloud Console]
+- OAUTH_REDIRECT_BASE = https://www.nevumo.com
 
 **Cloudflare DNS**
 - api.nevumo.com CNAME → ntkked5p.up.railway.app (DNS only, не Proxied)

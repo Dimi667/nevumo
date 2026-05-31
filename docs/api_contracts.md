@@ -245,6 +245,112 @@ GET /api/v1/auth/register/slug/check?slug=devs&city_slug=sofia&category_slug=mas
 
 ---
 
+## GET /api/v1/auth/google
+
+### Query Params
+- `lang` (optional) — language code for OAuth consent page
+- `intent` (optional) — "client" or "provider" for registration flow
+- `category` (optional) — category slug for provider registration
+- `city` (optional) — city slug for provider registration
+
+### Description
+Initiates Google OAuth 2.0 flow. Redirects to Google consent page.
+
+### Response
+HTTP 302 Redirect to Google OAuth consent page
+
+### Errors
+- 500 OAUTH_ERROR — Failed to initiate OAuth flow
+
+---
+
+## GET /api/v1/auth/google/callback
+
+### Query Params
+- `code` (required) — OAuth authorization code from Google
+- `state` (optional) — state parameter for CSRF protection
+
+### Description
+Handles Google OAuth callback. Exchanges authorization code for access token and retrieves user info.
+
+### Response (Success - Existing User)
+```json
+{
+  "success": true,
+  "data": {
+    "token": "JWT",
+    "user": {
+      "id": "uuid",
+      "email": "...",
+      "role": "client | provider",
+      "oauth_provider": "google",
+      "oauth_id": "google_user_id"
+    }
+  }
+}
+```
+
+### Response (Success - New User - Terms Required)
+```json
+{
+  "success": true,
+  "data": {
+    "oauth_id": "google_user_id",
+    "email": "...",
+    "name": "...",
+    "oauth_provider": "google",
+    "requires_terms": true
+  }
+}
+```
+
+### Errors
+- 400 OAUTH_ERROR — OAuth exchange failed
+- 500 SERVER_ERROR — Failed to process OAuth callback
+
+---
+
+## POST /api/v1/auth/google/complete
+
+### Body
+```json
+{
+  "oauth_id": "google_user_id",
+  "role": "client | provider",
+  "city_id": 1,
+  "slug": "business-slug",
+  "business_name": "Business Name"
+}
+```
+
+### Description
+Completes Google OAuth registration after user accepts terms. Creates user account and provider record (if role is provider).
+
+### Response (201)
+```json
+{
+  "success": true,
+  "data": {
+    "token": "JWT",
+    "user": {
+      "id": "uuid",
+      "email": "...",
+      "role": "client | provider",
+      "oauth_provider": "google",
+      "oauth_id": "google_user_id"
+    }
+  }
+}
+```
+
+### Errors
+- 400 VALIDATION_ERROR — Invalid request body
+- 409 EMAIL_ALREADY_EXISTS — Email already registered with different OAuth provider
+- 409 SLUG_TAKEN — Slug already in use (returns `extra_data.suggestions`)
+- 500 SERVER_ERROR — Failed to complete registration
+
+---
+
 ## DELETE /api/v1/auth/account
 
 ### Auth

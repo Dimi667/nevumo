@@ -30,8 +30,14 @@ This document reflects the major architectural optimization performed in April 2
 - **Key Environment Variables**:
   - `APP_URL`: The public base URL of the frontend application (e.g., `http://localhost:3000` in dev). Used for generating magic links, reset emails, and QR codes.
   - `STATIC_FILES_BASE_URL`: The public base URL of the API server. Used for generating absolute URLs for uploaded images and other static assets.
+  - `GOOGLE_CLIENT_ID`: Google OAuth 2.0 Client ID for social login (Google Cloud Console).
+  - `GOOGLE_CLIENT_SECRET`: Google OAuth 2.0 Client Secret for social login (Google Cloud Console).
+  - `OAUTH_REDIRECT_BASE`: Base URL for OAuth redirect callbacks (e.g., `http://localhost:3000` in dev, `https://www.nevumo.com` in production).
 - **Inter-container Communication**: Containers in Docker Compose communicate using service names (e.g., `nevumo-api`, `nevumo-postgres`) rather than `localhost`.
 - **CORS Configuration (April 2026)**: Added `CORSMiddleware` to `apps/api/main.py` using a configurable `CORS_ORIGINS` setting from `.env` (via `load_dotenv()`) to allow secure communication from the frontend domain.
+- **Google OAuth Setup (May 31, 2026)**: Implemented Google OAuth 2.0 for social login.
+  - **Endpoints**: `/api/v1/auth/google` (initiate), `/api/v1/auth/google/callback` (callback), `/api/v1/auth/google/complete` (complete after terms acceptance).
+  - **Production Configuration**: Credentials stored in Railway (backend) and Vercel (frontend) environment variables. Redirect URIs configured for `api.nevumo.com`, `www.nevumo.com`, and `nevumo.com`.
 
 ### 5. Next.js & UI (Metadata + i18n)
 - **Universal Slug Generation (April 30, 2026)**: Unified URL slug generation logic between Frontend and Backend to support all 34 languages.
