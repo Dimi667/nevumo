@@ -452,6 +452,10 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Fixed React hydration mismatch for provider images by implementing `resolveStaticUrl()` utility in `apps/web/lib/urlUtils.ts`
   - Utility uses relative URLs for local development (works on localhost:3000 and 192.168.0.15:3000)
   - Absolute URLs for production CDN (when backend returns them via `STATIC_FILES_BASE_URL`)
+- **Google OAuth Onboarding Fix (May 31, 2026)** — COMPLETE:
+  - /pl/dolacz — всички 6 auth линка вече подават intent=provider
+  - OAuthTermsClient.tsx — нови провайдъри (is_new_user=true) се redirect-ват към /provider/dashboard/profile
+  - Backend /api/v1/auth/google/complete — добавен is_new_user флаг в response
   - Eliminates hydration mismatch by ensuring server and client render identical HTML
   - Added `NEXT_PUBLIC_STATIC_URL` to `.env.example` documentation
   - Backend `STATIC_FILES_BASE_URL` config supports CDN/S3 in production

@@ -1,6 +1,7 @@
 import { generateHreflangAlternates } from '@/lib/seo';
 import { BarChart2, Search, LayoutTemplate, QrCode, Star, BadgeCheck } from 'lucide-react';
 import CtxCapture from '@/components/CtxCapture';
+import Link from 'next/link';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -213,7 +214,10 @@ export default async function DolaczPage({ params }: PageProps) {
 
         <div className="flex flex-col md:flex-row gap-6 max-w-2xl mx-auto">
           {/* Card 1 - Hydraulik */}
-          <div className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100 flex-1">
+          <Link
+            href={`/${lang}/auth?mode=register&category=plumbing&intent=provider`}
+            className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100 flex-1 hover:shadow-md hover:border-orange-200 transition-all cursor-pointer"
+          >
             <div className="text-orange-500 mb-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -221,16 +225,16 @@ export default async function DolaczPage({ params }: PageProps) {
             </div>
             <h3 className="font-bold text-gray-900">Hydraulik</h3>
             <p className="text-sm text-gray-500 mt-1">Naprawy, instalacje, awarie 24h</p>
-            <a
-              href={`/${lang}/auth?mode=register&category=plumbing&intent=provider`}
-              className="mt-4 inline-block text-orange-500 text-sm font-medium hover:underline"
-            >
+            <div className="mt-4 text-orange-500 text-sm font-medium">
               Dołącz jako hydraulik →
-            </a>
-          </div>
+            </div>
+          </Link>
 
           {/* Card 2 - Sprzątanie */}
-          <div className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100 flex-1">
+          <Link
+            href={`/${lang}/auth?mode=register&category=cleaning&intent=provider`}
+            className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100 flex-1 hover:shadow-md hover:border-orange-200 transition-all cursor-pointer"
+          >
             <div className="text-orange-500 mb-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
@@ -239,16 +243,16 @@ export default async function DolaczPage({ params }: PageProps) {
             </div>
             <h3 className="font-bold text-gray-900">Sprzątanie</h3>
             <p className="text-sm text-gray-500 mt-1">Mieszkania, biura, po remoncie</p>
-            <a
-              href={`/${lang}/auth?mode=register&category=cleaning&intent=provider`}
-              className="mt-4 inline-block text-orange-500 text-sm font-medium hover:underline"
-            >
+            <div className="mt-4 text-orange-500 text-sm font-medium">
               Dołącz jako firma sprzątająca →
-            </a>
-          </div>
+            </div>
+          </Link>
 
           {/* Card 3 - Masaż */}
-          <div className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100 flex-1">
+          <Link
+            href={`/${lang}/auth?mode=register&category=massage&intent=provider`}
+            className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100 flex-1 hover:shadow-md hover:border-orange-200 transition-all cursor-pointer"
+          >
             <div className="text-orange-500 mb-3">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ff5a1f" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
@@ -259,13 +263,10 @@ export default async function DolaczPage({ params }: PageProps) {
             </div>
             <h3 className="font-bold text-gray-900">Masaż</h3>
             <p className="text-sm text-gray-500 mt-1">Relaksacyjny, leczniczy, sportowy</p>
-            <a
-              href={`/${lang}/auth?mode=register&category=massage&intent=provider`}
-              className="mt-4 inline-block text-orange-500 text-sm font-medium hover:underline"
-            >
+            <div className="mt-4 text-orange-500 text-sm font-medium">
               Dołącz jako masażysta →
-            </a>
-          </div>
+            </div>
+          </Link>
         </div>
       </section>
 
