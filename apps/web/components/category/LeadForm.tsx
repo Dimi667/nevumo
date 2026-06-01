@@ -427,10 +427,10 @@ export default function LeadForm({
                 key={service.id}
                 type="button"
                 onClick={() => handleChipClick(service.title)}
-                className={`text-xs px-3 py-1.5 border border-gray-300 rounded-full cursor-pointer transition-colors bg-white text-gray-600 hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50 active:border-orange-400 active:bg-orange-50 ${
+                className={`text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors ${
                   selectedChip === service.title
-                    ? 'border-orange-500 bg-orange-500 text-white'
-                    : ''
+                    ? 'bg-orange-500 text-white border-orange-500'
+                    : 'border-gray-300 text-gray-600 bg-white hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50 active:border-orange-400 active:bg-orange-50'
                 }`}
               >
                 {service.title}
