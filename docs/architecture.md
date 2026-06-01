@@ -107,6 +107,12 @@ This document reflects the major architectural optimization performed in April 2
   - **SQL Script**: Created `delete_hardcoded_city_translations.sql` to delete 7 keys from all 34 languages (238 rows total)
   - **Affected Keys**: 7 category translation keys with hardcoded city names
   - **Result**: City names now display correctly on all pages using dynamic `{city}` placeholder replacement
+- **Widget Preview Image Loading Fix (June 1, 2026)**:
+  - **Problem**: Provider profile images were not loading in the widget preview iframe on `/provider/dashboard/widget` and `?embed=1` pages. The `crossOrigin="anonymous"` attribute on the img tag was causing the browser to add an `Origin` header, triggering CORS preflight requests that failed when loading images from Cloudflare R2 in iframe context.
+  - **Solution**: Removed `crossOrigin="anonymous"` attribute from the provider profile image img tag in `apps/web/components/ProviderWidget.tsx` (line 640). This prevents the browser from adding the Origin header and making CORS preflight requests, allowing images to load correctly in both regular pages and iframe contexts.
+  - **Technical Context**: Cloudflare R2 images use absolute URLs (`https://images.nevumo.com/...`). Without `crossOrigin`, the browser treats the request as a "simple" request that doesn't require CORS validation, which works correctly for image display purposes.
+  - **Affected Files**: `apps/web/components/ProviderWidget.tsx`
+  - **Result**: Provider profile images now load correctly in widget preview iframe and embed mode
 - **City Placeholder System (May 2, 2026)**:
   - **Purpose**: Replaced hardcoded city names in homepage translations with a dynamic `{city}` placeholder that resolves based on user context.
   - **Files Created**:
