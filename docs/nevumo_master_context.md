@@ -70,7 +70,10 @@ Nevumo е уеб платформа за marketplace на услуги.
 #### Deployment правила (от инцидент 2026-05-30)
 - **Cloudflare CNAME за Railway** → винаги **DNS only** (сив облак), никога Proxied
 - **Railway URL** → използвай service URL (`api-production-7631.up.railway.app`), не deployment URL — service URL е постоянен
-- **Нова env variable** → добавя се едновременно във Vercel Environment Variables И в `turbo.json` tasks.build.env масива
+- **Environment Variables**:
+  - **Backend variables** (Railway): `APP_URL`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `OAUTH_REDIRECT_BASE` - добавят се само в Railway environment variables
+  - **Frontend variables** (Vercel): `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_API_URL` - добавят се във Vercel Environment Variables И в `turbo.json` tasks.build.env масива
+  - **Important**: `APP_URL` е backend-only variable, не се добавя във Vercel или turbo.json
 - **Neon free tier** → задължително `NullPool` в `apps/api/database.py` (от `sqlalchemy.pool import NullPool`)
 - **Auto-deploy** → Vercel е свързан с GitHub (`Dimi667/nevumo`); всеки `git push origin main` тригерира автоматичен production deploy
 

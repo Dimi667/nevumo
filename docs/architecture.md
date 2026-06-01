@@ -28,7 +28,7 @@ This document reflects the major architectural optimization performed in April 2
 ### 4. Networking & Environment
 - **Centralized URL Management**: All internal and external URL addresses are managed through environment variables to ensure consistency across development, staging, and production environments.
 - **Key Environment Variables**:
-  - `APP_URL`: The public base URL of the frontend application (e.g., `http://localhost:3000` in dev). Used for generating magic links, reset emails, and QR codes.
+  - `APP_URL`: The public base URL of the frontend application (e.g., `http://localhost:3000` in dev). Used for generating magic links, reset emails, and QR codes. **Backend-only variable** - configured in Railway environment variables, not in Vercel or turbo.json.
   - `STATIC_FILES_BASE_URL`: The public base URL of the API server. Used for generating absolute URLs for uploaded images and other static assets.
   - `GOOGLE_CLIENT_ID`: Google OAuth 2.0 Client ID for social login (Google Cloud Console).
   - `GOOGLE_CLIENT_SECRET`: Google OAuth 2.0 Client Secret for social login (Google Cloud Console).
