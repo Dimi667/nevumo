@@ -113,6 +113,12 @@ This document reflects the major architectural optimization performed in April 2
   - **Technical Context**: Cloudflare R2 images use absolute URLs (`https://images.nevumo.com/...`). Without `crossOrigin`, the browser treats the request as a "simple" request that doesn't require CORS validation, which works correctly for image display purposes.
   - **Affected Files**: `apps/web/components/ProviderWidget.tsx`
   - **Result**: Provider profile images now load correctly in widget preview iframe and embed mode
+- **Social Share Buttons URL Fix (June 1, 2026)**:
+  - **Problem**: Social share buttons (Facebook, Instagram, TikTok) on the provider dashboard widget page were incorrectly using the embed URL with `?embed=1` parameter instead of the canonical public profile URL.
+  - **Solution**: Created a separate `shareUrl` variable using `qrData.canonical_url` (without `?embed=1`) for social share buttons, while keeping the embed code and iframe src using the embed URL with `?embed=1`.
+  - **Technical Context**: The `getEnhancedQRCode` API returns both `public_url` (with `?embed=1` for widget embedding) and `canonical_url` (clean URL for sharing). The fix ensures users share their actual public profile page, not the embed version.
+  - **Affected Files**: `apps/web/app/[lang]/provider/dashboard/widget/page.tsx`
+  - **Result**: Social share buttons now correctly share the canonical public profile URL without `?embed=1`
 - **City Placeholder System (May 2, 2026)**:
   - **Purpose**: Replaced hardcoded city names in homepage translations with a dynamic `{city}` placeholder that resolves based on user context.
   - **Files Created**:
