@@ -95,6 +95,18 @@ This document reflects the major architectural optimization performed in April 2
     - **City Page** (`apps/web/app/[lang]/[city]/page.tsx`): Fully integrated for all UI elements with Slavic language support
     - **Category Pages** (`apps/web/app/[lang]/[city]/[category]/page.tsx`): Fully integrated for all UI elements with Slavic language support
   - **Scope**: Warsaw has declension forms seeded for all 34 languages. Adding declension forms for other cities requires running the seed script with city-specific data.
+- **SEO City Grammatical Case Fix (June 1, 2026)**:
+  - **Problem**: Slavic languages (bg, cs, sk, ru, uk, sr, hr, mk, sl, pl) incorrectly used locative form for city names in SEO p1 paragraphs where city is sentence subject (e.g., "Warszawie oferuje..." instead of "Warszawa oferuje...")
+  - **Solution**: Added conditional logic in `apps/web/app/[lang]/[city]/[category]/page.tsx` to use direct `.replace('{city}', cityName)` (nominative) for Slavic languages in p1 paragraphs while keeping `getLocalizedCityText()` for other SEO elements (h2, h3, p2, p3)
+  - **Implementation**: Added `useDirectCityName` flag based on existing `slavicLanguagesWithDeclension` array
+  - **Affected Keys**: `category.seo_massage_p1`, `category.seo_cleaning_p1`, `category.seo_plumbing_p1`
+  - **No Database Changes**: Solution is frontend-only, no seed script or database modifications needed
+- **Hardcoded City Names Cleanup (June 1, 2026)**:
+  - **Problem**: All 34 languages in `seed_ui_translations.py` had hardcoded city names (Warsaw, Warszawa, Варшава, etc.) instead of `{city}` placeholder in 7 category keys, causing all city pages to display hardcoded city names
+  - **Solution**: Deleted hardcoded values from Neon production database using SQL script and removed them from `seed_ui_translations.py` to allow code fallback logic to generate dynamic text with `{city}` placeholder
+  - **SQL Script**: Created `delete_hardcoded_city_translations.sql` to delete 7 keys from all 34 languages (238 rows total)
+  - **Affected Keys**: 7 category translation keys with hardcoded city names
+  - **Result**: City names now display correctly on all pages using dynamic `{city}` placeholder replacement
 - **City Placeholder System (May 2, 2026)**:
   - **Purpose**: Replaced hardcoded city names in homepage translations with a dynamic `{city}` placeholder that resolves based on user context.
   - **Files Created**:
