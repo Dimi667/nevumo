@@ -493,6 +493,17 @@ This separation ensures that:
     - Second click on the same chip: deselects it and clears the textarea
     - Clicking a different chip: switches selection and updates textarea
   - **Implementation:** Modified `handleChipClick` function in `apps/web/components/category/LeadForm.tsx` to check if `selectedChip === chipTitle` before setting new selection.
+- **Unified Chip/Service Selector Button Styles (June 1, 2026)** — COMPLETE:
+  - **Problem:** Chip/service selector buttons had inconsistent styling across different form components (LeadForm, LeadPanel, ProviderWidget, BottomSheetForm), leading to visual inconsistency.
+  - **Solution:** Standardized chip button styles across all 4 form components:
+    - **Unselected state**: `text-xs px-3 py-1.5 border border-gray-300 rounded-full cursor-pointer transition-colors bg-white text-gray-600 hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50 active:border-orange-400 active:bg-orange-50`
+    - **Selected state**: `text-xs px-3 py-1.5 border border-orange-500 rounded-full cursor-pointer transition-colors bg-orange-500 text-white`
+  - **Files Modified:**
+    - `apps/web/components/category/LeadForm.tsx` (line 430)
+    - `apps/web/components/provider/LeadPanel.tsx` (line 425)
+    - `apps/web/components/ProviderWidget.tsx` (line 732)
+    - `apps/web/components/provider/BottomSheetForm.tsx` (line 484)
+  - **Result:** Consistent visual appearance and interaction behavior for service selection chips across all forms on both desktop and mobile.
   - **Dual Role Architecture (April 2026)** — UPDATED:
   - **PROBLEM:** One user can be both provider and client simultaneously (two tabs open). However, a provider accidentally landing on the client dashboard and clicking "Become a provider" received an `ALREADY_IN_ROLE` error.
   - **SOLUTION:** 
