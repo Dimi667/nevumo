@@ -338,9 +338,9 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - `69` total UI keys per language
   - `2,856` rows in `translations` for homepage/category namespaces across 34 languages (includes preposition keys: +68 rows)
   - `351` provider_dashboard keys per language (navigation, labels, messages, status, buttons, analytics, QR code, profile setup, settings, reviews, services, lead search & notes, lead details modal, TikTok share button)
-  - `24` city-page keys per language (hero, search, CTA, empty state, how it works, SEO, prepositions)
+  - `39` city-page keys per language (hero, search, CTA, empty state, how it works, SEO, prepositions)
   - `11,866` rows in `translations` for provider_dashboard namespace across 34 languages
-  - `816` rows in `translations` for city namespace across 34 languages (includes preposition keys: +102 rows)
+  - `1,326` rows in `translations` for city namespace across 34 languages (includes preposition keys: +102 rows; full 34-language support added June 1, 2026 - previously only EN, BG, PL)
   - `2,856` rows in `translations` for `client_dashboard` namespace across 34 languages (includes Client Notes feature: 10 keys × 34 languages = 340 rows)
   - `1,020` rows in `translations` for `provider_dashboard` namespace across 34 languages (includes Widget page: 25 keys × 34 languages = 850 rows)
   - `340` rows in `translations` for `widget` namespace across 34 languages (relative time translations: 8 keys × 34 languages = 272 rows; error messages: 2 keys × 34 languages = 68 rows)

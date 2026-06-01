@@ -498,7 +498,7 @@ CREATE INDEX idx_translations_key ON translations(key);
 - **category FAQ keys (May 2026)**: 7 new keys × 34 languages = 238 rows
   Keys added: faq_title, faq_cleaning_q1, faq_cleaning_q2, faq_cleaning_q3, faq_cleaning_a1, faq_cleaning_a2, faq_cleaning_a3
 - **category price_on_request key (May 2026)**: 1 key × 34 languages = 34 rows
-- **city namespace**: 24 keys × 34 languages = 816 rows (includes 10 hero keys added April 21, 2026)
+- **city namespace**: 39 keys × 34 languages = 1,326 rows (includes 10 hero keys added April 21, 2026; full 34-language support added June 1, 2026 - previously only EN, BG, PL)
 - **city preposition keys (May 2026)**: 3 new keys × 34 languages = 102 rows
   Keys added: preposition_base, preposition_modified, footer_in (for dynamic preposition logic)
 - **city declension keys (May 2026)**: 2 new keys × 34 languages = 68 rows
