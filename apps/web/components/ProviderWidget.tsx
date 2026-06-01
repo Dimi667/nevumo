@@ -637,7 +637,6 @@ export default function ProviderWidget({
               src={profileImageUrl}
               alt={provider.business_name}
               className="w-full h-full object-cover"
-              crossOrigin="anonymous"
             />
           ) : (
             <span className="text-orange-600 text-4xl font-bold">
