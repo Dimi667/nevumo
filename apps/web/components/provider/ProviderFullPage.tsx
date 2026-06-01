@@ -478,7 +478,7 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
     // Components will handle adding this text to their local notes state
   };
 
-  const handleServicePreFill = useCallback((serviceId: number): string | undefined => {
+  const handleServicePreFill = useCallback((serviceId: string): string | undefined => {
     const service = provider.services.find(s => s.id === serviceId);
     if (!service) return;
     const serviceText = `${service.title} - ${formatServicePrice(service)}`;
