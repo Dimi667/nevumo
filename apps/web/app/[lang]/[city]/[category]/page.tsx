@@ -323,6 +323,7 @@ export default async function CategoryPage({ params }: PageProps) {
   // Slavic languages that use grammatical cases (locative/genitive)
   const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
   const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
+  const useDirectCityName = slavicLanguagesWithDeclension.includes(lang);
 
   const catNameKey = `cat_${catKey}_name` as const;
   const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
@@ -625,7 +626,7 @@ export default async function CategoryPage({ params }: PageProps) {
 
               <section className="mt-8 rounded-xl bg-gray-50 p-6 sm:p-8">
                 <h2 className="text-2xl font-bold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h2`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</h2>
-                <p className="mt-4 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p1`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</p>
+                <p className="mt-4 text-base leading-7 text-gray-700">{replaceCity(useDirectCityName ? (categoryT[`seo_${catKey}_p1`] || '').replace('{city}', cityName) : getLocalizedCityText((categoryT[`seo_${catKey}_p1`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</p>
                 <h3 className="mt-6 text-xl font-semibold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h3_1`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</h3>
                 <p className="mt-3 text-base leading-7 text-gray-700">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_p2`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</p>
                 <h3 className="mt-6 text-xl font-semibold text-gray-900">{replaceCity(getLocalizedCityText((categoryT[`seo_${catKey}_h3_2`] || ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }))}</h3>
