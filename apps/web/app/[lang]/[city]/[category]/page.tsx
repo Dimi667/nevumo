@@ -466,14 +466,12 @@ export default async function CategoryPage({ params }: PageProps) {
   const services = Array.from(
     new Set(
       providers
-        .flatMap(provider => {
-          // Extract service titles from provider data if available
-          // For now, we'll use a basic approach - this might need adjustment based on actual provider data structure
-          return provider.description && provider.description.length > 0
-            ? [provider.description.split('.')[0]?.trim() || ''] // Use first sentence as service title
-            : [];
-        })
-        .filter(title => title.length > 0 && title.length < 50) // Filter for reasonable length
+        .flatMap(provider => 
+          (provider.services || [])
+            .filter(service => service.category_slug === apiSlug)
+            .map(service => service.title)
+        )
+        .filter(title => title && title.length > 0 && title.length < 50)
     )
   ).map((title, index) => ({
     id: `service-${index}`,
