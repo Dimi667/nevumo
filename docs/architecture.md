@@ -396,6 +396,15 @@ This separation ensures that:
 - Server-side rendering can reach the backend container via Docker network (API_URL)
 - Client-side browser requests use relative URLs by default (NEXT_PUBLIC_API_URL empty)
 - Relative URLs work automatically on localhost, local network, and same-domain production
+
+### Service Selection Bug Fix (June 1, 2026)
+- **Root Cause**: Service IDs in the database are UUIDs (strings), but the frontend was attempting to convert them to integers using `parseInt()`. This caused `NaN` values, breaking the selection logic since `NaN !== NaN` is always true in JavaScript.
+- **Files Modified**:
+  - `apps/web/app/[lang]/[city]/[category]/[providerPage]/page.tsx` — Removed `parseInt(s.id)` conversion
+  - `apps/web/components/provider/LeadPanel.tsx` — Updated service id type from `number` to `string` in interface and state
+  - `apps/web/components/provider/BottomSheetForm.tsx` — Updated service id type from `number` to `string` in interface and state
+  - `apps/web/components/provider/ProviderFullPage.tsx` — Updated ProviderService interface, selectedService state, and all callback functions to use `string` type
+- **Impact**: Fixed the first service chip selection bug where clicking "Маникюр и педикюр на Ваш адрес! 30 EUR/ч" in the provider page request form would not select the service. All service chips now work correctly.
 - No hydration mismatches between server and client rendering
 - Works in local network (laptop + phones) without hardcoded IP addresses
 - Independent of OrbStack network configuration changes
