@@ -16,7 +16,7 @@ interface GalleryImage {
 }
 
 interface ProviderService {
-  id: number;
+  id: string;
   title: string;
   base_price: number | null;
   price_type: string;
@@ -275,16 +275,16 @@ function GallerySection({ gallery, translations }: { gallery: GalleryImage[]; tr
 }
 
 // Services Section
-function ServicesSection({ 
-  services, 
-  translations, 
-  selectedService, 
-  onServiceSelect 
-}: { 
-  services: ProviderService[]; 
+function ServicesSection({
+  services,
+  translations,
+  selectedService,
+  onServiceSelect
+}: {
+  services: ProviderService[];
   translations: Record<string, string>;
-  selectedService: number | null;
-  onServiceSelect: (serviceId: number) => void;
+  selectedService: string | null;
+  onServiceSelect: (serviceId: string) => void;
 }) {
   const t = translations;
 
@@ -440,7 +440,7 @@ function ReviewsSection({ reviews = [], reviewCount, businessName, translations 
 
 export default function ProviderFullPage({ provider, translations, lang }: ProviderFullPageProps) {
   const t = translations;
-  const [selectedService, setSelectedService] = useState<number | null>(null);
+  const [selectedService, setSelectedService] = useState<string | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const formatServicePrice = (service: ProviderService) => {
@@ -456,7 +456,7 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
     return `${service.base_price} ${service.currency}`;
   };
 
-  const handleServiceSelect = (serviceId: number) => {
+  const handleServiceSelect = (serviceId: string) => {
     const isSelecting = selectedService !== serviceId;
     setSelectedService(prev => prev === serviceId ? null : serviceId);
     // Scroll to form only when selecting (not deselecting)

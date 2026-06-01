@@ -14,7 +14,7 @@ interface BottomSheetFormProps {
   providerSlug: string;
   categorySlug: string;
   citySlug: string;
-  services: Array<{ id: number; title: string; base_price: number | null; price_type: string; currency: string }>;
+  services: Array<{ id: string; title: string; base_price: number | null; price_type: string; currency: string }>;
   verificationLevel: number;
   reviewCount: number;
   jobsCompleted: number;
@@ -27,10 +27,10 @@ interface BottomSheetFormProps {
   leadsReceived?: number;
   translations: Record<string, string>;
   lang: string;
-  selectedService?: number | null;
-  onServiceSelect?: (serviceId: number) => void;
+  selectedService?: string | null;
+  onServiceSelect?: (serviceId: string) => void;
   onServiceDeselect?: () => void;
-  onServicePreFill?: (serviceId: number) => string | undefined;
+  onServicePreFill?: (serviceId: string) => string | undefined;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -72,7 +72,7 @@ export default function BottomSheetForm({
   onClose,
 }: BottomSheetFormProps) {
   const t = translations;
-  const [internalSelectedService, setInternalSelectedService] = useState<number | null>(null);
+  const [internalSelectedService, setInternalSelectedService] = useState<string | null>(null);
   const selectedService = externalSelectedService !== undefined ? externalSelectedService : internalSelectedService;
   const setSelectedService = externalOnServiceSelect ? externalOnServiceSelect : setInternalSelectedService;
   const [notes, setNotes] = useState('');

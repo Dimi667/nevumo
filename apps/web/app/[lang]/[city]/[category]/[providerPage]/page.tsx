@@ -163,7 +163,7 @@ export default async function Page(props: {
           verification_level: provider.verification_level ?? 0,
           gallery: provider.gallery ?? [],
           cities: [],
-          services: provider.services.map(s => ({ ...s, id: parseInt(s.id) })),
+          services: provider.services.map(s => ({ ...s, id: s.id })),
           latest_review: null,
         }}
         translations={mergedT}
