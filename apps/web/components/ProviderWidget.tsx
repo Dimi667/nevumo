@@ -732,7 +732,7 @@ export default function ProviderWidget({
                 className={`text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors ${
                   selectedServiceId === service.id
                     ? 'bg-orange-500 text-white border-orange-500'
-                    : 'border-gray-200 text-gray-600 bg-white hover:border-orange-400 hover:text-orange-600'
+                    : 'border-gray-300 text-gray-600 bg-white hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50 active:border-orange-400 active:bg-orange-50'
                 }`}
               >
                 {service.title} · {formatServicePrice(service, t('price_per_hour', undefined, '/h'), t('price_on_request', undefined, 'Price on request'))}
