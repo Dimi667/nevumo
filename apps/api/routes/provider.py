@@ -349,17 +349,6 @@ def list_leads(
     return ProviderLeadsResponse(data=result)
 
 
-@router.patch("/leads/{lead_id}", response_model=LeadStatusUpdateResponse)
-def update_lead_status(
-    lead_id: str,
-    body: LeadStatusUpdateRequest,
-    provider: Provider = Depends(get_current_provider),
-    db: Session = Depends(get_db),
-) -> LeadStatusUpdateResponse:
-    result = change_lead_status(db, lead_id, provider.id, body.status)
-    return LeadStatusUpdateResponse(data=result)
-
-
 @router.patch("/leads/{lead_id}/notes", response_model=LeadProviderNotesUpdateResponse)
 def update_lead_provider_notes(
     lead_id: str,
@@ -385,6 +374,17 @@ def update_lead_provider_notes(
     db.commit()
     
     return LeadProviderNotesUpdateResponse(data={"lead_id": lead_id, "provider_notes": body.provider_notes})
+
+
+@router.patch("/leads/{lead_id}", response_model=LeadStatusUpdateResponse)
+def update_lead_status(
+    lead_id: str,
+    body: LeadStatusUpdateRequest,
+    provider: Provider = Depends(get_current_provider),
+    db: Session = Depends(get_db),
+) -> LeadStatusUpdateResponse:
+    result = change_lead_status(db, lead_id, provider.id, body.status)
+    return LeadStatusUpdateResponse(data=result)
 
 
 # -------------------------
