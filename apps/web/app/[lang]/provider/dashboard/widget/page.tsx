@@ -102,6 +102,7 @@ export default function WidgetPage() {
   }
 
   const publicUrl = qrData.public_url;
+  const shareUrl = qrData.canonical_url;
 
   return (
     <div className="space-y-6 max-w-2xl">
@@ -233,7 +234,7 @@ export default function WidgetPage() {
         <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('widget_share_title')}</h2>
         <div className="flex gap-3">
           <button
-            onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(publicUrl)}`, '_blank')}
+            onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank')}
             className="bg-[#1877F2] text-white rounded-lg px-5 py-2.5 flex items-center gap-2 hover:opacity-90 transition-opacity"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -244,7 +245,7 @@ export default function WidgetPage() {
           <button
             onClick={async () => {
               try {
-                await navigator.clipboard.writeText(publicUrl);
+                await navigator.clipboard.writeText(shareUrl);
                 setBioCopied(true);
                 setTimeout(() => setBioCopied(false), 2000);
               } catch (e) {
@@ -263,7 +264,7 @@ export default function WidgetPage() {
           <button
             onClick={async () => {
               try {
-                await navigator.clipboard.writeText(publicUrl);
+                await navigator.clipboard.writeText(shareUrl);
                 setTiktokCopied(true);
                 setTimeout(() => setTiktokCopied(false), 2000);
               } catch (e) {
