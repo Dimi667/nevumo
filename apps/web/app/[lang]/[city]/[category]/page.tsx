@@ -38,6 +38,7 @@ interface ProviderService {
   basePrice: number | null;
   currency: string;
   description: string | null;
+  category_slug: string | null;
 }
 
 interface EnrichedProvider {
@@ -293,6 +294,7 @@ async function getEnrichedProviders(
         basePrice: s.base_price,
         currency: s.currency ?? 'PLN',
         description: s.description ?? null,
+        category_slug: s.category_slug,
       })),
   })) satisfies EnrichedProvider[];
 
