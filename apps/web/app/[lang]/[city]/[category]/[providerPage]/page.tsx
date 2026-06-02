@@ -4,7 +4,7 @@ import { fetchTranslations } from '@/lib/ui-translations';
 import ProviderWidget from '@/components/ProviderWidget';
 import ProviderFullPage from '@/components/provider/ProviderFullPage';
 import ClaimProfileBanner from '@/components/ClaimProfileBanner';
-import { generateHreflangAlternates, generateLocalBusinessJsonLd } from '@/lib/seo';
+import { generateHreflangAlternates, generateLocalBusinessJsonLd, getBaseIcons } from '@/lib/seo';
 import { JsonLd } from '@/components/JsonLd';
 import { getCurrency, formatCurrency } from '@/lib/currency';
 
@@ -64,6 +64,7 @@ export async function generateMetadata(props: {
         description,
         url: canonicalUrl,
       },
+      ...getBaseIcons(),
     };
   } catch {
     return { title: 'Nevumo' };

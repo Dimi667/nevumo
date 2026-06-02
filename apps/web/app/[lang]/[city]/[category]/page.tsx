@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug, ServiceOut } from '@/lib/api';
-import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd } from '@/lib/seo';
+import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd, getBaseIcons } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
 import { JsonLd } from '@/components/JsonLd';
@@ -262,6 +262,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
     },
+    ...getBaseIcons(),
   };
 }
 

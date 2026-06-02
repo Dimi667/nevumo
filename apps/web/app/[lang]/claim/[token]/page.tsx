@@ -1,5 +1,5 @@
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
-import { generateHreflangAlternates } from '@/lib/seo';
+import { generateHreflangAlternates, getBaseIcons } from '@/lib/seo';
 import { Metadata } from 'next';
 
 interface PageProps {
@@ -17,6 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       languages: generateHreflangAlternates(`/claim/${token}`),
     },
     robots: { index: false, follow: true },
+    ...getBaseIcons(),
   };
 }
 

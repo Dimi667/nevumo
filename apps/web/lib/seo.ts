@@ -5,6 +5,19 @@ import { getCurrency } from '@/lib/currency';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://nevumo.com';
 
 /**
+ * Returns base icon configuration for all pages.
+ * Use this in generateMetadata to ensure consistent favicon across all pages.
+ */
+export function getBaseIcons() {
+  return {
+    icon: '/nevumo_favicon.svg',
+    icons: {
+      apple: '/icons/icon-192x192.png',
+    },
+  };
+}
+
+/**
  * Generates hreflang alternate URLs for all supported languages.
  * @param path - The path after the language prefix, e.g. "/sofia/massage" or "/"
  */
