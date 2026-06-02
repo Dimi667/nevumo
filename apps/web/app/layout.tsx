@@ -54,7 +54,6 @@ export const metadata: Metadata = {
     title: 'Nevumo',
   },
   icons: {
-    icon: '/icon.svg',
     apple: '/icons/icon-192x192.png',
   },
 };
@@ -83,7 +82,6 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <head>
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
