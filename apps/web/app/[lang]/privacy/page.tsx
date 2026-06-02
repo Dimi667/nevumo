@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
 import { fetchTranslations, t } from '@/lib/ui-translations';
-import { generateHreflangAlternates, getBaseIcons } from '@/lib/seo';
+import { generateHreflangAlternates } from '@/lib/seo';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -36,7 +36,6 @@ export async function generateMetadata({ params }: PageProps) {
       locale: normalizedLang,
       type: 'website',
     },
-    ...getBaseIcons(),
   };
 }
 

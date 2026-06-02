@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { getDictionary } from "@/lib/locales";
 import { fetchTranslations, t } from "@/lib/ui-translations";
-import { generateHreflangAlternates, getBaseIcons } from "@/lib/seo";
+import { generateHreflangAlternates } from "@/lib/seo";
 import { LoginCards } from "./LoginCards";
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
@@ -30,7 +30,6 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
       siteName: 'Nevumo',
       type: 'website',
     },
-    ...getBaseIcons(),
   };
 }
 

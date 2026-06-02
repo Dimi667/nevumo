@@ -1,4 +1,4 @@
-import { generateHreflangAlternates, getBaseIcons } from '@/lib/seo';
+import { generateHreflangAlternates } from '@/lib/seo';
 import { BarChart2, Search, LayoutTemplate, QrCode, Star, BadgeCheck } from 'lucide-react';
 import CtxCapture from '@/components/CtxCapture';
 import Link from 'next/link';
@@ -29,7 +29,6 @@ export async function generateMetadata({ params }: PageProps) {
       index: true,
       follow: true,
     },
-    ...getBaseIcons(),
   };
 }
 

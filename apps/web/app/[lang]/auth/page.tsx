@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import LoginClient from "./LoginClient";
 import { fetchTranslations } from "@/lib/ui-translations";
-import { getBaseIcons } from "@/lib/seo";
 
 export async function generateMetadata({
   params,
@@ -17,7 +16,6 @@ export async function generateMetadata({
     description,
     openGraph: { title, description },
     robots: { index: false, follow: false },
-    ...getBaseIcons(),
   };
 }
 

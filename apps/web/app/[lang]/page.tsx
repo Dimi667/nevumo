@@ -1,5 +1,5 @@
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
-import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, getBaseIcons } from '@/lib/seo';
+import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { getCityBySlug } from '@/lib/api';
 import { resolveDefaultCity } from '@/lib/default-city';
@@ -63,7 +63,6 @@ export async function generateMetadata({ params }: PageProps) {
       locale: lang,
       type: 'website',
     },
-    ...getBaseIcons(),
   };
 }
 

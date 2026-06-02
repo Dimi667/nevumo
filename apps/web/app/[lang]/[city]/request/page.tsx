@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { generateHreflangAlternates, getBaseIcons } from '@/lib/seo';
+import { generateHreflangAlternates } from '@/lib/seo';
 import { Metadata } from 'next';
 
 interface Props {
@@ -17,7 +17,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       languages: generateHreflangAlternates(`/${city}/request`),
     },
     robots: { index: false, follow: true },
-    ...getBaseIcons(),
   };
 }
 

@@ -8,7 +8,6 @@ import {
   LANGUAGE_HEADER_NAME,
   normalizeLanguage,
 } from "../lib/locales";
-import { getBaseIcons } from "@/lib/seo";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 
@@ -54,7 +53,6 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
     title: 'Nevumo',
   },
-  ...getBaseIcons(),
 };
 
 export function generateViewport() {

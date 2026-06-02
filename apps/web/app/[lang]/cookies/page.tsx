@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
 import { t, type TranslationDict } from '@/lib/ui-translations';
-import { generateHreflangAlternates, getBaseIcons } from '@/lib/seo';
+import { generateHreflangAlternates } from '@/lib/seo';
 import { ReactNode } from 'react';
 
 interface PageProps {
@@ -51,7 +51,6 @@ export async function generateMetadata({ params }: PageProps) {
       locale: normalizedLang,
       type: 'website',
     },
-    ...getBaseIcons(),
   };
 }
 

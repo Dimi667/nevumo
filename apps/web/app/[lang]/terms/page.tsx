@@ -2,7 +2,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
 import { t, type TranslationDict } from '@/lib/ui-translations';
-import { getBaseIcons } from '@/lib/seo';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -43,7 +42,6 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title,
     description,
-    ...getBaseIcons(),
   };
 }
 
