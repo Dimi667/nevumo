@@ -54,6 +54,7 @@ export const metadata: Metadata = {
     title: 'Nevumo',
   },
   icons: {
+    icon: '/nevumo_favicon.svg',
     apple: '/icons/icon-192x192.png',
   },
 };
