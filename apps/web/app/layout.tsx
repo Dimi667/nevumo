@@ -10,6 +10,7 @@ import {
 } from "../lib/locales";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
+import { FaviconManager } from "@/components/FaviconManager";
 
 // Глобалните стилове с Tailwind
 import "./globals.css";
@@ -111,6 +112,7 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f9f9f9]`}
       >
+        <FaviconManager />
         <GoogleAnalytics />
         {children}
         <CookieConsentBanner lang={lang} />
