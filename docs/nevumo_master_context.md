@@ -1328,3 +1328,30 @@ git push nevumo-git main  # архив на SSD
 - **PWA Етап 2** — Push notifications само за провайдери: нова таблица push_subscriptions, Web Push протокол, интеграция с lead creation flow. Старт след валидиране на PWA install adoption от page_events данни.
 - **PWA Етап 3** — Push notifications за клиенти: нотификация когато провайдер отговори на заявка.
 - **Static Files URL Standardization** — Extend STATIC_FILES_BASE_URL pattern to other services that generate public URLs (e.g., QR codes, document uploads). Current implementation is specific to provider profile images; future services should use the same environment variable pattern for consistency across local and production environments.
+
+## Favicon Issue Log
+
+**Status:** UNRESOLVED for Safari iOS. Working on: Chrome, Edge, Orion desktop, Safari desktop.
+
+### What was tried (all failed for Safari iOS):
+
+1. SVG favicon via `<link rel="icon" type="image/svg+xml">` — broke Safari desktop too
+2. PNG favicons (32x32, 16x16) via manual `<head>` link tags — works only on full page load, disappears on client-side navigation
+3. `favicon.ico` in `apps/web/app/` (Next.js file convention) — generates hashed URLs like `/icon.png?icon.d96e364e.png`, inconsistent
+4. `icons` field in root layout `metadata` export — overridden by child pages with `generateMetadata`
+5. Airbnb pattern: multiple apple-touch-icon sizes (76, 120, 152, 180) via manual `<head>` — same problem: disappears on client-side navigation
+6. `FaviconManager` client component with `useEffect` + `usePathname` — did not fix Safari iOS
+
+### Root cause identified:
+Next.js App Router: child pages with `generateMetadata` override `icons` from root layout metadata during client-side navigation. Manual `<head>` tags also disappear on client-side navigation.
+
+### What works:
+- Full page load (direct URL) → favicon shows
+- Chrome, Edge, Orion: always show favicon regardless
+
+### Files created/modified:
+- `apps/web/public/favicon.ico` (5238 bytes, proper ICO)
+- `apps/web/public/favicon-32x32.png`, `favicon-16x16.png`
+- `apps/web/public/apple-touch-icon.png`, `apple-touch-icon-76x76.png`, `apple-touch-icon-120x120.png`, `apple-touch-icon-152x152.png`
+- `apps/web/scripts/generate-favicons.js`
+- `apps/web/components/FaviconManager.tsx`
