@@ -12,6 +12,7 @@ import {
 } from "./lib/locales";
 
 const STATIC_EXT_PATTERN = /\.(svg|png|jpg|jpeg|ico|css|js|txt|xml|json)$/i;
+const METADATA_ROUTE_PATTERN = /^\/(icon|apple-icon|opengraph-image|twitter-image)(-[\w-]+)?(\/.*)?$/;
 
 /**
  * Next.js 16 Proxy (formerly Middleware)
@@ -25,7 +26,8 @@ export default function proxy(request: NextRequest) {
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api/") ||
     /^\/[a-z]{2,5}\/api\//.test(pathname) ||
-    STATIC_EXT_PATTERN.test(pathname)
+    STATIC_EXT_PATTERN.test(pathname) ||
+    METADATA_ROUTE_PATTERN.test(pathname)
   ) {
     const response = NextResponse.next();
     response.headers.set('x-pathname', pathname);

@@ -30,6 +30,10 @@ export const metadata: Metadata = {
     template: '%s | Nevumo',
   },
   description: 'Find and book local services. Compare providers, read reviews, and request quotes.',
+  icons: {
+    icon: '/icons/favicon.png',
+    apple: '/icons/apple-touch-icon.png',
+  },
   openGraph: {
     type: 'website',
     siteName: 'Nevumo',
