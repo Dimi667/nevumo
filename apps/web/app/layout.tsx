@@ -53,6 +53,18 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
     title: 'Nevumo',
   },
+  icons: {
+    apple: [
+      { url: '/apple-touch-icon.png' },
+      { url: '/apple-touch-icon-76x76.png', sizes: '76x76' },
+      { url: '/apple-touch-icon-120x120.png', sizes: '120x120' },
+      { url: '/apple-touch-icon-152x152.png', sizes: '152x152' },
+      { url: '/apple-touch-icon.png', sizes: '180x180' },
+    ],
+    icon: [
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+  },
 };
 
 export function generateViewport() {
@@ -79,13 +91,6 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <head>
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" sizes="192x192" type="image/png" href="/favicon-32x32.png" />
-        <link rel="shortcut icon" sizes="76x76" type="image/png" href="/favicon-32x32.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
