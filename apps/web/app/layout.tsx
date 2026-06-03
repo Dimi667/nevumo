@@ -95,6 +95,7 @@ export default async function RootLayout({
 `,
           }}
         />
+        <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f9f9f9]`}
