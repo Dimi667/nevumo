@@ -12,6 +12,9 @@ const output32 = path.join(__dirname, '../public/favicon-32x32.png');
 const output16 = path.join(__dirname, '../public/favicon-16x16.png');
 const outputApple = path.join(__dirname, '../public/apple-touch-icon.png');
 const outputApplePre = path.join(__dirname, '../public/apple-touch-icon-precomposed.png');
+const outputApple76 = path.join(__dirname, '../public/apple-touch-icon-76x76.png');
+const outputApple120 = path.join(__dirname, '../public/apple-touch-icon-120x120.png');
+const outputApple152 = path.join(__dirname, '../public/apple-touch-icon-152x152.png');
 const outputIco = path.join(__dirname, '../public/favicon.ico');
 
 async function generateFavicons() {
@@ -44,6 +47,27 @@ async function generateFavicons() {
       .toFile(outputApplePre);
     console.log('Generated apple-touch-icon-precomposed.png');
 
+    // Generate 76x76 apple-touch-icon
+    await sharp(svgPath)
+      .resize(76, 76)
+      .png()
+      .toFile(outputApple76);
+    console.log('Generated apple-touch-icon-76x76.png');
+
+    // Generate 120x120 apple-touch-icon
+    await sharp(svgPath)
+      .resize(120, 120)
+      .png()
+      .toFile(outputApple120);
+    console.log('Generated apple-touch-icon-120x120.png');
+
+    // Generate 152x152 apple-touch-icon
+    await sharp(svgPath)
+      .resize(152, 152)
+      .png()
+      .toFile(outputApple152);
+    console.log('Generated apple-touch-icon-152x152.png');
+
     // Generate favicon.ico using to-ico (embed 16x16 and 32x32)
     const buffer16 = fs.readFileSync(output16);
     const buffer32 = fs.readFileSync(output32);
@@ -56,11 +80,17 @@ async function generateFavicons() {
     const size16 = fs.statSync(output16).size;
     const sizeApple = fs.statSync(outputApple).size;
     const sizeApplePre = fs.statSync(outputApplePre).size;
+    const sizeApple76 = fs.statSync(outputApple76).size;
+    const sizeApple120 = fs.statSync(outputApple120).size;
+    const sizeApple152 = fs.statSync(outputApple152).size;
     const sizeIco = fs.statSync(outputIco).size;
     console.log(`favicon-32x32.png: ${size32} bytes`);
     console.log(`favicon-16x16.png: ${size16} bytes`);
     console.log(`apple-touch-icon.png: ${sizeApple} bytes`);
     console.log(`apple-touch-icon-precomposed.png: ${sizeApplePre} bytes`);
+    console.log(`apple-touch-icon-76x76.png: ${sizeApple76} bytes`);
+    console.log(`apple-touch-icon-120x120.png: ${sizeApple120} bytes`);
+    console.log(`apple-touch-icon-152x152.png: ${sizeApple152} bytes`);
     console.log(`favicon.ico: ${sizeIco} bytes`);
 
     if (sizeIco < 3000) {

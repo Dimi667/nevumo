@@ -79,6 +79,13 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <head>
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" sizes="192x192" type="image/png" href="/favicon-32x32.png" />
+        <link rel="shortcut icon" sizes="76x76" type="image/png" href="/favicon-32x32.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -95,7 +102,6 @@ export default async function RootLayout({
 `,
           }}
         />
-        <link rel="shortcut icon" href="/favicon.ico" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f9f9f9]`}
