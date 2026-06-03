@@ -30,10 +30,6 @@ export const metadata: Metadata = {
     template: '%s | Nevumo',
   },
   description: 'Find and book local services. Compare providers, read reviews, and request quotes.',
-  icons: {
-    icon: '/icons/favicon.png?v=2',
-    apple: '/icons/apple-touch-icon.png?v=2',
-  },
   openGraph: {
     type: 'website',
     siteName: 'Nevumo',
@@ -83,6 +79,8 @@ export default async function RootLayout({
   return (
     <html lang={lang}>
       <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
