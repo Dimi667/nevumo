@@ -108,6 +108,12 @@ export default async function RootLayout({
 `,
           }}
         />
+        <link key="apple-touch-icon" rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link key="apple-touch-icon-76" rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+        <link key="apple-touch-icon-120" rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+        <link key="apple-touch-icon-152" rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+        <link key="apple-touch-icon-180" rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link key="favicon-icon" rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f9f9f9]`}
