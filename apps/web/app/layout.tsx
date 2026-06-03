@@ -31,8 +31,8 @@ export const metadata: Metadata = {
   },
   description: 'Find and book local services. Compare providers, read reviews, and request quotes.',
   icons: {
-    icon: '/icons/favicon.png',
-    apple: '/icons/apple-touch-icon.png',
+    icon: '/icons/favicon.png?v=2',
+    apple: '/icons/apple-touch-icon.png?v=2',
   },
   openGraph: {
     type: 'website',
