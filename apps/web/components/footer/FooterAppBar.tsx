@@ -59,11 +59,11 @@ export default function FooterAppBar({ lang, installLabel, shareLabel }: FooterA
 
   return (
     <>
-      <div className="flex items-center justify-center gap-3 py-3">
+      <div className="flex items-center justify-center gap-3 py-4">
         {(canInstall || isIOS) && (
           <div className="md:hidden flex items-center gap-3">
             <button
-              className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors cursor-pointer bg-transparent border-0 p-0"
+              className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-gray-400 rounded-full px-4 py-1.5 transition-colors cursor-pointer bg-transparent"
               onClick={() => {
                 if (isIOS) {
                   setShowIOSSheet(true)
@@ -75,11 +75,10 @@ export default function FooterAppBar({ lang, installLabel, shareLabel }: FooterA
               <Smartphone size={16} />
               {installLabel}
             </button>
-            <span className="w-px h-4 bg-gray-200" />
           </div>
         )}
         <button
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors cursor-pointer bg-transparent border-0 p-0"
+          className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-gray-400 rounded-full px-4 py-1.5 transition-colors cursor-pointer bg-transparent"
           onClick={handleShareClick}
         >
           {copied ? <Check size={16} /> : <Link2 size={16} />}

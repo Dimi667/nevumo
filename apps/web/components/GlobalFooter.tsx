@@ -114,12 +114,6 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
     <footer className={footerClasses} data-global-footer>
       <div className={`flex ${footerFlexClasses}`}>
         {!minimal && (
-          <div className="text-gray-600 text-sm">
-            © {currentYear} Nevumo
-          </div>
-        )}
-
-        {!minimal && (
           <>
             <FooterAppBar lang={lang} installLabel={installLabel} shareLabel={shareLabel} />
             <div className="flex flex-wrap justify-center gap-2 text-sm">
@@ -229,6 +223,12 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
             </div>
           )}
         </div>
+
+        {!minimal && (
+          <div className="text-gray-600 text-sm">
+            © {currentYear} Nevumo
+          </div>
+        )}
       </div>
 
       {/* Legal Modal */}
