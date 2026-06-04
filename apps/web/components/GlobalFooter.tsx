@@ -12,6 +12,7 @@ import {
 } from '@/lib/locales';
 import { CookieSettingsLink } from '@/components/ui/CookieSettingsLink';
 import LegalModal from '@/components/auth/LegalModal';
+import FooterAppBar from '@/components/footer/FooterAppBar';
 
 interface GlobalFooterProps {
   lang: string;
@@ -106,6 +107,9 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
     ? 'justify-end'
     : 'justify-between items-center flex-wrap gap-4';
 
+  const installLabel = t('install_app', 'Install the app')
+  const shareLabel = t('share_page', 'Share')
+
   return (
     <footer className={footerClasses} data-global-footer>
       <div className={`flex ${footerFlexClasses}`}>
@@ -116,45 +120,48 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
         )}
 
         {!minimal && (
-          <div className="flex flex-wrap justify-center gap-2 text-sm">
-            <button
-              onClick={() => { setLegalModalType('privacy'); setLegalModalOpen(true); }}
-              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
-            >
-              {t('privacy_policy_link', 'Privacy Policy')}
-            </button>
-            <button
-              onClick={() => { setLegalModalType('cookies'); setLegalModalOpen(true); }}
-              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
-            >
-              {t('cookies_link', 'Cookie Policy')}
-            </button>
-            <button
-              onClick={() => { setLegalModalType('terms'); setLegalModalOpen(true); }}
-              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
-            >
-              {t('terms_link', 'Terms & Conditions')}
-            </button>
-            <button
-              onClick={() => { setLegalModalType('terms-provider'); setLegalModalOpen(true); }}
-              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
-            >
-              {t('provider_terms_link', 'Terms for Providers')}
-            </button>
-            <button
-              onClick={() => { setLegalModalType('withdrawal'); setLegalModalOpen(true); }}
-              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
-            >
-              {t('withdrawal_link', 'Withdrawal Form')}
-            </button>
-            <button
-              onClick={() => { setLegalModalType('contact-dsa'); setLegalModalOpen(true); }}
-              className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
-            >
-              {t('contact_dsa_link', 'DSA Contact Point')}
-            </button>
-            <CookieSettingsLink lang={lang} />
-          </div>
+          <>
+            <FooterAppBar lang={lang} installLabel={installLabel} shareLabel={shareLabel} />
+            <div className="flex flex-wrap justify-center gap-2 text-sm">
+              <button
+                onClick={() => { setLegalModalType('privacy'); setLegalModalOpen(true); }}
+                className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+              >
+                {t('privacy_policy_link', 'Privacy Policy')}
+              </button>
+              <button
+                onClick={() => { setLegalModalType('cookies'); setLegalModalOpen(true); }}
+                className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+              >
+                {t('cookies_link', 'Cookie Policy')}
+              </button>
+              <button
+                onClick={() => { setLegalModalType('terms'); setLegalModalOpen(true); }}
+                className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+              >
+                {t('terms_link', 'Terms & Conditions')}
+              </button>
+              <button
+                onClick={() => { setLegalModalType('terms-provider'); setLegalModalOpen(true); }}
+                className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+              >
+                {t('provider_terms_link', 'Terms for Providers')}
+              </button>
+              <button
+                onClick={() => { setLegalModalType('withdrawal'); setLegalModalOpen(true); }}
+                className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+              >
+                {t('withdrawal_link', 'Withdrawal Form')}
+              </button>
+              <button
+                onClick={() => { setLegalModalType('contact-dsa'); setLegalModalOpen(true); }}
+                className="text-gray-700 transition-colors hover:text-orange-600 bg-transparent border-none cursor-pointer"
+              >
+                {t('contact_dsa_link', 'DSA Contact Point')}
+              </button>
+              <CookieSettingsLink lang={lang} />
+            </div>
+          </>
         )}
 
         <div className="relative ml-auto" ref={dropdownRef}>
