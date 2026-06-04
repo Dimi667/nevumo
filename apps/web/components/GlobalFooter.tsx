@@ -158,77 +158,78 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
           </>
         )}
 
-        <div className="relative ml-auto" ref={dropdownRef}>
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-expanded={isOpen}
-            aria-haspopup="listbox"
-            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md border border-gray-200"
-          >
-            <span>{LANGUAGE_FLAGS[lang] || '🌐'}</span>
-            <span>{LANGUAGE_DISPLAY_NAMES[lang] || lang}</span>
-            <svg
-              className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          {isOpen && (
-            <div className="absolute bottom-full right-0 mb-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-              <div className="p-3 border-b border-gray-100">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  aria-label="Search language"
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div className="max-h-64 overflow-y-auto" role="listbox">
-                {filteredLanguages.map((langCode) => {
-                  const isActive = langCode === lang;
-                  return (
-                    <button
-                      key={langCode}
-                      type="button"
-                      lang={langCode}
-                      onClick={() => handleLanguageChange(langCode)}
-                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left ${
-                        isActive
-                          ? 'bg-gray-100 font-medium text-gray-900'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                      role="option"
-                      aria-selected={isActive}
-                    >
-                      <span>{LANGUAGE_FLAGS[langCode] || '🌐'}</span>
-                      <span>{LANGUAGE_DISPLAY_NAMES[langCode] || langCode}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+        <div className="flex items-center justify-between w-full">
+          {!minimal ? (
+            <div className="text-gray-600 text-sm">© {currentYear} Nevumo</div>
+          ) : (
+            <div />
           )}
-        </div>
+          <div className="relative" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-expanded={isOpen}
+              aria-haspopup="listbox"
+              className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md border border-gray-200"
+            >
+              <span>{LANGUAGE_FLAGS[lang] || '🌐'}</span>
+              <span>{LANGUAGE_DISPLAY_NAMES[lang] || lang}</span>
+              <svg
+                className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
 
-        {!minimal && (
-          <div className="text-gray-600 text-sm">
-            © {currentYear} Nevumo
+            {isOpen && (
+              <div className="absolute bottom-full right-0 mb-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                <div className="p-3 border-b border-gray-100">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    aria-label="Search language"
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+
+                <div className="max-h-64 overflow-y-auto" role="listbox">
+                  {filteredLanguages.map((langCode) => {
+                    const isActive = langCode === lang;
+                    return (
+                      <button
+                        key={langCode}
+                        type="button"
+                        lang={langCode}
+                        onClick={() => handleLanguageChange(langCode)}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left ${
+                          isActive
+                            ? 'bg-gray-100 font-medium text-gray-900'
+                            : 'text-gray-700 hover:bg-gray-50'
+                        }`}
+                        role="option"
+                        aria-selected={isActive}
+                      >
+                        <span>{LANGUAGE_FLAGS[langCode] || '🌐'}</span>
+                        <span>{LANGUAGE_DISPLAY_NAMES[langCode] || langCode}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Legal Modal */}

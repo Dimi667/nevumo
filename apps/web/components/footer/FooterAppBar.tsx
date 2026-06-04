@@ -1,10 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Smartphone, Link2, Check } from 'lucide-react'
-import { usePWAInstall } from '@/hooks/usePWAInstall'
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt'
 import { getAuthUser } from '@/lib/auth-store'
+
+// Type definition for BeforeInstallPromptEvent (not in standard DOM types)
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+  prompt(): Promise<void>;
+}
+
+// Augment WindowEventMap for TypeScript
+declare global {
+  interface WindowEventMap {
+    beforeinstallprompt: BeforeInstallPromptEvent;
+    appinstalled: Event;
+  }
+}
 
 interface FooterAppBarProps {
   lang: string
@@ -35,9 +49,38 @@ function detectRole(): 'client' | 'provider' {
 
 export default function FooterAppBar({ lang, installLabel, shareLabel }: FooterAppBarProps) {
   const role = detectRole()
-  const { canInstall, isIOS, showPrompt } = usePWAInstall()
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+  const [canInstall, setCanInstall] = useState(false)
+  const [isIOS, setIsIOS] = useState(false)
   const [showIOSSheet, setShowIOSSheet] = useState(false)
   const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    // If already installed — hide button
+    const installed = localStorage.getItem('pwa_installed') === 'true'
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    if (installed || isStandalone) return
+
+    // iOS detection (no beforeinstallprompt on iOS)
+    const ua = navigator.userAgent.toLowerCase()
+    const ios = /iphone|ipad|ipod/.test(ua) && !/crios/.test(ua)
+    if (ios) {
+      setIsIOS(true)
+      setCanInstall(true)
+      return
+    }
+
+    // Android / Chrome desktop — listen for beforeinstallprompt
+    const handler = (e: Event) => {
+      e.preventDefault()
+      setDeferredPrompt(e as BeforeInstallPromptEvent)
+      setCanInstall(true)
+    }
+    window.addEventListener('beforeinstallprompt', handler)
+    return () => window.removeEventListener('beforeinstallprompt', handler)
+  }, [])
 
   const handleShareClick = async () => {
     if (typeof navigator !== 'undefined' && navigator.share) {
@@ -67,8 +110,13 @@ export default function FooterAppBar({ lang, installLabel, shareLabel }: FooterA
               onClick={() => {
                 if (isIOS) {
                   setShowIOSSheet(true)
-                } else if (canInstall) {
-                  showPrompt()
+                } else if (deferredPrompt) {
+                  deferredPrompt.prompt()
+                  deferredPrompt.userChoice.then(() => {
+                    setDeferredPrompt(null)
+                    setCanInstall(false)
+                    localStorage.setItem('pwa_installed', 'true')
+                  })
                 }
               }}
             >
