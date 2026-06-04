@@ -112,10 +112,15 @@ export default function FooterAppBar({ lang, installLabel, shareLabel }: FooterA
                   setShowIOSSheet(true)
                 } else if (deferredPrompt) {
                   deferredPrompt.prompt()
-                  deferredPrompt.userChoice.then(() => {
+                  deferredPrompt.userChoice.then((choiceResult) => {
                     setDeferredPrompt(null)
                     setCanInstall(false)
-                    localStorage.setItem('pwa_installed', 'true')
+                    if (choiceResult.outcome === 'accepted') {
+                      localStorage.setItem('pwa_installed', 'true')
+                    }
+                    // If dismissed: do NOT write to localStorage
+                    // Button will reappear on next page load when
+                    // browser fires beforeinstallprompt again
                   })
                 }
               }}
