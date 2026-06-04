@@ -63,12 +63,12 @@ export default function FooterAppBar({ lang, installLabel, shareLabel }: FooterA
         {(canInstall || isIOS) && (
           <div className="md:hidden flex items-center gap-3">
             <button
-              className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors cursor-pointer bg-transparent border-0 p-0"
+              className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors cursor-pointer bg-transparent border-0 p-0"
               onClick={() => {
-                if (canInstall) {
-                  showPrompt()
-                } else if (isIOS) {
+                if (isIOS) {
                   setShowIOSSheet(true)
+                } else if (canInstall) {
+                  showPrompt()
                 }
               }}
             >
@@ -79,7 +79,7 @@ export default function FooterAppBar({ lang, installLabel, shareLabel }: FooterA
           </div>
         )}
         <button
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition-colors cursor-pointer bg-transparent border-0 p-0"
+          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors cursor-pointer bg-transparent border-0 p-0"
           onClick={handleShareClick}
         >
           {copied ? <Check size={16} /> : <Link2 size={16} />}
