@@ -95,6 +95,17 @@ export default function FooterAppBar({ lang, installLabel, shareLabel }: FooterA
   const pt = (key: string, fallback: string): string =>
     pwaDict[key] || fallback
 
+  const handleIOSDismiss = async (closeFn: () => void) => {
+    try {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        await navigator.share({ url: window.location.href })
+      }
+    } catch {
+      // ignore AbortError silently
+    }
+    closeFn()
+  }
+
   const handleShareClick = async () => {
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
@@ -192,7 +203,7 @@ export default function FooterAppBar({ lang, installLabel, shareLabel }: FooterA
             </div>
             <div className="sticky bottom-0 bg-white pt-3">
               <button
-                onClick={() => setShowIOSSheet(false)}
+                onClick={() => handleIOSDismiss(() => setShowIOSSheet(false))}
                 className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-semibold text-white transition hover:bg-orange-600"
               >
                 {pt('dismiss_button', 'Got it')}
