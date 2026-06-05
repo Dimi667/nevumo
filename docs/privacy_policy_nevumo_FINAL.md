@@ -119,6 +119,7 @@ We use cookies and browser storage to operate the platform. Full details are in 
 | `nevumo_phone` | localStorage | Phone number autofill convenience | Indefinite | Legitimate interest |
 | `nevumo_intent` | localStorage | UX role preference at login | Session | Functional |
 | `nevumo_city_preference` | localStorage | Remembers your preferred city | Indefinite | Functional |
+| `nevumo_last_url` | localStorage | Last visited page for PWA smart redirect | Indefinite | Functional |
 | `nevumo_auth_email` | sessionStorage | Email during registration flow | Session (tab) | Contract |
 
 ---
