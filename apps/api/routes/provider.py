@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from apps.api.config import settings
 from apps.api.dependencies import get_current_provider, get_db, get_current_user
-from apps.api.models import Provider, User
+from apps.api.models import Provider, User, Lead
 from apps.api.schemas import (
     AddCityRequest,
     ClaimProviderRequest,
@@ -29,6 +29,7 @@ from apps.api.schemas import (
     ErrorResponse,
 )
 from apps.api.services import provider_service
+from apps.api.services.email_service import email_service
 from apps.api.services.provider_service import (
     add_city,
     add_service,
@@ -384,6 +385,21 @@ def update_lead_status(
     db: Session = Depends(get_db),
 ) -> LeadStatusUpdateResponse:
     result = change_lead_status(db, lead_id, provider.id, body.status)
+    try:
+        lead = db.query(Lead).filter(Lead.id == lead_id).first()
+        if lead and lead.client_id:
+            client_user = db.query(User).filter(User.id == lead.client_id).first()
+            if client_user and client_user.email:
+                dashboard_url = f"{settings.APP_URL}/client/dashboard"
+                email_service.send_lead_status_notification(
+                    to_email=client_user.email,
+                    new_status=body.status,
+                    category=str(lead.category_id),
+                    city=str(lead.city_id),
+                    dashboard_url=dashboard_url,
+                )
+    except Exception:
+        pass
     return LeadStatusUpdateResponse(data=result)
 
 
@@ -619,6 +635,14 @@ def claim_provider_endpoint(
 ) -> dict:
     """Claim a provider profile using a claim token."""
     provider = claim_provider(body.claim_token, current_user, db)
+    try:
+        if provider and current_user.email:
+            email_service.send_article14_notification(
+                provider_email=current_user.email,
+                provider_name=provider.business_name or current_user.email,
+            )
+    except Exception:
+        pass
     return {
         "success": True,
         "data": {

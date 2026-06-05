@@ -18,41 +18,39 @@ class EmailService:
     """
 
     def __init__(self) -> None:
-        self._enabled = bool(getattr(settings, 'SMTP_HOST', None) or
-                            getattr(settings, 'EMAIL_API_KEY', None))
-        self._from_email = getattr(settings, 'FROM_EMAIL', 'noreply@nevumo.com')
+        self._api_key = getattr(settings, 'RESEND_API_KEY', '')
+        self._from_email = getattr(settings, 'FROM_EMAIL', 'Nevumo <noreply@nevumo.com>')
+        self._legal_email = getattr(settings, 'LEGAL_EMAIL', 'legal@nevumo.com')
         self._app_url = getattr(settings, 'APP_URL', 'https://nevumo.com')
+        self._enabled = bool(self._api_key)
+        if self._enabled:
+            import resend
+            resend.api_key = self._api_key
 
     def _send_email(
         self,
         to_email: str,
         subject: str,
-        text_body: str,
-        html_body: Optional[str] = None
+        html_body: str,
+        text_body: Optional[str] = None,
     ) -> bool:
-        """Send email via configured provider.
-
-        Returns True if email was sent successfully, False otherwise.
-        This is idempotent - duplicate sends are safe.
-        """
         if not self._enabled:
-            # Log to console in development
-            print(f"[EMAIL] To: {to_email}")
-            print(f"[EMAIL] Subject: {subject}")
-            print(f"[EMAIL] Body: {text_body[:200]}...")
+            print(f"[EMAIL] To: {to_email} | Subject: {subject}")
             return True
-
-        # TODO: Implement actual email sending via SMTP or email API
-        # This is a minimal abstraction that can be extended later
         try:
-            # Placeholder for actual email implementation
-            # if hasattr(settings, 'EMAIL_API_KEY'):
-            #     return self._send_via_api(to_email, subject, text_body, html_body)
-            # else:
-            #     return self._send_via_smtp(to_email, subject, text_body, html_body)
+            import resend
+            params: resend.Emails.SendParams = {
+                "from": self._from_email,
+                "to": [to_email],
+                "subject": subject,
+                "html": html_body,
+            }
+            if text_body:
+                params["text"] = text_body
+            resend.Emails.send(params)
             return True
         except Exception as e:
-            print(f"[EMAIL ERROR] Failed to send email to {to_email}: {e}")
+            print(f"[EMAIL ERROR] Failed to send to {to_email}: {e}")
             return False
 
     def send_review_reply_notification(
@@ -257,6 +255,132 @@ This withdrawal form was submitted via the Nevumo online form.
             text_body=text_body,
             html_body=html_body
         )
+
+    def send_password_reset_email(self, email: str, reset_url: str) -> bool:
+        subject = "Reset your Nevumo password"
+        html_body = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#333;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+    <h2 style="color:#f97316;">Reset your password</h2>
+    <p>Click the button below to reset your password. The link expires in 30 minutes.</p>
+    <p><a href="{reset_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Reset Password</a></p>
+    <p>If you did not request this, ignore this email.</p>
+    </div></body></html>"""
+        return self._send_email(email, subject, html_body)
+
+    def send_welcome_email(self, email: str, role: str) -> bool:
+        dashboard_url = f"{self._app_url}/provider/dashboard" if role == "provider" else f"{self._app_url}/client/dashboard"
+        subject = "Welcome to Nevumo"
+        html_body = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#333;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+    <h2 style="color:#f97316;">Welcome to Nevumo!</h2>
+    <p>Your account has been created successfully.</p>
+    <p><a href="{dashboard_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Go to Dashboard</a></p>
+    </div></body></html>"""
+        return self._send_email(email, subject, html_body)
+
+    def send_magic_link_email(self, email: str, magic_link_url: str) -> bool:
+        subject = "Your Nevumo access link"
+        html_body = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#333;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+    <h2 style="color:#f97316;">View your service request</h2>
+    <p>Click below to access your request. The link expires in 48 hours.</p>
+    <p><a href="{magic_link_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">View My Request</a></p>
+    </div></body></html>"""
+        return self._send_email(email, subject, html_body)
+
+    def send_new_lead_notification(
+        self,
+        provider_email: str,
+        provider_name: str,
+        category: str,
+        city: str,
+        description: Optional[str],
+        dashboard_url: str,
+    ) -> bool:
+        subject = f"New request in {city} — {category}"
+        desc_html = f"<p><em>{description}</em></p>" if description else ""
+        html_body = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#333;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+    <h2 style="color:#f97316;">New service request</h2>
+    <p>Hi {provider_name}, you have a new request:</p>
+    <div style="background:#f3f4f6;padding:15px;border-radius:8px;margin:20px 0;">
+    <p><strong>Category:</strong> {category}</p>
+    <p><strong>City:</strong> {city}</p>
+    {desc_html}
+    </div>
+    <p><a href="{dashboard_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">View Request</a></p>
+    </div></body></html>"""
+        return self._send_email(provider_email, subject, html_body)
+
+    def send_lead_status_notification(
+        self,
+        to_email: str,
+        new_status: str,
+        category: str,
+        city: str,
+        dashboard_url: str,
+    ) -> bool:
+        status_messages = {
+            "contacted": ("Provider contacted you", "A provider has contacted you regarding your request."),
+            "done": ("Request marked as completed", "Your service request has been marked as completed."),
+            "cancelled": ("Request cancelled", "A service request has been cancelled."),
+        }
+        subject, body_text = status_messages.get(new_status, ("Request update", "Your request status has been updated."))
+        html_body = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#333;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+    <h2 style="color:#f97316;">{subject}</h2>
+    <p>{body_text}</p>
+    <div style="background:#f3f4f6;padding:15px;border-radius:8px;margin:20px 0;">
+    <p><strong>Category:</strong> {category}</p>
+    <p><strong>City:</strong> {city}</p>
+    </div>
+    <p><a href="{dashboard_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">View Dashboard</a></p>
+    </div></body></html>"""
+        return self._send_email(to_email, subject, html_body)
+
+    def send_new_review_notification(
+        self,
+        provider_email: str,
+        provider_name: str,
+        client_name: str,
+        rating: int,
+        comment: Optional[str],
+        dashboard_url: str,
+    ) -> bool:
+        subject = f"New review from {client_name} — {rating}/5 stars"
+        comment_html = f"<p><em>{comment}</em></p>" if comment else ""
+        html_body = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#333;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+    <h2 style="color:#f97316;">You received a new review</h2>
+    <p>Hi {provider_name},</p>
+    <div style="background:#f3f4f6;padding:15px;border-radius:8px;margin:20px 0;">
+    <p><strong>{client_name}</strong> rated you <strong>{rating}/5 ⭐</strong></p>
+    {comment_html}
+    </div>
+    <p><a href="{dashboard_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">View & Reply</a></p>
+    </div></body></html>"""
+        return self._send_email(provider_email, subject, html_body)
+
+    def send_article14_notification(
+        self,
+        provider_email: str,
+        provider_name: str,
+    ) -> bool:
+        subject = "Information about your Nevumo profile — GDPR Article 14"
+        html_body = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#333;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+    <h2 style="color:#f97316;">Information about your profile on Nevumo</h2>
+    <p>Dear {provider_name},</p>
+    <p>You have claimed a profile on Nevumo. In accordance with <strong>Article 14 GDPR</strong>, we inform you of the following:</p>
+    <div style="background:#f3f4f6;padding:15px;border-radius:8px;margin:20px 0;">
+    <p><strong>Data held:</strong> Business name, location, service category, contact details sourced from publicly available directories.</p>
+    <p><strong>Purpose:</strong> Connecting service providers with clients on the Nevumo marketplace.</p>
+    <p><strong>Legal basis:</strong> Article 6(1)(b) GDPR — performance of a contract.</p>
+    <p><strong>Your rights:</strong> Access, rectification, erasure, portability. Contact: <a href="mailto:privacy@nevumo.com">privacy@nevumo.com</a></p>
+    </div>
+    <p><a href="{self._app_url}/en/privacy" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Read Privacy Policy</a></p>
+    </div></body></html>"""
+        return self._send_email(provider_email, subject, html_body)
 
 
 # Global email service instance

@@ -6,8 +6,9 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session
 
+from apps.api.config import settings
 from apps.api.dependencies import get_current_user, get_db
-from apps.api.models import User, Lead, LeadMatch
+from apps.api.models import User, Lead, LeadMatch, Provider
 from apps.api.schemas import (
     ClientDashboardResponse,
     ClientLeadNotesUpdate,
@@ -22,6 +23,7 @@ from apps.api.schemas import (
     ReviewListResponse,
 )
 from apps.api.services.client_service import get_client_dashboard, get_client_leads, require_client_user
+from apps.api.services.email_service import email_service
 from apps.api.services.review_service import (
     get_eligible_leads_for_review,
     create_review,
@@ -123,6 +125,23 @@ def update_lead_status(
     lead.status = new_status
     lead.status_changed_by = "client"
     lead.status_changed_at = datetime.utcnow()
+
+    try:
+        if lead.provider_id:
+            provider = db.query(Provider).filter(Provider.id == lead.provider_id).first()
+            if provider and provider.user_id:
+                provider_user = db.query(User).filter(User.id == provider.user_id).first()
+                if provider_user and provider_user.email:
+                    dashboard_url = f"{settings.APP_URL}/provider/dashboard"
+                    email_service.send_lead_status_notification(
+                        to_email=provider_user.email,
+                        new_status=new_status,
+                        category=str(lead.category_id),
+                        city=str(lead.city_id),
+                        dashboard_url=dashboard_url,
+                    )
+    except Exception:
+        pass
 
     if new_status == "cancelled":
         lead.cancelled_by = "client"
@@ -228,6 +247,25 @@ def create_client_review(
         comment=body.comment,
         db=db
     )
+
+    try:
+        provider = db.query(Provider).filter(Provider.id == review.provider_id).first()
+        if provider and provider.user_id:
+            provider_user = db.query(User).filter(User.id == provider.user_id).first()
+            if provider_user and provider_user.email:
+                client_user = db.query(User).filter(User.id == current_user.id).first()
+                client_name = client_user.name if client_user and client_user.name else "Client"
+                dashboard_url = f"{settings.APP_URL}/provider/dashboard/reviews"
+                email_service.send_new_review_notification(
+                    provider_email=provider_user.email,
+                    provider_name=provider.business_name or "Provider",
+                    client_name=client_name,
+                    rating=body.rating,
+                    comment=body.comment,
+                    dashboard_url=dashboard_url,
+                )
+    except Exception:
+        pass
 
     return ReviewCreateResponse(data={
         "id": review.id,

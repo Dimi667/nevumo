@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
+from apps.api.config import settings
 from apps.api.dependencies import get_db, get_optional_current_user
 from apps.api.exceptions import (
     INVALID_PHONE,
@@ -29,6 +30,7 @@ from apps.api.schemas import (
     LeadClaimEmailRequest,
     LeadClaimEmailResponse,
 )
+from apps.api.services.email_service import email_service
 
 router = APIRouter(prefix="/api/v1", tags=["leads"])
 
@@ -118,6 +120,24 @@ async def create_lead(
         )
         for p in matching_providers:
             db.add(LeadMatch(lead_id=lead.id, provider_id=p.id, status="invited"))
+
+    # Notify matched providers about new lead
+    if not provider_id:
+        lead_matches = db.query(LeadMatch).filter(LeadMatch.lead_id == lead.id).all()
+        for match in lead_matches:
+            provider = db.query(Provider).filter(Provider.id == match.provider_id).first()
+            if provider and provider.user_id:
+                provider_user = db.query(User).filter(User.id == provider.user_id).first()
+                if provider_user and provider_user.email:
+                    dashboard_url = f"{settings.APP_URL}/provider/dashboard"
+                    email_service.send_new_lead_notification(
+                        provider_email=provider_user.email,
+                        provider_name=provider.business_name or "Provider",
+                        category=str(lead.category_id),
+                        city=str(lead.city_id),
+                        description=lead.description,
+                        dashboard_url=dashboard_url,
+                    )
 
     # Update user's last known city context
     if lead.city_id and lead.client_id:

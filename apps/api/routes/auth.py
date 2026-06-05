@@ -43,6 +43,7 @@ from apps.api.services.auth_service import (
     send_reset_email,
     verify_password,
 )
+from apps.api.services.email_service import email_service
 
 router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
 
@@ -137,6 +138,7 @@ async def register(
     except Exception:
         # Auth must NEVER fail due to claim linking errors
         pass
+    email_service.send_welcome_email(user.email, user.role)
 
     token = create_jwt(user.id, user.email, user.role)
     return AuthTokenResponse(data={
@@ -220,7 +222,7 @@ async def forgot_password(
 
         locale = user.locale or "en"
         reset_url = f"{settings.APP_URL}/{locale}/auth/reset-password?token={raw_token}"
-        send_reset_email(user.email, reset_url)
+        email_service.send_password_reset_email(user.email, reset_url)
 
     # Always return the same response — no email enumeration.
     return ForgotPasswordResponse(data={

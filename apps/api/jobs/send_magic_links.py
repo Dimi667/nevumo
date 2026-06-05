@@ -4,6 +4,7 @@ import secrets
 import hashlib
 from apps.api.config import settings
 from apps.api.models import PendingLeadClaim, MagicLinkToken
+from apps.api.services.email_service import email_service
 
 def process_pending_magic_links(db: Session) -> int:
     """
@@ -42,9 +43,7 @@ def process_pending_magic_links(db: Session) -> int:
 
             # Send email (console for now — same pattern as send_reset_email)
             magic_link_url = f"{settings.APP_URL}/en/auth/magic?token={raw_token}"
-            print(f"[Magic Link Email] To: {claim.email}")
-            print(f"[Magic Link Email] Subject: Виж кой отговори на заявката ти")
-            print(f"[Magic Link Email] Link: {magic_link_url}")
+            email_service.send_magic_link_email(claim.email, magic_link_url)
 
             # Mark claim as sent
             claim.magic_link_sent = True

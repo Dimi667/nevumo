@@ -36,6 +36,11 @@ class Settings(BaseSettings):
     R2_ENDPOINT_URL: str = ""
     R2_PUBLIC_BASE_URL: str = ""
 
+    # Email (Resend)
+    RESEND_API_KEY: str = ""
+    FROM_EMAIL: str = "Nevumo <noreply@nevumo.com>"
+    LEGAL_EMAIL: str = "legal@nevumo.com"
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 
