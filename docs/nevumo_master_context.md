@@ -143,7 +143,27 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Security: rate limiting, no email enumeration, token hashing, password policy
 - **Robustness**: BFCache support and auto-login recovery for duplicate registration attempts (back button flow). Replaced legacy hidden iframe hacks with the **Credential Management API** (`navigator.credentials.store`) for robust password saving, including iOS Safari.
 - **Password save robustness**: Credential Management API replaces legacy iframe hack. Hidden email input in register form ensures Safari associates email+password. onInput handler fixes browser autofill not triggering React state. Native browser strong password suggestion replaces custom generator.
-- Phase 2 (future): OAuth Google + Facebook, email sending via Resend/SendGrid
+- Phase 2 (future): OAuth Google + Facebook, email sending via Resend/SendGrid ✅ COMPLETE
+
+### Email Service (Resend) — COMPLETE (June 5, 2026)
+- Provider: Resend (resend>=2.0.0)
+- Railway env var: RESEND_API_KEY
+- From address: Nevumo <noreply@nevumo.com>
+- Domain verified: nevumo.com (SPF + DKIM verified in Resend)
+- Fallback: console.log when RESEND_API_KEY is empty
+
+### 11 transactional emails implemented in apps/api/services/email_service.py:
+1. send_password_reset_email — forgot password (auth.py:223)
+2. send_welcome_email — new registration (auth.py:136)
+3. send_magic_link_email — anonymous lead claim (send_magic_links.py:43)
+4. send_new_lead_notification — provider receives new lead (leads.py:107)
+5. send_lead_status_notification — status change to client (provider.py:379)
+6. send_lead_status_notification — status change to provider (client.py:123)
+7. send_new_review_notification — provider receives new review (client.py:223)
+8. send_review_reply_notification — client receives provider reply (email_service.py)
+9. send_withdrawal_form_email — legal@nevumo.com (legal.py:86)
+10. send_article14_notification — GDPR Art.14 on claimed profile (provider.py:621)
+11. send_welcome_email — covers both client and provider roles
 
 ### Shared
 - packages/ui (shared UI components)

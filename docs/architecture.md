@@ -38,6 +38,9 @@ This document reflects the major architectural optimization performed in April 2
   - `R2_BUCKET_NAME`: Cloudflare R2 bucket name for image storage (e.g., "nevumo-images").
   - `R2_ENDPOINT_URL`: Cloudflare R2 endpoint URL (e.g., "https://<accountid>.r2.cloudflarestorage.com").
   - `R2_PUBLIC_BASE_URL`: Public base URL for R2 images (e.g., "https://images.nevumo.com").
+  - `RESEND_API_KEY`: Resend API key for transactional email service (configured in Railway environment variables).
+  - `FROM_EMAIL`: Sender email address for Resend emails (default: "Nevumo <noreply@nevumo.com>").
+  - `LEGAL_EMAIL`: Legal department email address for withdrawal forms (default: "legal@nevumo.com").
 - **Inter-container Communication**: Containers in Docker Compose communicate using service names (e.g., `nevumo-api`, `nevumo-postgres`) rather than `localhost`.
 - **CORS Configuration (April 2026)**: Added `CORSMiddleware` to `apps/api/main.py` using a configurable `CORS_ORIGINS` setting from `.env` (via `load_dotenv()`) to allow secure communication from the frontend domain.
 - **Google OAuth Setup (May 31, 2026)**: Implemented Google OAuth 2.0 for social login.
@@ -2581,24 +2584,29 @@ reviews table:
 2. Unlimited edits allowed after first reply
 3. Edit history tracked via edit_count + edited_at
 
-### Email Notification System
+### Email Notification System (Resend) — COMPLETE (June 5, 2026)
 
 **Email Service:**
 - Provider: Resend (resend>=2.0.0)
+- Railway env var: RESEND_API_KEY
+- From address: Nevumo <noreply@nevumo.com>
+- Domain verified: nevumo.com (SPF + DKIM verified in Resend)
+- Fallback: console.log when RESEND_API_KEY is empty
 - Config: RESEND_API_KEY, FROM_EMAIL, LEGAL_EMAIL in apps/api/config.py
 - Implementation: email_service.py uses Resend SDK via _send_email()
-- Development fallback: console.log when RESEND_API_KEY is empty
 
 **11 Transactional Emails:**
 1. send_password_reset_email — forgot password (auth.py:223)
 2. send_welcome_email — new registration (auth.py:136)
 3. send_magic_link_email — anonymous lead claim (send_magic_links.py:43)
 4. send_new_lead_notification — provider receives new lead (leads.py:107)
-5. send_lead_status_notification — status change to client or provider (provider.py:379, client.py:123)
-6. send_new_review_notification — provider receives new review (client.py:223)
-7. send_review_reply_notification — client receives provider reply (existing)
-8. send_withdrawal_form_email — legal@nevumo.com (existing)
-9. send_article14_notification — GDPR Art.14 on claimed profile (provider.py:621)
+5. send_lead_status_notification — status change to client (provider.py:379)
+6. send_lead_status_notification — status change to provider (client.py:123)
+7. send_new_review_notification — provider receives new review (client.py:223)
+8. send_review_reply_notification — client receives provider reply (email_service.py)
+9. send_withdrawal_form_email — legal@nevumo.com (legal.py:86)
+10. send_article14_notification — GDPR Art.14 on claimed profile (provider.py:621)
+11. send_welcome_email — covers both client and provider roles
 
 **Review Reply Email (Existing):**
 - Trigger: First provider reply only (not on edits)
