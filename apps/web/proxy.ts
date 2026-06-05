@@ -21,7 +21,14 @@ const METADATA_ROUTE_PATTERN = /^\/(icon|apple-icon|opengraph-image|twitter-imag
 export default function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // 1. Exclude internal and static routes
+  // 1. Exclude PWA start page from language handling
+  if (pathname === "/pwa-start") {
+    const response = NextResponse.next();
+    response.headers.set('x-pathname', pathname);
+    return response;
+  }
+
+  // 2. Exclude internal and static routes
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api/") ||
