@@ -2295,8 +2295,22 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - JWT: python-jose, HS256, 30-day expiry
 - JWT storage: localStorage Phase 1 (key: nevumo_auth_token + nevumo_auth_user)
 - Reset tokens: secrets.token_urlsafe(32), expire 30 min, one-time use, SHA-256 hash in DB
-- Email sending Phase 1: console log only (send_reset_email logs to stdout)
-- Email sending Phase 2: TBD (Resend, SendGrid, or SMTP)
+- Email sending: Resend (resend>=2.0.0)
+- Config: RESEND_API_KEY, FROM_EMAIL, LEGAL_EMAIL in apps/api/config.py
+- email_service.py uses Resend SDK via _send_email()
+- 11 transactional emails implemented:
+  1. send_password_reset_email — forgot password
+  2. send_welcome_email — new registration
+  3. send_magic_link_email — anonymous lead claim
+  4. send_new_lead_notification — provider receives new lead
+  5. send_lead_status_notification — status change to client or provider
+  6. send_new_review_notification — provider receives new review
+  7. send_review_reply_notification — client receives provider reply (existing)
+  8. send_withdrawal_form_email — legal@nevumo.com (existing)
+  9. send_article14_notification — GDPR Art.14 on claimed profile
+- Trigger points: auth.py:223, auth.py:136, send_magic_links.py:43, leads.py:107, provider.py:379, provider.py:621, client.py:123, client.py:223
+- Railway env var: RESEND_API_KEY added
+- Development fallback: console.log when RESEND_API_KEY is empty
 - OAuth: Google + Facebook (future, UI placeholders exist)
 
 ### Intent System
@@ -2569,20 +2583,28 @@ reviews table:
 
 ### Email Notification System
 
-**Trigger Conditions:**
-- First provider reply only (not on edits)
-- Client must have review_reply_email_enabled = TRUE (opted in)
-- Default is opted in for all users
+**Email Service:**
+- Provider: Resend (resend>=2.0.0)
+- Config: RESEND_API_KEY, FROM_EMAIL, LEGAL_EMAIL in apps/api/config.py
+- Implementation: email_service.py uses Resend SDK via _send_email()
+- Development fallback: console.log when RESEND_API_KEY is empty
 
-**Email Content:**
-- Subject: "{provider_name} responded to your review"
-- Body: Client's review + provider's reply + link to view
+**11 Transactional Emails:**
+1. send_password_reset_email — forgot password (auth.py:223)
+2. send_welcome_email — new registration (auth.py:136)
+3. send_magic_link_email — anonymous lead claim (send_magic_links.py:43)
+4. send_new_lead_notification — provider receives new lead (leads.py:107)
+5. send_lead_status_notification — status change to client or provider (provider.py:379, client.py:123)
+6. send_new_review_notification — provider receives new review (client.py:223)
+7. send_review_reply_notification — client receives provider reply (existing)
+8. send_withdrawal_form_email — legal@nevumo.com (existing)
+9. send_article14_notification — GDPR Art.14 on claimed profile (provider.py:621)
+
+**Review Reply Email (Existing):**
+- Trigger: First provider reply only (not on edits)
+- Opt-in: Client must have review_reply_email_enabled = TRUE (default is opted in)
+- Content: Subject "{provider_name} responded to your review", body with review + reply + link to view
 - Footer: Link to manage email preferences
-
-**Implementation:**
-- Email service abstraction in `apps/api/services/email_service.py`
-- Configurable via SMTP or email API (placeholder for Phase 2)
-- Console logging in development mode
 
 ### Frontend Integration
 
