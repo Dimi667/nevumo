@@ -576,6 +576,14 @@ This separation ensures that:
   - **Embed Mode Support (May 27, 2026):** GlobalFooter hidden in embed mode via `[data-global-footer] { display: none !important; }` CSS rule in provider page
   - **UX Improvement:** Provides better visibility of provider offerings while maintaining progressive disclosure for providers with many services
   - **Note:** Services are filtered by category - on cleaning pages only cleaning services are shown per provider
+- **FooterAppBar (June 2026)**:
+  - File: apps/web/components/footer/FooterAppBar.tsx
+  - 'use client' component, rendered inside GlobalFooter (!minimal mode only)
+  - Props: { lang: string, installLabel: string, shareLabel: string }
+  - PWA button: mobile only, independent beforeinstallprompt listener, no dismiss limit
+  - iOS: inline sheet with pwa namespace translations, no usePWAInstall dependency
+  - Share: navigator.share() (mobile) / clipboard (desktop)
+  - Role detection: auth > intent > URL > default client
 - **Namespaced Translations Validator**: Implemented a mandatory `namespace.key` pattern at the ORM layer to ensure all UI copy is properly organized and to avoid cache conflicts.
 - **Redis Sync**: After updating translations in the database, Redis MUST be flushed (`FLUSHALL`) to clear the cache and reflect changes in the UI.
 - **ProviderWidget Translation Fixes (May 27, 2026)** — COMPLETE:

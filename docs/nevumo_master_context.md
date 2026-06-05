@@ -1020,6 +1020,24 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - PWAInstallPrompt компонентът зарежда преводи от DB via GET /api/v1/translations?lang={lang}&namespace=pwa
   - lang prop се предава от layout.tsx (provider dashboard) и LeadForm.tsx (category pages)
   - iOS bottom sheet: текстовете са центрирани, бутонът е sticky
+- **PWA Етап 2 — Footer AppBar (June 2026)** — COMPLETE:
+  - **Нов компонент**: `apps/web/components/footer/FooterAppBar.tsx`
+    - PWA install бутон (mobile only, md:hidden) — независим от usePWAInstall hook
+    - Share бутон (всички устройства) — navigator.share() на mobile, clipboard на desktop
+    - Inline iOS sheet — без dismiss count ограничение (копие на PWAInstallPrompt iOS JSX)
+    - Собствен beforeinstallprompt listener — pwa_installed записва се само при accepted
+    - pwa namespace преводи зареждат се независимо via fetch('/api/v1/translations/pwa')
+  - **Role detection** (detectRole() helper в FooterAppBar):
+    Йерархия: 1) getAuthUser().role → 2) nevumo_intent localStorage → 3) URL path (/dolacz, /provider/) → 4) default 'client'
+  - **Нов seed скрипт**: `apps/api/scripts/seed_footer_translations.py`
+    - 2 ключа × 34 езика = 68 реда в `footer` namespace
+    - `footer.install_app` — "Инсталирай приложението"
+    - `footer.share_page` — "Сподели"
+  - **GlobalFooter.tsx промени**:
+    - FooterAppBar добавен над legal links блока (вътре в !minimal)
+    - Copyright и language dropdown преместени в bottom row: copyright ляво, dropdown дясно
+  - **Важно решение**: FooterAppBar НЕ използва usePWAInstall — избягва анти-спам dismiss limit (2 отказа). Автоматичните PWA банери остават непроменени.
+  - **Отхвърлена оптимизация**: navigator.share() при "Разбрах" на iOS — програматичният share sheet не съдържа "Add to Home Screen" (само Safari toolbar бутонът го показва). Reverted.
 - **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
   - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
   - 272 new rows 
