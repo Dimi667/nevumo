@@ -14,7 +14,7 @@ export default function PWAStartPage() {
     const lastUrl = localStorage.getItem('nevumo_last_url');
     if (lastUrl) {
       const segments = lastUrl.split('/').filter(Boolean);
-      if (segments.length >= 1 && SUPPORTED_LANGUAGES.includes(segments[0])) {
+      if (segments.length >= 1 && segments[0] && SUPPORTED_LANGUAGES.includes(segments[0])) {
         lang = segments[0];
       }
     }
