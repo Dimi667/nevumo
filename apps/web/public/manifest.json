@@ -2,7 +2,7 @@
   "name": "Nevumo",
   "short_name": "Nevumo",
   "description": "Find trusted service providers",
-  "start_url": "/",
+  "start_url": "/pwa-start",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#f97316",
