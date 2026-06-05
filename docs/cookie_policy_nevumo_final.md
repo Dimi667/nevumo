@@ -277,6 +277,7 @@ Gdy podasz numer telefonu na platformie (np. podczas składania zapytania o usł
 | `nevumo_phone` | Local Storage | Autouzupełnianie numeru telefonu | Nevumo | Do wyczyszczenia | Funkcjonalne | Uzasadniony interes |
 | `nevumo_intent` | Local Storage | Przechowuje wybraną rolę (klient / usługodawca) | Nevumo | Sesja | Funkcjonalne | Uzasadniony interes |
 | `nevumo_city_preference` | Local Storage | Przechowuje wybrane miasto | Nevumo | Do wyczyszczenia | Funkcjonalne | Uzasadniony interes |
+| `nevumo_last_url` | Local Storage | Ostatnio odwiedzona strona dla inteligentnego przekierowania PWA | Nevumo | Do wyczyszczenia | Funkcjonalne | Uzasadniony interes |
 | `nevumo_auth_email` | Session Storage | Tymczasowo przechowuje adres e-mail podczas rejestracji | Nevumo | Sesja (karta) | Niezbędne | Umowa |
 
 > **Uwaga dotycząca cookies Stripe:** `__stripe_mid` i `__stripe_sid` są ustawiane wyłącznie na stronach, na których odbywa się przetwarzanie płatności. Stripe.js nie jest ładowany na innych stronach.
@@ -457,6 +458,7 @@ Nevumo използва бисквитки и браузърно хранили�
 | `nevumo_phone` | Local Storage | Автоматично попълване на телефонен номер | Nevumo | До изчистване | Функционални | Легитимен интерес |
 | `nevumo_intent` | Local Storage | Съхранява избраната роля (клиент / доставчик) | Nevumo | Сесия | Функционални | Легитимен интерес |
 | `nevumo_city_preference` | Local Storage | Съхранява избрания град | Nevumo | До изчистване | Функционални | Легитимен интерес |
+| `nevumo_last_url` | Local Storage | Последно посетена страница за PWA пренасочване | Nevumo | До изчистване | Функционални | Легитимен интерес |
 | `nevumo_auth_email` | Session Storage | Временно съхранява имейл адрес по време на регистрация | Nevumo | Сесия (таб) | Необходими | Договор |
 
 > **Забележка за бисквитките на Stripe:** `__stripe_mid` и `__stripe_sid` се задават само на страниците, на които се осъществява обработка на плащания. Stripe.js не се зарежда на другите страници.

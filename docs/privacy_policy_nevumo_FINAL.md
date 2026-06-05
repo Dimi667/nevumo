@@ -346,6 +346,7 @@ Nevumo може да създаде профил въз основа на пуб
 | `nevumo_phone` | localStorage | Автоматично попълване на телефон | Неопределено | Легитимен интерес |
 | `nevumo_intent` | localStorage | UX предпочитание за роля при вход | Сесия | Функционален |
 | `nevumo_city_preference` | localStorage | Предпочитан град | Неопределено | Функционален |
+| `nevumo_last_url` | localStorage | Последно посетена страница за PWA пренасочване | Неопределено | Функционален |
 | `nevumo_auth_email` | sessionStorage | Имейл по време на регистрация | Сесия (таб) | Договор |
 
 Пълни подробности: **[Политика за бисквитки](/bg/cookies)**
@@ -573,6 +574,7 @@ Nevumo może tworzyć profile dostawców na podstawie publicznie dostępnych inf
 | `nevumo_phone` | localStorage | Automatyczne wypełnianie numeru telefonu | Nieokreślone | Uzasadniony interes |
 | `nevumo_intent` | localStorage | Preferencja roli UX przy logowaniu | Sesja | Funkcjonalny |
 | `nevumo_city_preference` | localStorage | Zapamiętane preferowane miasto | Nieokreślone | Funkcjonalny |
+| `nevumo_last_url` | localStorage | Ostatnio odwiedzona strona do przekierowania PWA | Nieokreślone | Funkcjonalny |
 | `nevumo_auth_email` | sessionStorage | E-mail podczas rejestracji | Sesja (karta) | Umowa |
 
 Szczegóły: **[Polityka cookies](/pl/cookies)**

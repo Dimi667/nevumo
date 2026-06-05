@@ -177,8 +177,8 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Route: `/[lang]/privacy` — SSG, 34 езика
 - Текст: EN + BG + PL
 - Компонент: `apps/web/app/[lang]/privacy/page.tsx`
-- Seed: `apps/api/scripts/seed_privacy_translations.py` (121 ключа — включва всички таблични стрингове в секции 3.1–3.4, 4, 5, 8). Допълнителни скриптове: seed_privacy_table_part1-5.py (сийдват EN+BG+PL), seed_privacy_corrections.py (коригира 8 правни citation ключа). Таблиците са напълно преводими на всички 34 езика; BG и PL имат пълни преводи, останалите 31 fallback-ват към EN.
-- Namespace: `privacy`
+- Seed: `apps/api/scripts/seed_privacy_translations.py` (121 ключа — включва всички таблични стрингове в секции 3.1–3.4, 4, 5, 8). Допълнителни скриптове: seed_privacy_table_part1-5.py (сийдват EN+BG+PL), seed_privacy_corrections.py (коригира 8 правни citation ключа), seed_privacy_last_url.py (1 ключ × 3 езика = 3 rows) — t4_purpose_pwa_redirect. Таблиците са напълно преводими на всички 34 езика; BG и PL имат пълни преводи, останалите 31 fallback-ват към EN.
+- Namespace: `privacy` (54 ключа)
 
 ### Terms & Conditions (завършено 2026-05-15)
 - Route: `/[lang]/terms` — SSG, 34 езика
@@ -216,9 +216,10 @@ Nevumo е уеб платформа за marketplace на услуги.
   - seed_cookies_table_data_p1.py (12 ключа EN only = 23 rows)
   - seed_cookies_browser_paths_p2.py (4 ключа × 17 езика = 68 rows)
   - seed_cookies_browser_paths_p3.py (4 ключа × 17 езика = 68 rows)
+  - seed_cookies_last_url.py (1 ключ × 34 езика = 34 rows) — s5_p_last_url
 - Namespace: `cookies`
 - Keys: page_title, effective_date, s1_title, s1_text, s2_title, s2_text, s3_title, s3_text, s3_1_title, s3_2_title, s3_3_title, s3_4_title, s4_title, s4_text, s5_title, s5_text, s5_p_consent, s5_p_lang, s5_p_ga, s5_p_ga_id, s5_p_stripe_mid, s5_p_stripe_sid, s5_p_auth_token, s5_p_auth_user, s5_p_phone, s5_p_intent, s5_p_city, s5_p_auth_email, s5_type_cookie_1p, s5_type_cookie_3p, s5_type_localstorage, s5_type_sessionstorage, s5_ret_12mo, s5_ret_13mo, s5_ret_1y, s5_ret_30d, s5_ret_30min, s5_ret_sess_30d, s5_ret_cleared, s5_ret_session, s5_ret_session_tab, s6_chrome_path, s6_firefox_path, s6_safari_path, s6_edge_path, s7_role_google, s7_role_stripe, s7_role_vercel, s7_role_railway, s7_role_neon, s7_role_upstash, s7_role_cloudflare, s8_safeguard_sccs_dpf, s8_safeguard_sccs, s8_country_usa, s9_title, s9_text, s10_title, s10_text, s11_title, s11_authority_bg, s11_authority_pl, last_updated, back_to_home
-- Total: 1,814 rows (49 ключа × 34 езика + 12 ключа EN only + 4 ключа × 34 езика)
+- Total: 1,848 rows (50 ключа × 34 езика + 12 ключа EN only + 4 ключа × 34 езика)
 - Note: s1_title values have "1. " prefix removed (e.g., "1. What Are Cookies" → "What Are Cookies") — updated in both DB and seed file (2026-05-16)
 - Note: s3_1_title, s3_2_title, s3_3_title, s3_4_title Bulgarian translations corrected from Latin to Cyrillic (e.g., "Zadulzhitelno neobhodimi" → "Задължително необходими") — seed_cookies_p12.py updated (2026-05-16)
 
@@ -257,6 +258,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 |------|-----|-----|-----------|--------|
 | `lang` | Cookie | Избран език от dropdown | 30 дни | Functional |
 | `nevumo_city_preference` | localStorage | Предпочитан град | Indefinite | Functional |
+| `nevumo_last_url` | localStorage | Последна посетена чиста URL за PWA smart redirect | Indefinite | Functional |
 | `nevumo_auth_email` | sessionStorage | Email при auth flow | Session (tab) | Договор |
 
 Пълният актуален списък (11 entries) е в `docs/gdpr_compliance_plan.md` ЗАДАЧА 4.
