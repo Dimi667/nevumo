@@ -92,21 +92,12 @@ export default function PWAInstallPrompt({
     }
   };
 
-  const handleDismissClick = async () => {
+  const handleDismissClick = () => {
     trackPageEvent('pwa_install_dismissed', 'pwa', {
       trigger,
       role,
       platform,
     });
-    if (isIOS) {
-      try {
-        if (typeof navigator !== 'undefined' && navigator.share) {
-          await navigator.share({ url: window.location.href })
-        }
-      } catch {
-        // ignore AbortError silently
-      }
-    }
     handleDismiss();
     onClose();
   };
