@@ -1,10 +1,4 @@
-import type { Metadata } from 'next';
 import LayoutShell from './LayoutShell';
-import { baseIcons } from '@/lib/base-metadata';
-
-export const metadata: Metadata = {
-  icons: baseIcons,
-};
 
 interface LangLayoutProps {
   children: React.ReactNode;
