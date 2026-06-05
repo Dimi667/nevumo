@@ -1058,6 +1058,26 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - Copyright и language dropdown преместени в bottom row: copyright ляво, dropdown дясно
   - **Важно решение**: FooterAppBar НЕ използва usePWAInstall — избягва анти-спам dismiss limit (2 отказа). Автоматичните PWA банери остават непроменени.
   - **Отхвърлена оптимизация**: navigator.share() при "Разбрах" на iOS — програматичният share sheet не съдържа "Add to Home Screen" (само Safari toolbar бутонът го показва). Reverted.
+- **PWA Етап 3 — Smart Redirect (June 2026)** — COMPLETE:
+  - **Проблем**: manifest.json start_url="/" отваряше homepage при всяко стартиране на PWA, независимо от контекста на потребителя.
+  - **Решение**: Нова /pwa-start страница с интелигентна redirect логика.
+  - **Нови файлове**:
+    - apps/web/app/pwa-start/page.tsx — client компонент с redirect логика и оранжев spinner
+    - apps/web/hooks/usePWALastUrl.ts — записва последната "чиста" URL в localStorage
+    - apps/web/components/PWAUrlTracker.tsx — невидим компонент, монтиран в [lang]/layout.tsx
+  - **Промени по съществуващи файлове**:
+    - apps/web/public/manifest.json — start_url сменен от "/" на "/pwa-start"
+    - apps/web/app/[lang]/layout.tsx — добавен <PWAUrlTracker /> в LayoutShell
+    - apps/web/proxy.ts — добавено изключение за /pwa-start от language normalization
+  - **Redirect логика**:
+    - Логнат провайдър → /{lang}/provider/dashboard
+    - Логнат клиент + nevumo_ctx.city → /{lang}/{city}
+    - Логнат клиент без град → /{lang}
+    - Анонимен + nevumo_last_url → последната посетена страница
+    - Анонимен без last_url → /{lang}
+  - **"Чисти" URL-и** (записват се в nevumo_last_url): homepage, city pages, category pages, provider pages (1-4 сегмента)
+  - **"Мръсни" URL-и** (не се записват): /auth/*, /dashboard/*, /pwa-start, /izberi-grad
+  - **localStorage ключ**: nevumo_last_url — последната посетена чиста URL за PWA smart redirect
 - **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
   - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
   - 272 new rows 

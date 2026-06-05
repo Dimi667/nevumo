@@ -4,18 +4,17 @@
       - /url: /en
       - img "Nevumo" [ref=e4]
   - generic [ref=e6]:
-    - generic [ref=e90]:
-      - heading "Find a service in minutes" [level=1] [ref=e91]
-      - paragraph [ref=e92]: Free • No obligation
-    - paragraph [ref=e93]: Quick login without password
-    - button "Sign in with Google" [ref=e95] [cursor=pointer]:
-      - img [ref=e96]
+    - generic [ref=e7]:
+      - heading "Find a service in minutes" [level=1] [ref=e8]
+      - paragraph [ref=e9]: Free • No obligation
+    - paragraph [ref=e10]: Quick login without password
+    - button "Sign in with Google" [ref=e12] [cursor=pointer]:
+      - img [ref=e13]
       - text: Sign in with Google
-    - generic [ref=e103]: or with email
-    - textbox "Email address" [active] [ref=e105]:
+    - generic [ref=e20]: or with email
+    - textbox "Email address" [active] [ref=e22]:
       - /placeholder: name@email.com
-      - text: dimitar.j.dimitroff@gmail.com
-    - button "Continue" [ref=e106] [cursor=pointer]
+    - button "Continue" [disabled] [ref=e23]
   - contentinfo [ref=e24]:
     - generic [ref=e25]:
       - button "Share" [ref=e27] [cursor=pointer]:
@@ -35,10 +34,10 @@
           - generic [ref=e43]: 🇬🇧
           - generic [ref=e44]: English
           - img [ref=e45]
-  - alert [ref=e47]
+  - alert [ref=e47]: Login | Nevumo
   - generic [ref=e50]:
     - generic [ref=e51]:
-      - heading "We use cookies" [level=3] [ref=e60]
+      - heading "We use cookies" [level=3] [ref=e52]
       - paragraph [ref=e53]:
         - generic [ref=e54]:
           - text: We use cookies and similar technologies to improve your experience, analyse traffic and show relevant content. You can choose which categories to allow.

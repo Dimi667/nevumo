@@ -1,0 +1,143 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Nevumo" [ref=e3] [cursor=pointer]:
+      - /url: /en
+      - img "Nevumo" [ref=e4]
+    - img [ref=e6] [cursor=pointer]
+  - generic [ref=e10]:
+    - navigation [ref=e11]:
+      - generic [ref=e12]:
+        - link "Looking for a service?" [ref=e13] [cursor=pointer]:
+          - /url: /en/warszawa
+        - generic [ref=e14]: "|"
+        - link "Select city" [ref=e15] [cursor=pointer]:
+          - /url: /en/izberi-grad
+    - generic [ref=e17]:
+      - heading "Get clients for Massage in Warsaw" [level=1] [ref=e18]:
+        - text: Get clients for
+        - generic [ref=e19]: Massage
+        - text: in Warsaw
+      - paragraph [ref=e20]: Free. No commission. Direct contact.
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - generic [ref=e23]: ✓
+          - text: No commission
+        - generic [ref=e24]:
+          - generic [ref=e25]: ✓
+          - text: 2 min registration
+        - generic [ref=e26]:
+          - generic [ref=e27]: ✓
+          - text: Real requests
+      - generic [ref=e28]: 47 specialists • 120 requests this month
+      - button "Start for free" [ref=e29] [cursor=pointer]
+    - generic [ref=e31]:
+      - heading "How it works" [level=2] [ref=e32]
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]: "1"
+          - heading "Create a profile" [level=3] [ref=e36]
+          - paragraph [ref=e37]: 2 minutes
+        - generic [ref=e38]:
+          - generic [ref=e39]: "2"
+          - heading "Receive client requests" [level=3] [ref=e40]
+          - paragraph [ref=e41]: immediately after registration
+        - generic [ref=e42]:
+          - generic [ref=e43]: "3"
+          - heading "Contact clients directly" [level=3] [ref=e44]
+          - paragraph [ref=e45]: no middlemen
+    - generic [ref=e48]:
+      - generic [ref=e49]:
+        - img [ref=e51]
+        - heading "Cleaning" [level=3] [ref=e54]
+        - paragraph [ref=e55]: 26 requests this week
+        - button "I offer this service" [ref=e56] [cursor=pointer]
+      - generic [ref=e57]:
+        - img [ref=e59]
+        - heading "Plumbing" [level=3] [ref=e61]
+        - paragraph [ref=e62]: 18 requests this week
+        - button "I offer this service" [ref=e63] [cursor=pointer]
+      - generic [ref=e64]:
+        - img [ref=e66]
+        - heading "Massage" [level=3] [ref=e71]
+        - paragraph [ref=e72]: 14 requests this week
+        - button "I offer this service" [ref=e73] [cursor=pointer]
+    - generic [ref=e75]:
+      - heading "Recent requests" [level=2] [ref=e76]
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - generic [ref=e80]: 🔴
+            - generic [ref=e81]: Krzysztof from Warsaw is looking for cleaning
+          - generic [ref=e82]: 8 min ago
+        - generic [ref=e83]:
+          - generic [ref=e84]:
+            - generic [ref=e85]: 🔴
+            - generic [ref=e86]: Anna from Warsaw is looking for massage
+          - generic [ref=e87]: 1 hour ago
+        - generic [ref=e88]:
+          - generic [ref=e89]:
+            - generic [ref=e90]: 🔴
+            - generic [ref=e91]: Marek from Warsaw is looking for plumbing
+          - generic [ref=e92]: 3 hours ago
+    - generic [ref=e94]:
+      - heading "Why specialists choose Nevumo" [level=2] [ref=e95]
+      - generic [ref=e96]:
+        - generic [ref=e97]:
+          - generic [ref=e98]: ✓
+          - generic [ref=e99]:
+            - heading "Free" [level=3] [ref=e100]
+            - paragraph [ref=e101]: no hidden fees
+        - generic [ref=e102]:
+          - generic [ref=e103]: ✓
+          - heading "Direct contact with clients" [level=3] [ref=e105]
+        - generic [ref=e106]:
+          - generic [ref=e107]: ✓
+          - heading "Profile + SEO page that works for you 24/7" [level=3] [ref=e109]
+    - generic [ref=e111]:
+      - heading "Ready for new clients?" [level=2] [ref=e112]
+      - button "Create free profile" [ref=e113] [cursor=pointer]
+    - contentinfo [ref=e114]:
+      - generic [ref=e115]:
+        - paragraph [ref=e116]: Looking for a service in Warsaw?
+        - generic [ref=e117]:
+          - link "Cleaning in Warsaw" [ref=e118] [cursor=pointer]:
+            - /url: /en/warszawa/cleaning
+          - generic [ref=e119]: "|"
+          - link "Plumbing in Warsaw" [ref=e120] [cursor=pointer]:
+            - /url: /en/warszawa/plumbing
+          - generic [ref=e121]: "|"
+          - link "Massage in Warsaw" [ref=e122] [cursor=pointer]:
+            - /url: /en/warszawa/massage
+        - paragraph [ref=e123]: "Popular: Massage • Cleaning • Plumbing"
+  - contentinfo [ref=e124]:
+    - generic [ref=e125]:
+      - button "Share" [ref=e127] [cursor=pointer]:
+        - img [ref=e128]
+        - text: Share
+      - generic [ref=e131]:
+        - button "Privacy Policy" [ref=e132] [cursor=pointer]
+        - button "Cookie Policy" [ref=e133] [cursor=pointer]
+        - button "Terms & Conditions" [ref=e134] [cursor=pointer]
+        - button "Terms for Providers" [ref=e135] [cursor=pointer]
+        - button "Withdrawal Form" [ref=e136] [cursor=pointer]
+        - button "DSA Contact Point" [ref=e137] [cursor=pointer]
+        - button "Cookie Settings" [ref=e138] [cursor=pointer]
+      - generic [ref=e139]:
+        - generic [ref=e140]: © 2026 Nevumo
+        - button "🇬🇧 English" [ref=e142] [cursor=pointer]:
+          - generic [ref=e143]: 🇬🇧
+          - generic [ref=e144]: English
+          - img [ref=e145]
+  - alert [ref=e147]
+  - generic [ref=e150]:
+    - generic [ref=e151]:
+      - heading "We use cookies" [level=3] [ref=e152]
+      - paragraph [ref=e153]:
+        - generic [ref=e154]:
+          - text: We use cookies and similar technologies to improve your experience, analyse traffic and show relevant content. You can choose which categories to allow.
+          - link "Privacy Policy" [ref=e155] [cursor=pointer]:
+            - /url: /en/privacy
+    - generic [ref=e156]:
+      - button "Customize" [ref=e157] [cursor=pointer]
+      - button "Reject All" [ref=e158] [cursor=pointer]
+      - button "Accept All" [ref=e159] [cursor=pointer]

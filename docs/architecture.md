@@ -2323,6 +2323,13 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - Cleared after successful auth (clearStoredIntent)
 - Cross-device limitation: intent not available if reset link opened on different device → fallback to role from JWT user object
 
+### PWA Smart Redirect System (June 2026)
+- localStorage key: nevumo_last_url — last visited "clean" URL for PWA smart redirect
+- Managed by apps/web/hooks/usePWALastUrl.ts
+- "Clean" URLs (1-4 segments): homepage, city pages, category pages, provider pages
+- "Dirty" URLs (not recorded): /auth/*, /dashboard/*, /pwa-start, /izberi-grad
+- Used by /pwa-start page to redirect anonymous users to their last visited page
+
 ---
 
 ## Authentication Phase 2 — Google OAuth (May 9, 2026)

@@ -96,6 +96,7 @@ When you provide a phone number on the platform (e.g., when submitting a service
 | `nevumo_phone` | Local Storage | Phone number autofill | Nevumo | Until cleared | Functional | Legitimate Interest |
 | `nevumo_intent` | Local Storage | Stores your selected role intent (client / provider) | Nevumo | Session | Functional | Legitimate Interest |
 | `nevumo_city_preference` | Local Storage | Stores your selected city | Nevumo | Until cleared | Functional | Legitimate Interest |
+| `nevumo_last_url` | Local Storage | Last visited "clean" URL for PWA smart redirect | Nevumo | Until cleared | Functional | Legitimate Interest |
 | `nevumo_auth_email` | Session Storage | Temporarily stores email address during registration | Nevumo | Session (tab) | Necessary | Contract |
 
 > **Note on Stripe cookies:** `__stripe_mid` and `__stripe_sid` are set only on pages where payment processing takes place. Stripe.js is not loaded on other pages.
