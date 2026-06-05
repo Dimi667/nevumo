@@ -21,7 +21,7 @@ export default function PWAStartPage() {
 
     if (lang === 'en') {
       const browserLang = navigator.language.split('-')[0];
-      if (SUPPORTED_LANGUAGES.includes(browserLang)) {
+      if (browserLang && SUPPORTED_LANGUAGES.includes(browserLang)) {
         lang = browserLang;
       }
     }
