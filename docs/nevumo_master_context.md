@@ -1359,9 +1359,18 @@ git push nevumo-git main  # архив на SSD
 4. `icons` field in root layout `metadata` export — overridden by child pages with `generateMetadata`
 5. Airbnb pattern: multiple apple-touch-icon sizes (76, 120, 152, 180) via manual `<head>` — same problem: disappears on client-side navigation
 6. `FaviconManager` client component with `useEffect` + `usePathname` — did not fix Safari iOS
+7. `baseIcons` shared helper + `metadata.icons` in `[lang]/layout.tsx` — caused duplicate icon tags (manual head + metadata), unstable React keys in RSC payload caused Safari to reset favicon on navigation
+8. Stable React `key` props on manual `<head>` link tags (root layout) — Safari still resets favicon on client-side navigation
+9. Removed duplicate metadata from `[lang]/layout.tsx`, kept only stable-key manual tags — still not working
 
 ### Root cause identified:
 Next.js App Router: child pages with `generateMetadata` override `icons` from root layout metadata during client-side navigation. Manual `<head>` tags also disappear on client-side navigation.
+
+### Current state (manual <head> in root layout.tsx):
+- `<link key="apple-touch-icon">` + 4 sizes + `<link key="favicon-icon">` present in HTML on ALL pages (confirmed via curl)
+- Tags present in server-rendered HTML AND RSC payload
+- Safari iOS still resets favicon on client-side navigation
+- Root cause unclear: iOS Safari may ignore favicon updates during SPA navigation regardless of implementation
 
 ### What works:
 - Full page load (direct URL) → favicon shows
