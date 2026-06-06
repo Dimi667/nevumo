@@ -155,6 +155,14 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
               </button>
               <CookieSettingsLink lang={lang} />
             </div>
+            <div className="flex justify-center mt-2">
+              <a
+                href="mailto:support@nevumo.com"
+                className="text-gray-700 text-sm transition-colors hover:text-orange-600 hover:underline"
+              >
+                support@nevumo.com
+              </a>
+            </div>
           </>
         )}
 
