@@ -236,7 +236,7 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
           </div>
         </div>
         {!minimal && (
-          <div className="text-center text-xs text-gray-400 mt-2">
+          <div className="text-center text-xs text-gray-400 mt-2 w-full">
             © {currentYear} Nevumo
           </div>
         )}
