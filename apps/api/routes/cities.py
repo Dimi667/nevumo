@@ -136,6 +136,67 @@ async def list_cities(
     return CitiesResponse(data=data)
 
 
+@router.get("/cities/all")
+async def get_all_cities(
+    lang: str = Query("en", min_length=2, max_length=5),
+    db: Session = Depends(get_db),
+    redis_client: Optional[redis_lib.Redis] = Depends(get_redis),
+):
+    cache_key = f"cities:all:{lang}"
+    if redis_client:
+        cached = redis_client.get(cache_key)
+        if cached:
+            items = json.loads(cached)
+            return CitiesResponse(data=[CityOut(**i) for i in items])
+
+    rows = (
+        db.query(Location)
+        .outerjoin(
+            LocationTranslation,
+            (Location.id == LocationTranslation.location_id)
+            & (LocationTranslation.lang == lang),
+        )
+        .order_by(Location.city)
+        .all()
+    )
+
+    data = []
+    for loc in rows:
+        # Get translated city name with fallback
+        translated_name = None
+        locative_form = None
+        genitive_form = None
+        if loc.translations:
+            for translation in loc.translations:
+                if translation.lang == lang:
+                    translated_name = translation.city_name
+                    locative_form = translation.locative_form
+                    genitive_form = translation.genitive_form
+                    break
+
+        # Fallback: translation -> city_en -> city
+        city_display = translated_name if translated_name else (loc.city_en if loc.city_en else loc.city)
+        city_en_display = loc.city_en if loc.city_en else loc.city
+
+        data.append(
+            CityOut(
+                id=loc.id,
+                slug=loc.slug,
+                city=city_display,
+                city_en=city_en_display,
+                country_code=loc.country_code,
+                currency=COUNTRY_CURRENCY_MAP.get(loc.country_code, DEFAULT_CURRENCY),
+                locative_form=locative_form,
+                genitive_form=genitive_form
+            )
+        )
+
+    if redis_client and data:
+        redis_client.setex(cache_key, 3600, json.dumps([d.model_dump() for d in data], ensure_ascii=False))
+
+    return CitiesResponse(data=data)
+
+
 @router.get("/cities/{slug}", response_model=CityOut)
 async def get_city_by_slug(
     slug: str,

@@ -378,6 +378,16 @@ export async function getActiveCities(lang: string): Promise<CityOut[]> {
   }
 }
 
+export async function getAllCities(lang: string): Promise<CityOut[]> {
+  const res = await fetch(
+    `${API_BASE}/api/v1/cities/all?lang=${encodeURIComponent(lang)}`,
+    { cache: 'no-store' }
+  );
+  if (!res.ok) return [];
+  const json = await res.json();
+  return json?.data ?? [];
+}
+
 export async function createLead(input: LeadCreateInput): Promise<LeadCreateResult | { success: false; error: { code: string; message: string } } | null> {
   try {
     const token = getAuthToken();

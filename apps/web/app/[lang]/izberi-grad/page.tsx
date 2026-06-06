@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { getActiveCities } from '@/lib/api';
+import { getActiveCities, getAllCities } from '@/lib/api';
 import { generateHreflangAlternates } from '@/lib/seo';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
 import { fetchTranslations, t } from '@/lib/ui-translations';
@@ -44,7 +44,7 @@ export default async function ChooseCityPage({ params }: PageProps) {
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await fetchTranslations(normalizedLang, 'city_selection');
   const cookieT = await fetchTranslations(normalizedLang, 'cookie_banner');
-  const cities = await getActiveCities(normalizedLang);
+  const cities = await getAllCities(normalizedLang);
 
   const jsonLd = {
     '@context': 'https://schema.org',
