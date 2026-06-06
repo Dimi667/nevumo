@@ -8,8 +8,10 @@ export function useAutoIntent(): void {
   const pathname = usePathname();
   useEffect(() => {
     if (!pathname) return;
-    // Skip auth and dashboard routes
+    // Skip homepage, auth and dashboard routes
+    const segments = pathname.split('/').filter(Boolean);
     if (
+      segments.length <= 1 ||
       pathname.includes('/auth') ||
       pathname.includes('/provider/dashboard') ||
       pathname.includes('/client/dashboard')
