@@ -1673,7 +1673,29 @@ Same format as `GET /api/v1/cities`.
 
 ---
 
-## 5.2. Get City by Slug
+## 5.2. Get All Cities
+
+### GET
+/api/v1/cities/all?lang=en
+
+### Purpose
+Returns ALL configured cities regardless of provider availability status. Used for the global city selection page `/[lang]/izberi-grad`.
+
+### Query Params
+- `lang` (optional, default: "en") — Language code for translated city names
+
+### Response
+Same format as `GET /api/v1/cities/active`.
+- `city_en` always returns the English name (from location.city_en or location.city as fallback)
+- Translation lookup uses LEFT OUTER JOIN on location_translations table
+
+### Notes
+- Redis cached: key `cities:all:{lang}`, TTL 3600s
+- Replaces `/api/v1/cities/active` on the `/izberi-grad` page
+
+---
+
+## 5.3. Get City by Slug
 
 ### GET
 /api/v1/cities/{slug}?lang=en
@@ -1704,7 +1726,7 @@ Same format as `GET /api/v1/cities`.
 
 ---
 
-## 5.3. Get City Stats
+## 5.4. Get City Stats
 
 ### GET
 /api/v1/cities/{slug}/stats
@@ -1729,7 +1751,7 @@ Same format as `GET /api/v1/cities`.
 
 ---
 
-## 5.1. Get Price Range
+## 5.5. Get Price Range
 
 ### GET
 /api/v1/price-range

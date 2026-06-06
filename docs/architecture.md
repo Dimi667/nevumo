@@ -1124,7 +1124,7 @@ Location трябва да бъде нормализирана:
 ### City Selection Page (April 30, 2026)
 - **Route**: `/[lang]/izberi-grad`
 - **Purpose**: A landing page for users to select their city before browsing services.
-- **Fetch**: Uses `GET /api/v1/cities/active?lang={lang}` to list only cities with active providers.
+- **Fetch**: Uses `GET /api/v1/cities/all?lang={lang}` to list ALL configured cities regardless of provider availability status.
 - **UI**: Displayed as a grid of cards with city names and country codes.
 - **SEO**: Indexed, with English metadata by default.
 - **Persistence**: The slug `izberi-grad` is fixed across all languages to maintain SEO stability.
