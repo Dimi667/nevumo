@@ -577,6 +577,13 @@ This separation ensures that:
     - No page reload or navigation context loss
   - **CookieSettingsLink Exception:** Cookie Settings link uses custom event system (`open-cookie-settings`) instead of modal, as it opens the cookie banner UI
   - **Embed Mode Support (May 27, 2026):** GlobalFooter hidden in embed mode via `[data-global-footer] { display: none !important; }` CSS rule in provider page
+  - **Support Email Link (June 2026):**
+    - Added `mailto:support@nevumo.com` link to GlobalFooter.tsx
+    - Placement: bottom row, left side (replaces copyright position)
+    - Copyright `© 2026 Nevumo` moved to a new centered row below the bottom row
+    - Style: text-sm, text-gray-700, hover:text-orange-600 hover:underline
+    - No translation key needed — email address is identical across all 34 languages
+    - Only visible in `!minimal` mode (same as legal links)
   - **UX Improvement:** Provides better visibility of provider offerings while maintaining progressive disclosure for providers with many services
   - **Note:** Services are filtered by category - on cleaning pages only cleaning services are shown per provider
 - **FooterAppBar (June 2026)**:
