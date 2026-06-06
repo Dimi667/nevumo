@@ -515,19 +515,40 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
           <>
             {/* Intent-based header (or claim-specific when claim token present) */}
             <div className="mb-6 text-center">
-              <h1 className="text-[20px] font-bold text-[#171717] leading-tight">
-                {claimToken
-                  ? t(authDict, 'claim_headline', "Claim your profile on Nevumo")
-                  : state.intent === 'provider'
-                  ? t(authDict, 'hero_title_provider', 'Start getting clients')
-                  : t(authDict, 'hero_title_client', 'Find a service in minutes')}
-              </h1>
               {claimToken ? (
-                <p className="text-sm text-gray-500 mt-1">
-                  {t(authDict, 'claim_subtitle', "Register for free and manage your clients")}
-                </p>
-              ) : state.intent !== 'provider' && (
-                <p className="text-sm text-gray-500 mt-1">{t(authDict, 'hero_subtitle_client', 'Free • No obligation')}</p>
+                <>
+                  <h1 className="text-[20px] font-bold text-[#171717] leading-tight">
+                    {t(authDict, 'claim_headline', "Claim your profile on Nevumo")}
+                  </h1>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {t(authDict, 'claim_subtitle', "Register for free and manage your clients")}
+                  </p>
+                </>
+              ) : state.intent === 'provider' ? (
+                <>
+                  <h1 className="text-[20px] font-bold text-[#171717] leading-tight">
+                    {t(authDict, 'hero_title_provider', 'Start getting clients')}
+                  </h1>
+                </>
+              ) : state.intent === 'client' ? (
+                <>
+                  <h1 className="text-[20px] font-bold text-[#171717] leading-tight">
+                    {t(authDict, 'hero_title_client', 'Find a service in minutes')}
+                  </h1>
+                  <p className="text-sm text-gray-500 mt-1">{t(authDict, 'hero_subtitle_client', 'Free • No obligation')}</p>
+                </>
+              ) : (
+                <>
+                  <h1 className="text-[20px] font-bold text-[#171717] leading-tight">
+                    {t(authDict, 'hero_title_neutral', 'Nevumo works for you!')}
+                  </h1>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {t(authDict, 'hero_subtitle_neutral_1', 'Looking for a service or offering one — it works both ways')}
+                  </p>
+                  <p className="text-sm text-orange-500 mt-0.5 font-semibold">
+                    {t(authDict, 'hero_subtitle_neutral_2', 'No commission!')}
+                  </p>
+                </>
               )}
             </div>
 
