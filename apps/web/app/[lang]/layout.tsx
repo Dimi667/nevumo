@@ -1,5 +1,6 @@
 import LayoutShell from './LayoutShell';
 import PWAUrlTracker from '@/components/PWAUrlTracker';
+import AutoIntentTracker from '@/components/AutoIntentTracker';
 
 interface LangLayoutProps {
   children: React.ReactNode;
@@ -11,6 +12,7 @@ export default async function LangLayout({ children, params }: LangLayoutProps) 
   return (
     <LayoutShell lang={lang}>
       <PWAUrlTracker />
+      <AutoIntentTracker />
       {children}
     </LayoutShell>
   );

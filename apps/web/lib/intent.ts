@@ -11,3 +11,11 @@ export function clearStoredIntent(): void {
   localStorage.removeItem("nevumo_intent");
   localStorage.removeItem("nevumo_lang");
 }
+
+export function setStoredIntent(intent: 'client' | 'provider'): void {
+  if (typeof window === 'undefined') return;
+  const current = localStorage.getItem('nevumo_intent');
+  if (!current) {
+    localStorage.setItem('nevumo_intent', intent);
+  }
+}
