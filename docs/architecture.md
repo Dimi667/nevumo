@@ -2765,3 +2765,42 @@ python scripts/seed_review_translations.py
 - namespace `provider_page`: section_gallery, section_about, section_services, section_reviews, read_more, read_less, completed_jobs, meta_services, meta_cities, reviews_count, request_panel_title, request_panel_free, request_panel_no_commitment, or_general_request, phone_placeholder, notes_placeholder, cta_button, trust_verified, trust_free, trust_direct
 - Seed скрипт: apps/api/scripts/seed_provider_page_translations.py
 - Easy opt-out mechanism
+
+---
+
+### Auto-Intent Detection System (June 6, 2026)
+
+#### Problem solved
+- Auth header showed client text by default when `nevumo_intent` was null
+- Intent was set manually and inconsistently across components
+- No automatic detection of user intent based on navigation patterns
+
+#### New files created
+- `apps/web/lib/intent-config.ts` — `PROVIDER_ROUTES` list defining provider-specific paths
+- `apps/web/hooks/useAutoIntent.ts` — auto-detects intent on route change using pathname analysis
+- `apps/web/components/AutoIntentTracker.tsx` — mounts hook at root level in layout
+
+#### Modified files
+- `apps/web/lib/intent.ts` — added `setStoredIntent()` function for localStorage management
+- `apps/web/app/[lang]/layout.tsx` — added `<AutoIntentTracker />` component to enable system-wide tracking
+- `apps/web/app/[lang]/auth/LoginClient.tsx` — neutral header when intent is null
+
+#### Intent rules
+- **Homepage** (`/bg`, `/en`, `/pl`, etc.) → skip, no intent set (preserves neutral state)
+- **Auth routes** (`/auth/*`) → skip, no intent set
+- **Dashboard routes** (`/provider/dashboard/*`, `/client/dashboard/*`) → skip, no intent set
+- **Provider routes** (paths in `PROVIDER_ROUTES`) → set to `provider` (only if currently null)
+- **All other routes** → set to `client` (only if currently null)
+- **Once set**, intent is never overwritten automatically (preserves user's explicit choice)
+
+#### New translation keys seeded (seed_auth_neutral_hero.py)
+- `auth.hero_title_neutral` — "Nevumo работи за теб!"
+- `auth.hero_subtitle_neutral_1` — "Търсиш услуга или предлагаш услуга — става и в двата случая"
+- `auth.hero_subtitle_neutral_2` — "Без комисионни!"
+
+#### Implementation details
+- The system uses `usePathname()` from Next.js to detect route changes
+- Intent is stored in `localStorage` under the key `nevumo_intent`
+- The hook only sets intent if the current value is `null`, preventing overwrites
+- Homepage detection uses path segment counting: `segments.length <= 1` indicates language-only path
+- Provider routes are defined in `intent-config.ts` and include paths like `/dolacz`, `/provider/dashboard`, etc.
