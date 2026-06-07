@@ -88,12 +88,33 @@ export default async function Homepage({ params }: PageProps) {
   const cityData = await getCityBySlug(citySlug, lang);
   const cityName = cityData?.city || citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
 
+  const cityStatsRes = await fetch(
+    `${process.env.API_URL}/api/v1/cities/${citySlug}/stats`,
+    { cache: 'no-store' }
+  ).catch(() => null)
+  const cityStats = cityStatsRes?.ok ? await cityStatsRes.json() : null
+
+  const providerCount: number = cityStats?.data?.provider_count ?? 0
+  const requestCount: number = cityStats?.data?.request_count ?? 0
+
   // Slavic languages that use grammatical cases (locative/genitive)
   const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
   const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
 
   const organizationJsonLd = generateOrganizationJsonLd();
   const websiteJsonLd = generateWebSiteJsonLd(lang);
+
+  let socialProofText = ''
+  if (providerCount > 0 && requestCount > 0) {
+    socialProofText = t(homepageT, 'social_proof', '')
+      .replace('{providers}', String(providerCount))
+      .replace('{requests}', String(requestCount))
+  } else if (providerCount > 0) {
+    socialProofText = t(homepageT, 'social_proof_providers_only', '')
+      .replace('{providers}', String(providerCount))
+  } else {
+    socialProofText = t(homepageT, 'social_proof_pioneer', '')
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -149,9 +170,11 @@ export default async function Homepage({ params }: PageProps) {
             </span>
           </div>
           
-          <div className="text-lg mb-10 text-orange-100">
-            {getLocalizedCityText(t(homepageT, 'social_proof', ''), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
-          </div>
+          {socialProofText && (
+            <div className="text-lg mb-10 text-orange-100">
+              {socialProofText}
+            </div>
+          )}
           
           <AuthIntentButton
             href={`/${normalizedLang}/auth`}
