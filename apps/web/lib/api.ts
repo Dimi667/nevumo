@@ -368,7 +368,7 @@ export async function getCityStats(citySlug: string): Promise<{ provider_count: 
     if (!res.ok) return null
     const json = await res.json()
     console.log('[getCityStats] data:', JSON.stringify(json?.data))
-    return json?.data ?? null
+    return json ?? null
   } catch (e) {
     console.log('[getCityStats] ERROR:', e)
     return null
