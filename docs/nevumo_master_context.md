@@ -259,6 +259,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 | `lang` | Cookie | Избран език от dropdown | 30 дни | Functional |
 | `nevumo_city_preference` | localStorage | Предпочитан град | Indefinite | Functional |
 | `nevumo_last_url` | localStorage | Последна посетена чиста URL за PWA smart redirect | Indefinite | Functional |
+| `nevumo_pwa_ctx` | Cookie | Дублира nevumo_last_url за iOS PWA isolated storage — последна посетена чиста URL | 30 дни (max-age=2592000) | Functional |
 | `nevumo_auth_email` | sessionStorage | Email при auth flow | Session (tab) | Договор |
 
 Пълният актуален списък (11 entries) е в `docs/gdpr_compliance_plan.md` ЗАДАЧА 4.
@@ -1067,7 +1068,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Решение**: Нова /pwa-start страница с интелигентна redirect логика.
   - **Нови файлове**:
     - apps/web/app/pwa-start/page.tsx — client компонент с redirect логика и оранжев spinner
-    - apps/web/hooks/usePWALastUrl.ts — записва последната "чиста" URL в localStorage
+    - apps/web/hooks/usePWALastUrl.ts — записва последната "чиста" URL в localStorage И в cookie nevumo_pwa_ctx
     - apps/web/components/PWAUrlTracker.tsx — невидим компонент, монтиран в [lang]/layout.tsx
   - **Промени по съществуващи файлове**:
     - apps/web/public/manifest.json — start_url сменен от "/" на "/pwa-start"
@@ -1077,11 +1078,16 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - Логнат провайдър → /{lang}/provider/dashboard
     - Логнат клиент + nevumo_ctx.city → /{lang}/{city}
     - Логнат клиент без град → /{lang}
-    - Анонимен + nevumo_last_url → последната посетена страница
-    - Анонимен без last_url → /{lang}
-  - **"Чисти" URL-и** (записват се в nevumo_last_url): homepage, city pages, category pages, provider pages (1-4 сегмента)
+    - Анонимен + nevumo_last_url (localStorage) → последната посетена страница
+    - Анонимен + nevumo_pwa_ctx (cookie) → последната посетена страница (iOS fallback)
+    - Анонимен + cookie `lang` → /{lang} (език от cookie)
+    - Анонимен + navigator.language → /{lang} (системен език)
+    - Анонимен без нищо → /en
+  - **"Чисти" URL-и** (записват се в nevumo_last_url и nevumo_pwa_ctx): homepage, city pages, category pages, provider pages (1-4 сегмента)
   - **"Мръсни" URL-и** (не се записват): /auth/*, /dashboard/*, /pwa-start, /izberi-grad
   - **localStorage ключ**: nevumo_last_url — последната посетена чиста URL за PWA smart redirect
+  - **Cookie**: nevumo_pwa_ctx — дублира nevumo_last_url като cookie (path=/; max-age=2592000; SameSite=Lax); решава iOS PWA isolated storage проблема — iOS PWA има напълно изолиран localStorage от Safari browser, но cookies се споделят
+  - **iOS бъг (June 2026)**: При инсталиране на PWA от iOS Safari, PWA-то стартира с празен localStorage (изолиран от браузъра). nevumo_pwa_ctx cookie се чете успешно и redirect-ва към последната посетена страница.
 - **PWA Етап 4 — Web Push Notifications (June 7, 2026)** — COMPLETE:
   - **Backend:**
     - Dependency: `pywebpush>=2.0.0` added to `apps/api/requirements.txt`
