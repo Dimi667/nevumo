@@ -18,6 +18,7 @@ import { usePhone } from '@/hooks/usePhone';
 import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 function getAvailabilityOptions(t: (key: string, fallback?: string) => string): { value: AvailabilityStatus; label: string }[] {
   return [
@@ -33,6 +34,7 @@ const MAX_SLUG_CHANGES = 1;
 export default function SettingsPage() {
   const router = useRouter();
   const { t, lang } = useDashboardI18n();
+  const { isSupported, isSubscribed, isLoading: pushLoading, subscribe, unsubscribe } = usePushNotifications();
   const user = getAuthUser();
 
   const [profile, setProfile] = useState<ProviderProfile | null>(null);
@@ -533,6 +535,32 @@ export default function SettingsPage() {
         </button>
       </div>
       */}
+
+      {/* Push Notifications */}
+      {isSupported && (
+        <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
+          <h2 className="text-sm font-semibold text-gray-800">{t('settings.push_title', 'Push Notifications')}</h2>
+          <p className="text-sm text-gray-500">
+            {t('settings.push_description', 'Receive instant notifications for new leads and messages.')}
+          </p>
+          <button
+            type="button"
+            onClick={isSubscribed ? unsubscribe : subscribe}
+            disabled={pushLoading}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 ${
+              isSubscribed
+                ? 'border border-gray-300 text-gray-700 hover:bg-gray-100'
+                : 'bg-orange-500 hover:bg-orange-600 text-white'
+            }`}
+          >
+            {pushLoading
+              ? t('settings.push_loading', 'Please wait...')
+              : isSubscribed
+              ? t('settings.push_disable', 'Disable Notifications')
+              : t('settings.push_enable', 'Enable Notifications')}
+          </button>
+        </div>
+      )}
 
       {/* Logout */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
