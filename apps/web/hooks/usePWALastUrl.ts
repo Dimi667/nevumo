@@ -19,5 +19,8 @@ export function usePWALastUrl(): void {
 
     // Save to localStorage
     localStorage.setItem('nevumo_last_url', pathname);
+
+    // Save to cookie as fallback for PWA on iOS (isolated localStorage)
+    document.cookie = `nevumo_pwa_ctx=${pathname}; path=/; max-age=2592000; SameSite=Lax`;
   }, [pathname]);
 }
