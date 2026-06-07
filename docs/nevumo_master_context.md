@@ -433,7 +433,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
-- **Web Push Notifications (June 7, 2026)** — COMPLETE: pywebpush backend, VAPID keys, push_subscriptions table, push service, 3 API endpoints, Service Worker push/notificationclick handlers, usePushNotifications hook, provider settings toggle. Providers notified on new leads, clients notified on status changes.
+- **Web Push Notifications (June 7, 2026)** — COMPLETE: pywebpush backend, VAPID keys, push_subscriptions table, push service, 3 API endpoints, Service Worker push/notificationclick handlers, usePushNotifications hook, provider settings toggle. Full coverage: providers notified on new leads + new reviews; clients notified on lead status changes + review replies.
 - **Provider CTA with City/Category Pre-fill (May 2026)** — COMPLETE:
   - **Category page header CTA**: Replaced static "Become a specialist" link with 2-line dynamic CTA using new translation keys `nav_cta_line1` and `nav_cta_line2` (category namespace, 68 rows × 34 languages). Href updated to `/${lang}/auth?mode=register&role=provider&city=${citySlug}&category=${categorySlug}`
   - **Auth flow**: `LoginClient.tsx` now saves `city` and `category` query params to localStorage (`nevumo_selected_city`, `nevumo_selected_category`) after successful provider registration
@@ -1095,6 +1095,8 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - Push triggers added:
       - `apps/api/routes/leads.py` — push to provider on new lead (after email notification)
       - `apps/api/routes/provider.py` — push to client on lead status update (after email notification)
+      - `apps/api/routes/client.py` — push to provider on new review (only first review per lead)
+      - `apps/api/routes/reviews.py` — push to client on provider review reply (only first reply, not edits)
     - **Import path rule**: all new files under `apps/api/routes/` and `apps/api/services/` must use `apps.api.*` absolute imports (Railway runs uvicorn from `/workspace` monorepo root)
   - **Frontend:**
     - New hook: `apps/web/hooks/usePushNotifications.ts` — `isSupported`, `isSubscribed`, `isLoading`, `subscribe()`, `unsubscribe()` — handles VAPID key fetch, PushManager subscription, API calls to `/api/v1/push/subscribe` and `/api/v1/push/unsubscribe`
