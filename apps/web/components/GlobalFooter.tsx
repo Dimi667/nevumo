@@ -23,7 +23,7 @@ interface GlobalFooterProps {
 function readCurrentCity(currentLang: string): string {
   // Priority 1: explicit nevumo_city cookie
   const cookieMatch = document.cookie.match(/(?:^|;\s*)nevumo_city=([^;]+)/);
-  if (cookieMatch) return decodeURIComponent(cookieMatch[1]);
+  if (cookieMatch?.[1]) return decodeURIComponent(cookieMatch[1]);
 
   // Priority 2: localStorage nevumo_ctx
   try {
