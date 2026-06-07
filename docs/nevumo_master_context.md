@@ -1134,6 +1134,21 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **City Page Hero (4 States)**: Implemented `CityPageHero.tsx` with dynamic content based on provider count, request count, and ratings.
   - **City Stats API**: Added `GET /api/v1/cities/{slug}/stats` with Redis caching (1h TTL) to power the hero section.
   - **Lead Form Integration**: Integrated `LeadForm` directly into the city hero via `CityHeroChips.tsx`.
+- **Homepage Hero Social Proof (June 2026)** — COMPLETE:
+  - Fixed: hero was showing hardcoded "47 specialists • 120 requests" from seed script
+  - Root cause: homepage did not call city stats API; numbers were hardcoded in translation value
+  - Added: `getCityStats(citySlug)` function in `apps/web/lib/api.ts` using `API_BASE`
+  - API discovery: `GET /api/v1/cities/{slug}/stats` returns flat JSON (no success/data wrapper)
+  - Updated: `apps/web/app/[lang]/page.tsx` now fetches real stats via getCityStats()
+  - 3-state social proof logic:
+    - provider_count > 0 AND request_count > 0 → "{providers} specialists • {requests} requests this month"
+    - provider_count > 0 AND request_count == 0 → "{providers} specialists have already registered"
+    - provider_count == 0 → "And more: statistics, client reviews, Website Widget"
+  - Changed translation key: `homepage.trust_1` from "No commission" → "Visibility in Google" (all 34 langs)
+  - Updated: `homepage.social_proof` — now uses {providers} and {requests} placeholders
+  - Added: `homepage.social_proof_providers_only` (new key, all 34 langs)
+  - Added: `homepage.social_proof_pioneer` (new key, all 34 langs)
+  - Affected files: apps/api/scripts/seed_ui_translations.py, apps/web/lib/api.ts, apps/web/app/[lang]/page.tsx
 - **Lead Cancellation Logic Improvement (April 24, 2026)** — COMPLETE:
   - Updated `provider_service.py` to correctly handle UI status for cancelled leads.
   - Modified `change_lead_status` to prevent `lead_match.status` update when lead is cancelled.

@@ -1734,12 +1734,9 @@ Same format as `GET /api/v1/cities/active`.
 ### Response
 ```json
 {
-  "success": true,
-  "data": {
-    "provider_count": 5,
-    "request_count": 120,
-    "average_rating": 4.5
-  }
+  "provider_count": 4,
+  "request_count": 2,
+  "average_rating": null
 }
 ```
 
@@ -1747,7 +1744,7 @@ Same format as `GET /api/v1/cities/active`.
 - Returns aggregate statistics for a specific city.
 - `provider_count`: Number of active providers in the city.
 - `request_count`: Total number of leads created in the city.
-- `average_rating`: Average rating of all providers in the city (0 if no ratings).
+- `average_rating`: Average rating of all providers in the city (null if no ratings).
 
 ---
 
