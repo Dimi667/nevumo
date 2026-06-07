@@ -437,6 +437,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Category page header CTA**: Replaced static "Become a specialist" link with 2-line dynamic CTA using new translation keys `nav_cta_line1` and `nav_cta_line2` (category namespace, 68 rows × 34 languages). Href updated to `/${lang}/auth?mode=register&role=provider&city=${citySlug}&category=${categorySlug}`
   - **Auth flow**: `LoginClient.tsx` now saves `city` and `category` query params to localStorage (`nevumo_selected_city`, `nevumo_selected_category`) after successful provider registration
   - **Onboarding Step 2**: `profile/page.tsx` reads `nevumo_selected_city` from localStorage in a separate `useEffect([cities])` and pre-fills city dropdown. Fix: city.id cast to `String()` to match `cityOptions` value type (string[])
+  - **Onboarding City Dropdown Fix (June 7, 2026)**: `profile/page.tsx` previously called `getCities('BG', lang)`, `getCities('RS', lang)`, `getCities('PL', lang)` separately. Replaced with single `getAllCities(lang)` call using `GET /api/v1/cities/all?lang={lang}`. Both `/izberi-grad` and the onboarding city dropdown now use the same data source and show all cities from the database.
   - **Seed script**: `apps/api/scripts/seed_nav_cta_translations.py`
 - **Legal & Compliance (May 2026)** — COMPLETE:
   - /[lang]/terms страница с онлайн форма и PDF изтегляне на withdrawal form
