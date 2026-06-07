@@ -4,6 +4,7 @@ import { fetchTranslations, t } from '@/lib/ui-translations';
 import { getCityBySlug, getCityStats } from '@/lib/api';
 import { resolveDefaultCity } from '@/lib/default-city';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
+import { cookies } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 import RotatingCategory from '@/components/homepage/RotatingCategory';
@@ -21,9 +22,10 @@ export async function generateMetadata({ params }: PageProps) {
   const { lang } = await params;
   const homepageT = await fetchTranslations(lang, 'homepage');
   const cityT = await fetchTranslations(lang, 'city');
+  const cookieCity = (await cookies()).get('nevumo_city')?.value;
 
   // Resolve city for dynamic translations
-  const citySlug = await resolveDefaultCity(lang);
+  const citySlug = await resolveDefaultCity(lang, cookieCity);
   const cityData = await getCityBySlug(citySlug, lang);
   const cityName = cityData?.city || citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
 
@@ -81,10 +83,11 @@ export default async function Homepage({ params }: PageProps) {
   const homepageT = await fetchTranslations(lang, 'homepage');
   const cityT = await fetchTranslations(lang, 'city');
   const cookieT = await fetchTranslations(lang, 'cookie_banner');
+  const cookieCity = (await cookies()).get('nevumo_city')?.value;
   const rotatingCategories = t(homepageT, 'rotating_categories', 'Massage,Cleaning,Plumbing').split(',');
 
   // Resolve city for dynamic translations
-  const citySlug = await resolveDefaultCity(lang);
+  const citySlug = await resolveDefaultCity(lang, cookieCity);
   const cityData = await getCityBySlug(citySlug, lang);
   const cityName = cityData?.city || citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
 

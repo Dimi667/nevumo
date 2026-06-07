@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { getActiveCities, getAllCities } from '@/lib/api';
+import { getAllCities } from '@/lib/api';
 import { generateHreflangAlternates } from '@/lib/seo';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
 import { fetchTranslations, t } from '@/lib/ui-translations';
+import CitySelectButton from './CitySelectButton';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
@@ -80,11 +80,7 @@ export default async function ChooseCityPage({ params }: PageProps) {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {cities.map((city) => (
-              <Link
-                key={city.id}
-                href={`/${normalizedLang}/${city.slug}`}
-                className="nevumo-card flex items-center justify-between hover:border-orange-500 hover:shadow-md transition-all group"
-              >
+              <CitySelectButton key={city.id} slug={city.slug} lang={normalizedLang}>
                 <div>
                   <h3 className="text-xl font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">
                     {city.city}
@@ -107,7 +103,7 @@ export default async function ChooseCityPage({ params }: PageProps) {
                     <path d="M9 18l6-6-6-6" />
                   </svg>
                 </div>
-              </Link>
+              </CitySelectButton>
             ))}
           </div>
         )}
