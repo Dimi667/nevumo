@@ -10,6 +10,7 @@ import {
   LANGUAGE_FLAGS,
   LANGUAGE_COOKIE_NAME,
 } from '@/lib/locales';
+import { getDefaultCityForLang } from '@/lib/default-city';
 import { CookieSettingsLink } from '@/components/ui/CookieSettingsLink';
 import LegalModal from '@/components/auth/LegalModal';
 import FooterAppBar from '@/components/footer/FooterAppBar';
@@ -17,6 +18,26 @@ import FooterAppBar from '@/components/footer/FooterAppBar';
 interface GlobalFooterProps {
   lang: string;
   minimal?: boolean;
+}
+
+function readCurrentCity(currentLang: string): string {
+  // Priority 1: explicit nevumo_city cookie
+  const cookieMatch = document.cookie.match(/(?:^|;\s*)nevumo_city=([^;]+)/);
+  if (cookieMatch) return decodeURIComponent(cookieMatch[1]);
+
+  // Priority 2: localStorage nevumo_ctx
+  try {
+    const raw = localStorage.getItem('nevumo_ctx');
+    if (raw) {
+      const parsed = JSON.parse(raw) as { city?: string };
+      if (parsed.city) return parsed.city;
+    }
+  } catch {
+    // ignore parse errors
+  }
+
+  // Priority 3: language mapping for CURRENT (not new) lang
+  return getDefaultCityForLang(currentLang);
 }
 
 export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProps) {
@@ -82,6 +103,9 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
   }, [isOpen]);
 
   const handleLanguageChange = (newLang: string) => {
+    const currentCity = readCurrentCity(lang);
+    document.cookie = `nevumo_city=${currentCity}; path=/; max-age=31536000; SameSite=Lax`;
+
     // Replace lang segment in pathname
     const pathSegments = pathname.split('/').filter(Boolean);
     if (pathSegments.length > 0 && SUPPORTED_LANGUAGES.includes(pathSegments[0] as string)) {

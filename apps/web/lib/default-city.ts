@@ -33,3 +33,7 @@ export async function resolveDefaultCity(lang: string, cookieCity?: string): Pro
   // 4. Fallback
   return validateCitySlug(DEFAULT_CITY);
 }
+
+export function getDefaultCityForLang(lang: string): string {
+  return LANGUAGE_TO_CITY[lang] ?? DEFAULT_CITY;
+}
