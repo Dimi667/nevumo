@@ -1,7 +1,7 @@
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
 import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
-import { getCityBySlug } from '@/lib/api';
+import { getCityBySlug, getCityStats } from '@/lib/api';
 import { resolveDefaultCity } from '@/lib/default-city';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
 import Image from 'next/image';
@@ -88,14 +88,9 @@ export default async function Homepage({ params }: PageProps) {
   const cityData = await getCityBySlug(citySlug, lang);
   const cityName = cityData?.city || citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
 
-  const cityStatsRes = await fetch(
-    `${process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'}/api/v1/cities/${citySlug}/stats`,
-    { cache: 'no-store' }
-  ).catch(() => null)
-  const cityStats = cityStatsRes?.ok ? await cityStatsRes.json() : null
-
-  const providerCount: number = cityStats?.data?.provider_count ?? 0
-  const requestCount: number = cityStats?.data?.request_count ?? 0
+  const cityStatsData = await getCityStats(citySlug)
+  const providerCount: number = cityStatsData?.provider_count ?? 0
+  const requestCount: number = cityStatsData?.request_count ?? 0
 
   // Slavic languages that use grammatical cases (locative/genitive)
   const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];

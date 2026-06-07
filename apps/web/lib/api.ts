@@ -359,6 +359,20 @@ export async function getCityBySlug(slug: string, lang: string = 'en'): Promise<
   }
 }
 
+export async function getCityStats(citySlug: string): Promise<{ provider_count: number; request_count: number; average_rating: number | null } | null> {
+  try {
+    const res = await fetch(
+      `${API_BASE}/api/v1/cities/${citySlug}/stats`,
+      { cache: 'no-store' }
+    )
+    if (!res.ok) return null
+    const json = await res.json()
+    return json?.data ?? null
+  } catch {
+    return null
+  }
+}
+
 export async function getActiveCities(lang: string): Promise<CityOut[]> {
   try {
     const res = await fetch(
