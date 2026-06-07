@@ -41,6 +41,11 @@ class Settings(BaseSettings):
     FROM_EMAIL: str = "Nevumo <noreply@nevumo.com>"
     LEGAL_EMAIL: str = "legal@nevumo.com"
 
+    # Web Push Notifications (VAPID)
+    vapid_public_key: str = ""
+    vapid_private_key: str = ""
+    vapid_claims_email: str = "support@nevumo.com"
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 

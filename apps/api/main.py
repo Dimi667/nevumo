@@ -46,6 +46,7 @@ from apps.api.routes import (
     reviews_router,
     user_router,
 )
+from apps.api.routes.push import router as push_router
 from apps.api.routes.price_range import router as price_range_router
 from apps.api.routes.translations import router as translations_router
 from apps.api.routes.consent import router as consent_router
@@ -158,6 +159,7 @@ app.include_router(translations_router, prefix="/api/v1/translations")
 app.include_router(price_range_router, prefix="/api/v1")
 app.include_router(legal_router)
 app.include_router(consent_router, prefix="/api/v1", tags=["consent"])
+app.include_router(push_router, prefix="/api/v1")
 
 # Serve uploaded provider images
 from apps.api.config import settings
