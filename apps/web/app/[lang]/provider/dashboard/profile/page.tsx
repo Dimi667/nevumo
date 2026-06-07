@@ -4,7 +4,7 @@ import { use, useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ProviderProfile, UpdateProfileInput, PriceType } from '@/types/provider';
 import type { CategoryOut, CityOut } from '@/lib/api';
-import { getCategories, getCities } from '@/lib/api';
+import { getCategories, getAllCities } from '@/lib/api';
 import { getCtx, setCtx, clearCategoryCtx } from '@/lib/ctx';
 import {
   ProviderApiError,
@@ -324,15 +324,13 @@ export default function ProfilePage({ params }: PageProps) {
     Promise.all([
       getProviderProfile(),
       getCategories(lang),
-      getCities('BG', lang),
-      getCities('RS', lang),
-      getCities('PL', lang),
+      getAllCities(lang),
       getProviderDashboard(),
     ])
-      .then(([p, cats, bgCities, rsCities, plCities, dashboard]) => {
+      .then(([p, cats, cities, dashboard]) => {
         setProfile(p);
         setCategories(cats);
-        setCities([...bgCities, ...rsCities, ...plCities]);
+        setCities(cities);
         setPublicUrl(null);
 
         // Pre-select category from localStorage if valid and not already selected
