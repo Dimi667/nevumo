@@ -19,6 +19,8 @@ from apps.api.services.review_service import (
     get_latest_review_preview,
     add_provider_reply,
 )
+from apps.api.models import User, Review
+from apps.api.services.push_service import send_push_notification
 
 router = APIRouter(prefix="/api/v1/provider", tags=["provider"])
 
@@ -92,6 +94,18 @@ def reply_to_review(
         db=db
     )
 
+    if review.provider_reply_edit_count == 0:
+        try:
+            if review.client_id:
+                send_push_notification(
+                    db=db,
+                    user_id=str(review.client_id),
+                    title="Review Reply",
+                    body="A provider replied to your review.",
+                    url="/client/dashboard/reviews",
+                )
+        except Exception:
+            pass
     return ProviderReplyResponse(data={
         "id": review.id,
         "provider_reply": review.provider_reply,
