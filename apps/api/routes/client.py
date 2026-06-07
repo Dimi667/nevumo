@@ -24,6 +24,7 @@ from apps.api.schemas import (
 )
 from apps.api.services.client_service import get_client_dashboard, get_client_leads, require_client_user
 from apps.api.services.email_service import email_service
+from apps.api.services.push_service import send_push_notification
 from apps.api.services.review_service import (
     get_eligible_leads_for_review,
     create_review,
@@ -264,6 +265,18 @@ def create_client_review(
                     comment=body.comment,
                     dashboard_url=dashboard_url,
                 )
+    except Exception:
+        pass
+    try:
+        provider = db.query(Provider).filter(Provider.id == review.provider_id).first()
+        if provider and provider.user_id:
+            send_push_notification(
+                db=db,
+                user_id=str(provider.user_id),
+                title="New Review",
+                body=f"You received a {body.rating}★ review.",
+                url="/provider/dashboard/reviews",
+            )
     except Exception:
         pass
 
