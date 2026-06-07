@@ -714,7 +714,7 @@ Allowed values: `contacted` | `done` | `rejected`
 - 404 LEAD_NOT_FOUND — lead doesn't exist or provider doesn't own it
 
 ### Notes
-- Strictly verifies that the requesting provider owns the lead
+- Ownership check accepts leads from both `Lead.provider_id` (direct assignment) and `LeadMatch.provider_id` (marketplace/broadcast matches) — matches the dashboard fetch query logic
 - `provider_notes` is optional and can be set to `null` to clear
 
 ---

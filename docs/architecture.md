@@ -2166,6 +2166,12 @@ Layout: Sidebar (logo + nav links + "View public profile" button on mobile + "Н
 - Translation key: label_private_notes (provider_dashboard namespace)
 - Search functionality: searches across client_name, client_email, client_phone, description, and provider_notes fields with case-insensitive partial matching
 
+#### Provider Notes Ownership Fix (June 2026)
+- **Problem:** Saving notes on marketplace-matched leads (broadcast/retro-matched) returned 404 LEAD_NOT_FOUND
+- **Root cause:** `update_lead_provider_notes` in `apps/api/routes/provider.py` checked ownership via `Lead.provider_id == provider.id` only — it did not check `LeadMatch`. The dashboard fetch query included leads from both `Lead.provider_id` AND `LeadMatch.provider_id`, so matched leads appeared in the UI but failed on save.
+- **Fix:** Ownership check in `update_lead_provider_notes` updated to mirror the dashboard fetch query — uses `outerjoin(LeadMatch)` + `or_(Lead.provider_id == provider.id, LeadMatch.provider_id == provider.id)`
+- **File modified:** `apps/api/routes/provider.py`
+
 **Services** — Grid of service cards showing: title, category, cities (as badges), price + currency, price_type. "Add Service" button. Each card has Edit and Delete buttons. Delete triggers confirmation dialog → DELETE endpoint. Add → empty "New Service" form. Edit → pre-filled "Edit Service" form. Empty state when no services.
 
 **Analytics** — KPI cards (Total Leads, Contacted, Conversion %). Period toggle: 7 days / 30 days. Source breakdown horizontal bars (seo, direct, widget, qr).
