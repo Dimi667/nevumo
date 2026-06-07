@@ -444,6 +444,17 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - `apps/web/components/GlobalFooter.tsx` — added `readCurrentCity(currentLang)` helper + city-lock logic as first two lines of `handleLanguageChange`
   - **Result**: Hero city is unchanged when user switches language. City changes only on explicit selection via `/izberi-grad`.
 - **Web Push Notifications (June 7, 2026)** — COMPLETE: pywebpush backend, VAPID keys, push_subscriptions table, push service, 3 API endpoints, Service Worker push/notificationclick handlers, usePushNotifications hook, provider settings toggle. Full coverage: providers notified on new leads + new reviews; clients notified on lead status changes + review replies.
+- **Related Links Category Names Fix (June 7, 2026)** — COMPLETE:
+  - **Problem**: "Виж също" section on category pages showed category names in English on all languages. Root cause: `category.h1_cleaning/massage/plumbing` keys existed in `translations` table but were empty strings — falsy in JS, always triggering English fallback.
+  - **Root cause (architectural)**: Using `translations` table for category names is wrong. The correct source is `category_translations` table (102 rows: 3 categories × 34 languages).
+  - **Fix**: `apps/web/app/[lang]/[city]/[category]/page.tsx`
+    - Added `getCategories(lang)` import from `@/lib/api`
+    - Replaced hardcoded `relatedLinksByCategory` Record with dynamic logic:
+      - Calls `getCategories(lang)` → fetches from `GET /api/v1/categories?lang={lang}`
+      - Filters out current category by slug
+      - Builds labels: `${cat.name} ${prepBaseCat} {city}` → passed to `getLocalizedCityText()`
+  - **Scalability**: Adding a new category to DB automatically appears in related links. Zero code changes needed.
+  - **Note**: `category.h1_cleaning/massage/plumbing` keys remain in DB (empty) — not removed, not used.
 - **Provider CTA with City/Category Pre-fill (May 2026)** — COMPLETE:
   - **Category page header CTA**: Replaced static "Become a specialist" link with 2-line dynamic CTA using new translation keys `nav_cta_line1` and `nav_cta_line2` (category namespace, 68 rows × 34 languages). Href updated to `/${lang}/auth?mode=register&role=provider&city=${citySlug}&category=${categorySlug}`
   - **Auth flow**: `LoginClient.tsx` now saves `city` and `category` query params to localStorage (`nevumo_selected_city`, `nevumo_selected_category`) after successful provider registration
