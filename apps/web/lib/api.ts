@@ -361,16 +361,14 @@ export async function getCityBySlug(slug: string, lang: string = 'en'): Promise<
 
 export async function getCityStats(citySlug: string): Promise<{ provider_count: number; request_count: number; average_rating: number | null } | null> {
   try {
-    const url = `${API_BASE}/api/v1/cities/${citySlug}/stats`
-    console.log('[getCityStats] URL:', url)
-    const res = await fetch(url, { cache: 'no-store' })
-    console.log('[getCityStats] status:', res.status, 'ok:', res.ok)
+    const res = await fetch(
+      `${API_BASE}/api/v1/cities/${citySlug}/stats`,
+      { cache: 'no-store' }
+    )
     if (!res.ok) return null
     const json = await res.json()
-    console.log('[getCityStats] data:', JSON.stringify(json?.data))
     return json ?? null
-  } catch (e) {
-    console.log('[getCityStats] ERROR:', e)
+  } catch {
     return null
   }
 }
