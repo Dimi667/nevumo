@@ -1149,6 +1149,14 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Added: `homepage.social_proof_providers_only` (new key, all 34 langs)
   - Added: `homepage.social_proof_pioneer` (new key, all 34 langs)
   - Affected files: apps/api/scripts/seed_ui_translations.py, apps/web/lib/api.ts, apps/web/app/[lang]/page.tsx
+- **Homepage Hero City Fix (June 2026)** — COMPLETE:
+  - Problem: Homepage Hero showed the language-default city even after user explicitly selected a different city on `/izberi-grad`.
+  - Root cause: City preference was stored only in localStorage (`nevumo_ctx.city`), which is inaccessible during SSR. Priority 1 always failed server-side, falling through to language mapping.
+  - Fix 1: `apps/web/app/[lang]/izberi-grad/CitySelectButton.tsx` (NEW) — client component that sets cookie `nevumo_city` + syncs localStorage + navigates on city card click.
+  - Fix 2: `apps/web/lib/default-city.ts` — `resolveDefaultCity(lang, cookieCity?)` now accepts optional cookie value as Priority 1.
+  - Fix 3: `apps/web/app/[lang]/page.tsx` — reads `nevumo_city` cookie via `next/headers` in both `generateMetadata` and `Homepage` component, passes to `resolveDefaultCity`.
+  - Result: Homepage Hero correctly reflects user's city selection on every subsequent SSR visit.
+  - Compatibility: No impact on provider registration pre-fill (uses URL params → localStorage), Google OAuth flow (uses state param), or CtxCapture mechanism.
 - **Lead Cancellation Logic Improvement (April 24, 2026)** — COMPLETE:
   - Updated `provider_service.py` to correctly handle UI status for cancelled leads.
   - Modified `change_lead_status` to prevent `lead_match.status` update when lead is cancelled.

@@ -132,14 +132,16 @@ This document reflects the major architectural optimization performed in April 2
     - `apps/api/scripts/seed_ui_translations.py`: Updated homepage translations to use `{city}` placeholder
     - `apps/api/scripts/seed_select_city_translations.py`: Added new `homepage.select_city_link` translation key
   - **City Resolution Priority Order**:
-    1. **User Preference** (localStorage): If user has previously selected a city via `saveCityPreference()`
-    2. **Language Mapping**: Maps language codes to default cities (e.g., `pl` → `warszawa`)
-    3. **Fallback**: Defaults to `warsaw` if no preference or mapping exists
+    1. **Cookie** (`nevumo_city`): Set by `/izberi-grad` when user explicitly selects a city. Read server-side during SSR via `next/headers` cookies(). This is Priority 1 because it reflects an explicit user choice.
+    2. **User Preference** (localStorage): `getCityPreference()` via `ctx.ts`. Only works client-side — always fails during SSR.
+    3. **Language Mapping**: Maps language codes to default cities (e.g., `pl` → `warszawa`, `bg` → `sofia`).
+    4. **Fallback**: Defaults to `warszawa` (DEFAULT_CITY).
   - **User City Preference System**:
     - Stored in localStorage under key `nevumo_city_preference`
     - Functions: `saveCityPreference(citySlug)`, `getCityPreference()`, `clearCityPreference()`
     - Persists across sessions for returning users
     - Can be cleared by user via browser settings or UI (future implementation)
+    - Cookie `nevumo_city` (name=`nevumo_city`, path=/, max-age=31536000, SameSite=Lax) is set simultaneously with localStorage update for SSR compatibility.
   - **Default City Mapping**:
     - Defined in `LANGUAGE_TO_CITY` constant in `default-city.ts`
     - Current mapping: `pl` → `warsaw`
@@ -166,7 +168,7 @@ This document reflects the major architectural optimization performed in April 2
     - Adding a new city requires: database entry + language mapping update
     - No code changes needed for homepage or category pages
   - **GDPR Considerations**:
-    - City preference is stored in localStorage (client-side, non-sensitive data)
+    - City preference is stored in both cookie `nevumo_city` (SSR-readable, 1-year expiry) and localStorage `nevumo_ctx.city` (client-side). Both are non-sensitive functional data.
     - Does not require explicit consent under GDPR for basic functionality
     - Must be documented in Privacy Policy and Cookie Policy when those documents are created (future task)
     - User can clear preference via browser localStorage management
@@ -1135,6 +1137,10 @@ Location трябва да бъде нормализирана:
 - **UI**: Displayed as a grid of cards with city names and country codes.
 - **SEO**: Indexed, with English metadata by default.
 - **Persistence**: The slug `izberi-grad` is fixed across all languages to maintain SEO stability.
+- **City Selection Persistence (June 2026)**: City cards are now rendered via a `CitySelectButton` client component (`apps/web/app/[lang]/izberi-grad/CitySelectButton.tsx`). On click:
+  1. Sets cookie `nevumo_city={slug}` (path=/, max-age=31536000, SameSite=Lax) — readable by SSR
+  2. Syncs `nevumo_ctx.city` in localStorage via `setCtx()` — for client-side consistency
+  3. Navigates to `/{lang}/{slug}`
 
 ### Frontend City Data Fetching (Next.js SSR)
 - **Problem**: Next.js SSR can cache `fetch()` calls aggressively. If a city name is updated in the DB, the frontend might still show the old name.
