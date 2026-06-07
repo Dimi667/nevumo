@@ -119,6 +119,7 @@ We use cookies and browser storage to operate the platform. Full details are in 
 | `nevumo_phone` | localStorage | Phone number autofill convenience | Indefinite | Legitimate interest |
 | `nevumo_intent` | localStorage | UX role preference at login | Session | Functional |
 | `nevumo_city_preference` | localStorage | Remembers your preferred city | Indefinite | Functional |
+| `nevumo_city` | Cookie | Stores the city selected by the user for homepage personalisation | 1 year | Functional |
 | `nevumo_last_url` | localStorage | Last visited page for PWA smart redirect | Indefinite | Functional |
 | `nevumo_auth_email` | sessionStorage | Email during registration flow | Session (tab) | Contract |
 
@@ -346,6 +347,7 @@ Nevumo може да създаде профил въз основа на пуб
 | `nevumo_phone` | localStorage | Автоматично попълване на телефон | Неопределено | Легитимен интерес |
 | `nevumo_intent` | localStorage | UX предпочитание за роля при вход | Сесия | Функционален |
 | `nevumo_city_preference` | localStorage | Предпочитан град | Неопределено | Функционален |
+| `nevumo_city` | Бисквитка | Съхранява избрания от потребителя град за персонализация на началната страница | 1 година | Функционален |
 | `nevumo_last_url` | localStorage | Последно посетена страница за PWA пренасочване | Неопределено | Функционален |
 | `nevumo_auth_email` | sessionStorage | Имейл по време на регистрация | Сесия (таб) | Договор |
 
@@ -574,6 +576,7 @@ Nevumo może tworzyć profile dostawców na podstawie publicznie dostępnych inf
 | `nevumo_phone` | localStorage | Automatyczne wypełnianie numeru telefonu | Nieokreślone | Uzasadniony interes |
 | `nevumo_intent` | localStorage | Preferencja roli UX przy logowaniu | Sesja | Funkcjonalny |
 | `nevumo_city_preference` | localStorage | Zapamiętane preferowane miasto | Nieokreślone | Funkcjonalny |
+| `nevumo_city` | Cookie | Przechowuje miasto wybrane przez użytkownika do personalizacji strony głównej | 1 rok | Funkcjonalny |
 | `nevumo_last_url` | localStorage | Ostatnio odwiedzona strona do przekierowania PWA | Nieokreślone | Funkcjonalny |
 | `nevumo_auth_email` | sessionStorage | E-mail podczas rejestracji | Sesja (karta) | Umowa |
 
