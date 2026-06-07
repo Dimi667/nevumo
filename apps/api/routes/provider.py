@@ -30,6 +30,7 @@ from apps.api.schemas import (
 )
 from apps.api.services import provider_service
 from apps.api.services.email_service import email_service
+from apps.api.services.push_service import send_push_notification
 from apps.api.services.provider_service import (
     add_city,
     add_service,
@@ -398,6 +399,18 @@ def update_lead_status(
                     city=str(lead.city_id),
                     dashboard_url=dashboard_url,
                 )
+    except Exception:
+        pass
+    try:
+        lead = db.query(Lead).filter(Lead.id == lead_id).first()
+        if lead and lead.client_id:
+            send_push_notification(
+                db=db,
+                user_id=str(lead.client_id),
+                title="Lead Update",
+                body=f"Your request status changed to: {body.status}",
+                url="/client/dashboard/requests",
+            )
     except Exception:
         pass
     return LeadStatusUpdateResponse(data=result)
