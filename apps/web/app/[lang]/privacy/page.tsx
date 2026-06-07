@@ -185,6 +185,7 @@ export default async function PrivacyPage({ params, searchParams }: PageProps) {
                 ['nevumo_phone', 'localStorage', t(dict, 't4_purpose_phone_autofill', 'Phone autofill'), t(dict, 't4_ret_indefinite', 'Indefinite'), t(dict, 't4_basis_legint', 'Legitimate interest')],
                 ['nevumo_intent', 'localStorage', t(dict, 't4_purpose_ux_role', 'UX role at login'), t(dict, 't4_ret_session', 'Session'), t(dict, 't4_basis_functional', 'Functional')],
                 ['nevumo_city_preference', 'localStorage', t(dict, 't4_purpose_city_pref', 'Preferred city'), t(dict, 't4_ret_indefinite', 'Indefinite'), t(dict, 't4_basis_functional', 'Functional')],
+                ['nevumo_city', 'Cookie', t(dict, 't4_purpose_city_cookie', 'Stores the city selected by the user for homepage personalisation'), t(dict, 't4_ret_1y', '1 year'), t(dict, 't4_basis_functional', 'Functional')],
                 ['nevumo_last_url', 'localStorage', t(dict, 't4_purpose_pwa_redirect', 'Last visited page for PWA smart redirect'), t(dict, 't4_ret_indefinite', 'Indefinite'), t(dict, 't4_basis_functional', 'Functional')],
                 ['nevumo_auth_email', 'sessionStorage', t(dict, 't4_purpose_email_reg', 'Email during registration'), t(dict, 't4_ret_session_tab', 'Session (tab)'), t(dict, 't4_basis_contract', 'Contract')]
               ]}
