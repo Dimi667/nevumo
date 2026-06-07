@@ -46,7 +46,7 @@ from apps.api.routes import (
     reviews_router,
     user_router,
 )
-from routes.push import router as push_router
+from apps.api.routes.push import router as push_router
 from apps.api.routes.price_range import router as price_range_router
 from apps.api.routes.translations import router as translations_router
 from apps.api.routes.consent import router as consent_router
