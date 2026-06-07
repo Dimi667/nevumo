@@ -434,6 +434,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 ## Roadmap Status
 
 ### ✅ Complete
+- **Language Switch City Persistence Fix (June 7, 2026)** — COMPLETE:
+  - **Problem**: Switching the display language changed the Hero city (e.g., switching to `pl` showed Warsaw even if the user was browsing Sofia in Bulgarian).
+  - **Root cause**: `resolveDefaultCity()` reaches Priority 3 (`LANGUAGE_TO_CITY` mapping) when no `nevumo_city` cookie exists. Changing language changes the lang code, which changes the mapped city.
+  - **Fix**: `handleLanguageChange` in `GlobalFooter.tsx` now reads the current city and locks it into `nevumo_city` cookie before navigating to the new language URL. Read priority inside the handler: (1) `nevumo_city` cookie → (2) `nevumo_ctx` localStorage → (3) `LANGUAGE_TO_CITY[currentLang]` fallback.
+  - **TypeScript fix**: `cookieMatch?.[1]` instead of `cookieMatch[1]` to satisfy strict null checks in production build.
+  - **Affected files**:
+    - `apps/web/lib/default-city.ts` — added `getDefaultCityForLang(lang: string): string` export
+    - `apps/web/components/GlobalFooter.tsx` — added `readCurrentCity(currentLang)` helper + city-lock logic as first two lines of `handleLanguageChange`
+  - **Result**: Hero city is unchanged when user switches language. City changes only on explicit selection via `/izberi-grad`.
 - **Web Push Notifications (June 7, 2026)** — COMPLETE: pywebpush backend, VAPID keys, push_subscriptions table, push service, 3 API endpoints, Service Worker push/notificationclick handlers, usePushNotifications hook, provider settings toggle. Full coverage: providers notified on new leads + new reviews; clients notified on lead status changes + review replies.
 - **Provider CTA with City/Category Pre-fill (May 2026)** — COMPLETE:
   - **Category page header CTA**: Replaced static "Become a specialist" link with 2-line dynamic CTA using new translation keys `nav_cta_line1` and `nav_cta_line2` (category namespace, 68 rows × 34 languages). Href updated to `/${lang}/auth?mode=register&role=provider&city=${citySlug}&category=${categorySlug}`
