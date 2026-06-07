@@ -31,6 +31,7 @@ from apps.api.schemas import (
     LeadClaimEmailResponse,
 )
 from apps.api.services.email_service import email_service
+from apps.api.services.push_service import send_push_notification
 
 router = APIRouter(prefix="/api/v1", tags=["leads"])
 
@@ -138,6 +139,16 @@ async def create_lead(
                         description=lead.description,
                         dashboard_url=dashboard_url,
                     )
+                    try:
+                        send_push_notification(
+                            db=db,
+                            user_id=str(provider_user.id),
+                            title="New Lead",
+                            body=f"You have a new service request.",
+                            url="/provider/dashboard/leads",
+                        )
+                    except Exception:
+                        pass
 
     # Update user's last known city context
     if lead.city_id and lead.client_id:
