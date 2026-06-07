@@ -1,7 +1,7 @@
 from pywebpush import webpush, WebPushException
 from sqlalchemy.orm import Session
-from models import PushSubscription
-from config import settings
+from apps.api.models import PushSubscription
+from apps.api.config import settings
 import json
 import logging
 
