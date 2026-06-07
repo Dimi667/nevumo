@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
-import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug, ServiceOut } from '@/lib/api';
+import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug, ServiceOut, getCategories } from '@/lib/api';
 import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
@@ -350,21 +350,20 @@ export default async function CategoryPage({ params }: PageProps) {
     moreServices: getLocalizedCityText((categoryT['provider_more_services'] || 'и още {n} услуги'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
   };
 
-  const relatedLinksByCategory: Record<CategoryKey, Array<{ href: string; label: string }>> = {
-    massage: [
-      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
-      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
-    ],
-    cleaning: [
-      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
-      { href: `/${lang}/${city}/plumbing`, label: getLocalizedCityText((categoryT['h1_plumbing'] || `Plumbing ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
-    ],
-    plumbing: [
-      { href: `/${lang}/${city}/massage`, label: getLocalizedCityText((categoryT['h1_massage'] || `Massage ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
-      { href: `/${lang}/${city}/cleaning`, label: getLocalizedCityText((categoryT['h1_cleaning'] || `Cleaning ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }) },
-    ],
-  };
-  const relatedLinks = relatedLinksByCategory[(category as CategoryKey)] ?? relatedLinksByCategory.cleaning;
+  const allCategories = await getCategories(lang);
+  const relatedLinks = allCategories
+    .filter((cat) => cat.slug !== category)
+    .map((cat) => ({
+      href: `/${lang}/${city}/${cat.slug}`,
+      label: getLocalizedCityText(
+        `${cat.name} ${prepBaseCat} {city}`,
+        lang,
+        cityName,
+        categoryT,
+        grammaticalCase,
+        { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }
+      ),
+    }));
 
   const { providers, allCount, averageRating } = await getEnrichedProviders(lang, city, apiSlug);
   const priceData = await getPriceRange(apiSlug, city);
