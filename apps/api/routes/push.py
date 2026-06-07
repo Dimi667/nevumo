@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from pydantic import BaseModel
 from apps.api.database import get_db
 from apps.api.models import PushSubscription, User
-from apps.api.auth import get_current_user
+from apps.api.dependencies import get_current_user
 from apps.api.config import settings
 import uuid
 
