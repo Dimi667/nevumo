@@ -4,10 +4,11 @@ from typing import Union, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, status, Response, BackgroundTasks
 from sqlalchemy.orm import Session
+from sqlalchemy import or_, and_
 
 from apps.api.config import settings
 from apps.api.dependencies import get_current_provider, get_db, get_current_user
-from apps.api.models import Provider, User, Lead
+from apps.api.models import Provider, User, Lead, LeadMatch
 from apps.api.schemas import (
     AddCityRequest,
     ClaimProviderRequest,
@@ -358,11 +359,19 @@ def update_lead_provider_notes(
     provider: Provider = Depends(get_current_provider),
     db: Session = Depends(get_db),
 ) -> LeadProviderNotesUpdateResponse:
-    from apps.api.models import Lead
-    
     lead = (
         db.query(Lead)
-        .filter(Lead.id == lead_id, Lead.provider_id == provider.id)
+        .outerjoin(
+            LeadMatch,
+            and_(Lead.id == LeadMatch.lead_id, LeadMatch.provider_id == provider.id)
+        )
+        .filter(
+            Lead.id == lead_id,
+            or_(
+                Lead.provider_id == provider.id,
+                LeadMatch.provider_id == provider.id,
+            ),
+        )
         .first()
     )
     
