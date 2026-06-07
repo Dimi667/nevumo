@@ -89,7 +89,7 @@ export default async function Homepage({ params }: PageProps) {
   const cityName = cityData?.city || citySlug.charAt(0).toUpperCase() + citySlug.slice(1);
 
   const cityStatsRes = await fetch(
-    `${process.env.API_URL}/api/v1/cities/${citySlug}/stats`,
+    `${process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'}/api/v1/cities/${citySlug}/stats`,
     { cache: 'no-store' }
   ).catch(() => null)
   const cityStats = cityStatsRes?.ok ? await cityStatsRes.json() : null
