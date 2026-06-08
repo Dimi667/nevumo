@@ -408,8 +408,8 @@ def update_lead_status(
                     city=str(lead.city_id),
                     dashboard_url=dashboard_url,
                 )
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[EMAIL_WARNING] {type(e).__name__}: {e}", flush=True)
     try:
         lead = db.query(Lead).filter(Lead.id == lead_id).first()
         if lead and lead.client_id:
@@ -663,8 +663,8 @@ def claim_provider_endpoint(
                 provider_email=current_user.email,
                 provider_name=provider.business_name or current_user.email,
             )
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[EMAIL_WARNING] {type(e).__name__}: {e}", flush=True)
     return {
         "success": True,
         "data": {

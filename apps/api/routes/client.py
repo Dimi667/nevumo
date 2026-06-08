@@ -141,8 +141,8 @@ def update_lead_status(
                         city=str(lead.city_id),
                         dashboard_url=dashboard_url,
                     )
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[EMAIL_WARNING] {type(e).__name__}: {e}", flush=True)
 
     if new_status == "cancelled":
         lead.cancelled_by = "client"
@@ -265,8 +265,8 @@ def create_client_review(
                     comment=body.comment,
                     dashboard_url=dashboard_url,
                 )
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[EMAIL_WARNING] {type(e).__name__}: {e}", flush=True)
     try:
         provider = db.query(Provider).filter(Provider.id == review.provider_id).first()
         if provider and provider.user_id:

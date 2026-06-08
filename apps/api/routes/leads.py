@@ -131,14 +131,17 @@ async def create_lead(
                 provider_user = db.query(User).filter(User.id == provider.user_id).first()
                 if provider_user and provider_user.email:
                     dashboard_url = f"{settings.APP_URL}/provider/dashboard"
-                    email_service.send_new_lead_notification(
-                        provider_email=provider_user.email,
-                        provider_name=provider.business_name or "Provider",
-                        category=str(lead.category_id),
-                        city=str(lead.city_id),
-                        description=lead.description,
-                        dashboard_url=dashboard_url,
-                    )
+                    try:
+                        email_service.send_new_lead_notification(
+                            provider_email=provider_user.email,
+                            provider_name=provider.business_name or "Provider",
+                            category=str(lead.category_id),
+                            city=str(lead.city_id),
+                            description=lead.description,
+                            dashboard_url=dashboard_url,
+                        )
+                    except Exception as e:
+                        print(f"[EMAIL_WARNING] marketplace lead email: {e}", flush=True)
                     try:
                         send_push_notification(
                             db=db,
@@ -156,6 +159,25 @@ async def create_lead(
 
     db.commit()
     db.refresh(lead)
+
+    # Notify direct provider about new lead
+    if provider_id:
+        try:
+            provider_for_email = db.query(Provider).filter(Provider.id == provider_id).first()
+            if provider_for_email and provider_for_email.user_id:
+                provider_user_email = db.query(User).filter(User.id == provider_for_email.user_id).first()
+                if provider_user_email and provider_user_email.email:
+                    dashboard_url = f"{settings.APP_URL}/provider/dashboard"
+                    email_service.send_new_lead_notification(
+                        provider_email=provider_user_email.email,
+                        provider_name=provider_for_email.business_name or "Provider",
+                        category=str(lead.category_id),
+                        city=str(lead.city_id),
+                        description=lead.description,
+                        dashboard_url=dashboard_url,
+                    )
+        except Exception as e:
+            print(f"[EMAIL_WARNING] direct lead email: {e}", flush=True)
 
     return LeadCreatedResponse(data={"lead_id": str(lead.id)})
 
