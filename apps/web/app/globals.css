@@ -28,6 +28,7 @@
 
   *, *::before, *::after {
     box-sizing: border-box;
+    max-width: 100%;
   }
 
   html {
@@ -43,6 +44,35 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: clip;
+  }
+
+  /* Mobile: prevent double-tap zoom on all interactive elements */
+  a,
+  button,
+  [role="button"],
+  input[type="submit"],
+  input[type="button"],
+  input[type="reset"],
+  label[for],
+  select {
+    touch-action: manipulation;
+  }
+
+  /* Mobile: prevent iOS auto-zoom on input focus — overrides Tailwind text-sm (14px) */
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em) !important;
+  }
+
+  /* Prevent media from overflowing viewport */
+  img,
+  video,
+  iframe,
+  svg,
+  canvas {
+    max-width: 100%;
+    height: auto;
   }
 
   body {
