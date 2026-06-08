@@ -1462,6 +1462,7 @@ git push nevumo-git main  # архив на SSD
 - **PWA Етап 2** — Push notifications само за провайдери: нова таблица push_subscriptions, Web Push протокол, интеграция с lead creation flow. Старт след валидиране на PWA install adoption от page_events данни.
 - **PWA Етап 3** — Push notifications за клиенти: нотификация когато провайдер отговори на заявка.
 - **Static Files URL Standardization** — Extend STATIC_FILES_BASE_URL pattern to other services that generate public URLs (e.g., QR codes, document uploads). Current implementation is specific to provider profile images; future services should use the same environment variable pattern for consistency across local and production environments.
+- **Mobile tap zoom prevention** — `touch-action: manipulation` must be on all interactive elements globally in globals.css; input font-size must be `max(16px, 1em)` to prevent iOS auto-zoom; `max-width: 100%` on `*` prevents horizontal overflow. Do NOT revert these rules.
 
 ## Favicon Issue Log
 

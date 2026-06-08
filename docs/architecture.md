@@ -1541,6 +1541,22 @@ Translation keys used in `t()` calls must follow strict conventions to ensure co
 - Reason: overflow-x:hidden causes browser to set overflow-y:auto on body
   making body a scroll container which breaks position:fixed on mobile
 
+### CSS Fix: Mobile Tap Zoom & Layout Shift (June 8, 2026)
+- File: apps/web/app/globals.css
+- Problem: On mobile, tapping buttons/links caused slight zoom or layout shift;
+  iOS zoomed in automatically when focusing input fields.
+- Root causes identified via diagnostic:
+  1. No `touch-action: manipulation` on interactive elements → double-tap zoom
+  2. Tailwind `text-sm` (14px) on inputs → iOS auto-zoom on focus (requires ≥16px)
+  3. No `max-width: 100%` on media/all elements → potential horizontal overflow
+- Changes made:
+  - Added `max-width: 100%` to `*, *::before, *::after` rule
+  - Added `touch-action: manipulation` on a, button, [role="button"], input[type="submit/button/reset"], label[for], select
+  - Added `font-size: max(16px, 1em) !important` on input, textarea, select
+  - Added `max-width: 100%; height: auto` on img, video, iframe, svg, canvas
+- Note: viewport (generateViewport in app/layout.tsx) was already correct —
+  width: device-width, initialScale: 1, viewportFit: cover, themeColor: #f97316
+
 ## Provider Description Auto-Translation
 
 ### Overview
