@@ -122,37 +122,6 @@ async def create_lead(
         for p in matching_providers:
             db.add(LeadMatch(lead_id=lead.id, provider_id=p.id, status="invited"))
 
-    # Notify matched providers about new lead
-    if not provider_id:
-        lead_matches = db.query(LeadMatch).filter(LeadMatch.lead_id == lead.id).all()
-        for match in lead_matches:
-            provider = db.query(Provider).filter(Provider.id == match.provider_id).first()
-            if provider and provider.user_id:
-                provider_user = db.query(User).filter(User.id == provider.user_id).first()
-                if provider_user and provider_user.email:
-                    dashboard_url = f"{settings.APP_URL}/provider/dashboard"
-                    try:
-                        email_service.send_new_lead_notification(
-                            provider_email=provider_user.email,
-                            provider_name=provider.business_name or "Provider",
-                            category=str(lead.category_id),
-                            city=str(lead.city_id),
-                            description=lead.description,
-                            dashboard_url=dashboard_url,
-                        )
-                    except Exception as e:
-                        print(f"[EMAIL_WARNING] marketplace lead email: {e}", flush=True)
-                    try:
-                        send_push_notification(
-                            db=db,
-                            user_id=str(provider_user.id),
-                            title="New Lead",
-                            body=f"You have a new service request.",
-                            url="/provider/dashboard/leads",
-                        )
-                    except Exception:
-                        pass
-
     # Update user's last known city context
     if lead.city_id and lead.client_id:
         db.query(User).filter(User.id == lead.client_id).update({"city_id": lead.city_id})
@@ -178,6 +147,35 @@ async def create_lead(
                     )
         except Exception as e:
             print(f"[EMAIL_WARNING] direct lead email: {e}", flush=True)
+
+    # Notify matched providers about new lead (marketplace)
+    if not provider_id:
+        for p in matching_providers:
+            if p.user_id:
+                try:
+                    provider_user = db.query(User).filter(User.id == p.user_id).first()
+                    if provider_user and provider_user.email:
+                        dashboard_url = f"{settings.APP_URL}/provider/dashboard"
+                        email_service.send_new_lead_notification(
+                            provider_email=provider_user.email,
+                            provider_name=p.business_name or "Provider",
+                            category=str(lead.category_id),
+                            city=str(lead.city_id),
+                            description=lead.description,
+                            dashboard_url=dashboard_url,
+                        )
+                except Exception as e:
+                    print(f"[EMAIL_WARNING] marketplace lead email: {e}", flush=True)
+                try:
+                    send_push_notification(
+                        db=db,
+                        user_id=str(p.user_id),
+                        title="New Lead",
+                        body=f"You have a new service request.",
+                        url="/provider/dashboard/leads",
+                    )
+                except Exception:
+                    pass
 
     return LeadCreatedResponse(data={"lead_id": str(lead.id)})
 
