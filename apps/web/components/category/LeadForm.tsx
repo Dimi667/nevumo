@@ -64,7 +64,7 @@ export default function LeadForm({
   const { isValid } = usePhoneValidation(phoneValue, countryCode);
   
   const user = getAuthUser();
-  const role = user?.role === 'provider' ? 'provider' : 'client';
+  const role = (user?.role === 'provider' ? 'provider' : 'client') as 'provider' | 'client';
   
   const resolvedTitle = title ?? translations['form_btn'] ?? 'Get offers';
 

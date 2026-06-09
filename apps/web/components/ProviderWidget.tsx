@@ -240,7 +240,7 @@ export default function ProviderWidget({
   const { dict: termsProviderDict } = useTranslation('provider_terms', lang);
   
   const user = getAuthUser();
-  const role = user?.role === 'provider' ? 'provider' : 'client';
+  const role = (user?.role === 'provider' ? 'provider' : 'client') as 'provider' | 'client';
   const { dict: privacyDict } = useTranslation('privacy', lang);
 
   const getDocDict = () => {
