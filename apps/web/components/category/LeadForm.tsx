@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { createLead, claimLeadEmail } from '@/lib/api';
 import { checkEmail } from '@/lib/auth-api';
 import { usePhone } from '@/hooks/usePhone';
@@ -55,7 +55,6 @@ export default function LeadForm({
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const phoneRef = useRef<HTMLDivElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { savePhone } = usePhone(countryCode);
@@ -68,13 +67,15 @@ export default function LeadForm({
     setIsLoggedIn(!!token);
   }, []);
 
-  useEffect(() => {
-    if (isSuccess && wrapperRef.current) {
-      const rect = wrapperRef.current.getBoundingClientRect()
-      const absoluteTop = rect.top + window.scrollY - 16
-      window.scrollTo({ top: absoluteTop, behavior: 'smooth' })
+  const scrollToSuccessRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) {
+      requestAnimationFrame(() => {
+        const rect = node.getBoundingClientRect()
+        const absoluteTop = rect.top + window.scrollY - 16
+        window.scrollTo({ top: absoluteTop, behavior: 'smooth' })
+      })
     }
-  }, [isSuccess])
+  }, [])
 
   const handleChange = (value: string) => {
     setPhoneValue(value);
@@ -246,163 +247,167 @@ export default function LeadForm({
   };
 
   const notSureText = translations['chip_not_sure'] || 'Not sure';
+
+  if (isSuccess && successStep === 'sent') {
+    if (isLoggedIn) {
+      return (
+        <div ref={scrollToSuccessRef} className="text-center py-8">
+          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+            <span className="text-green-600 text-3xl">✓</span>
+          </div>
+          <p className="font-bold text-gray-900 text-lg mb-1">
+            {translations['success_title'] || 'Request sent!'}
+          </p>
+          <p className="text-sm text-gray-500 mb-6">
+            {cityTranslations
+              ? getLocalizedCityText(translations['success_subtitle'] || 'Specialists in {city} will contact you.', lang, cityName, cityTranslations, grammaticalCase)
+              : (translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace(/{cityName}|{city}/g, cityName)}
+          </p>
+          <button
+            onClick={handleNoThanks}
+            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors text-base px-6"
+          >
+            {translations['new_request_button'] || 'New Request'}
+          </button>
+
+          {showPWAPrompt && (
+            <PWAInstallPrompt
+              trigger="lead_submit"
+              role="client"
+              onClose={() => setShowPWAPrompt(false)}
+              lang={lang}
+            />
+          )}
+        </div>
+      );
+    }
+    return (
+      <div ref={scrollToSuccessRef} className="flex flex-col items-center justify-center py-8 text-center px-4">
+        {/* Large green checkmark */}
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-600">
+          ✓
+        </div>
+
+        {/* Heading */}
+        <h3 className="text-xl font-bold text-gray-900">
+          {translations['success_title'] || 'Request sent!'}
+        </h3>
+
+        {/* Subtext */}
+        <p className="mt-2 mb-4 text-sm text-gray-500">
+          {cityTranslations
+            ? getLocalizedCityText(translations['success_subtitle'] || 'Specialists in {city} will contact you.', lang, cityName, cityTranslations, grammaticalCase)
+            : (translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace(/{cityName}|{city}/g, cityName)}
+        </p>
+
+        {/* Separator */}
+        <div className="border-t border-gray-200 my-6 w-full"></div>
+
+        {/* Track your request section */}
+        <p className="mt-2 text-sm font-medium text-gray-700 mb-3">
+          {translations['success_track_title'] || 'Want to track your request?'}
+        </p>
+
+        {/* Bullet points */}
+        <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left inline-block">
+          <li>• {translations['success_bullet_responses'] || 'See who responded'}</li>
+          <li>• {translations['success_bullet_manage'] || 'Manage your requests'}</li>
+          <li>• {translations['success_bullet_notifications'] || 'Get notifications'}</li>
+        </ul>
+
+        {/* Primary CTA */}
+        <button
+          onClick={handleContinueWithEmail}
+          className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600"
+        >
+          {translations['success_cta_email'] || 'Continue with email →'}
+        </button>
+
+        {/* Free text */}
+        <p className="mt-2 text-xs text-gray-400">
+          {translations['success_free_label'] || 'Free · No registration required'}
+        </p>
+
+        {/* Skip link */}
+        <button
+          onClick={handleNoThanks}
+          className="mt-4 text-sm text-gray-500 underline hover:text-gray-700"
+        >
+          {translations['success_skip_link'] || 'No thanks'}
+        </button>
+
+        {/* PWA Install Prompt */}
+        {showPWAPrompt && (
+          <PWAInstallPrompt
+            trigger="lead_submit"
+            role="client"
+            onClose={() => setShowPWAPrompt(false)}
+            lang={lang}
+          />
+        )}
+      </div>
+    );
+  }
+
+  if (isSuccess && successStep === 'email') {
+    const emailValid = isValidEmail(email);
+    return (
+      <div ref={scrollToSuccessRef} className="flex flex-col py-8 px-4">
+        {/* Back link */}
+        <button
+          onClick={handleBackToSent}
+          className="mb-6 text-sm text-gray-500 hover:text-gray-700 flex items-center"
+        >
+          {translations['email_back_link'] || '← Back'}
+        </button>
+
+        {/* Email form */}
+        <form onSubmit={handleEmailSubmit} className="space-y-4">
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              {translations['email_label'] || 'Your email address'}
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={translations['email_placeholder'] || 'your@email.com'}
+              autoFocus
+              className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={!emailValid || isEmailSubmitting}
+            className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
+          >
+            {isEmailSubmitting ? (translations['email_cta_continue'] || 'Continue →') : (translations['email_cta_continue'] || 'Continue →')}
+          </button>
+        </form>
+
+        {/* Free text */}
+        <p className="mt-3 text-center text-xs text-gray-400">
+          {translations['success_free_label'] || 'Free · No registration required'}
+        </p>
+
+        {/* Skip link */}
+        <button
+          onClick={handleNoThanks}
+          className="mt-4 text-center text-sm text-gray-500 underline hover:text-gray-700"
+        >
+          {translations['success_skip_link'] || 'No thanks'}
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div ref={wrapperRef} className="flex flex-col min-h-0 overflow-hidden">
-      {isSuccess && successStep === 'sent' ? (
-        isLoggedIn ? (
-          <div className="text-center py-8">
-            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-              <span className="text-green-600 text-3xl">✓</span>
-            </div>
-            <p className="font-bold text-gray-900 text-lg mb-1">
-              {translations['success_title'] || 'Request sent!'}
-            </p>
-            <p className="text-sm text-gray-500 mb-6">
-              {cityTranslations
-                ? getLocalizedCityText(translations['success_subtitle'] || 'Specialists in {city} will contact you.', lang, cityName, cityTranslations, grammaticalCase)
-                : (translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace(/{cityName}|{city}/g, cityName)}
-            </p>
-            <button
-              onClick={handleNoThanks}
-              className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg transition-colors text-base px-6"
-            >
-              {translations['new_request_button'] || 'New Request'}
-            </button>
-
-            {showPWAPrompt && (
-              <PWAInstallPrompt
-                trigger="lead_submit"
-                role="client"
-                onClose={() => setShowPWAPrompt(false)}
-                lang={lang}
-              />
-            )}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-8 text-center px-4">
-            {/* Large green checkmark */}
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-600">
-              ✓
-            </div>
-
-            {/* Heading */}
-            <h3 className="text-xl font-bold text-gray-900">
-              {translations['success_title'] || 'Request sent!'}
-            </h3>
-
-            {/* Subtext */}
-            <p className="mt-2 mb-4 text-sm text-gray-500">
-              {cityTranslations
-                ? getLocalizedCityText(translations['success_subtitle'] || 'Specialists in {city} will contact you.', lang, cityName, cityTranslations, grammaticalCase)
-                : (translations['success_subtitle'] || 'Specialists in {cityName} will contact you.').replace(/{cityName}|{city}/g, cityName)}
-            </p>
-
-            {/* Separator */}
-            <div className="border-t border-gray-200 my-6 w-full"></div>
-
-            {/* Track your request section */}
-            <p className="mt-2 text-sm font-medium text-gray-700 mb-3">
-              {translations['success_track_title'] || 'Want to track your request?'}
-            </p>
-
-            {/* Bullet points */}
-            <ul className="text-xs text-gray-500 space-y-1 mb-6 text-left inline-block">
-              <li>• {translations['success_bullet_responses'] || 'See who responded'}</li>
-              <li>• {translations['success_bullet_manage'] || 'Manage your requests'}</li>
-              <li>• {translations['success_bullet_notifications'] || 'Get notifications'}</li>
-            </ul>
-
-            {/* Primary CTA */}
-            <button
-              onClick={handleContinueWithEmail}
-              className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600"
-            >
-              {translations['success_cta_email'] || 'Continue with email →'}
-            </button>
-
-            {/* Free text */}
-            <p className="mt-2 text-xs text-gray-400">
-              {translations['success_free_label'] || 'Free · No registration required'}
-            </p>
-
-            {/* Skip link */}
-            <button
-              onClick={handleNoThanks}
-              className="mt-4 text-sm text-gray-500 underline hover:text-gray-700"
-            >
-              {translations['success_skip_link'] || 'No thanks'}
-            </button>
-
-            {/* PWA Install Prompt */}
-            {showPWAPrompt && (
-              <PWAInstallPrompt
-                trigger="lead_submit"
-                role="client"
-                onClose={() => setShowPWAPrompt(false)}
-                lang={lang}
-              />
-            )}
-          </div>
-        )
-      ) : isSuccess && successStep === 'email' ? (
-        (() => {
-          const emailValid = isValidEmail(email);
-          return (
-            <div className="flex flex-col py-8 px-4">
-              {/* Back link */}
-              <button
-                onClick={handleBackToSent}
-                className="mb-6 text-sm text-gray-500 hover:text-gray-700 flex items-center"
-              >
-                {translations['email_back_link'] || '← Back'}
-              </button>
-
-              {/* Email form */}
-              <form onSubmit={handleEmailSubmit} className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2"
-                  >
-                    {translations['email_label'] || 'Your email address'}
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={translations['email_placeholder'] || 'your@email.com'}
-                    autoFocus
-                    className="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={!emailValid || isEmailSubmitting}
-                  className="w-full rounded-xl bg-orange-500 px-4 py-3 text-base font-bold text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:bg-orange-300"
-                >
-                  {isEmailSubmitting ? (translations['email_cta_continue'] || 'Continue →') : (translations['email_cta_continue'] || 'Continue →')}
-                </button>
-              </form>
-
-              {/* Free text */}
-              <p className="mt-3 text-center text-xs text-gray-400">
-                {translations['success_free_label'] || 'Free · No registration required'}
-              </p>
-
-              {/* Skip link */}
-              <button
-                onClick={handleNoThanks}
-                className="mt-4 text-center text-sm text-gray-500 underline hover:text-gray-700"
-              >
-                {translations['success_skip_link'] || 'No thanks'}
-              </button>
-            </div>
-          );
-        })()
-      ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
+    <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
       <div className="overflow-y-auto min-h-0 flex-1 px-6 pt-6 pb-2 space-y-6">
         {/* Header Section */}
         <div>
@@ -478,7 +483,7 @@ export default function LeadForm({
         </div>
       </div>
 
-      <div className="px-6 pb-6 pt-3 border-t border-gray-100 bg-white rounded-b-xl">
+      <div className="px-6 pb-6 pt-3 border-t border-gray-100 bg-white">
         {/* Submit Button */}
         <button
           type="submit"
@@ -510,7 +515,5 @@ export default function LeadForm({
         </div>
       </div>
     </form>
-      )}
-    </div>
   );
 }
