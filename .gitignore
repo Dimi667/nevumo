@@ -67,7 +67,3 @@ apps/api/uploads/provider_images/*
 playwright-report/
 test-results/
 tests/nevumo_lead_status_test.spec.ts
-
-# Service Worker build artifacts
-apps/web/public/sw.js
-apps/web/public/workbox-*.js
