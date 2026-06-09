@@ -71,7 +71,7 @@ export default function PushPermissionPrompt({ lang, role, show, onDismiss }: Pu
       isSupported &&
       !isSubscribed &&
       show &&
-      Notification.permission !== 'denied' &&
+      (typeof Notification === 'undefined' || Notification.permission !== 'denied') &&
       shownCount < 2 &&
       Date.now() - dismissedAt >= threeDaysMs
   } catch {
@@ -101,12 +101,12 @@ export default function PushPermissionPrompt({ lang, role, show, onDismiss }: Pu
     onDismiss()
   }
 
-  const title = t['push_prompt.title'] || FALLBACK.title
+  const title = t['title'] || FALLBACK.title
   const body = role === 'provider' 
-    ? (t['push_prompt.provider_body'] || FALLBACK.provider_body)
-    : (t['push_prompt.client_body'] || FALLBACK.client_body)
-  const ctaButton = t['push_prompt.cta_button'] || FALLBACK.cta_button
-  const dismissButton = t['push_prompt.dismiss_button'] || FALLBACK.dismiss_button
+    ? (t['provider_body'] || FALLBACK.provider_body)
+    : (t['client_body'] || FALLBACK.client_body)
+  const ctaButton = t['cta_button'] || FALLBACK.cta_button
+  const dismissButton = t['dismiss_button'] || FALLBACK.dismiss_button
 
   return (
     <div className="fixed inset-0 z-50">

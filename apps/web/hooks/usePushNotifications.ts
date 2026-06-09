@@ -55,6 +55,10 @@ export function usePushNotifications(): UsePushNotificationsReturn {
   const subscribe = useCallback(async () => {
     setIsLoading(true);
     try {
+      if (typeof Notification === 'undefined') {
+        console.warn('[Push] Notification API not available');
+        return;
+      }
       const permission = await Notification.requestPermission();
       if (permission !== 'granted') {
         console.warn('[Push] Notification permission not granted:', permission);
