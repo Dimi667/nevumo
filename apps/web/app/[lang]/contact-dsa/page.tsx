@@ -6,13 +6,14 @@ import { generateHreflangAlternates } from '@/lib/seo';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
+  searchParams: Promise<{ modal?: string }>;
 }
 
 export async function generateStaticParams() {
   return SUPPORTED_LANGUAGES.map((lang) => ({ lang }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params, searchParams }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await fetchTranslations(normalizedLang, 'contact_dsa');
@@ -20,14 +21,17 @@ export async function generateMetadata({ params }: PageProps) {
   const title = t(dict, 'page_title', 'DSA Contact Point');
   const description = t(dict, 'meta_description', 'Contact point for authorities and users under the Digital Services Act (DSA).');
 
+  const isModal = (await searchParams)?.modal === 'true';
+
   return {
     title,
     description,
-    alternates: {
+    robots: isModal ? { index: false, follow: true } : { index: true, follow: true },
+    alternates: isModal ? undefined : {
       canonical: `/${normalizedLang}/contact-dsa`,
       languages: generateHreflangAlternates('/contact-dsa'),
     },
-    openGraph: {
+    openGraph: isModal ? undefined : {
       title,
       description,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/${normalizedLang}/contact-dsa`,
@@ -38,7 +42,7 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-export default async function ContactDSAPage({ params }: PageProps) {
+export default async function ContactDSAPage({ params, searchParams }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await fetchTranslations(normalizedLang, 'contact_dsa');

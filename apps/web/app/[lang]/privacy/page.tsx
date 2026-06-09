@@ -6,14 +6,14 @@ import { generateHreflangAlternates } from '@/lib/seo';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
-  searchParams: { modal?: string };
+  searchParams: Promise<{ modal?: string }>;
 }
 
 export async function generateStaticParams() {
   return SUPPORTED_LANGUAGES.map((lang) => ({ lang }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params, searchParams }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await fetchTranslations(normalizedLang, 'privacy');
@@ -21,14 +21,17 @@ export async function generateMetadata({ params }: PageProps) {
   const title = t(dict, 'page_title', 'Privacy Policy — Nevumo');
   const description = t(dict, 'meta_description', 'Learn how Nevumo collects, uses and protects your personal data in accordance with GDPR.');
 
+  const isModal = (await searchParams)?.modal === 'true';
+
   return {
     title,
     description,
-    alternates: {
+    robots: isModal ? { index: false, follow: true } : { index: true, follow: true },
+    alternates: isModal ? undefined : {
       canonical: `/${normalizedLang}/privacy`,
       languages: generateHreflangAlternates('/privacy'),
     },
-    openGraph: {
+    openGraph: isModal ? undefined : {
       title,
       description,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/${normalizedLang}/privacy`,

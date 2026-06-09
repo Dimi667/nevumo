@@ -7,6 +7,7 @@ import { ReactNode } from 'react';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
+  searchParams: Promise<{ modal?: string }>;
 }
 
 const API_BASE = typeof window === 'undefined' 
@@ -31,20 +32,23 @@ export async function generateStaticParams() {
   return SUPPORTED_LANGUAGES.map((lang) => ({ lang }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params, searchParams }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await getTranslations(normalizedLang);
 
   const title = t(dict, 'page_title', 'Cookie Policy');
 
+  const isModal = (await searchParams)?.modal === 'true';
+
   return {
     title,
-    alternates: {
+    robots: isModal ? { index: false, follow: true } : { index: true, follow: true },
+    alternates: isModal ? undefined : {
       canonical: `/${normalizedLang}/cookies`,
       languages: generateHreflangAlternates('/cookies'),
     },
-    openGraph: {
+    openGraph: isModal ? undefined : {
       title,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/${normalizedLang}/cookies`,
       siteName: 'Nevumo',
@@ -54,7 +58,7 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-export default async function CookiesPage({ params }: PageProps) {
+export default async function CookiesPage({ params, searchParams }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const cookiesT = await getTranslations(normalizedLang);

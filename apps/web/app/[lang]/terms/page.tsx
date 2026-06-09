@@ -2,10 +2,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from '@/lib/locales';
 import { t, type TranslationDict } from '@/lib/ui-translations';
+import { generateHreflangAlternates } from '@/lib/seo';
 
 interface PageProps {
   params: Promise<{ lang: string }>;
-  searchParams: { modal?: string };
+  searchParams: Promise<{ modal?: string }>;
 }
 
 const API_BASE = typeof window === 'undefined' ? (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000') : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000');
@@ -31,7 +32,7 @@ export async function generateStaticParams() {
   return SUPPORTED_LANGUAGES.map((lang) => ({ lang }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params, searchParams }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await getTranslations(normalizedLang);
@@ -39,9 +40,25 @@ export async function generateMetadata({ params }: PageProps) {
   const title = t(dict, 'page_title', 'Terms & Conditions — Nevumo');
   const description = t(dict, 'meta_description', 'Terms and conditions for using the Nevumo platform.');
 
+  const { modal } = await searchParams;
+  const isModal = modal === 'true';
+
   return {
     title,
     description,
+    robots: isModal ? { index: false, follow: true } : { index: true, follow: true },
+    alternates: isModal ? undefined : {
+      canonical: `/${normalizedLang}/terms`,
+      languages: generateHreflangAlternates('/terms'),
+    },
+    openGraph: isModal ? undefined : {
+      title,
+      description,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/${normalizedLang}/terms`,
+      siteName: 'Nevumo',
+      locale: normalizedLang,
+      type: 'website' as const,
+    },
   };
 }
 

@@ -14,7 +14,7 @@ export async function generateStaticParams() {
   return SUPPORTED_LANGUAGES.map((lang) => ({ lang }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params, searchParams }: PageProps) {
   const { lang } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : DEFAULT_LANGUAGE;
   const dict = await fetchTranslations(normalizedLang, 'provider_terms');
@@ -22,14 +22,17 @@ export async function generateMetadata({ params }: PageProps) {
   const title = t(dict, 'page_title', 'Terms & Conditions for Service Providers');
   const description = t(dict, 'meta_description', 'Terms and conditions for service providers on the Nevumo platform.');
 
+  const isModal = (await searchParams)?.modal === 'true';
+
   return {
     title,
     description,
-    alternates: {
+    robots: isModal ? { index: false, follow: true } : { index: true, follow: true },
+    alternates: isModal ? undefined : {
       canonical: `/${normalizedLang}/terms-provider`,
       languages: generateHreflangAlternates('/terms-provider'),
     },
-    openGraph: {
+    openGraph: isModal ? undefined : {
       title,
       description,
       url: `${process.env.NEXT_PUBLIC_SITE_URL}/${normalizedLang}/terms-provider`,
