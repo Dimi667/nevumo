@@ -97,6 +97,7 @@ export default function LeadPanel({
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const phoneRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -105,6 +106,12 @@ export default function LeadPanel({
     const token = localStorage.getItem('nevumo_auth_token');
     setIsLoggedIn(!!token);
   }, []);
+
+  useEffect(() => {
+    if (step === 'success1' && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [step]);
 
   // Social proof signal cascade logic
   const getSocialProofSignal = () => {
@@ -398,7 +405,7 @@ export default function LeadPanel({
 
   // Form Step
   return (
-    <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden max-h-[calc(100vh-48px)] overflow-y-auto">
+    <div ref={formRef} className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden max-h-[calc(100vh-48px)] overflow-y-auto">
       {/* 1. Header */}
       <div className="px-5 py-4 border-b border-gray-100">
         <h2 className="text-sm font-semibold text-gray-900">

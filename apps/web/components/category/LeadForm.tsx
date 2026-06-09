@@ -55,6 +55,7 @@ export default function LeadForm({
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
   const phoneRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { savePhone } = usePhone(countryCode);
@@ -66,7 +67,13 @@ export default function LeadForm({
     const token = localStorage.getItem('nevumo_auth_token');
     setIsLoggedIn(!!token);
   }, []);
-  
+
+  useEffect(() => {
+    if (isSuccess && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [isSuccess]);
+
   const handleChange = (value: string) => {
     setPhoneValue(value);
   };
@@ -400,7 +407,7 @@ export default function LeadForm({
 
   const notSureText = translations['chip_not_sure'] || 'Not sure';
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col min-h-0">
+    <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col min-h-0">
       <div className="overflow-y-auto min-h-0 flex-1 px-6 pt-6 pb-2 space-y-6">
         {/* Header Section */}
         <div>
