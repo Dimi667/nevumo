@@ -2865,3 +2865,14 @@ python scripts/seed_review_translations.py
 - The hook only sets intent if the current value is `null`, preventing overwrites
 - Homepage detection uses path segment counting: `segments.length <= 1` indicates language-only path
 - Provider routes are defined in `intent-config.ts` and include paths like `/dolacz`, `/provider/dashboard`, etc.
+
+---
+
+**LeadForm Scroll-to-Success Fix (June 9, 2026)** — ЧАСТИЧНО COMPLETE:
+  - **Проблем:** След Submit на lead форма на мобилен телефон, success screen се появяваше горе в компонента, но viewport оставаше на текущата скролирана позиция — потвърждението беше невидимо.
+  - **Root cause:** success screen се рендерира като early return — `<form ref={formRef}>` се unmount-ва при `isSuccess=true`, `formRef.current` става `null` преди useEffect да се изпълни. `scrollIntoView` и `window.scrollTo` не работят на iOS Safari при unmount-нат ref.
+  - **Решение (мобилен):** Callback ref (`scrollToSuccessRef`) с `requestAnimationFrame` поставен директно на outermost div на всеки success branch. Callback ref се изпълнява в момента на mount — `formRef` проблемът е заобиколен изцяло.
+  - **Файл:** `apps/web/components/category/LeadForm.tsx`
+  - **Статус мобилен (iOS Safari):** ✅ FIXED
+  - **Статус десктоп:** ❌ PENDING — border styling на формата изглежда различно след промените (оранжеви вместо сиви очертания в долната част). Предстои диагноза и фикс.
+  - **Бележка за десктоп фикс:** Проблемът е вероятно в Safari flex/overflow-hidden клипване на `rounded-xl border-orange-100` в page.tsx desktop wrapper. При следваща сесия — диагноза на page.tsx desktop wrapper структура и LeadForm pinned bottom section.
