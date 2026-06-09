@@ -2667,6 +2667,12 @@ reviews table:
 10. send_article14_notification — GDPR Art.14 on claimed profile (provider.py:621)
 11. send_welcome_email — covers both client and provider roles
 
+**Email Notification Fixes (June 9, 2026) — COMPLETE:**
+- **Root cause diagnosed:** `except Exception: pass` silently swallowed all email errors in provider.py, client.py, and leads.py — replaced with `[EMAIL_WARNING]` logging in all 3 files
+- **Direct lead fix:** `send_new_lead_notification` was never called for direct leads (with provider_slug). Added email notification block AFTER db.commit() in leads.py for direct provider assignment.
+- **Marketplace lead fix:** `send_new_lead_notification` for marketplace leads was called BEFORE db.commit(), so LeadMatch records were not yet visible in the DB query. Fixed by moving the notification block AFTER db.commit() and iterating directly over `matching_providers` list instead of re-querying LeadMatch.
+- **Silent error fix:** All `except Exception: pass` blocks around email_service calls in provider.py, client.py, leads.py replaced with `print(f"[EMAIL_WARNING] ...", flush=True)`. Push notification except blocks remain as `pass`.
+
 **Review Reply Email (Existing):**
 - Trigger: First provider reply only (not on edits)
 - Opt-in: Client must have review_reply_email_enabled = TRUE (default is opted in)
@@ -2684,6 +2690,16 @@ reviews table:
 - `/provider/dashboard` — Shows "Latest Review" preview card with unreplied count
 - `/provider/dashboard/reviews` — Full review management with reply/edit
 - Sidebar shows unreplied review badge
+
+### Email Notification Incident Log
+
+**2026-06-09 — Email notifications fully operational:**
+- All 11 transactional emails confirmed working
+- Direct lead → provider email: FIXED
+- Marketplace lead → all matched providers email: FIXED
+- Lead status change → client email: CONFIRMED WORKING
+- Lead status change → provider email: CONFIRMED WORKING
+- Error visibility: [EMAIL_WARNING] logs now appear in Railway logs on any email failure
 
 ### Dynamic Rating Calculation
 

@@ -165,6 +165,12 @@ Nevumo е уеб платформа за marketplace на услуги.
 10. send_article14_notification — GDPR Art.14 on claimed profile (provider.py:621)
 11. send_welcome_email — covers both client and provider roles
 
+### Email Notification Fixes (June 9, 2026) — COMPLETE:
+- **Root cause diagnosed:** `except Exception: pass` silently swallowed all email errors in provider.py, client.py, and leads.py — replaced with `[EMAIL_WARNING]` logging in all 3 files
+- **Direct lead fix:** `send_new_lead_notification` was never called for direct leads (with provider_slug). Added email notification block AFTER db.commit() in leads.py for direct provider assignment.
+- **Marketplace lead fix:** `send_new_lead_notification` for marketplace leads was called BEFORE db.commit(), so LeadMatch records were not yet visible in the DB query. Fixed by moving the notification block AFTER db.commit() and iterating directly over `matching_providers` list instead of re-querying LeadMatch.
+- **Silent error fix:** All `except Exception: pass` blocks around email_service calls in provider.py, client.py, leads.py replaced with `print(f"[EMAIL_WARNING] ...", flush=True)`. Push notification except blocks remain as `pass`.
+
 ### Shared
 - packages/ui (shared UI components)
 - packages/typescript-config (shared TS config)
@@ -1519,6 +1525,16 @@ git push nevumo-git main  # архив на SSD
 - **PWA Етап 3** — Push notifications за клиенти: нотификация когато провайдер отговори на заявка.
 - **Static Files URL Standardization** — Extend STATIC_FILES_BASE_URL pattern to other services that generate public URLs (e.g., QR codes, document uploads). Current implementation is specific to provider profile images; future services should use the same environment variable pattern for consistency across local and production environments.
 - **Mobile tap zoom prevention** — `touch-action: manipulation` must be on all interactive elements globally in globals.css; input font-size must be `max(16px, 1em)` to prevent iOS auto-zoom; `max-width: 100%` on `*` prevents horizontal overflow. Do NOT revert these rules.
+
+## Email Notification Incident Log
+
+**2026-06-09 — Email notifications fully operational:**
+- All 11 transactional emails confirmed working
+- Direct lead → provider email: FIXED
+- Marketplace lead → all matched providers email: FIXED
+- Lead status change → client email: CONFIRMED WORKING
+- Lead status change → provider email: CONFIRMED WORKING
+- Error visibility: [EMAIL_WARNING] logs now appear in Railway logs on any email failure
 
 ## Favicon Issue Log
 
