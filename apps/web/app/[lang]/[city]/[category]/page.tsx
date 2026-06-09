@@ -580,7 +580,7 @@ export default async function CategoryPage({ params }: PageProps) {
             </ol>
           </div>
         </nav>
-        <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <main className="mx-auto w-full max-w-7xl px-4 pt-4 pb-12 sm:px-6 lg:px-8">
           <section className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
               {heading}
