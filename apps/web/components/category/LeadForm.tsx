@@ -478,7 +478,7 @@ export default function LeadForm({
         </div>
       </div>
 
-      <div className="px-6 pb-6 pt-3 border-t border-gray-100 bg-white">
+      <div className="px-6 pb-6 pt-3 border-t border-gray-100 bg-white rounded-b-xl">
         {/* Submit Button */}
         <button
           type="submit"
