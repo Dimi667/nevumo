@@ -9,8 +9,8 @@ const swPath = path.join(__dirname, '../public/sw.js');
 const workerPath = path.join(__dirname, '../worker/index.js');
 
 if (!fs.existsSync(swPath)) {
-  console.error('[append-sw] ERROR: sw.js not found at:', swPath);
-  process.exit(1);
+  console.warn('[append-sw] WARNING: sw.js not found at:', swPath, '— skipping');
+  process.exit(0);
 }
 
 if (!fs.existsSync(workerPath)) {
