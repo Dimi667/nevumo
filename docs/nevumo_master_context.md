@@ -369,6 +369,16 @@ causing `nevumo.com` to 307-redirect to `www`. Google saw both as duplicates.
 - og:url missing on city and category pages
 - JSON-LD missing on legal pages
 
+### Category Page Visual Breadcrumb (June 9, 2026) — COMPLETE
+
+**Файл:** `apps/web/app/[lang]/[city]/[category]/page.tsx`
+
+**Проблем:** Category listing страниците имаха breadcrumb само като JSON-LD Schema.org — видим за ботове, но не и за потребителите.
+
+**Решение:** Добавен визуален `<nav>` breadcrumb между `</header>` и `<main>`. Стилът съвпада с `ProviderFullPage.tsx` breadcrumb (city › category › provider). `<main>` padding сменен от `py-12` на `pt-4 pb-12` за мобилен.
+
+**Структура:** `[CityName] › [CategoryName]` — cityName от getCityBySlug, categoryName от homepageT. Без нови translation keys, без seed скрипт, без backend промени.
+
 ### Global Language Switcher (May 2026)
 
 Имплементиран глобален превключвател на езика достъпен на всички страници.

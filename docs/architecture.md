@@ -122,6 +122,7 @@ This document reflects the major architectural optimization performed in April 2
   - **Technical Context**: The `getEnhancedQRCode` API returns both `public_url` (with `?embed=1` for widget embedding) and `canonical_url` (clean URL for sharing). The fix ensures users share their actual public profile page, not the embed version.
   - **Affected Files**: `apps/web/app/[lang]/provider/dashboard/widget/page.tsx`
   - **Result**: Social share buttons now correctly share the canonical public profile URL without `?embed=1`
+- **Category Page Visual Breadcrumb (June 9, 2026)**: Added visual `<nav>` breadcrumb to `apps/web/app/[lang]/[city]/[category]/page.tsx` between `</header>` and `<main>`. Style matches ProviderFullPage.tsx. cityName from getCityBySlug, categoryName from homepageT. main padding changed from py-12 to pt-4 pb-12. No new translation keys, seed scripts, or backend changes.
 - **City Placeholder System (May 2, 2026)**:
   - **Purpose**: Replaced hardcoded city names in homepage translations with a dynamic `{city}` placeholder that resolves based on user context.
   - **Files Created**:
