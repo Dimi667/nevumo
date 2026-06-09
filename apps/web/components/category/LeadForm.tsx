@@ -247,7 +247,7 @@ export default function LeadForm({
 
   const notSureText = translations['chip_not_sure'] || 'Not sure';
   return (
-    <div ref={wrapperRef}>
+    <div ref={wrapperRef} className="flex flex-col min-h-0">
       {isSuccess && successStep === 'sent' ? (
         isLoggedIn ? (
           <div className="text-center py-8">
