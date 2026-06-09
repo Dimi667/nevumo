@@ -20,6 +20,7 @@ const FALLBACK = {
 
 export default function PushPermissionPrompt({ lang, role, show, onDismiss }: PushPermissionPromptProps) {
   const [t, setT] = useState<Record<string, string>>({})
+  const [tLoaded, setTLoaded] = useState(false)
   const [visible, setVisible] = useState(false)
   const { isSupported, isSubscribed, isLoading, subscribe } = usePushNotifications()
 
@@ -27,9 +28,12 @@ export default function PushPermissionPrompt({ lang, role, show, onDismiss }: Pu
   useEffect(() => {
     fetch(`/api/v1/translations/push_prompt?lang=${lang}`)
       .then((res) => res.json())
-      .then((data) => setT(data))
+      .then((data) => {
+        setT(data)
+        setTLoaded(true)
+      })
       .catch(() => {
-        // Use fallback on error
+        setTLoaded(true) // Use fallback values on error
       })
   }, [lang])
 
@@ -45,7 +49,7 @@ export default function PushPermissionPrompt({ lang, role, show, onDismiss }: Pu
 
   // Track shown count
   useEffect(() => {
-    if (!show) return
+    if (!visible) return
 
     try {
       const shownCount = parseInt(localStorage.getItem('push_prompt_shown_count') ?? '0', 10)
@@ -53,7 +57,7 @@ export default function PushPermissionPrompt({ lang, role, show, onDismiss }: Pu
     } catch {
       // localStorage access failed
     }
-  }, [show])
+  }, [visible])
 
   // Anti-spam check
   let shouldShow = false
@@ -63,6 +67,7 @@ export default function PushPermissionPrompt({ lang, role, show, onDismiss }: Pu
     const threeDaysMs = 3 * 24 * 60 * 60 * 1000
 
     shouldShow =
+      tLoaded &&
       isSupported &&
       !isSubscribed &&
       show &&
