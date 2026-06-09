@@ -70,9 +70,11 @@ export default function LeadForm({
 
   useEffect(() => {
     if (isSuccess && formRef.current) {
-      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const rect = formRef.current.getBoundingClientRect()
+      const absoluteTop = rect.top + window.scrollY - 16
+      window.scrollTo({ top: absoluteTop, behavior: 'smooth' })
     }
-  }, [isSuccess]);
+  }, [isSuccess])
 
   const handleChange = (value: string) => {
     setPhoneValue(value);
