@@ -565,7 +565,7 @@ export default async function CategoryPage({ params }: PageProps) {
             </Link>
           </div>
         </header>
-        <nav className="border-b border-gray-100 bg-white">
+        <nav className="bg-white">
           <div className="mx-auto w-full max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
             <ol className="flex items-center gap-2 text-sm text-gray-500">
               <li>
