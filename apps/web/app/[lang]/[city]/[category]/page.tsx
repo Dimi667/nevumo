@@ -565,6 +565,21 @@ export default async function CategoryPage({ params }: PageProps) {
             </Link>
           </div>
         </header>
+        <nav className="border-b border-gray-100 bg-white">
+          <div className="mx-auto w-full max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+            <ol className="flex items-center gap-2 text-sm text-gray-500">
+              <li>
+                <Link href={`/${lang}/${city}`} className="hover:text-gray-700 transition-colors">
+                  {cityName}
+                </Link>
+              </li>
+              <li className="text-gray-400">›</li>
+              <li className="text-gray-900 font-medium">
+                {categoryName}
+              </li>
+            </ol>
+          </div>
+        </nav>
         <main className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <section className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
