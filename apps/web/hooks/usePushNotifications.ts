@@ -71,7 +71,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       const reg = await navigator.serviceWorker.ready;
       const subscription = await reg.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(public_key),
+        applicationServerKey: urlBase64ToUint8Array(public_key) as unknown as ArrayBuffer,
       });
 
       const { endpoint, keys } = subscription.toJSON() as {
