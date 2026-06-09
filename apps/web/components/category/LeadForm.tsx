@@ -288,6 +288,12 @@ export default function LeadForm({
               lang={lang}
             />
           )}
+          <PushPermissionPrompt
+            lang={lang}
+            role={role}
+            show={showPushPrompt}
+            onDismiss={() => setShowPushPrompt(false)}
+          />
         </div>
       );
     }
@@ -355,6 +361,12 @@ export default function LeadForm({
             lang={lang}
           />
         )}
+        <PushPermissionPrompt
+          lang={lang}
+          role={role}
+          show={showPushPrompt}
+          onDismiss={() => setShowPushPrompt(false)}
+        />
       </div>
     );
   }
