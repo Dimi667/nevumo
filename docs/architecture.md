@@ -282,6 +282,22 @@ The system now implements a fully automated SEO strategy for City Landing pages,
   - Claim page (`/[lang]/claim/[token]/page.tsx`)
   - Request form (`/[lang]/[city]/request/page.tsx`)
 
+- **Legal Pages SEO (June 9, 2026)**:
+  - All 6 legal pages now have complete SEO metadata: canonical, hreflang (34 languages), OpenGraph
+  - Pages: `/[lang]/terms`, `/[lang]/privacy`, `/[lang]/cookies`, `/[lang]/terms-provider`,
+    `/[lang]/contact-dsa`, `/[lang]/withdrawal`
+  - **Modal noindex pattern**: All legal pages detect `?modal=true` query parameter and return
+    `robots: { index: false, follow: true }` to prevent duplicate content from LegalModal iframe
+  - **Withdrawal page pattern**: `use client` component required server wrapper —
+    `WithdrawalClient.tsx` (client logic) + `page.tsx` (server wrapper with generateMetadata)
+  - **robots.ts**: Dashboard paths blocked — `/*/provider/dashboard`, `/*/client/dashboard`
+
+- **Domain Canonical Configuration (June 9, 2026)**:
+  - **Primary domain**: `nevumo.com` (no www)
+  - **www handling**: `www.nevumo.com` → 301 Permanent Redirect → `nevumo.com` (configured in Vercel)
+  - **Cloudflare**: `www` DNS record must remain Proxied (orange cloud) for redirect to work
+  - **Anti-pattern to avoid**: Never set www as Primary in Vercel — causes redirect loop with Cloudflare
+
 - **Polish Landing Page SEO & UI Enhancements (May 28, 2026)**:
   - **File**: `apps/web/app/[lang]/dolacz/page.tsx`
   - **SEO Metadata**:

@@ -323,6 +323,52 @@ Nevumo е уеб платформа за marketplace на услуги.
 - **Canonical Tags**: Автоматично генериране на абсолютни canonical URLs за всички City Landing страници чрез `NEXT_PUBLIC_SITE_URL`.
 - **Universal Slug Logic**: Унифицирана логика за генериране на slugs между Frontend (`apps/web/lib/slug-utils.ts`) и Backend (`apps/api/services/provider_service.py`), поддържаща специални символи за 34 езика (Turkish İ/ı, German ü/ö, Icelandic ð/þ, Cyrillic).
 
+### SEO Audit & Fixes (June 9, 2026)
+
+**Trigger:** Google Search Console notification — "Duplicate without user-selected canonical"
+
+**Root cause discovered:** Vercel was configured with `www.nevumo.com` as Primary domain,
+causing `nevumo.com` to 307-redirect to `www`. Google saw both as duplicates.
+
+**Fixes applied:**
+
+1. **Vercel Domain Config** (no code change):
+   - `nevumo.com` → changed from "Redirect to www" to **Primary Production**
+   - `www.nevumo.com` → changed from Production to **301 Permanent Redirect → nevumo.com**
+
+2. **Cloudflare DNS** (no code change):
+   - `www.nevumo.com` CNAME record → changed from DNS only to **Proxied** (orange cloud)
+
+3. **terms/page.tsx** — `apps/web/app/[lang]/terms/page.tsx`:
+   - Was missing: canonical, hreflang (34 languages), OpenGraph tags
+   - Added: `generateHreflangAlternates('/terms')`, canonical, OG block
+   - Added modal noindex: `robots: isModal ? { index: false } : { index: true }`
+
+4. **Legal pages modal noindex** — added `?modal=true` → noindex pattern to all 6 legal pages:
+   - `apps/web/app/[lang]/privacy/page.tsx`
+   - `apps/web/app/[lang]/cookies/page.tsx`
+   - `apps/web/app/[lang]/terms/page.tsx`
+   - `apps/web/app/[lang]/terms-provider/page.tsx`
+   - `apps/web/app/[lang]/contact-dsa/page.tsx`
+   - `apps/web/app/[lang]/withdrawal/page.tsx` — required server wrapper pattern
+     (renamed to WithdrawalClient.tsx + new page.tsx server component)
+
+5. **robots.ts** — `apps/web/app/robots.ts`:
+   - Added to disallow array: `/*/provider/dashboard`, `/*/client/dashboard`
+
+**Verification:** All 5 automated Playwright tests PASSED (June 9, 2026):
+- robots.txt dashboard blocking ✅
+- terms canonical + 34 hreflang tags ✅
+- modal noindex on all 6 legal pages ✅
+- non-modal legal pages indexable ✅
+- www redirect chain working ✅
+
+**Google Search Console:** "Validate Fix" submitted for both issues (June 9, 2026).
+
+**Known remaining items (next sprint):**
+- og:url missing on city and category pages
+- JSON-LD missing on legal pages
+
 ### Global Language Switcher (May 2026)
 
 Имплементиран глобален превключвател на езика достъпен на всички страници.
