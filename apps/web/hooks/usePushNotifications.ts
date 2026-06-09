@@ -68,7 +68,12 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       const res = await fetch('/api/v1/push/vapid-public-key');
       const { public_key } = await res.json();
 
-      const reg = await navigator.serviceWorker.ready;
+      const reg = await Promise.race([
+        navigator.serviceWorker.ready,
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('[Push] serviceWorker.ready timeout')), 10000)
+        )
+      ]);
       const subscription = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(public_key) as unknown as ArrayBuffer,

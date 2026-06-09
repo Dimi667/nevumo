@@ -82,13 +82,17 @@ export default function PushPermissionPrompt({ lang, role, show, onDismiss }: Pu
   if (!shouldShow) return null
 
   const handleEnable = async () => {
-    await subscribe()
-    onDismiss()
     try {
-      localStorage.removeItem('push_prompt_dismissed_at')
-      localStorage.removeItem('push_prompt_shown_count')
-    } catch {
-      // localStorage access failed
+      await Promise.race([
+        subscribe(),
+        new Promise<void>((resolve) => setTimeout(resolve, 15000))
+      ])
+    } finally {
+      onDismiss()
+      try {
+        localStorage.removeItem('push_prompt_dismissed_at')
+        localStorage.removeItem('push_prompt_shown_count')
+      } catch {}
     }
   }
 
