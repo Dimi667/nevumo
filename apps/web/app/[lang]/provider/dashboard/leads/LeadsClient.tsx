@@ -5,6 +5,7 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import LeadRow from '@/components/dashboard/LeadRow';
 import LeadDetailModal from '@/components/dashboard/LeadDetailModal';
 import EmptyState from '@/components/dashboard/EmptyState';
+import PushPermissionPrompt from '@/components/push/PushPermissionPrompt';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import type { Lead, LeadStatusQuery, LeadsResponse } from '@/types/provider';
 import { getProviderLeads, updateLeadStatus } from '@/lib/provider-api';
@@ -147,6 +148,7 @@ export default function LeadsClient() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showPushPrompt, setShowPushPrompt] = useState(false);
 
   // Local filter state (synced with URL)
   const [status, setStatus] = useState<LeadStatusQuery>(urlStatus);
@@ -198,6 +200,14 @@ export default function LeadsClient() {
         setIsSearching(false);
       });
   }, [status, period, dateFrom, dateTo, search]);
+
+  // Show push prompt when provider has at least 1 lead
+  useEffect(() => {
+    if (leads && leads.length > 0) {
+      const timer = setTimeout(() => setShowPushPrompt(true), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [leads]);
 
   // Update URL when filters change (without triggering reload)
   const updateUrlParams = useCallback(
@@ -498,6 +508,13 @@ export default function LeadsClient() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onNotesSaved={handleNotesSaved}
+      />
+
+      <PushPermissionPrompt
+        lang={lang}
+        role="provider"
+        show={showPushPrompt}
+        onDismiss={() => setShowPushPrompt(false)}
       />
     </div>
   );

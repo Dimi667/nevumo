@@ -9,11 +9,13 @@ import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getPhonePrefix } from '@/lib/phoneUtils';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
+import PushPermissionPrompt from '@/components/push/PushPermissionPrompt';
 import { getCurrency, formatCurrency } from '@/lib/currency';
 import { JsonLd } from '@/components/JsonLd';
 import { resolveStaticUrl } from '@/lib/urlUtils';
 import LegalModal from '@/components/auth/LegalModal';
 import { useTranslation } from '@/lib/use-translation';
+import { getAuthUser } from '@/lib/auth-store';
 
 interface ProviderWidgetProps {
   provider: ProviderDetail;
@@ -229,12 +231,16 @@ export default function ProviderWidget({
   const [descriptionValue, setDescriptionValue] = useState('');
   const [serviceNoteError, setServiceNoteError] = useState<string | null>(null);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+  const [showPushPrompt, setShowPushPrompt] = useState(false);
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy'>('terms');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const lang = propLang || (typeof document !== 'undefined' && document.documentElement.lang) || 'en';
   const { dict: termsDict } = useTranslation('terms', lang);
   const { dict: termsProviderDict } = useTranslation('provider_terms', lang);
+  
+  const user = getAuthUser();
+  const role = user?.role === 'provider' ? 'provider' : 'client';
   const { dict: privacyDict } = useTranslation('privacy', lang);
 
   const getDocDict = () => {
@@ -407,6 +413,8 @@ export default function ProviderWidget({
         }
         setIsSuccess(true);
         setSuccessStep('sent');
+        // Show push prompt after 2 seconds
+        setTimeout(() => setShowPushPrompt(true), 2000);
         // Show PWA prompt after 2 seconds
         setTimeout(() => { setShowPWAPrompt(true); }, 2000);
       } else {
@@ -847,6 +855,13 @@ export default function ProviderWidget({
         type={legalModalType}
         authDict={translations}
         docDict={getDocDict()}
+      />
+
+      <PushPermissionPrompt
+        lang={lang}
+        role={role}
+        show={showPushPrompt}
+        onDismiss={() => setShowPushPrompt(false)}
       />
     </div>
   );

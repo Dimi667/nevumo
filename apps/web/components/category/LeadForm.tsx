@@ -8,6 +8,8 @@ import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getLocalizedCityText } from '@/lib/cityHelpers';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
+import PushPermissionPrompt from '@/components/push/PushPermissionPrompt';
+import { getAuthUser } from '@/lib/auth-store';
 
 interface ServiceOption {
   id: string;
@@ -54,11 +56,15 @@ export default function LeadForm({
   const [email, setEmail] = useState('');
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+  const [showPushPrompt, setShowPushPrompt] = useState(false);
   const phoneRef = useRef<HTMLDivElement>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { savePhone } = usePhone(countryCode);
   const { isValid } = usePhoneValidation(phoneValue, countryCode);
+  
+  const user = getAuthUser();
+  const role = user?.role === 'provider' ? 'provider' : 'client';
   
   const resolvedTitle = title ?? translations['form_btn'] ?? 'Get offers';
 
@@ -146,6 +152,8 @@ export default function LeadForm({
           if ('lead_id' in result && result.lead_id) setLeadId(result.lead_id as string);
           setIsSuccess(true);
           setSuccessStep('sent');
+          // Show push prompt after 2 seconds
+          setTimeout(() => setShowPushPrompt(true), 2000);
         } else {
           console.error('Lead submission error:', result.error?.code, result.error?.message);
           setHasError(true);
@@ -165,6 +173,8 @@ export default function LeadForm({
         if (phoneValue.replace(/\D/g, '').length >= 7) {
           savePhone(phoneValue.trim());
         }
+        // Show push prompt after 2 seconds
+        setTimeout(() => setShowPushPrompt(true), 2000);
       }
       // Show PWA prompt after 2 seconds
       setTimeout(() => {
@@ -515,5 +525,12 @@ export default function LeadForm({
         </div>
       </div>
     </form>
+
+    <PushPermissionPrompt
+      lang={lang}
+      role={role}
+      show={showPushPrompt}
+      onDismiss={() => setShowPushPrompt(false)}
+    />
   );
 }

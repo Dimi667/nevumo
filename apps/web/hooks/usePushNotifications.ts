@@ -27,10 +27,20 @@ export function usePushNotifications(): UsePushNotificationsReturn {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const supported =
+    const isIOS =
+      typeof navigator !== 'undefined' &&
+      /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    const isIOSStandalone =
       typeof window !== 'undefined' &&
+      Boolean((window.navigator as any).standalone);
+
+    const supported =
+      typeof navigator !== 'undefined' &&
       'serviceWorker' in navigator &&
-      'PushManager' in window;
+      typeof window !== 'undefined' &&
+      'PushManager' in window &&
+      (!isIOS || isIOSStandalone);
     setIsSupported(supported);
 
     if (!supported) return;
@@ -45,6 +55,12 @@ export function usePushNotifications(): UsePushNotificationsReturn {
   const subscribe = useCallback(async () => {
     setIsLoading(true);
     try {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        console.warn('[Push] Notification permission not granted:', permission);
+        return;
+      }
+
       const res = await fetch('/api/v1/push/vapid-public-key');
       const { public_key } = await res.json();
 

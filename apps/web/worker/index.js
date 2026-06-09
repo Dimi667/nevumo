@@ -1,6 +1,13 @@
 self.addEventListener('push', function(event) {
-  if (!event.data) return;
-  const data = event.data.json();
+  let data = { title: 'Nevumo', body: '', url: '/' };
+  try {
+    if (event.data) {
+      const parsed = event.data.json();
+      data = { ...data, ...parsed };
+    }
+  } catch (e) {
+    console.error('[SW] Failed to parse push payload:', e);
+  }
   const title = data.title || 'Nevumo';
   const options = {
     body: data.body || '',
