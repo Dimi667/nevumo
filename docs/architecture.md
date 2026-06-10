@@ -47,6 +47,21 @@ This document reflects the major architectural optimization performed in April 2
   - **Endpoints**: `/api/v1/auth/google` (initiate), `/api/v1/auth/google/callback` (callback), `/api/v1/auth/google/complete` (complete after terms acceptance).
   - **Production Configuration**: Credentials stored in Railway (backend) and Vercel (frontend) environment variables. Redirect URIs configured for `api.nevumo.com`, `www.nevumo.com`, and `nevumo.com`.
   - **Onboarding Redirect (May 31, 2026)**: Added `is_new_user` flag to `/api/v1/auth/google/complete` response. New providers (is_new_user=true) are redirected to `/provider/dashboard/profile` for onboarding, existing providers to `/provider/dashboard`.
+- **Google OAuth — Production Activation (June 10, 2026)**:
+  - **Problem**: Google Cloud project nevumo-495812 was suspended by Google.
+  - **Cause**: OAuth app was in "Testing" mode (only 3 test users had access) and mandatory Branding fields were missing.
+  - **Solution (Google Cloud Console → APIs & Services → Google Auth Platform)**:
+    - **Branding → App domain**:
+      - Application home page: https://www.nevumo.com
+      - Application privacy policy link: https://www.nevumo.com/en/privacy
+      - Application terms of service link: https://www.nevumo.com/en/terms
+    - **Audience → Publishing status**:
+      - Changed from "Testing" → "In production"
+      - Result: Google Login works for all Google accounts worldwide
+  - **Important for future**:
+    - Never upload a logo without being ready for Google verification (takes weeks)
+    - Publishing status "In production" is mandatory before any public launch
+    - Testing with an account outside the test list is the only valid test
 
 ### 5. Next.js & UI (Metadata + i18n)
 - **Universal Slug Generation (April 30, 2026)**: Unified URL slug generation logic between Frontend and Backend to support all 34 languages.
