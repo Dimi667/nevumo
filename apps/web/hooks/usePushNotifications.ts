@@ -53,45 +53,38 @@ export function usePushNotifications(): UsePushNotificationsReturn {
   }, []);
 
   const subscribe = useCallback(async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      alert('[Push] Step 1: Starting subscribe')
-
       if (typeof Notification === 'undefined') {
-        alert('[Push] Step 2: Notification API undefined — stopping')
-        return
+        console.warn('[Push] Notification API not available');
+        return;
       }
-      alert('[Push] Step 2: Notification API exists, requesting permission')
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        console.warn('[Push] Notification permission not granted:', permission);
+        return;
+      }
 
-      const permission = await Notification.requestPermission()
-      alert('[Push] Step 3: Permission = ' + permission)
-      if (permission !== 'granted') return
-
-      alert('[Push] Step 4: Fetching VAPID key')
-      const res = await fetch('/api/v1/push/vapid-public-key')
-      const { public_key } = await res.json()
-      alert('[Push] Step 5: VAPID key received, waiting for SW ready')
+      const res = await fetch('/api/v1/push/vapid-public-key');
+      const { public_key } = await res.json();
 
       const reg = await Promise.race([
         navigator.serviceWorker.ready,
         new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('SW timeout')), 10000)
+          setTimeout(() => reject(new Error('[Push] serviceWorker.ready timeout')), 10000)
         )
-      ])
-      alert('[Push] Step 6: SW ready, subscribing to push')
-
+      ]);
       const subscription = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(public_key) as unknown as ArrayBuffer,
-      })
-      alert('[Push] Step 7: Push subscription created, saving to server')
+      });
 
       const { endpoint, keys } = subscription.toJSON() as {
-        endpoint: string
-        keys: { p256dh: string; auth: string }
-      }
+        endpoint: string;
+        keys: { p256dh: string; auth: string };
+      };
 
-      const saveRes = await fetch('/api/v1/push/subscribe', {
+      await fetch('/api/v1/push/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -100,17 +93,15 @@ export function usePushNotifications(): UsePushNotificationsReturn {
           p256dh: keys.p256dh,
           auth: keys.auth,
         }),
-      })
-      alert('[Push] Step 8: Server response = ' + saveRes.status)
+      });
 
-      setIsSubscribed(true)
-      alert('[Push] Step 9: SUCCESS')
+      setIsSubscribed(true);
     } catch (err) {
-      alert('[Push] ERROR: ' + String(err))
+      console.error('Push subscribe error:', err);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [])
+  }, []);
 
   const unsubscribe = useCallback(async () => {
     setIsLoading(true);
