@@ -1,11 +1,10 @@
-import nextPWA from 'next-pwa';
-
-const withPWA = nextPWA({
-  dest: 'public',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
-  customWorkerDir: 'worker',
+import withPWAInit from "@ducanh2912/next-pwa";
+const withPWA = withPWAInit({
+dest: "public",
+disable: process.env.NODE_ENV === "development",
+register: false,
+reloadOnOnline: true,
+cacheOnFrontEndNav: true,
 });
 
 /** @type {import('next').NextConfig} */

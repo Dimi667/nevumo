@@ -1109,7 +1109,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - **PWA Етап 1 — Install Prompt + Tracking** — Базова PWA инфраструктура и install prompt система:
   - `apps/web/public/manifest.json` — Web App Manifest (name, icons, theme_color: #f97316, display: standalone)
   - `apps/web/public/icons/icon-192x192.png` и `icon-512x512.png` — PWA иконки
-  - `apps/web/next.config.mjs` — next-pwa конфигурация (disabled в development)
+  - `apps/web/next.config.mjs` — @ducanh2912/next-pwa конфигурация (disabled в development, Turbopack-compatible, register: false)
   - `apps/web/app/layout.tsx` — PWA meta тагове (manifest, theme-color, apple-mobile-web-app-*)
   - `apps/web/hooks/usePWAInstall.ts` — Hook: beforeinstallprompt (Android), iOS detection, localStorage anti-spam (спира при 2 отказа), canInstall/isIOS/showPrompt/handleDismiss/handleInstalled
   - `apps/web/components/pwa/PWAInstallPrompt.tsx` — Компонент: Android bottom banner + iOS bottom sheet с 2-стъпкови инструкции, различно копие за client/provider роли
@@ -1189,7 +1189,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Frontend:**
     - New hook: `apps/web/hooks/usePushNotifications.ts` — `isSupported`, `isSubscribed`, `isLoading`, `subscribe()`, `unsubscribe()` — handles VAPID key fetch, PushManager subscription, API calls to `/api/v1/push/subscribe` and `/api/v1/push/unsubscribe`
     - New file: `apps/web/worker/index.js` — custom Service Worker handlers for `push` event (showNotification) and `notificationclick` event (focus/open window)
-    - `apps/web/next.config.mjs` — added `customWorkerDir: 'worker'` to next-pwa config
+    - `apps/web/next.config.mjs` — added `customWorkerDir: 'worker'` to next-pwa config (later migrated to @ducanh2912/next-pwa on June 11, 2026 for Turbopack compatibility)
     - `apps/web/app/[lang]/provider/dashboard/settings/page.tsx` — added Push Notifications toggle section (visible only when `isSupported === true`, i.e. PWA installed + browser supports push)
   - **iOS note**: Web Push requires PWA installed via Add to Home Screen + iOS 16.4+. Safari without PWA install does NOT support Web Push.
   - **Notification flow**: Provider receives push on new lead → Client receives push on lead status change
@@ -1524,6 +1524,7 @@ git push nevumo-git main  # архив на SSD
 - **PWA Етап 2** — Push notifications само за провайдери: нова таблица push_subscriptions, Web Push протокол, интеграция с lead creation flow. Старт след валидиране на PWA install adoption от page_events данни.
 - **PWA Етап 3** — Push notifications за клиенти: нотификация когато провайдер отговори на заявка.
 - **Static Files URL Standardization** — Extend STATIC_FILES_BASE_URL pattern to other services that generate public URLs (e.g., QR codes, document uploads). Current implementation is specific to provider profile images; future services should use the same environment variable pattern for consistency across local and production environments.
+- **sw.js generation rule** — `sw.js` is NOT in `.gitignore` — @ducanh2912/next-pwa generates it during Vercel build; postbuild appends custom handlers via `[NEVUMO-CUSTOM-SW]` marker.
 - **Mobile tap zoom prevention** — `touch-action: manipulation` must be on all interactive elements globally in globals.css; input font-size must be `max(16px, 1em)` to prevent iOS auto-zoom; `max-width: 100%` on `*` prevents horizontal overflow. Do NOT revert these rules.
 
 ## Email Notification Incident Log
