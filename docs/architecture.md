@@ -870,6 +870,12 @@ This separation ensures that:
     - apps/web/components/homepage/Footer.tsx
   - **Резултат:** Cookie Settings е достъпен от footer-а на всяка страница в системата
 
+- **Language Dropdown Width Fix (June 11, 2026)**:
+  - **Проблем:** Dropdown менюто за избор на език изрязваше по-дългите имена на езици (напр. "Ελληνικά") когато е избран език с кратко име (напр. "Polski").
+  - **Причина:** Dropdown контейнерът имаше фиксиран клас `w-64` (256px), недостатъчен за по-дългите имена.
+  - **Решение:** Заменен `w-64` с `min-w-max` на dropdown контейнера в `apps/web/components/GlobalFooter.tsx` (ред 223). Менюто автоматично се разтяга до ширината на най-дългото съдържание — при добавяне на нов език не се налага ръчна корекция.
+  - **Commit:** `6e38a31`
+
 ---
 
 ## Data Export Endpoint (GDPR Article 20 - Right to Portability) — May 8, 2026
