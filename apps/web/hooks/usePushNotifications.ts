@@ -85,7 +85,11 @@ export function usePushNotifications(): UsePushNotificationsReturn {
         keys: { p256dh: string; auth: string };
       };
 
-      const token = getAuthToken()
+      const token = getAuthToken();
+      if (!token) {
+        console.log('[Push] No auth token — skipping subscribe, will retry after login');
+        return;
+      }
       await fetch('/api/v1/push/subscribe', {
         method: 'POST',
         headers: {
