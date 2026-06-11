@@ -21,6 +21,7 @@ from apps.api.services.review_service import (
 )
 from apps.api.models import User, Review
 from apps.api.services.push_service import send_push_notification
+from apps.api.services.email_service import email_service
 
 router = APIRouter(prefix="/api/v1/provider", tags=["provider"])
 
@@ -95,6 +96,14 @@ def reply_to_review(
     )
 
     if review.provider_reply_edit_count == 0:
+        try:
+            email_service.send_review_reply_notification(
+                db=db,
+                review=review,
+                is_first_reply=True,
+            )
+        except Exception as e:
+            print(f"[EMAIL_WARNING] review reply email: {e}", flush=True)
         try:
             if review.client_id:
                 send_push_notification(

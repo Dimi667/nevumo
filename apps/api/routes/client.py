@@ -127,23 +127,6 @@ def update_lead_status(
     lead.status_changed_by = "client"
     lead.status_changed_at = datetime.utcnow()
 
-    try:
-        if lead.provider_id:
-            provider = db.query(Provider).filter(Provider.id == lead.provider_id).first()
-            if provider and provider.user_id:
-                provider_user = db.query(User).filter(User.id == provider.user_id).first()
-                if provider_user and provider_user.email:
-                    dashboard_url = f"{settings.APP_URL}/provider/dashboard"
-                    email_service.send_lead_status_notification(
-                        to_email=provider_user.email,
-                        new_status=new_status,
-                        category=str(lead.category_id),
-                        city=str(lead.city_id),
-                        dashboard_url=dashboard_url,
-                    )
-    except Exception as e:
-        print(f"[EMAIL_WARNING] {type(e).__name__}: {e}", flush=True)
-
     if new_status == "cancelled":
         lead.cancelled_by = "client"
     else:
@@ -163,6 +146,39 @@ def update_lead_status(
             match.status = new_status
 
     db.commit()
+
+    try:
+        if lead.provider_id:
+            provider = db.query(Provider).filter(Provider.id == lead.provider_id).first()
+            if provider and provider.user_id:
+                provider_user = db.query(User).filter(User.id == provider.user_id).first()
+                if provider_user and provider_user.email:
+                    dashboard_url = f"{settings.APP_URL}/provider/dashboard"
+                    email_service.send_lead_status_notification(
+                        to_email=provider_user.email,
+                        new_status=new_status,
+                        category=str(lead.category_id),
+                        city=str(lead.city_id),
+                        dashboard_url=dashboard_url,
+                    )
+    except Exception as e:
+        print(f"[EMAIL_WARNING] {type(e).__name__}: {e}", flush=True)
+
+    try:
+        if lead.provider_id:
+            provider_for_push = db.query(Provider).filter(
+                Provider.id == lead.provider_id
+            ).first()
+            if provider_for_push and provider_for_push.user_id:
+                send_push_notification(
+                    db=db,
+                    user_id=str(provider_for_push.user_id),
+                    title="Lead Status Update",
+                    body="Your client updated the request status.",
+                    url="/provider/dashboard/leads",
+                )
+    except Exception:
+        pass
 
     return {
         "success": True,
