@@ -1,0 +1,211 @@
+#!/usr/bin/env python3
+"""
+Seed script to add push notification settings translations for all 34 languages.
+Keys: push_title, push_description, push_enable, push_disable, push_loading
+Namespace: settings
+"""
+
+import os
+import psycopg2
+
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://nevumo:nevumo@nevumo-postgres:5432/nevumo_leads")
+
+TRANSLATIONS = [
+    ("bg", "settings.push_title", "Известия"),
+    ("bg", "settings.push_description", "Получавайте мигновени известия за нови заявки и съобщения."),
+    ("bg", "settings.push_enable", "Включи известия"),
+    ("bg", "settings.push_disable", "Изключи известия"),
+    ("bg", "settings.push_loading", "Моля изчакайте..."),
+    ("cs", "settings.push_title", "Push notifikace"),
+    ("cs", "settings.push_description", "Dostávejte okamžitá oznámení o nových poptávkách a zprávách."),
+    ("cs", "settings.push_enable", "Povolit notifikace"),
+    ("cs", "settings.push_disable", "Zakázat notifikace"),
+    ("cs", "settings.push_loading", "Prosím čekejte..."),
+    ("da", "settings.push_title", "Push-notifikationer"),
+    ("da", "settings.push_description", "Modtag øjeblikkelige notifikationer om nye forespørgsler og beskeder."),
+    ("da", "settings.push_enable", "Aktiver notifikationer"),
+    ("da", "settings.push_disable", "Deaktiver notifikationer"),
+    ("da", "settings.push_loading", "Vent venligst..."),
+    ("de", "settings.push_title", "Push-Benachrichtigungen"),
+    ("de", "settings.push_description", "Erhalten Sie sofortige Benachrichtigungen über neue Anfragen und Nachrichten."),
+    ("de", "settings.push_enable", "Benachrichtigungen aktivieren"),
+    ("de", "settings.push_disable", "Benachrichtigungen deaktivieren"),
+    ("de", "settings.push_loading", "Bitte warten..."),
+    ("el", "settings.push_title", "Ειδοποιήσεις push"),
+    ("el", "settings.push_description", "Λαμβάνετε άμεσες ειδοποιήσεις για νέα αιτήματα και μηνύματα."),
+    ("el", "settings.push_enable", "Ενεργοποίηση ειδοποιήσεων"),
+    ("el", "settings.push_disable", "Απενεργοποίηση ειδοποιήσεων"),
+    ("el", "settings.push_loading", "Παρακαλώ περιμένετε..."),
+    ("en", "settings.push_title", "Push Notifications"),
+    ("en", "settings.push_description", "Receive instant notifications for new leads and messages."),
+    ("en", "settings.push_enable", "Enable Notifications"),
+    ("en", "settings.push_disable", "Disable Notifications"),
+    ("en", "settings.push_loading", "Please wait..."),
+    ("es", "settings.push_title", "Notificaciones push"),
+    ("es", "settings.push_description", "Recibe notificaciones instantáneas sobre nuevas solicitudes y mensajes."),
+    ("es", "settings.push_enable", "Activar notificaciones"),
+    ("es", "settings.push_disable", "Desactivar notificaciones"),
+    ("es", "settings.push_loading", "Por favor espera..."),
+    ("et", "settings.push_title", "Tõuketeavitused"),
+    ("et", "settings.push_description", "Saate koheseid teavitusi uute päringute ja sõnumite kohta."),
+    ("et", "settings.push_enable", "Luba teavitused"),
+    ("et", "settings.push_disable", "Keela teavitused"),
+    ("et", "settings.push_loading", "Palun oodake..."),
+    ("fi", "settings.push_title", "Push-ilmoitukset"),
+    ("fi", "settings.push_description", "Saa välittömiä ilmoituksia uusista pyynnöistä ja viesteistä."),
+    ("fi", "settings.push_enable", "Ota ilmoitukset käyttöön"),
+    ("fi", "settings.push_disable", "Poista ilmoitukset käytöstä"),
+    ("fi", "settings.push_loading", "Odota hetki..."),
+    ("fr", "settings.push_title", "Notifications push"),
+    ("fr", "settings.push_description", "Recevez des notifications instantanées pour les nouvelles demandes et messages."),
+    ("fr", "settings.push_enable", "Activer les notifications"),
+    ("fr", "settings.push_disable", "Désactiver les notifications"),
+    ("fr", "settings.push_loading", "Veuillez patienter..."),
+    ("ga", "settings.push_title", "Fógraí push"),
+    ("ga", "settings.push_description", "Faigh fógraí láithreach faoi iarratais agus teachtaireachtaí nua."),
+    ("ga", "settings.push_enable", "Cumasaigh fógraí"),
+    ("ga", "settings.push_disable", "Díchumasaigh fógraí"),
+    ("ga", "settings.push_loading", "Fan le do thoil..."),
+    ("hr", "settings.push_title", "Push obavijesti"),
+    ("hr", "settings.push_description", "Primajte trenutne obavijesti o novim zahtjevima i porukama."),
+    ("hr", "settings.push_enable", "Omogući obavijesti"),
+    ("hr", "settings.push_disable", "Onemogući obavijesti"),
+    ("hr", "settings.push_loading", "Molimo pričekajte..."),
+    ("hu", "settings.push_title", "Push értesítések"),
+    ("hu", "settings.push_description", "Kapjon azonnali értesítéseket az új megkeresésekről és üzenetekről."),
+    ("hu", "settings.push_enable", "Értesítések engedélyezése"),
+    ("hu", "settings.push_disable", "Értesítések letiltása"),
+    ("hu", "settings.push_loading", "Kérem várjon..."),
+    ("is", "settings.push_title", "Push-tilkynningar"),
+    ("is", "settings.push_description", "Fáðu tafarlausar tilkynningar um nýjar beiðnir og skilaboð."),
+    ("is", "settings.push_enable", "Virkja tilkynningar"),
+    ("is", "settings.push_disable", "Gera tilkynningar óvirkar"),
+    ("is", "settings.push_loading", "Vinsamlegast bíddu..."),
+    ("it", "settings.push_title", "Notifiche push"),
+    ("it", "settings.push_description", "Ricevi notifiche istantanee per nuove richieste e messaggi."),
+    ("it", "settings.push_enable", "Abilita notifiche"),
+    ("it", "settings.push_disable", "Disabilita notifiche"),
+    ("it", "settings.push_loading", "Attendere prego..."),
+    ("lb", "settings.push_title", "Push-Notifikatiounen"),
+    ("lb", "settings.push_description", "Kritt direkt Notifikatiounen fir nei Ufroe a Messagen."),
+    ("lb", "settings.push_enable", "Notifikatiounen aktivéieren"),
+    ("lb", "settings.push_disable", "Notifikatiounen deaktivéieren"),
+    ("lb", "settings.push_loading", "Waart w.e.g...."),
+    ("lt", "settings.push_title", "Push pranešimai"),
+    ("lt", "settings.push_description", "Gaukite momentinius pranešimus apie naujus užklausimus ir žinutes."),
+    ("lt", "settings.push_enable", "Įjungti pranešimus"),
+    ("lt", "settings.push_disable", "Išjungti pranešimus"),
+    ("lt", "settings.push_loading", "Prašome palaukti..."),
+    ("lv", "settings.push_title", "Push paziņojumi"),
+    ("lv", "settings.push_description", "Saņemiet tūlītējus paziņojumus par jauniem pieprasījumiem un ziņojumiem."),
+    ("lv", "settings.push_enable", "Iespējot paziņojumus"),
+    ("lv", "settings.push_disable", "Atspējot paziņojumus"),
+    ("lv", "settings.push_loading", "Lūdzu uzgaidiet..."),
+    ("mk", "settings.push_title", "Push известувања"),
+    ("mk", "settings.push_description", "Добивајте моментални известувања за нови барања и пораки."),
+    ("mk", "settings.push_enable", "Овозможи известувања"),
+    ("mk", "settings.push_disable", "Оневозможи известувања"),
+    ("mk", "settings.push_loading", "Ве молиме почекајте..."),
+    ("mt", "settings.push_title", "Notifiki push"),
+    ("mt", "settings.push_description", "Irċievi notifiki immedjati għal talbiet u messaġġi ġodda."),
+    ("mt", "settings.push_enable", "Attiva n-notifiki"),
+    ("mt", "settings.push_disable", "Iddiżattiva n-notifiki"),
+    ("mt", "settings.push_loading", "Jekk jogħġbok stenna..."),
+    ("nl", "settings.push_title", "Push-meldingen"),
+    ("nl", "settings.push_description", "Ontvang directe meldingen voor nieuwe aanvragen en berichten."),
+    ("nl", "settings.push_enable", "Meldingen inschakelen"),
+    ("nl", "settings.push_disable", "Meldingen uitschakelen"),
+    ("nl", "settings.push_loading", "Even geduld..."),
+    ("no", "settings.push_title", "Push-varsler"),
+    ("no", "settings.push_description", "Motta umiddelbare varsler om nye forespørsler og meldinger."),
+    ("no", "settings.push_enable", "Aktiver varsler"),
+    ("no", "settings.push_disable", "Deaktiver varsler"),
+    ("no", "settings.push_loading", "Vennligst vent..."),
+    ("pl", "settings.push_title", "Powiadomienia push"),
+    ("pl", "settings.push_description", "Otrzymuj natychmiastowe powiadomienia o nowych zapytaniach i wiadomościach."),
+    ("pl", "settings.push_enable", "Włącz powiadomienia"),
+    ("pl", "settings.push_disable", "Wyłącz powiadomienia"),
+    ("pl", "settings.push_loading", "Proszę czekać..."),
+    ("pt", "settings.push_title", "Notificações push"),
+    ("pt", "settings.push_description", "Receba notificações instantâneas sobre novas solicitações e mensagens."),
+    ("pt", "settings.push_enable", "Ativar notificações"),
+    ("pt", "settings.push_disable", "Desativar notificações"),
+    ("pt", "settings.push_loading", "Por favor aguarde..."),
+    ("pt-PT", "settings.push_title", "Notificações push"),
+    ("pt-PT", "settings.push_description", "Receba notificações instantâneas sobre novos pedidos e mensagens."),
+    ("pt-PT", "settings.push_enable", "Ativar notificações"),
+    ("pt-PT", "settings.push_disable", "Desativar notificações"),
+    ("pt-PT", "settings.push_loading", "Por favor aguarde..."),
+    ("ro", "settings.push_title", "Notificări push"),
+    ("ro", "settings.push_description", "Primiți notificări instantanee pentru cereri și mesaje noi."),
+    ("ro", "settings.push_enable", "Activați notificările"),
+    ("ro", "settings.push_disable", "Dezactivați notificările"),
+    ("ro", "settings.push_loading", "Vă rugăm așteptați..."),
+    ("ru", "settings.push_title", "Push-уведомления"),
+    ("ru", "settings.push_description", "Получайте мгновенные уведомления о новых заявках и сообщениях."),
+    ("ru", "settings.push_enable", "Включить уведомления"),
+    ("ru", "settings.push_disable", "Отключить уведомления"),
+    ("ru", "settings.push_loading", "Пожалуйста подождите..."),
+    ("sk", "settings.push_title", "Push oznámenia"),
+    ("sk", "settings.push_description", "Dostávajte okamžité oznámenia o nových dopytoch a správach."),
+    ("sk", "settings.push_enable", "Povoliť oznámenia"),
+    ("sk", "settings.push_disable", "Zakázať oznámenia"),
+    ("sk", "settings.push_loading", "Prosím čakajte..."),
+    ("sl", "settings.push_title", "Push obvestila"),
+    ("sl", "settings.push_description", "Prejemajte takojšnja obvestila o novih zahtevah in sporočilih."),
+    ("sl", "settings.push_enable", "Omogoči obvestila"),
+    ("sl", "settings.push_disable", "Onemogoči obvestila"),
+    ("sl", "settings.push_loading", "Prosimo počakajte..."),
+    ("sq", "settings.push_title", "Njoftime push"),
+    ("sq", "settings.push_description", "Merrni njoftime të menjëhershme për kërkesa dhe mesazhe të reja."),
+    ("sq", "settings.push_enable", "Aktivizo njoftimet"),
+    ("sq", "settings.push_disable", "Çaktivizo njoftimet"),
+    ("sq", "settings.push_loading", "Ju lutem prisni..."),
+    ("sr", "settings.push_title", "Push obaveštenja"),
+    ("sr", "settings.push_description", "Primajte trenutna obaveštenja o novim zahtevima i porukama."),
+    ("sr", "settings.push_enable", "Omogući obaveštenja"),
+    ("sr", "settings.push_disable", "Onemogući obaveštenja"),
+    ("sr", "settings.push_loading", "Molimo sačekajte..."),
+    ("sv", "settings.push_title", "Push-aviseringar"),
+    ("sv", "settings.push_description", "Få omedelbara aviseringar om nya förfrågningar och meddelanden."),
+    ("sv", "settings.push_enable", "Aktivera aviseringar"),
+    ("sv", "settings.push_disable", "Inaktivera aviseringar"),
+    ("sv", "settings.push_loading", "Vänligen vänta..."),
+    ("tr", "settings.push_title", "Push bildirimleri"),
+    ("tr", "settings.push_description", "Yeni talepler ve mesajlar için anında bildirim alın."),
+    ("tr", "settings.push_enable", "Bildirimleri etkinleştir"),
+    ("tr", "settings.push_disable", "Bildirimleri devre dışı bırak"),
+    ("tr", "settings.push_loading", "Lütfen bekleyin..."),
+    ("uk", "settings.push_title", "Push-сповіщення"),
+    ("uk", "settings.push_description", "Отримуйте миттєві сповіщення про нові запити та повідомлення."),
+    ("uk", "settings.push_enable", "Увімкнути сповіщення"),
+    ("uk", "settings.push_disable", "Вимкнути сповіщення"),
+    ("uk", "settings.push_loading", "Будь ласка зачекайте..."),
+]
+
+def main() -> None:
+    conn = psycopg2.connect(DATABASE_URL)
+    cursor = conn.cursor()
+
+    insert_query = """
+        INSERT INTO translations (lang, key, value)
+        VALUES (%s, %s, %s)
+        ON CONFLICT (lang, key) DO UPDATE SET value = EXCLUDED.value
+    """
+
+    print(f"Seeding {len(TRANSLATIONS)} push settings translations...")
+    
+    for i, (lang, key, value) in enumerate(TRANSLATIONS, 1):
+        cursor.execute(insert_query, (lang, key, value))
+        if i % 20 == 0:
+            print(f"  Progress: {i}/{len(TRANSLATIONS)}")
+            conn.commit()
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    print(f"✓ Successfully seeded {len(TRANSLATIONS)} push settings translations")
+
+if __name__ == "__main__":
+    main()

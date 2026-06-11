@@ -18,6 +18,7 @@ import { usePhone } from '@/hooks/usePhone';
 import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
+import { useTranslation } from '@/lib/use-translation';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 function getAvailabilityOptions(t: (key: string, fallback?: string) => string): { value: AvailabilityStatus; label: string }[] {
@@ -34,6 +35,7 @@ const MAX_SLUG_CHANGES = 1;
 export default function SettingsPage() {
   const router = useRouter();
   const { t, lang } = useDashboardI18n();
+  const { t: tSettings } = useTranslation('settings', lang);
   const { isSupported, isSubscribed, isLoading: pushLoading, permissionState, subscribe, unsubscribe } = usePushNotifications();
   const user = getAuthUser();
 
@@ -539,17 +541,17 @@ export default function SettingsPage() {
       {/* Push Notifications */}
       {isSupported && (
         <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
-          <h2 className="text-sm font-semibold text-gray-800">{t('settings.push_title', 'Push Notifications')}</h2>
+          <h2 className="text-sm font-semibold text-gray-800">{tSettings('push_title', 'Push Notifications')}</h2>
           <p className="text-sm text-gray-500">
-            {t('settings.push_description', 'Receive instant notifications for new leads and messages.')}
+            {tSettings('push_description', 'Receive instant notifications for new leads and messages.')}
           </p>
           {permissionState === 'denied' ? (
             <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 space-y-1">
               <p className="text-sm font-medium text-amber-800">
-                {t('settings.push_blocked_title', 'Notifications are blocked')}
+                {tSettings('push_blocked_title', 'Notifications are blocked')}
               </p>
               <p className="text-sm text-amber-700">
-                {t('settings.push_blocked_description', 'Notifications for nevumo.com are blocked in your browser. To enable them, go to your browser settings and allow notifications for this site.')}
+                {tSettings('push_blocked_description', 'Notifications for nevumo.com are blocked in your browser. To enable them, go to your browser settings and allow notifications for this site.')}
               </p>
             </div>
           ) : (
@@ -564,10 +566,10 @@ export default function SettingsPage() {
               }`}
             >
               {pushLoading
-                ? t('settings.push_loading', 'Please wait...')
+                ? tSettings('push_loading', 'Please wait...')
                 : isSubscribed
-                ? t('settings.push_disable', 'Disable Notifications')
-                : t('settings.push_enable', 'Enable Notifications')}
+                ? tSettings('push_disable', 'Disable Notifications')
+                : tSettings('push_enable', 'Enable Notifications')}
             </button>
           )}
         </div>

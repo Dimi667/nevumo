@@ -2437,6 +2437,8 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - apps/web/app/[lang]/provider/dashboard/settings/page.tsx — permissionState destructured; blocked state UI with amber warning box
 - apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx — push toggle added with blocked state UI; tSettings from 'settings' namespace
 - apps/api/scripts/seed_push_blocked_translations.py — new seed script, 68 rows (settings.push_blocked_title + settings.push_blocked_description × 34 languages)
+- apps/api/scripts/seed_push_settings_translations.py — new seed script, 170 rows (settings.push_title + settings.push_description + settings.push_enable + settings.push_disable + settings.push_loading × 34 languages)
+- Translation namespace fix (Provider Settings): added useTranslation('settings', lang) as tSettings — push keys now load from correct namespace instead of provider_dashboard
 
 ### Push & Email Notification Audit (June 11, 2026) — COMPLETE
 

@@ -1229,6 +1229,8 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Client Settings push toggle**: Added push notifications section to `SettingsClient.tsx` (before Review Preferences) — clients can now enable/disable push from their dashboard
   - **New translation keys**: `settings.push_blocked_title` + `settings.push_blocked_description` × 34 languages — seed script: `apps/api/scripts/seed_push_blocked_translations.py`
   - **Translation namespace fix**: Client Settings uses `tSettings` from `useTranslation('settings', lang)` for push keys — separate from `t` for `client_dashboard` namespace
+  - **Missing push settings translations**: 5 keys (push_title, push_description, push_enable, push_disable, push_loading) were missing from `settings` namespace — seed script added: `apps/api/scripts/seed_push_settings_translations.py` (170 rows × 34 languages)
+  - **Provider Settings namespace fix**: `useTranslation('settings', lang)` added as `tSettings` in provider settings page — push keys now correctly load from `settings` namespace instead of `provider_dashboard`
 - **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
   - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
   - 272 new rows 
