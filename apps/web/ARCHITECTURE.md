@@ -1,19 +1,19 @@
 # Nevumo Web Architecture
 
 **PWA Library Migration (June 11, 2026)** — COMPLETE:
-- **Problem**: next-pwa v5 incompatible with Turbopack — `customWorkerDir` triggers webpack pipeline which does not run under Turbopack → `sw.js` not generated → push handlers not appended → push notifications silently broken in production.
-- **Solution**: Migrated from `next-pwa` ^5.6.0 to `@ducanh2912/next-pwa` ^10.2.9 (Turbopack-compatible fork).
+- **Problem**: Both next-pwa v5 and @ducanh2912/next-pwa v10 incompatible with Turbopack — both rely on Webpack plugin to generate sw.js. turbopack:{} in next.config.mjs prevents Webpack from running → sw.js never generated in production.
+- **Solution**: Removed all PWA libraries. Static sw.js created directly in apps/web/public/sw.js.
+- **Architecture**: Zero external PWA dependencies.
+  - apps/web/public/sw.js — static base Service Worker (install/activate/fetch handlers)
+  - apps/web/worker/index.js — push/notificationclick handlers (unchanged)
+  - apps/web/scripts/append-sw-handlers.js — postbuild appends worker/index.js into sw.js (unchanged)
+  - apps/web/components/sw/ServiceWorkerRegistration.tsx — registers /sw.js (unchanged)
+- **Build flow**: next build → postbuild appends push handlers → [NEVUMO-CUSTOM-SW] marker in sw.js → Vercel serves static sw.js
 - **Files changed**:
-  - `apps/web/package.json` — removed `next-pwa` from devDependencies, added `@ducanh2912/next-pwa` to dependencies
-  - `apps/web/next.config.mjs` — updated import and config: removed `customWorkerDir`, `skipWaiting`, `register: true`; added `register: false`, `reloadOnOnline: true`, `cacheOnFrontEndNav: true`
-  - root `.gitignore` — removed `apps/web/public/sw.js` (line 70)
-- **Unchanged (intentionally preserved)**:
-  - `apps/web/worker/index.js` — push/notificationclick handlers
-  - `apps/web/scripts/append-sw-handlers.js` — postbuild script with `[NEVUMO-CUSTOM-SW]` marker
-  - `apps/web/package.json` postbuild hook — `"postbuild": "node scripts/append-sw-handlers.js"`
-  - `apps/web/components/sw/ServiceWorkerRegistration.tsx` — manual SW registration
-- **Build flow**: `next build` → @ducanh2912/next-pwa generates `sw.js` in `public/` (Turbopack-compatible) → `postbuild` appends push handlers → Vercel serves `sw.js` with `[NEVUMO-CUSTOM-SW]` section.
-- **Key rule**: `register: false` in withPWA config because `ServiceWorkerRegistration.tsx` handles registration manually.
+  - apps/web/package.json — removed next-pwa and @ducanh2912/next-pwa
+  - apps/web/next.config.mjs — removed withPWA wrapper, plain nextConfig
+  - apps/web/public/sw.js — new static base Service Worker
+- **Key rule**: sw.js is a static committed file in git. The postbuild script appends push handlers idempotently on every build using the [NEVUMO-CUSTOM-SW] marker.
 
 ---
 

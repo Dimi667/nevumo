@@ -1109,7 +1109,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - **PWA Етап 1 — Install Prompt + Tracking** — Базова PWA инфраструктура и install prompt система:
   - `apps/web/public/manifest.json` — Web App Manifest (name, icons, theme_color: #f97316, display: standalone)
   - `apps/web/public/icons/icon-192x192.png` и `icon-512x512.png` — PWA иконки
-  - `apps/web/next.config.mjs` — @ducanh2912/next-pwa конфигурация (disabled в development, Turbopack-compatible, register: false)
+  - `apps/web/next.config.mjs` — plain Next.js config (no PWA library — static sw.js in public/)
   - `apps/web/app/layout.tsx` — PWA meta тагове (manifest, theme-color, apple-mobile-web-app-*)
   - `apps/web/hooks/usePWAInstall.ts` — Hook: beforeinstallprompt (Android), iOS detection, localStorage anti-spam (спира при 2 отказа), canInstall/isIOS/showPrompt/handleDismiss/handleInstalled
   - `apps/web/components/pwa/PWAInstallPrompt.tsx` — Компонент: Android bottom banner + iOS bottom sheet с 2-стъпкови инструкции, различно копие за client/provider роли
@@ -1189,10 +1189,24 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Frontend:**
     - New hook: `apps/web/hooks/usePushNotifications.ts` — `isSupported`, `isSubscribed`, `isLoading`, `subscribe()`, `unsubscribe()` — handles VAPID key fetch, PushManager subscription, API calls to `/api/v1/push/subscribe` and `/api/v1/push/unsubscribe`
     - New file: `apps/web/worker/index.js` — custom Service Worker handlers for `push` event (showNotification) and `notificationclick` event (focus/open window)
-    - `apps/web/next.config.mjs` — added `customWorkerDir: 'worker'` to next-pwa config (later migrated to @ducanh2912/next-pwa on June 11, 2026 for Turbopack compatibility)
+    - `apps/web/next.config.mjs` — added `customWorkerDir: 'worker'` to next-pwa config (later removed all PWA libraries on June 11, 2026 — static sw.js in public/)
     - `apps/web/app/[lang]/provider/dashboard/settings/page.tsx` — added Push Notifications toggle section (visible only when `isSupported === true`, i.e. PWA installed + browser supports push)
   - **iOS note**: Web Push requires PWA installed via Add to Home Screen + iOS 16.4+. Safari without PWA install does NOT support Web Push.
   - **Notification flow**: Provider receives push on new lead → Client receives push on lead status change
+- **PWA Library Migration (June 11, 2026)** — COMPLETE:
+  - **Problem**: Both next-pwa v5 and @ducanh2912/next-pwa v10 incompatible with Turbopack — both rely on Webpack plugin to generate sw.js. turbopack:{} in next.config.mjs prevents Webpack from running → sw.js never generated in production.
+  - **Solution**: Removed all PWA libraries. Static sw.js created directly in apps/web/public/sw.js.
+  - **Architecture**: Zero external PWA dependencies.
+    - apps/web/public/sw.js — static base Service Worker (install/activate/fetch handlers)
+    - apps/web/worker/index.js — push/notificationclick handlers (unchanged)
+    - apps/web/scripts/append-sw-handlers.js — postbuild appends worker/index.js into sw.js (unchanged)
+    - apps/web/components/sw/ServiceWorkerRegistration.tsx — registers /sw.js (unchanged)
+  - **Build flow**: next build → postbuild appends push handlers → [NEVUMO-CUSTOM-SW] marker in sw.js → Vercel serves static sw.js
+  - **Files changed**:
+    - apps/web/package.json — removed next-pwa and @ducanh2912/next-pwa
+    - apps/web/next.config.mjs — removed withPWA wrapper, plain nextConfig
+    - apps/web/public/sw.js — new static base Service Worker
+  - **Key rule**: sw.js is a static committed file in git. The postbuild script appends push handlers idempotently on every build using the [NEVUMO-CUSTOM-SW] marker.
 - **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
   - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
   - 272 new rows 
@@ -1524,7 +1538,7 @@ git push nevumo-git main  # архив на SSD
 - **PWA Етап 2** — Push notifications само за провайдери: нова таблица push_subscriptions, Web Push протокол, интеграция с lead creation flow. Старт след валидиране на PWA install adoption от page_events данни.
 - **PWA Етап 3** — Push notifications за клиенти: нотификация когато провайдер отговори на заявка.
 - **Static Files URL Standardization** — Extend STATIC_FILES_BASE_URL pattern to other services that generate public URLs (e.g., QR codes, document uploads). Current implementation is specific to provider profile images; future services should use the same environment variable pattern for consistency across local and production environments.
-- **sw.js generation rule** — `sw.js` is NOT in `.gitignore` — @ducanh2912/next-pwa generates it during Vercel build; postbuild appends custom handlers via `[NEVUMO-CUSTOM-SW]` marker.
+- **sw.js generation rule** — `sw.js` is a static committed file in `apps/web/public/sw.js` — no PWA library needed; postbuild appends push handlers via `[NEVUMO-CUSTOM-SW]` marker on every build
 - **Mobile tap zoom prevention** — `touch-action: manipulation` must be on all interactive elements globally in globals.css; input font-size must be `max(16px, 1em)` to prevent iOS auto-zoom; `max-width: 100%` on `*` prevents horizontal overflow. Do NOT revert these rules.
 
 ## Email Notification Incident Log
