@@ -34,7 +34,7 @@ const MAX_SLUG_CHANGES = 1;
 export default function SettingsPage() {
   const router = useRouter();
   const { t, lang } = useDashboardI18n();
-  const { isSupported, isSubscribed, isLoading: pushLoading, subscribe, unsubscribe } = usePushNotifications();
+  const { isSupported, isSubscribed, isLoading: pushLoading, permissionState, subscribe, unsubscribe } = usePushNotifications();
   const user = getAuthUser();
 
   const [profile, setProfile] = useState<ProviderProfile | null>(null);
@@ -543,22 +543,33 @@ export default function SettingsPage() {
           <p className="text-sm text-gray-500">
             {t('settings.push_description', 'Receive instant notifications for new leads and messages.')}
           </p>
-          <button
-            type="button"
-            onClick={isSubscribed ? unsubscribe : subscribe}
-            disabled={pushLoading}
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 ${
-              isSubscribed
-                ? 'border border-gray-300 text-gray-700 hover:bg-gray-100'
-                : 'bg-orange-500 hover:bg-orange-600 text-white'
-            }`}
-          >
-            {pushLoading
-              ? t('settings.push_loading', 'Please wait...')
-              : isSubscribed
-              ? t('settings.push_disable', 'Disable Notifications')
-              : t('settings.push_enable', 'Enable Notifications')}
-          </button>
+          {permissionState === 'denied' ? (
+            <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 space-y-1">
+              <p className="text-sm font-medium text-amber-800">
+                {t('settings.push_blocked_title', 'Notifications are blocked')}
+              </p>
+              <p className="text-sm text-amber-700">
+                {t('settings.push_blocked_description', 'Notifications for nevumo.com are blocked in your browser. To enable them, go to your browser settings and allow notifications for this site.')}
+              </p>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={isSubscribed ? unsubscribe : subscribe}
+              disabled={pushLoading}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 ${
+                isSubscribed
+                  ? 'border border-gray-300 text-gray-700 hover:bg-gray-100'
+                  : 'bg-orange-500 hover:bg-orange-600 text-white'
+              }`}
+            >
+              {pushLoading
+                ? t('settings.push_loading', 'Please wait...')
+                : isSubscribed
+                ? t('settings.push_disable', 'Disable Notifications')
+                : t('settings.push_enable', 'Enable Notifications')}
+            </button>
+          )}
         </div>
       )}
 

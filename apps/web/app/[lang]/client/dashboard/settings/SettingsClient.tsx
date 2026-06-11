@@ -12,6 +12,7 @@ import { clearCategoryCtx } from '@/lib/ctx';
 import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { useTranslation } from '@/lib/use-translation';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 export default function SettingsClient({ lang }: { lang: string }) {
   const router = useRouter();
@@ -33,7 +34,9 @@ export default function SettingsClient({ lang }: { lang: string }) {
   const [exportError, setExportError] = useState<string | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const { t } = useTranslation('client_dashboard', lang);
+  const { t: tSettings } = useTranslation('settings', lang);
   const { isValid } = usePhoneValidation(phoneValue, user?.country_code ?? 'BG');
+  const { isSupported: pushSupported, isSubscribed, isLoading: pushLoading, permissionState, subscribe, unsubscribe } = usePushNotifications();
 
   useEffect(() => {
     async function loadPreferences() {
@@ -259,6 +262,43 @@ export default function SettingsClient({ lang }: { lang: string }) {
           {t('btn_change_password', 'Change Password')}
         </Link>
       </div>
+
+      {/* Push Notifications */}
+      {pushSupported && (
+        <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
+          <h2 className="text-sm font-semibold text-gray-800">{tSettings('push_title', 'Push Notifications')}</h2>
+          <p className="text-sm text-gray-500">
+            {tSettings('push_description', 'Receive instant notifications for new leads and messages.')}
+          </p>
+          {permissionState === 'denied' ? (
+            <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 space-y-1">
+              <p className="text-sm font-medium text-amber-800">
+                {tSettings('push_blocked_title', 'Notifications are blocked')}
+              </p>
+              <p className="text-sm text-amber-700">
+                {tSettings('push_blocked_description', 'Notifications for nevumo.com are blocked in your browser. To enable them, go to your browser settings and allow notifications for this site.')}
+              </p>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={isSubscribed ? unsubscribe : subscribe}
+              disabled={pushLoading}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors disabled:opacity-50 ${
+                isSubscribed
+                  ? 'border border-gray-300 text-gray-700 hover:bg-gray-100'
+                  : 'bg-orange-500 hover:bg-orange-600 text-white'
+              }`}
+            >
+              {pushLoading
+                ? tSettings('push_loading', 'Please wait...')
+                : isSubscribed
+                ? tSettings('push_disable', 'Disable Notifications')
+                : tSettings('push_enable', 'Enable Notifications')}
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
         <h2 className="text-sm font-semibold text-gray-800">{t('section_notifications', 'Email Notifications')}</h2>

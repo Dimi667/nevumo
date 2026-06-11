@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { usePushNotifications } from '@/hooks/usePushNotifications'
+import { isAuthenticated } from '@/lib/auth-store'
 
 interface PushPermissionPromptProps {
   lang: string
@@ -68,6 +69,7 @@ export default function PushPermissionPrompt({ lang, role, show, onDismiss }: Pu
 
     shouldShow =
       tLoaded &&
+      isAuthenticated() &&
       isSupported &&
       !isSubscribed &&
       show &&

@@ -18,6 +18,7 @@ interface UsePushNotificationsReturn {
   isSupported: boolean;
   isSubscribed: boolean;
   isLoading: boolean;
+  permissionState: NotificationPermission;
   subscribe: () => Promise<void>;
   unsubscribe: () => Promise<void>;
 }
@@ -26,6 +27,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
   const [isSupported, setIsSupported] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [permissionState, setPermissionState] = useState<NotificationPermission>('default');
 
   useEffect(() => {
     const isIOS =
@@ -44,12 +46,46 @@ export function usePushNotifications(): UsePushNotificationsReturn {
       (!isIOS || isIOSStandalone);
     setIsSupported(supported);
 
+    if (typeof Notification !== 'undefined') {
+      setPermissionState(Notification.permission);
+    }
+
     if (!supported) return;
 
     navigator.serviceWorker.ready.then((reg) => {
-      reg.pushManager.getSubscription().then((sub) => {
-        setIsSubscribed(!!sub);
-      });
+      reg.pushManager.getSubscription().then(async (sub) => {
+        if (!sub) {
+          setIsSubscribed(false)
+          return
+        }
+        setIsSubscribed(true)
+        // Auto-sync: if browser has subscription but user is now logged in,
+        // silently send to backend so DB record is created for this user_id
+        const token = getAuthToken()
+        if (token) {
+          try {
+            const { endpoint, keys } = sub.toJSON() as {
+              endpoint: string
+              keys: { p256dh: string; auth: string }
+            }
+            await fetch('/api/v1/push/subscribe', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+              credentials: 'include',
+              body: JSON.stringify({
+                endpoint,
+                p256dh: keys.p256dh,
+                auth: keys.auth,
+              }),
+            })
+          } catch {
+            // Silent — auto-sync is best-effort, not critical
+          }
+        }
+      })
     });
   }, []);
 
@@ -61,6 +97,7 @@ export function usePushNotifications(): UsePushNotificationsReturn {
         return;
       }
       const permission = await Notification.requestPermission();
+      setPermissionState(permission);
       if (permission !== 'granted') {
         console.warn('[Push] Notification permission not granted:', permission);
         return;
@@ -124,9 +161,13 @@ export function usePushNotifications(): UsePushNotificationsReturn {
         keys: { p256dh: string; auth: string };
       };
 
+      const token = getAuthToken()
       await fetch('/api/v1/push/unsubscribe', {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
         credentials: 'include',
         body: JSON.stringify({
           endpoint,
@@ -144,5 +185,5 @@ export function usePushNotifications(): UsePushNotificationsReturn {
     }
   }, []);
 
-  return { isSupported, isSubscribed, isLoading, subscribe, unsubscribe };
+  return { isSupported, isSubscribed, isLoading, permissionState, subscribe, unsubscribe };
 }

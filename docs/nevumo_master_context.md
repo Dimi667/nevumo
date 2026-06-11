@@ -1220,6 +1220,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - Client submits review → provider: ✅ email (client.py), ✅ push (client.py)
     - Provider replies to review → client: ✅ email (review_service.py), ✅ push (reviews.py)
     - Provider edits reply → client: ❌ intentional (no notifications)
+- **Push Notifications Hardening (June 11, 2026)** — COMPLETE:
+  - **PushPermissionPrompt auth guard**: Added `isAuthenticated()` check to `shouldShow` condition — prompt never shown to anonymous users, protecting browser permission budget
+  - **permissionState exposed**: `usePushNotifications.ts` now exposes `permissionState: NotificationPermission` — components can react to 'default'/'granted'/'denied' states
+  - **Blocked state UI**: Both Provider and Client Settings show amber warning box with browser instructions when `permissionState === 'denied'` — no more silent failures
+  - **Anonymous subscription auto-sync**: On mount, if browser has push subscription AND user is logged in, hook silently POSTs to `/push/subscribe` to create DB record for `user_id` — fixes "Disable" shown instead of "Enable" after anonymous → login flow
+  - **unsubscribe() auth header**: Added Authorization header to DELETE /push/unsubscribe call
+  - **Client Settings push toggle**: Added push notifications section to `SettingsClient.tsx` (before Review Preferences) — clients can now enable/disable push from their dashboard
+  - **New translation keys**: `settings.push_blocked_title` + `settings.push_blocked_description` × 34 languages — seed script: `apps/api/scripts/seed_push_blocked_translations.py`
+  - **Translation namespace fix**: Client Settings uses `tSettings` from `useTranslation('settings', lang)` for push keys — separate from `t` for `client_dashboard` namespace
 - **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
   - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
   - 272 new rows 
