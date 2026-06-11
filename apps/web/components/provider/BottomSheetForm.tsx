@@ -5,6 +5,7 @@ import { X } from 'lucide-react';
 import { createLead, claimLeadEmail } from '@/lib/api';
 import { checkEmail } from '@/lib/auth-api';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
+import PushPermissionPrompt from '@/components/push/PushPermissionPrompt';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { usePhone } from '@/hooks/usePhone';
 import { usePhoneValidation } from '@/hooks/usePhoneValidation';
@@ -99,6 +100,7 @@ export default function BottomSheetForm({
   const [emailError, setEmailError] = useState<string | null>(null);
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+  const [showPushPrompt, setShowPushPrompt] = useState(false);
   const phoneRef = useRef<HTMLInputElement>(null);
   const [phoneValue, setPhoneValue] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
@@ -203,6 +205,7 @@ export default function BottomSheetForm({
         setLeadId(result.lead_id);
         setStep('success1');
         setTimeout(() => { setShowPWAPrompt(true); }, 2000);
+        setTimeout(() => setShowPushPrompt(true), 2000);
       } else if (result && 'success' in result && !result.success && result.error.code === 'RATE_LIMIT_EXCEEDED') {
         // Rate limited but still show success
         const leadIdFromError = (result as any).lead_id;
@@ -211,6 +214,7 @@ export default function BottomSheetForm({
         }
         setStep('success1');
         setTimeout(() => { setShowPWAPrompt(true); }, 2000);
+        setTimeout(() => setShowPushPrompt(true), 2000);
       } else {
         setSubmitError(t['error_generic'] ?? 'An error occurred. Please try again.');
       }
@@ -560,6 +564,13 @@ export default function BottomSheetForm({
           </div>
         </div>
       </div>
+
+      <PushPermissionPrompt
+        lang={lang}
+        role="client"
+        show={showPushPrompt}
+        onDismiss={() => setShowPushPrompt(false)}
+      />
     </>
   );
 }
