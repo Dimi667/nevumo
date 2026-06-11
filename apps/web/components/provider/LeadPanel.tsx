@@ -298,6 +298,12 @@ export default function LeadPanel({
               />
             )}
           </div>
+          <PushPermissionPrompt
+            lang={lang}
+            role="client"
+            show={showPushPrompt}
+            onDismiss={() => setShowPushPrompt(false)}
+          />
         </div>
       );
     }
@@ -349,6 +355,12 @@ export default function LeadPanel({
             />
           )}
         </div>
+        <PushPermissionPrompt
+          lang={lang}
+          role="client"
+          show={showPushPrompt}
+          onDismiss={() => setShowPushPrompt(false)}
+        />
       </div>
     );
   }
@@ -403,6 +415,12 @@ export default function LeadPanel({
             {t['success_skip_link'] ?? 'Не, благодаря'}
           </button>
         </div>
+        <PushPermissionPrompt
+          lang={lang}
+          role="client"
+          show={showPushPrompt}
+          onDismiss={() => setShowPushPrompt(false)}
+        />
       </div>
     );
   }

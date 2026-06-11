@@ -147,6 +147,17 @@ async def create_lead(
                     )
         except Exception as e:
             print(f"[EMAIL_WARNING] direct lead email: {e}", flush=True)
+        try:
+            if provider_for_email and provider_for_email.user_id:
+                send_push_notification(
+                    db=db,
+                    user_id=str(provider_for_email.user_id),
+                    title="New Lead",
+                    body="You have a new service request.",
+                    url="/provider/dashboard/leads",
+                )
+        except Exception:
+            pass
 
     # Notify matched providers about new lead (marketplace)
     if not provider_id:

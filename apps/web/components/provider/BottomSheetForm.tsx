@@ -317,6 +317,12 @@ export default function BottomSheetForm({
               )}
             </div>
           </div>
+          <PushPermissionPrompt
+            lang={lang}
+            role="client"
+            show={showPushPrompt}
+            onDismiss={() => setShowPushPrompt(false)}
+          />
         </>
       );
     }
@@ -376,6 +382,12 @@ export default function BottomSheetForm({
             )}
           </div>
         </div>
+        <PushPermissionPrompt
+          lang={lang}
+          role="client"
+          show={showPushPrompt}
+          onDismiss={() => setShowPushPrompt(false)}
+        />
       </>
     );
   }
@@ -438,6 +450,12 @@ export default function BottomSheetForm({
             </button>
           </div>
         </div>
+        <PushPermissionPrompt
+          lang={lang}
+          role="client"
+          show={showPushPrompt}
+          onDismiss={() => setShowPushPrompt(false)}
+        />
       </>
     );
   }
