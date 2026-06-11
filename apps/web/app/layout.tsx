@@ -11,6 +11,7 @@ import {
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 import { FaviconManager } from "@/components/FaviconManager";
+import ServiceWorkerRegistration from "@/components/sw/ServiceWorkerRegistration";
 
 // Глобалните стилове с Tailwind
 import "./globals.css";
@@ -122,6 +123,7 @@ export default async function RootLayout({
         <GoogleAnalytics />
         {children}
         <CookieConsentBanner lang={lang} />
+        <ServiceWorkerRegistration />
       </body>
     </html>
   );
