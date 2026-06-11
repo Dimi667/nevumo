@@ -2891,3 +2891,10 @@ python scripts/seed_review_translations.py
   - **Статус мобилен (iOS Safari):** ✅ FIXED
   - **Статус десктоп:** ❌ PENDING — border styling на формата изглежда различно след промените (оранжеви вместо сиви очертания в долната част). Предстои диагноза и фикс.
   - **Бележка за десктоп фикс:** Проблемът е вероятно в Safari flex/overflow-hidden клипване на `rounded-xl border-orange-100` в page.tsx desktop wrapper. При следваща сесия — диагноза на page.tsx desktop wrapper структура и LeadForm pinned bottom section.
+
+---
+
+**Sitemap DB Cleanup (June 11, 2026)**:
+- Изтрити тестови градове от locations: berlin (ID:7), helsinki (ID:6), oslo (ID:5) — 102 translations + 3 cities
+- sitemap.ts: getAllCities() вместо getCitiesActive()
+- Production градове: belgrade, warszawa, sofia
