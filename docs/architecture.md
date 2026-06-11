@@ -2406,6 +2406,53 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - **Working for**: provider receives notification on new lead, client receives notification on lead status change
 - **Architecture**: Zero external PWA library dependencies — static sw.js in public/ with postbuild handler injection
 
+### Push & Email Notification Audit (June 11, 2026) — COMPLETE
+
+**Fixes applied:**
+
+**1. PushPermissionPrompt — provider page (frontend)**
+- Problem: PushPermissionPrompt only rendered in default (form) return of
+  LeadPanel.tsx and BottomSheetForm.tsx. After lead submit, component switched
+  to success return → PushPermissionPrompt unmounted before 2s setTimeout fired.
+- Fix: Added PushPermissionPrompt to ALL return branches (success1 logged in,
+  success1 not logged in, success2) in both components.
+- Files: apps/web/components/provider/LeadPanel.tsx,
+         apps/web/components/provider/BottomSheetForm.tsx
+
+**2. Push notification for direct leads (backend)**
+- Problem: send_push_notification was missing from the direct lead block in
+  leads.py. Only marketplace leads had push notification.
+- Fix: Added push notification block after email block inside `if provider_id:`
+  in leads.py. Reuses existing provider_for_email variable.
+- File: apps/api/routes/leads.py
+
+**3. Client status change → provider push notification (backend)**
+- Problem: When client changes lead status, only email was sent to provider
+  (and it was sent BEFORE db.commit() — timing bug). Push was missing.
+- Fix: Moved email block to AFTER db.commit(). Added push notification block
+  after the email block.
+- File: apps/api/routes/client.py
+
+**4. Review reply duplicate email (backend)**
+- Problem: send_review_reply_notification was already called in
+  review_service.py (line 395). Adding it again in reviews.py caused
+  duplicate emails to clients.
+- Fix: Removed the route-level email call from reviews.py.
+  Removed unused email_service import from reviews.py.
+- File: apps/api/routes/reviews.py
+
+**Full notification matrix (verified state after fixes):**
+
+| Event | Email | Push |
+|---|---|---|
+| New lead (direct) → provider | ✅ leads.py | ✅ leads.py |
+| New lead (marketplace) → provider | ✅ leads.py | ✅ leads.py |
+| Provider changes status → client | ✅ provider.py | ✅ provider.py |
+| Client changes status → provider | ✅ client.py | ✅ client.py |
+| Client submits review → provider | ✅ client.py | ✅ client.py |
+| Provider replies to review → client | ✅ review_service.py | ✅ reviews.py |
+| Provider edits reply → client | ❌ intentional | ❌ intentional |
+
 ---
 
 ## Authentication Phase 2 — Google OAuth (May 9, 2026)

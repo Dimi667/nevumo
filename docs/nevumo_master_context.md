@@ -1207,6 +1207,19 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - apps/web/next.config.mjs — removed withPWA wrapper, plain nextConfig
     - apps/web/public/sw.js — new static base Service Worker
   - **Key rule**: sw.js is a static committed file in git. The postbuild script appends push handlers idempotently on every build using the [NEVUMO-CUSTOM-SW] marker.
+- **Push & Email Notification Audit (June 11, 2026)** — COMPLETE:
+  - **PushPermissionPrompt fix (frontend)**: Added PushPermissionPrompt to ALL return branches (success1 logged in, success1 not logged in, success2) in LeadPanel.tsx and BottomSheetForm.tsx. Previously only rendered in default (form) return, causing unmount before 2s setTimeout fired after lead submit.
+  - **Direct lead push notification (backend)**: Added send_push_notification to direct lead block in leads.py (was missing, only marketplace leads had push).
+  - **Client status change push notification (backend)**: Added send_push_notification to client.py when client changes lead status. Also moved email notification from before db.commit() to after db.commit() (timing bug fix).
+  - **Review reply duplicate email fix (backend)**: Removed duplicate send_review_reply_notification call from reviews.py (already called in review_service.py line 395). Removed unused email_service import from reviews.py.
+  - **Full notification matrix verified**:
+    - New lead (direct) → provider: ✅ email (leads.py), ✅ push (leads.py)
+    - New lead (marketplace) → provider: ✅ email (leads.py), ✅ push (leads.py)
+    - Provider changes status → client: ✅ email (provider.py), ✅ push (provider.py)
+    - Client changes status → provider: ✅ email (client.py), ✅ push (client.py)
+    - Client submits review → provider: ✅ email (client.py), ✅ push (client.py)
+    - Provider replies to review → client: ✅ email (review_service.py), ✅ push (reviews.py)
+    - Provider edits reply → client: ❌ intentional (no notifications)
 - **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
   - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
   - 272 new rows 
