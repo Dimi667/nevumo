@@ -851,6 +851,8 @@ This separation ensures that:
 - **Audit Trail**: Anonymized session_hash and ip_hash for GDPR compliance (24-month retention)
 
 ### Pending Items (Future Tasks)
+- Desktop border styling on LeadForm.tsx after wrapper div revert (documented previously)
+- PushPermissionPrompt not showing on provider page for direct lead requests (LOW priority)
 - GA4 Consent Mode v2 integration (Task 2)
 - Stripe.js conditional loading
 - Mobile touch targets verification (44×44px)
@@ -2396,6 +2398,13 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - "Clean" URLs (1-4 segments): homepage, city pages, category pages, provider pages
 - "Dirty" URLs (not recorded): /auth/*, /dashboard/*, /pwa-start, /izberi-grad
 - Used by /pwa-start page to redirect anonymous users to their last visited page
+
+### Push Notifications (June 11, 2026) — COMPLETE
+- **Status**: Push notifications work end-to-end on iPhone (tested June 11, 2026)
+- **Subscription flow**: PushPermissionPrompt → iOS Allow → POST /push/subscribe 201 Created
+- **Fix**: usePushNotifications.ts — added auth token check before subscribe (unauthenticated users skip API call silently)
+- **Working for**: provider receives notification on new lead, client receives notification on lead status change
+- **Architecture**: Zero external PWA library dependencies — static sw.js in public/ with postbuild handler injection
 
 ---
 
