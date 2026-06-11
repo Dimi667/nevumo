@@ -68,3 +68,6 @@ playwright-report/
 test-results/
 tests/nevumo_lead_status_test.spec.ts
 apps/web/public/workbox-*.js
+
+# Playwright MCP (Windsurf)
+.playwright-mcp/
