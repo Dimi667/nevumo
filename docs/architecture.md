@@ -2898,3 +2898,10 @@ python scripts/seed_review_translations.py
 - Изтрити тестови градове от locations: berlin (ID:7), helsinki (ID:6), oslo (ID:5) — 102 translations + 3 cities
 - sitemap.ts: getAllCities() вместо getCitiesActive()
 - Production градове: belgrade, warszawa, sofia
+
+---
+
+**slugs.ts Consistency Fix (June 11, 2026)**:
+- getValidCitySlugs() в apps/web/lib/slugs.ts сменена от getActiveCities() на getAllCities()
+- Причина: несъответствие с sitemap.ts — градове без активни провайдъри (warszawa, belgrade) връщаха 404 при директен достъп
+- Правило: всички функции които валидират city slugs трябва да използват getAllCities(), не getActiveCities()

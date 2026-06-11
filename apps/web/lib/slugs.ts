@@ -1,7 +1,7 @@
-import { getCategories, getActiveCities } from './api';
+import { getCategories, getAllCities } from './api';
 
 export async function getValidCitySlugs(): Promise<string[]> {
-  const cities = await getActiveCities('en');
+  const cities = await getAllCities('en');
   return cities.map((c) => c.slug);
 }
 
