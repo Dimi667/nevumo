@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { getAuthToken } from '@/lib/auth-store';
 
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -84,9 +85,13 @@ export function usePushNotifications(): UsePushNotificationsReturn {
         keys: { p256dh: string; auth: string };
       };
 
+      const token = getAuthToken()
       await fetch('/api/v1/push/subscribe', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
         credentials: 'include',
         body: JSON.stringify({
           endpoint,
