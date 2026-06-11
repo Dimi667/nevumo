@@ -220,7 +220,7 @@ export default function GlobalFooter({ lang, minimal = false }: GlobalFooterProp
             </button>
 
             {isOpen && (
-              <div className="absolute bottom-full right-0 mb-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+              <div className="absolute bottom-full right-0 mb-2 min-w-max bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                 <div className="p-3 border-b border-gray-100">
                   <input
                     type="text"
