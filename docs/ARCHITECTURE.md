@@ -2402,9 +2402,41 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 ### Push Notifications (June 11, 2026) — COMPLETE
 - **Status**: Push notifications work end-to-end on iPhone (tested June 11, 2026)
 - **Subscription flow**: PushPermissionPrompt → iOS Allow → POST /push/subscribe 201 Created
-- **Fix**: usePushNotifications.ts — added auth token check before subscribe (unauthenticated users skip API call silently)
 - **Working for**: provider receives notification on new lead, client receives notification on lead status change
 - **Architecture**: Zero external PWA library dependencies — static sw.js in public/ with postbuild handler injection
+
+### Push Notifications Hardening (June 11, 2026) — COMPLETE
+
+**Problem 1 — PushPermissionPrompt shown to anonymous users**
+- PushPermissionPrompt was shown after lead submission to ALL users including anonymous
+- Anonymous users have no user_id → POST /push/subscribe silently skipped
+- Risk: browser "permission budget" wasted — if anonymous user clicks Block, nevumo.com can never ask again even after registration
+- Fix: Added `isAuthenticated()` check as second condition in `shouldShow` in PushPermissionPrompt.tsx
+- File: apps/web/components/pwa/PushPermissionPrompt.tsx
+
+**Problem 2 — No feedback when Notification.permission === 'denied'**
+- Provider Settings showed "Enable Notifications" button even when permission was blocked
+- Clicking the button showed "Please wait..." then silently returned to "Enable Notifications"
+- Fix: Added `permissionState` to usePushNotifications hook; Settings pages now show amber warning box with browser instructions when permissionState === 'denied'
+- Files: apps/web/hooks/usePushNotifications.ts, apps/web/app/[lang]/provider/dashboard/settings/page.tsx, apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx
+
+**Problem 3 — Anonymous browser subscription not synced on login**
+- If anonymous user granted push permission and a browser subscription was created, then logged in → isSubscribed showed true but no DB record existed for user_id
+- Settings showed "Disable Notifications" instead of "Enable Notifications" — confusing
+- Fix: Auto-sync logic added to useEffect in usePushNotifications.ts — when browser has subscription AND user is logged in, silently POST to /push/subscribe to create DB record
+- File: apps/web/hooks/usePushNotifications.ts
+
+**Problem 4 — Client Settings had no push toggle**
+- Clients receive push notifications (status changes, review replies) but had no way to enable/disable from their dashboard
+- Fix: Added identical push notifications section to Client Settings (before Review Preferences)
+- File: apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx
+
+**Changes summary:**
+- apps/web/hooks/usePushNotifications.ts — added permissionState: NotificationPermission to interface and state; auto-sync on login; Authorization header in unsubscribe()
+- apps/web/components/pwa/PushPermissionPrompt.tsx — added isAuthenticated() to shouldShow condition
+- apps/web/app/[lang]/provider/dashboard/settings/page.tsx — permissionState destructured; blocked state UI with amber warning box
+- apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx — push toggle added with blocked state UI; tSettings from 'settings' namespace
+- apps/api/scripts/seed_push_blocked_translations.py — new seed script, 68 rows (settings.push_blocked_title + settings.push_blocked_description × 34 languages)
 
 ### Push & Email Notification Audit (June 11, 2026) — COMPLETE
 
