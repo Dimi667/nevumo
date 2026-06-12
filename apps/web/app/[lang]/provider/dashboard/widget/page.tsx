@@ -22,8 +22,8 @@ export default function WidgetPage() {
   const [bioCopied, setBioCopied] = useState(false);
   const [tiktokCopied, setTiktokCopied] = useState(false);
 
-  const previewContainerRef = useRef<HTMLDivElement>(null);
-  const [previewScale, setPreviewScale] = useState<number>(1);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [previewWidth, setPreviewWidth] = useState<number>(360);
 
   useEffect(() => {
     async function fetchData() {
@@ -47,19 +47,18 @@ export default function WidgetPage() {
   }, [t, lang]);
 
   useEffect(() => {
-    const calcScale = () => {
-      if (!previewContainerRef.current) return;
-      const padding = 48;
-      const available = Math.max(100, previewContainerRef.current.offsetWidth - padding);
-      setPreviewScale(Math.min(1, available / iframeWidth));
+    const measure = () => {
+      if (!previewRef.current) return;
+      const available = previewRef.current.offsetWidth - 32;
+      setPreviewWidth(Math.min(iframeWidth, Math.max(280, available)));
     };
 
-    calcScale();
+    measure();
 
-    const observer = new ResizeObserver(calcScale);
-    if (previewContainerRef.current) observer.observe(previewContainerRef.current);
+    const ro = new ResizeObserver(measure);
+    if (previewRef.current) ro.observe(previewRef.current);
 
-    return () => observer.disconnect();
+    return () => ro.disconnect();
   }, [iframeWidth]);
 
   // Extract relative path from absolute URL for local network compatibility
@@ -159,36 +158,21 @@ export default function WidgetPage() {
       <div>
         <h2 className="text-lg font-semibold text-gray-900 mb-3">{t('widget_preview_title')}</h2>
         <div
-          ref={previewContainerRef}
-          className="bg-gray-50 rounded-xl p-6 flex justify-center w-full"
+          ref={previewRef}
+          className="bg-gray-50 rounded-xl p-4 w-full flex justify-center"
         >
-          <div
+          <iframe
+            src={relativeUrl}
+            width={previewWidth}
+            height={950}
             style={{
-              width: Math.round(iframeWidth * previewScale),
-              height: Math.round(800 * previewScale),
-              overflow: 'hidden',
+              border: 'none',
               borderRadius: '12px',
               boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
-              flexShrink: 0,
+              display: 'block',
             }}
-          >
-            <div
-              style={{
-                width: iframeWidth,
-                height: 800,
-                transform: `scale(${previewScale})`,
-                transformOrigin: '0 0',
-              }}
-            >
-              <iframe
-                src={relativeUrl}
-                width={iframeWidth}
-                height={800}
-                style={{ border: 'none', display: 'block' }}
-                title={t('widget_preview_title')}
-              />
-            </div>
-          </div>
+            title={t('widget_preview_title')}
+          />
         </div>
       </div>
 
