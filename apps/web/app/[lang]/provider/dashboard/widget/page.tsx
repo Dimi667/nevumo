@@ -49,8 +49,8 @@ export default function WidgetPage() {
   useEffect(() => {
     const calcScale = () => {
       if (!previewContainerRef.current) return;
-      const padding = 32; // 16px each side
-      const available = previewContainerRef.current.offsetWidth - padding;
+      const padding = 48;
+      const available = Math.max(100, previewContainerRef.current.offsetWidth - padding);
       setPreviewScale(Math.min(1, available / iframeWidth));
     };
 
@@ -76,7 +76,7 @@ export default function WidgetPage() {
   
   // For embed code, use current origin to work across domains
   const embedCode = qrData
-    ? `<iframe src="${typeof window !== 'undefined' ? window.location.origin : ''}${relativeUrl}" width="${iframeWidth}" height="600" style="border:none;border-radius:12px;" title="Nevumo Widget"></iframe>`
+    ? `<iframe src="${typeof window !== 'undefined' ? window.location.origin : ''}${relativeUrl}" width="${iframeWidth}" height="800" style="border:none;border-radius:12px;" title="Nevumo Widget"></iframe>`
     : '';
 
   async function handleCopy() {
@@ -160,37 +160,31 @@ export default function WidgetPage() {
         <h2 className="text-lg font-semibold text-gray-900 mb-3">{t('widget_preview_title')}</h2>
         <div
           ref={previewContainerRef}
-          className="bg-gray-50 rounded-xl p-4 flex justify-center w-full"
+          className="bg-gray-50 rounded-xl p-6 flex justify-center w-full"
         >
           <div
             style={{
               width: Math.round(iframeWidth * previewScale),
-              height: Math.round(600 * previewScale),
+              height: Math.round(800 * previewScale),
               overflow: 'hidden',
               borderRadius: '12px',
               boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
-              position: 'relative',
+              flexShrink: 0,
             }}
           >
-            <div
+            <iframe
+              src={relativeUrl}
+              width={iframeWidth}
+              height={800}
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: iframeWidth,
-                height: 600,
-                transform: `scale(${previewScale})`,
+                border: 'none',
+                borderRadius: '12px',
+                display: 'block',
                 transformOrigin: 'top left',
+                transform: `scale(${previewScale})`,
               }}
-            >
-              <iframe
-                src={relativeUrl}
-                width={iframeWidth}
-                height={600}
-                style={{ border: 'none', display: 'block' }}
-                title={t('widget_preview_title')}
-              />
-            </div>
+              title={t('widget_preview_title')}
+            />
           </div>
         </div>
       </div>
