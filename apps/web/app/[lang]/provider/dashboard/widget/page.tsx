@@ -172,19 +172,22 @@ export default function WidgetPage() {
               flexShrink: 0,
             }}
           >
-            <iframe
-              src={relativeUrl}
-              width={iframeWidth}
-              height={800}
+            <div
               style={{
-                border: 'none',
-                borderRadius: '12px',
-                display: 'block',
-                transformOrigin: 'top left',
+                width: iframeWidth,
+                height: 800,
                 transform: `scale(${previewScale})`,
+                transformOrigin: '0 0',
               }}
-              title={t('widget_preview_title')}
-            />
+            >
+              <iframe
+                src={relativeUrl}
+                width={iframeWidth}
+                height={800}
+                style={{ border: 'none', display: 'block' }}
+                title={t('widget_preview_title')}
+              />
+            </div>
           </div>
         </div>
       </div>
