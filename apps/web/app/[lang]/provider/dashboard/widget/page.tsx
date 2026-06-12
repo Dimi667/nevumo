@@ -170,6 +170,8 @@ export default function WidgetPage() {
               borderRadius: '12px',
               boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
               display: 'block',
+              width: `${previewWidth}px`,
+              height: '950px',
             }}
             title={t('widget_preview_title')}
           />
