@@ -619,6 +619,28 @@ This separation ensures that:
   - **Build Error Fix:** lucide-react doesn't have Facebook/Instagram icons → replaced with inline SVGs
   - **Iframe Network Fix:** Uses `window.location.origin` for embed code to work on local network (mobile devices accessing via IP)
   - **API Endpoint:** Uses existing `GET /api/v1/provider/qr-code` endpoint
+  - **Widget Preview iframe Height Fix (June 12, 2026)**:
+    - **Problem**: Widget preview in provider dashboard showed only partial content (avatar + sticky button) regardless of screen size. The iframe `height={950}` HTML attribute was being overridden by Tailwind CSS preflight reset to `150px` — the HTML spec default for `<iframe>` elements. This affected both desktop and mobile.
+    - **Root Cause**: In HTML5, `height` and `width` as HTML attributes on `<iframe>` are deprecated. Tailwind's preflight CSS resets them, making the attribute ineffective. Only inline `style={{ height }}` has sufficient CSS specificity to override.
+    - **Diagnosis**: Browser console confirmed `attrHeight: "950"` but `computedHeight: "150px"` — definitive proof of CSS override.
+    - **Failed approaches (do not retry)**:
+      1. CSS `transform: scale()` + `overflow: hidden` on position:absolute wrapper — overflow clips pre-transform, not post-transform
+      2. CSS `transform: scale()` directly on `<iframe>` — browsers don't apply `transformOrigin` reliably on iframes
+      3. CSS `transform: scale()` on plain `<div>` wrapper with `transformOrigin: '0 0'` — same clipping issue
+      4. ResizeObserver + dynamic `previewWidth` passed as `width` attribute — same Tailwind override issue
+    - **Fix**: Added `width` and `height` to the inline `style` prop on the `<iframe>` element in the preview section:
+```tsx
+    style={{
+      border: 'none',
+      borderRadius: '12px',
+      boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+      display: 'block',
+      width: `${previewWidth}px`,
+      height: '950px',
+    }}
+```
+    - **Rule**: For `<iframe>` elements, ALWAYS set dimensions via inline `style`, never via HTML attributes alone. Tailwind preflight resets `<iframe>` attribute dimensions to browser defaults.
+    - **Affected file**: `apps/web/app/[lang]/provider/dashboard/widget/page.tsx`
 - **Legal Document Modal System (May 27, 2026)** — COMPLETE:
   - **Purpose:** Unified legal document display across the application using a modal instead of page navigation
   - **Component:** `apps/web/components/auth/LegalModal.tsx`
