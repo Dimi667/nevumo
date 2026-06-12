@@ -160,30 +160,37 @@ export default function WidgetPage() {
         <h2 className="text-lg font-semibold text-gray-900 mb-3">{t('widget_preview_title')}</h2>
         <div
           ref={previewContainerRef}
-          className="bg-gray-50 rounded-xl p-4 flex justify-center overflow-hidden"
-          style={{ height: `${Math.round(600 * previewScale) + 32}px` }}
+          className="bg-gray-50 rounded-xl p-4 flex justify-center w-full"
         >
           <div
             style={{
-              width: iframeWidth,
-              height: 600,
-              flexShrink: 0,
-              transform: `scale(${previewScale})`,
-              transformOrigin: 'top center',
+              width: Math.round(iframeWidth * previewScale),
+              height: Math.round(600 * previewScale),
+              overflow: 'hidden',
+              borderRadius: '12px',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+              position: 'relative',
             }}
           >
-            <iframe
-              src={relativeUrl}
-              width={iframeWidth}
-              height={600}
+            <div
               style={{
-                border: 'none',
-                borderRadius: '12px',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
-                display: 'block',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: iframeWidth,
+                height: 600,
+                transform: `scale(${previewScale})`,
+                transformOrigin: 'top left',
               }}
-              title={t('widget_preview_title')}
-            />
+            >
+              <iframe
+                src={relativeUrl}
+                width={iframeWidth}
+                height={600}
+                style={{ border: 'none', display: 'block' }}
+                title={t('widget_preview_title')}
+              />
+            </div>
           </div>
         </div>
       </div>
