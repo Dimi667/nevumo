@@ -310,7 +310,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Desktop sidebar */}
       <aside className="hidden md:flex w-60 flex-col bg-white border-r border-gray-200 flex-shrink-0">
         {sidebarContent}

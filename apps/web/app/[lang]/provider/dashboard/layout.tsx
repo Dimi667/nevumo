@@ -115,7 +115,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
 
   return (
     <DashboardI18nProvider lang={lang}>
-      <div className={isOnboarding ? 'bg-gray-50' : 'min-h-screen bg-gray-50 flex'}>
+      <div className={isOnboarding ? 'bg-gray-50' : 'h-screen bg-gray-50 flex overflow-hidden'}>
         {/* Hide sidebar completely during onboarding */}
         {!isOnboarding && (
           <DashboardSidebar
