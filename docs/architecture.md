@@ -325,6 +325,26 @@ The system now implements a fully automated SEO strategy for City Landing pages,
   - **Cloudflare**: `www` DNS record must remain Proxied (orange cloud) for redirect to work
   - **Anti-pattern to avoid**: Never set www as Primary in Vercel — causes redirect loop with Cloudflare
 
+### Google Search Console — New Indexing Reasons (June 12, 2026) — RESOLVED
+
+**Trigger:** GSC email notification — "New reasons preventing your pages from being indexed":
+- Page with redirect (1 page)
+- Alternate page with proper canonical tag (1 page)
+
+**Investigation:**
+- "Page with redirect" → https://nevumo.com/ — root domain without language prefix 
+  redirects to /en/ as expected by the multilingual routing system. Intentional.
+- "Alternate page with proper canonical tag" → https://www.nevumo.com/cs/warszawa — 
+  crawled June 7 (before June 9 fix). www was primary domain at crawl time, 
+  but canonical already pointed to nevumo.com. Intentional.
+
+**Root cause:** Both issues are a direct consequence of the June 9 domain fix 
+(www → nevumo.com 301 redirect). Google crawled stale www URLs before the fix propagated.
+
+**Action taken:** "Validate Fix" submitted in GSC for both reasons (June 12, 2026).
+
+**No code changes required.**
+
 - **Polish Landing Page SEO & UI Enhancements (May 28, 2026)**:
   - **File**: `apps/web/app/[lang]/dolacz/page.tsx`
   - **SEO Metadata**:
