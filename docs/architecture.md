@@ -2620,6 +2620,83 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 | Provider replies to review → client | ✅ review_service.py | ✅ reviews.py |
 | Provider edits reply → client | ❌ intentional | ❌ intentional |
 
+### PushNotificationBanner (June 14, 2026) — COMPLETE
+
+**New component: PushNotificationBanner**
+- File: `apps/web/components/pwa/PushNotificationBanner.tsx`
+- Persistent banner shown at the top of provider and client dashboards
+- No X button, no dismiss logic — stays visible until user acts
+- Banner disappears ONLY when isSubscribed becomes true
+
+**4 states (checked in this order):**
+
+1. **isSubscribed === true**
+   - return null (banner disappears)
+
+2. **isIOSWithoutPWA === true**
+   - Shows iOS install banner
+   - Icon: Smartphone from lucide-react
+   - Text: role === 'provider' ? pwaT['install_for_notifications_provider'] : pwaT['install_for_notifications_client']
+   - No button — informational text only
+   - Colors: bg-blue-50 border-blue-200, icon text-blue-500, text text-blue-800
+
+3. **isSupported && !isSubscribed && permissionState === 'denied'**
+   - Shows blocked banner
+   - Icon: BellOff from lucide-react
+   - Title: settingsT['push_blocked_title']
+   - Body: settingsT['push_blocked_description']
+   - No button — informational text only
+   - Colors: bg-amber-50 border-amber-200, icon text-amber-500, title text-amber-900, body text-amber-700
+
+4. **isSupported && !isSubscribed && permissionState !== 'denied'**
+   - Shows enable notifications banner
+   - Icon: Bell from lucide-react
+   - Title: pushPromptT['title']
+   - Body: role === 'provider' ? pushPromptT['provider_body'] : pushPromptT['client_body']
+   - CTA button: pushPromptT['cta_button']
+   - Colors: bg-amber-50 border-amber-200, icon text-amber-500, title text-amber-900 font-semibold, body text-amber-700
+
+If none of the above conditions match → return null
+
+**iOS detection:**
+- isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent)
+- isStandalone: Boolean(window.navigator.standalone)
+- isIOSWithoutPWA = isIOS && !isStandalone
+
+**Translation sources (3 namespaces via Promise.all):**
+1. GET /api/v1/translations/pwa?lang={lang} → pwaT: Record<string, string>
+2. GET /api/v1/translations/push_prompt?lang={lang} → pushPromptT: Record<string, string>
+3. GET /api/v1/translations/settings?lang={lang} → settingsT: Record<string, string>
+
+While translations are loading → return null (no loading spinner)
+
+**Props:**
+- lang: string
+- role: 'provider' | 'client'
+
+**Provider dashboard layout changes (June 14, 2026)**
+- File: `apps/web/app/[lang]/provider/dashboard/layout.tsx`
+- PushNotificationBanner added before {children} in main content area
+- After nevumo:onboarding_complete event: second timer at 5000ms shows PushPermissionPrompt
+  (existing PWA prompt fires at 1500ms, push prompt fires at 5000ms)
+- Onboarding sequence: 0ms event → 1500ms PWA banner → 5000ms Push prompt
+
+**Client dashboard layout changes (June 14, 2026)**
+- File: `apps/web/app/[lang]/client/dashboard/layout.tsx`
+- PushNotificationBanner added before {children} in main content area
+
+**New translation keys (June 14, 2026)**
+- Seed script: `apps/api/scripts/seed_pwa_install_notifications_translations.py`
+- 68 rows (2 keys × 34 languages), seeded June 14, 2026
+- Keys added to pwa namespace:
+  - pwa.install_for_notifications_provider
+  - pwa.install_for_notifications_client
+
+**Architecture decision: no separate Notifications menu item (June 14, 2026)**
+- Notifications toggle stays in Settings
+- Separate menu item deferred until in-app notification inbox exists
+- Dashboard banner is the primary visibility mechanism
+
 ---
 
 ## Authentication Phase 2 — Google OAuth (May 9, 2026)

@@ -1244,6 +1244,43 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Translation namespace fix**: Client Settings uses `tSettings` from `useTranslation('settings', lang)` for push keys — separate from `t` for `client_dashboard` namespace
   - **Missing push settings translations**: 5 keys (push_title, push_description, push_enable, push_disable, push_loading) were missing from `settings` namespace — seed script added: `apps/api/scripts/seed_push_settings_translations.py` (170 rows × 34 languages)
   - **Provider Settings namespace fix**: `useTranslation('settings', lang)` added as `tSettings` in provider settings page — push keys now correctly load from `settings` namespace instead of `provider_dashboard`
+- **PushNotificationBanner (June 14, 2026)** — COMPLETE:
+  - **New component**: `apps/web/components/pwa/PushNotificationBanner.tsx`
+  - Persistent banner shown at the top of provider and client dashboards.
+  - No X button, no dismiss logic — stays visible until user acts.
+  - **4 states (checked in this order)**:
+    1. isSubscribed === true → return null (hidden)
+    2. isIOSWithoutPWA === true → blue banner, Smartphone icon, install CTA text only
+    3. isSupported && !isSubscribed && permissionState === 'denied' → amber banner, BellOff icon, blocked instructions
+    4. isSupported && !isSubscribed && permissionState !== 'denied' → amber banner, Bell icon, "Enable" CTA button
+  - **iOS detection**:
+    - isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent)
+    - isStandalone: Boolean(window.navigator.standalone)
+    - isIOSWithoutPWA = isIOS && !isStandalone
+  - **Translation sources (3 namespaces via Promise.all)**:
+    - pwa namespace: install_for_notifications_provider, install_for_notifications_client (NEW — seeded June 14, 2026)
+    - push_prompt namespace: title, provider_body, client_body, cta_button (existing)
+    - settings namespace: push_blocked_title, push_blocked_description (existing)
+  - **Props**: lang: string, role: 'provider' | 'client'
+- **Provider dashboard layout changes (June 14, 2026)** — COMPLETE:
+  - File: `apps/web/app/[lang]/provider/dashboard/layout.tsx`
+  - PushNotificationBanner added before {children} in main content area
+  - After nevumo:onboarding_complete event: second timer at 5000ms shows PushPermissionPrompt
+    (existing PWA prompt fires at 1500ms, push prompt fires at 5000ms)
+  - Onboarding sequence: 0ms event → 1500ms PWA banner → 5000ms Push prompt
+- **Client dashboard layout changes (June 14, 2026)** — COMPLETE:
+  - File: `apps/web/app/[lang]/client/dashboard/layout.tsx`
+  - PushNotificationBanner added before {children} in main content area
+- **New translation keys (June 14, 2026)** — COMPLETE:
+  - Seed script: `apps/api/scripts/seed_pwa_install_notifications_translations.py`
+  - 68 rows (2 keys × 34 languages), seeded June 14, 2026
+  - Keys added to pwa namespace:
+    - pwa.install_for_notifications_provider
+    - pwa.install_for_notifications_client
+- **Architecture decision: no separate Notifications menu item (June 14, 2026)** — COMPLETE:
+  - Notifications toggle stays in Settings.
+  - Separate menu item deferred until in-app notification inbox exists.
+  - Dashboard banner is the primary visibility mechanism.
 - **Onboarding Hero Banner i18n** — Hero banner texts on provider dashboard are now DB-backed and translated in all 34 languages:
   - 8 new keys in `provider_dashboard` namespace: `onboarding_hero_2steps_title`, `onboarding_hero_2steps_desc`, `onboarding_hero_2steps_cta`, `onboarding_hero_1step_title`, `onboarding_hero_1step_desc`, `onboarding_hero_1step_cta`, `onboarding_step_profile`, `onboarding_step_service` 
   - 272 new rows 
