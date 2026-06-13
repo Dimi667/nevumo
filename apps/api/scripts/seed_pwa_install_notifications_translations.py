@@ -4,10 +4,8 @@ Seed script to add PWA install notification translations for all 34 languages.
 Keys: pwa.install_for_notifications_provider, pwa.install_for_notifications_client
 """
 
-import os
-from psycopg2.extras import execute_values
-
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://nevumo:nevumo@nevumo-postgres:5432/nevumo_leads")
+from sqlalchemy import text
+from apps.api.database import SessionLocal
 
 TRANSLATIONS = [
     # pwa.install_for_notifications_provider
@@ -83,28 +81,26 @@ TRANSLATIONS = [
     ('uk', 'pwa.install_for_notifications_client', 'Встанови додаток, щоб отримувати сповіщення про статус своїх заявок'),
 ]
 
-def seed_translations():
-    import psycopg2
-    conn = psycopg2.connect(DATABASE_URL)
+def seed():
+    db = SessionLocal()
     try:
-        with conn.cursor() as cur:
-            execute_values(
-                cur,
-                """
-                INSERT INTO translations (lang, key, value)
-                VALUES %s
-                ON CONFLICT (lang, key) DO UPDATE SET value = EXCLUDED.value
-                """,
-                TRANSLATIONS
+        for lang, key, value in TRANSLATIONS:
+            db.execute(
+                text("""
+                    INSERT INTO translations (lang, key, value)
+                    VALUES (:lang, :key, :value)
+                    ON CONFLICT (lang, key) DO UPDATE SET value = EXCLUDED.value
+                """),
+                {"lang": lang, "key": key, "value": value}
             )
-        conn.commit()
-        print(f"Seeded {len(TRANSLATIONS)} translations")
+        db.commit()
+        print(f"Seeded {len(TRANSLATIONS)} translations successfully")
     except Exception as e:
-        conn.rollback()
-        print(f"Error seeding translations: {e}")
+        db.rollback()
+        print(f"Error: {e}")
         raise
     finally:
-        conn.close()
+        db.close()
 
 if __name__ == "__main__":
-    seed_translations()
+    seed()
