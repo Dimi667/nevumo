@@ -173,7 +173,7 @@ export default function DashboardOverviewPage({ params }: PageProps) {
         <Link href={`${base}/leads`} className={`relative block ${!isOnboardingComplete ? 'pointer-events-none' : ''}`}>
           <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
             {!isOnboardingComplete && (
-              <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
+              <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer touch-pan-y"
                    onClick={() => router.push(`${base}/profile`)}>
                 <div className="text-center">
                   <div className="text-2xl mb-1">🔒</div>
@@ -193,7 +193,7 @@ export default function DashboardOverviewPage({ params }: PageProps) {
         <Link href={`${base}/leads?status=new`} className={`relative block ${!isOnboardingComplete ? 'pointer-events-none' : ''}`}>
           <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
             {!isOnboardingComplete && (
-              <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
+              <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer touch-pan-y"
                    onClick={() => router.push(`${base}/profile`)}>
                 <div className="text-center">
                   <div className="text-2xl mb-1">🔒</div>
@@ -215,7 +215,7 @@ export default function DashboardOverviewPage({ params }: PageProps) {
         <Link href={`${base}/leads?status=contacted`} className={`relative block ${!isOnboardingComplete ? 'pointer-events-none' : ''}`}>
           <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
             {!isOnboardingComplete && (
-              <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
+              <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer touch-pan-y"
                    onClick={() => router.push(`${base}/profile`)}>
                 <div className="text-center">
                   <div className="text-2xl mb-1">🔒</div>
@@ -235,7 +235,7 @@ export default function DashboardOverviewPage({ params }: PageProps) {
         {/* Rating - non-clickable, shows motivational value during onboarding */}
         <div className={`relative ${!isOnboardingComplete ? 'opacity-50' : ''}`}>
           {!isOnboardingComplete && (
-            <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer"
+            <div className="absolute inset-0 bg-white/80 rounded-lg flex items-center justify-center z-10 cursor-pointer touch-pan-y"
                  onClick={() => router.push(`${base}/profile`)}>
               <div className="text-center">
                 <div className="text-2xl mb-1">🔒</div>
@@ -259,7 +259,7 @@ export default function DashboardOverviewPage({ params }: PageProps) {
         !isOnboardingComplete ? 'opacity-50' : ''
       }`}>
         {!isOnboardingComplete && (
-          <div className="absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 cursor-pointer"
+          <div className="absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center z-10 cursor-pointer touch-pan-y"
                onClick={() => router.push(`${base}/profile`)}>
             <div className="text-center">
               <div className="text-3xl mb-2">🔒</div>
