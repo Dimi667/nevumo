@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Bell, X } from 'lucide-react';
+import { Bell, BellOff, Smartphone } from 'lucide-react';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 interface PushNotificationBannerProps {
@@ -11,86 +11,103 @@ interface PushNotificationBannerProps {
 
 export default function PushNotificationBanner({ lang, role }: PushNotificationBannerProps) {
   const { isSupported, isSubscribed, isLoading, permissionState, subscribe } = usePushNotifications();
-  const [t, setT] = useState<Record<string, string>>({});
-  const [tLoaded, setTLoaded] = useState(false);
-  const [dismissed, setDismissed] = useState(false);
+  const [pwaT, setPwaT] = useState<Record<string, string>>({});
+  const [pushPromptT, setPushPromptT] = useState<Record<string, string>>({});
+  const [settingsT, setSettingsT] = useState<Record<string, string>>({});
+  const [translationsLoaded, setTranslationsLoaded] = useState(false);
 
-  // Check session dismiss on mount
-  useEffect(() => {
-    try {
-      if (sessionStorage.getItem('push_banner_dismissed') === 'true') {
-        setDismissed(true);
-      }
-    } catch {
-      // sessionStorage access failed
-    }
-  }, []);
+  // iOS detection
+  const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isStandalone = typeof window !== 'undefined' && Boolean((window.navigator as any).standalone);
+  const isIOSWithoutPWA = isIOS && !isStandalone;
 
-  // Fetch translations
+  // Fetch translations from 3 endpoints
   useEffect(() => {
-    fetch(`/api/v1/translations/push_prompt?lang=${lang}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setT(data);
-        setTLoaded(true);
+    Promise.all([
+      fetch(`/api/v1/translations/pwa?lang=${lang}`).then((res) => res.json()),
+      fetch(`/api/v1/translations/push_prompt?lang=${lang}`).then((res) => res.json()),
+      fetch(`/api/v1/translations/settings?lang=${lang}`).then((res) => res.json()),
+    ])
+      .then(([pwaData, pushPromptData, settingsData]) => {
+        setPwaT(pwaData);
+        setPushPromptT(pushPromptData);
+        setSettingsT(settingsData);
+        setTranslationsLoaded(true);
       })
       .catch(() => {
-        setTLoaded(true); // Use fallback values on error
+        setTranslationsLoaded(true);
       });
   }, [lang]);
 
-  const handleDismiss = () => {
-    try {
-      sessionStorage.setItem('push_banner_dismissed', 'true');
-    } catch {
-      // sessionStorage access failed
-    }
-    setDismissed(true);
-  };
-
-  // Render condition
-  if (
-    !isSupported ||
-    isSubscribed ||
-    permissionState === 'denied' ||
-    dismissed ||
-    !tLoaded
-  ) {
+  // Return null while translations are loading
+  if (!translationsLoaded) {
     return null;
   }
 
-  const title = t['title'] || '🔔 Get notifications instantly!';
-  const body = role === 'provider'
-    ? (t['provider_body'] || "Don't miss new client requests while your phone is in your pocket.")
-    : (t['client_body'] || "We'll notify you instantly when a provider responds to your request.");
-  const ctaButton = t['cta_button'] || 'Enable notifications';
-  const dismissButton = t['dismiss_button'] || 'Not now';
+  // STATE 1: Already subscribed
+  if (isSubscribed) {
+    return null;
+  }
 
-  return (
-    <div className="w-full mb-4 px-4 py-3 rounded-lg border bg-amber-50 border-amber-200 flex items-start gap-3">
-      <Bell className="text-amber-500 mt-0.5 shrink-0" size={20} />
-      <div className="flex-1">
-        <h3 className="font-semibold text-amber-900 text-sm">{title}</h3>
-        <p className="text-amber-700 text-sm mt-0.5">{body}</p>
+  // STATE 2: iOS without PWA
+  if (isIOSWithoutPWA) {
+    const text = role === 'provider'
+      ? pwaT['install_for_notifications_provider'] || 'Install the app to receive notifications for new requests'
+      : pwaT['install_for_notifications_client'] || 'Install the app to receive notifications about the status of your requests';
+
+    return (
+      <div className="w-full mb-4 px-4 py-3 rounded-lg border bg-blue-50 border-blue-200 flex items-start gap-3">
+        <Smartphone className="text-blue-500 mt-0.5 shrink-0" size={20} />
+        <div className="flex-1 flex flex-col gap-0.5">
+          <p className="text-sm text-blue-800">{text}</p>
+        </div>
       </div>
-      <div className="flex row gap-2 items-center">
-        <button
-          type="button"
-          disabled={isLoading}
-          onClick={subscribe}
-          className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg shrink-0 disabled:opacity-50"
-        >
-          {isLoading ? '...' : ctaButton}
-        </button>
-        <button
-          type="button"
-          onClick={handleDismiss}
-          className="text-amber-400 hover:text-amber-600 shrink-0"
-          aria-label={dismissButton}
-        >
-          <X size={16} />
-        </button>
+    );
+  }
+
+  // STATE 3: Blocked
+  if (isSupported && !isSubscribed && permissionState === 'denied') {
+    const title = settingsT['push_blocked_title'] || 'Notifications are blocked';
+    const body = settingsT['push_blocked_description'] || 'Notifications for nevumo.com are blocked in your browser. To enable them, go to your browser settings and allow notifications for this site.';
+
+    return (
+      <div className="w-full mb-4 px-4 py-3 rounded-lg border bg-amber-50 border-amber-200 flex items-start gap-3">
+        <BellOff className="text-amber-500 mt-0.5 shrink-0" size={20} />
+        <div className="flex-1 flex flex-col gap-0.5">
+          <h3 className="text-sm font-semibold text-amber-900">{title}</h3>
+          <p className="text-sm text-amber-700">{body}</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // STATE 4: Enable notifications
+  if (isSupported && !isSubscribed && permissionState !== 'denied') {
+    const title = pushPromptT['title'] || '🔔 Get notifications instantly!';
+    const body = role === 'provider'
+      ? (pushPromptT['provider_body'] || "Don't miss new client requests while your phone is in your pocket.")
+      : (pushPromptT['client_body'] || "We'll notify you instantly when a provider responds to your request.");
+    const ctaButton = pushPromptT['cta_button'] || 'Enable notifications';
+
+    return (
+      <div className="w-full mb-4 px-4 py-3 rounded-lg border bg-amber-50 border-amber-200 flex items-start gap-3">
+        <Bell className="text-amber-500 mt-0.5 shrink-0" size={20} />
+        <div className="flex-1 flex flex-col gap-0.5">
+          <h3 className="text-sm font-semibold text-amber-900">{title}</h3>
+          <p className="text-sm text-amber-700">{body}</p>
+          <button
+            type="button"
+            disabled={isLoading}
+            onClick={subscribe}
+            className="mt-2 self-start bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg disabled:opacity-50"
+          >
+            {isLoading ? '...' : ctaButton}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // No condition matched
+  return null;
 }
