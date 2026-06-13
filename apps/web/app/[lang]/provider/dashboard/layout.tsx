@@ -126,7 +126,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
           />
         )}
 
-        <div className={isOnboarding ? 'w-full max-w-2xl mx-auto' : 'flex-1 flex flex-col min-w-0'}>
+        <div className={isOnboarding ? 'w-full max-w-2xl mx-auto' : 'flex-1 flex flex-col min-w-0 min-h-0'}>
           {/* Hide top bar during onboarding to remove menu button */}
           {!isOnboarding ? (
             <DashboardTopBar
@@ -138,7 +138,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
             <div className="h-16 flex-shrink-0" /> // Spacer to maintain layout
           )}
           <main
-            className={isOnboarding ? 'p-4 md:p-6 w-full' : 'flex-1 p-4 md:p-6 overflow-auto overscroll-contain [webkit-overflow-scrolling:touch]'}
+            className={isOnboarding ? 'p-4 md:p-6 w-full' : 'flex-1 p-4 md:p-6 overflow-auto overscroll-contain min-h-0'}
           >
             {children}
           </main>

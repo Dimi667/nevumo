@@ -340,7 +340,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
       )}
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 min-h-0">
         {/* Top bar */}
         <ClientDashboardTopBar
           email={user?.email ?? null}
@@ -348,7 +348,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
           lang={lang}
         />
 
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
+        <main className="flex-1 p-4 md:p-6 overflow-auto min-h-0">
           {children}
         </main>
       </div>
