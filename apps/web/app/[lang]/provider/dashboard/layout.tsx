@@ -8,6 +8,7 @@ import { DashboardI18nProvider } from '@/lib/provider-dashboard-i18n';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
+import SmartGlobalFooter from '@/components/SmartGlobalFooter';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -141,6 +142,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
             className={isOnboarding ? 'p-4 md:p-6 w-full' : 'flex-1 p-4 md:p-6 overflow-auto overscroll-contain min-h-0 touch-pan-y'}
           >
             {children}
+            <SmartGlobalFooter lang={lang} force={true} />
           </main>
           {showPWAPrompt && (
             <PWAInstallPrompt

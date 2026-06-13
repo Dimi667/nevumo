@@ -8,6 +8,7 @@ import { getAuthToken, getAuthUser, clearAuth, saveAuth } from '@/lib/auth-store
 import { switchRole, ProviderApiError } from '@/lib/provider-api';
 import { getClientDashboard, type ClientDashboardData } from '@/lib/client-api';
 import { useTranslation } from '@/lib/use-translation';
+import SmartGlobalFooter from '@/components/SmartGlobalFooter';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -350,6 +351,7 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
 
         <main className="flex-1 p-4 md:p-6 overflow-auto min-h-0 touch-pan-y">
           {children}
+          <SmartGlobalFooter lang={lang} force={true} />
         </main>
       </div>
     </div>
