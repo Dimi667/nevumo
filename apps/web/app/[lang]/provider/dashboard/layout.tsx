@@ -157,7 +157,12 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
               lang={lang}
             />
           )}
-          <PushPermissionPrompt show={showOnboardingPushPrompt} lang={lang} role="provider" />
+          <PushPermissionPrompt
+            show={showOnboardingPushPrompt}
+            lang={lang}
+            role="provider"
+            onDismiss={() => setShowOnboardingPushPrompt(false)}
+          />
         </div>
       </div>
     </DashboardI18nProvider>
