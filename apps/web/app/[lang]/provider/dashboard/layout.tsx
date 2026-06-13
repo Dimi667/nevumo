@@ -8,6 +8,8 @@ import { DashboardI18nProvider } from '@/lib/provider-dashboard-i18n';
 import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import DashboardTopBar from '@/components/dashboard/DashboardTopBar';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
+import PushNotificationBanner from '@/components/pwa/PushNotificationBanner';
+import PushPermissionPrompt from '@/components/push/PushPermissionPrompt';
 import SmartGlobalFooter from '@/components/SmartGlobalFooter';
 
 interface DashboardLayoutProps {
@@ -22,6 +24,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
   const [ready, setReady] = useState(false);
   const [isOnboarding, setIsOnboarding] = useState(false);
   const [showPWAPrompt, setShowPWAPrompt] = useState(false);
+  const [showOnboardingPushPrompt, setShowOnboardingPushPrompt] = useState(false);
   const [dashboardData, setDashboardData] = useState<any>(null);
 
   const checkOnboardingStatus = useCallback(async (forceRefresh = false) => {
@@ -98,6 +101,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
   useEffect(() => {
     const handleOnboardingComplete = () => {
       setTimeout(() => setShowPWAPrompt(true), 1500);
+      setTimeout(() => setShowOnboardingPushPrompt(true), 5000);
     };
 
     window.addEventListener('nevumo:onboarding_complete', handleOnboardingComplete);
@@ -141,6 +145,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
           <main
             className={isOnboarding ? 'p-4 md:p-6 w-full' : 'flex-1 p-4 md:p-6 overflow-auto overscroll-contain min-h-0 touch-pan-y'}
           >
+            <PushNotificationBanner lang={lang} role="provider" />
             {children}
             <SmartGlobalFooter lang={lang} force={true} />
           </main>
@@ -152,6 +157,7 @@ export default function DashboardLayout({ children, params }: DashboardLayoutPro
               lang={lang}
             />
           )}
+          <PushPermissionPrompt show={showOnboardingPushPrompt} lang={lang} role="provider" />
         </div>
       </div>
     </DashboardI18nProvider>
