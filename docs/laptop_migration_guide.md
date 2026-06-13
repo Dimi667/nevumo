@@ -72,6 +72,30 @@ npx --version
 ### 2.3 Инсталирай Devin
 Свали от [windsurf.ai](https://windsurf.ai) и инсталирай.
 
+### 2.4 Инсталирай Railway CLI
+```bash
+brew install railway
+railway --version  # трябва да покаже railway 5.x.x
+railway login      # отваря браузър → влез с GitHub акаунт
+cd /Users/dimitardimitrov/nevumo
+railway link       # избери: Nevumo's Projects → nevumo → production → api
+railway status     # трябва да покаже api: Online
+```
+
+### 2.5 Инсталирай Python 3.13
+macOS идва с Python 3.9 (вграден в Xcode Tools) — твърде стар за проекта (изисква 3.10+).
+```bash
+brew install python@3.13
+python3.13 --version  # трябва да покаже Python 3.13.x
+pip3.13 install psycopg2-binary sqlalchemy --break-system-packages
+python3.13 -c "import psycopg2, sqlalchemy; print('OK')"
+```
+
+Използвай `python3.13` и `pip3.13` за всички production seed скриптове:
+```bash
+railway run python3.13 -m apps.api.scripts.SCRIPT_NAME
+```
+
 ---
 
 ## Стъпка 3 — На новия лаптоп: пренеси кода

@@ -219,7 +219,7 @@ TRANSLATIONS = {
         "sk": "Zmazať túto fotografiu?",
         "sl": "Izbrišem to fotografijo?",
         "sq": "Të fshihet kjo foto?",
-        "sr": "Избрисати ову φωτογραφју?",
+        "sr": "Избришите ову фотографију?",
         "sv": "Ta bort detta foto?",
         "tr": "Bu fotoğrafı silmek istiyor musunuz?",
         "uk": "Видалити це фото?",
@@ -308,7 +308,7 @@ TRANSLATIONS = {
         "fi": "Vedä muuttaaksesi järjestystä",
         "fr": "Glissez pour réorganiser",
         "ga": "Tarraing chun athordú",
-        "hr": "Prevucite за промјену редослиједа",
+        "hr": "Povucite za promjenu redoslijeda",
         "hu": "Húzza az átrendezéshez",
         "is": "Draga til að endurraða",
         "it": "Trascina per riordinare",
@@ -335,18 +335,17 @@ TRANSLATIONS = {
 }
 
 def run():
-    # Delete existing translations for this namespace
-    with engine.connect() as conn:
-        conn.commit()
-
-    # Insert new translations
     with engine.connect() as conn:
         try:
             for key, translations in TRANSLATIONS.items():
                 full_key = f"{NAMESPACE}.{key}"
                 for lang, value in translations.items():
                     conn.execute(
-                        text("INSERT INTO translations (lang, key, value) VALUES (:lang, :key, :value)"),
+                        text("""
+                            INSERT INTO translations (lang, key, value)
+                            VALUES (:lang, :key, :value)
+                            ON CONFLICT (lang, key) DO UPDATE SET value = EXCLUDED.value
+                        """),
                         {"lang": lang, "key": full_key, "value": value}
                     )
             conn.commit()
@@ -354,11 +353,10 @@ def run():
             conn.rollback()
             raise
 
-    # Count inserted rows
     with engine.connect() as conn:
-        result = conn.execute(text(f"SELECT COUNT(*) FROM translations WHERE key LIKE '{NAMESPACE}.%'"))
+        result = conn.execute(text(f"SELECT COUNT(*) FROM translations WHERE key LIKE '{NAMESPACE}.gallery%'"))
         count = result.scalar()
-        print(f"✓ Inserted {count} translation rows for namespace '{NAMESPACE}'")
+        print(f"Seeded {count} gallery translation rows for namespace '{NAMESPACE}'")
 
 if __name__ == "__main__":
     run()

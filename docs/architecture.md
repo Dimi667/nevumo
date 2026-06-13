@@ -3088,6 +3088,18 @@ python scripts/seed_review_translations.py
 
 ---
 
+**Fixed Gallery Translations Missing in Provider Dashboard Profile (June 13, 2026)**
+- **Симптом:** Галерията в `/provider/dashboard/profile` показваше празна секция без текстове
+- **Root Cause:** `seed_provider_gallery_translations.py` никога не е бил изпълнен в production. 0 gallery ключове в Neon DB.
+- **Допълнителен проблем:** Seed скриптът използваше обикновен `INSERT` без `ON CONFLICT DO UPDATE` — нарушение на seed script правилото на проекта.
+- **Fix 1:** Seed скриптът обновен да използва `ON CONFLICT (lang, key) DO UPDATE SET value = EXCLUDED.value` 
+- **Fix 2:** Коригирани два грешни превода: `gallery_delete_confirm.sr` (смесена кирилица+гръцки), `gallery_drag_hint.hr` (кирилица вместо латиница)
+- **Fix 3:** Seed скриптът изпълнен на production: `railway run python3.13 -m apps.api.scripts.seed_provider_gallery_translations` → 306 реда заредени
+- **Affected Keys (9):** gallery_title, gallery_subtitle, gallery_cover_hint, gallery_upload_btn, gallery_uploading, gallery_delete_confirm, gallery_max_reached, gallery_empty, gallery_drag_hint
+- **Урок:** При миграция към нов лаптоп — всички seed скриптове трябва да се верифицират в production DB
+
+---
+
 **LeadForm Scroll-to-Success Fix (June 9, 2026)** — ЧАСТИЧНО COMPLETE:
   - **Проблем:** След Submit на lead форма на мобилен телефон, success screen се появяваше горе в компонента, но viewport оставаше на текущата скролирана позиция — потвърждението беше невидимо.
   - **Root cause:** success screen се рендерира като early return — `<form ref={formRef}>` се unmount-ва при `isSuccess=true`, `formRef.current` става `null` преди useEffect да се изпълни. `scrollIntoView` и `window.scrollTo` не работят на iOS Safari при unmount-нат ref.
