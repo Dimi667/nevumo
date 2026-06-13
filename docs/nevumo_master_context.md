@@ -465,6 +465,14 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Използвай Decimal (Python)
 - Никога float за пари
 
+### Mobile & CSS Rules (CRITICAL)
+- **Android Chrome touch routing rule:** Any element with onClick that overlaps a scroll container MUST have touch-pan-y class. Without it, Chrome delays scroll activation waiting to distinguish tap vs scroll. iOS Safari is unaffected.
+- **Dashboard layout rules (КРИТИЧНО):**
+  - Outer wrapper MUST be h-screen (not min-h-screen) + overflow-hidden
+  - Flex-col wrapper MUST have min-h-0
+  - main scroll container MUST have overflow-auto + min-h-0 + touch-pan-y
+  - SmartGlobalFooter MUST NOT render on dashboard pages (adds height to body)
+
 ---
 
 ## AI Behavior Rules (IMPORTANT)
@@ -899,6 +907,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Auth frontend — connected to real API (login, register, forgot, reset)
 - Provider Dashboard backend — 10 endpoints, JWT auth, lead status management, image upload (HEIC/HEIF → WebP conversion, max 1200px resize, 85% quality), QR generation, onboarding support
 - Provider Dashboard frontend — all pages (Overview, Leads, Services, Analytics, QR Code, Profile, Settings, Reviews)
+- Android Chrome mobile scroll freeze fixed (June 2026): root cause was 5 onboarding overlay divs (absolute inset-0, onClick) covering 70% of viewport. Fix: touch-pan-y on overlays + h-screen/min-h-0 layout fixes + SmartGlobalFooter excluded from dashboard pages via isDashboardPath().
 - Provider onboarding — 2-step wizard (profile info → first service), completeness check with auto-redirect
 - Service CRUD — add/edit/delete with category, multi-city, price type, currency
 - Client Dashboard — frontend + backend complete with guarded sidebar/topbar layout, Overview, My Requests, Reviews, Settings, inline review submission, review reply toggle preferences, role switch, and logout. Multi-provider review system: clients can review each provider who contacted them (LeadMatch.status IN contacted/done), one review per (lead_id, provider_id) pair. Badge count loads on initial mount (not only on tab click). Overview page lead cards have hover:shadow-md + "Write a Review" button for done leads. Fixes (April 2026): Resolved data inconsistencies and added real-time status updates for reviews and leads.

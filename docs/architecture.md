@@ -1650,6 +1650,62 @@ Translation keys used in `t()` calls must follow strict conventions to ensure co
 - Note: viewport (generateViewport in app/layout.tsx) was already correct —
   width: device-width, initialScale: 1, viewportFit: cover, themeColor: #f97316
 
+### Android Chrome Dashboard Scroll Freeze Fix (June 2026) — COMPLETE
+- **Problem:** Provider dashboard overview page (/provider/dashboard) was completely 
+  unscrollable on Android Chrome (Pixel 7). iOS Safari was unaffected. Scroll worked 
+  on all other dashboard pages.
+
+- **Diagnostic process (5 rounds):**
+  1. Playwright computed styles → body was 835px vs 610px viewport (SmartGlobalFooter 
+     rendering outside h-screen wrapper)
+  2. min-h-screen → h-screen + overflow-hidden on outer wrapper (necessary but not sufficient)
+  3. computedMinHeight: "auto" on main and flex wrapper → added min-h-0 to both
+  4. Fixed z-[9999] CookieConsentBanner detected → pointer-events-none outer + 
+     pointer-events-auto inner (good practice, not root cause)
+  5. programmatic scroll worked (didScroll: true) → root cause is touch routing, 
+     not CSS structure
+
+- **Root cause confirmed:** 5 absolute inset-0 overlay divs (bg-white/80, z-10, 
+  cursor-pointer, onClick) in provider dashboard page.tsx cover 70%+ of mobile 
+  viewport during onboarding. Android Chrome delays touch routing to distinguish 
+  tap vs scroll on interactive elements → scroll never activates.
+
+- **Why only provider dashboard overview:** Overlays render only when 
+  !isOnboardingComplete. Completed onboarding = no overlays = no freeze.
+
+- **Why iOS Safari unaffected:** WebKit routes scroll gestures immediately to 
+  overflow:auto containers regardless of overlapping interactive elements.
+
+- **Files changed:**
+  1. apps/web/app/[lang]/provider/dashboard/layout.tsx
+     - Outer wrapper: min-h-screen → h-screen + overflow-hidden
+     - Flex wrapper: added min-h-0
+     - main: added min-h-0 + touch-pan-y, removed [webkit-overflow-scrolling:touch]
+  2. apps/web/app/[lang]/client/dashboard/layout.tsx
+     - Outer wrapper: min-h-screen → h-screen + overflow-hidden
+     - Flex wrapper: added min-h-0
+     - main: added min-h-0 + touch-pan-y
+  3. apps/web/components/SmartGlobalFooter.tsx
+     - Added isDashboardPath(pathname) check → returns null on dashboard pages
+     - Prevents footer from adding ~225px to body height outside h-screen wrapper
+  4. apps/web/components/ui/CookieConsentBanner.tsx
+     - Outer div: added pointer-events-none
+     - Inner div (max-w-7xl): added pointer-events-auto
+     - Prevents compositor hit-test interference (defensive fix)
+  5. apps/web/app/[lang]/provider/dashboard/page.tsx
+     - All 5 absolute overlay divs: added touch-pan-y
+     - ROOT CAUSE FIX: tells Android Chrome to route vertical touch to scroll 
+       immediately without waiting to distinguish tap vs scroll
+
+- **Key learnings:**
+  - touch-pan-y is required on any onClick interactive element that overlaps 
+    a scroll container on Android Chrome
+  - programmatic scroll working (scrollTop change) but touch scroll not working = 
+    always a touch routing issue, not a CSS overflow issue
+  - SmartGlobalFooter must never render outside h-screen dashboard wrapper
+  - [webkit-overflow-scrolling:touch] is deprecated and incorrectly formatted in 
+    Tailwind — remove it
+
 ## Provider Description Auto-Translation
 
 ### Overview
