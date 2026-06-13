@@ -1687,15 +1687,33 @@ Translation keys used in `t()` calls must follow strict conventions to ensure co
      - main: added min-h-0 + touch-pan-y
   3. apps/web/components/SmartGlobalFooter.tsx
      - Added isDashboardPath(pathname) check → returns null on dashboard pages
-     - Prevents footer from adding ~225px to body height outside h-screen wrapper
-  4. apps/web/components/ui/CookieConsentBanner.tsx
+       when force prop is false (default)
+     - Added optional force?: boolean prop to bypass dashboard exclusion
+     - Prevents global instance from adding ~225px to body height outside 
+       h-screen wrapper
+  4. apps/web/app/[lang]/provider/dashboard/layout.tsx (additional change)
+     - SmartGlobalFooter rendered INSIDE <main> with force={true}
+     - Footer is part of scrollable content — visible on scroll, no body overflow
+  5. apps/web/app/[lang]/client/dashboard/layout.tsx (additional change)
+     - SmartGlobalFooter rendered INSIDE <main> with force={true}
+     - Footer is part of scrollable content — visible on scroll, no body overflow
+  6. apps/web/components/ui/CookieConsentBanner.tsx
      - Outer div: added pointer-events-none
      - Inner div (max-w-7xl): added pointer-events-auto
      - Prevents compositor hit-test interference (defensive fix)
-  5. apps/web/app/[lang]/provider/dashboard/page.tsx
+  7. apps/web/app/[lang]/provider/dashboard/page.tsx
      - All 5 absolute overlay divs: added touch-pan-y
      - ROOT CAUSE FIX: tells Android Chrome to route vertical touch to scroll 
        immediately without waiting to distinguish tap vs scroll
+
+**Dashboard Footer Architecture (June 2026):**
+- Global SmartGlobalFooter in [lang]/layout.tsx → excluded on dashboard pages 
+  via isDashboardPath() → returns null (prevents body height overflow)
+- Dashboard-specific SmartGlobalFooter rendered INSIDE <main> with force={true}
+  → part of scrollable content → visible when user scrolls to bottom
+- Pattern: TWO SmartGlobalFooter instances — one global (excluded on dashboard), 
+  one local inside scroll container (force=true)
+- This pattern MUST be preserved for any new dashboard layouts added in future
 
 - **Key learnings:**
   - touch-pan-y is required on any onClick interactive element that overlaps 
