@@ -71,8 +71,8 @@ export default function CookieConsentBanner({ lang }: CookieConsentBannerProps) 
   };
 
   return (
-    <div data-testid="cookie-banner" className="fixed bottom-0 left-0 right-0 z-[9999] bg-gray-900 text-white p-4 md:p-6 shadow-2xl transition-all duration-300">
-      <div className="max-w-7xl mx-auto">
+    <div data-testid="cookie-banner" className="fixed bottom-0 left-0 right-0 z-[9999] bg-gray-900 text-white p-4 md:p-6 shadow-2xl transition-all duration-300 pointer-events-none">
+      <div className="max-w-7xl mx-auto pointer-events-auto">
         {!isExpanded ? (
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex-1 text-center md:text-left">
