@@ -360,7 +360,7 @@ causing `nevumo.com` to 307-redirect to `www`. Google saw both as duplicates.
      (renamed to WithdrawalClient.tsx + new page.tsx server component)
 
 5. **robots.ts** — `apps/web/app/robots.ts`:
-   - Added to disallow array: `/*/provider/dashboard`, `/*/client/dashboard`
+   - Added to disallow array: `/*/provider/dashboard`, `/*/client/dashboard`, `/*/auth`
 
 **Verification:** All 5 automated Playwright tests PASSED (June 9, 2026):
 - robots.txt dashboard blocking ✅
@@ -374,6 +374,24 @@ causing `nevumo.com` to 307-redirect to `www`. Google saw both as duplicates.
 **Known remaining items (next sprint):**
 - og:url missing on city and category pages
 - JSON-LD missing on legal pages
+
+### Google Search Console — Excluded by 'noindex' tag (June 14, 2026) — RESOLVED
+
+**Trigger:** GSC email notification — "New reason preventing your pages from being indexed: Excluded by 'noindex' tag"
+
+**Investigation:**
+- 1 URL affected: `https://www.nevumo.com/en/auth?category=cleaning` (last crawled: Jun 7, 2026)
+- URL is on `www.nevumo.com` — stale crawl from before the June 9 domain fix (www → nevumo.com).
+- The `/auth` page is intentionally noindexed — login/registration pages must not appear in search results.
+- The `?category=cleaning` parameter is a post-lead-submission redirect parameter. Google followed this link and reached the auth page.
+
+**Conclusion:** Intentional and correct behavior. No bug.
+
+**Fix applied (June 14, 2026):**
+- `apps/web/app/robots.ts` — Added `/*/auth` to the disallow array to prevent Googlebot from crawling auth pages entirely, saving crawl budget and eliminating future GSC noise.
+- Disallow array is now: `/*/provider/dashboard`, `/*/client/dashboard`, `/*/auth`
+
+**Action taken:** "Validate Fix" to be submitted in GSC after deploy.
 
 ### Category Page Visual Breadcrumb (June 9, 2026) — COMPLETE
 

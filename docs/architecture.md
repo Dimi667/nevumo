@@ -317,7 +317,7 @@ The system now implements a fully automated SEO strategy for City Landing pages,
     `robots: { index: false, follow: true }` to prevent duplicate content from LegalModal iframe
   - **Withdrawal page pattern**: `use client` component required server wrapper —
     `WithdrawalClient.tsx` (client logic) + `page.tsx` (server wrapper with generateMetadata)
-  - **robots.ts**: Dashboard paths blocked — `/*/provider/dashboard`, `/*/client/dashboard`
+  - **robots.ts**: Dashboard paths blocked — `/*/provider/dashboard`, `/*/client/dashboard`, `/*/auth`
 
 - **Domain Canonical Configuration (June 9, 2026)**:
   - **Primary domain**: `nevumo.com` (no www)
