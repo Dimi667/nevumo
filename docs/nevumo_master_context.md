@@ -165,6 +165,15 @@ Nevumo е уеб платформа за marketplace на услуги.
 10. send_article14_notification — GDPR Art.14 on claimed profile (provider.py:621)
 11. send_welcome_email — covers both client and provider roles
 
+### Claimed Profiles Email Templates
+- **Outreach template:** `apps/api/scripts/templates/outreach_email_pl.html`
+  - Език: полски (единствен outreach език — Варшава)
+  - Изпраща се от: `support@nevumo.com` via Resend
+  - Jinja2 templating
+  - Лого: при deploy качи `nevumo-logo.png` на `images.nevumo.com/nevumo-logo.png` и замени base64 src
+- **Gravatar:** настроен за `support@nevumo.com` с Nevumo иконка (apple-touch-icon 120×120px)
+- **FROM_EMAIL:** хардкоднат в кода (не е env var в Railway) — при следваща рефакторинг да се извади като `RESEND_FROM_EMAIL` env var
+
 ### Email Notification Fixes (June 9, 2026) — COMPLETE:
 - **Root cause diagnosed:** `except Exception: pass` silently swallowed all email errors in provider.py, client.py, and leads.py — replaced with `[EMAIL_WARNING]` logging in all 3 files
 - **Direct lead fix:** `send_new_lead_notification` was never called for direct leads (with provider_slug). Added email notification block AFTER db.commit() in leads.py for direct provider assignment.

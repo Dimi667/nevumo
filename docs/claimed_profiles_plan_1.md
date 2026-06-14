@@ -1,6 +1,6 @@
 # Nevumo — Claimed Profiles: Пълен план
 
-**Статус:** 🟡 В процес — CEIDG скрипт върви; Задача 2Б ✅ завършена
+**Статус:** 🟡 В процес — Задача 2Б ✅ и 3А ✅ завършени
 **Последна актуализация:** 14 юни 2026
 **Приоритет:** 🔴 Висок — преди Warsaw outreach кампания
 
@@ -127,13 +127,19 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 
 ### 🟨 ФАЗА 3 — ИМЕЙЛИ
 
-**Задача 3А — Outreach имейл шаблон** *(на полски)*
+**Задача 3А — Outreach имейл шаблон** ✅ ЗАВЪРШЕНА (14 юни 2026)
 - Тема: "Twój profil jest już na Nevumo — odbierz go bezpłatnie"
+- Файл: `apps/api/scripts/templates/outreach_email_pl.html`
+- Jinja2 променливи: `{{ business_name }}`, `{{ claim_link }}`, `{{ provider_phone }}`, `{{ provider_email }}`, `{{ provider_address }}`, `{{ provider_website }}`
 - Съдържа:
-  - GDPR Art. 14 уведомление (какви данни обработваме, от какъв source)
-  - CTA бутон: "Odbierz swój profil →" с `claim_token` линк
-  - Обяснение на предимствата vs Fixly
-- **Аз (Claude) пиша шаблона**
+  - GDPR Art. 14 уведомление (CEIDG source, данни, права, mailto за изтриване)
+  - FOMO блок: "Im wcześniej przejmiesz swój profil, tym wyżej pojawisz się w wynikach..."
+  - Сравнение Nevumo vs Fixly (9 ползи vs 6 недостатъка)
+  - 2 CTA бутона: "Odbierz swój profil →" и "Przejmij profil bezpłatnie →"
+- Дизайн: бял хедър с лого PNG, оранжеви CTA (#F97316), светлосив футър — идентичен на сайта
+- Лого: конвертирано от SVG → PNG (cairosvg), вградено като base64 за преглед; за продъкшън се качва на `images.nevumo.com/nevumo-logo.png`
+- Sender: `Nevumo <support@nevumo.com>` via Resend
+- Gravatar: настроен за `support@nevumo.com` с apple-touch-icon (120×120px) ✅
 
 **Задача 3Б — Art. 14 Confirmation имейл**
 - Изпраща се АВТОМАТИЧНО след успешен claim
@@ -227,7 +233,9 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token);
 
 ## Следваща незабавна стъпка
 
-1. Изчакай CEIDG скрипта да приключи
-2. Провери броя и качеството на CSV данните
-3. Стартирай Задача 1Б (преглед на CSV)
-4. Стартирай Задача 2А (seed script) с Kimi-2.6
+1. Задача 3Б — Art. 14 Confirmation имейл (Claude пише шаблона)
+2. Задача 4А — `/[lang]/claim/[token]` страница (Kimi-2.6)
+3. Задача 4Б — "Unclaimed" банер на Provider Full Page (Kimi-2.6)
+4. Задача 1Б — Преглед и почистване на CSV (ръчно)
+5. Задача 2А — seed_unclaimed_providers.py (Kimi-2.6)
+6. Задача 5А — Bulk имейл кампания (Kimi-2.6)
