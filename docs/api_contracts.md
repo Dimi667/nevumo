@@ -2016,6 +2016,71 @@ Auth errors (see Auth section for full list):
 
 ---
 
+# 🔹 CLAIMED PROFILES ENDPOINTS
+
+## GET /api/v1/providers/claim/{token}
+
+**Purpose:** Public preview of an unclaimed provider profile. Used by the claim landing page to display provider info before the user authenticates.
+
+**Auth:** None required (public)
+
+**Path Params:**
+- `token` — claim token (unique per unclaimed provider)
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "business_name": "Jan Kowalski Hydraulik",
+    "slug": "jan-kowalski-hydraulik",
+    "city": "Warszawa",
+    "category": "Plumbing",
+    "data_source": "scraped"
+  }
+}
+```
+
+**Errors:**
+- 404 TOKEN_NOT_FOUND — token does not exist or profile is already claimed
+
+---
+
+## POST /api/v1/providers/claim/{token}
+
+**Purpose:** Claim an unclaimed provider profile. Links the authenticated user's account to the scraped provider profile.
+
+**Auth:** JWT required (Authorization: Bearer <JWT>)
+
+**Path Params:**
+- `token` — claim token (unique per unclaimed provider)
+
+**Logic:**
+- Validates user role is provider
+- Finds unclaimed provider by token (is_claimed=FALSE)
+- If user has a draft provider row (slug starts with "draft" AND business_name equals user email) → deletes the draft
+- If user has a real (non-draft) provider profile → returns 409
+- Sets user_id, is_claimed=TRUE, claim_token=NULL, recalculates verification_level
+- Sends Art. 14 GDPR confirmation email (non-blocking — email failure does not rollback claim)
+
+**Response (200):**
+```json
+{
+  "success": true,
+  "data": {
+    "provider_slug": "jan-kowalski-hydraulik",
+    "business_name": "Jan Kowalski Hydraulik"
+  }
+}
+```
+
+**Errors:**
+- 403 FORBIDDEN — user role is not provider
+- 404 TOKEN_NOT_FOUND — token does not exist or already claimed
+- 409 PROVIDER_ALREADY_EXISTS — user already has an active (non-draft) provider profile
+
+---
+
 # 🔹 REVIEW SYSTEM API (Closed Trust Conversation Model)
 
 ## Overview

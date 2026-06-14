@@ -536,6 +536,10 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - `apps/web/components/GlobalFooter.tsx` — added `readCurrentCity(currentLang)` helper + city-lock logic as first two lines of `handleLanguageChange`
   - **Result**: Hero city is unchanged when user switches language. City changes only on explicit selection via `/izberi-grad`.
 - **Web Push Notifications (June 7, 2026)** — COMPLETE: pywebpush backend, VAPID keys, push_subscriptions table, push service, 3 API endpoints, Service Worker push/notificationclick handlers, usePushNotifications hook, provider settings toggle. Full coverage: providers notified on new leads + new reviews; clients notified on lead status changes + review replies.
+- **Claimed Profiles — Backend (Task 2B, June 14 2026)** — COMPLETE: Claim endpoint pair added to apps/api/routes/providers.py:
+  - GET /api/v1/providers/claim/{token} — public profile preview for claim landing page
+  - POST /api/v1/providers/claim/{token} — authenticated claim action; validates role, deletes registration draft (detected by slug prefix "draft" + business_name = user email), links user_id to unclaimed profile, sets is_claimed=TRUE, clears claim_token, recalculates verification_level, sends Art. 14 GDPR email (non-blocking)
+  - Draft detection: dual condition (slug.startswith("draft") AND business_name == user.email) to prevent accidental deletion of real profiles
 - **Related Links Category Names Fix (June 7, 2026)** — COMPLETE:
   - **Problem**: "Виж също" section on category pages showed category names in English on all languages. Root cause: `category.h1_cleaning/massage/plumbing` keys existed in `translations` table but were empty strings — falsy in JS, always triggering English fallback.
   - **Root cause (architectural)**: Using `translations` table for category names is wrong. The correct source is `category_translations` table (102 rows: 3 categories × 34 languages).
