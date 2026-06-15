@@ -1,7 +1,7 @@
 # Nevumo — Claimed Profiles: Пълен план
 
 **Статус:** 🟡 В процес — Задача 2Б ✅ и 3А ✅ завършени
-**Последна актуализация:** 14 юни 2026
+**Последна актуализация:** 15 юни 2026
 **Приоритет:** 🔴 Висок — преди Warsaw outreach кампания
 
 ---
@@ -88,17 +88,30 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - С имейл: 701 | С телефон: 257
 - Файл: apps/scripts/warszawa_providers_ceidg.csv
 
-**Задача 1Б — Преглед и почистване на CSV**
-- Отвори apps/scripts/warszawa_providers_ceidg.csv в Excel/Google Sheets
-- Провери качеството на данните
-- Изтрий редове с business_name = само цифри или явно грешни
-- Правиш го ти — 30 минути
+**Задача 1Б — Преглед и почистване на CSV** ✅ Завършена (15 юни 2026)
+- Скрипт: apps/scripts/clean_ceidg_csv.py
+- Input: warszawa_providers_ceidg.csv (2,375 реда)
+- Output: warszawa_providers_clean.csv (2,122 реда)
+- Резултат: 633 валидни имейли, 230 валидни телефони (+48 формат)
+- Открит проблем: колона "address" съдържа имейли вместо физически адреси
+  (скраперът е записал email и в address полето) — при seed скрипта (2А)
+  address колоната се зарежда като ПРАЗНА
+- Открит проблем: 176 реда с партньорски бизнес имена ("1. FIRM A, 2. FIRM B
+  wspólnik s.c.") — seed скриптът (2А) взема само първото име преди запетаята
 
-**Задача 1В — CEIDG re-scrape за уебсайтове**
-- Поправен селектор: `Adres strony internetowej` (беше `Strona`)
-- Пуска се overnight върху вече събраните 2,375 провайдъра
-- Цел: добавяне на уебсайт колоната
-- Модел: Kimi-2.6
+**Задача 1В — CEIDG re-scrape за уебсайтове** 🟡 В процес (15 юни 2026)
+- Скрипт: apps/scripts/rescrape_websites.py (Python 3.13, sync Playwright)
+- Пуснат overnight: 15 юни 2026
+- Output: apps/scripts/warszawa_providers_with_websites.csv
+- Очакван резултат: 5-15% от 2,122 реда с уебсайт (100-300 уебсайта)
+- Технически бележки за бъдещи CEIDG скриптове:
+  * CEIDG API (dane.biznes.gov.pl) е мъртво — връща 404
+  * Директен URL по NIP не работи (връща "Brak wpisu")
+  * Търсенето изисква минимум 2 критерия: NIP + PKD код
+  * headless=False задължително — Akamai CDN блокира headless Chromium
+  * Label за уебсайт е "Adres strony internetowej" (НЕ "Strona" — CEIDG го е сменил)
+  * Selector за резултати: a[href*='SearchDetails.aspx']
+  * Selector за полета: section.block → dt/dd двойки
 
 **Задача 1Г — Email extractor от уебсайтове**
 - Playwright скрипт посещава всеки уебсайт от 1В
@@ -285,6 +298,6 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token);
 1. Задача 3Б — Art. 14 Confirmation имейл (Claude пише шаблона)
 2. Задача 4А — `/[lang]/claim/[token]` страница (Kimi-2.6)
 3. Задача 4Б — "Unclaimed" банер на Provider Full Page (Kimi-2.6)
-4. Задача 1Б — Преглед и почистване на CSV (ръчно)
-5. Задача 2А — seed_unclaimed_providers.py (Kimi-2.6)
+4. Задача 1Б — Преглед и почистване на CSV ✅ Завършена
+5. Задача 2А — seed_unclaimed_providers.py (Kimi-2.6) — изчакай overnight резултата от 1В
 6. Задача 5А — Bulk имейл кампания (Kimi-2.6)
