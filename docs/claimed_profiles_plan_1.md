@@ -125,16 +125,26 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - Съдържание: кратко съобщение с claim линк
 - Модел: Kimi-2.6
 
-**Задача 1Е — Fixly scraper за бизнес имена**
-- Публичните профили на Fixly показват бизнес имена
-- Warsaw: 26,829 cleaning + 53,418 plumbing + 591 massage
-- Реалистично използваеми (с реално бизнес име): ~16,000
+**Задача 1Е — Panoramafirm.pl scraper за бизнес имена** 🟡 В процес (15 юни 2026)
+- **Fixly.pl проучен и отхвърлен (15 юни 2026):**
+  * Не е browsable directory — activity feed модел, без pagination
+  * GraphQL API (api.fixly.pl/graphql) достъпен без auth, но searchProvidersByLonLatCategoryId връща само total: Int, не списък с провайдъри
+  * Имената на listing са предимно лични (Piotr Serocki, Mateusz G) — неподходящи за Bing API
+- **Pivot: Panoramafirm.pl** (проверен browsable business directory):
+  * Скрипт: apps/scripts/scrape_panoramafirm.py (Python 3.13, sync Playwright, headless=False)
+  * Output: apps/scripts/warszawa_providers_panoramafirm.csv
+  * Статус: Работи overnight (15 юни) — page 32/250 за cleaning, 780 records
+  * Колони: business_name, phone, website, category, source=panoramafirm, profile_url
+  * ВАЖНО: Телефоните от Panoramafirm са call-tracking номера (224573095) — не се ползват
+  * Уебсайтовете са реални → директно към Email extractor (Task 1З) без нужда от Bing API
+- Реалистично очаквани records: ~3,000-5,000 Warsaw фирми (3 категории)
 - Модел: SWE-1.6
 
 **Задача 1Ж — Bing API → намиране на уебсайтове**
 - Bing Search API (безплатно до 3,000 заявки/месец)
-- Търси по бизнес имена от Fixly → намира уебсайтовете им
+- Търси по бизнес имена → намира уебсайтовете им
 - Модел: Kimi-2.6
+- ВАЖНО: Panoramafirm.pl вече дава уебсайтове директно → Task 1Ж нужен САМО за records от Panoramafirm без уебсайт
 
 **Задача 1З — Email extractor от Fixly уебсайтове**
 - Същия email extractor от Задача 1Г
@@ -295,9 +305,17 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token);
 
 ## Следваща незабавна стъпка
 
-1. Задача 3Б — Art. 14 Confirmation имейл (Claude пише шаблона)
-2. Задача 4А — `/[lang]/claim/[token]` страница (Kimi-2.6)
-3. Задача 4Б — "Unclaimed" банер на Provider Full Page (Kimi-2.6)
-4. Задача 1Б — Преглед и почистване на CSV ✅ Завършена
-5. Задача 2А — seed_unclaimed_providers.py (Kimi-2.6) — изчакай overnight резултата от 1В
-6. Задача 5А — Bulk имейл кампания (Kimi-2.6)
+**Работи overnight (15 юни 2026):**
+- Задача 1В: apps/scripts/rescrape_websites.py (CEIDG уебсайтове)
+- Задача 1Е: apps/scripts/scrape_panoramafirm.py (Panoramafirm бизнес имена + уебсайтове, 780 records/page 32)
+
+**Следва (след overnight резултати):**
+1. Задача 1Г — Email extractor от CEIDG уебсайтове (Kimi-2.6) — изчаква 1В
+2. Задача 1З — Email extractor от Panoramafirm уебсайтове (Kimi-2.6) — изчаква 1Е
+3. Задача 2А — seed_unclaimed_providers.py (Kimi-2.6) — изчаква 1В + 1Е
+4. Задача 5А — Bulk имейл кампания (Kimi-2.6) — изчаква 2А
+
+**Паралелно (може веднага, не чака overnight):**
+- Задача 4А — /[lang]/claim/[token] страница (Kimi-2.6) ← следваща
+- Задача 4Б — Unclaimed банер на Provider Full Page (Kimi-2.6)
+- Задача 3Б — Art. 14 Confirmation имейл шаблон (Claude)
