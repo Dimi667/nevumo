@@ -285,37 +285,26 @@ async def list_providers(
 @router.get("/providers/by-claim-token/{token}")
 async def get_provider_by_claim_token_endpoint(
     token: str,
-    lang: str = Query("en", min_length=2, max_length=5),
     db: Session = Depends(get_db),
 ) -> dict:
     """Get provider by claim token (public endpoint)."""
     provider = get_provider_by_claim_token(token, db)
     if not provider:
-        return {
-            "success": False,
-            "error": {
-                "code": "NOT_FOUND", 
-                "message": "Token not found or already claimed"
-            }
-        }
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Provider not found"}
+        )
     
-    # Get first city name with lang-aware lookup
+    # Get first city slug
     first_city_row = (
         db.query(ProviderCity)
         .filter(ProviderCity.provider_id == provider.id)
         .first()
     )
-    city_name = None
+    city_slug = None
     if first_city_row:
         city = db.query(Location).filter(Location.id == first_city_row.city_id).first()
-        if city:
-            # Get translated city name with fallback
-            translation = db.query(LocationTranslation).filter(
-                LocationTranslation.location_id == city.id,
-                LocationTranslation.lang == lang
-            ).first()
-            # Fallback: translation -> city_en -> city
-            city_name = translation.city_name if translation else (city.city_en if city.city_en else city.city)
+        city_slug = city.slug if city else None
     
     # Get first service category slug
     first_service = (
@@ -329,14 +318,12 @@ async def get_provider_by_claim_token_endpoint(
         category_slug = category.slug if category else None
     
     return {
-        "success": True,
-        "data": {
-            "business_name": provider.business_name,
-            "slug": provider.slug,
-            "is_claimed": provider.is_claimed,
-            "city_name": city_name,
-            "category_slug": category_slug
-        }
+        "id": str(provider.id),
+        "business_name": provider.business_name,
+        "category_slug": category_slug,
+        "city_slug": city_slug,
+        "is_claimed": provider.is_claimed,
+        "data_source": provider.data_source
     }
 
 
@@ -402,71 +389,42 @@ async def claim_provider(
     """Claim an unclaimed provider profile (JWT required)."""
     logger = logging.getLogger(__name__)
     
-    # Check user role
-    if current_user.role != "provider":
-        raise HTTPException(
-            status_code=403,
-            detail={"code": "FORBIDDEN", "message": "Only provider accounts can claim profiles"}
-        )
-    
-    # Find the unclaimed provider by token
-    unclaimed = db.query(Provider).filter(
-        Provider.claim_token == token,
-        Provider.is_claimed == False
+    # Find the provider by token
+    provider = db.query(Provider).filter(
+        Provider.claim_token == token
     ).first()
     
-    if not unclaimed:
+    if not provider:
         raise HTTPException(
             status_code=404,
-            detail={"code": "TOKEN_NOT_FOUND", "message": "Claim token not found or already used"}
+            detail={"code": "NOT_FOUND", "message": "Provider not found"}
         )
     
-    # Find user's existing provider (draft created at registration)
-    existing = db.query(Provider).filter(
-        Provider.user_id == current_user.id
-    ).first()
-    
-    # Handle existing provider
-    if existing:
-        # A draft is identified by BOTH conditions being true:
-        # - slug starts with "draft" (set at registration as draft{token_hex(6)})
-        # - business_name equals user email (placeholder set at registration)
-        is_draft = (
-            existing.slug.startswith("draft")
-            and existing.business_name == current_user.email
+    # Check if already claimed
+    if provider.is_claimed:
+        raise HTTPException(
+            status_code=409,
+            detail="already_claimed"
         )
-        if not is_draft:
-            raise HTTPException(
-                status_code=409,
-                detail={"code": "PROVIDER_ALREADY_EXISTS", "message": "You already have an active provider profile"}
-            )
-        # It's a draft → delete it (cascade handles provider_cities, services, etc.)
-        db.delete(existing)
-        db.flush()  # flush before updating unclaimed to avoid constraint violations
     
-    # Claim the unclaimed profile
-    unclaimed.user_id = current_user.id
-    unclaimed.is_claimed = True
-    unclaimed.claim_token = None
-    unclaimed.verification_level = calculate_verification_level(unclaimed, db)
+    # Claim the profile
+    provider.is_claimed = True
+    provider.user_id = current_user.id
+    provider.claim_token = None
     db.commit()
-    db.refresh(unclaimed)
     
-    # Send Art. 14 GDPR confirmation email
+    # Send welcome email
     try:
-        await email_service.send_article14_notification(
+        await email_service.send_claim_welcome_email(
             provider_email=current_user.email,
-            provider_name=unclaimed.business_name
+            provider_name=provider.business_name
         )
     except Exception as e:
-        logger.warning(f"[EMAIL_WARNING] Art.14 email failed for provider {unclaimed.id}: {e}")
+        logger.warning(f"[EMAIL_WARNING] Claim welcome email failed for provider {provider.id}: {e}")
     
     return {
         "success": True,
-        "data": {
-            "provider_slug": unclaimed.slug,
-            "business_name": unclaimed.business_name
-        }
+        "provider_id": str(provider.id)
     }
 
 

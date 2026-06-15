@@ -2413,6 +2413,81 @@ Provider ↔ Client switching works. Updates user role via API and redirects to 
 
 ---
 
+## Claimed Profiles & Claim Landing Page (June 15, 2026)
+
+### Overview
+Claim functionality allows providers to claim pre-created profiles (from scraped data) by visiting a unique claim token URL. This bridges the gap between scraped provider data and active provider accounts.
+
+### Frontend Implementation
+- **Page**: `apps/web/app/[lang]/claim/[token]/page.tsx` — Server Component
+- **Route**: `/[lang]/claim/[token]` (e.g., `/bg/claim/abc123xyz`)
+- **Translations**: namespace `claim`, 12 keys, 34 languages
+- **Seed script**: `apps/api/scripts/seed_claim_translations.py`
+
+### Backend Endpoints
+
+**GET `/api/v1/providers/by-claim-token/{token}`** — Public endpoint (no auth required)
+- Returns provider data by claim_token
+- Response schema:
+  ```json
+  {
+    "id": "uuid",
+    "business_name": "string",
+    "category_slug": "string",
+    "city_slug": "string",
+    "is_claimed": boolean,
+    "data_source": "string"
+  }
+  ```
+- Returns 404 if provider not found
+
+**POST `/api/v1/providers/claim/{token}`** — Protected endpoint (JWT required)
+- Claims an unclaimed provider profile
+- Sets `is_claimed = True`, `user_id = current_user.id`, `claim_token = None`
+- Invalidates claim_token after use (set to None)
+- Returns 409 Conflict with `detail="already_claimed"` if already claimed
+- Response schema:
+  ```json
+  {
+    "success": true,
+    "provider_id": "uuid"
+  }
+  ```
+
+### Email Notification
+- **Welcome email**: Sent via `send_claim_welcome_email()` in `email_service.py`
+- **Subject**: "Your Nevumo profile is now active"
+- **Content**: Congratulations, profile activation confirmation, dashboard link
+- **Error handling**: Email failure logged with `[EMAIL_WARNING]` pattern, does not block claim response
+
+### Translation Keys (claim namespace)
+- `title` — Page title
+- `subtitle` — "Is this your business on Nevumo?"
+- `description` — "Claim this profile and start receiving client requests for free."
+- `cta_login` — "Log in to claim this profile"
+- `cta_register` — "Register and claim this profile for free"
+- `cta_claim` — "Claim your profile for free"
+- `category_label` — "Category"
+- `city_label` — "City"
+- `not_found` — "This profile was not found or has already been claimed."
+- `already_claimed` — "This profile has already been claimed."
+- `success` — "Profile claimed! Redirecting to your dashboard..."
+- `error` — "An error occurred. Please try again."
+
+### UI States
+1. **Valid unclaimed profile**: Shows claim landing page with provider card
+   - If authenticated: Claim button (server action)
+   - If not authenticated: Login + Register buttons with redirect params
+2. **Already claimed**: Shows `already_claimed` message
+3. **Not found**: Shows `not_found` message
+
+### Auth Detection
+- Server-side cookie check: `cookies().get('nevumo_auth_token')`
+- No client-side auth checks
+- Determines whether to show claim button or login/register CTAs
+
+---
+
 ## Event Tracking (IMPORTANT)
 
 ### Двуслойна система
@@ -2503,7 +2578,7 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - Email sending: Resend (resend>=2.0.0)
 - Config: RESEND_API_KEY, FROM_EMAIL, LEGAL_EMAIL in apps/api/config.py
 - email_service.py uses Resend SDK via _send_email()
-- 11 transactional emails implemented:
+- 12 transactional emails implemented:
   1. send_password_reset_email — forgot password
   2. send_welcome_email — new registration
   3. send_magic_link_email — anonymous lead claim
@@ -2513,7 +2588,8 @@ trackPageEvent("event_name", "page_name", { key: "value" });
   7. send_review_reply_notification — client receives provider reply (existing)
   8. send_withdrawal_form_email — legal@nevumo.com (existing)
   9. send_article14_notification — GDPR Art.14 on claimed profile
-- Trigger points: auth.py:223, auth.py:136, send_magic_links.py:43, leads.py:107, provider.py:379, provider.py:621, client.py:123, client.py:223
+  10. send_claim_welcome_email — welcome email after successful profile claim
+- Trigger points: auth.py:223, auth.py:136, send_magic_links.py:43, leads.py:107, provider.py:379, provider.py:621, client.py:123, client.py:223, providers.py:claim_provider
 - Railway env var: RESEND_API_KEY added
 - Development fallback: console.log when RESEND_API_KEY is empty
 - OAuth: Google + Facebook (future, UI placeholders exist)
@@ -2981,6 +3057,7 @@ reviews table:
 9. send_withdrawal_form_email — legal@nevumo.com (legal.py:86)
 10. send_article14_notification — GDPR Art.14 on claimed profile (provider.py:621)
 11. send_welcome_email — covers both client and provider roles
+12. send_claim_welcome_email — welcome email after successful profile claim (providers.py:claim_provider)
 
 **Email Notification Fixes (June 9, 2026) — COMPLETE:**
 - **Root cause diagnosed:** `except Exception: pass` silently swallowed all email errors in provider.py, client.py, and leads.py — replaced with `[EMAIL_WARNING]` logging in all 3 files
@@ -3009,7 +3086,7 @@ reviews table:
 ### Email Notification Incident Log
 
 **2026-06-09 — Email notifications fully operational:**
-- All 11 transactional emails confirmed working
+- All 12 transactional emails confirmed working
 - Direct lead → provider email: FIXED
 - Marketplace lead → all matched providers email: FIXED
 - Lead status change → client email: CONFIRMED WORKING
@@ -3077,6 +3154,54 @@ python scripts/seed_review_translations.py
 ---
 
 ## Future Tasks
+
+### Мултиезични transactional имейли и push нотификации (June 15, 2026)
+
+**Приоритет:** Висок — преди мек launch в PL/BG/SR  
+**Статус:** Планирана
+
+**Проблем:** Всички transactional имейли и push нотификации са hardcoded на английски.
+
+**Решение:**
+
+1. **Database schema change:**
+   - Добави поле `preferred_lang VARCHAR(10) DEFAULT 'en'` в `users` таблицата
+   - Създай Alembic миграция за новото поле
+   - Обнови registration endpoints да записват preferred_lang от registration form
+
+2. **Email translation infrastructure:**
+   - Добави email translation namespace-и в `translations` таблицата
+   - Конвенция: `email_{template_name}.subject`, `email_{template_name}.body`
+   - Seed scripts минимум за: en, bg, pl, sr (основни launch пазари)
+   - Примерни namespace-и: `email_welcome`, `email_password_reset`, `email_new_lead`, `email_claim_welcome`
+
+3. **Email service update:**
+   - Обнови `email_service.py` да приема `lang` параметър с fallback към 'en'
+   - Всички email методи да търсят преводи в translations таблицата
+   - Fallback chain: preferred_lang → 'en' → hardcoded английски
+
+4. **Update existing email calls:**
+   - Обнови всички съществуващи email извиквания да подават `lang` параметър
+   - Източници: preferred_lang от user record, или lang от request context
+   - Файлове за обновяване: auth.py, leads.py, provider.py, client.py, reviews.py
+
+5. **Push notifications (отделна под-задача):**
+   - Добави push notification translation namespace-и
+   - Обнови push notification service да ползва преводи
+   - Подкрепа за push notification body и title на всички 34 езика
+
+**Affected files:**
+- `apps/api/alembic/versions/` — нова миграция за preferred_lang
+- `apps/api/services/email_service.py` — lang параметър + translation lookup
+- `apps/api/routes/auth.py` — preferred_lang при registration
+- `apps/api/routes/leads.py` — lang при lead notification emails
+- `apps/api/routes/provider.py` — lang при provider notification emails
+- `apps/api/routes/client.py` — lang при client notification emails
+- `apps/api/scripts/` — seed scripts за email translation namespace-и
+
+**Estimated effort:** 4-6 часа за emails, 2-3 часа за push notifications
+
+---
 
 ### Geolocation Implementation (Standing Task)
 

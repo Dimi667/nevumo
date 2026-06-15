@@ -382,6 +382,26 @@ This withdrawal form was submitted via the Nevumo online form.
     </div></body></html>"""
         return self._send_email(provider_email, subject, html_body)
 
+    def send_claim_welcome_email(
+        self,
+        provider_email: str,
+        provider_name: str,
+    ) -> bool:
+        """Send welcome email after successful profile claim."""
+        dashboard_url = f"{self._app_url}/provider/dashboard"
+        subject = "Your Nevumo profile is now active"
+        html_body = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#333;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+    <h2 style="color:#f97316;">Your Nevumo profile is now active!</h2>
+    <p>Dear {provider_name},</p>
+    <p>Congratulations! Your profile has been successfully claimed and is now active on Nevumo.</p>
+    <p>You can start receiving client requests right away. Make sure to complete your profile information to increase your visibility.</p>
+    <p><a href="{dashboard_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Go to Dashboard</a></p>
+    <hr style="border:none;border-top:1px solid #e5e7eb;margin:30px 0;">
+    <p style="font-size:12px;color:#6b7280;">If you have any questions, feel free to contact our support team.</p>
+    </div></body></html>"""
+        return self._send_email(provider_email, subject, html_body)
+
 
 # Global email service instance
 email_service = EmailService()
