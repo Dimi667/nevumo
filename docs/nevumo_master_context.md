@@ -545,6 +545,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - `apps/web/components/GlobalFooter.tsx` — added `readCurrentCity(currentLang)` helper + city-lock logic as first two lines of `handleLanguageChange`
   - **Result**: Hero city is unchanged when user switches language. City changes only on explicit selection via `/izberi-grad`.
 - **Web Push Notifications (June 7, 2026)** — COMPLETE: pywebpush backend, VAPID keys, push_subscriptions table, push service, 3 API endpoints, Service Worker push/notificationclick handlers, usePushNotifications hook, provider settings toggle. Full coverage: providers notified on new leads + new reviews; clients notified on lead status changes + review replies.
+- **Claimed Profiles — Data Collection (June 14 2026):** Warsaw CEIDG scraper complete (`apps/scripts/collect_ceidg_providers.py`). Collected 2,375 unique providers (701 with email, 257 with phone). PKD codes: cleaning 81.21.Z/81.22.Z/81.29.Z, massage 96.04.Z/96.23.Z/86.90.A/86.99.D, plumbing 43.22.Z/43.21.Z. Multi-layer acquisition planned: CEIDG website re-scrape → email extractor → Fixly scraper → Bing API → SMS campaign. Full roadmap: `docs/claimed_profiles_plan.md`. Target: 3,000+ emails → 240-450 claimed profiles for Warsaw launch.
 - **Claimed Profiles — Backend (Task 2B, June 14 2026)** — COMPLETE: Claim endpoint pair added to apps/api/routes/providers.py:
   - GET /api/v1/providers/claim/{token} — public profile preview for claim landing page
   - POST /api/v1/providers/claim/{token} — authenticated claim action; validates role, deletes registration draft (detected by slug prefix "draft" + business_name = user email), links user_id to unclaimed profile, sets is_claimed=TRUE, clears claim_token, recalculates verification_level, sends Art. 14 GDPR email (non-blocking)
@@ -1645,6 +1646,7 @@ git push nevumo-git main  # архив на SSD
 - **Static Files URL Standardization** — Extend STATIC_FILES_BASE_URL pattern to other services that generate public URLs (e.g., QR codes, document uploads). Current implementation is specific to provider profile images; future services should use the same environment variable pattern for consistency across local and production environments.
 - **sw.js generation rule** — `sw.js` is a static committed file in `apps/web/public/sw.js` — no PWA library needed; postbuild appends push handlers via `[NEVUMO-CUSTOM-SW]` marker on every build
 - **Mobile tap zoom prevention** — `touch-action: manipulation` must be on all interactive elements globally in globals.css; input font-size must be `max(16px, 1em)` to prevent iOS auto-zoom; `max-width: 100%` on `*` prevents horizontal overflow. Do NOT revert these rules.
+- **Claimed Profiles Warsaw launch:** Full roadmap in `docs/claimed_profiles_plan.md`. Next: CEIDG website re-scrape, email extractor, Fixly scraper, Bing API, SMS campaign. Target: 3,000+ emails → 240-450 claimed profiles.
 
 ## Email Notification Incident Log
 
