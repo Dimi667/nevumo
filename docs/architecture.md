@@ -2413,10 +2413,16 @@ Provider ↔ Client switching works. Updates user role via API and redirects to 
 
 ---
 
-## Claimed Profiles & Claim Landing Page (June 15, 2026)
+## Claimed Profiles & Claim Landing Page (June 15, 2026) ✅ ЗАВЪРШЕНА (16 юни 2026)
 
 ### Overview
 Claim functionality allows providers to claim pre-created profiles (from scraped data) by visiting a unique claim token URL. This bridges the gap between scraped provider data and active provider accounts.
+
+### Discovered pattern — важна бележка
+При паралелна разработка frontend/backend дефинирай точния response format в промпта.
+Claim page очаква директен обект (не wrapper):
+✅ Правилно: { id, business_name, category_slug, city_slug, is_claimed, data_source }
+❌ Грешно: { success: true, data: { ... } }
 
 ### Frontend Implementation
 - **Page**: `apps/web/app/[lang]/claim/[token]/page.tsx` — Server Component
@@ -2485,6 +2491,12 @@ Claim functionality allows providers to claim pre-created profiles (from scraped
 - Server-side cookie check: `cookies().get('nevumo_auth_token')`
 - No client-side auth checks
 - Determines whether to show claim button or login/register CTAs
+
+### E2E Testing (June 16, 2026)
+- **Test 1 — Valid unclaimed profile**: ✅ PASS — business_name, translations, login/register buttons, category/city labels, no JS errors
+- **Test 2 — Invalid token**: ✅ PASS — shows not_found message with register CTA
+- **Test 3 — Login redirect**: ✅ PASS — redirects to `/bg/auth/login?redirect=/bg/claim/{token}`
+- **Fix applied**: Claim page updated to match API response format (commit 67ccc5a)
 
 ---
 

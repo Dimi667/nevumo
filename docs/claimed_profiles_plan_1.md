@@ -1,7 +1,7 @@
 # Nevumo — Claimed Profiles: Пълен план
 
-**Статус:** 🟡 В процес — Задача 2Б ✅ и 3А ✅ завършени
-**Последна актуализация:** 15 юни 2026
+**Статус:** 🟡 В процес — Задача 2Б ✅, 3А ✅ и 4А ✅ завършени
+**Последна актуализация:** 16 юни 2026
 **Приоритет:** 🔴 Висок — преди Warsaw outreach кампания
 
 ---
@@ -222,12 +222,16 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 
 ### 🟧 ФАЗА 4 — FRONTEND
 
-**Задача 4А — `/[lang]/claim/[token]` страница**
+**Задача 4А — `/[lang]/claim/[token]` страница** ✅ ЗАВЪРШЕНА (16 юни 2026)
 - Показва профила (само за четене): name, category, city
 - CTA: "Твой ли е този профил? Вземи го безплатно →"
 - При клик → регистрация/вход → профилът е твой
 - Redirect към Provider Dashboard след успех
-- **Модел: Kimi-2.6**
+- Welcome email при успешен claim (send_claim_welcome_email, non-blocking)
+- Translations: namespace 'claim', 12 ключа, 34 езика, 408 превода
+- E2E тестове: ✅ всички 3 теста преминаха успешно
+- Fix: claim page обновен да работи с директен API response format (commit 67ccc5a)
+- Файлове: apps/web/app/[lang]/claim/[token]/page.tsx, apps/api/routes/providers.py, apps/api/services/email_service.py
 
 **Задача 4Б — "Unclaimed" банер на Provider Full Page**
 - Видим само за некредентовани профили (`is_claimed = FALSE`)
@@ -316,6 +320,5 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token);
 4. Задача 5А — Bulk имейл кампания (Kimi-2.6) — изчаква 2А
 
 **Паралелно (може веднага, не чака overnight):**
-- Задача 4А — /[lang]/claim/[token] страница (Kimi-2.6) ← следваща
 - Задача 4Б — Unclaimed банер на Provider Full Page (Kimi-2.6)
 - Задача 3Б — Art. 14 Confirmation имейл шаблон (Claude)
