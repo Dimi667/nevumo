@@ -29,18 +29,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 interface ProviderData {
+  id: string;
   business_name: string;
-  slug: string;
+  category_slug: string | null;
+  city_slug: string | null;
   is_claimed: boolean;
-  city_name: string;
-  category_slug: string;
   data_source: string;
-}
-
-interface ApiResponse {
-  success: boolean;
-  data?: ProviderData;
-  error?: { code: string; message: string };
 }
 
 function getInitials(name: string): string {
@@ -51,7 +45,7 @@ function getInitials(name: string): string {
     .join('');
 }
 
-async function fetchProviderByToken(token: string): Promise<ApiResponse> {
+async function fetchProviderByToken(token: string): Promise<ProviderData | null> {
   try {
     const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     const response = await fetch(
@@ -60,12 +54,12 @@ async function fetchProviderByToken(token: string): Promise<ApiResponse> {
     );
 
     if (!response.ok) {
-      return { success: false };
+      return null;
     }
 
-    return await response.json() as ApiResponse;
+    return await response.json() as ProviderData;
   } catch {
-    return { success: false };
+    return null;
   }
 }
 
@@ -105,7 +99,7 @@ export default async function ClaimPage({ params }: PageProps) {
   const isAuthenticated = !!authToken;
 
   const result = await fetchProviderByToken(token);
-  const isValid = result.success && result.data && !result.data.is_claimed;
+  const isValid = result && !result.is_claimed;
 
   // Handle claim action if authenticated and form submitted
   // Note: In a real implementation, this would be a server action or form handler
@@ -113,7 +107,7 @@ export default async function ClaimPage({ params }: PageProps) {
 
   return (
     <div className="bg-white">
-      {isValid && result.data ? (
+      {isValid && result ? (
         /* STATE A: Token valid and not claimed */
         <main className="max-w-2xl mx-auto px-6 pt-6 pb-12">
           {/* HERO SECTION */}
@@ -130,21 +124,21 @@ export default async function ClaimPage({ params }: PageProps) {
           <div className="max-w-sm mx-auto mt-8 p-6 bg-white rounded-2xl shadow-md border border-gray-200">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-xl font-bold flex-shrink-0">
-                {getInitials(result.data.business_name)}
+                {getInitials(result.business_name)}
               </div>
               <div>
                 <h3 className="font-bold text-xl text-gray-900">
-                  {result.data.business_name}
+                  {result.business_name}
                 </h3>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-2 mt-4">
               <span className="bg-gray-100 text-gray-600 text-sm px-3 py-1 rounded-full">
-                {t(claimT, 'category_label', 'Category')}: {result.data.category_slug}
+                {t(claimT, 'category_label', 'Category')}: {result.category_slug || 'N/A'}
               </span>
               <span className="bg-orange-50 text-orange-600 text-sm px-3 py-1 rounded-full">
-                {t(claimT, 'city_label', 'City')}: {result.data.city_name}
+                {t(claimT, 'city_label', 'City')}: {result.city_slug || 'N/A'}
               </span>
             </div>
 
@@ -211,7 +205,7 @@ export default async function ClaimPage({ params }: PageProps) {
         <main className="max-w-md mx-auto px-6 py-20 text-center">
           <div className="text-5xl mb-6">🔒</div>
           <h2 className="text-2xl font-bold text-gray-900">
-            {result.data?.is_claimed 
+            {result?.is_claimed
               ? t(claimT, 'already_claimed', 'This profile has already been claimed.')
               : t(claimT, 'not_found', 'This profile was not found or has already been claimed.')
             }
