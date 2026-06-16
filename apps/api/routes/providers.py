@@ -285,6 +285,7 @@ async def list_providers(
 @router.get("/providers/by-claim-token/{token}")
 async def get_provider_by_claim_token_endpoint(
     token: str,
+    lang: str = Query(default="en"),
     db: Session = Depends(get_db),
 ) -> dict:
     """Get provider by claim token (public endpoint)."""
@@ -294,18 +295,30 @@ async def get_provider_by_claim_token_endpoint(
             status_code=404,
             detail={"code": "NOT_FOUND", "message": "Provider not found"}
         )
-    
-    # Get first city slug
+
+    # Get first city slug and localized city_name
     first_city_row = (
         db.query(ProviderCity)
         .filter(ProviderCity.provider_id == provider.id)
         .first()
     )
     city_slug = None
+    city_name = None
     if first_city_row:
         city = db.query(Location).filter(Location.id == first_city_row.city_id).first()
-        city_slug = city.slug if city else None
-    
+        if city:
+            city_slug = city.slug
+            # Try to get localized city_name
+            city_translation = db.query(LocationTranslation).filter(
+                LocationTranslation.location_id == city.id,
+                LocationTranslation.lang == lang
+            ).first()
+            if city_translation:
+                city_name = city_translation.city_name
+            else:
+                # Fallback to city_slug if translation not found
+                city_name = city_slug
+
     # Get first service category slug
     first_service = (
         db.query(Service)
@@ -316,12 +329,27 @@ async def get_provider_by_claim_token_endpoint(
     if first_service:
         category = db.query(Category).filter(Category.id == first_service.category_id).first()
         category_slug = category.slug if category else None
-    
+
+    # Get claimed_count in the same city (social proof)
+    claimed_count = 0
+    if first_city_row:
+        try:
+            claimed_count = db.query(func.count(Provider.id)).join(
+                ProviderCity, Provider.id == ProviderCity.provider_id
+            ).filter(
+                ProviderCity.city_id == first_city_row.city_id,
+                Provider.is_claimed == True
+            ).scalar() or 0
+        except Exception:
+            claimed_count = 0
+
     return {
         "id": str(provider.id),
         "business_name": provider.business_name,
         "category_slug": category_slug,
         "city_slug": city_slug,
+        "city_name": city_name,
+        "claimed_count": claimed_count,
         "is_claimed": provider.is_claimed,
         "data_source": provider.data_source
     }
