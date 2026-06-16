@@ -1,6 +1,6 @@
 # Nevumo — Claimed Profiles: Пълен план
 
-**Статус:** 🟡 В процес — Задача 2Б ✅, 3А ✅ и 4А ✅ завършени
+**Статус:** 🟡 В процес — Задача 2Б ✅, 3А ✅, 4А ✅ и 4А редизайн ✅ завършени
 **Последна актуализация:** 16 юни 2026
 **Приоритет:** 🔴 Висок — преди Warsaw outreach кампания
 
@@ -237,6 +237,14 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - E2E тестове: ✅ всички 3 теста преминаха успешно
 - Fix: claim page обновен да работи с директен API response format (commit 67ccc5a)
 - Файлове: apps/web/app/[lang]/claim/[token]/page.tsx, apps/api/routes/providers.py, apps/api/services/email_service.py
+
+**Редизайн (16 юни 2026) ✅**
+- Висококонверсионен дизайн: urgency bar, leads teaser, benefits grid, Fixly comparison, social proof
+- Social proof: 3-фазна логика (zero/few/many) с {city} и {count} параметри
+- city_name локализиран от location_translations (не city_slug)
+- claimed_count от API за динамичен social proof
+- 1,190 нови превода: seed_claim_v2_p1.py + seed_claim_v2_p2.py (34 езика × 35 ключа)
+- E2E тестове: ✅ 4/4 минаха включително PL локализация
 
 **Задача 4Б — "Unclaimed" банер на Provider Full Page**
 - Видим само за некредентовани профили (`is_claimed = FALSE`)
