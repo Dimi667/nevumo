@@ -99,19 +99,24 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - Открит проблем: 176 реда с партньорски бизнес имена ("1. FIRM A, 2. FIRM B
   wspólnik s.c.") — seed скриптът (2А) взема само първото име преди запетаята
 
-**Задача 1В — CEIDG re-scrape за уебсайтове** 🟡 В процес (15 юни 2026)
+**Задача 1В — CEIDG re-scrape за уебсайтове** ✅ Завършена (16 юни 2026)
 - Скрипт: apps/scripts/rescrape_websites.py (Python 3.13, sync Playwright)
-- Пуснат overnight: 15 юни 2026
+- Изпълнен: 16 юни 2026
+- Input: apps/scripts/warszawa_providers_clean.csv (2,122 реда)
 - Output: apps/scripts/warszawa_providers_with_websites.csv
-- Очакван резултат: 5-15% от 2,122 реда с уебсайт (100-300 уебсайта)
-- Технически бележки за бъдещи CEIDG скриптове:
-  * CEIDG API (dane.biznes.gov.pl) е мъртво — връща 404
-  * Директен URL по NIP не работи (връща "Brak wpisu")
-  * Търсенето изисква минимум 2 критерия: NIP + PKD код
+- Резултат: 51 уебсайта намерени от 2,122 реда (2.4%)
+- Бележка: Повечето малки полски фирми не попълват уебсайт в CEIDG.
+  Останалите 2,071 без уебсайт ще се обработят в Задача 1Ж (Bing API)
+- Технически бележки (критично за бъдещи CEIDG скриптове):
+  * CEIDG API (dane.biznes.gov.pl) — мъртво, връща 404
+  * Директен URL по NIP не работи
+  * Търсенето изисква NIP (#MainContentForm_txtNip) + PKD (#MainContentForm_txtPkd)
+  * Бутон: #MainContentForm_btnInputSearch
   * headless=False задължително — Akamai CDN блокира headless Chromium
-  * Label за уебсайт е "Adres strony internetowej" (НЕ "Strona" — CEIDG го е сменил)
+  * Label за уебсайт: "Adres strony internetowej" (НЕ "Strona" — CEIDG го е сменил)
   * Selector за резултати: a[href*='SearchDetails.aspx']
   * Selector за полета: section.block → dt/dd двойки
+  * sync_playwright, viewport 1920x1080, реален Chrome UA
 
 **Задача 1Г — Email extractor от уебсайтове**
 - Playwright скрипт посещава всеки уебсайт от 1В
@@ -309,14 +314,10 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token);
 
 ## Следваща незабавна стъпка
 
-**Работи overnight (15 юни 2026):**
-- Задача 1В: apps/scripts/rescrape_websites.py (CEIDG уебсайтове)
-- Задача 1Е: apps/scripts/scrape_panoramafirm.py (Panoramafirm бизнес имена + уебсайтове, 780 records/page 32)
-
-**Следва (след overnight резултати):**
-1. Задача 1Г — Email extractor от CEIDG уебсайтове (Kimi-2.6) — изчаква 1В
-2. Задача 1З — Email extractor от Panoramafirm уебсайтове (Kimi-2.6) — изчаква 1Е
-3. Задача 2А — seed_unclaimed_providers.py (Kimi-2.6) — изчаква 1В + 1Е
+1. Задача 1Ж — Bing API за уебсайтове (Kimi-2.6) — за останалите 2,071 фирми без уебсайт
+2. Задача 1Г — Email extractor от CEIDG уебсайтове (Kimi-2.6) — изчаква повече уебсайтове
+3. Задача 1З — Email extractor от Panoramafirm уебсайтове (Kimi-2.6) — изчаква повече уебсайтове
+4. Задача 2А — seed_unclaimed_providers.py (Kimi-2.6) — изчаква 1В ✅
 4. Задача 5А — Bulk имейл кампания (Kimi-2.6) — изчаква 2А
 
 **Паралелно (може веднага, не чака overnight):**

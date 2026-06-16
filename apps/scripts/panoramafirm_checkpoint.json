@@ -1,0 +1,15 @@
+{
+  "cleaning": {
+    "page": 1389,
+    "done": false,
+    "total": 3150
+  },
+  "plumbing": {
+    "page": 1,
+    "done": false
+  },
+  "massage": {
+    "page": 1,
+    "done": false
+  }
+}

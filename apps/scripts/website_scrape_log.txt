@@ -222,3 +222,1061 @@
 2026-06-15 15:14:50 - No results for NIP 1181965108 / PKD 96.04.Z
 2026-06-15 15:14:55 - No results for NIP 9222823497 / PKD 96.04.Z
 2026-06-15 15:14:59 - No results for NIP 5252581447 / PKD 96.04.Z
+2026-06-15 15:15:05 - No results for NIP 1181659067 / PKD 96.04.Z
+2026-06-15 15:15:11 - No results for NIP 6442828489 / PKD 96.04.Z
+2026-06-15 15:15:15 - No results for NIP 5252459410 / PKD 96.04.Z
+2026-06-15 15:15:20 - No results for NIP 7742848893 / PKD 96.04.Z
+2026-06-15 15:15:25 - No results for NIP 9521087971 / PKD 96.04.Z
+2026-06-15 15:15:31 - No results for NIP 5272292479 / PKD 96.04.Z
+2026-06-15 15:15:37 - No results for NIP 9522018311 / PKD 96.04.Z
+2026-06-15 15:15:43 - No results for NIP 9512268302 / PKD 96.04.Z
+2026-06-15 15:15:49 - No results for NIP 8811205941 / PKD 96.04.Z
+2026-06-15 15:15:54 - No results for NIP 5222384914 / PKD 96.04.Z
+2026-06-15 15:15:59 - No results for NIP 8392724256 / PKD 96.04.Z
+2026-06-15 15:16:04 - No results for NIP 1131395040 / PKD 96.04.Z
+2026-06-15 15:16:09 - No results for NIP 1182231319 / PKD 96.04.Z
+2026-06-15 15:16:15 - No results for NIP 5252422832 / PKD 96.04.Z
+2026-06-15 15:16:21 - No results for NIP 5222296073 / PKD 96.04.Z
+2026-06-15 15:16:26 - No results for NIP 1180351232 / PKD 96.04.Z
+2026-06-15 15:16:30 - No results for NIP 1251307340 / PKD 96.04.Z
+2026-06-15 15:16:34 - No results for NIP 5252266102 / PKD 96.04.Z
+2026-06-15 15:16:39 - No results for NIP 1180572602 / PKD 96.04.Z
+2026-06-15 15:16:43 - No results for NIP 1132563456 / PKD 96.04.Z
+2026-06-15 15:16:49 - No results for NIP 6961606497 / PKD 96.04.Z
+2026-06-15 15:16:53 - No results for NIP 1182187676 / PKD 96.04.Z
+2026-06-15 15:16:57 - No results for NIP 5221966749 / PKD 96.04.Z
+2026-06-15 15:17:03 - No results for NIP 7742848812 / PKD 96.04.Z
+2026-06-15 15:17:08 - No results for NIP 9521864245 / PKD 96.04.Z
+2026-06-15 15:17:12 - No results for NIP 1181714895 / PKD 96.04.Z
+2026-06-15 15:17:18 - No results for NIP 5262467291 / PKD 96.04.Z
+2026-06-15 15:17:24 - No results for NIP 1132583849 / PKD 96.04.Z
+2026-06-15 15:17:28 - No results for NIP 5272482978 / PKD 96.04.Z
+2026-06-15 15:17:33 - No results for NIP 5971637820 / PKD 96.04.Z
+2026-06-15 15:17:38 - No results for NIP 7542792780 / PKD 96.04.Z
+2026-06-15 15:17:44 - No results for NIP 7991947074 / PKD 96.04.Z
+2026-06-15 15:17:50 - No results for NIP 9512289043 / PKD 96.04.Z
+2026-06-15 15:17:55 - No results for NIP 7010072772 / PKD 96.04.Z
+2026-06-15 15:18:00 - No results for NIP 7591735233 / PKD 96.04.Z
+2026-06-15 15:18:05 - No results for NIP 5252041998 / PKD 86.90.A
+2026-06-15 15:18:10 - No results for NIP 1181499132 / PKD 86.90.A
+2026-06-15 15:18:14 - No results for NIP 5730101064 / PKD 86.90.A
+2026-06-15 15:18:20 - No results for NIP 9521246702 / PKD 86.90.A
+2026-06-15 15:18:24 - No results for NIP 1132258658 / PKD 86.90.A
+2026-06-15 15:18:28 - No results for NIP 1230053495 / PKD 86.90.A
+2026-06-15 15:18:34 - No results for NIP 5271693242 / PKD 86.90.A
+2026-06-15 15:18:39 - No results for NIP 1180155241 / PKD 86.90.A
+2026-06-15 15:18:45 - No results for NIP 6551791839 / PKD 86.90.A
+2026-06-15 15:18:50 - No results for NIP 5251005210 / PKD 86.90.A
+2026-06-15 15:18:50 - Checkpoint saved: 250 rows processed
+2026-06-15 15:18:55 - No results for NIP 9510043579 / PKD 86.90.A
+2026-06-15 15:19:01 - No results for NIP 7123092902 / PKD 96.23.Z
+2026-06-15 15:19:05 - No results for NIP 9522126696 / PKD 96.23.Z
+2026-06-15 15:19:11 - No results for NIP 1132390659 / PKD 96.23.Z
+2026-06-15 15:19:16 - No results for NIP 5221021345 / PKD 96.23.Z
+2026-06-15 15:19:22 - No results for NIP 8121683031 / PKD 96.23.Z
+2026-06-15 15:19:27 - No results for NIP 5252384899 / PKD 96.23.Z
+2026-06-15 15:19:33 - No results for NIP 1132648603 / PKD 96.23.Z
+2026-06-15 15:19:39 - No results for NIP 5811359393 / PKD 96.23.Z
+2026-06-15 15:19:44 - No results for NIP 1180032739 / PKD 96.23.Z
+2026-06-15 15:19:49 - No results for NIP 1131445766 / PKD 96.23.Z
+2026-06-15 15:19:54 - No results for NIP 9661367050 / PKD 96.23.Z
+2026-06-15 15:20:37 - Found: NIP=5211016383 website=https://www.4shooter.com
+2026-06-15 15:20:42 - No results for NIP 5241643104 / PKD 96.23.Z
+2026-06-15 15:21:13 - Found: NIP=7161261235 website=https://www.abba1.pl
+2026-06-15 15:21:17 - No results for NIP 1132235858 / PKD 96.23.Z
+2026-06-15 15:21:45 - No results for NIP 9511853872 / PKD 96.23.Z
+2026-06-15 15:22:17 - Found: NIP=6691503467 website=https://adeptus.com.pl
+2026-06-15 15:23:42 - Found: NIP=5222967314 website=https://edu-consul.com
+2026-06-15 15:24:45 - Checkpoint saved: 300 rows processed
+2026-06-15 15:24:53 - Found: NIP=7282169913 website=https://www.agnieszkasliskowska.pl
+2026-06-15 15:25:24 - Found: NIP=9521727258 website=https://www.aquaspa.pl
+2026-06-15 15:25:47 - Found: NIP=5221001621 website=https://www.visage.pl
+2026-06-15 15:26:14 - No results for NIP 9511541894 / PKD 96.23.Z
+2026-06-15 15:26:20 - No results for NIP 8521681538 / PKD 96.23.Z
+2026-06-15 15:26:48 - No results for NIP 5262740597 / PKD 96.23.Z
+2026-06-15 15:27:32 - No results for NIP 5242913327 / PKD 96.23.Z
+2026-06-15 15:27:45 - No results for NIP 1231603325 / PKD 96.23.Z
+2026-06-15 15:28:14 - Found: NIP=5260101002 website=https://www.berckana.pl
+2026-06-15 15:28:42 - No results for NIP 1251586831 / PKD 96.23.Z
+2026-06-15 15:28:48 - No results for NIP 8212648201 / PKD 96.23.Z
+2026-06-15 15:29:46 - No results for NIP 5212993190 / PKD 86.90.A
+2026-06-15 15:30:49 - Checkpoint saved: 350 rows processed
+2026-06-15 15:31:10 - No results for NIP 9521887157 / PKD 86.90.A
+2026-06-15 15:31:24 - No results for NIP 5221647820 / PKD 86.90.A
+2026-06-15 15:32:50 - No results for NIP 7542627472 / PKD 86.90.A
+2026-06-15 15:33:23 - Found: NIP=1132725999 website=https://natwoim.pl/
+2026-06-15 15:35:01 - Found: NIP=7581086827 website=https://beautyline.net.pl
+2026-06-15 15:36:02 - No results for NIP 5223100416 / PKD 86.90.A
+2026-06-15 15:37:16 - Checkpoint saved: 400 rows processed
+2026-06-15 15:37:29 - No results for NIP 5261582647 / PKD 86.99.D
+2026-06-15 15:37:49 - No results for NIP 6452318525 / PKD 86.99.D
+2026-06-15 15:38:28 - Found: NIP=8371651055 website=https://acdictum.pl
+2026-06-15 15:38:36 - Found: NIP=9521657598 website=https://acstudiofryzur.pl
+2026-06-15 15:39:30 - Found: NIP=5251143202 website=https://www.adammpietrzak.pl
+2026-06-15 15:40:26 - No results for NIP 7221331555 / PKD 86.99.D
+2026-06-15 15:40:31 - No results for NIP 5291635650 / PKD 86.99.D
+2026-06-15 15:42:55 - No results for NIP 5212597376 / PKD 86.99.D
+2026-06-15 15:43:26 - Checkpoint saved: 450 rows processed
+2026-06-15 15:43:39 - No results for NIP 7571143297 / PKD 86.99.D
+2026-06-15 15:44:46 - Found: NIP=7711007253 website=https://www.biofeedback.info.pl
+2026-06-15 15:45:04 - No results for NIP 1132106782 / PKD 86.99.D
+2026-06-15 15:46:04 - No results for NIP 7221628976 / PKD 43.22.Z
+2026-06-15 15:46:10 - No results for NIP 5262626097 / PKD 43.22.Z
+2026-06-15 15:46:15 - No results for NIP 5212858374 / PKD 43.22.Z
+2026-06-15 15:46:36 - No results for NIP 5222258606 / PKD 43.22.Z
+2026-06-15 15:46:59 - No results for NIP 9511166947 / PKD 43.22.Z
+2026-06-15 15:47:33 - No results for NIP 5241015715 / PKD 43.22.Z
+2026-06-15 15:49:28 - Checkpoint saved: 500 rows processed
+2026-06-15 15:49:50 - No results for NIP 5221541820 / PKD 43.22.Z
+2026-06-15 15:49:55 - No results for NIP 5241733801 / PKD 43.22.Z
+2026-06-15 15:50:50 - Found: NIP=5211622994 website=https://www.unikanserwis.eu
+2026-06-15 15:51:46 - No results for NIP 5271059404 / PKD 43.22.Z
+2026-06-15 15:52:56 - Found: NIP=9512077944 website=https://klimatyzacja2p.pl
+2026-06-15 15:53:26 - No results for NIP 9511959553 / PKD 43.22.Z
+2026-06-15 15:53:50 - Found: NIP=5213014253 website=https://www.e-kacperkowo.pl
+2026-06-15 15:54:11 - No results for NIP 5212037507 / PKD 43.21.Z
+2026-06-15 15:54:16 - No results for NIP 8221974733 / PKD 43.21.Z
+2026-06-15 15:54:40 - Found: NIP=1130866715 website=https://www.wars-sped.pl; www.mat-serwis.waw.pl
+2026-06-15 15:54:54 - No results for NIP 5272424768 / PKD 43.21.Z
+2026-06-15 15:55:42 - No results for NIP 5252287363 / PKD 43.21.Z
+2026-06-15 15:55:42 - Checkpoint saved: 550 rows processed
+2026-06-15 15:56:04 - Found: NIP=5611314463 website=https://www.400kv.pl
+2026-06-15 15:56:19 - Found: NIP=5242582149 website=https://www.4thebest.pl
+2026-06-15 15:56:26 - Found: NIP=5213446484 website=https://abbapater.org
+2026-06-15 15:56:39 - No results for NIP 5221912185 / PKD 81.21.Z
+2026-06-15 15:56:43 - No results for NIP 5261165033 / PKD 81.21.Z
+2026-06-15 15:56:55 - No results for NIP 5272641141 / PKD 81.21.Z
+2026-06-15 15:58:55 - No results for NIP 5241548239 / PKD 81.21.Z
+2026-06-15 15:59:00 - No results for NIP 8381367338 / PKD 81.21.Z
+2026-06-15 15:59:59 - No results for NIP 5261581501 / PKD 81.22.Z
+2026-06-15 16:00:03 - No results for NIP 5242765068 / PKD 81.22.Z
+2026-06-15 16:00:27 - Found: NIP=5321618485 website=https://agakubish.weebly.com
+2026-06-15 16:01:03 - No results for NIP 5241409130 / PKD 81.22.Z
+2026-06-15 16:01:51 - Checkpoint saved: 600 rows processed
+2026-06-15 16:01:56 - No results for NIP 5271693325 / PKD 81.22.Z
+2026-06-15 16:03:43 - No results for NIP 1251725729 / PKD 81.22.Z
+2026-06-15 16:05:17 - Found: NIP=5221908166 website=https://www.aludomdesign.com
+2026-06-15 16:08:45 - No results for NIP 8241487396 / PKD 81.29.Z
+2026-06-15 16:09:08 - No results for NIP 8221899339 / PKD 96.04.Z
+2026-06-15 16:09:14 - No results for NIP 5221581357 / PKD 96.04.Z
+2026-06-15 16:09:14 - Checkpoint saved: 650 rows processed
+2026-06-15 16:09:58 - No results for NIP 1181752542 / PKD 96.04.Z
+2026-06-15 16:10:14 - No results for NIP 5261350546 / PKD 96.04.Z
+2026-06-15 16:12:46 - No results for NIP 5213518396 / PKD 96.04.Z
+2026-06-15 16:13:40 - No results for NIP 5211312992 / PKD 96.04.Z
+2026-06-15 16:13:56 - No results for NIP 7262350182 / PKD 96.04.Z
+2026-06-15 16:14:06 - Found: NIP=5341280888 website=https://www.serwiskwiatowy.pl
+2026-06-15 16:16:42 - Checkpoint saved: 700 rows processed
+2026-06-15 16:16:58 - No results for NIP 5252414100 / PKD 96.23.Z
+2026-06-15 16:17:05 - No results for NIP 1251323706 / PKD 96.23.Z
+2026-06-15 16:17:12 - No results for NIP 5241280280 / PKD 96.23.Z
+2026-06-15 16:17:19 - No results for NIP 5241429859 / PKD 96.23.Z
+2026-06-15 16:17:26 - No results for NIP 5221870179 / PKD 96.23.Z
+2026-06-15 16:17:35 - Found: NIP=5321749230 website=http://www.bali-spa.pl/
+2026-06-15 16:19:07 - No results for NIP 8212466227 / PKD 96.23.Z
+2026-06-15 16:19:25 - Found: NIP=9511151779 website=https://www.aveECO.pl
+2026-06-15 16:19:35 - Found: NIP=5341821752 website=https://www.intrastat24.pl
+2026-06-15 16:21:35 - Found: NIP=5422490880 website=https://www.sejwa.com
+2026-06-15 16:21:41 - No results for NIP 5222878697 / PKD 96.23.Z
+2026-06-15 16:21:51 - Found: NIP=5241012415 website=https://WWW.WHITESPORT.PL
+2026-06-15 16:23:03 - No results for NIP 5251501280 / PKD 96.23.Z
+2026-06-15 16:23:56 - Checkpoint saved: 750 rows processed
+2026-06-15 16:25:39 - No results for NIP 5211089844 / PKD 86.90.A
+2026-06-15 16:26:02 - No results for NIP 5271976980 / PKD 86.90.A
+2026-06-15 16:26:09 - No results for NIP 5212721416 / PKD 86.90.A
+2026-06-15 16:27:03 - Found: NIP=5641545084 website=https://krainaterapii.pl
+2026-06-15 16:27:37 - No results for NIP 5261546077 / PKD 86.90.A
+2026-06-15 16:28:21 - Found: NIP=6641558710 website=https://www.auravitae.pl
+2026-06-15 16:28:39 - Found: NIP=5243024902 website=https://bielska-psycholog.pl/
+2026-06-15 16:30:33 - No results for NIP 5213770813 / PKD 86.99.D
+2026-06-15 16:31:10 - Found: NIP=1130910304 website=https://www.psychoterapiaanima.pl
+2026-06-15 16:31:10 - Checkpoint saved: 800 rows processed
+2026-06-15 16:31:17 - No results for NIP 8133883965 / PKD 86.99.D
+2026-06-15 16:32:35 - No results for NIP 7161012609 / PKD 86.99.D
+2026-06-15 16:33:01 - No results for NIP 1231588778 / PKD 86.99.D
+2026-06-15 16:34:27 - No results for NIP 5241098428 / PKD 86.99.D
+2026-06-15 16:34:33 - No results for NIP 5241198785 / PKD 86.99.D
+2026-06-15 16:34:39 - No results for NIP 5211272672 / PKD 86.99.D
+2026-06-15 16:35:21 - No results for NIP 5262292526 / PKD 86.99.D
+2026-06-15 16:36:05 - Found: NIP=5252031942 website=https://www.abaklim.pl
+2026-06-15 16:36:31 - No results for NIP 1132131946 / PKD 43.22.Z
+2026-06-15 16:37:17 - Found: NIP=9730281890 website=https://uslugizlotaraczka.pl
+2026-06-15 16:38:21 - Checkpoint saved: 850 rows processed
+2026-06-15 16:39:52 - No results for NIP 8882803112 / PKD 43.22.Z
+2026-06-15 16:40:10 - Found: NIP=1180026549 website=https://phup.pl
+2026-06-15 16:41:02 - No results for NIP 5241352329 / PKD 43.21.Z
+2026-06-15 16:41:09 - No results for NIP 9521370388 / PKD 43.21.Z
+2026-06-15 16:41:15 - No results for NIP 5271175725 / PKD 43.21.Z
+2026-06-15 16:41:56 - No results for NIP 8261336909 / PKD 43.21.Z
+2026-06-15 16:42:02 - No results for NIP 1251661099 / PKD 43.21.Z
+2026-06-15 16:42:45 - No results for NIP 5261488635 / PKD 43.21.Z
+2026-06-15 16:42:51 - No results for NIP 5271417967 / PKD 43.21.Z
+2026-06-15 16:42:57 - No results for NIP 8212247873 / PKD 43.21.Z
+2026-06-15 16:44:05 - No results for NIP 8241044954 / PKD 81.22.Z
+2026-06-15 16:45:24 - Checkpoint saved: 900 rows processed
+2026-06-15 16:46:15 - No results for NIP 5262464430 / PKD 81.22.Z
+2026-06-15 16:46:23 - No results for NIP 5242346851 / PKD 81.22.Z
+2026-06-15 16:46:32 - Found: NIP=5252101401 website=https://www.ad-dom.com.pl
+2026-06-15 16:47:05 - No results for NIP 1250943223 / PKD 96.04.Z
+2026-06-15 16:47:50 - Found: NIP=5691202995 website=https://www.retropasje.pl
+2026-06-15 16:49:38 - No results for NIP 5241913791 / PKD 96.23.Z
+2026-06-15 16:49:44 - No results for NIP 5261124123 / PKD 96.23.Z
+2026-06-15 16:49:51 - No results for NIP 5291828136 / PKD 96.23.Z
+2026-06-15 16:51:22 - No results for NIP 7262663722 / PKD 96.23.Z
+2026-06-15 16:51:47 - No results for NIP 8251986801 / PKD 96.23.Z
+2026-06-15 16:51:53 - No results for NIP 5273182103 / PKD 96.23.Z
+2026-06-15 16:52:16 - No results for NIP 1230894295 / PKD 96.23.Z
+2026-06-15 16:52:23 - No results for NIP 1182308803 / PKD 96.23.Z
+2026-06-15 16:52:34 - Checkpoint saved: 950 rows processed
+2026-06-15 16:54:04 - No results for NIP 5243001781 / PKD 86.90.A
+2026-06-15 16:57:51 - No results for NIP 5272246798 / PKD 43.22.Z
+2026-06-15 16:58:17 - No results for NIP 1250446097 / PKD 43.21.Z
+2026-06-15 16:58:33 - No results for NIP 7581577376 / PKD 43.21.Z
+2026-06-15 16:58:59 - No results for NIP 9222697673 / PKD 81.21.Z
+2026-06-15 17:00:02 - Checkpoint saved: 1000 rows processed
+2026-06-15 17:01:41 - No results for NIP 5214059766 / PKD 96.23.Z
+2026-06-15 17:03:10 - No results for NIP 5213320412 / PKD 86.90.A
+2026-06-15 17:05:07 - No results for NIP 9512333005 / PKD 86.99.D
+2026-06-15 17:05:32 - No results for NIP 5242245021 / PKD 43.22.Z
+2026-06-15 17:05:39 - No results for NIP 5214079059 / PKD 43.22.Z
+2026-06-15 17:07:28 - Checkpoint saved: 1050 rows processed
+2026-06-15 17:09:31 - No results for NIP 5671807063 / PKD 81.21.Z
+2026-06-15 17:09:38 - No results for NIP 5221297805 / PKD 81.21.Z
+2026-06-15 17:10:16 - Found: NIP=5251055828 website=https://www.foto-kurier.pl
+2026-06-15 17:11:28 - Found: NIP=5222649614 website=https://www.alerobale.pl
+2026-06-15 17:11:54 - No results for NIP 9512642433 / PKD 81.21.Z
+2026-06-15 17:14:05 - No results for NIP 5272548631 / PKD 81.21.Z
+2026-06-15 17:14:49 - Checkpoint saved: 1100 rows processed
+2026-06-15 17:15:46 - No results for NIP 9511620300 / PKD 81.21.Z
+2026-06-15 17:16:41 - No results for NIP 5211306460 / PKD 81.21.Z
+2026-06-15 17:21:18 - No results for NIP 5242238498 / PKD 81.22.Z
+2026-06-15 17:22:14 - Checkpoint saved: 1150 rows processed
+2026-06-15 17:23:21 - Found: NIP=7010150064 website=https://www.alert-trela.pl
+2026-06-15 17:23:54 - No results for NIP 7231241747 / PKD 81.29.Z
+2026-06-15 17:27:03 - Found: NIP=5242469329 website=https://www.allaccess.pl
+2026-06-15 17:27:10 - No results for NIP 5252175150 / PKD 96.04.Z
+2026-06-15 17:27:45 - No results for NIP 5271381608 / PKD 96.04.Z
+2026-06-15 17:28:00 - No results for NIP 5242622498 / PKD 96.04.Z
+2026-06-15 17:28:07 - No results for NIP 5212940911 / PKD 96.04.Z
+2026-06-15 17:28:39 - No results for NIP 9522156964 / PKD 96.04.Z
+2026-06-15 17:29:14 - No results for NIP 8241725772 / PKD 96.04.Z
+2026-06-15 17:29:32 - Checkpoint saved: 1200 rows processed
+2026-06-15 17:31:12 - Found: NIP=1181891060 website=https://www.bikerstudio.com.pl
+2026-06-15 17:31:44 - No results for NIP 8132830470 / PKD 96.04.Z
+2026-06-15 17:32:18 - No results for NIP 5213728113 / PKD 96.04.Z
+2026-06-15 17:33:36 - No results for NIP 1132239187 / PKD 96.23.Z
+2026-06-15 17:34:54 - No results for NIP 5342213552 / PKD 96.23.Z
+2026-06-15 17:35:49 - Found: NIP=5220053780 website=https://www.dana.com.pl
+2026-06-15 17:36:53 - Found: NIP=9512192332 website=https://www.effor.pl
+2026-06-15 17:37:01 - Checkpoint saved: 1250 rows processed
+2026-06-15 17:42:44 - No results for NIP 5222909825 / PKD 96.23.Z
+2026-06-15 17:42:50 - No results for NIP 5342418136 / PKD 96.23.Z
+2026-06-15 17:42:57 - No results for NIP 5262597361 / PKD 96.23.Z
+2026-06-15 17:43:43 - Found: NIP=5272467683 website=https://www.freestylegirls.com
+2026-06-15 17:43:59 - Found: NIP=6292414911 website=https://Www.fryzjerwczapce.pl
+2026-06-15 17:44:26 - Checkpoint saved: 1300 rows processed
+2026-06-15 17:44:58 - No results for NIP 7971909337 / PKD 86.90.A
+2026-06-15 17:45:06 - Found: NIP=5242320202 website=https://www.jogart.pl
+2026-06-15 17:45:14 - No results for NIP 5272430384 / PKD 86.90.A
+2026-06-15 17:45:20 - No results for NIP 5252955066 / PKD 86.90.A
+2026-06-15 17:45:28 - No results for NIP 5252841701 / PKD 86.90.A
+2026-06-15 17:46:13 - Found: NIP=9511654090 website=https://cwiczeumysl.pl
+2026-06-15 17:47:16 - Found: NIP=5831859667 website=https://www.trening-uwagi.pl
+2026-06-15 17:47:30 - No results for NIP 5671130011 / PKD 86.90.A
+2026-06-15 17:47:44 - No results for NIP 7551666460 / PKD 86.90.A
+2026-06-15 17:48:27 - No results for NIP 8461064634 / PKD 86.90.A
+2026-06-15 17:48:55 - Found: NIP=1131431155 website=https://www.bestbrandspr.pl
+2026-06-15 17:49:52 - No results for NIP 5951402597 / PKD 86.99.D
+2026-06-15 17:50:23 - No results for NIP 7251095527 / PKD 86.99.D
+2026-06-15 17:51:14 - Error for NIP 5252209512: Page.query_selector: Target page, context or browser has been closed
+2026-06-15 17:51:17 - Error for NIP 5691795274: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:17 - Checkpoint saved: 1350 rows processed
+2026-06-15 17:51:20 - Error for NIP 5222764491: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:24 - Error for NIP 9542576445: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:26 - Error for NIP 9720884931: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:29 - Error for NIP 5431354403: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:31 - Error for NIP 8732499931: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:35 - Error for NIP 7742707454: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:38 - Error for NIP 9511982813: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:41 - Error for NIP 5261528085: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:44 - Error for NIP 9521770366: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:46 - Error for NIP 9521198044: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:48 - Error for NIP 1132685811: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:51 - Error for NIP 1132849419: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:54 - Error for NIP 9452137297: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:56 - Error for NIP 1180076079: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:51:58 - Error for NIP 7162696076: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:02 - Error for NIP 7811793469: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:04 - Error for NIP 5222742325: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:07 - Error for NIP 6572686964: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:10 - Error for NIP 9511836767: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:13 - Error for NIP 9511989755: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:16 - Error for NIP 1132326259: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:18 - Error for NIP 1182025761: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:21 - Error for NIP 8631623341: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:24 - Error for NIP 7542938479: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:27 - Error for NIP 8442309537: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:30 - Error for NIP 9511254491: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:32 - Error for NIP 9512124655: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:35 - Error for NIP 7681800833: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:37 - Error for NIP 8792372097: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:40 - Error for NIP 7133061122: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:44 - Error for NIP 9482022328: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:47 - Error for NIP 7123062166: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:50 - Error for NIP 1132759840: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:53 - Error for NIP 8981453112: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:56 - Error for NIP 7393139513: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:52:58 - Error for NIP 7962756064: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:01 - Error for NIP 7981426617: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:04 - Error for NIP 9191763764: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:07 - Error for NIP 1182190922: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:10 - Error for NIP 5342150538: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:13 - Error for NIP 5223097884: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:16 - Error for NIP 5050029741: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:19 - Error for NIP 7162560313: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:23 - Error for NIP 5242765536: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:26 - Error for NIP 5212789503: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:30 - Error for NIP 5252351658: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:33 - Error for NIP 7271001682: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:36 - Error for NIP 7622008274: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:38 - Error for NIP 5272816764: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:42 - Error for NIP 5221031674: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:42 - Checkpoint saved: 1400 rows processed
+2026-06-15 17:53:46 - Error for NIP 8222381509: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:48 - Error for NIP 7581861568: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:52 - Error for NIP 9512215257: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:55 - Error for NIP 1181939298: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:53:57 - Error for NIP 7010468808: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:00 - Error for NIP 5260035920: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:03 - Error for NIP 9521971900: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:07 - Error for NIP 5212997578: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:10 - Error for NIP 7621790338: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:14 - Error for NIP 5213900322: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:18 - Error for NIP 9522254224: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:20 - Error for NIP 1181691622: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:24 - Error for NIP 1132770646: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:27 - Error for NIP 9121014069: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:29 - Error for NIP 1132635285: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:33 - Error for NIP 8883092883: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:35 - Error for NIP 5223178677: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:38 - Error for NIP 5212216316: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:41 - Error for NIP 7010986578: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:43 - Error for NIP 5222777921: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:46 - Error for NIP 5431880190: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:49 - Error for NIP 8262057347: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:52 - Error for NIP 5242532358: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:55 - Error for NIP 9512278128: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:54:57 - Error for NIP 5252672150: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:00 - Error for NIP 9521405566: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:02 - Error for NIP 9511855368: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:06 - Error for NIP 1180365240: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:09 - Error for NIP 9521799370: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:12 - Error for NIP 9521845704: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:15 - Error for NIP 5681367364: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:18 - Error for NIP 7542560087: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:20 - Error for NIP 5273177728: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:23 - Error for NIP 1181665501: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:26 - Error for NIP 9521263528: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:29 - Error for NIP 1130885888: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:33 - Error for NIP 5213507286: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:36 - Error for NIP 5211638334: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:39 - Error for NIP 9522253383: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:42 - Error for NIP 1131940046: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:45 - Error for NIP 9520004693: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:48 - Error for NIP 1250910703: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:51 - Error for NIP 6272448700: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:54 - Error for NIP 5241524960: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:55:58 - Error for NIP 5210324622: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:02 - Error for NIP 7221543004: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:04 - Error for NIP 9522043183: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:08 - Error for NIP 5222883563: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:10 - Error for NIP 9710712619: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:14 - Error for NIP 8241663769: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:14 - Checkpoint saved: 1450 rows processed
+2026-06-15 17:56:16 - Error for NIP 9492082208: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:20 - Error for NIP 5242204298: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:22 - Error for NIP 8791086113: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:26 - Error for NIP 7231601157: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:30 - Error for NIP 5261444537: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:34 - Error for NIP 5213026049: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:37 - Error for NIP 5262419292: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:40 - Error for NIP 5211907490: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:43 - Error for NIP 6852232075: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:46 - Error for NIP 8991815410: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:48 - Error for NIP 5251457739: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:51 - Error for NIP 1132944336: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:55 - Error for NIP 5262234150: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:56:57 - Error for NIP 8781098221: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:00 - Error for NIP 1180748544: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:03 - Error for NIP 1132980071: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:06 - Error for NIP 7292014098: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:09 - Error for NIP 1130746170: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:13 - Error for NIP 5251168461: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:16 - Error for NIP 8111562509: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:19 - Error for NIP 1132766662: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:22 - Error for NIP 1130207390: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:25 - Error for NIP 1181472498: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:29 - Error for NIP 8652323667: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:33 - Error for NIP 5261750671: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:35 - Error for NIP 7971280997: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:39 - Error for NIP 1231085209: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:42 - Error for NIP 5252305517: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:45 - Error for NIP 5261812490: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:48 - Error for NIP 5391334043: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:51 - Error for NIP 9511283995: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:54 - Error for NIP 5272366597: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:57 - Error for NIP 7392132472: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:57:59 - Error for NIP 9511377012: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:03 - Error for NIP 5221743682: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:05 - Error for NIP 7721789180: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:07 - Error for NIP 5240400948: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:11 - Error for NIP 5242158954: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:15 - Error for NIP 8531460632: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:17 - Error for NIP 8121619381: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:19 - Error for NIP 5241907721: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:23 - Error for NIP 1180252257: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:25 - Error for NIP 9511404105: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:29 - Error for NIP 8133331094: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:32 - Error for NIP 5252390109: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:35 - Error for NIP 5222872536: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:38 - Error for NIP 5213575833: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:41 - Error for NIP 5372240364: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:44 - Error for NIP 5361176817: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:47 - Error for NIP 9521408369: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:47 - Checkpoint saved: 1500 rows processed
+2026-06-15 17:58:50 - Error for NIP 9512072987: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:53 - Error for NIP 1181675729: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:56 - Error for NIP 1130164479: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:58:59 - Error for NIP 5321695787: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:02 - Error for NIP 5222415129: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:05 - Error for NIP 9182138417: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:07 - Error for NIP 5222420768: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:11 - Error for NIP 8231293087: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:13 - Error for NIP 5211014510: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:17 - Error for NIP 1130756961: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:20 - Error for NIP 6731862564: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:24 - Error for NIP 6961701801: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:27 - Error for NIP 5221154425: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:31 - Error for NIP 8451458099: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:34 - Error for NIP 5251615121: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:38 - Error for NIP 9481524909: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:41 - Error for NIP 5222737324: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:44 - Error for NIP 7971200521: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:48 - Error for NIP 2910211812: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:51 - Error for NIP 6482339756: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:55 - Error for NIP 5213042539: Page.goto: Target page, context or browser has been closed
+2026-06-15 17:59:58 - Error for NIP 5271305783: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:02 - Error for NIP 9522019167: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:05 - Error for NIP 1180933359: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:09 - Error for NIP 5222157816: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:11 - Error for NIP 1131158067: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:13 - Error for NIP 9521382664: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:17 - Error for NIP 9710484816: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:20 - Error for NIP 1132371030: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:24 - Error for NIP 5271554078: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:27 - Error for NIP 9522089015: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:30 - Error for NIP 9511921792: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:33 - Error for NIP 1180524460: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:37 - Error for NIP 8461525124: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:40 - Error for NIP 9511862701: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:42 - Error for NIP 7181634886: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:45 - Error for NIP 5262263269: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:47 - Error for NIP 5213119696: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:50 - Error for NIP 1182317647: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:53 - Error for NIP 9512570171: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:55 - Error for NIP 1182285396: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:00:58 - Error for NIP 1132845143: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:01:00 - Error for NIP 5361837064: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:01:04 - Error for NIP 1182107619: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:01:07 - Error for NIP 7181943038: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:01:10 - Error for NIP 5211137394: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:01:13 - Error for NIP 9511397150: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:01:58 - Error for NIP 1132289392: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:00 - Error for NIP 5221857523: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:02 - Error for NIP 1133112566: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:02 - Checkpoint saved: 1550 rows processed
+2026-06-15 18:02:05 - Error for NIP 5322097143: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:08 - Error for NIP 8481697265: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:11 - Error for NIP 5543012441: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:13 - Error for NIP 1182323429: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:16 - Error for NIP 1131273466: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:19 - Error for NIP 5691810401: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:23 - Error for NIP 1181830874: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:26 - Error for NIP 1231178709: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:28 - Error for NIP 5271143139: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:31 - Error for NIP 5222789605: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:35 - Error for NIP 5212659746: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:37 - Error for NIP 1181266362: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:39 - Error for NIP 1131290915: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:42 - Error for NIP 5271000747: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:45 - Error for NIP 1132305694: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:48 - Error for NIP 1132321434: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:51 - Error for NIP 5221720149: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:53 - Error for NIP 9710642155: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:56 - Error for NIP 7761055159: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:02:59 - Error for NIP 9511668063: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:02 - Error for NIP 8921374389: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:04 - Error for NIP 5222797444: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:08 - Error for NIP 8212255967: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:11 - Error for NIP 1132797303: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:14 - Error for NIP 5242362554: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:18 - Error for NIP 6462864407: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:20 - Error for NIP 5211899862: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:23 - Error for NIP 5240316797: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:26 - Error for NIP 5241672672: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:28 - Error for NIP 1180141380: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:31 - Error for NIP 5271607633: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:34 - Error for NIP 5252435585: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:37 - Error for NIP 5212098704: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:40 - Error for NIP 5262885077: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:42 - Error for NIP 9710717597: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:45 - Error for NIP 8341004003: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:47 - Error for NIP 8392851747: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:51 - Error for NIP 5213408035: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:54 - Error for NIP 5261099000: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:03:57 - Error for NIP 5261542381: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:00 - Error for NIP 8911512341: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:02 - Error for NIP 5272195032: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:04 - Error for NIP 5213745324: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:08 - Error for NIP 1133140686: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:11 - Error for NIP 5223162713: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:14 - Error for NIP 5252450627: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:17 - Error for NIP 1131331399: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:20 - Error for NIP 5273109052: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:24 - Error for NIP 5243038123: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:27 - Error for NIP 7011272272: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:27 - Checkpoint saved: 1600 rows processed
+2026-06-15 18:04:31 - Error for NIP 5251020385: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:34 - Error for NIP 1131862501: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:37 - Error for NIP 5311401040: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:39 - Error for NIP 8992222385: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:41 - Error for NIP 6711669114: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:44 - Error for NIP 7122548783: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:47 - Error for NIP 1251283183: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:50 - Error for NIP 5211903339: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:52 - Error for NIP 5214053249: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:55 - Error for NIP 5221422914: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:04:59 - Error for NIP 5241074008: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:03 - Error for NIP 1181189070: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:06 - Error for NIP 5381545933: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:10 - Error for NIP 1180082453: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:14 - Error for NIP 5242798317: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:16 - Error for NIP 5272407161: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:19 - Error for NIP 9521823861: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:22 - Error for NIP 5222392693: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:25 - Error for NIP 9521847525: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:27 - Error for NIP 1130644340: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:29 - Error for NIP 1130405670: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:32 - Error for NIP 7010824232: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:36 - Error for NIP 5241072676: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:40 - Error for NIP 9522091472: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:42 - Error for NIP 7190007456: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:45 - Error for NIP 5241373857: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:48 - Error for NIP 5213254997: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:51 - Error for NIP 5261338574: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:54 - Error for NIP 5261328274: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:05:56 - Error for NIP 5213393902: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:00 - Error for NIP 5213425921: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:03 - Error for NIP 6612081004: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:05 - Error for NIP 1130619649: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:08 - Error for NIP 5242899567: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:10 - Error for NIP 5342089307: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:13 - Error for NIP 1180187229: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:17 - Error for NIP 5261299153: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:19 - Error for NIP 7010817798: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:22 - Error for NIP 5212910258: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:25 - Error for NIP 5341270950: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:29 - Error for NIP 7131203380: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:32 - Error for NIP 5311015644: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:36 - Error for NIP 5241876682: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:39 - Error for NIP 9511791852: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:42 - Error for NIP 5211786767: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:45 - Error for NIP 5242622475: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:49 - Error for NIP 1130250517: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:52 - Error for NIP 9511179921: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:54 - Error for NIP 9661010313: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:58 - Error for NIP 1181716061: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:06:58 - Checkpoint saved: 1650 rows processed
+2026-06-15 18:07:01 - Error for NIP 5321864020: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:04 - Error for NIP 5221858729: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:08 - Error for NIP 1132495996: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:11 - Error for NIP 9512507132: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:15 - Error for NIP 9720891316: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:17 - Error for NIP 5212319766: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:19 - Error for NIP 5223273186: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:23 - Error for NIP 5251344627: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:26 - Error for NIP 1181374330: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:29 - Error for NIP 7392143814: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:32 - Error for NIP 5242372216: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:34 - Error for NIP 9522182068: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:36 - Error for NIP 9222663303: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:40 - Error for NIP 5273041621: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:43 - Error for NIP 6631631457: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:47 - Error for NIP 5221748188: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:50 - Error for NIP 5732920168: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:52 - Error for NIP 7221461594: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:54 - Error for NIP 1130692675: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:07:57 - Error for NIP 1132945175: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:00 - Error for NIP 8222029847: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:03 - Error for NIP 5262275522: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:05 - Error for NIP 5372117735: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:09 - Error for NIP 9521152119: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:12 - Error for NIP 7743112869: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:15 - Error for NIP 5851224624: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:19 - Error for NIP 5262600063: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:22 - Error for NIP 5241468150: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:25 - Error for NIP 5361621157: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:28 - Error for NIP 5213855283: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:32 - Error for NIP 5253068769: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:36 - Error for NIP 9512594415: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:39 - Error for NIP 9860244864: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:43 - Error for NIP 1231326009: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:45 - Error for NIP 1182313307: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:48 - Error for NIP 5241489100: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:51 - Error for NIP 5252720564: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:53 - Error for NIP 1133152206: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:56 - Error for NIP 1130541568: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:08:59 - Error for NIP 5223363742: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:02 - Error for NIP 5781477170: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:05 - Error for NIP 5273043761: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:08 - Error for NIP 5422770852: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:11 - Error for NIP 7011162402: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:15 - Error for NIP 1133147659: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:18 - Error for NIP 1132400375: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:21 - Error for NIP 5223205693: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:23 - Error for NIP 1132786788: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:26 - Error for NIP 7011292955: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:29 - Error for NIP 5242634610: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:29 - Checkpoint saved: 1700 rows processed
+2026-06-15 18:09:32 - Error for NIP 7392554078: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:36 - Error for NIP 1180313711: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:39 - Error for NIP 5251603939: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:42 - Error for NIP 1230901842: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:45 - Error for NIP 8883035767: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:49 - Error for NIP 1130414255: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:53 - Error for NIP 5213118202: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:56 - Error for NIP 1130704875: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:09:59 - Error for NIP 5251337490: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:02 - Error for NIP 5252225505: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:05 - Error for NIP 1132287513: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:08 - Error for NIP 5251290512: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:11 - Error for NIP 9710717137: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:14 - Error for NIP 1231274181: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:17 - Error for NIP 5252960512: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:21 - Error for NIP 5472100390: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:23 - Error for NIP 5242264308: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:26 - Error for NIP 7731312686: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:30 - Error for NIP 6611046483: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:32 - Error for NIP 5210526320: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:34 - Error for NIP 1132006247: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:38 - Error for NIP 1181683114: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:41 - Error for NIP 9512490012: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:45 - Error for NIP 5242821447: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:47 - Error for NIP 9512201611: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:50 - Error for NIP 7542818893: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:53 - Error for NIP 1181464174: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:57 - Error for NIP 5252236130: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:10:59 - Error for NIP 7394004330: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:03 - Error for NIP 5221505764: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:06 - Error for NIP 8961365681: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:09 - Error for NIP 7421835639: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:13 - Error for NIP 9512012436: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:16 - Error for NIP 1231509980: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:18 - Error for NIP 5213199531: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:20 - Error for NIP 5221916119: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:23 - Error for NIP 1230370072: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:27 - Error for NIP 1182309116: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:30 - Error for NIP 1132878355: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:33 - Error for NIP 5251613091: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:36 - Error for NIP 7962286782: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:39 - Error for NIP 5320011901: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:42 - Error for NIP 1180369918: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:44 - Error for NIP 1133011256: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:47 - Error for NIP 7181911593: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:50 - Error for NIP 6881243377: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:54 - Error for NIP 9511932749: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:11:58 - Error for NIP 5321292687: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:00 - Error for NIP 7741759093: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:03 - Error for NIP 5611484188: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:03 - Checkpoint saved: 1750 rows processed
+2026-06-15 18:12:07 - Error for NIP 6342575758: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:10 - Error for NIP 5222303270: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:13 - Error for NIP 1130419100: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:17 - Error for NIP 6010051539: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:20 - Error for NIP 9521799424: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:24 - Error for NIP 8241279315: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:26 - Error for NIP 5251593508: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:29 - Error for NIP 7582328161: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:32 - Error for NIP 9511917796: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:35 - Error for NIP 5660006589: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:37 - Error for NIP 5241109669: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:41 - Error for NIP 9512053435: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:44 - Error for NIP 1132161769: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:47 - Error for NIP 9521746646: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:49 - Error for NIP 8381743988: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:53 - Error for NIP 5272150443: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:56 - Error for NIP 9511828012: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:12:59 - Error for NIP 5251336065: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:01 - Error for NIP 1250940354: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:03 - Error for NIP 5251022131: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:07 - Error for NIP 5242269116: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:10 - Error for NIP 5271537619: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:13 - Error for NIP 9511763896: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:16 - Error for NIP 1130861652: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:20 - Error for NIP 8371697749: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:23 - Error for NIP 1182206072: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:26 - Error for NIP 8251965058: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:29 - Error for NIP 5223363682: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:31 - Error for NIP 5271574224: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:34 - Error for NIP 5262082148: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:37 - Error for NIP 8341203524: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:40 - Error for NIP 1181475278: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:43 - Error for NIP 5213430460: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:46 - Error for NIP 6631762515: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:49 - Error for NIP 5861673789: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:52 - Error for NIP 1132183512: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:55 - Error for NIP 7162734776: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:13:57 - Error for NIP 5222542862: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:00 - Error for NIP 5223185772: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:04 - Error for NIP 9820367170: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:06 - Error for NIP 5222310264: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:10 - Error for NIP 5691379630: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:14 - Error for NIP 5252317957: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:17 - Error for NIP 5272652423: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:20 - Error for NIP 1130426560: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:23 - Error for NIP 8831409658: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:26 - Error for NIP 1130594808: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:30 - Error for NIP 5213043088: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:33 - Error for NIP 9522149728: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:36 - Error for NIP 5261330489: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:36 - Checkpoint saved: 1800 rows processed
+2026-06-15 18:14:40 - Error for NIP 7691965518: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:43 - Error for NIP 9521217847: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:46 - Error for NIP 1130731323: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:49 - Error for NIP 7010300204: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:53 - Error for NIP 1130366088: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:14:57 - Error for NIP 1131784540: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:00 - Error for NIP 5242314710: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:02 - Error for NIP 6611822846: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:05 - Error for NIP 5252936896: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:08 - Error for NIP 5471900467: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:12 - Error for NIP 8951609880: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:15 - Error for NIP 5213201268: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:19 - Error for NIP 5222955216: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:22 - Error for NIP 9511877683: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:24 - Error for NIP 1230069160: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:27 - Error for NIP 1132384535: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:29 - Error for NIP 1231031917: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:33 - Error for NIP 5641152232: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:35 - Error for NIP 5222892674: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:38 - Error for NIP 1131038251: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:40 - Error for NIP 5252181529: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:43 - Error for NIP 5222749988: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:46 - Error for NIP 5271253135: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:49 - Error for NIP 9511846518: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:53 - Error for NIP 5272215728: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:15:57 - Error for NIP 5211246114: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:01 - Error for NIP 1181776063: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:03 - Error for NIP 5211053823: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:05 - Error for NIP 5222890296: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:09 - Error for NIP 1181931428: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:11 - Error for NIP 5213273262: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:15 - Error for NIP 7393183922: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:17 - Error for NIP 1130829246: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:20 - Error for NIP 7123194554: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:23 - Error for NIP 9291323935: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:27 - Error for NIP 5212782122: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:30 - Error for NIP 9521938854: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:34 - Error for NIP 1181943012: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:37 - Error for NIP 5262074172: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:41 - Error for NIP 7621785900: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:45 - Error for NIP 1130035078: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:47 - Error for NIP 1130530139: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:51 - Error for NIP 1180639430: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:53 - Error for NIP 1180586722: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:55 - Error for NIP 5381037935: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:16:59 - Error for NIP 5251003725: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:01 - Error for NIP 1181604770: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:04 - Error for NIP 9710670571: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:06 - Error for NIP 1180153348: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:10 - Error for NIP 5251539957: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:10 - Checkpoint saved: 1850 rows processed
+2026-06-15 18:17:13 - Error for NIP 9222725607: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:17 - Error for NIP 8391583210: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:20 - Error for NIP 1181738950: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:24 - Error for NIP 9281838158: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:26 - Error for NIP 5222669226: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:30 - Error for NIP 5311334102: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:33 - Error for NIP 9521240295: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:36 - Error for NIP 5211128834: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:38 - Error for NIP 5272089778: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:40 - Error for NIP 5212110440: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:42 - Error for NIP 5222839740: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:45 - Error for NIP 9491771294: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:47 - Error for NIP 5681417205: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:51 - Error for NIP 9521197197: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:54 - Error for NIP 8762048156: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:17:57 - Error for NIP 5272354996: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:00 - Error for NIP 5211446215: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:03 - Error for NIP 5242126440: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:06 - Error for NIP 5451623728: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:09 - Error for NIP 1130001547: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:13 - Error for NIP 7541067427: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:16 - Error for NIP 5271027835: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:19 - Error for NIP 1131960592: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:23 - Error for NIP 5213241730: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:26 - Error for NIP 5213304755: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:28 - Error for NIP 7010016638: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:31 - Error for NIP 8522424246: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:34 - Error for NIP 5252983536: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:37 - Error for NIP 5272357701: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:39 - Error for NIP 9512595320: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:42 - Error for NIP 5741864618: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:46 - Error for NIP 1132047335: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:48 - Error for NIP 1231254675: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:50 - Error for NIP 9521824228: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:53 - Error for NIP 5262120268: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:56 - Error for NIP 5252694217: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:18:59 - Error for NIP 5243036561: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:03 - Error for NIP 9512568955: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:06 - Error for NIP 6020069245: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:09 - Error for NIP 5342701895: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:11 - Error for NIP 5222796930: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:15 - Error for NIP 9482545724: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:17 - Error for NIP 9522149697: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:21 - Error for NIP 1130491534: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:23 - Error for NIP 9511609072: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:25 - Error for NIP 1132642776: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:28 - Error for NIP 8461498953: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:31 - Error for NIP 5242548454: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:33 - Error for NIP 9521726276: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:36 - Error for NIP 5241734433: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:36 - Checkpoint saved: 1900 rows processed
+2026-06-15 18:19:40 - Error for NIP 8451907976: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:44 - Error for NIP 5221795897: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:47 - Error for NIP 9522046773: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:49 - Error for NIP 7961759882: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:51 - Error for NIP 1180542966: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:55 - Error for NIP 7711038325: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:19:59 - Error for NIP 5262727616: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:01 - Error for NIP 8361877970: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:05 - Error for NIP 5212222268: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:09 - Error for NIP 7382014920: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:11 - Error for NIP 5211757091: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:13 - Error for NIP 7511729881: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:16 - Error for NIP 9462275813: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:19 - Error for NIP 1130271614: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:22 - Error for NIP 7272857445: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:24 - Error for NIP 5632149182: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:27 - Error for NIP 4980093744: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:30 - Error for NIP 8461351718: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:33 - Error for NIP 5261775671: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:35 - Error for NIP 5252048730: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:39 - Error for NIP 5272508985: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:42 - Error for NIP 1180520284: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:45 - Error for NIP 5222718597: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:49 - Error for NIP 5322050420: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:53 - Error for NIP 7961985785: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:55 - Error for NIP 5862191549: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:20:58 - Error for NIP 8261929704: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:00 - Error for NIP 5272383414: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:04 - Error for NIP 5213258386: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:08 - Error for NIP 5261369014: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:12 - Error for NIP 8341029925: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:15 - Error for NIP 5222529956: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:19 - Error for NIP 8531108496: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:23 - Error for NIP 5223157043: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:26 - Error for NIP 5272352201: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:28 - Error for NIP 5262715665: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:31 - Error for NIP 9512177083: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:33 - Error for NIP 5222817075: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:36 - Error for NIP 1130251267: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:40 - Error for NIP 7251715697: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:42 - Error for NIP 5211893227: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:46 - Error for NIP 5661237256: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:48 - Error for NIP 5271336482: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:52 - Error for NIP 6631094404: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:55 - Error for NIP 5341008169: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:21:59 - Error for NIP 1132392397: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:01 - Error for NIP 7282285921: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:04 - Error for NIP 5491903670: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:07 - Error for NIP 5213402593: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:11 - Error for NIP 9520014355: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:11 - Checkpoint saved: 1950 rows processed
+2026-06-15 18:22:13 - Error for NIP 7842288330: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:17 - Error for NIP 7611355115: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:19 - Error for NIP 5213225228: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:22 - Error for NIP 1180075619: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:26 - Error for NIP 8341790102: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:29 - Error for NIP 8121814763: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:31 - Error for NIP 5272016130: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:34 - Error for NIP 5271619091: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:38 - Error for NIP 5242308419: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:41 - Error for NIP 8792334346: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:45 - Error for NIP 9511905178: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:48 - Error for NIP 1131245406: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:50 - Error for NIP 5340200858: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:53 - Error for NIP 9211915907: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:56 - Error for NIP 5222679911: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:22:58 - Error for NIP 1181485325: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:02 - Error for NIP 1132088110: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:04 - Error for NIP 5212750091: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:06 - Error for NIP 5212973537: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:10 - Error for NIP 1132423910: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:14 - Error for NIP 5214152980: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:16 - Error for NIP 1132125644: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:19 - Error for NIP 5262341294: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:23 - Error for NIP 8442122974: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:26 - Error for NIP 5242574196: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:29 - Error for NIP 9271936008: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:31 - Error for NIP 9521871127: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:35 - Error for NIP 5272357888: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:39 - Error for NIP 5252404082: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:42 - Error for NIP 9521666829: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:45 - Error for NIP 5272331541: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:48 - Error for NIP 5222605048: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:51 - Error for NIP 5211702782: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:53 - Error for NIP 5273010632: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:55 - Error for NIP 5272535410: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:23:59 - Error for NIP 5262691232: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:03 - Error for NIP 7010919151: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:05 - Error for NIP 5213001701: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:09 - Error for NIP 5221649670: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:12 - Error for NIP 1131529919: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:15 - Error for NIP 5262635593: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:18 - Error for NIP 1131442590: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:20 - Error for NIP 6442992208: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:23 - Error for NIP 9512048612: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:26 - Error for NIP 5222897111: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:29 - Error for NIP 8261857152: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:32 - Error for NIP 1130729450: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:34 - Error for NIP 6782794418: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:37 - Error for NIP 8171770683: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:41 - Error for NIP 7121873268: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:41 - Checkpoint saved: 2000 rows processed
+2026-06-15 18:24:43 - Error for NIP 1132436025: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:45 - Error for NIP 8111622482: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:48 - Error for NIP 5262472010: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:51 - Error for NIP 6751416709: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:54 - Error for NIP 1132970434: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:24:56 - Error for NIP 8241799871: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:00 - Error for NIP 5562565359: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:04 - Error for NIP 5361398038: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:07 - Error for NIP 7971782368: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:09 - Error for NIP 1132533716: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:12 - Error for NIP 5242341368: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:15 - Error for NIP 1181312122: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:17 - Error for NIP 8491464976: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:21 - Error for NIP 7411799008: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:24 - Error for NIP 5212106852: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:28 - Error for NIP 5342463579: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:30 - Error for NIP 6182032373: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:32 - Error for NIP 5291267531: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:34 - Error for NIP 5361783204: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:38 - Error for NIP 5632415034: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:41 - Error for NIP 5262504052: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:45 - Error for NIP 9522070056: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:47 - Error for NIP 1131899993: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:51 - Error for NIP 7781425955: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:54 - Error for NIP 5213326863: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:56 - Error for NIP 5243052979: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:25:59 - Error for NIP 1230945874: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:03 - Error for NIP 5242788477: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:06 - Error for NIP 5223322246: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:09 - Error for NIP 1181340986: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:12 - Error for NIP 1130000418: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:15 - Error for NIP 5214064684: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:17 - Error for NIP 9860244516: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:19 - Error for NIP 5213330416: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:23 - Error for NIP 5222990885: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:25 - Error for NIP 1132432694: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:27 - Error for NIP 7742273725: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:31 - Error for NIP 9671060011: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:35 - Error for NIP 9511529870: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:37 - Error for NIP 5212224008: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:41 - Error for NIP 7011133346: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:43 - Error for NIP 8121187059: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:46 - Error for NIP 7122608597: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:50 - Error for NIP 9522282568: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:53 - Error for NIP 6452510576: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:26:57 - Error for NIP 5272174633: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:01 - Error for NIP 9522276639: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:03 - Error for NIP 7262267914: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:07 - Error for NIP 1132190765: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:10 - Error for NIP 5252974916: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:10 - Checkpoint saved: 2050 rows processed
+2026-06-15 18:27:12 - Error for NIP 9512507959: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:16 - Error for NIP 5342185494: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:19 - Error for NIP 5262510704: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:21 - Error for NIP 5222357679: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:23 - Error for NIP 5223193487: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:26 - Error for NIP 8241650962: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:28 - Error for NIP 9581656728: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:32 - Error for NIP 5262720347: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:35 - Error for NIP 7591171523: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:38 - Error for NIP 7011060446: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:42 - Error for NIP 8471599182: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:44 - Error for NIP 5671732572: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:48 - Error for NIP 5272823356: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:50 - Error for NIP 7761610997: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:53 - Error for NIP 8660000921: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:57 - Error for NIP 5371904690: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:27:59 - Error for NIP 5512246681: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:02 - Error for NIP 8171867000: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:05 - Error for NIP 5221648446: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:08 - Error for NIP 5482403270: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:12 - Error for NIP 8522158997: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:15 - Error for NIP 1132249748: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:19 - Error for NIP 5242439848: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:21 - Error for NIP 9521998282: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:24 - Error for NIP 5422811485: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:27 - Error for NIP 5472086218: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:30 - Error for NIP 9511296041: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:33 - Error for NIP 6692127598: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:37 - Error for NIP 8121450663: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:41 - Error for NIP 9222812861: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:45 - Error for NIP 5272253887: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:48 - Error for NIP 7011197866: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:50 - Error for NIP 6841780241: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:52 - Error for NIP 4960103758: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:56 - Error for NIP 5222170099: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:28:59 - Error for NIP 5641452796: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:02 - Error for NIP 1130294762: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:05 - Error for NIP 5213985689: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:07 - Error for NIP 5252288635: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:10 - Error for NIP 5213208081: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:13 - Error for NIP 7621959524: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:16 - Error for NIP 5221325105: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:18 - Error for NIP 7831584059: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:21 - Error for NIP 7010147234: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:24 - Error for NIP 7311683513: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:27 - Error for NIP 1131918489: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:29 - Error for NIP 5242999530: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:32 - Error for NIP 5242300493: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:35 - Error for NIP 8262071867: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:38 - Error for NIP 5110189484: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:38 - Checkpoint saved: 2100 rows processed
+2026-06-15 18:29:41 - Error for NIP 1132132868: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:44 - Error for NIP 7581892592: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:48 - Error for NIP 5211249785: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:50 - Error for NIP 5221170938: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:53 - Error for NIP 9521825759: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:55 - Error for NIP 5242999004: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:29:59 - Error for NIP 7122183264: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:02 - Error for NIP 5214019123: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:06 - Error for NIP 5211365971: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:10 - Error for NIP 5223337408: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:14 - Error for NIP 8392837902: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:18 - Error for NIP 5272574048: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:20 - Error for NIP 9521938564: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:23 - Error for NIP 5213285578: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:27 - Error for NIP 5262330103: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:30 - Error for NIP 8251733744: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:32 - Error for NIP 5242487267: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:36 - Error for NIP 5272283167: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:38 - Error for NIP 5221015764: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:40 - Error for NIP 9512176876: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:43 - Error for NIP 5251997217: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:46 - Error for NIP 9522171509: Page.goto: Target page, context or browser has been closed
+2026-06-15 18:30:49 - Checkpoint saved: 2122 rows processed
+2026-06-15 18:30:49 - Complete: processed=2122 found=51 skipped=0 errors=0

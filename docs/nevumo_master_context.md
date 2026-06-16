@@ -546,12 +546,14 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - **Result**: Hero city is unchanged when user switches language. City changes only on explicit selection via `/izberi-grad`.
 - **Web Push Notifications (June 7, 2026)** — COMPLETE: pywebpush backend, VAPID keys, push_subscriptions table, push service, 3 API endpoints, Service Worker push/notificationclick handlers, usePushNotifications hook, provider settings toggle. Full coverage: providers notified on new leads + new reviews; clients notified on lead status changes + review replies.
 - **Claimed Profiles — Data Collection (June 14 2026):** Warsaw CEIDG scraper complete (`apps/scripts/collect_ceidg_providers.py`). Collected 2,375 unique providers (701 with email, 257 with phone). PKD codes: cleaning 81.21.Z/81.22.Z/81.29.Z, massage 96.04.Z/96.23.Z/86.90.A/86.99.D, plumbing 43.22.Z/43.21.Z. Multi-layer acquisition planned: CEIDG website re-scrape → email extractor → Panoramafirm.pl scraper (Fixly отхвърлен — no browsable directory) → Bing API → SMS campaign. Full roadmap: `docs/claimed_profiles_plan.md`. Target: 3,000+ emails → 240-450 claimed profiles for Warsaw launch.
-- **Claimed Profiles — CSV Clean + CEIDG Re-scrape (June 15 2026):**
+- **Claimed Profiles — CSV Clean + CEIDG Re-scrape (June 15-16 2026):**
   - CSV cleaning complete: 2,375 → 2,122 rows, script: clean_ceidg_csv.py
   - Result: 633 emails, 230 phones, all NIPs valid
   - IMPORTANT for seed script (2A): column "address" is broken (contains emails) → load as empty
   - IMPORTANT for seed script (2A): 176 partnership names "1. X, 2. Y" → take only first one
-  - CEIDG re-scrape in process (overnight June 15): apps/scripts/rescrape_websites.py
+  - CEIDG re-scrape complete (June 16 2026): 51 websites from 2,122 rows (2.4%)
+  - Output: apps/scripts/warszawa_providers_with_websites.csv
+  - Next step: 1Ж — Bing API for remaining 2,071 firms without website
 - **Claimed Profiles — Panoramafirm.pl Scraper (June 15 2026):** 🟡 В процес
   - Fixly.pl отхвърлен: activity feed (не directory), GraphQL само count, лични имена
   - Panoramafirm.pl: реален business directory с фирмени имена + уебсайтове
