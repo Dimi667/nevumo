@@ -10,7 +10,7 @@ from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
 from apps.api.config import settings
-from apps.api.models import AuthRateLimit, Lead, LeadMatch, PendingLeadClaim, Provider, ProviderCity, Service, User
+from apps.api.models import AuthRateLimit, Lead, LeadMatch, Message, PendingLeadClaim, Provider, ProviderCity, Review, Service, User
 
 logger = logging.getLogger(__name__)
 
@@ -146,7 +146,7 @@ def delete_user_account(db: Session, user: User) -> dict:
     Runs all steps in a single DB transaction; rolls back on any failure.
     """
     try:
-        db.query(Lead).filter(Lead.client_id == user.id).update({"client_id": None})
+        db.query(Lead).filter(Lead.client_id == user.id).update({"client_id": None, "phone": "deleted"})
 
         provider = db.query(Provider).filter(Provider.user_id == user.id).first()
         if provider:
@@ -155,6 +155,11 @@ def delete_user_account(db: Session, user: User) -> dict:
             db.query(ProviderCity).filter(ProviderCity.provider_id == provider.id).delete()
             db.query(LeadMatch).filter(LeadMatch.provider_id == provider.id).delete()
             db.delete(provider)
+
+        # Delete reviews written by this user as a client (NO ACTION FK — must be explicit)
+        db.query(Review).filter(Review.client_id == user.id).delete()
+        # Delete messages sent by this user (NO ACTION FK — preventive)
+        db.query(Message).filter(Message.sender_id == user.id).delete()
 
         db.delete(user)
 
