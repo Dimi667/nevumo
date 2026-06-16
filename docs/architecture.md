@@ -2427,13 +2427,22 @@ Claim page очаква директен обект (не wrapper):
 ### Frontend Implementation
 - **Page**: `apps/web/app/[lang]/claim/[token]/page.tsx` — Server Component
 - **Route**: `/[lang]/claim/[token]` (e.g., `/bg/claim/abc123xyz`)
-- **Translations**: namespace `claim`, 12 keys, 34 languages
+- **Translations**: namespace `claim`, 47 keys, 34 languages
+  - Original 12 keys: seed_claim_translations.py (408 rows)
+  - New 35 keys (v2 redesign): seed_claim_v2_p1.py + seed_claim_v2_p2.py (1,190 rows)
+  - New keys: urgency, kicker, hero_title, your_profile_badge, leads_title,
+    leads_overlay, leads_overlay_sub, benefit_1/2/3 title+sub,
+    vs_bad_1/2, vs_good_1/2, time_signal, login_hint,
+    social_proof_zero/few/many, trust_gdpr/no_sub/cancel, free_badge,
+    notfound_title/desc/support/cta/ghost,
+    claimed_title/desc/cta/support
 - **Seed script**: `apps/api/scripts/seed_claim_translations.py`
 
 ### Backend Endpoints
 
 **GET `/api/v1/providers/by-claim-token/{token}`** — Public endpoint (no auth required)
 - Returns provider data by claim_token
+- Query param: `lang` (optional, default: "en") — for localized city_name
 - Response schema:
   ```json
   {
@@ -2441,10 +2450,14 @@ Claim page очаква директен обект (не wrapper):
     "business_name": "string",
     "category_slug": "string",
     "city_slug": "string",
+    "city_name": "string",
+    "claimed_count": number,
     "is_claimed": boolean,
     "data_source": "string"
   }
   ```
+- `city_name`: localized city name from location_translations (fallback to city_slug)
+- `claimed_count`: number of claimed providers in same city (for social proof)
 - Returns 404 if provider not found
 
 **POST `/api/v1/providers/claim/{token}`** — Protected endpoint (JWT required)
@@ -2497,6 +2510,19 @@ Claim page очаква директен обект (не wrapper):
 - **Test 2 — Invalid token**: ✅ PASS — shows not_found message with register CTA
 - **Test 3 — Login redirect**: ✅ PASS — redirects to `/bg/auth/login?redirect=/bg/claim/{token}`
 - **Fix applied**: Claim page updated to match API response format (commit 67ccc5a)
+
+**Redesign (June 16, 2026):**
+- High-conversion page: urgency bar, leads teaser (decorative),
+  benefits grid, Fixly comparison, social proof
+- Social proof 3-phase logic:
+  count === 0 → social_proof_zero (early mover message)
+  count < 10  → social_proof_few (traction message)
+  count >= 10 → social_proof_many (social proof message)
+- city_name pattern: GET endpoint accepts ?lang= param, JOINs
+  location_translations → returns localized city name (not city_slug)
+- claimed_count: COUNT of is_claimed=TRUE providers in same city
+- API response is direct object (no success/data wrapper) —
+  important: frontend must handle direct JSON, not response.data
 
 ---
 

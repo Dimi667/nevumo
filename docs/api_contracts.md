@@ -2018,31 +2018,44 @@ Auth errors (see Auth section for full list):
 
 # 🔹 CLAIMED PROFILES ENDPOINTS
 
-## GET /api/v1/providers/claim/{token}
+## GET /api/v1/providers/by-claim-token/{token}
 
-**Purpose:** Public preview of an unclaimed provider profile. Used by the claim landing page to display provider info before the user authenticates.
+**Purpose:** Public preview of an unclaimed provider profile. Used by the
+claim landing page to display provider info before the user authenticates.
 
 **Auth:** None required (public)
 
 **Path Params:**
 - `token` — claim token (unique per unclaimed provider)
 
-**Response (200):**
+**Query Params:**
+- `lang` (optional, default: "en") — language code for localized city_name
+
+**Response (200) — direct object (no success/data wrapper):**
 ```json
 {
-  "success": true,
-  "data": {
-    "business_name": "Jan Kowalski Hydraulik",
-    "slug": "jan-kowalski-hydraulik",
-    "city": "Warszawa",
-    "category": "Plumbing",
-    "data_source": "scraped"
-  }
+  "id": "uuid",
+  "business_name": "Jan Kowalski Hydraulik",
+  "category_slug": "plumbing",
+  "city_slug": "warszawa",
+  "city_name": "Warsaw",
+  "claimed_count": 5,
+  "is_claimed": false,
+  "data_source": "scraped"
 }
 ```
 
+**Notes:**
+- `city_name` — localized city name from `location_translations` table for
+  the given `lang`. Falls back to `city_slug` if translation not found.
+- `claimed_count` — number of claimed providers in the same city.
+  Used for social proof display (zero/few/many logic on frontend).
+  Returns 0 on query failure (non-blocking).
+- Response is a direct object, NOT wrapped in { success, data } envelope
+  (differs from standard API format — discovered during Task 4A integration).
+
 **Errors:**
-- 404 TOKEN_NOT_FOUND — token does not exist or profile is already claimed
+- 404 — token does not exist
 
 ---
 
@@ -2062,6 +2075,9 @@ Auth errors (see Auth section for full list):
 - If user has a real (non-draft) provider profile → returns 409
 - Sets user_id, is_claimed=TRUE, claim_token=NULL, recalculates verification_level
 - Sends Art. 14 GDPR confirmation email (non-blocking — email failure does not rollback claim)
+
+**Welcome email:** Sends welcome email via send_claim_welcome_email() on
+successful claim (non-blocking — email failure does not rollback claim).
 
 **Response (200):**
 ```json
