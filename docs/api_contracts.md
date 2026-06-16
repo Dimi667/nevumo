@@ -369,9 +369,11 @@ None
 
 ### Description
 GDPR-compliant account deletion. Executed in a single DB transaction:
-1. Nullify leads.client_id WHERE client_id = user.id
+1. Nullify leads.client_id AND set leads.phone = "deleted" WHERE client_id = user.id (GDPR Art. 17)
 2. If provider exists: nullify leads.provider_id → delete lead_matches → delete provider_cities → delete services → delete provider
-3. Delete user record (cascade handles tokens, claims, reviews)
+3. Explicitly delete reviews WHERE client_id = user.id
+4. Explicitly delete messages WHERE sender_id = user.id
+5. Delete user record (cascade handles tokens, magic_link_tokens, pending_lead_claims, providers)
 Handles client-only, provider-only, and dual-role accounts.
 
 ### Errors

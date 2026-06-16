@@ -839,15 +839,26 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - **Delete Account — GDPR-compliant (April 25, 2026)**
   - Backend: `DELETE /api/v1/auth/account` (JWT required) in `apps/api/routes/auth.py` + `apps/api/services/auth_service.py`
   - Deletion order (single DB transaction):
-    1. Nullify `leads.client_id` WHERE `client_id = user.id`
+    1. Nullify `leads.client_id` AND set `leads.phone = "deleted"` WHERE `client_id = user.id` (GDPR Art. 17 — phone is personal data)
     2. If provider exists: nullify `leads.provider_id`, delete `lead_matches`, `provider_cities`, `services`, then `providers` record
-    3. Delete `user` record (cascade: `password_reset_tokens`, `magic_link_tokens`, `pending_lead_claims`, `reviews`)
+    3. Explicitly delete `reviews` WHERE `client_id = user.id` (NO ACTION FK — not cascaded)
+    4. Explicitly delete `messages` WHERE `sender_id = user.id` (NO ACTION FK — preventive)
+    5. Delete `user` record (cascade: `password_reset_tokens`, `magic_link_tokens`, `pending_lead_claims`, `providers`)
   - Handles all three cases: client-only, provider-only, both simultaneously
   - Frontend: inline confirmation panel (no modal) in both:
     - `apps/web/app/[lang]/provider/dashboard/settings/page.tsx`
     - `apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx`
   - On success: `clearAuth()` + localStorage cleanup + redirect to `/${lang}`
   - Translations: 5 keys × 34 languages × 2 namespaces (`provider_dashboard`, `client_dashboard`) = 340 rows seeded
+- **Delete Account Bug Fix (June 16, 2026)**
+  - **Root cause**: `reviews.client_id` FK is `NO ACTION` (not CASCADE). Users with reviews could not delete their account — PostgreSQL threw `ForeignKeyViolation: reviews_client_id_fkey`.
+  - **Secondary issue**: `leads.phone` was not nullified on account deletion — personal data remained in DB after GDPR Art. 17 erasure request.
+  - **Fix**: `apps/api/services/auth_service.py` — `delete_user_account()` updated:
+    - `leads.phone` set to `"deleted"` alongside `client_id = None`
+    - Explicit `Review` delete added before `db.delete(user)`
+    - Explicit `Message` delete added before `db.delete(user)` (preventive — `messages.sender_id` also NO ACTION)
+  - **Imports added**: `Review`, `Message` added to models import in `auth_service.py`
+  - **Verified**: Account deletion confirmed working in production (June 16, 2026)
   - Translation keys: `delete_account_btn`, `delete_account_title`, `delete_account_warning`, `delete_account_confirm`, `delete_account_cancel`
 - **Frontend Next.js 16 Compliance (April 21, 2026)** — Migrated from `middleware.ts` to `proxy.ts`:
   - **Reason**: Next.js 16 deprecated the `middleware.ts` convention in favor of `proxy.ts` for improved routing control.
