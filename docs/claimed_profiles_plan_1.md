@@ -1,7 +1,7 @@
 # Nevumo — Claimed Profiles: Пълен план
 
-**Статус:** 🟡 В процес — Задача 2Б ✅, 3А ✅, 4А ✅ и 4А редизайн ✅ завършени
-**Последна актуализация:** 16 юни 2026
+**Статус:** 🟡 В процес — Задача 1Ж ✅, 1Ж-ext ✅, 2Б ✅, 3А ✅, 4А ✅ и 4А редизайн ✅ завършени
+**Последна актуализация:** 17 юни 2026
 **Приоритет:** 🔴 Висок — преди Warsaw outreach кампания
 
 ---
@@ -128,11 +128,23 @@ python3.13 apps/scripts/collect_ceidg_providers.py
   * Телефоните от Panoramafirm са call-tracking (224573095) — не се ползват
   * 233 уебсайта БЕЗ имейл → Task 1З
 
-**Задача 1Ж — Bing Search API → намиране на уебсайтове** ⏳ Следваща
-- Bing Search API (безплатно до 3,000 заявки/месец)
-- Търси по бизнес имена от Panoramafirm БЕЗ уебсайт → намира сайтовете им
-- Потенциал: +300-500 уебсайта → +150-250 нови имейла
-- Модел: Kimi-2.6
+**Задача 1Ж — DuckDuckGo Website Finder** ✅ ЗАВЪРШЕНА (17 юни 2026)
+- Script: apps/scripts/bing_website_finder.py
+- Input: warszawa_providers_with_websites.csv (1,473 реда без email + без website)
+- Намерени уебсайтове: 562 (38% success rate)
+- Encoding fix: utf-8-sig (BOM)
+- Blocklist: social media + directories + international TLDs
+- Output: warszawa_providers_with_websites.csv (website колона обновена)
+- Runtime: ~37 минути
+- DuckDuckGo API (ddgs пакет) вместо Bing Search API (безплатно, не изисква key)
+
+**Задача 1Ж-ext — Email Extractor CEIDG** ✅ ЗАВЪРШЕНА (17 юни 2026)
+- Script: apps/scripts/extract_emails_ceidg.py
+- Input: warszawa_providers_with_websites.csv (568 реда с website != "" AND email == "")
+- Намерени имейли: 231 (40.7% success rate)
+- Стратегия: homepage + /kontakt + /contact, https с http fallback
+- Output: warszawa_providers_with_websites.csv (email колона обновена)
+- CEIDG CSV финален резултат: 864 имейла | 613 уебсайта | 2,122 реда
 
 **Задача 1З — Email extractor от Panoramafirm уебсайтове** ✅ Завършена (17 юни 2026)
 - Script: apps/scripts/extract_emails_from_websites.py
@@ -164,16 +176,14 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 
 | Source | Имейли | Телефони | Уебсайтове |
 |---|---|---|---|
-| CEIDG (1А) | 633 | 230 | 51 |
-| Panoramafirm (1Е) | 612 уникални | — | 967 |
-| **Общо досега** | **~1,360** | **230** | **~1,000** |
-| След 1З (уебсайтове) | +160 | — | — |
+| CEIDG (1А + 1В + 1Ж-ext) | 864 | 230 | 613 |
+| Panoramafirm (1Е + 1З) | 772 уникални | — | 967 |
+| **Общо досега** | **~1,636** | **230** | **~1,580** |
 | След 1Д (SMS) | — | 230 SMS | — |
-| След 1Ж (Bing) | +150-250 | — | — |
 | След 1И (Google, опц.) | +200-300 | +200 | — |
-| **Прогнозен краен** | **~1,700-2,000** | **~430+** | — |
+| **Прогнозен краен** | **~1,800-2,000** | **~430+** | — |
 
-При 8-15% конверсия = **136-300 claimed профила за Warsaw launch.**
+При 8-15% конверсия = **144-300 claimed профила за Warsaw launch.**
 
 ---
 

@@ -578,6 +578,20 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     * headless=False required (Akamai blocks headless)
     * Website label: "Adres strony internetowej" (not "Strona")
     * sync_playwright, headless=False, viewport 1920x1080, real Chrome UA
+- **Claimed Profiles — Task 1Ж DuckDuckGo Website Finder (June 17 2026):** ✅ ЗАВЪРШЕНА
+  - Script: apps/scripts/bing_website_finder.py
+  - Targets: 1,473 реда (без email + без website)
+  - Намерени уебсайтове: 562 (38% success rate)
+  - Encoding fix: utf-8-sig (BOM)
+  - Blocklist: social media + directories
+  - Output: warszawa_providers_with_websites.csv (website колона обновена)
+- **Claimed Profiles — Task 1Ж-ext Email Extractor CEIDG (June 17 2026):** ✅ ЗАВЪРШЕНА
+  - Script: apps/scripts/extract_emails_ceidg.py
+  - Targets: 568 реда (website != "" AND email == "")
+  - Намерени имейли: 231 (40.7% success rate)
+  - Стратегия: homepage + /kontakt + /contact, https с http fallback
+  - Output: warszawa_providers_with_websites.csv (email колона обновена)
+  - CEIDG CSV финален резултат: 864 имейла | 613 уебсайта | 2,122 реда
 - **Claimed Profiles — Backend (Task 2B, June 14 2026)** — COMPLETE: Claim endpoint pair added to apps/api/routes/providers.py:
   - GET /api/v1/providers/claim/{token} — public profile preview for claim landing page
   - POST /api/v1/providers/claim/{token} — authenticated claim action; validates role, deletes registration draft (detected by slug prefix "draft" + business_name = user email), links user_id to unclaimed profile, sets is_claimed=TRUE, clears claim_token, recalculates verification_level, sends Art. 14 GDPR email (non-blocking)

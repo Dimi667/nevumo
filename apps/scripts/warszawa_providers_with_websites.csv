@@ -1,4 +1,4 @@
-business_name,owner_name,address,phone,email,website,nip,pkd_code,category,source
+﻿business_name,owner_name,address,phone,email,website,nip,pkd_code,category,source
 10SHOPS Wiesław Wójcicki,Wiesław Wójcicki,10shops.pl@gmail.com,+48730301310,10shops.pl@gmail.com,,9511604749,81.21.Z,cleaning,ceidg
 "1. 2PM Paweł Białas, 2. Paweł Białas - wspólnik spółki cywilnej SUPREME CONCIERGE",Paweł Białas,-,,,,5222356125,81.21.Z,cleaning,ceidg
 "1.""ABYSS DIVING"", 2.Przedsiębiorstwo Parkingowe ""DOMINEX"" wspólnik spółki cywilnej Anna Janczewska Dominik, Adam Janczewski",Adam Janczewski,-,,,teraz-otwarte.pl,1230452077,81.21.Z,cleaning,ceidg
@@ -6,7 +6,7 @@ business_name,owner_name,address,phone,email,website,nip,pkd_code,category,sourc
 "1) ADA POL URSZULA FLORCZUK 2) STOMATOLOGIA RODZINNA FLO-DENTAL FLORCZUK, WSPÓLNIK S.C.",URSZULA FLORCZUK,-,,,,5271309344,81.21.Z,cleaning,ceidg
 1) ADVERTIME KRZYSZTOF GAŁACH; 2) PO WŁOSKU S. C. Krzysztof Gałach wspólnik spółki cywilnej,Krzysztof Gałach,-,,,,5222419245,81.21.Z,cleaning,ceidg
 "1. AGENCJA OCHRONY OSÓB I MIENIA ""MIBOS"" MIROSŁAW SIEROCIŃSKI 2. MIROSŁAW SIEROCIŃSKI wspólnik s. c. MIBOS, 3. MIROSŁAW SIEROCIŃSKI wspólnik s. c. MIBOS BIS, 4/MIROSŁAW SIEROCIŃSKI wspólnik s. c. MIBOS RESIDENCE, 5/MIROSŁAW SIEROCIŃSKI wspólnik s. c. DUO",MIROSŁAW SIEROCIŃSKI,-,,,,5210413596,81.21.Z,cleaning,ceidg
-"1.AGENCJA TRANSPORTOWA DANIEL s.c. ,SĘCZEK MAREK wspólnik spółki cywilnej",Marek Sęczek,-,,,daniel.com.pl,9521205927,81.21.Z,cleaning,ceidg
+"1.AGENCJA TRANSPORTOWA DANIEL s.c. ,SĘCZEK MAREK wspólnik spółki cywilnej",Marek Sęczek,-,,72info@daniel.com.plmapaformularz,daniel.com.pl,9521205927,81.21.Z,cleaning,ceidg
 1. AK PROJEKT AGNIESZKA KUDELSKA,AGNIESZKA KUDELSKA,AKUDELSKA1@GMAIL.COM,,AKUDELSKA1@GMAIL.COM,,5221953072,81.21.Z,cleaning,ceidg
 1. AREAHOUSE Jacek Prażmowski; 2. STUDIO URSYNÓW s.c.; 3. AreaHouse PM s.c.,Jacek Prażmowski,-,,,areahouse.pl,8652382339,81.21.Z,cleaning,ceidg
 "1) ""AR-MAR"" s.c Mariusz Grot, Arkadiusz Kozłowski 2) ""BIKER"" - Grot, Kozłowski s.c.",Mariusz Grot,-,,,,1250036399,81.21.Z,cleaning,ceidg
@@ -33,13 +33,13 @@ business_name,owner_name,address,phone,email,website,nip,pkd_code,category,sourc
 "1) KOMPLEKSOWE USŁUGI PORZĄDKOWE BŁYSK - Robert Zegarek; 2) S-SERVICE S.C. MAGDALENA DZIEMIDOK, ROBERT ZEGAREK",ROBERT ZEGAREK,-,,,,5262827217,81.21.Z,cleaning,ceidg
 "1) ""KONTANOR"" BIURO KSIĘGOWE Barbara Noremberg; 2) Barbara Noremberg wspólnik s.c. ""CLINSERWIS""",Barbara Noremberg,-,,,biura-rachunkowe.waw.pl,5661033849,81.21.Z,cleaning,ceidg
 "1. KRZYSZTOF PIOTROWSKI 2. WAWRZENIECKI I PIOTROWSKI VIP S.C., KRZYSZTOF PIOTROWSKI wspólnik spółki cywilnej",KRZYSZTOF PIOTROWSKI,-,,,,5221182947,81.21.Z,cleaning,ceidg
-1. LIMBA-USŁUGI LEŚNE ZOFIA TOKAJ; 2. ZOFIA TOKAJ WSPÓLNIK SPÓŁKI CYWILNEJ MAGNAT,Zofia Tokaj,-,,,swiat-stylu.pl,1230020521,81.21.Z,cleaning,ceidg
+1. LIMBA-USŁUGI LEŚNE ZOFIA TOKAJ; 2. ZOFIA TOKAJ WSPÓLNIK SPÓŁKI CYWILNEJ MAGNAT,Zofia Tokaj,-,,kontakt@wenet.pl,swiat-stylu.pl,1230020521,81.21.Z,cleaning,ceidg
 "1/MaG Marcin Górecki, 2/Marcin Górecki wspólnik spółki cywilnej LEMON",Marcin Górecki,-,,,,1181628090,81.21.Z,cleaning,ceidg
 "1) ""Małgorzata"" agent ubezpieczeniowy Mariusz Sochacki; 2) Mariusz Sochacki - wspólnik spółki cywilnej ""PAB"" POLSKA AGENCJA BADAWCZA BUDOWNICTWA",Mariusz Sochacki,-,,,,5211920697,81.21.Z,cleaning,ceidg
 "1. MANDRONE STUDIO BARTOSZ MYSZKOWSKI, 2. CALYPSO DIVERS BARTOSZ MYSZKOWSKI 3.APPLECAFFE BARTOSZ MYSZKOWSKI 4. APPETYTCAFFE BARTOSZ MYSZKOWSKI",BARTOSZ MYSZKOWSKI,bartosz.myszkowski@me.com,,bartosz.myszkowski@me.com,,9511935653,81.21.Z,cleaning,ceidg
 1. MARGO HOUSE MAŁGORZATA SUTKOWSKA 2. A&M MAŁGORZATA SUTKOWSKA - wspólnik spółki cywilnej,MAŁGORZATA SUTKOWSKA,msutkowska.biuro@gmail.com,,msutkowska.biuro@gmail.com,,5421335953,81.21.Z,cleaning,ceidg
 1) Marta Stefaniak GRAND HOUSE; 2) Biuro Ochrony GRAND Marta Stefaniak,Marta Stefaniak,-,,,t.me,1181795959,81.21.Z,cleaning,ceidg
-1. MG RECYKLING S.C. GRZEGORZ WĄCHOCKI MARCIN WYDERKA 2. PODIUM - Grzegorz Wąchocki,GRZEGORZ WĄCHOCKI,-,,,swiat-uslug.pl,7272352633,81.21.Z,cleaning,ceidg
+1. MG RECYKLING S.C. GRZEGORZ WĄCHOCKI MARCIN WYDERKA 2. PODIUM - Grzegorz Wąchocki,GRZEGORZ WĄCHOCKI,-,,kontakt@wenet.pl,swiat-uslug.pl,7272352633,81.21.Z,cleaning,ceidg
 1. MIASTO I ŚRODOWISKO LESZEK PERLIŃSKI Wspólnik Spółki Cywilnej; 2. MIŚ STUDIO LESZEK PERLIŃSKI,LESZEK PERLIŃSKI,-,,,,5211765073,81.21.Z,cleaning,ceidg
 1) MILMAR MARIA STĘPNIAK 2) STĘPNIAK NIERUCHOMOŚCI S.C.,Maria Stępniak,mariastepniak1@gmail.com,,mariastepniak1@gmail.com,,5270010471,81.21.Z,cleaning,ceidg
 "1) MONIKA BELKIEWICZ - wspólnik spółki cywilnej ""FABRYKA GRZECHÓW"" S.C. M i G BELKIEWICZ; 2) FABRYKA GRZECHÓW - MONIKA BELKIEWICZ",MONIKA BELKIEWICZ,-,,,,5222295671,81.21.Z,cleaning,ceidg
@@ -47,17 +47,17 @@ business_name,owner_name,address,phone,email,website,nip,pkd_code,category,sourc
 1) PANIE JANIE SPRZĄTANIE JAN KUROWSKI,JAN KUROWSKI,-,,,,7621726323,81.21.Z,cleaning,ceidg
 1. Paweł Brymas WK BLOKBUD; 2. PBB; 3. BB DEVELOPER s.c.Paweł Brymas,Paweł Brymas,-,,,,5212046788,81.21.Z,cleaning,ceidg
 1)PO GODZINACH; 2) KAPSLE MARIUSZ STEFAŃSKI,MARIUSZ STEFAŃSKI,-,,,,5222726220,81.21.Z,cleaning,ceidg
-1) PRACOWNIA JĘZYKOWA ROKSANA CICHOŃ,ROKSANA CICHOŃ,-,,,aktin.pl,8822100186,81.21.Z,cleaning,ceidg
+1) PRACOWNIA JĘZYKOWA ROKSANA CICHOŃ,ROKSANA CICHOŃ,-,,karina@aktin.pl,aktin.pl,8822100186,81.21.Z,cleaning,ceidg
 "1/ PRZEDSIĘBIORSTWO USŁUGOWO-HANDLOWE ""LUX"" ADRIAN OSIŃSKI, 2/ Wspólnik Spółki Cywilnej ""Dombis"" Osińscy A.A.",ADRIAN OSIŃSKI,adrosi123@gmail.com,,adrosi123@gmail.com,,9512382512,81.21.Z,cleaning,ceidg
-1.RADLIŃSKI MARIUSZ WSPÓLNIK SPÓŁKI CYWILNEJ MIMAR 2.MIMAR MARIUSZ RADLIŃSKI,MARIUSZ RADLIŃSKI,-,,,jestporzadek.pl,5251376834,81.21.Z,cleaning,ceidg
+1.RADLIŃSKI MARIUSZ WSPÓLNIK SPÓŁKI CYWILNEJ MIMAR 2.MIMAR MARIUSZ RADLIŃSKI,MARIUSZ RADLIŃSKI,-,,kontakt@wenet.pl,jestporzadek.pl,5251376834,81.21.Z,cleaning,ceidg
 "1. RAFAŁ PAWŁOWSKI ""RIM"" 2. T.R. Development Rafał Pawłowski wspólnik Spółki Cywilnej",RAFAŁ PAWŁOWSKI,biuro@wywoznieczystosci.net,+48507201301,biuro@wywoznieczystosci.net,,9521050436,81.21.Z,cleaning,ceidg
 1) RYMAT Ryszard Matwiejuk 2) CONCORDIA OBSŁUGA TECHNICZNA Ryszard Matwiejuk - wspólnik s.c. 3) CONCORDIA UTRZYMANIE CZYSTOŚCI Ryszard Matwiejuk - wspólnik s.c. 4) CONCIERGEGOLD Ryszard Matwiejuk - wspólnik s.c.,Ryszard Matwiejuk,-,,,workornot.pl,5212879181,81.21.Z,cleaning,ceidg
 1. Stępniak Nieruchomości Katarzyna Stępniak 2. Stępniak Nieruchomości S.C.,KATARZYNA STĘPNIAK,-,,,,5222728897,81.21.Z,cleaning,ceidg
-1. USŁUGI FRYZJERSKO KOSMETYCZNE DODA - DOROTA NOWAK; 2. FIRMA BUDOWLANO USŁUGOWA PUCUŚ - DOROTA NOWAK,Dorota NOWAK,-,,,inkandcut.pl,5262119868,81.21.Z,cleaning,ceidg
+1. USŁUGI FRYZJERSKO KOSMETYCZNE DODA - DOROTA NOWAK; 2. FIRMA BUDOWLANO USŁUGOWA PUCUŚ - DOROTA NOWAK,Dorota NOWAK,-,,kontakt@wenet.pl,inkandcut.pl,5262119868,81.21.Z,cleaning,ceidg
 "1/ WARMET Piotr Sasinowski, 2/ Piotr Sasinowski wspólnik spółki cywilnej Poltermex",PIOTR SASINOWSKI,-,,,,5222319704,81.21.Z,cleaning,ceidg
 "1/WTS Wojciech Kuczyński, 2/Wojciech Kuczyński wspólnik Spółki Cywilnej CANDID",Wojciech Kuczyński,woj-tazz-king@wp.pl,,woj-tazz-king@wp.pl,,5222362367,81.21.Z,cleaning,ceidg
 1.ZAKŁAD REMONTOWO-BUDOWLANY KRZYSZTOF BŁAŻEJEWSKI 2.ZAKŁAD REMONTOWO-BUDOWLANY KRZYSZTOF BŁAŻEJEWSKI WSPÓLNIK SPÓŁKI CYWILNEJ,KRZYSZTOF BŁAŻEJEWSKI,-,,,,5270102210,81.21.Z,cleaning,ceidg
-2 Follow - Iwona Opoka,IWONA OPOKA,-,,,fizjoactive.com.pl,7171377206,81.21.Z,cleaning,ceidg
+2 Follow - Iwona Opoka,IWONA OPOKA,-,,kontakt24@fizjoactive.com.pl,fizjoactive.com.pl,7171377206,81.21.Z,cleaning,ceidg
 2klevel Kamil Kwiatkowski,Kamil Kwiatkowski,2klevel.poczta@gmail.com,+48505557613,2klevel.poczta@gmail.com,,5242991617,81.21.Z,cleaning,ceidg
 2M Magdalena Burkiewicz,Magdalena Burkiewicz,-,,,,8171973860,81.21.Z,cleaning,ceidg
 2M Mikołaj Mayzel,Mikołaj Mayzel,-,,,,5212882734,81.21.Z,cleaning,ceidg
@@ -95,7 +95,7 @@ ABC Jarosław Rusiniak,Jarosław Rusiniak,-,,,,5212793781,81.22.Z,cleaning,ceidg
 ABGAS Grzegorz Zaręba,Grzegorz Zaręba,-,,,,9511975776,81.22.Z,cleaning,ceidg
 ABKRIS KRZYSZTOF ZYŚK,KRZYSZTOF ZYŚK,-,,,windows-10-forum.com,7591066200,81.22.Z,cleaning,ceidg
 A.B.M ANNA KRZYŚPIAK,ANNA KRZYŚPIAK,-,,,,9522115876,81.22.Z,cleaning,ceidg
-A.B.M. BOGDAN BĄDARCZUK,Bogdan Bądarczuk,-,,,biznesbaza.com,9521348489,81.22.Z,cleaning,ceidg
+A.B.M. BOGDAN BĄDARCZUK,Bogdan Bądarczuk,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,9521348489,81.22.Z,cleaning,ceidg
 ABORK ADAM BORKOWSKI,ADAM BORKOWSKI,-,,,,5251269185,81.22.Z,cleaning,ceidg
 AB PRO RAFAŁ TYDA,RAFAŁ TYDA,defed@op.pl,,defed@op.pl,,5212108420,81.22.Z,cleaning,ceidg
 ABT Irena Zbrzezna,Irena Zbrzezna,-,,,,1250211715,81.22.Z,cleaning,ceidg
@@ -118,24 +118,24 @@ ADAM KILIAN ELEKTRYFIKACJA,ADAM KILIAN,-,,,se.pl,8171129986,81.22.Z,cleaning,cei
 ADAM KRYSZTOF - wspólnik spółki cywilnej KAMED - APARATURA I INSTRUMENTY MEDYCZNE,ADAM KRYSZTOF,kamed@kamed.com.pl,,kamed@kamed.com.pl,,1181843316,81.22.Z,cleaning,ceidg
 Adam Marchwiński Admax,Adam Marchwiński,-,,,,5272331831,81.22.Z,cleaning,ceidg
 ADAM MENDELKA ADEX,ADAM MENDELKA,zamowienia@mojezapachy.pl,,zamowienia@mojezapachy.pl,,9521940495,81.22.Z,cleaning,ceidg
-"Adam OLSZEWSKI FIRMA USŁUGOWA ""RYWAL""",Adam OLSZEWSKI,-,,,biznesbaza.com,1180110511,81.22.Z,cleaning,ceidg
+"Adam OLSZEWSKI FIRMA USŁUGOWA ""RYWAL""",Adam OLSZEWSKI,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,1180110511,81.22.Z,cleaning,ceidg
 ADAM PANEK ADAK,ADAM PANEK,biuro@blts.net.pl,+48784936980,biuro@blts.net.pl,,9211640391,81.22.Z,cleaning,ceidg
 Adam Polak BLUE SKY LOGISTIC,Adam Polak,-,,,,5242443181,81.22.Z,cleaning,ceidg
-Adam RAJEWSKI RAJPOL Adam Rajewski,Adam RAJEWSKI,-,,,firma.nuclear.pl,5270153348,81.22.Z,cleaning,ceidg
+Adam RAJEWSKI RAJPOL Adam Rajewski,Adam RAJEWSKI,-,,office@nuclear.plcypyright,firma.nuclear.pl,5270153348,81.22.Z,cleaning,ceidg
 ADAM REINHARD STUDIO ART 78,ADAM REINHARD,-,,,,5291519955,81.22.Z,cleaning,ceidg
-ADAM RELUGA ZAKŁAD USŁUG KOMINIARSKICH wspólnik spółki cywilnej,ADAM RELUGA,-,,,kominiarz.org,5241124841,81.22.Z,cleaning,ceidg
+ADAM RELUGA ZAKŁAD USŁUG KOMINIARSKICH wspólnik spółki cywilnej,ADAM RELUGA,-,,kominiarzreluga@gmail.com,kominiarz.org,5241124841,81.22.Z,cleaning,ceidg
 Adam Romer Alpha Workers,Adam Romer,alphaworkers@outlook.com,+48790216603,alphaworkers@outlook.com,,5272825846,81.22.Z,cleaning,ceidg
 ADAM SOBSTYL ZARZĄDZANIE NIERUCHOMOŚCIAMI,ADAM SOBSTYL,asobstyl@besthome.waw.pl,,asobstyl@besthome.waw.pl,,8541567426,81.22.Z,cleaning,ceidg
 ADAM TUROS ZAKŁAD USŁUG REMONTOWO BUDOWLANYCH,ADAM TUROS,-,,,,8231236221,81.22.Z,cleaning,ceidg
-Adam UCIESZYŃSKI,Adam UCIESZYŃSKI,-,,,jestporzadek.pl,1180218272,81.22.Z,cleaning,ceidg
+Adam UCIESZYŃSKI,Adam UCIESZYŃSKI,-,,kontakt@wenet.pl,jestporzadek.pl,1180218272,81.22.Z,cleaning,ceidg
 ADAM WĄSOWSKI ZAKŁAD INSTALACJI SANITARNYCH I ROBÓT BUDOWLANYCH,ADAM WĄSOWSKI,-,,,,5220200287,81.22.Z,cleaning,ceidg
 ADAM WĄTKOWSKI Współnik Spółki Cywilnej,ADAM WĄTKOWSKI,-,,,,5241560269,81.22.Z,cleaning,ceidg
-"ADAM WYRZYK ""VERT""",ADAM WYRZYK,-,,,spalaniebiomasy.pl,9520004581,81.22.Z,cleaning,ceidg
+"ADAM WYRZYK ""VERT""",ADAM WYRZYK,-,,kontakt@wenet.pl,spalaniebiomasy.pl,9520004581,81.22.Z,cleaning,ceidg
 "Adam Zaporski ""VIDEO - SAT""",Adam Zaporski,-,,,,1130061302,81.22.Z,cleaning,ceidg
 ADAM ZIEMBOWICZ ADMIR wspólnik spółki cywilnej,ADAM ZIEMBOWICZ,-,,,,5241408372,81.22.Z,cleaning,ceidg
 ADAX ADAM ŁAKOMSKI,ADAM ŁAKOMSKI,adamlakomski@op.pl,+48501364529,adamlakomski@op.pl,,5271696890,81.22.Z,cleaning,ceidg
 ADBUD-INSTAL ADAM KIJEWSKI,Adam Kijewski,adbudinstal@vp.pl,+48884782381,adbudinstal@vp.pl,,5213522179,81.22.Z,cleaning,ceidg
-AD-DOM SERWIS KONSTANTY STRUMSKI,KONSTANTY STRUMSKI,-,,,ad-dom.pl,7921137200,81.22.Z,cleaning,ceidg
+AD-DOM SERWIS KONSTANTY STRUMSKI,KONSTANTY STRUMSKI,-,,biuro@ad-dom.pl,ad-dom.pl,7921137200,81.22.Z,cleaning,ceidg
 AD-DOM ZARZĄDZANIE NIERUCHOMOŚCIAMI PAWEŁ WALCZAK,Paweł Walczak,biuro@ad-dom.pl,,biuro@ad-dom.pl,,9521019389,81.22.Z,cleaning,ceidg
 ADEMAR MARIOLA DOBACZEWSKA,Mariola Dobaczewska,-,,,,1131995952,81.22.Z,cleaning,ceidg
 ADF ANNA DUDKIEWICZ,ANNA DUDKIEWICZ,-,,,,8531410539,81.22.Z,cleaning,ceidg
@@ -149,11 +149,11 @@ ADKAL KAROL KALINOWSKI,Karol Kalinowski,-,,,chip.com.tr,8441817059,81.22.Z,clean
 ADM1N KONRAD DYGULSKI,KONRAD DYGULSKI,-,,,,5262860640,81.22.Z,cleaning,ceidg
 1. AKCEPT RAFAŁ BADOWSKI 2. FARMOT - RAFAŁ BADOWSKI wspólnik spółki cywilnej,Rafał Badowski,-,,,support.google.com,5211136791,81.29.Z,cleaning,ceidg
 1. F.H.U. STOCK HANDEL KONRAD MOCARSKI 2. GALERIA D&K OUTLET S.C.,KONRAD MOCARSKI,-,,,owg.pl,1181467528,81.29.Z,cleaning,ceidg
-"1.GOLDENLENS.PL STANISŁAW SZYMANEK, 2.AQUA LENS Piotr, Katarzyna i Stanisław Szymanek Spółka Cywilna",STANISŁAW SZYMANEK,-,,,forum.lowyat.net,1231261965,81.29.Z,cleaning,ceidg
+"1.GOLDENLENS.PL STANISŁAW SZYMANEK, 2.AQUA LENS Piotr, Katarzyna i Stanisław Szymanek Spółka Cywilna",STANISŁAW SZYMANEK,-,,mjaciq@yahoo.com,forum.lowyat.net,1231261965,81.29.Z,cleaning,ceidg
 "1) KAZIMIERZ WASYK ""EL-WAS"" P.P.U., 2) KAZIMIERZ WASYK EL-KAM ZAKŁAD REMONTOWO-BUDOWLANY - WSPÓLNIK SPÓŁKI CYWILNEJ",KAZIMIERZ WASYK,-,,,,1180010620,81.29.Z,cleaning,ceidg
 1. PHENOMED ŁUKASZ ZAWADZKI 2. TOP DRY ŁUKASZ ZAWADZKI Wspólnik Spółki Cywilnej,ŁUKASZ ZAWADZKI,-,,,,5213363829,81.29.Z,cleaning,ceidg
 ABC - DOMU SPRZĄTANIE REMONTY MARTA MINIAKOWSKA,MARTA MINIAKOWSKA,ominiakowska@gmail.com,+48509511838,ominiakowska@gmail.com,,1132675215,81.29.Z,cleaning,ceidg
-ABC-USŁUGI WŁADYSŁAW MAŁKIEWICZ,WŁADYSŁAW MAŁKIEWICZ,-,,,zrobimyporzadki.pl,1130518960,81.29.Z,cleaning,ceidg
+ABC-USŁUGI WŁADYSŁAW MAŁKIEWICZ,WŁADYSŁAW MAŁKIEWICZ,-,,kontakt@wenet.pl,zrobimyporzadki.pl,1130518960,81.29.Z,cleaning,ceidg
 ABELLA IZABELA ZAWADZKA,IZABELA ZAWADZKA,-,,,,9511168194,81.29.Z,cleaning,ceidg
 ABERO JAROSŁAW CHMIELECKI,JAROSŁAW CHMIELECKI,jchmielecki@gazeta.pl,,jchmielecki@gazeta.pl,,9670079391,81.29.Z,cleaning,ceidg
 AB factory PL Krzysztof Krasuski,Krzysztof Krasuski,biuro@abfactory.pl,,biuro@abfactory.pl,,9521456836,81.29.Z,cleaning,ceidg
@@ -162,7 +162,7 @@ ABUILD ANNA WYŻLIC,ANNA WYŻLIC,-,,,,6842182766,81.29.Z,cleaning,ceidg
 ACCU.PL PIOTR MULTAN,PIOTR MULTAN,multan@op.pl,+48601223366,multan@op.pl,,5341367891,81.29.Z,cleaning,ceidg
 ADAM BIELAŃSKI,ADAM BIELAŃSKI,-,,,,1251336206,81.29.Z,cleaning,ceidg
 Adam Kamiński Usługi Ogrodnicze,ADAM KAMIŃSKI,-,,,liderbudowlany.pl,5222715305,81.29.Z,cleaning,ceidg
-Adam Łomnicki - ADAMPOL Handel - Usługi,Adam Łomnicki,-,,,naukawpolsce.pl,5251282168,81.29.Z,cleaning,ceidg
+Adam Łomnicki - ADAMPOL Handel - Usługi,Adam Łomnicki,-,,fundacja@pap.pl,naukawpolsce.pl,5251282168,81.29.Z,cleaning,ceidg
 adamowy.pl Adam Chojnacki,Adam Chojnacki,-,,,,9512198352,81.29.Z,cleaning,ceidg
 ADAM PIWOWARCZYK,ADAM PIWOWARCZYK,-,,,,1180558602,81.29.Z,cleaning,ceidg
 ADAM PRZASNYSKI MADAX,ADAM PRZASNYSKI,-,,,,5661020597,81.29.Z,cleaning,ceidg
@@ -172,7 +172,7 @@ ADAM PRZASNYSKI MADAX,ADAM PRZASNYSKI,-,,,,5661020597,81.29.Z,cleaning,ceidg
 1. CORE STUDIO Katarzyna Szmyd 2. CORE STUDIO S.C. Katarzyna Szmyd wspólnik spółki cywilnej,KATARZYNA SZMYD,katarzyna.szmyd@corestudio.com.pl,,katarzyna.szmyd@corestudio.com.pl,,1250324997,96.04.Z,massage,ceidg
 1) DOBA - BARTŁOMIEJ DOMAGAŁA;,BARTŁOMIEJ DOMAGAŁA,bm.domagala@gmail.com,,bm.domagala@gmail.com,,5262300467,96.04.Z,massage,ceidg
 1) FINANSE EXPRESS & DEVELOPMENT KRZYSZTOF ZDANOWSKI 2) RS NIERUCHOMOŚCI KRZYSZTOF ZDANOWSKI,KRZYSZTOF ZDANOWSKI,-,,,scoreo.pl,9511838772,96.04.Z,massage,ceidg
-"1) GABINET DERMATOLOGICZNY IWONA MARYCZ-LANGNER; 2) ""DERMCLINIC"" Iwona Marycz-Langner wspólnik spółki cywilnej",IWONA MARYCZ-LANGNER,-,,,dermclinic.pl,6341613735,96.04.Z,massage,ceidg
+"1) GABINET DERMATOLOGICZNY IWONA MARYCZ-LANGNER; 2) ""DERMCLINIC"" Iwona Marycz-Langner wspólnik spółki cywilnej",IWONA MARYCZ-LANGNER,-,,biuro@dermclinic.pl,dermclinic.pl,6341613735,96.04.Z,massage,ceidg
 1.J R S MEDIA Joanna Rocka-Szerszenowicz 2.KAARAL POLSKA Joanna Rocka-Szerszenowicz wspólnik spółki cywilnej,JOANNA ROCKA-SZERSZENOWICZ,tomasz@kaaral.pl,,tomasz@kaaral.pl,,9511728144,96.04.Z,massage,ceidg
 "1/KLINIKA URODY ""K&K"" KATARZYNA WĄSOWSKA-ZAMULSKA ; 2/ ""DERMCLINIC"" KATARZYNA WĄSOWSKA-ZAMULSKA WSPÓLNIK SPÓŁKI CYWILNEJ: 3/SALON URODY ""K&K"" KATARZYNA WĄSOWSKA-ZAMULSKA WSPÓLNIK SPÓŁKI CYWILNEJ",KATARZYNA WĄSOWSKA-ZAMULSKA,klinikaurody@wp.pl,,klinikaurody@wp.pl,,9511854564,96.04.Z,massage,ceidg
 "1. ""MACIEJA"" Wiesław Macieja; 2.Macieja S.C. W. Macieja D. Macieja",Wiesław Macieja,-,,,,5211010535,96.04.Z,massage,ceidg
@@ -180,21 +180,21 @@ ADAM PRZASNYSKI MADAX,ADAM PRZASNYSKI,-,,,,5661020597,81.29.Z,cleaning,ceidg
 "1/ PAWEŁ PARADOWSKI USŁUGI REKLAMOWE, 2/ WakacjeDlaWas.pl PAWEŁ PARADOWSKI - wspólnik spółki cywilnej",PAWEŁ PARADOWSKI,-,,,,7751288407,96.04.Z,massage,ceidg
 1. PROVITA PORADNICTWO ŻYWIENIOWE LUDMIŁA PODGÓRSKA-STAWIECKA 2. BLIFE s.c. LUDMIŁA POGÓRSKA-STAWIECKA wspólnik spółki cywilnej,LUDMIŁA PODGÓRSKA-STAWIECKA,-,,,,9522003203,96.04.Z,massage,ceidg
 1. Przedsiębiorstwo Handlowo-Usługowe MAXIMA WALICKA BARBARA,Barbara Walicka,emaxima@o2.pl,,emaxima@o2.pl,,8261033221,96.04.Z,massage,ceidg
-1. Przemysław P. Krzywosz Kancelaria Prawna 2. Przemysław Krzywosz Galatea 3. Przemysław Krzywosz A.SD,Przemysław Krzywosz,-,,,multiprawnicy.pl,9510020609,96.04.Z,massage,ceidg
+1. Przemysław P. Krzywosz Kancelaria Prawna 2. Przemysław Krzywosz Galatea 3. Przemysław Krzywosz A.SD,Przemysław Krzywosz,-,,kontakt@wenet.pl,multiprawnicy.pl,9510020609,96.04.Z,massage,ceidg
 1. SKJ-PRAKTYKA CHIRURGICZNA DR KRZYSZTOF SZALA 2. SKJ Centrum medyczne Dr Krzysztof Szala,KRZYSZTOF SZALA,recepcja@doktorszala.pl,,recepcja@doktorszala.pl,,5211942486,96.04.Z,massage,ceidg
 1.UNI-KAN ROGER SERAFIN; 2.Roger Serafin wspólnik spółki cywilnej UNIKAN GROUP,ROGER SERAFIN,biuro@uni-kan.pl,,biuro@uni-kan.pl,,5211623025,96.04.Z,massage,ceidg
 "1. VITAL LIFE NATALIA EL DAGHESTANI; 2. SUPPORT 4 SPORT S.C. ŁUKASZ BIAŁKOWSKI, NATALIA EL DAGHESTANI",Natalia El Daghestani,n.eldaghestani@gmail.com,,n.eldaghestani@gmail.com,,1132350795,96.04.Z,massage,ceidg
 21i1 Michał Łasiński,Michał Łasiński,-,,,,5252512363,96.04.Z,massage,ceidg
 27 MINUT SZYMON BARTOSZEK EMS BUSINESS SOLUTIONS,SZYMON BARTOSZEK,-,,,,5941513757,96.04.Z,massage,ceidg
 4P SPORT Patrycja Poszytek,Patrycja Poszytek,-,,,,5252297597,96.04.Z,massage,ceidg
-4 VOLLEY ANDRZEJ WRONA,ANDRZEJ WRONA,-,,,activelifedvd.pl,9492098238,96.04.Z,massage,ceidg
+4 VOLLEY ANDRZEJ WRONA,ANDRZEJ WRONA,-,,kontakt@wenet.pl,activelifedvd.pl,9492098238,96.04.Z,massage,ceidg
 4WMK MARCIN KRUKOWSKI,MARCIN KRUKOWSKI,4w.marcin@gmail.com,+48501372666,4w.marcin@gmail.com,,8212189130,96.04.Z,massage,ceidg
 """4 YOU "" Katarzyna Krysik wspólnik spółki cywilnej",Katarzyna Krysik,-,,,,9521900768,96.04.Z,massage,ceidg
-4YOU NATALIIA KOVCHAR,NATALIIA KOVCHAR,-,,,sperky4u.eu,5214018537,96.04.Z,massage,ceidg
+4YOU NATALIIA KOVCHAR,NATALIIA KOVCHAR,-,,info@sperky4u.eu,sperky4u.eu,5214018537,96.04.Z,massage,ceidg
 7h7 PATRYCJA SOKOŁOWSKA,PATRYCJA SOKOŁOWSKA,LESSZEK@OP.PL,,LESSZEK@OP.PL,,5272399303,96.04.Z,massage,ceidg
 AB ACTIVE ANNA KOWALIK,Anna Kowalik,ania@abactive.pl,,ania@abactive.pl,,5271692596,96.04.Z,massage,ceidg
 AbcPsyche Anna Biernacka,Anna Biernacka,abcpsyche@interia.pl,+48607717220,abcpsyche@interia.pl,,1180138389,96.04.Z,massage,ceidg
-ABC TERAPII DZIECKA S.C.MARTA DUSIŃSKA wspólnik spółki cywilnej,Marta Dusińska,-,,,koronazglowy.pl,9522012544,96.04.Z,massage,ceidg
+ABC TERAPII DZIECKA S.C.MARTA DUSIŃSKA wspólnik spółki cywilnej,Marta Dusińska,-,,kontakt@wenet.pl,koronazglowy.pl,9522012544,96.04.Z,massage,ceidg
 ABIKO MICHAŁ WRÓBEL,MICHAŁ WRÓBEL,-,,,vertalen.nu,9512078553,96.04.Z,massage,ceidg
 a\ BLACK & WHITE S.C Katarzyna Kubiak wspólnik spółki cywilnej; b\ LIDER S.C. Katarzyna Kubiak wspólnik spółki cywilnej,Katarzyna Kubiak,-,,,,1132290886,96.04.Z,massage,ceidg
 About Love Ganna Gordiievska,Ganna Gordiievska,-,,,booksy.com,1231546484,96.04.Z,massage,ceidg
@@ -210,14 +210,14 @@ ACTIVITY. KATARZYNA KOSTAŃSKA,KATARZYNA KOSTAŃSKA,kasia.hutny@gmail.com,,kasia
 AdamA Performance Adam Ambroziak,Adam Ambroziak,adamambroziakpl@gmail.com,+48507119507,adamambroziakpl@gmail.com,,7742848893,96.04.Z,massage,ceidg
 "Adam Bania ""ALTRA""",Adam Bania,-,,,owg.pl,9521087971,96.04.Z,massage,ceidg
 ADAM CENTKOWSKI,ADAM CENTKOWSKI,centunie@wp.pl,+48575922555,centunie@wp.pl,,5272292479,96.04.Z,massage,ceidg
-Adam Gapczyński Studio Masażu,Adam Gapczyński,-,,,krs-online.com.pl,9522018311,96.04.Z,massage,ceidg
-ADAM JAŁBRZYKOWSKI,ADAM JAŁBRZYKOWSKI,-,,,spalaniebiomasy.pl,9512268302,96.04.Z,massage,ceidg
+Adam Gapczyński Studio Masażu,Adam Gapczyński,-,,kontakt@wenet.pl,krs-online.com.pl,9522018311,96.04.Z,massage,ceidg
+ADAM JAŁBRZYKOWSKI,ADAM JAŁBRZYKOWSKI,-,,kontakt@wenet.pl,spalaniebiomasy.pl,9512268302,96.04.Z,massage,ceidg
 ADAM JAŚNIKOWSKI,ADAM JAŚNIKOWSKI,-,,,dnb.com,8811205941,96.04.Z,massage,ceidg
 ADAM KUCZA SMARTLAB,ADAM KUCZA,-,,,,5222384914,96.04.Z,massage,ceidg
 Adam Pochylski,Adam Pochylski,-,,,,8392724256,96.04.Z,massage,ceidg
 Adam Prządka P.A.J.P.,Adam Prządka,-,,,,1131395040,96.04.Z,massage,ceidg
 ADAM SARBIJAN TRENER PERSONALNY,ADAM SARBIJAN,-,,,,1182231319,96.04.Z,massage,ceidg
-ADAM SKOCZEK FizjoSkok,ADAM SKOCZEK,-,,,activelifedvd.pl,5252422832,96.04.Z,massage,ceidg
+ADAM SKOCZEK FizjoSkok,ADAM SKOCZEK,-,,kontakt@wenet.pl,activelifedvd.pl,5252422832,96.04.Z,massage,ceidg
 "ADAM SKÓRA NIEPUBLICZNY ZAKŁAD OPIEKI STOMATOLOGICZNEJ ""EDENT""",ADAM SKÓRA,-,,,,5222296073,96.04.Z,massage,ceidg
 "ADAM SKWARNICKI ""AS Partner""",ADAM SKWARNICKI,as.skwarnicki@wp.pl,,as.skwarnicki@wp.pl,,1180351232,96.04.Z,massage,ceidg
 ADAM SZYMCZAK SILKY & SMOOTH,ADAM SZYMCZAK,-,,,,1251307340,96.04.Z,massage,ceidg
@@ -227,30 +227,30 @@ ADB Trade ARTUR BARGIEL,ARTUR BARGIEL,artur.bargiel@gmail.com,+48504778714,artur
 ADDAMS AGATA MARCINIAK-SKRĘTKOWICZ,AGATA MARCINIAK-SKRĘTKOWICZ,agatam23@wp.pl,,agatam23@wp.pl,,6961606497,96.04.Z,massage,ceidg
 ADDICTED MARTA RENTEL,MARTA RENTEL,-,,,tiktok.com,1182187676,96.04.Z,massage,ceidg
 ADD SOLUTION URSZULA SŁAWEK,URSZULA SŁAWEK,-,,,,5221966749,96.04.Z,massage,ceidg
-Adekspert Paweł Ścieszko,Paweł Ścieszko,-,,,biznesbaza.com,7742848812,96.04.Z,massage,ceidg
+Adekspert Paweł Ścieszko,Paweł Ścieszko,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,7742848812,96.04.Z,massage,ceidg
 """ADLAR"" Ada Bujalska",ADA BUJALSKA,-,,,,9521864245,96.04.Z,massage,ceidg
 """ADMIN Plus"" Agnieszka Cukrowska",AGNIESZKA CUKROWSKA,-,,,github.com,1181714895,96.04.Z,massage,ceidg
 ADNAP MARCIN NAPIÓRKOWSKI,MARCIN NAPIÓRKOWSKI,-,,,,5262467291,96.04.Z,massage,ceidg
 ADOGAMA Marcin Kulczycki,Marcin Kulczycki,-,,,,1132583849,96.04.Z,massage,ceidg
 ADOLF LASKOWSKI,ADOLF LASKOWSKI,-,,,owg.pl,5272482978,96.04.Z,massage,ceidg
-ADRENALINE FIT Aleksandra Wilczek-Musielak,Aleksandra Wilczek-Musielak,-,,,adrenaline-fit.pro,5971637820,96.04.Z,massage,ceidg
+ADRENALINE FIT Aleksandra Wilczek-Musielak,Aleksandra Wilczek-Musielak,-,,kontakt@adrenaline-fit.pro,adrenaline-fit.pro,5971637820,96.04.Z,massage,ceidg
 ADRIANA ŁADOCHA,ADRIANA ŁADOCHA,adrianaladocha@gmail.com,,adrianaladocha@gmail.com,,7542792780,96.04.Z,massage,ceidg
 ADRIANA MAJOR WSPÓLNIK SPÓŁKI CYWILNEJ PRZYCHODNIA MEDYCZNO-PODOLOGICZNA,ADRIANA MAJOR,-,,,owg.pl,7991947074,96.04.Z,massage,ceidg
 Adrian Dąbrowski,Adrian Dąbrowski,-,,,,9512289043,96.04.Z,massage,ceidg
 Adrian Kowarzyk,Adrian Kowarzyk,-,,,,7010072772,96.04.Z,massage,ceidg
-ADRIAN STACHACZ,ADRIAN STACHACZ,-,,,athletic-house.pl,7591735233,96.04.Z,massage,ceidg
+ADRIAN STACHACZ,ADRIAN STACHACZ,-,,biuro@athletic-house.pl,athletic-house.pl,7591735233,96.04.Z,massage,ceidg
 "1) ARTIMED S.C. EWA DONDE, DOMINIKA DONDE-ANTEPOWICZ; 2) DONDE GALERIA/PRACOWNIA DOMINIKA DONDE-ANTEPOWICZ",DOMINIKA DONDE,dominika@donde.pl,,dominika@donde.pl,,5252041998,86.90.A,massage,ceidg
 1) Bartłomiej ŁACHETA 2) ORTOSHOP Bartłomiej ŁACHETA wspólnik spółki cywilnej,Bartłomiej Łacheta,-,,,owg.pl,1181499132,86.90.A,massage,ceidg
 "1.BOŻENA KOCISZEWSKA-NAJMAN INDYWIDUALNA SPECJALISTYCZNA PRAKTYKA LEKARSKA W DZIEDZINIE PEDIATRIA, NEONATOLOGIA 2. BOŻENA KOCISZEWSKA-NAJMAN SPECJALISTYCZNE CENTRUM MEDYCZNE PROFILAKTYKI, DIAGNOSTYKI I TERAPII MAŁEGO DZIECKA",BOŻENA KOCISZEWSKA-NAJMAN,bnajman@wp.pl,,bnajman@wp.pl,,5730101064,86.90.A,massage,ceidg
 "1/ ""CZES-BUD""- ANDRZEJ CZESUCH, 2/ ""NOWA"" s.c. ANDRZEJ CZESUCH wspólnik spółki cywilnej",Andrzej Czesuch,-,,,,9521246702,86.90.A,massage,ceidg
-1. FIZJOTERAPIA RAFAŁ KACPRZAK; 2. Rafał Kacprzak - wspólnik spółki cywilnej DOCTOR BEST RAFAŁ KACPRZAK MALWINA DAWIDZIUK S.C.,RAFAŁ KACPRZAK,-,,,doctorbest.pl,1132258658,86.90.A,massage,ceidg
-1. Gabinet SOFTMED-LASER Daniel Kozyra wspólnik spółki cywilnej; 2. TRIGON ORTHOPEDIA Daniel Kozyra wspólnik spółki cywilnej,Daniel Kozyra,-,,,softmedlaser.pl,1230053495,86.90.A,massage,ceidg
+1. FIZJOTERAPIA RAFAŁ KACPRZAK; 2. Rafał Kacprzak - wspólnik spółki cywilnej DOCTOR BEST RAFAŁ KACPRZAK MALWINA DAWIDZIUK S.C.,RAFAŁ KACPRZAK,-,,info@doctorbest.pl,doctorbest.pl,1132258658,86.90.A,massage,ceidg
+1. Gabinet SOFTMED-LASER Daniel Kozyra wspólnik spółki cywilnej; 2. TRIGON ORTHOPEDIA Daniel Kozyra wspólnik spółki cywilnej,Daniel Kozyra,-,,klinika@softmedlaser.pl,softmedlaser.pl,1230053495,86.90.A,massage,ceidg
 1. GRAŻYNA RYBIŃSKA WSPÓLNIK SPÓŁKI CYWILNEJ MGM ; 2. GRAŻYNA RYBIŃSKA WSPÓLNIK SPÓŁKI CYWILNEJ 7 ZMYSŁÓW,GRAŻYNA RYBIŃSKA,-,,,yellowpages.pl,5271693242,86.90.A,massage,ceidg
 1)INDYWIDUALNA PRAKTYKA STOMATOLOGICZNA ZBIGNIEW KOWALIK 2) ZBIGNIEW KOWALIK-WSPÓLNIK SPÓŁKI CYWILNEJ PHU MASTERS-POLSKA,Zbigniew KOWALIK,-,,,warsawdental.pl,1180155241,86.90.A,massage,ceidg
-"1) Indywidualna Specjalistyczna Praktyka Lekarska Laura Załucka 2) Laura Załucka -Sanatorium Uzdrowiskowe ""Astoria""",Laura Załucka,-,,,planeta-mody.pl,6551791839,86.90.A,massage,ceidg
-1) Jadwiga Dowgiałło-Smolarczyk wspólnik spółki cywilnej PRZYCHODNIA NA BIELANACH - NIEPUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ 2) MEDIC-RENT Jadwiga Dowgiałło-Smolarczyk 3) SPECJALISTYCZNY GABINET LEKARSKI Jadwiga Dowgiałło-Smolarczyk,Jadwiga DOWGIAŁŁO-SMOLARCZYK,-,,,smolarczykgabinet.pl,5251005210,86.90.A,massage,ceidg
+"1) Indywidualna Specjalistyczna Praktyka Lekarska Laura Załucka 2) Laura Załucka -Sanatorium Uzdrowiskowe ""Astoria""",Laura Załucka,-,,kontakt@wenet.pl,planeta-mody.pl,6551791839,86.90.A,massage,ceidg
+1) Jadwiga Dowgiałło-Smolarczyk wspólnik spółki cywilnej PRZYCHODNIA NA BIELANACH - NIEPUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ 2) MEDIC-RENT Jadwiga Dowgiałło-Smolarczyk 3) SPECJALISTYCZNY GABINET LEKARSKI Jadwiga Dowgiałło-Smolarczyk,Jadwiga DOWGIAŁŁO-SMOLARCZYK,-,,smolarczykgabinet@gmail.com,smolarczykgabinet.pl,5251005210,86.90.A,massage,ceidg
 "1.Jolanta Stępowska wspólnik spółki cywilnej Centrum Rehabilitacji Dziecięcej ""Maluch""",JOLANTA STĘPOWSKA,nzozmaluch@gmail.com,,nzozmaluch@gmail.com,,9510043579,86.90.A,massage,ceidg
-1. Bahati Paulina Niedzielska 2. JOYINME wspólnik spółki cywilnej,Paulina Niedzielska,-,,,joyinme.co,7123092902,96.23.Z,massage,ceidg
+1. Bahati Paulina Niedzielska 2. JOYINME wspólnik spółki cywilnej,Paulina Niedzielska,-,,.@magdacebula.fotografia,joyinme.co,7123092902,96.23.Z,massage,ceidg
 1. BARBERSHOPWAWER MARIUSZ SZANIAWSKI; 2. MARIUSZ SZANIAWSKI WSPÓLNIK SPÓŁKI ARAS AUTOMOTIVE; 3. MK AUTOMOTIVE MARIUSZ SZANIAWSKI WSPÓLNIK SPÓŁKI,MARIUSZ SZANIAWSKI,-,,,owg.pl,9522126696,96.23.Z,massage,ceidg
 1. DaySpa DOMINIKA NIKIEL,DOMINIKA NIKIEL,-,,,,1132390659,96.23.Z,massage,ceidg
 1) INVEST-DRUK RENATA BARCIŃSKA; 2) RENATA BARCIŃSKA - wspólnik spółki cywilnej HUMAN BALANCE,RENATA BARCIŃSKA,-,,,,5221021345,96.23.Z,massage,ceidg
@@ -266,18 +266,18 @@ ADRIAN STACHACZ,ADRIAN STACHACZ,-,,,athletic-house.pl,7591735233,96.04.Z,massage
 3T Jakub Markowski,Jakub Markowski,-,,,,5252607483,96.23.Z,massage,ceidg
 3T Marcin Żebrowski,Marcin Żebrowski,-,,,,1181476763,96.23.Z,massage,ceidg
 4SHOOTER Janusz Świątek,Janusz Świątek,info@4shooter.com,,info@4shooter.com,https://www.4shooter.com,5211016383,96.23.Z,massage,ceidg
-5SQUAD PAWEŁ WOŹNIAKOWSKI,PAWEŁ WOŹNIAKOWSKI,-,,,australianliving.pl,5241643104,96.23.Z,massage,ceidg
+5SQUAD PAWEŁ WOŹNIAKOWSKI,PAWEŁ WOŹNIAKOWSKI,-,,kontakt@wenet.pl,australianliving.pl,5241643104,96.23.Z,massage,ceidg
 7 SZTUK.PL MAREK JANUSZCZYK,MAREK JANUSZCZYK,-,,,,5461093315,96.23.Z,massage,ceidg
 A&A Adam Januszewski wspólnik spółki cywilnej,ADAM JANUSZEWSKI,-,,,,5221367374,96.23.Z,massage,ceidg
-A&A ANNA JANUSZEWSKA WSPÓLNIK SPÓŁKI CYWILNEJ,ANNA JANUSZEWSKA,-,,,krs-pobierz.pl,5221417758,96.23.Z,massage,ceidg
+A&A ANNA JANUSZEWSKA WSPÓLNIK SPÓŁKI CYWILNEJ,ANNA JANUSZEWSKA,-,,gdpr@transparentdata.pl,krs-pobierz.pl,5221417758,96.23.Z,massage,ceidg
 Abba 1 Sławomir Kamola,Sławomir Kamola,kamola@abba1.pl,,kamola@abba1.pl,https://www.abba1.pl,7161261235,96.23.Z,massage,ceidg
 ABC 4 KAZIMIERZ ROGUSKI,KAZIMIERZ ROGUSKI,zew_morza@tlen.pl,,zew_morza@tlen.pl,,1132235858,96.23.Z,massage,ceidg
-ACADEMY KOBIDO ART JOANNA SIEDLECKA,JOANNA SIEDLECKA,-,,,kobido.com.pl,5213249789,96.23.Z,massage,ceidg
+ACADEMY KOBIDO ART JOANNA SIEDLECKA,JOANNA SIEDLECKA,-,,studio@kobido.com.pl,kobido.com.pl,5213249789,96.23.Z,massage,ceidg
 AC Andrzej Cichocki,Andrzej Cichocki,-,,,ibspan.waw.pl,1132676284,96.23.Z,massage,ceidg
 Active Broker TOMASZ DMOWSKI,TOMASZ DMOWSKI,-,,,,9521451968,96.23.Z,massage,ceidg
 ADAM GRZYMSKI LIGOWIEC,ADAM GRZYMSKI,grzymski@ligowiec.com.pl,,grzymski@ligowiec.com.pl,,9511853872,96.23.Z,massage,ceidg
 ADAM LASKOWSKI,ADAM LASKOWSKI,-,,,,5210285773,96.23.Z,massage,ceidg
-Adam Rak Beauty Solutions,Adam Rak,-,,,rakbeauty.com,6482739533,96.23.Z,massage,ceidg
+Adam Rak Beauty Solutions,Adam Rak,-,,rakbeauty.office@gmail.com,rakbeauty.com,6482739533,96.23.Z,massage,ceidg
 Adelfos Ivan Krasnoshapka,Ivan Krasnoshapka,ivan_krasnoshapka@o2.pl,,ivan_krasnoshapka@o2.pl,,5272495768,96.23.Z,massage,ceidg
 ADEPTUS Akademia Szkoleń i Coachingu Marzenna Bajeńska,Marzenna Bajeńska,info@adeptus.com.pl,,info@adeptus.com.pl,https://adeptus.com.pl,6691503467,96.23.Z,massage,ceidg
 adsPerformance Eryk Wrzesiński,Eryk Wrzesiński,adsperformancepoland@gmail.com,,adsperformancepoland@gmail.com,,7972071617,96.23.Z,massage,ceidg
@@ -285,9 +285,9 @@ ADVERT POINT Adam Śliwiński,ADAM ŚLIWIŃSKI,-,,,,5223282989,96.23.Z,massage,c
 "a/ ""ENERGY"" Michał Pogoński wspólnik spółki cywilnej; b/ ""ENERGY 2"" Michał Pogoński wspólnik spółki cywilnej; c/""ENERGY 4"" Michał Pogoński wspólnik spółki cywilnej; d/ ""ENERGY 6"" Michał Pogoński - wspólnik spółki cywilnej; e/ ENERGY INVESTMENT Michał Pogoński f/ EVA s.c. MARIA POGOŃSKA, MICHAŁ POGOŃSKI",MICHAŁ POGOŃSKI,-,,,,1132452544,96.23.Z,massage,ceidg
 AGATA AMBROŻY Mini Movie,AGATA AMBROŻY,-,,,,5242703245,96.23.Z,massage,ceidg
 Agata Kogut wspólnik spółki cywilnej LYMFE,Agata Kogut,-,,,,9592082840,96.23.Z,massage,ceidg
-"Agata Reszelewska ""KineziActive""",Agata Reszelewska,-,,,krs-online.com.pl,5213380199,96.23.Z,massage,ceidg
+"Agata Reszelewska ""KineziActive""",Agata Reszelewska,-,,kontakt@wenet.pl,krs-online.com.pl,5213380199,96.23.Z,massage,ceidg
 Agata Trzonkowska,Agata Trzonkowska,-,,,,8652481805,96.23.Z,massage,ceidg
-"AG-CONSULTING, ANDRZEJ GRUDNIEWSKI",ANDRZEJ GRUDNIEWSKI,-,,,obierzkurs.pl,1130239869,96.23.Z,massage,ceidg
+"AG-CONSULTING, ANDRZEJ GRUDNIEWSKI",ANDRZEJ GRUDNIEWSKI,-,,kontakt@wenet.pl,obierzkurs.pl,1130239869,96.23.Z,massage,ceidg
 "AGENCJA PROMOCJI SPORTU ""SPORTS EMOTIONS"" TOMASZ DĄBROWSKI",TOMASZ DĄBROWSKI,-,,,,1181305866,96.23.Z,massage,ceidg
 Agencja Promocyjno-Reklamowa KIORA Andrzej Cyra,Andrzej Cyra,kiora@kiora.pl,,kiora@kiora.pl,,1130569012,96.23.Z,massage,ceidg
 """Agency Irena Lewandowska""",Irena Lewandowska,director@edu-consul.com,,director@edu-consul.com,https://edu-consul.com,5222967314,96.23.Z,massage,ceidg
@@ -297,19 +297,19 @@ AgK Biznes Agnieszka Krawczyk,AGNIESZKA KRAWCZYK,AGAKRAWCZYK1@OP.PL,,AGAKRAWCZYK
 AGNIESZKA BELINIAK AGABELL,AGNIESZKA BELINIAK,-,,,,1181427718,96.23.Z,massage,ceidg
 Agnieszka Chabinka Maison Massage,Agnieszka Chabinka,-,,,,1181915151,96.23.Z,massage,ceidg
 Agnieszka Łubiarz Ambasada Marki,Agnieszka Łubiarz,alubiarz@interia.eu,,alubiarz@interia.eu,,5361104901,96.23.Z,massage,ceidg
-Agnieszka Nogala,Agnieszka Nogala,-,,,ortomasters.pl,7011126441,96.23.Z,massage,ceidg
+Agnieszka Nogala,Agnieszka Nogala,-,,recepcja@ortomasters.pl,ortomasters.pl,7011126441,96.23.Z,massage,ceidg
 AGNIESZKA POST AP Agnieszka Post,AGNIESZKA POST,POSTAGNIESZKA@GMAIL.COM,,POSTAGNIESZKA@GMAIL.COM,,6491355358,96.23.Z,massage,ceidg
 Agnieszka Śliskowska Studio Treningu,Agnieszka ŚLiskowska,agnieszka.sliskowska@gmail.com,+48601912634,agnieszka.sliskowska@gmail.com,https://www.agnieszkasliskowska.pl,7282169913,96.23.Z,massage,ceidg
 Agnieszka Sobkowiak Brand Media,Agnieszka Sobkowiak,agnieszka.d.sobkowiak@gmail.com,,agnieszka.d.sobkowiak@gmail.com,,9561553698,96.23.Z,massage,ceidg
-Agnieszka Suchecka STUDIO,Agnieszka Suchecka,-,,,sggw.edu.pl,1133136302,96.23.Z,massage,ceidg
-AGROPIAN SYSTEM DARIUSZ JANIAK,DARIUSZ JANIAK,-,,,agropian.pl,5212677767,96.23.Z,massage,ceidg
+Agnieszka Suchecka STUDIO,Agnieszka Suchecka,-,,rekrutacja@sggw.edu.pl,sggw.edu.pl,1133136302,96.23.Z,massage,ceidg
+AGROPIAN SYSTEM DARIUSZ JANIAK,DARIUSZ JANIAK,-,,agropian@agropian.pl,agropian.pl,5212677767,96.23.Z,massage,ceidg
 "a\ ""GRUPA GPS S.C."" Piotr Kędzia-Stępkowski WSPÓLNIK SPÓŁKI CYWILNEJ ; b\ ""BUDDY S.C."" Piotr Kędzia-Stępkowski WSPÓLNIK SPÓŁKI CYWILNEJ",Piotr Kędzia-Stępkowski,piotr@buddy.pl,+48792992993,piotr@buddy.pl,https://www.aquaspa.pl,9521727258,96.23.Z,massage,ceidg
-A&J HOME DESIGN DOMINIK GAJDECKI,DOMINIK GAJDECKI,-,,,krs-online.com.pl,5272241387,96.23.Z,massage,ceidg
-AKADEMIA RUCHU MAGDALENA DĄBROWSKA,Magdalena Dąbrowska,-,,,akademiaruchu.eu,5272285404,96.23.Z,massage,ceidg
+A&J HOME DESIGN DOMINIK GAJDECKI,DOMINIK GAJDECKI,-,,kontakt@wenet.pl,krs-online.com.pl,5272241387,96.23.Z,massage,ceidg
+AKADEMIA RUCHU MAGDALENA DĄBROWSKA,Magdalena Dąbrowska,-,,zapisy@akademiaruchu.eu,akademiaruchu.eu,5272285404,96.23.Z,massage,ceidg
 AKADEMIA SZKOLENIOWA PMU SALON VISAGE AGNIESZKA ADAMCZAK,AGNIESZKA ADAMCZAK,salon@visage.pl,,salon@visage.pl,https://www.visage.pl,5221001621,96.23.Z,massage,ceidg
 AK SERVICES ARTUR KURAŚ,ARTUR KURAŚ,-,,,,9511632450,96.23.Z,massage,ceidg
 AK - SYSTEM Adam Kaska,ADAM KASKA,-,,,,5252117098,96.23.Z,massage,ceidg
-AKTYWNA lady fitness Marta Jabłońska,Marta Jabłońska,-,,,aktywna.waw.pl,9521843869,96.23.Z,massage,ceidg
+AKTYWNA lady fitness Marta Jabłońska,Marta Jabłońska,-,,088aktywna@aktywna.waw.pl,aktywna.waw.pl,9521843869,96.23.Z,massage,ceidg
 AKURAT WITOLD KOSSAKOWSKI,WITOLD KOSSAKOWSKI,akurat@akurat.com.pl,,akurat@akurat.com.pl,,9511541894,96.23.Z,massage,ceidg
 ALBEA ALEKSANDRA ROSA-ZADWORNA,ALEKSANDRA ROSA-ZADWORNA,-,,,dnb.com,8521681538,96.23.Z,massage,ceidg
 Albina Romanenko,Albina Romanenko,albinaromanenko29@gmail.com,+48501642119,albinaromanenko29@gmail.com,,5223287490,96.23.Z,massage,ceidg
@@ -317,13 +317,13 @@ ALE czary ALEKSANDRA WOLAK-GÓRSKA,ALEKSANDRA WOLAK-GÓRSKA,-,,,,7011230084,96.2
 ALEKSANDER GUCZ - ALEX PERFECT MASSAGE,ALEKSANDER GUCZ,-,,,,5222477219,96.23.Z,massage,ceidg
 Aleksander Latkowski - Mała pracownia jogi i masażu,Aleksander Latkowski,aleksander.latkowski@gmail.com,+48531418532,aleksander.latkowski@gmail.com,,5262740597,96.23.Z,massage,ceidg
 Aleksandra Bieć,Aleksandra Bieć,-,,,,5732583908,96.23.Z,massage,ceidg
-ALEKSANDRA BOGUSZ. Fizjo-Action.,ALEKSANDRA BOGUSZ,-,,,cmmedicum.com,1182190431,96.23.Z,massage,ceidg
-Aleksandra Dąbkowska Indywidualna Praktyka Lekarska,Aleksandra Dąbkowska,-,,,medincus.pl,4660387645,96.23.Z,massage,ceidg
+ALEKSANDRA BOGUSZ. Fizjo-Action.,ALEKSANDRA BOGUSZ,-,,83rejestracja@cmmedicum.pl,cmmedicum.com,1182190431,96.23.Z,massage,ceidg
+Aleksandra Dąbkowska Indywidualna Praktyka Lekarska,Aleksandra Dąbkowska,-,,sekretariat@ifps.org.pl,medincus.pl,4660387645,96.23.Z,massage,ceidg
 ALEKSANDRA JÓŹWIK BEST CONVERTING CHANNEL,ALEKSANDRA JÓŹWIK,jwkaleksandra@gmail.com,,jwkaleksandra@gmail.com,,6172166994,96.23.Z,massage,ceidg
 Aleksandra Kozak,Aleksandra Kozak,aleksandrakozak42@gmail.com,+48601970773,aleksandrakozak42@gmail.com,,5222837698,96.23.Z,massage,ceidg
 Aleksandra Kucek,Aleksandra Kucek,-,,,biletyna.pl,5242913327,96.23.Z,massage,ceidg
 Aleksandra Rosolska,Aleksandra Rosolska,ola.rosolska@gmail.com,,ola.rosolska@gmail.com,,5213237616,96.23.Z,massage,ceidg
-Alena Bialiauskaya,Alena Bialiauskaya,-,,,muzexlab.com,1231603325,96.23.Z,massage,ceidg
+Alena Bialiauskaya,Alena Bialiauskaya,-,,dmca@muzexlab.com,muzexlab.com,1231603325,96.23.Z,massage,ceidg
 Alexandra Natalie Boykow Centrum Harmonii i Witalności Izyda,Alexandra Boykow,alexandranatalieboykow@gmail.com,+48507682813,alexandranatalieboykow@gmail.com,,5792012291,96.23.Z,massage,ceidg
 ALEX STORY ALEKSANDRA MOSZCZYŃSKA,ALEKSANDRA MOSZCZYŃSKA,aleksandramoszczynska123@gmail.com,,aleksandramoszczynska123@gmail.com,,1181996882,96.23.Z,massage,ceidg
 ALGO Alena Holub,Alena Holub,-,,,booksy.com,9512588188,96.23.Z,massage,ceidg
@@ -332,10 +332,10 @@ Alina Kornukh,Alina Kornukh,-,,,,5423352312,96.23.Z,massage,ceidg
 Alina Pylypaka,Alina Pylypaka,-,,,,1133139832,96.23.Z,massage,ceidg
 Alina Voloshyna Spa,Alina Voloshyna,-,,,,5223057436,96.23.Z,massage,ceidg
 ALLA WOROBEJ,ALLA WOROBEJ,alla.vorobey@wp.pl,,alla.vorobey@wp.pl,,1251586831,96.23.Z,massage,ceidg
-Almonis Paweł Otwinowski,Paweł Otwinowski,-,,,jaskinia-almonis.pl,8212648201,96.23.Z,massage,ceidg
+Almonis Paweł Otwinowski,Paweł Otwinowski,-,,info@almonis.pl,jaskinia-almonis.pl,8212648201,96.23.Z,massage,ceidg
 ALONA SHULZHYNSKA-PUSTOVOIT,ALONA SHULZHYNSKA-PUSTOVOIT,-,,,um.warszawa.pl,5223337555,96.23.Z,massage,ceidg
 Alpin Vip Jarosław Olszewski,Jarosław Olszewski,alpinvip@onet.pl,+48602248939,alpinvip@onet.pl,,5211171103,96.23.Z,massage,ceidg
-ALTER Piotr Florczuk,Piotr Florczuk,-,,,biznesbaza.com,5211183425,96.23.Z,massage,ceidg
+ALTER Piotr Florczuk,Piotr Florczuk,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,5211183425,96.23.Z,massage,ceidg
 1.Klinika DEAMED Maria ZEGADŁO-MYLIK 2.Specjalistyczna Praktyka Lekarska DEAMED Maria ZEGADŁO-MYLIK 3.Centrum Dermatopatologii i Diagnostyki Chorób Skóry Maria Zegadło - Mylik,Maria ZEGADŁO-MYLIK,-,,,znanylekarz.pl,1130124439,86.90.A,massage,ceidg
 1. KRZYSZTOF MARZEC ARABELLA SC; 2. KRZYSZTOF MARZEC PRYWATNY DOM OPIEKI NADZIEJA SC,KRZYSZTOF MARZEC,-,,,owg.pl,5221596241,86.90.A,massage,ceidg
 "1.Krzysztof Skwierczyński OŚRODEK KONFERENCYJNO-WYPOCZYNKOWY ""KUKLÓWKA"" KRZYSZTOF SKWIERCZYŃSKI 2. Stopcoronavirus.com.pl Krzysztof Skwierczyński",Krzysztof Skwierczyński,ufiks@ufiks.pl,,ufiks@ufiks.pl,,5262331491,86.90.A,massage,ceidg
@@ -352,7 +352,7 @@ ALTER Piotr Florczuk,Piotr Florczuk,-,,,biznesbaza.com,5211183425,96.23.Z,massag
 4 YOU ANNA DENKIEWICZ,ANNA DENKIEWICZ,-,,,pomorze.ipolska.info,1180198664,86.90.A,massage,ceidg
 ABATEAM IRMINA GRABEK,IRMINA GRABEK,-,,,,6562230754,86.90.A,massage,ceidg
 "ABC TERAPII DZIECKA S.C. MARTA DUSIŃSKA, PRZEMYSŁAW DUSIŃSKI",PRZEMYSŁAW DUSIŃSKI,-,,,,9521887157,86.90.A,massage,ceidg
-"ABR - Aparaty słuchowe, Logopedia Agata Kukwa",Agata Kukwa,-,,,dobrzeslyszec.pl,5261605118,86.90.A,massage,ceidg
+"ABR - Aparaty słuchowe, Logopedia Agata Kukwa",Agata Kukwa,-,,bochnia@dobrzeslyszec.pl,dobrzeslyszec.pl,5261605118,86.90.A,massage,ceidg
 ACTIMEDICA CENTRUM NOWOCZESNEJ REHABILITACJI KRZYSZTOF ADAMOWICZ,KRZYSZTOF ADAMOWICZ,KONTAKT@ACTIMEDICA.PL,+48501131727,KONTAKT@ACTIMEDICA.PL,,5221647820,86.90.A,massage,ceidg
 Active Rehab PAULINA PRZYBYSZ,PAULINA PRZYBYSZ,-,,,activerehab.pl,7182027941,86.90.A,massage,ceidg
 ACTIVE TEAM MONIKA MACIEJEWICZ,MONIKA MACIEJEWICZ,-,,,,5212987806,86.90.A,massage,ceidg
@@ -363,7 +363,7 @@ Adam Grybalow AG SERVICES,Adam Grybalow,-,,,,1132862354,86.90.A,massage,ceidg
 ADAM KRAM Yaka Production,ADAM KRAM,-,,,,1132401676,86.90.A,massage,ceidg
 Adam Paprocki Sport,Adam Paprocki,-,,,,5213605586,86.90.A,massage,ceidg
 ADAM S. BRONIKOWSKI USŁUGI REHABILITACYJNE,Adam BRONIKOWSKI,bronikowskiadam@wp.pl,,bronikowskiadam@wp.pl,,5242205576,86.90.A,massage,ceidg
-ADAM SĘKTAS Fizjo ADMED,ADAM SĘKTAS,-,,,fizjoadmed.pl,9512318282,86.90.A,massage,ceidg
+ADAM SĘKTAS Fizjo ADMED,ADAM SĘKTAS,-,,fizjoadmed@fizjoadmed.net,fizjoadmed.pl,9512318282,86.90.A,massage,ceidg
 ADENTIS ALEKSANDRA GABREN-SYLLER,ALEKSANDRA GABREN-SYLLER,adentis@op.pl,,adentis@op.pl,,7542627472,86.90.A,massage,ceidg
 ADITUS RAFAŁ GOŁOWICZ,RAFAŁ GOŁOWICZ,hrf@wp.pl,,hrf@wp.pl,,1132059605,86.90.A,massage,ceidg
 Adrianna Tarnowska,Adrianna Tarnowska,tarnowska.adrianna@gmail.com,,tarnowska.adrianna@gmail.com,,5040073568,86.90.A,massage,ceidg
@@ -374,9 +374,9 @@ AFIZJO; USŁUGI FIZJOTERAPEUTYCZNE AGNIESZKA BUDYŃSKA,AGNIESZKA BUDYŃSKA,-,,,,
 AGADENT AGATA FALKOWSKA,AGATA FALKOWSKA,cezfalkowski@gmail.com,,cezfalkowski@gmail.com,,5221490011,86.90.A,massage,ceidg
 AGANTRUS Sailing & Travel Agency Agnieszka Truskowska-Janusz,Agnieszka Truskowska-Janusz,-,,,foursquare.com,5212065136,86.90.A,massage,ceidg
 Agata Majewska-Stefaniak praktyka lekarska,Agata Majewska-Stefaniak,-,,,,1180176071,86.90.A,massage,ceidg
-AGATA MIROS FIZJOTERAPIA,AGATA MIROS,-,,,galileomedical.pl,1131048982,86.90.A,massage,ceidg
+AGATA MIROS FIZJOTERAPIA,AGATA MIROS,-,,warszawabiuro@galileomedical.pl,galileomedical.pl,1131048982,86.90.A,massage,ceidg
 AGATA NAGÓRSKA FIZJOTERAPIA,AGATA NAGÓRSKA,-,,,openmed.pl,5242509402,86.90.A,massage,ceidg
-AGATA NIEDZIAŁEK-KABAT Praktyka Położnicza,AGATA NIEDZIAŁEK-KABAT,-,,,biznesbaza.com,7010824574,86.90.A,massage,ceidg
+AGATA NIEDZIAŁEK-KABAT Praktyka Położnicza,AGATA NIEDZIAŁEK-KABAT,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,7010824574,86.90.A,massage,ceidg
 Agata Skowrońska-Domańska,Agata Skowrońska-Domańska,-,,,,9511826415,86.90.A,massage,ceidg
 AGATA WOŹNIAK-WIERTLEWSKA,AGATA WOŹNIAK-WIERTLEWSKA,-,,,,5221912050,86.90.A,massage,ceidg
 Agata Znyk ZET AGATA ZNYK,Agata Znyk,-,,,,5213247483,86.90.A,massage,ceidg
@@ -400,7 +400,7 @@ AGNIESZKA BODYCH BELL-MED S.C.,AGNIESZKA BODYCH,-,,,,5223100416,86.90.A,massage,
 1) MARTA SMOLARCZYK wspólnik spółki cywilnej PRZYCHODNIA NA BIELANACH-NIEPUBLICZNY ZAKŁAD OPIEKI ZDROWOTNEJ 2) MARTA SMOLARCZYK,MARTA SMOLARCZYK,martasmolarczyk@gmail.com,,martasmolarczyk@gmail.com,,1182088052,86.99.D,massage,ceidg
 1. NATALIA KOZIRÓG-ŞAHİN; 2.AKADEMIA BEAUTY ZOOM NATALIA KOZIRÓG-ŞAHİN S.C.,NATALIA KOZIRÓG-ŞAHİN,-,,,,9730901186,86.99.D,massage,ceidg
 "1/ Paweł Polit ""AL-POL""; 2/ Paweł Polit wspólnik spółki cywilnej MAR-GO",Paweł Polit,-,,,,5211024595,86.99.D,massage,ceidg
-"1. PRAKTYKA SPECJALISTYCZNA LEKARSKA IZABELA LEMAŃSKA, 2. OMEGA PLASTICS WYROBY Z TWORZYW SZTUCZNYCH IZABELA LEMAŃSKA, 3. IZABELA LEMAŃSKA -wspólnik spółki cywilnej ONKOLMED LECZNICA ONKOLOGICZNA",IZABELA LEMAŃSKA,-,,,rankinglekarzy.pl,5261582647,86.99.D,massage,ceidg
+"1. PRAKTYKA SPECJALISTYCZNA LEKARSKA IZABELA LEMAŃSKA, 2. OMEGA PLASTICS WYROBY Z TWORZYW SZTUCZNYCH IZABELA LEMAŃSKA, 3. IZABELA LEMAŃSKA -wspólnik spółki cywilnej ONKOLMED LECZNICA ONKOLOGICZNA",IZABELA LEMAŃSKA,-,,kontakt@rankinglekarzy.pl,rankinglekarzy.pl,5261582647,86.99.D,massage,ceidg
 1) STUDIO PSYCHOTERAPII TAŃCEM I RUCHEM MAŁGORZATA WIŚNIEWSKA; 2) MAŁGORZATA WIŚNIEWSKA wspólnik spółki cywilnej Instytut DMT-Polski Instytut Psychoterapii Tańcem i Ruchem,MAŁGORZATA WIŚNIEWSKA,-,,,,7581295927,86.99.D,massage,ceidg
 "1) TOMASZ LATOCHA NOVA MEDICAL, 2) TOMASZ LATOCHA NOVA MEDICAL - WSPÓLNIK SPÓŁKI CYWILNEJ",Tomasz LATOCHA,-,,,,5421604809,86.99.D,massage,ceidg
 3stepsbysara Edyta Padyasek,Edyta Padyasek,-,,,,6452318525,86.99.D,massage,ceidg
@@ -411,7 +411,7 @@ ABAK MONIKA KURAKOWSKA-WOŹNIAK,MONIKA KURAKOWSKA-WOŹNIAK,-,,,,6442112839,86.99
 ACdictum Aneta Ciechańska,Aneta Ciechańska,gabinet@acdictum.pl,+48501200456,gabinet@acdictum.pl,https://acdictum.pl,8371651055,86.99.D,massage,ceidg
 AC Studio Agnieszka Chorolewska,Agnieszka Chorolewska,agnieszkagoss450@gmail.com,+48795999018,agnieszkagoss450@gmail.com,https://acstudiofryzur.pl,9521657598,86.99.D,massage,ceidg
 ACTIMEDIS Małgorzata Geleta,Małgorzata Geleta,-,,,imsig.pl,8421474722,86.99.D,massage,ceidg
-Active Mind - Diana Grudzień,DIANA GRUDZIEŃ,-,,,obierzkurs.pl,5311508878,86.99.D,massage,ceidg
+Active Mind - Diana Grudzień,DIANA GRUDZIEŃ,-,,kontakt@wenet.pl,obierzkurs.pl,5311508878,86.99.D,massage,ceidg
 ADAM GOCŁOWSKI,ADAM GOCŁOWSKI,-,,,,1182178536,86.99.D,massage,ceidg
 ADAM GRZESIAK,ADAM GRZESIAK,-,,,,5291781512,86.99.D,massage,ceidg
 Adam Korzycki,Adam Korzycki,-,,,,4960249427,86.99.D,massage,ceidg
@@ -421,7 +421,7 @@ ADANMED ADRIAN MECHUT,ADRIAN MECHUT,mechutadrian@icloud.com,+48516991358,mechuta
 ADEDU Marek Draniak,Marek Draniak,-,,,,5341609265,86.99.D,massage,ceidg
 ADRIANA PIOTROWSKA 4 PASSIONS,ADRIANA PIOTROWSKA,-,,,,5262661455,86.99.D,massage,ceidg
 ADRIANA WEREMIJ,ADRIANA WEREMIJ,adrianaweremij@gmail.com,+48509449735,adrianaweremij@gmail.com,,9191764143,86.99.D,massage,ceidg
-ADRIANNA DYLEWSKA FITNESS,ADRIANNA DYLEWSKA,-,,,zdrofit.pl,5542339803,86.99.D,massage,ceidg
+ADRIANNA DYLEWSKA FITNESS,ADRIANNA DYLEWSKA,-,,iod@benefitsystems.pl,zdrofit.pl,5542339803,86.99.D,massage,ceidg
 Aesthetic Medicine Doctor Nadya Gurmanchuk,Nadya Gurmanchuk,-,,,znanylekarz.pl,5273176255,86.99.D,massage,ceidg
 AGARTIS MAŁGORZATA ZIELONKA,MAŁGORZATA ZIELONKA,-,,,,5221890851,86.99.D,massage,ceidg
 AGATA FILIŃSKA,AGATA FILIŃSKA,-,,,,7221331555,86.99.D,massage,ceidg
@@ -434,12 +434,12 @@ Agata Topczewska,Agata Topczewska,-,,,,5242981748,86.99.D,massage,ceidg
 "AGENCJA ARTYSTYCZNA ""NOVARTE"" MACIEJ ZAKLICZYŃSKI",MACIEJ ZAKLICZYŃSKI,zakliczynski@gmail.com,+48602292354,zakliczynski@gmail.com,,6311028831,86.99.D,massage,ceidg
 Agent ubezpieczeniowy Małgorzata Tarnopolska,Małgorzata Tarnopolska,-,,,,1180076205,86.99.D,massage,ceidg
 AGNIESZKA BAZAK-WOŁCZYŃSKA,AGNIESZKA BAZAK-WOŁCZYŃSKA,a.bazakwolczynska@gmail.com,,a.bazakwolczynska@gmail.com,,5261416943,86.99.D,massage,ceidg
-AGNIESZKA BLIŻANOWSKA WELLDERM,AGNIESZKA BLIŻANOWSKA,-,,,wellderm.pl,8971569801,86.99.D,massage,ceidg
+AGNIESZKA BLIŻANOWSKA WELLDERM,AGNIESZKA BLIŻANOWSKA,-,,rejestracja.warszawa@wellderm.pl,wellderm.pl,8971569801,86.99.D,massage,ceidg
 Agnieszka Bogucka,Agnieszka Bogucka,-,,,,5253076088,86.99.D,massage,ceidg
 Agnieszka Emerling Counselling,Agnieszka Emerling,-,,,,5272273884,86.99.D,massage,ceidg
 AGNIESZKA GŁADYSZ SCHEMAT,AGNIESZKA GŁADYSZ,agahajno@poczta.onet.pl,,agahajno@poczta.onet.pl,,5741756917,86.99.D,massage,ceidg
 AGNIESZKA GRĄDEK NAUKA JĘZYKÓW OBCYCH,AGNIESZKA GRĄDEK,agnieszkagradek@gmail.com,,agnieszkagradek@gmail.com,,1131412287,86.99.D,massage,ceidg
-AGNIESZKA JAŚKIEWICZ,AGNIESZKA JAŚKIEWICZ,-,,,aj-biuroprojektowe.pl,1133150638,86.99.D,massage,ceidg
+AGNIESZKA JAŚKIEWICZ,AGNIESZKA JAŚKIEWICZ,-,,biuro@aj-biuroprojektowe.pl,aj-biuroprojektowe.pl,1133150638,86.99.D,massage,ceidg
 AGNIESZKA JEMIELITY GABINET PSYCHOTERAPEUTYCZNY,AGNIESZKA JEMIELITY,balagas@interia.pl,,balagas@interia.pl,,6262615906,86.99.D,massage,ceidg
 "AGNIESZKA JÓŹWIAK Firma Handlowo - Usługowa ""AGNES""",AGNIESZKA JÓŹWIAK,-,,,,7161205343,86.99.D,massage,ceidg
 Agnieszka Koniecka RA Consulting,Agnieszka Koniecka,agnieszka.koniecka@gmail.com,,agnieszka.koniecka@gmail.com,,9710109260,86.99.D,massage,ceidg
@@ -457,26 +457,26 @@ Agnieszka Świderska Blisko Zdrowia,Agnieszka Świderska,-,,,,5273154940,86.99.D
 Agnieszka Szczytowska,Agnieszka Szczytowska,agszczytowska@gmail.com,,agszczytowska@gmail.com,,7010016762,86.99.D,massage,ceidg
 Agnieszka Szydłowska,Agnieszka Szydłowska,-,,,,9511990126,86.99.D,massage,ceidg
 AGNIESZKA TRZASKA OMEGA,AGNIESZKA TRZASKA,-,,,teraz-otwarte.pl,5241387977,86.99.D,massage,ceidg
-AGNIESZKA WOJCIECHOWSKA KANCELARIA ADWOKACKA ASW LEGAL,AGNIESZKA WOJCIECHOWSKA,-,,,asw.legal,5242216522,86.99.D,massage,ceidg
+AGNIESZKA WOJCIECHOWSKA KANCELARIA ADWOKACKA ASW LEGAL,AGNIESZKA WOJCIECHOWSKA,-,,kancelaria@asw.legal,asw.legal,5242216522,86.99.D,massage,ceidg
 AImmersion Maura Merson,Maura Merson,-,,,,1132250183,86.99.D,massage,ceidg
 AKADEMIA BIOFEEDBACK EEG Centrum Szkoleniowo-Terapeutyczne Dariusz Skorupa,Dariusz Skorupa,kontakt@biofeedback.info.pl,,kontakt@biofeedback.info.pl,https://www.biofeedback.info.pl,7711007253,86.99.D,massage,ceidg
 Akademia Mądrego Odżywiania Olga Makiewicz,Olga Makiewicz,olga.makiewicz@gmail.com,,olga.makiewicz@gmail.com,,7642657981,86.99.D,massage,ceidg
 AKADEMIA NOWY HORYZONT EMILIA SOBCZYK,Emilia Sobczyk,esobczyk@gazeta.pl,,esobczyk@gazeta.pl,,7181731566,86.99.D,massage,ceidg
-AKADEMIA OKA MONIKA KRUPICKA,MONIKA KRUPICKA,-,,,akademiaoka.pl,1132106782,86.99.D,massage,ceidg
+AKADEMIA OKA MONIKA KRUPICKA,MONIKA KRUPICKA,-,,akademiaokapl@gmail.com,akademiaoka.pl,1132106782,86.99.D,massage,ceidg
 Akademia Wewnętrznego Wglądu Gabinet Psychoterapeutyczny Dr Eryk Kowalczyk,Eryk Kowalczyk,-,,,patcode.pl,7422085264,86.99.D,massage,ceidg
 AKME STUDIO HANNA KOCHAŃSKA-SZYMCZAK,HANNA KOCHAŃSKA-SZYMCZAK,-,,,firma.egospodarka.pl,7391494782,86.99.D,massage,ceidg
 AKTOTO Art Company - PIOTR ZUBEK-URBANYI,PIOTR ZUBEK-URBANYI,-,,,,7010316151,86.99.D,massage,ceidg
 1000R-BIK KRZYSZTOF JÓŹWIAK,KRZYSZTOF JÓŹWIAK,-,,,,5270017680,43.22.Z,plumbing,ceidg
 100larze Radosław BATORY,Radosław BATORY,-,,,,5252278909,43.22.Z,plumbing,ceidg
 1.ARCHITEKT Hanna Dąbrowska wspólnik spółki cywilnej 2. ARCHITEKT Hanna Dąbrowska,HANNA DĄBROWSKA,-,,,,9511139347,43.22.Z,plumbing,ceidg
-"1/ Auto-Motor-Serwis Karolina Zajączkowska, 2/ A.M.S Serwis Karolina Zajączkowska",KAROLINA ZAJĄCZKOWSKA,-,,,krs-online.com.pl,5222663703,43.22.Z,plumbing,ceidg
+"1/ Auto-Motor-Serwis Karolina Zajączkowska, 2/ A.M.S Serwis Karolina Zajączkowska",KAROLINA ZAJĄCZKOWSKA,-,,kontakt@wenet.pl,krs-online.com.pl,5222663703,43.22.Z,plumbing,ceidg
 "1. AW MEDIA Łopuski Dominik 2. Dominik Łopuski Wspólnik Spółki Cywilnej ""U JANA""",Dominik Łopuski,U_ana@wp.pl,,U_ana@wp.pl,,7221628976,43.22.Z,plumbing,ceidg
 1) B57 IZABELLA BUCZYŃSKA 2) IZABELLA BUCZYŃSKA WSPÓLNIK SPÓŁKI CYWILNEJ B57 IZABELLA I ZOFIA BUCZYŃSKIE,IZABELLA BUCZYŃSKA,-,,,,5262626097,43.22.Z,plumbing,ceidg
 "1) BIURO TECHNICZNO HANDLOWE ""BIZAL"" IZABELA ZALEWSKA, 2) BIURO KREDYTOWE BIZAL IZABELA ZALEWSKA wspólnik spółki cywilnej",IZABELA ZALEWSKA,-,,,,5212858374,43.22.Z,plumbing,ceidg
 1. CONCEPT SERWIS Anna Jakubik - wspólnik spółki cywilne,Anna Jakubik,-,,,,5211638400,43.22.Z,plumbing,ceidg
 1.DICORIA GROUP ANDRZEJ DZIEJMA 2.MASURIAN HOUSE ANDRZEJ DZIEJMA,Andrzej Dziejma,anna.dziejma@dicoria.pl,+48502268456,anna.dziejma@dicoria.pl,,5320005496,43.22.Z,plumbing,ceidg
 1. DOMAŃSKA & POPKOWSKI NIERUCHOMOŚCI s.c. JOANNA DOMAŃSKA 2. JOANNA DOMAŃSKA NIERUCHOMOŚCI,JOANNA DOMAŃSKA,JDOMANSKA@DOM-POP.COM,,JDOMANSKA@DOM-POP.COM,,5222258606,43.22.Z,plumbing,ceidg
-"1. EKOTECH BIURO KONSULTINGOWO-PROJEKTOWE PIOTR MANCZARSKI,",PIOTR MANCZARSKI,-,,,ekotech.pl,5251535899,43.22.Z,plumbing,ceidg
+"1. EKOTECH BIURO KONSULTINGOWO-PROJEKTOWE PIOTR MANCZARSKI,",PIOTR MANCZARSKI,-,,m.wojtynska@ekotechtrade.eu,ekotech.pl,5251535899,43.22.Z,plumbing,ceidg
 "1. ELŻBIETA DOMAGAŁA PRZEDSIĘBIORSTWO USŁUGOWO-TRANSPORTOWE ""PREST-ECCO""",ELŻBIETA DOMAGAŁA,-,,,,7571183546,43.22.Z,plumbing,ceidg
 "1. EURO-BUD Barbara Jezierska 2. ""USŁUGI REMONTOWO-BUDOWLANE"" Barbara Jezierska wspólnik spółki cywilnej",BARBARA JEZIERSKA,-,,,,9511166947,43.22.Z,plumbing,ceidg
 1. HEMP ETERNITY RAFAŁ RESICH 2. HEMP MEDICALS,RAFAŁ RESICH,-,,,forum.rajcygdanscy.pl,5213302242,43.22.Z,plumbing,ceidg
@@ -496,7 +496,7 @@ AKTOTO Art Company - PIOTR ZUBEK-URBANYI,PIOTR ZUBEK-URBANYI,-,,,,7010316151,86.
 1. MICHAŁ GĘBOREK WSPÓLNIK SPÓŁKI CYWILNEJ 2. MYWATER MICHAŁ GĘBOREK,MICHAŁ GĘBOREK,-,,,,6641525254,43.22.Z,plumbing,ceidg
 1. MK MACIEJ KRZYŻANOWSKI 2. Wspólnik spółki cywilnej AGMK.NET,MACIEJ KRZYŻANOWSKI,mk@agmk.net,,mk@agmk.net,,1132366098,43.22.Z,plumbing,ceidg
 1) NESAN STANISŁAW NESTEROWICZ; 2) NESBUD STANISŁAW NESTEROWICZ WSPÓLNIK SPÓŁKI CYWILNEJ,STANISŁAW NESTEROWICZ,-,,,,5270152478,43.22.Z,plumbing,ceidg
-"1) NEXT PATRYK CHRZANOWSKI, 2) AD ENERGIA PATRYK CHRZANOWSKI",PATRYK CHRZANOWSKI,-,,,amq.pl,1182101574,43.22.Z,plumbing,ceidg
+"1) NEXT PATRYK CHRZANOWSKI, 2) AD ENERGIA PATRYK CHRZANOWSKI",PATRYK CHRZANOWSKI,-,,pawel.kowalik@amq.pl,amq.pl,1182101574,43.22.Z,plumbing,ceidg
 1. OLGAZ MACIEJ KOWALSKI; 2. MACIEJ KOWALSKI WSPÓLNIK SPÓŁKI CYWILNEJ MPK,Maciej Kowalski,-,,,,5691561665,43.22.Z,plumbing,ceidg
 1. Optimat Piotr Hołubek; 2. Novigo Piotr Hołubek wspólnik s.c.; 3. Biamar Piotr Hołubek wspólnik s.c.,Piotr Hołubek,-,,,,5271104257,43.22.Z,plumbing,ceidg
 "1. ""ORZECHOWSKI"" MIROSŁAW ORZECHOWSKI, 2. BELWEDER NIERUCHOMOŚCI MIROSŁAW ORZECHOWSKI",MIROSŁAW ORZECHOWSKI,biuro@belweder.info,,biuro@belweder.info,,9521272102,43.22.Z,plumbing,ceidg
@@ -507,19 +507,19 @@ AKTOTO Art Company - PIOTR ZUBEK-URBANYI,PIOTR ZUBEK-URBANYI,-,,,,7010316151,86.
 "1. SŁAWOMIR GŁĄBAŁA, 2. KARNAWAŁOWE. COM.PL",SŁAWOMIR GŁĄBAŁA,-,,,,5222784855,43.22.Z,plumbing,ceidg
 1.SYSTEMAL S.C MICHAŁ GAJEWSKI NORBERT BIŃKOWSKI 2.MG DOM Michał Gajewski,Michał Gajewski,-,,,,5291641277,43.22.Z,plumbing,ceidg
 1)Tadeusz ŚWIDZIŃSKI Invest Support s.c. 2) Tadeusz Świdziński Building Support,Tadeusz ŚWIDZIŃSKI,-,,,,7691120169,43.22.Z,plumbing,ceidg
-1. TOMASZ NYC KOMFORT SERWIS;,TOMASZ NYC,-,,,nastykach.pl,5212208765,43.22.Z,plumbing,ceidg
+1. TOMASZ NYC KOMFORT SERWIS;,TOMASZ NYC,-,,kontakt@wenet.pl,nastykach.pl,5212208765,43.22.Z,plumbing,ceidg
 1. Tomasz Sawicki 2. T.R. Development Tomasz Sawicki wspólnik Spółki Cywilnej,Tomasz Sawicki,sawicki.tomek@wp.pl,,sawicki.tomek@wp.pl,,1131821548,43.22.Z,plumbing,ceidg
 1.UNI-KAN SERWIS JERZY SERAFIN ; 2.Jerzy Serafin Wspólnik Spółki Cywilnej UNIKAN GROUP,Jerzy Serafin,biuro@unikanserwis.pl,,biuro@unikanserwis.pl,https://www.unikanserwis.eu,5211622994,43.22.Z,plumbing,ceidg
 1) United Capital & Real Estate - Michał Tomaszewski 2) United Capital & Real Estate - Michał Tomaszewski wspólnik spółki cywilnej,Michał Tomaszewski,-,,,,5252458907,43.22.Z,plumbing,ceidg
 "1. USŁUGI CATERINGOWE PAULINA RAK 2. ""KLIMTER KLIMATYZACJE"" PAULINA RAK",PAULINA RAK,-,,,,9522065581,43.22.Z,plumbing,ceidg
-1. Usługi Kominiarskie Filip Budzicki 2. PROKOMIN POLSKA Filip Budzicki,Filip Budzicki,-,,,ipon.pl,6040127448,43.22.Z,plumbing,ceidg
+1. Usługi Kominiarskie Filip Budzicki 2. PROKOMIN POLSKA Filip Budzicki,Filip Budzicki,-,,biuro@ipon.pl,ipon.pl,6040127448,43.22.Z,plumbing,ceidg
 1) WAGO WIESŁAW JĘDRAS; 2) WIESŁAW JĘDRAS wspólnik spółki cywilnej ARIA,Wiesław JĘDRAS,w.jedras@poczta.onet.pl,,w.jedras@poczta.onet.pl,,1180080371,43.22.Z,plumbing,ceidg
 "1) Wiesław Trzewik TIM""- Przedsiębiorstwo Handlowo-Usługowe; 2) Wiesław Trzewik ""BALTI"" wspólnik spółki cywilnej.",Wiesław Trzewik,-,,,,5210407466,43.22.Z,plumbing,ceidg
 1. WYPOŻYCZALNIA SPRZĘTU BUDOWLANEGO ANDRZEJ SIWIŃSKI 2.KONSERWACJA URZĄDZEŃ DŹWIGNICOWYCH SIWIŃSKI WSPÓLNIK SPÓŁKI CYWILNEJ,ANDRZEJ SIWIŃSKI,-,,,,1180168410,43.22.Z,plumbing,ceidg
 1) ZAKŁAD INSTALACYJNO-BUDOWLANY-MACIEJ PIETRZAK ; 2) WAVE MEDIA MACIEJ PIETRZAK,MACIEJ PIETRZAK,-,,,,1231164707,43.22.Z,plumbing,ceidg
 "1) ""ZORZA"" - BUDOWNICTWO MAREK MAZUREK",Marek Mazurek,zorzasc@vp.pl,,zorzasc@vp.pl,,5271059404,43.22.Z,plumbing,ceidg
 22handsman Radosław Winiaszkiewicz,Radosław Winiaszkiewicz,-,,,pl.pinterest.com,9511949856,43.22.Z,plumbing,ceidg
-24na7 Usługi Hydrauliczno-Gazowe Dawid Szymański,Dawid Szymański,-,,,hydraulik24na7.pl,5321750612,43.22.Z,plumbing,ceidg
+24na7 Usługi Hydrauliczno-Gazowe Dawid Szymański,Dawid Szymański,-,,247hydraulik@gmail.com,hydraulik24na7.pl,5321750612,43.22.Z,plumbing,ceidg
 """2 CH"" JACEK CHACHAJ",JACEK CHACHAJ,-,,,,5220205853,43.22.Z,plumbing,ceidg
 2D Daniel Derkacz,Daniel Derkacz,-,,,,5372543892,43.22.Z,plumbing,ceidg
 2M CONSULTING MICHAŁ MAZUREK,MICHAŁ MAZUREK,-,,,,1180627645,43.22.Z,plumbing,ceidg
@@ -534,18 +534,18 @@ AKTOTO Art Company - PIOTR ZUBEK-URBANYI,PIOTR ZUBEK-URBANYI,-,,,,7010316151,86.
 3K Krzysztof Klepacki,Krzysztof Klepacki,-,,,,1181652467,43.22.Z,plumbing,ceidg
 """10"" USŁUGI-HANDEL KRZYSZTOF MONGIRD",KRZYSZTOF MONGIRD,-,,,,5271016889,43.21.Z,plumbing,ceidg
 "1. Artykuły dziecięce ""Kacperkowo"" Magdalena Prymowicz 2. INSTALACJE TELETECHNICZNE I ELEKTRYCZNE M.A.PRYMOWICZ",Magdalena Prymowicz,-,,,https://www.e-kacperkowo.pl,5213014253,43.21.Z,plumbing,ceidg
-"1) MICHAŁ FRĄCKIEWICZ ANTIDOTUM, 2) MICHAŁ FRĄCKIEWICZ wspólnik spółki cywilnej APS",MICHAŁ FRĄCKIEWICZ,-,,,odtrucie.warszawa.pl,1132412906,43.21.Z,plumbing,ceidg
+"1) MICHAŁ FRĄCKIEWICZ ANTIDOTUM, 2) MICHAŁ FRĄCKIEWICZ wspólnik spółki cywilnej APS",MICHAŁ FRĄCKIEWICZ,-,,kontakt@odtrucie.warszawa.plmo,odtrucie.warszawa.pl,1132412906,43.21.Z,plumbing,ceidg
 "1. OSKAR POPŁAWSKI wspólnik spółki cywilnej INWEST POPULARNA, 2. OSKAR POPŁAWSKI",OSKAR POPŁAWSKI,-,,,,5222522782,43.21.Z,plumbing,ceidg
 "1/PPDI MARCIN BACZEWSKI,2/PHU DREWMAX S.C. MARCIN BACZEWSKI-wspólnik spółki cywilnej",Marcin Baczewski,-,,,,5212037507,43.21.Z,plumbing,ceidg
 1.PRO-ELEKTRO INSTALACJE ELEKTRYCZNE Marek Cwojdziński; 2.ELSIEĆ-ELEKTRO S.C. Marek Cwojdziński wspólnik spółki cywilnej 3.TEAM-PACK Marek Cwojdziński wspólnik spółki cywilnej,Marek Cwojdziński,pro.elektro@wp.pl,,pro.elektro@wp.pl,,8221974733,43.21.Z,plumbing,ceidg
 "1. STUDIO BELL BARTOSZ ŚWIDERSKI; 2. BARTOSZ ŚWIDERSKI WSPÓLNIK SPÓŁKI CYWILNEJ ""SERWIS MITSUMANIAKÓW""",BARTOSZ ŚWIDERSKI,BARTEK@WYDRUKI.COM,,BARTEK@WYDRUKI.COM,,5251621481,43.21.Z,plumbing,ceidg
-1. TechPoint Anna Matuła 2. FIDELIS Anna Matuła,Anna Matuła,-,,,gg.pl,7991433659,43.21.Z,plumbing,ceidg
+1. TechPoint Anna Matuła 2. FIDELIS Anna Matuła,Anna Matuła,-,,bok@gg.pl,gg.pl,7991433659,43.21.Z,plumbing,ceidg
 1.WARS-SPED Spedycja Międzynarodowa i Krajowa Andrzej Matysiak 2. Mat-serwis- Andrzej Matysiak,ANDRZEJ MATYSIAK,info@wars-sped.pl,,info@wars-sped.pl,https://www.wars-sped.pl; www.mat-serwis.waw.pl,1130866715,43.21.Z,plumbing,ceidg
 "1. WIKTOR POPŁAWSKI wspólnik spółki cywilnej INWEST POPULARNA, 2. WIKTOR POPŁAWSKI",WIKTOR POPŁAWSKI,-,,,,5222873688,43.21.Z,plumbing,ceidg
 23doors Robert Kopaczewski,ROBERT KOPACZEWSKI,-,,,,5272424768,43.21.Z,plumbing,ceidg
 24 TECH Łukasz Wisiński,Łukasz Wisiński,-,+48693923554,,pl.revieweuro.com,8222146470,43.21.Z,plumbing,ceidg
 2K16 PROJECT Jarosław Kubicki,Jarosław Kubicki,-,,,,9591288775,43.21.Z,plumbing,ceidg
-2nd Company PAWEŁ GRZYWA,PAWEŁ GRZYWA,-,,,millenniumtfi.pl,5241639410,43.21.Z,plumbing,ceidg
+2nd Company PAWEŁ GRZYWA,PAWEŁ GRZYWA,-,,warszawamillenniumtfi@millenniumtfi.pl,millenniumtfi.pl,5241639410,43.21.Z,plumbing,ceidg
 3K ELEKTRO KAMIL PRZYBYSZ,KAMIL PRZYBYSZ,-,,,,5381843211,43.21.Z,plumbing,ceidg
 3Q-Projekt Daniel Łasek,Daniel Łasek,-,,,,8231554441,43.21.Z,plumbing,ceidg
 3V Winiarek Łukasz,Łukasz WINIAREK,19LUKASZ19@wp.pl,,19LUKASZ19@wp.pl,,5252287363,43.21.Z,plumbing,ceidg
@@ -563,7 +563,7 @@ ABG SPRZĄTANIE ANNA WOJCIESKA-SINGH,ANNA WOJCIESKA-SINGH,ANNA.WOJCIESKA@ONET.PL
 A&BIKE Anna Maciążek,Anna Maciążek,-,,,,5213055803,81.21.Z,cleaning,ceidg
 AB Invest Agnieszka Balcerczak,Agnieszka Balcerczak,-,,,,6612133451,81.21.Z,cleaning,ceidg
 "a/ Biuro Usług ""KEMIT"" Ida Andruszkiewicz, b/ Ida Andruszkiewicz wspólnik spółki cywilnej Biuro Usług IMA",Ida Andruszkiewicz,-,,,biura-rachunkowe.waw.pl,1130133332,81.21.Z,cleaning,ceidg
-ABMAR _Mariusz Sieraczkiewicz,Mariusz Sieraczkiewicz,-,,,jestporzadek.pl,6711151601,81.21.Z,cleaning,ceidg
+ABMAR _Mariusz Sieraczkiewicz,Mariusz Sieraczkiewicz,-,,kontakt@wenet.pl,jestporzadek.pl,6711151601,81.21.Z,cleaning,ceidg
 A.B.METRO BRONISŁAW STĘPIEŃ,BRONISŁAW STĘPIEŃ,-,+48601806503,,,5272068606,81.21.Z,cleaning,ceidg
 ABO-ART Alina Bloch,ALINA BLOCH,alinabloch@tlen.pl,,alinabloch@tlen.pl,,9511854802,81.21.Z,cleaning,ceidg
 about group JOLANTA SZYMCZAK,JOLANTA SZYMCZAK,-,,,foursquare.com,5341422087,81.21.Z,cleaning,ceidg
@@ -573,13 +573,13 @@ ABT AGNIESZKA BŁACHEWICZ,AGNIESZKA BŁACHEWICZ,-,,,firma.egospodarka.pl,5931900
 ACONT BIURO RACHUNKOWE DOROTA ŁATA-ĆWIK,DOROTA ŁATA-ĆWIK,acontbiuro@gmail.com,,acontbiuro@gmail.com,,8631536547,81.21.Z,cleaning,ceidg
 ACTION! JAN BALDWIN-RAMULT,Jan Baldwin-Ramult,baldwin@op.pl,,baldwin@op.pl,,5262597639,81.21.Z,cleaning,ceidg
 ActiveGarden Beata Wierzchowska,BEATA WIERZCHOWSKA,-,+48784307642,,,5671770638,81.21.Z,cleaning,ceidg
-ADA LUX BUD Oleksii Yershov,Oleksii Yershov,-,,,krs-online.com.pl,5342626946,81.21.Z,cleaning,ceidg
+ADA LUX BUD Oleksii Yershov,Oleksii Yershov,-,,kontakt@wenet.pl,krs-online.com.pl,5342626946,81.21.Z,cleaning,ceidg
 "ADAM CHUDORLIŃSKI ""BŁYSK""",ADAM CHUDORLIŃSKI,-,,,,5241548239,81.21.Z,cleaning,ceidg
 ADAM MITURA PRZEDSIĘBIORSTWO WIELOBRANŻOWE MITUR CONSULTING,ADAM MITURA,-,,,,8381367338,81.21.Z,cleaning,ceidg
 ADAM NADOLNY RZEMIEŚLNICZY ZAKŁAD BUDOWLANY,ADAM NADOLNY,-,,,,5261029436,81.21.Z,cleaning,ceidg
 ADAM TOLAK USŁUGI INSTALACYJNO-BUDOWLANE,ADAM TOLAK,tolak.adam@vp.pl,+48502068086,tolak.adam@vp.pl,,5272179814,81.21.Z,cleaning,ceidg
 "Adam WLAZŁY 1) WOW STUDIO, 2) ALABAMA ART BUYING & PRODUCTION",Adam WLAZŁY,-,,,,5251642520,81.21.Z,cleaning,ceidg
-ADBAT - KONRAD GACKI,KONRAD GACKI,-,,,krs-pobierz.pl,1181749600,81.21.Z,cleaning,ceidg
+ADBAT - KONRAD GACKI,KONRAD GACKI,-,,gdpr@transparentdata.pl,krs-pobierz.pl,1181749600,81.21.Z,cleaning,ceidg
 ADB REKLAMA ANDRZEJ DERA,ANDRZEJ DERA,-,,,,5272262596,81.21.Z,cleaning,ceidg
 AD BUTIK AGENCJA REKLAMOWA AGNIESZKA CHOCHMAN,AGNIESZKA CHOCHMAN,agnieszka@adbutik.pl,,agnieszka@adbutik.pl,,7132576640,81.21.Z,cleaning,ceidg
 ADMAT MEBLE Adam Matusik,Adam Matusik,-,,,,8231398113,81.22.Z,cleaning,ceidg
@@ -603,7 +603,7 @@ Agnieszka Łabędź THE POWER OF MINDS,Agnieszka Łabędź,agnieszkalabedz1@wp.p
 AKCENT BARBARA SOŁTYSIAK,BARBARA SOŁTYSIAK,-,,,,9511598345,81.22.Z,cleaning,ceidg
 AKCENT JANUSZ SOBCZYK,JANUSZ SOBCZYK,-,,,,5241383962,81.22.Z,cleaning,ceidg
 AKE ALEKSANDER ARABADŹIĆ,Aleksander Arabadźić,a.arabadzic@gmail.com,+48505391145,a.arabadzic@gmail.com,,1181920330,81.22.Z,cleaning,ceidg
-AKOL PRZEDSIĘBIORSTWO USŁUG WYSOKOŚCIOWYCH I REMONTOWO BUDOWLANYCH EDYTA GRYŻEWSKA,Edyta GRYŻEWSKA,-,,,akol.eu,5252040326,81.22.Z,cleaning,ceidg
+AKOL PRZEDSIĘBIORSTWO USŁUG WYSOKOŚCIOWYCH I REMONTOWO BUDOWLANYCH EDYTA GRYŻEWSKA,Edyta GRYŻEWSKA,-,,info@akol.eu,akol.eu,5252040326,81.22.Z,cleaning,ceidg
 "Alan OŻÓG PRZEDSIĘBIORSTWO HANDLOWO-USŁUGOWE ""AMEL""-ALAN OŻÓG",Alan OŻÓG,-,,,historiaadresow.com,5262754978,81.22.Z,cleaning,ceidg
 ALBART ANNA LINEK,ANNA LINEK,-,,,,9521483804,81.22.Z,cleaning,ceidg
 Albert Dąbrowicz ADVANCE,Albert Dąbrowicz,-,,,,5211049187,81.22.Z,cleaning,ceidg
@@ -616,8 +616,8 @@ ALFRED OWOC Centrum BSZ,ALFRED OWOC,a.owoc@wp.pl,,a.owoc@wp.pl,,5211766718,81.22
 ALIANSBUD MARK YAKUBOUSKI,MARK YAKUBOUSKI,biuro.alians@wp.pl,,biuro.alians@wp.pl,,1251725729,81.22.Z,cleaning,ceidg
 ALMON-BUD Monika Sokołowska,Monika Sokołowska,-,,,,5242634455,81.22.Z,cleaning,ceidg
 Alp 4 Media Piotr Grubiński,Piotr Grubiński,-,,,,1132510773,81.22.Z,cleaning,ceidg
-"""ALPIMA"" Biuro Rachunkowo - Administracyjne Piotr Stokowski",Piotr Stokowski,-,,,krs-online.com.pl,5221117393,81.22.Z,cleaning,ceidg
-"Alpine Brothers - Alpinizm Budowlany, Vadym Tykhomyrskyi",Vadym Tykhomyrskyi,-,,,alpinebrothers.rzetelnafirma.pl,1132914950,81.22.Z,cleaning,ceidg
+"""ALPIMA"" Biuro Rachunkowo - Administracyjne Piotr Stokowski",Piotr Stokowski,-,,kontakt@wenet.pl,krs-online.com.pl,5221117393,81.22.Z,cleaning,ceidg
+"Alpine Brothers - Alpinizm Budowlany, Vadym Tykhomyrskyi",Vadym Tykhomyrskyi,-,,4lpinebrothers@gmail.com,alpinebrothers.rzetelnafirma.pl,1132914950,81.22.Z,cleaning,ceidg
 ALPINISTYKA24H Andrzej Babula,Andrzej Babula,-,,,,9512003472,81.22.Z,cleaning,ceidg
 """AL-POL"" Bledar Goga",Bledar Goga,-,,,,1182167805,81.22.Z,cleaning,ceidg
 ALP SYSTEM JACEK ZBIERAJEWSKI,Jacek Zbierajewski,-,,,dnb.com,5262314794,81.22.Z,cleaning,ceidg
@@ -635,7 +635,7 @@ ANDREW ANDRZEJ BUJALSKI,ANDRZEJ BUJALSKI,-,,,,9521274785,81.22.Z,cleaning,ceidg
 ANDRZEJ BĄKOWSKI,ANDRZEJ BĄKOWSKI,-,,,,5261087735,81.22.Z,cleaning,ceidg
 ANDRZEJ BORAWSKI BATEAM WYTWÓRNIA ZABAWY,ANDRZEJ BORAWSKI,-,,,,1132418866,81.22.Z,cleaning,ceidg
 Andrzej BRZOZOWSKI Andrzej Brzozowski,Andrzej BRZOZOWSKI,-,,,,5251416628,81.22.Z,cleaning,ceidg
-ADVER TOMASZ DĘBSKI,TOMASZ DĘBSKI,-,,,drdebski.pl,5272261970,81.29.Z,cleaning,ceidg
+ADVER TOMASZ DĘBSKI,TOMASZ DĘBSKI,-,,info@drdebski.pl,drdebski.pl,5272261970,81.29.Z,cleaning,ceidg
 "AGATA DĄBROWSKA ""Black Zulu""",AGATA DĄBROWSKA,-,,,pinterest.com,1181624270,81.29.Z,cleaning,ceidg
 "AGATA KUBICKA; wspólnik spółek cywilnych: GUGUS, BARDZO LOCALNIE",AGATA KUBICKA,-,,,,9511652010,81.29.Z,cleaning,ceidg
 AG :BUD Michał Kadłubowski,Michał Kadłubowski,-,,,,7010287946,81.29.Z,cleaning,ceidg
@@ -670,11 +670,11 @@ ALAKSANDRA YAKUBETSKAYA dermis aesthetic centrum kosmetologiczne,ALAKSANDRA YAKU
 Albert Świetlik VITA,Albert Świetlik,-,,,,9521695624,96.04.Z,massage,ceidg
 Aleksandra Chądzyńska BE BEAUTY STUDIO DESIGN,Aleksandra Chądzyńska,-,,,,5711599689,96.04.Z,massage,ceidg
 Aleksandra Dąbrowska BONITA,Aleksandra Dąbrowska,-,,,,5361754533,96.04.Z,massage,ceidg
-ALEKSANDRA KŁAK-DZIEMIAN - REHABILITY,ALEKSANDRA KŁAK-DZIEMIAN,-,,,rehability.pl,1181913554,96.04.Z,massage,ceidg
+ALEKSANDRA KŁAK-DZIEMIAN - REHABILITY,ALEKSANDRA KŁAK-DZIEMIAN,-,,kontakt@rehability.pl,rehability.pl,1181913554,96.04.Z,massage,ceidg
 "ALEX - SPECJALISTYCZNA PIELĘGNACJA NÓG I RĄK, ZABIEGI KOSMETYCZNE GRAŻYNA KRZĄTAŁA",GRAŻYNA KRZĄTAŁA,-,,,,1230248514,96.04.Z,massage,ceidg
 Alicja Gabillaud,Alicja Gabillaud,-,,,,5213518396,96.04.Z,massage,ceidg
 ALICJA SUBSTELNA,ALICJA SUBSTELNA,-,,,,9512475099,96.04.Z,massage,ceidg
-AMARANT IZABELA WRÓBEL,IZABELA WRÓBEL,-,,,migracje.uw.edu.pl,8311571252,96.04.Z,massage,ceidg
+AMARANT IZABELA WRÓBEL,IZABELA WRÓBEL,-,,migration.cmr@uw.edu.pl,migracje.uw.edu.pl,8311571252,96.04.Z,massage,ceidg
 AMARE Magdalena Dąbrowska,Magdalena Dąbrowska,-,,,,8212106167,96.04.Z,massage,ceidg
 AMBASADA ZDROWEGO ODŻYWIANIA MONIKA SĄCZEK-MAJ,MONIKA SĄCZEK-MAJ,monika.maj@poczta.onet.pl,,monika.maj@poczta.onet.pl,,9491544606,96.04.Z,massage,ceidg
 AMBER P.W. ARTUR ROSŁAN,ARTUR ROSŁAN,-,,,,5221056295,96.04.Z,massage,ceidg
@@ -686,7 +686,7 @@ Andrzej Ziemba,Andrzej Ziemba,-,,,,6612234301,96.04.Z,massage,ceidg
 ANETA KSIĄŻEK BEAUTY4YOU,Aneta Książek,-,,,,9521593668,96.04.Z,massage,ceidg
 "a/ NEURON Jacek Jędrzejczak, b/ NEURON S.C. Jacek Jędrzejczak wspólnik spółki cywilnej",JACEK JĘDRZEJCZAK,-,,,,5210527006,96.04.Z,massage,ceidg
 ANGELS BEAUTY Angelika Arkit,Angelika Arkit,-,,,booksy.com,1133050807,96.04.Z,massage,ceidg
-ANIMUSZ ELŻBIETA FIGELAND,ELŻBIETA FIGELAND,-,,,animusz.pl,1180134718,96.04.Z,massage,ceidg
+ANIMUSZ ELŻBIETA FIGELAND,ELŻBIETA FIGELAND,-,,gabinet@animusz.pl,animusz.pl,1180134718,96.04.Z,massage,ceidg
 Anna ALBIN AA.WIZAŻ,Anna ALBIN,-,,,,5252170655,96.04.Z,massage,ceidg
 ANNA AMBROZIAK A&A Strategy Group,ANNA Ambroziak,anna.a@wp.pl,,anna.a@wp.pl,,1132313966,96.04.Z,massage,ceidg
 ANNA BASIAK ANN,ANNA BASIAK,-,,,,5271579859,96.04.Z,massage,ceidg
@@ -700,9 +700,9 @@ AMP Strawberry Consulting Agnieszka Musioł-Posyniak,Agnieszka Musioł-Posyniak,
 ANCARA BIS JUSTYNA ROSŁONEK-KOWALSKA,Justyna Rosłonek-Kowalska,justyna@ancara.pl,,justyna@ancara.pl,,9521845207,96.23.Z,massage,ceidg
 Andrii Zubko,Andrii Zubko,-,,,booksy.com,9512587846,96.23.Z,massage,ceidg
 "Angel Beauty, Angelika Jończyk",Angelika Jończyk,Angelika.angel.beauty@gmail.com,+48510911442,Angelika.angel.beauty@gmail.com,,1231335899,96.23.Z,massage,ceidg
-ANGELIKA BARDYGUŁA ANGEL,ANGELIKA BARDYGUŁA,-,,,tickets.pl,5252414100,96.23.Z,massage,ceidg
+ANGELIKA BARDYGUŁA ANGEL,ANGELIKA BARDYGUŁA,-,,543info@tickets.plnasza,tickets.pl,5252414100,96.23.Z,massage,ceidg
 ANITA BURDON FEMELLE CLINIC,ANITA BURDON,-,,,groupon.pl,1251323706,96.23.Z,massage,ceidg
-Anjali Joga Monika Zabokrzecka,Monika Zabokrzecka,-,,,anjalijoga.pl,5241280280,96.23.Z,massage,ceidg
+Anjali Joga Monika Zabokrzecka,Monika Zabokrzecka,-,,studio@anjalijoga.pl,anjalijoga.pl,5241280280,96.23.Z,massage,ceidg
 ANNA BEDNARCZYK PPL GOLD CLINIC wspólnik spółki cywilnej,ANNA BEDNARCZYK,-,,,,5241429859,96.23.Z,massage,ceidg
 ANNA DĄBROWSKA,ANNA DĄBROWSKA,ANDIAMO@POCZTA.ONET.PL,,ANDIAMO@POCZTA.ONET.PL,,5221870179,96.23.Z,massage,ceidg
 Anna Gawlikowska wspólnik spółki cywilnej GALERIA BALI S.C. Witold Gawlikowski Anna Gawlikowska,Anna Gawlikowska,Anna@balicafe.pl,+48501722848,Anna@balicafe.pl,http://www.bali-spa.pl/,5321749230,96.23.Z,massage,ceidg
@@ -714,7 +714,7 @@ Ansty Beauty Anastasiya Varankevich,Anastasiya Varankevich,anastasiyavarankevich
 Arkadiusz Babiarz,Arkadiusz Babiarz,arkadiusz@babiarz.waw.pl,,arkadiusz@babiarz.waw.pl,,6631214966,96.23.Z,massage,ceidg
 Art Agenda Zofia Gebert,Zofia Gebert,-,,,filmmakers.eu,5252130437,96.23.Z,massage,ceidg
 ARTUR BIEDERMANN,ARTUR BIEDERMANN,-,,,,5251501587,96.23.Z,massage,ceidg
-ASPIUS PRO SEBASTIAN KALKOWSKI,Sebastian Kalkowski,-,,,firmagodnazaufania.pl,1132194013,96.23.Z,massage,ceidg
+ASPIUS PRO SEBASTIAN KALKOWSKI,Sebastian Kalkowski,-,,kontakt@firmagodnazaufania.pl,firmagodnazaufania.pl,1132194013,96.23.Z,massage,ceidg
 Atelier Garik / GAREGIN BAGHDASARYAN,GAREGIN BAGHDASARYAN,-,,,booksy.com,8252140176,96.23.Z,massage,ceidg
 Aura Beauty Urszula Sikorska,Urszula Sikorska,sikorska_urszula@op.pl,+48883634383,sikorska_urszula@op.pl,,8212466227,96.23.Z,massage,ceidg
 AURA-NAILS&COSMETICS FILIP BOCHEŃSKI,FILIP BOCHEŃSKI,-,,,,1133192281,96.23.Z,massage,ceidg
@@ -728,7 +728,7 @@ BAMAR Bartosz Wasilewski,Bartosz Wasilewski,-,,,,7221551009,96.23.Z,massage,ceid
 BARBARA JERSCHINA,BARBARA JERSCHINA,-,,,mp.pl,9511401905,96.23.Z,massage,ceidg
 Bartłomiej Doszko RASPA,Bartłomiej Doszko,bartlomiej.doszko@gmail.com,+48570071548,bartlomiej.doszko@gmail.com,,8252119147,96.23.Z,massage,ceidg
 BARTŁOMIEJ GĄSIOROWSKI ABM TRADE,BARTŁOMIEJ GĄSIOROWSKI,MILIONIK@O2.PL,,MILIONIK@O2.PL,,1181540751,96.23.Z,massage,ceidg
-"BARTŁOMIEJ OSUCH ""B-Art"" Bartłomiej Osuch",BARTŁOMIEJ OSUCH,-,,,spalaniebiomasy.pl,5221553929,96.23.Z,massage,ceidg
+"BARTŁOMIEJ OSUCH ""B-Art"" Bartłomiej Osuch",BARTŁOMIEJ OSUCH,-,,kontakt@wenet.pl,spalaniebiomasy.pl,5221553929,96.23.Z,massage,ceidg
 BARTŁOMIEJ PRUS GRUPA VISIT,BARTŁOMIEJ PRUS,-,,,,6342399706,96.23.Z,massage,ceidg
 BARTOSZ KOWALCZYK Fitness Club S4,BARTOSZ KOWALCZYK,-,,,yellowpages.pl,7122410352,96.23.Z,massage,ceidg
 BARTOSZ TOCZKIEWICZ Bart-Pharm,BARTOSZ TOCZKIEWICZ,-,,,,8512498183,96.23.Z,massage,ceidg
@@ -746,7 +746,7 @@ BEATA ZAJĄCZKOWSKA,BEATA ZAJĄCZKOWSKA,-,,,,5251501280,96.23.Z,massage,ceidg
 "AGNIESZKA OLSZEWSKA-DĄBROWSKA ENIGMA - DORADCY, SPECJALIŚCI I MEDIATORZY PRAWNO-GOSPODARCZY",AGNIESZKA OLSZEWSKA-DĄBROWSKA,aga_olszewska@autograf.pl,,aga_olszewska@autograf.pl,,1181323605,86.90.A,massage,ceidg
 AGNIESZKA ŻUBER,AGNIESZKA ŻUBER,-,,,,7311137561,86.90.A,massage,ceidg
 Akademia Balonowa - Adrian Rosiński,Adrian Rosiński,-,,,,5252218563,86.90.A,massage,ceidg
-Aleksandra Bogusz Fizjoterapia,ALEKSANDRA BOGUSZ,-,,,cmmedicum.com,7962497326,86.90.A,massage,ceidg
+Aleksandra Bogusz Fizjoterapia,ALEKSANDRA BOGUSZ,-,,83rejestracja@cmmedicum.pl,cmmedicum.com,7962497326,86.90.A,massage,ceidg
 Aleksandra Buchla,Aleksandra Buchla,-,,,znanylekarz.pl,1133076540,86.90.A,massage,ceidg
 Aleksandra TRUSZCZYŃSKA-BASZAK GABINET FIZJOTERAPII,Aleksandra TRUSZCZYŃSKA-BASZAK,-,,,researchgate.net,1181462689,86.90.A,massage,ceidg
 Aleksandra Zawistowska - Rehabilitacja,Aleksandra Zawistowska,aleks.zawistowska@gmail.com,,aleks.zawistowska@gmail.com,,1132423867,86.90.A,massage,ceidg
@@ -760,8 +760,8 @@ ANNA CHRÓŚCICKA REHABILITACJA I REKREACJA,ANNA CHRÓŚCICKA,anulach1@op.pl,,an
 ANNA JAWORSKA Neurorehabilitacja,ANNA JAWORSKA,-,,,osrodekwiez.pl,7692091671,86.90.A,massage,ceidg
 ANNA KAMIŃSKA REHABILITACJA DOMOWA,ANNA KAMIŃSKA,-,,,,9521415234,86.90.A,massage,ceidg
 ANNA KOMORNICKA PRAXIS - GABINET REHABILITACJI I ODNOWY BIOLOGICZNEJ,ANNA KOMORNICKA,-,,,,5271346440,86.90.A,massage,ceidg
-Anna Krawczak REHABILITACJA GIMNASTYKA KOREKCYJNA,Anna Krawczak,-,,,fizjoactive.com.pl,5211089844,86.90.A,massage,ceidg
-ANNA PODSIEDLIK-CIEBIERA Personal Pilates,ANNA PODSIEDLIK-CIEBIERA,-,,,personalpilates.pl,9491776179,86.90.A,massage,ceidg
+Anna Krawczak REHABILITACJA GIMNASTYKA KOREKCYJNA,Anna Krawczak,-,,kontakt24@fizjoactive.com.pl,fizjoactive.com.pl,5211089844,86.90.A,massage,ceidg
+ANNA PODSIEDLIK-CIEBIERA Personal Pilates,ANNA PODSIEDLIK-CIEBIERA,-,,studio@personalpilates.pl,personalpilates.pl,9491776179,86.90.A,massage,ceidg
 ANNA SZOZDA-BUGAJSKA,ANNA SZOZDA-BUGAJSKA,anaszozda@wp.pl,,anaszozda@wp.pl,,2220736342,86.90.A,massage,ceidg
 ANNA TERLECKA-ROMANOWICZ GABINET WSPIERANIA ROZWOJU DZIECI,ANNA TERLECKA-ROMANOWICZ,ania.terlecka@interia.pl,,ania.terlecka@interia.pl,,5271976980,86.90.A,massage,ceidg
 ANTRESOLA ZDROWIA I URODY Bogumiła Majka,BOGUMIŁA MAJKA,-,,,tripadvisor.com.au,5212721416,86.90.A,massage,ceidg
@@ -772,8 +772,8 @@ Arkadiusz Brzozowski KIUR MED,Arkadiusz Brzozowski,-,,,,5213266339,86.90.A,massa
 ARKADIUSZ KNYCH SANATIO-REHABILITACJA,ARKADIUSZ KNYCH,-,,,,5222745358,86.90.A,massage,ceidg
 ARKADIUSZ SZYDŁOWSKI KRAINATERAPII GABINET REHABILITACJI KOMPLEKSOWEJ DZIECI I MŁODZIEŻY,ARKADIUSZ SZYDŁOWSKI,krainaterapiidziecka@gmail.pl,,krainaterapiidziecka@gmail.pl,https://krainaterapii.pl,5641545084,86.90.A,massage,ceidg
 ART-BEAUTY MARIA PAREDES DE WIERZBOWSKI,MARIA PAREDES DE WIERZBOWSKI,-,,,,6581920477,86.90.A,massage,ceidg
-ARTISMEDICA PRAKTYKA LEKARSKA BOŻENA KRÓL,BOŻENA KRÓL,-,,,artismedica.pl,7121974101,86.90.A,massage,ceidg
-ART THERAPY INSTITUTE MAŁGORZATA HEBDA,MAŁGORZATA HEBDA,-,,,zozwola.pl,5251569042,86.90.A,massage,ceidg
+ARTISMEDICA PRAKTYKA LEKARSKA BOŻENA KRÓL,BOŻENA KRÓL,-,,recepcja@artismedica.pl,artismedica.pl,7121974101,86.90.A,massage,ceidg
+ART THERAPY INSTITUTE MAŁGORZATA HEBDA,MAŁGORZATA HEBDA,-,,chmielna@zozwola.pl,zozwola.pl,5251569042,86.90.A,massage,ceidg
 ARTUR BARTOCHOWSKI - wspólnik spółki cywilnej CENTRUM REHABILITACJI I EDUKACJI DOBRY START,ARTUR BARTOCHOWSKI,dobry-start@wp.pl,,dobry-start@wp.pl,,5261546077,86.90.A,massage,ceidg
 Artur Borkowski ORTHOS,Artur Borkowski,-,,,,7791099871,86.90.A,massage,ceidg
 ASGARD Bartosz Szerszeń,Bartosz Szerszeń,-,,,,5471169095,86.90.A,massage,ceidg
@@ -784,26 +784,26 @@ AVA Usługi Lekarskie Bożena Łukasik-Madej - wspólnik spółki cywilnej,Boże
 Aleksandra Bielska Prywatna Praktyka Psychologiczna,Aleksandra Bielska,kontakt@bielska-psycholog.pl,,kontakt@bielska-psycholog.pl,https://bielska-psycholog.pl/,5243024902,86.99.D,massage,ceidg
 Aleksandra Dziewulska Bodywork,Aleksandra Dziewulska,aleksandra.bodywork@gmail.com,+48600212421,aleksandra.bodywork@gmail.com,,5272545590,86.99.D,massage,ceidg
 Aleksandra Jędrzejczak Gabinet Psychoterapii,Aleksandra Jędrzejczak,-,,,psychoterapiawwarszawie.pl,8942770541,86.99.D,massage,ceidg
-Aleksandra Lemba,Aleksandra Lemba,-,,,aleksandralemba.pl,7010084663,86.99.D,massage,ceidg
+Aleksandra Lemba,Aleksandra Lemba,-,,aleksandra.lemba@gmail.com,aleksandralemba.pl,7010084663,86.99.D,massage,ceidg
 "Aleksandra Lutoborska, Plaster Miodu Aleksandra Lutoborska wspólnik spółki cywilnej",Aleksandra Lutoborska,-,,,plastermiodu.waw.pl,9521716668,86.99.D,massage,ceidg
 AlexBeauty Aleksandra Sobkowiak,ALEKSANDRA SOBKOWIAK,ALEKSANDRA_ANNA@ONET.PL,+48505994848,ALEKSANDRA_ANNA@ONET.PL,,5273004933,86.99.D,massage,ceidg
 Alicja Baska Medycyna Stylu Życia,Alicja Baska,alicebaska@gmail.com,,alicebaska@gmail.com,,1182217822,86.99.D,massage,ceidg
-Alicja Bielecka Trychologia i Kosmetologia,Alicja Bielecka,-,,,salonvelure.pl,7011219734,86.99.D,massage,ceidg
+Alicja Bielecka Trychologia i Kosmetologia,Alicja Bielecka,-,,kontakt@salonvelure.pl,salonvelure.pl,7011219734,86.99.D,massage,ceidg
 Allora. Centrum Psychoterapii i Terapii Seksuologicznej Monika Kaszuba,Monika Kaszuba,-,,,basniobor.pl,5681596171,86.99.D,massage,ceidg
 ALOE FIT BEATA PAZIEWSKA,BEATA PAZIEWSKA,beata.paziewska.kbi@op.pl,,beata.paziewska.kbi@op.pl,,1180041425,86.99.D,massage,ceidg
 AMBAR BY MAJA LIPIŃSKA,MAJA LIPIŃSKA,-,,,,5252067325,86.99.D,massage,ceidg
 Ambasada Głosu Ada Pawłowska,Ada Pawłowska,-,,,ranking.abczdrowie.pl,7412036956,86.99.D,massage,ceidg
 AMBROZJA ANNA BUNICZ,ANNA BUNICZ,-,,,,1250167026,86.99.D,massage,ceidg
 AMED Beauty JOANNA ULAN,JOANNA ULAN,-,,,znanylekarz.pl,5213770813,86.99.D,massage,ceidg
-Ameera Anna Ibrahim - psychoterapia,Ameera Ibrahim,-,,,medfile.pl,1132731422,86.99.D,massage,ceidg
+Ameera Anna Ibrahim - psychoterapia,Ameera Ibrahim,-,,biuro@medfile.pl,medfile.pl,1132731422,86.99.D,massage,ceidg
 ANDRZEJ KOLBUSZEWSKI,ANDRZEJ KOLBUSZEWSKI,akolbusz@interia.pl,+48503169980,akolbusz@interia.pl,,5241257074,86.99.D,massage,ceidg
 Aneta Olbrot,Aneta Olbrot,-,,,,5223352299,86.99.D,massage,ceidg
 ANIMA Pracownia Psychologii Agata BRONIKOWSKA,Agata BRONIKOWSKA,anima@pracowniaanima.pl,+48603331070,anima@pracowniaanima.pl,https://www.psychoterapiaanima.pl,1130910304,86.99.D,massage,ceidg
 Anita Ambroży Akademia Przewagi Mentalnej i Emocjonalnej VARENA,Anita Ambroży,-,,,,8133883965,86.99.D,massage,ceidg
-Anna Beneturska,ANNA BENETURSKA,-,,,cmp.med.pl,6972157117,86.99.D,massage,ceidg
+Anna Beneturska,ANNA BENETURSKA,-,,rezerwacja.wizyt@cmp.med.pl,cmp.med.pl,6972157117,86.99.D,massage,ceidg
 "ANNA DANIEL - Psychoterapia, Rozwój Osobisty i Edukacja",ANNA DANIEL,-,,,znanylekarz.pl,1132620438,86.99.D,massage,ceidg
-ANNA DROBKIEWICZ,ANNA DROBKIEWICZ,-,,,bestwaydent.pl,9720116008,86.99.D,massage,ceidg
-Anna Filipowicz Gabinet Psychoterapii,Anna Filipowicz,-,,,psychoterapia-af.pl,8451296490,86.99.D,massage,ceidg
+ANNA DROBKIEWICZ,ANNA DROBKIEWICZ,-,,424kontakt@bestwaydent.plbest,bestwaydent.pl,9720116008,86.99.D,massage,ceidg
+Anna Filipowicz Gabinet Psychoterapii,Anna Filipowicz,-,,aniaspchwarszawa@gmail.com,psychoterapia-af.pl,8451296490,86.99.D,massage,ceidg
 Anna Jarmińska-Srebrna,Anna Jarmińska-Srebrna,anna.jarminska@gmail.com,+48600523885,anna.jarminska@gmail.com,,1132134643,86.99.D,massage,ceidg
 ANNA JASTRZĘBSKA USŁUGI ADMINISTRACYJNO - BIUROWE,ANNA JASTRZĘBSKA,anna_jastrzebska78@wp.pl,,anna_jastrzebska78@wp.pl,,5681409364,86.99.D,massage,ceidg
 ANNA ZABOROWSKA ANZAB CONSULTING,ANNA ZABOROWSKA,ANZAB@anzab.pl,,ANZAB@anzab.pl,,5211485310,86.99.D,massage,ceidg
@@ -817,7 +817,7 @@ AVIDA Akademia Rozwoju Bożena Lewicka,Bożena Lewicka,-,,,bozkalew25.wixsite.co
 AWZ Farma Zbigniew Gadamski,Zbigniew Gadamski,-,,,,5222229881,86.99.D,massage,ceidg
 """Azyl Myśli"" Gabinet Terapeutyczny Marta Kurkiewicz",Marta Kurkiewicz,-,,,myslikosmate.blog.deon.pl,8883156927,86.99.D,massage,ceidg
 Badanie Wzroku Maciej Lach,Maciej Lach,-,,,dobryoptometrysta.pl,5322031351,86.99.D,massage,ceidg
-Bagno Ceramics DANIELA DOMACHOWSKA,DANIELA DOMACHOWSKA,-,,,przystroimy.pl,9512511197,86.99.D,massage,ceidg
+Bagno Ceramics DANIELA DOMACHOWSKA,DANIELA DOMACHOWSKA,-,,sklep@bagnoceramics.pl,przystroimy.pl,9512511197,86.99.D,massage,ceidg
 Balley & Co OPTYKA IGA LANGERT,IGA LANGERT,-,,,waze.com,5372098972,86.99.D,massage,ceidg
 BARBARA KUSZCZAK-BOHL,BARBARA KUSZCZAK-BOHL,bkuszczak-bohl@wp.pl,,bkuszczak-bohl@wp.pl,,9511252902,86.99.D,massage,ceidg
 Barbara Podlasek Luźno,Barbara Podlasek,-,,,,1251783201,86.99.D,massage,ceidg
@@ -829,7 +829,7 @@ Bartłomiej Paprocki,Bartłomiej Paprocki,-,,,,5242599629,86.99.D,massage,ceidg
 Bartłomiej Potrzebowski POTRZEBNY AI,Bartłomiej Potrzebowski,ai@potrzebny.ai,+48691350888,ai@potrzebny.ai,,1133182851,86.99.D,massage,ceidg
 Bartosz Gorczyca EVOQ,Bartosz Gorczyca,-,,,,9222258821,86.99.D,massage,ceidg
 BARTOSZ KUCZMAR,BARTOSZ KUCZMAR,-,,,,5262292526,86.99.D,massage,ceidg
-BAWEO BARBARA BORKOWSKA,BARBARA BORKOWSKA,-,,,baweo.pl,1132640346,86.99.D,massage,ceidg
+BAWEO BARBARA BORKOWSKA,BARBARA BORKOWSKA,-,,imprezybaweo@gmail.com,baweo.pl,1132640346,86.99.D,massage,ceidg
 1. Do Trong Truy wspólnik spółki cywilnej Silver-Bud; 2. Thuong Hieu Do Trong Truy,Trong Truy Do,-,,,tiktok.com,5262574727,43.22.Z,plumbing,ceidg
 4BUD INWESTYCJE Wojciech Korzeniewski,Wojciech Korzeniewski,w.korzeniewski@wp.pl,,w.korzeniewski@wp.pl,,5241926701,43.22.Z,plumbing,ceidg
 AAB Aleksej Andreev,Aleksej Andreev,-,,,m.ok.ru,9522218889,43.22.Z,plumbing,ceidg
@@ -837,7 +837,7 @@ ABAKLIM MARIUSZ SOKOŁOWSKI,MARIUSZ SOKOŁOWSKI,biuro@abaklim.pl,,biuro@abaklim.
 """ABAS"" IWONA WIETECHA",IWONA WIETECHA,-,,,,9511388702,43.22.Z,plumbing,ceidg
 ABCAGD ADAM GAJEWSKI,ADAM GAJEWSKI,GAIDAHO@GMAIL.COM,,GAIDAHO@GMAIL.COM,,1130197823,43.22.Z,plumbing,ceidg
 ABCK Arkadiusz Biskup,Arkadiusz Biskup,a.biskup@abck.pl,+48530530330,a.biskup@abck.pl,,1132131946,43.22.Z,plumbing,ceidg
-ABC KOMP Adam Stolarczyk,Adam Stolarczyk,-,,,krs-online.com.pl,5241350141,43.22.Z,plumbing,ceidg
+ABC KOMP Adam Stolarczyk,Adam Stolarczyk,-,,kontakt@wenet.pl,krs-online.com.pl,5241350141,43.22.Z,plumbing,ceidg
 ABC Maria Adamczyk,Maria Adamczyk,adamczyk.maria@wp.pl,+48509638668,adamczyk.maria@wp.pl,,6912210279,43.22.Z,plumbing,ceidg
 ABC MONTAŻ SERHII DEREVENETS,SERHII DEREVENETS,-,,,,7231632844,43.22.Z,plumbing,ceidg
 ABC SERWIS WIESŁAW PASTERNAK,WIESŁAW PASTERNAK,-,,,,1132895483,43.22.Z,plumbing,ceidg
@@ -855,7 +855,7 @@ ABRA - USŁUGI REMONTOWO-BUDOWLANE WACŁAW WOROPAJ,Wacław Woropaj,-,,,,73426714
 ABRIL JUSTYNA SKORUPSKA,JUSTYNA SKORUPSKA,-,,,,5241079951,43.22.Z,plumbing,ceidg
 „ABROROWICZ” Yusufjon Tursunov,Yusufjon Tursunov,abrorowicz@gmail.com,+48736700700,abrorowicz@gmail.com,,5272963873,43.22.Z,plumbing,ceidg
 ABsolutions ADRIAN HENRYKOWSKI VEL HENDRYKOWSKI,ADRIAN HENRYKOWSKI VEL HENDRYKOWSKI,adek168@gmail.com,+48668858008,adek168@gmail.com,,5272949778,43.22.Z,plumbing,ceidg
-AB SOLUTION TOMASZ GŁOGOWSKI,TOMASZ GŁOGOWSKI,-,,,fabrykaciepla.co,1180796649,43.22.Z,plumbing,ceidg
+AB SOLUTION TOMASZ GŁOGOWSKI,TOMASZ GŁOGOWSKI,-,,biuro@serwisjunkers.pl,fabrykaciepla.co,1180796649,43.22.Z,plumbing,ceidg
 ABSORBER Rafał Górecki,Rafał Górecki,-,,,,5212879979,43.22.Z,plumbing,ceidg
 """A - COSTA "" BUSINESS CONSULTING ZBIGNIEW STABRAWA",ZBIGNIEW STABRAWA,-,,,,8681195315,43.22.Z,plumbing,ceidg
 ADAM BUDZYŃSKI MAR-LEX Adam Budzyński,ADAM BUDZYŃSKI,-,,,,8882803112,43.22.Z,plumbing,ceidg
@@ -864,15 +864,15 @@ Adam DRÓZD PHUP-PRZEDSIĘBIORSTWO HANDLOWO USŁUGOWO PRODUKCYJNE IMPORT-EXPORT,
 ADAMEX - Usługi Budowlane Adam Bogdański,Adam Bogdański,adambo86@wp.pl,,adambo86@wp.pl,,1132810535,43.22.Z,plumbing,ceidg
 Adam Gancarczyk Usługi Budowlane,Adam Gancarczyk,-,+48607304604,,,7343014933,43.22.Z,plumbing,ceidg
 Adam Kubicz Złota Rączka,Adam Kubicz,kufel@kufel.waw.pl,,kufel@kufel.waw.pl,,5221672798,43.22.Z,plumbing,ceidg
-4City MAREK TYBOROWSKI,Marek Tyborowski,-,,,bizuteriatyborowski.pl,7181911297,43.21.Z,plumbing,ceidg
+4City MAREK TYBOROWSKI,Marek Tyborowski,-,,info@bizuteriatyborowski.pldane,bizuteriatyborowski.pl,7181911297,43.21.Z,plumbing,ceidg
 4PROSPACE Robert Piasecki,Robert Piasecki,robert.piasecki@wp.pl,,robert.piasecki@wp.pl,,9222151394,43.21.Z,plumbing,ceidg
 808 SEBASTIAN SIUCHTA,SEBASTIAN SIUCHTA,-,,,808xemtv.com,5241352329,43.21.Z,plumbing,ceidg
 Ab-art Paweł Szymczyk,Paweł Szymczyk,-,,,,9521370388,43.21.Z,plumbing,ceidg
 ABAZKUZ Krzysztof Pawlak,Krzysztof Pawlak,-,,,,5271175725,43.21.Z,plumbing,ceidg
-ABC ASIA BENSARI CONSULTING - JOANNA BENSARI,JOANNA BENSARI,-,,,bc.pl,8971563158,43.21.Z,plumbing,ceidg
+ABC ASIA BENSARI CONSULTING - JOANNA BENSARI,JOANNA BENSARI,-,,info@bc.pl,bc.pl,8971563158,43.21.Z,plumbing,ceidg
 ABC ASSISTANCE Robert Ihnatovich,Robert Ihnatovich,-,,,flagma.pl,5272886670,43.21.Z,plumbing,ceidg
 Abdo-Art Krzysztof Błaszczyk,Krzysztof Błaszczyk,-,,,,7752384194,43.21.Z,plumbing,ceidg
-""" A.B.I. "" ANDRZEJ BIRULA nazwa skrócona: ""ABI""",ANDRZEJ BIRULA,-,,,biznesbaza.com,5261054486,43.21.Z,plumbing,ceidg
+""" A.B.I. "" ANDRZEJ BIRULA nazwa skrócona: ""ABI""",ANDRZEJ BIRULA,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,5261054486,43.21.Z,plumbing,ceidg
 ABICOM Aneta Garbacz,ANETA GARBACZ,biuro@abicom.pl,,biuro@abicom.pl,,8261336909,43.21.Z,plumbing,ceidg
 Abram Group Bartosz Abramczuk,Bartosz Abramczuk,-,,,,1251661099,43.21.Z,plumbing,ceidg
 """ABRAM-II"" IWONA SKIERKOWSKA S.C.",IWONA SKIERKOWSKA,-,,,abram.waw.pl,1130678936,43.21.Z,plumbing,ceidg
@@ -886,21 +886,21 @@ ADAM BĘBEN,ADAM BĘBEN,-,,,moovitapp.com,9521269330,43.21.Z,plumbing,ceidg
 Adam BIJAK BECREATIVE.PL ADAM BIJAK,Adam BIJAK,-,,,,5252194526,43.21.Z,plumbing,ceidg
 ADAM BREMER Activa Electric,ADAM BREMER,-,,,,1131409960,43.21.Z,plumbing,ceidg
 Adrian Zach,Adrian Zach,-,,,,5581014620,81.22.Z,cleaning,ceidg
-"""ADSESSOR"" S.C"" MARTA LATOS-KARPIŃSKA",MARTA LATOS-KARPIŃSKA,-,,,biznesbaza.com,1130691635,81.22.Z,cleaning,ceidg
+"""ADSESSOR"" S.C"" MARTA LATOS-KARPIŃSKA",MARTA LATOS-KARPIŃSKA,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,1130691635,81.22.Z,cleaning,ceidg
 ADVAR Gracjan Witak,Gracjan Witak,gracjan.witak@wp.pl,+48607607500,gracjan.witak@wp.pl,,5211980713,81.22.Z,cleaning,ceidg
 Advice To Goal Michał Kołakowski,Michał Kołakowski,-,,,,5252584983,81.22.Z,cleaning,ceidg
 ADW ELEKTRO ANDRZEJ WOJCIECHOWSKI,ANDRZEJ WOJCIECHOWSKI,-,,,,8241044954,81.22.Z,cleaning,ceidg
 AE Consulting Aleksandra Elżanowska,Aleksandra Elżanowska,-,,,nuzle.pl,6631801439,81.22.Z,cleaning,ceidg
 Agencja Dziennikarska - INFO Wojciech Nomejko,WOJCIECH NOMEJKO,nomejko@wp.pl,,nomejko@wp.pl,,5271494815,81.22.Z,cleaning,ceidg
-AGENCJA KRIS RYSZARDA UCHMAŃSKA,RYSZARDA UCHMAŃSKA,-,,,biznesbaza.com,5240301382,81.22.Z,cleaning,ceidg
+AGENCJA KRIS RYSZARDA UCHMAŃSKA,RYSZARDA UCHMAŃSKA,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,5240301382,81.22.Z,cleaning,ceidg
 AGENCJA M.G. MIROSŁAW GOŁDA,Mirosław GOŁDA,biuro@cafedeparis.com.pl,,biuro@cafedeparis.com.pl,,5261680516,81.22.Z,cleaning,ceidg
-"AGENCJA OCHRONY ""GLOK"" MIROSŁAW MAŁCZYŃSKI",MIROSŁAW MAŁCZYŃSKI,-,,,ochronaglok.pl,5212730415,81.22.Z,cleaning,ceidg
+"AGENCJA OCHRONY ""GLOK"" MIROSŁAW MAŁCZYŃSKI",MIROSŁAW MAŁCZYŃSKI,-,,biuro@glok.pl,ochronaglok.pl,5212730415,81.22.Z,cleaning,ceidg
 "Agencja Ochrony ""WENTO"" Wojciech Krupa",WOJCIECH KRUPA,-,,,,5211122777,81.22.Z,cleaning,ceidg
 AGENCJA TRANSPORTOWA DANIEL-FRYC MIROSŁAW wspólnik spółki cywilnej,Mirosław Fryc,-,,,,9521226740,81.22.Z,cleaning,ceidg
 Agencja Usł.-Handl. Piotr Świątkowski,Piotr Świątkowski,-,,,,1130011770,81.22.Z,cleaning,ceidg
 AGENCJA USŁUGOWO-HANDLOWA INTERSERVICE S.C. JOANNA WIETESKA,JOANNA WIETESKA,-,,,,7981349124,81.22.Z,cleaning,ceidg
 Agmar Mariusz Wolniewicz,Mariusz Wolniewicz,biuro@agmar.biz,,biuro@agmar.biz,,5213300303,81.22.Z,cleaning,ceidg
-Agnieszka Kmieć NATI-CLEAN,Agnieszka Kmieć,-,,,krs-online.com.pl,5272360525,81.22.Z,cleaning,ceidg
+Agnieszka Kmieć NATI-CLEAN,Agnieszka Kmieć,-,,kontakt@wenet.pl,krs-online.com.pl,5272360525,81.22.Z,cleaning,ceidg
 AGNIESZKA KOWALSKA AG-COM Agnieszka Kowalska wspólnik spółki cywilnej,AGNIESZKA KOWALSKA,-,,,,1132190015,81.22.Z,cleaning,ceidg
 AGNIESZKA MACIEJAK,Agnieszka MACIEJAK,agnieszkamaciejak@gmail.com,,agnieszkamaciejak@gmail.com,,8361401121,81.22.Z,cleaning,ceidg
 AGNIESZKA SZACHERSKA MARGLAS,AGNIESZKA SZACHERSKA,glassmar28@wp.pl,,glassmar28@wp.pl,,5252149158,81.22.Z,cleaning,ceidg
@@ -937,7 +937,7 @@ ANNA WÓJCIKOWSKA,ANNA WÓJCIKOWSKA,-,,,,6641417636,96.23.Z,massage,ceidg
 Antonio Condezo Caceres,Antonio Condezo Caceres,-,,,,9512600015,96.23.Z,massage,ceidg
 ANZHELIKA WACHOWICZ,ANZHELIKA WACHOWICZ,angelika.wachowicz@o2.pl,+48796799177,angelika.wachowicz@o2.pl,,9482460063,96.23.Z,massage,ceidg
 APISERWIS ARKADIUSZ PISKAŁA; NAZWA SKRÓCONA: APISERWIS,ARKADIUSZ PISKAŁA,-,,,,5261092937,96.23.Z,massage,ceidg
-AQUARIUS MEDICAL Małgorzata Grotowska,Małgorzata Grotowska,-,,,aquariusmedical.pl,9521751707,96.23.Z,massage,ceidg
+AQUARIUS MEDICAL Małgorzata Grotowska,Małgorzata Grotowska,-,,info@aquariusmedical.euklinika,aquariusmedical.pl,9521751707,96.23.Z,massage,ceidg
 Ars Orientalis Terapia Holistyczna Andriy Moroz,Andriy Moroz,-,,,booksy.com,5253052952,96.23.Z,massage,ceidg
 ARTECH Solutions Artur Rogacki,Artur Rogacki,-,,,,7262663722,96.23.Z,massage,ceidg
 ARTEM SZOŁOMICKI,ARTEM SZOŁOMICKI,-,,,,1133017282,96.23.Z,massage,ceidg
@@ -945,54 +945,54 @@ Artem Valchenko,Artem Valchenko,-,,,booksy.com,5243016883,96.23.Z,massage,ceidg
 Artur Celiński,Artur Celiński,-,,,architektura.muratorplus.pl,8251986801,96.23.Z,massage,ceidg
 Aryna Pashkevich,Aryna Pashkevich,-,,,,5273182103,96.23.Z,massage,ceidg
 ASO POLSERVICE DAWIDY Andrzej Korycki,Andrzej Korycki,ASOPOLSERVICE@GMAIL.COM,,ASOPOLSERVICE@GMAIL.COM,,5212798577,96.23.Z,massage,ceidg
-ATLANTA HANNA MALANCHYN,HANNA MALANCHYN,-,,,lawyer-hannamalanchyn.pl,1132984347,96.23.Z,massage,ceidg
+ATLANTA HANNA MALANCHYN,HANNA MALANCHYN,-,,03emailoffice@lawyer-hannamalanchyn.pl,lawyer-hannamalanchyn.pl,1132984347,96.23.Z,massage,ceidg
 Atma Music Michał Rudaś,Michał Rudaś,michalrudas@gmail.com,,michalrudas@gmail.com,,1230894295,96.23.Z,massage,ceidg
 AURA STUDIO NATALIA ARCHICIŃSKA,NATALIA ARCHICIŃSKA,-,,,pl.jobrapido.com,1182308803,96.23.Z,massage,ceidg
 Agnieszka GŁOWACKA FIT AGNES AGNIESZKA GŁOWACKA,Agnieszka GŁOWACKA,-,,,,8792343552,86.90.A,massage,ceidg
-AGNIESZKA GONDEK-GÓRECKA FIZJOTERAPIA,Agnieszka Gondek-Górecka,-,,,ckr.pl,8121779854,86.90.A,massage,ceidg
-"AGNIESZKA GROCHOWSKA ""STUDIO ZDROWIA""",AGNIESZKA GROCHOWSKA,-,,,studiozdrowia.waw.pl,5222304795,86.90.A,massage,ceidg
-"Agnieszka Krajewska-Górecka ""INT-SENS"" Terapia Integracji Sensorycznej",Agnieszka Krajewska-Górecka,-,,,koronazglowy.pl,8351282488,86.90.A,massage,ceidg
+AGNIESZKA GONDEK-GÓRECKA FIZJOTERAPIA,Agnieszka Gondek-Górecka,-,,infolinia@ckr.pl,ckr.pl,8121779854,86.90.A,massage,ceidg
+"AGNIESZKA GROCHOWSKA ""STUDIO ZDROWIA""",AGNIESZKA GROCHOWSKA,-,,agnieszka@studiozdrowia.waw.pl,studiozdrowia.waw.pl,5222304795,86.90.A,massage,ceidg
+"Agnieszka Krajewska-Górecka ""INT-SENS"" Terapia Integracji Sensorycznej",Agnieszka Krajewska-Górecka,-,,kontakt@wenet.pl,koronazglowy.pl,8351282488,86.90.A,massage,ceidg
 Agnieszka Pańczyk Studio urody i modelowania sylwetki,Agnieszka Pańczyk,-,,,,7651047101,86.90.A,massage,ceidg
-"AGNIESZKA ROSIŃSKA ""KINESIS"" USŁUGI FIZJOTERAPEUTYCZNE",AGNIESZKA ROSIŃSKA,-,,,koronazglowy.pl,9551919382,86.90.A,massage,ceidg
+"AGNIESZKA ROSIŃSKA ""KINESIS"" USŁUGI FIZJOTERAPEUTYCZNE",AGNIESZKA ROSIŃSKA,-,,kontakt@wenet.pl,koronazglowy.pl,9551919382,86.90.A,massage,ceidg
 AGNIESZKA STODOŁKIEWICZ PRAKTYKA PIELĘGNIARSKA,AGNIESZKA STODOŁKIEWICZ,a.sierejewska@interia.pl,,a.sierejewska@interia.pl,,5271710851,86.90.A,massage,ceidg
 AGNIESZKA SUDOMIRSKA GLICNER PROPERTY CONSULTING,AGNIESZKA SUDOMIRSKA,aglicner@interia.pl,,aglicner@interia.pl,,5731728368,86.90.A,massage,ceidg
 AG-Osteo usługi fizjoterapeutyczne i osteopatyczne Anna Gawryszewska,Anna Gawryszewska,-,,,owg.pl,9521788432,86.90.A,massage,ceidg
 "AGROTECH POLSKA, CENTRUM TERAPII ASQ ,TERAPEUTYCZNY PUNKT PRZEDSZKOLNY ASQ, SZKOŁA PODSTAWOWA ASQ WŁADYSŁAW STANEK",WŁADYSŁAW STANEK,wladekstanek@wp.pl,,wladekstanek@wp.pl,,5213252828,86.90.A,massage,ceidg
 AJ FIZJOTERAPIA AGATA JAŚKIEWICZ-MARCHENKO,AGATA JAŚKIEWICZ-MARCHENKO,fizjoterapia.aj@gmail.com,+48514969331,fizjoterapia.aj@gmail.com,,5243001781,86.90.A,massage,ceidg
-Akademia Serca Monika Michalska,Monika Michalska,-,,,koronazglowy.pl,7171808847,86.90.A,massage,ceidg
+Akademia Serca Monika Michalska,Monika Michalska,-,,kontakt@wenet.pl,koronazglowy.pl,7171808847,86.90.A,massage,ceidg
 AKADEMIA SPORTOWO-SZKOLENIOWA EXTREME ACADEMY WOJCIECH LITWINIUK,WOJCIECH LITWINIUK,-,,,,5372202837,86.90.A,massage,ceidg
 Akademia Sprawności Aleksander Świątek Fizjoterapia i Ruch,Aleksander Świątek,alek.alex@gmail.com,,alek.alex@gmail.com,,7010309582,86.90.A,massage,ceidg
 AKADEMIA ŚWIADOMEGO RUCHU JACEK PASZKOWSKI,JACEK PASZKOWSKI,jotpas65@gmail.com,+48606832328,jotpas65@gmail.com,,5262687992,86.90.A,massage,ceidg
 A.K. Anna Klepacka,ANNA KLEPACKA,-,,,1944.pl,1132787931,86.90.A,massage,ceidg
-AKUKU - KRZYSZTOF GONTARCZUK,KRZYSZTOF GONTARCZUK,-,,,narodzinemoznaliczyc.pl,7221489084,86.90.A,massage,ceidg
+AKUKU - KRZYSZTOF GONTARCZUK,KRZYSZTOF GONTARCZUK,-,,kontakt@wenet.pl,narodzinemoznaliczyc.pl,7221489084,86.90.A,massage,ceidg
 Aleksander Czuchłow,Aleksander Czuchłow,-,,,,5321998737,86.90.A,massage,ceidg
 Aleksander Trzciński Fizjoterapia Sportowa,Aleksander Trzciński,olek.trzcinski@op.pl,+48505996269,olek.trzcinski@op.pl,,5213188444,86.99.D,massage,ceidg
 Aleksandra Czarnecka,Aleksandra Czarnecka,-,,,,1181954375,86.99.D,massage,ceidg
-Aleksandra Goluch,Aleksandra Goluch,-,,,oig.ug.edu.pl,5214153169,86.99.D,massage,ceidg
+Aleksandra Goluch,Aleksandra Goluch,-,,dziekanatwoig@ug.edu.pl,oig.ug.edu.pl,5214153169,86.99.D,massage,ceidg
 ALEKSANDRA GOTKOWICZ,ALEKSANDRA GOTKOWICZ,-,,,znanylekarz.pl,5242287930,86.99.D,massage,ceidg
-Aleksandra Januszewicz,ALEKSANDRA JANUSZEWICZ,-,,,aleksandrajanuszewicz.pl,5213344855,86.99.D,massage,ceidg
+Aleksandra Januszewicz,ALEKSANDRA JANUSZEWICZ,-,,kontakt@aleksandrajanuszewicz.pl,aleksandrajanuszewicz.pl,5213344855,86.99.D,massage,ceidg
 Aleksandra Jureczko,Aleksandra Jureczko,-,,,,9522249424,86.99.D,massage,ceidg
 Aleksandra Paczek-Dilis,Aleksandra Paczek-Dilis,apacz@mp.pl,+48888380210,apacz@mp.pl,,5222558567,86.99.D,massage,ceidg
-ALEKSANDRA PILINOW SZKOLENIA W ZAKRESIE PSYCHOTERAPII,ALEKSANDRA PILINOW,-,,,psychoanalizaspa.wordpress.com,9511745987,86.99.D,massage,ceidg
+ALEKSANDRA PILINOW SZKOLENIA W ZAKRESIE PSYCHOTERAPII,ALEKSANDRA PILINOW,-,,o.pilinow@gmail.com,psychoanalizaspa.wordpress.com,9511745987,86.99.D,massage,ceidg
 Aleksandra Serwach Dietetyk,Aleksandra Serwach,-,,,kliniki.pl,5223328154,86.99.D,massage,ceidg
-ALICJA ANNA GALDA,ANNA GALDA,-,,,narodzinemoznaliczyc.pl,5261095723,86.99.D,massage,ceidg
-ALICJA NOWICKA Psychologia i Rozwój,ALICJA NOWICKA,-,,,planeta-futrzaka.pl,5272489874,86.99.D,massage,ceidg
+ALICJA ANNA GALDA,ANNA GALDA,-,,kontakt@wenet.pl,narodzinemoznaliczyc.pl,5261095723,86.99.D,massage,ceidg
+ALICJA NOWICKA Psychologia i Rozwój,ALICJA NOWICKA,-,,kontakt@wenet.pl,planeta-futrzaka.pl,5272489874,86.99.D,massage,ceidg
 Alicja Wojtasiewicz Fizjo-Oczko Fizjoterapia Dzieci,Alicja Wojtasiewicz,-,,,znanylekarz.pl,9522221644,86.99.D,massage,ceidg
 A-med lekarz specjalista medycyny rodzinnej Piotr Adamus,Piotr Adamus,-,,,mp.pl,5220150359,86.99.D,massage,ceidg
 Amelia Włodarczyk,Amelia Włodarczyk,amelia.wlodarczyk@gmail.com,+48531197674,amelia.wlodarczyk@gmail.com,,9522248488,86.99.D,massage,ceidg
 Anari Anna Janiec,ANNA JANIEC,-,,,,5213521398,86.99.D,massage,ceidg
-1.KOMP-EL Wojciech Sokołowski,Wojciech SOKOŁOWSKI,-,,,biznesbaza.com,5261505440,43.22.Z,plumbing,ceidg
+1.KOMP-EL Wojciech Sokołowski,Wojciech SOKOŁOWSKI,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,5261505440,43.22.Z,plumbing,ceidg
 4console Michał Olczak,Michał Olczak,biuro@4console.pl,,biuro@4console.pl,,5272348926,43.22.Z,plumbing,ceidg
 4MIND DARIUSZ MINDEWICZ,DARIUSZ MINDEWICZ,-,,,,5272246798,43.22.Z,plumbing,ceidg
-4SITE Cezary Strulak,Cezary Strulak,-,,,krs-online.com.pl,7971888397,43.22.Z,plumbing,ceidg
+4SITE Cezary Strulak,Cezary Strulak,-,,kontakt@wenet.pl,krs-online.com.pl,7971888397,43.22.Z,plumbing,ceidg
 3E PROTECH KRZYSZTOF FIDLER,KRZYSZTOF FIDLER,-,,,,8261121333,43.21.Z,plumbing,ceidg
-3W SYSTEM WOJCIECH WITKOWSKI,WOJCIECH WITKOWSKI,-,,,3wsystem.pl,1250446097,43.21.Z,plumbing,ceidg
-4PROKU GRZEGORZ KLENCZON,GRZEGORZ KLENCZON,-,,,meteor-turystyka.pl,9521848424,43.21.Z,plumbing,ceidg
+3W SYSTEM WOJCIECH WITKOWSKI,WOJCIECH WITKOWSKI,-,,3wsystem@3wsystem.pl,3wsystem.pl,1250446097,43.21.Z,plumbing,ceidg
+4PROKU GRZEGORZ KLENCZON,GRZEGORZ KLENCZON,-,,roksanawoz...@...il.com,meteor-turystyka.pl,9521848424,43.21.Z,plumbing,ceidg
 4Teech Marcin Domański,MARCIN DOMAŃSKI,-,,,,7581577376,43.21.Z,plumbing,ceidg
 5TUD10 ARCHITEKTONICZNE KATARZYNA PAŁKUS,KATARZYNA PAŁKUS,k.barbella.aponte@5tud10.pl,,k.barbella.aponte@5tud10.pl,,1131990073,43.21.Z,plumbing,ceidg
 ActiVita Katarzyna Niedziela,KATARZYNA NIEDZIELA,-,,,,5212932828,81.21.Z,cleaning,ceidg
 ADAK GROUP MARTA PANEK,MARTA PANEK,biuro@blts.net.pl,+48602255298,biuro@blts.net.pl,,9222697673,81.21.Z,cleaning,ceidg
-ADAMANTIUM Piotr Szałowski,Piotr Szałowski,-,,,krs-online.com.pl,7010182408,81.21.Z,cleaning,ceidg
+ADAMANTIUM Piotr Szałowski,Piotr Szałowski,-,,kontakt@wenet.pl,krs-online.com.pl,7010182408,81.21.Z,cleaning,ceidg
 Adam Dźwigała,Adam Dźwigała,adam.dzwigala@gmail.com,,adam.dzwigala@gmail.com,,9522146262,81.21.Z,cleaning,ceidg
 ADAM KOWALSKI ADAMEX,ADAM KOWALSKI,ADAMKOW33@WP.PL,,ADAMKOW33@WP.PL,,6731031811,81.21.Z,cleaning,ceidg
 ADAM LAUK,ADAM LAUK,-,,,ok.ru,1130842695,81.21.Z,cleaning,ceidg
@@ -1034,7 +1034,7 @@ Aleksandra Wiśniewska,ALEKSANDRA WIŚNIEWSKA,-,,,,1133152689,86.99.D,massage,ce
 Alfa-Med Agnieszka Stanek,Agnieszka Stanek,agnieszka.wachocka@gmail.com,,agnieszka.wachocka@gmail.com,,6572811352,86.99.D,massage,ceidg
 """ALIGO"" Paulina Mydłowska",Paulina Mydłowska,-,,,,9512333005,86.99.D,massage,ceidg
 ALSMED Aleksandra Szermińska,Aleksandra Szermińska,-,,,rejestr.io,5782812156,86.99.D,massage,ceidg
-4 Data Solutions Mariusz Kujawski,Mariusz Kujawski,-,,,cyber-safe.pl,1251362310,43.22.Z,plumbing,ceidg
+4 Data Solutions Mariusz Kujawski,Mariusz Kujawski,-,,kontakt@wenet.pl,cyber-safe.pl,1251362310,43.22.Z,plumbing,ceidg
 4M Design Katarzyna Szelążek,Katarzyna Szelążek,-,,,,5242245021,43.22.Z,plumbing,ceidg
 4MInstal MARTYNA NIKITIN-PODYMNIAK,MARTYNA NIKITIN-PODYMNIAK,MARTYNANIKITIN@INTERIA.EU,,MARTYNANIKITIN@INTERIA.EU,,5214079059,43.22.Z,plumbing,ceidg
 4Serwis Jerzy Drożdżewski,Jerzy Drożdżewski,-,,,,9521017806,43.22.Z,plumbing,ceidg
@@ -1061,7 +1061,7 @@ Agnieszka Kołosowska,Agnieszka Kołosowska,-,,,,7661303244,86.90.A,massage,ceid
 AGNIESZKA KOPYT,AGNIESZKA KOPYT,-,,,starofservice.pl,9521994634,86.90.A,massage,ceidg
 AGNIESZKA MAKS-ŚWIRGOŃ - fizjoterapia i masaż,AGNIESZKA MAKS-ŚWIRGOŃ,-,,,,7722331402,86.90.A,massage,ceidg
 AGNIESZKA MARIA POLOK,AGNIESZKA POLOK,agnieszka.m.polok@gmail.com,,agnieszka.m.polok@gmail.com,,5252038832,86.90.A,massage,ceidg
-Agnieszka Ostapiuk SENSIS,Agnieszka Ostapiuk,-,,,godzinyotwarcia24.pl,5271475628,86.90.A,massage,ceidg
+Agnieszka Ostapiuk SENSIS,Agnieszka Ostapiuk,-,,kontakt@godzinyotwarcia24.pl,godzinyotwarcia24.pl,5271475628,86.90.A,massage,ceidg
 ADAM ZAWISTOWSKI TWÓJ OFF-GRID,ADAM ZAWISTOWSKI,-,,,,5671807063,81.21.Z,cleaning,ceidg
 AD SOFT-KATARZYNA DOMAŃSKA,KATARZYNA DOMAŃSKA,-,,,,5221297805,81.21.Z,cleaning,ceidg
 Aga Garden Agnieszka Pfeiffer,Agnieszka Pfeiffer,-,,,,9511310611,81.21.Z,cleaning,ceidg
@@ -1080,14 +1080,14 @@ ALICJA SAWICKA FIRMA SAWICKI OBSŁUGA WIDOWNI TEATRALNYCH,ALICJA SAWICKA,LASAWIC
 "ALL CLEAR ZORIANA KACHURKO; ""NASZ FART"" S.C. ZORIANA KACHURKO",ZORIANA KACHURKO,-,,,genius.com,9522153888,81.21.Z,cleaning,ceidg
 ALLFIX Kostiantyn Kucherov,Kostiantyn Kucherov,kkucherov7@gmail.com,+48795610995,kkucherov7@gmail.com,,9512642433,81.21.Z,cleaning,ceidg
 ALL-PACKA MEDIA STEFAN MAKOWIECKI,STEFAN MAKOWIECKI,smakowiecki@o2.pl,+48579144055,smakowiecki@o2.pl,,7772902930,81.21.Z,cleaning,ceidg
-AlpinSzlif Beata Ornat,Beata Ornat,-,,,ornaty.pl,8891501178,81.21.Z,cleaning,ceidg
+AlpinSzlif Beata Ornat,Beata Ornat,-,,345kontakt@ornaty.plnewsletter,ornaty.pl,8891501178,81.21.Z,cleaning,ceidg
 ALPIN-SZLIF Grzegorz Galbarski,Grzegorz Galbarski,-,,,t.me,5272605576,81.21.Z,cleaning,ceidg
-ALTRO KRZYSZTOF TROĆ,Krzysztof TROĆ,-,,,altro.info.pl,5261086807,81.21.Z,cleaning,ceidg
-AMAL DANIEL STEFAŃSKI,Daniel Stefański,-,,,amalblysk.eu,5242246405,81.21.Z,cleaning,ceidg
+ALTRO KRZYSZTOF TROĆ,Krzysztof TROĆ,-,,kontakt@altro.info.pl,altro.info.pl,5261086807,81.21.Z,cleaning,ceidg
+AMAL DANIEL STEFAŃSKI,Daniel Stefański,-,,amal@amal.waw.pl,amalblysk.eu,5242246405,81.21.Z,cleaning,ceidg
 AMPER - MAX RAFAŁ STARCZEWSKI,RAFAŁ STARCZEWSKI,-,,,znajdzmechanika.pl,1132171035,81.21.Z,cleaning,ceidg
 AMPOL Agnieszka Freund,Agnieszka Freund,-,,,,9542333903,81.21.Z,cleaning,ceidg
 ANDRZEJ BARANOWSKI Firma Rem-Budowlana - Andrzej Baranowski,ANDRZEJ BARANOWSKI,-,,,,1130253527,81.21.Z,cleaning,ceidg
-ANDRZEJ MARCINIAK PROFI-LAM,ANDRZEJ MARCINIAK,-,,,profi-lam.com.pl,5361146532,81.21.Z,cleaning,ceidg
+ANDRZEJ MARCINIAK PROFI-LAM,ANDRZEJ MARCINIAK,-,,biuro@profi-lam.com.pl,profi-lam.com.pl,5361146532,81.21.Z,cleaning,ceidg
 "ANDRZEJ OLSZAK FHUP ""MARIOL""",ANDRZEJ OLSZAK,-,,,,5240200037,81.21.Z,cleaning,ceidg
 Andrzej Sieradzki ANSER USŁUGI DLA FIRM,Andrzej Sieradzki,-,,,,5211862741,81.21.Z,cleaning,ceidg
 Andrzej Skarzyński Arts&Crafts,Andrzej Skarzyński,f.skarzynski@gmail.com,,f.skarzynski@gmail.com,,9522057601,81.21.Z,cleaning,ceidg
@@ -1114,7 +1114,7 @@ ART Serwis KATARZYNA FLAZIŃSKA,KATARZYNA FLAZIŃSKA,-,,,,5241428446,81.21.Z,cle
 ARTUR SZAFRAŃSKI,ARTUR SZAFRAŃSKI,-,,,,5211306460,81.21.Z,cleaning,ceidg
 AS Nowa Olesia Safina,Olesia Safina,olesiasafina28@gmail.com,+48793084487,olesiasafina28@gmail.com,,5214128119,81.21.Z,cleaning,ceidg
 """ALDO"" Rafał Szumert",Rafał Szumert,-,,,,5321349269,81.22.Z,cleaning,ceidg
-ALPIN-TEAM RAFAŁ ŁAZAROWICZ,RAFAŁ ŁAZAROWICZ,-,,,alpin-team.pl,1181588657,81.22.Z,cleaning,ceidg
+ALPIN-TEAM RAFAŁ ŁAZAROWICZ,RAFAŁ ŁAZAROWICZ,-,,alpin-team@alpin-team.pl,alpin-team.pl,1181588657,81.22.Z,cleaning,ceidg
 "ANDRZEJ MILAS Milaf ""CLEANNING"" Andrzej Milas",ANDRZEJ MILAS,-,,,,7431825453,81.22.Z,cleaning,ceidg
 "ARTUR LASECKI P.H.U ""KOMFORT""",ARTUR LASECKI,-,,,,5212912263,81.22.Z,cleaning,ceidg
 AS SERWIS ANDRZEJ SAFARYN,ANDRZEJ SAFARYN,-,,,,1130903155,81.22.Z,cleaning,ceidg
@@ -1127,7 +1127,7 @@ Bartex FIRMA HANDLOWO USŁUGOWA Bartłomiej Kuźniarz,BARTŁOMIEJ KUŹNIARZ,kuzn
 BARTŁOMIEJ FILIPCZAK BAFLO,BARTŁOMIEJ FILIPCZAK,-,,,,5222408069,81.22.Z,cleaning,ceidg
 Bartłomiej KRZEMIŃSKI B F K PROFIT,Bartłomiej KRZEMIŃSKI,-,,,,1181336594,81.22.Z,cleaning,ceidg
 Bauprofi Valerii Stefanov,Valerii Stefanov,-,,,bauprofi.eu,7010972027,81.22.Z,cleaning,ceidg
-BEDNAR FILM OLIMPIA BEDNAREK,OLIMPIA BEDNAREK,-,,,krs-online.com.pl,9521462794,81.22.Z,cleaning,ceidg
+BEDNAR FILM OLIMPIA BEDNAREK,OLIMPIA BEDNAREK,-,,kontakt@wenet.pl,krs-online.com.pl,9521462794,81.22.Z,cleaning,ceidg
 Better Future August Żywczyk,August Żywczyk,august.zywczyk@onet.pl,,august.zywczyk@onet.pl,,7962679470,81.22.Z,cleaning,ceidg
 BiSound Paulina Bischoff,Paulina Bischoff,paulina.bischoff84@gmail.com,,paulina.bischoff84@gmail.com,,5213294784,81.22.Z,cleaning,ceidg
 BIURO ANNA STEFANIAK,ANNA STEFANIAK,-,,,notariusz-wawer.pl,5241229250,81.22.Z,cleaning,ceidg
@@ -1136,12 +1136,12 @@ BIURO OCHRONY COLT RAFAŁ BEŁDYCKI,RAFAŁ BEŁDYCKI,-,,,owg.pl,5242221061,81.22
 BIURO USŁUG FINANSOWYCH URSZULA LUDWICKA,URSZULA LUDWICKA,urszula.l@onet.pl,,urszula.l@onet.pl,,9511237280,81.22.Z,cleaning,ceidg
 BLASK PIOTR RAFAŁKO,PIOTR RAFAŁKO,rafalkopiotr@op.pl,,rafalkopiotr@op.pl,,1132354540,81.22.Z,cleaning,ceidg
 BOGDAN CZERNIAWSKI wspólnik spółki cywilnej WĄTKOWSKI-CZERNIAWSKI; FX BOGDAN CZERNIAWSKI,BOGDAN CZERNIAWSKI,-,,,,7351665177,81.22.Z,cleaning,ceidg
-Bogdan KOŁODZIEJCZYK INTER-TRANSFER BIURO NIERUCHOMOŚCI,Bogdan KOŁODZIEJCZYK,-,,,imo.pl,1130077094,81.22.Z,cleaning,ceidg
+Bogdan KOŁODZIEJCZYK INTER-TRANSFER BIURO NIERUCHOMOŚCI,Bogdan KOŁODZIEJCZYK,-,,79imo@imo.plpomoc,imo.pl,1130077094,81.22.Z,cleaning,ceidg
 "BOGUSŁAW PIELAK PRZEDSIĘBIORSTWO ZARZĄDZAJĄCO INWESTYCYJNE ""ARKADIA"" ; ArMa spółka cywilna; BAUFORM INVEST",BOGUSŁAW PIELAK,-,,,,5241132125,81.22.Z,cleaning,ceidg
 BOKART Krzysztof Kowalski,Krzysztof Kowalski,poxkszyh@gamil.com,,poxkszyh@gamil.com,,5213411818,81.22.Z,cleaning,ceidg
 BOUW - KOL - PL KRZYSZTOF KOLASIŃSKI,KRZYSZTOF KOLASIŃSKI,krzysztof-kolasinski1@wp.pl,,krzysztof-kolasinski1@wp.pl,,5222838551,81.22.Z,cleaning,ceidg
 "BOŻENA MIKŁASZ Firma Handlowo-Usługowa ""BARDI"" Bożena Mikłasz",BOŻENA MIKŁASZ,-,,,,7921562067,81.22.Z,cleaning,ceidg
-BOŻENNA JÓZEFOWICZ FOKA,BOŻENNA JÓZEFOWICZ,-,,,iplywamy.pl,5272084901,81.22.Z,cleaning,ceidg
+BOŻENNA JÓZEFOWICZ FOKA,BOŻENNA JÓZEFOWICZ,-,,biuro@iplywamy.pl,iplywamy.pl,5272084901,81.22.Z,cleaning,ceidg
 BRILLAR DZIAŁALNOŚĆ HANDLOWO USŁUGOWA EWA STEFAŃSKA-CIUK,EWA STEFAŃSKA-CIUK,-,,,,5242238498,81.22.Z,cleaning,ceidg
 BUDGOSS JÓZEF GOSSA,Józef GOSSA,-,,,,1180055901,81.22.Z,cleaning,ceidg
 Centralne Biuro Scenograficzne Dominik Dąbrowski,Dominik Dąbrowski,-,,,obsluga-imprez.com.pl,5252844243,81.22.Z,cleaning,ceidg
@@ -1154,39 +1154,39 @@ COMFORT CLEAN LARYSA CZAICKA,LARYSA CZAICKA,-,,,honeywellhome.com,1132043863,81.
 CONFIRMA MARTA NICPOŃ,MARTA NICPOŃ,martanicpon@interia.pl,,martanicpon@interia.pl,,6761724507,81.22.Z,cleaning,ceidg
 CONSULTING RAFAŁ JANKOWSKI,RAFAŁ JANKOWSKI,-,,,,5212966508,81.22.Z,cleaning,ceidg
 Creepy Soft Filip Kazimierczak,Filip Kazimierczak,filipkazimierczak@gmail.com,,filipkazimierczak@gmail.com,,1181594037,81.22.Z,cleaning,ceidg
-CSM ONLINE Rafał Dzido,Rafał Dzido,-,,,csm-sport.pl,8251893028,81.22.Z,cleaning,ceidg
+CSM ONLINE Rafał Dzido,Rafał Dzido,-,,r.dzido@csmonline.pl,csm-sport.pl,8251893028,81.22.Z,cleaning,ceidg
 ALERT RAFAŁ TRELA,RAFAŁ TRELA,-,,,https://www.alert-trela.pl,7010150064,81.29.Z,cleaning,ceidg
 AlfaVar Marcin Stefański,Marcin Stefański,-,,,,5222393534,81.29.Z,cleaning,ceidg
-AM-FN ALBERT GOŁASIEWICZ,ALBERT GOŁASIEWICZ,-,,,pozegnaj.pl,9521802221,81.29.Z,cleaning,ceidg
+AM-FN ALBERT GOŁASIEWICZ,ALBERT GOŁASIEWICZ,-,,info@pozegnaj.pl,pozegnaj.pl,9521802221,81.29.Z,cleaning,ceidg
 "ANGELIKA CISZEWSKA ""INSECTA"" Profesjonalna dezynsekcja",ANGELIKA CISZEWSKA,-,,,,5272820435,81.29.Z,cleaning,ceidg
 ANNA Salon Fryzjerski Anna Szeligowska,Anna Szeligowska,orchiidea@o2.pl,,orchiidea@o2.pl,,7231241747,81.29.Z,cleaning,ceidg
-ANTYGROM PIOTR FELIKSIAK,PIOTR FELIKSIAK,-,,,antygrom.pl,9511632763,81.29.Z,cleaning,ceidg
+ANTYGROM PIOTR FELIKSIAK,PIOTR FELIKSIAK,-,,biuro@antygrom.pl,antygrom.pl,9511632763,81.29.Z,cleaning,ceidg
 "Atrium Przemysław Milanowski, wspólnik spółki cywilnej Food",PRZEMYSŁAW MILANOWSKI,trygonometryczny@wp.pl,,trygonometryczny@wp.pl,,9512264149,81.29.Z,cleaning,ceidg
 AUTO MILA MACHINE MILENA OLSZEWSKA; TRAFFIC TRUCK MILENA OLSZEWSKA wspólnik spółki cywilnej,Milena Olszewska,pawelolszewski1@vp.pl,,pawelolszewski1@vp.pl,,1251499345,81.29.Z,cleaning,ceidg
 BARBARA PFICNER,Barbara Pficner,niki1995@op.pl,,niki1995@op.pl,,7531149862,81.29.Z,cleaning,ceidg
 "BARBARA ROCHNIAK ""COPEST"" SPECJALISTYCZNY ZAKŁAD DEZYNSEKCJI, DEZYNFEKCJI I DERATYZACJI -wspólnik spółki cywilnej",BARBARA ROCHNIAK,-,,,,5221038676,81.29.Z,cleaning,ceidg
-"""BAR-Bufet"" - Katarzyna Dankowska",Katarzyna Dankowska,-,,,barbufetwsz.eatbu.com,5212618428,81.29.Z,cleaning,ceidg
+"""BAR-Bufet"" - Katarzyna Dankowska",Katarzyna Dankowska,-,,barbufetwsz@gmail.com,barbufetwsz.eatbu.com,5212618428,81.29.Z,cleaning,ceidg
 Bartosz Fornal,Bartosz Fornal,-,,,,1182030957,81.29.Z,cleaning,ceidg
 "BEATA GAWRYŚ ""BETTIFLOWER""",Beata Gawryś,-,,,,9521699906,81.29.Z,cleaning,ceidg
 BEATA KIEŁBIŃSKA FIRMA ELBE,BEATA KIEŁBIŃSKA,-,,,,6581681707,81.29.Z,cleaning,ceidg
 BEKO-POL ALEKSANDER FLORCZAK,ALEKSANDER FLORCZAK,-,,,,5211055957,81.29.Z,cleaning,ceidg
 BIURO FINANSOWO-KSIĘGOWE Mariola Podgórska,Mariola Podgórska,-,,,,7231140986,81.29.Z,cleaning,ceidg
-BŁYSK NATALIYA FRONCHAK,NATALIYA FRONCHAK,-,,,hakiwarszawa.pl,5671890845,81.29.Z,cleaning,ceidg
+BŁYSK NATALIYA FRONCHAK,NATALIYA FRONCHAK,-,,auta.biuro@autoplus-serwis.pl,hakiwarszawa.pl,5671890845,81.29.Z,cleaning,ceidg
 Bonita FOTO - Andrzej Figlewicz,ANDRZEJ FIGLEWICZ,afiglewicz@gmail.pl,,afiglewicz@gmail.pl,,5251266324,81.29.Z,cleaning,ceidg
-BRAVO BRANDS RAFAŁ CEZARY CIECIURA,Rafał Cieciura,-,+48668270404,,krs-online.com.pl,5361664327,81.29.Z,cleaning,ceidg
+BRAVO BRANDS RAFAŁ CEZARY CIECIURA,Rafał Cieciura,-,+48668270404,kontakt@wenet.pl,krs-online.com.pl,5361664327,81.29.Z,cleaning,ceidg
 AGNIESZKA RAFIŃSKA,AGNIESZKA RAFIŃSKA,-,,,,9552025669,96.04.Z,massage,ceidg
 Aleksandra Popkowicz Facial Therapy,Aleksandra Popkowicz,aleksandrapopkowicz@gmail.com,+48535115225,aleksandrapopkowicz@gmail.com,,5311526132,96.04.Z,massage,ceidg
 Aleksandra Szumczyk KLINIKA URODY MGR FARM. ALEKSANDRA SZUMCZYK,Aleksandra Szumczyk,-,,,,6171832288,96.04.Z,massage,ceidg
 Alfa Joanna Danielewska,Joanna Danielewska,-,,,,6751216212,96.04.Z,massage,ceidg
 Alice Fitnessmom Alicja Szkamruk,Alicja Szkamruk,-,,,,9691508302,96.04.Z,massage,ceidg
-ALICJA KOWALIK Finance Consulting,ALICJA KOWALIK,-,,,lendi.pl,8551526736,96.04.Z,massage,ceidg
+ALICJA KOWALIK Finance Consulting,ALICJA KOWALIK,-,,rodo@lendi.pljak,lendi.pl,8551526736,96.04.Z,massage,ceidg
 ALL ACCESS KRZYSZTOF NOWAK,KRZYSZTOF NOWAK,-,,,https://www.allaccess.pl,5242469329,96.04.Z,massage,ceidg
 ALL SPORTS Olaf Weker,Olaf Weker,-,,,,5252175150,96.04.Z,massage,ceidg
 ANNA MIGACZ-LESIŃSKA MIGFACTORY,ANNA MIGACZ-LESIŃSKA,-,,,migfactory.wixsite.com,7342572648,96.04.Z,massage,ceidg
-ANNA RUCIŃSKA FIZJOTERAPIA,ANNA RUCIŃSKA,-,,,ckr.pl,1132467971,96.04.Z,massage,ceidg
+ANNA RUCIŃSKA FIZJOTERAPIA,ANNA RUCIŃSKA,-,,infolinia@ckr.pl,ckr.pl,1132467971,96.04.Z,massage,ceidg
 Anna Rzepińska FORMATT,Anna Rzepińska,-,,,katalogdobrychfirm.pl,5211679422,96.04.Z,massage,ceidg
 ANNA SOSIŃSKA SALON FRYZJERSKO-KOSMETYCZNY,ANNA SOSIŃSKA,-,,,orlykosmetyki.pl,5271381608,96.04.Z,massage,ceidg
-Arbitrium Stefan Strohhofer,Stefan Strohhofer,-,,,krs-online.com.pl,5272888982,96.04.Z,massage,ceidg
+Arbitrium Stefan Strohhofer,Stefan Strohhofer,-,,kontakt@wenet.pl,krs-online.com.pl,5272888982,96.04.Z,massage,ceidg
 ARFIT Artur Janasz,Artur Janasz,arfitwarsaw@o2.pl,+48789072571,arfitwarsaw@o2.pl,,5242622498,96.04.Z,massage,ceidg
 "ART FOCUS STUDIO Joanna Pawlikowska, FORESTFILM JOANNA PAWLIKOWSKA wspólnik spółki cywilnej",JOANNA PAWLIKOWSKA,jleska@o2.pl,,jleska@o2.pl,,5212940911,96.04.Z,massage,ceidg
 ArtGraf Artur Wójcik,ARTUR WÓJCIK,-,,,,5222818117,96.04.Z,massage,ceidg
@@ -1195,7 +1195,7 @@ ART OF COMMUNICATION NATALIA WASZCZUK,NATALIA WASZCZUK,natalia_waszczuk1987@wp.p
 ART STUDIO SOFIIA MAKINA,SOFIIA MAKINA,-,,,galochka-art-studio.tilda.ws,9522156964,96.04.Z,massage,ceidg
 Artur Dobrowolski doradztwo finansowe,Artur DOBROWOLSKI,-,,,,8381366267,96.04.Z,massage,ceidg
 Asiia Zhanna Fedoruk,Zhanna Fedoruk,-,,,booksy.com,9522248749,96.04.Z,massage,ceidg
-ATMOSFERA HANNA LARYIONAVA,HANNA LARYIONAVA,-,,,biznesbaza.com,5273117494,96.04.Z,massage,ceidg
+ATMOSFERA HANNA LARYIONAVA,HANNA LARYIONAVA,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,5273117494,96.04.Z,massage,ceidg
 """ATS"" Rafał Roguski",RAFAŁ ROGUSKI,autotruckservice@wp.pl,,autotruckservice@wp.pl,,8241725772,96.04.Z,massage,ceidg
 BAFF BEAUTY DIANA LEWANDOWSKA,DIANA LEWANDOWSKA,-,,,groupon.pl,9512046777,96.04.Z,massage,ceidg
 BARBARA JAFRA SALON KOSMETYCZNY SOLARIUM,BARBARA JAFRA,-,,,jafrasalonkosmetyczny.pl,5272187647,96.04.Z,massage,ceidg
@@ -1228,7 +1228,7 @@ Chf Trans Łukasz Chwiłoc-Fiłoc,Łukasz Chwiłoc-Fiłoc,-,,,,5671842444,96.04.
 ANNA FRANKE,ANNA FRANKE,-,,,,1182218738,96.23.Z,massage,ceidg
 BEAUTYFACE Agnieszka Krasieńko,Agnieszka Krasieńko,beautyface.ak@gmail.com,,beautyface.ak@gmail.com,,1132239187,96.23.Z,massage,ceidg
 BEAUTY FACTORY KAMILA MUCHA-ORLIŃSKA,KAMILA MUCHA-ORLIŃSKA,kamila.muchaorlinska@op.pl,+48791721820,kamila.muchaorlinska@op.pl,,5223211920,96.23.Z,massage,ceidg
-BEAUTY SHEN ALEKSANDRA KNAFLEWSKA,ALEKSANDRA KNAFLEWSKA,-,,,225.studio,8751513595,96.23.Z,massage,ceidg
+BEAUTY SHEN ALEKSANDRA KNAFLEWSKA,ALEKSANDRA KNAFLEWSKA,-,,kontakt@225.studio,225.studio,8751513595,96.23.Z,massage,ceidg
 BE- FIT URSZULA KORCZAK,URSZULA KORCZAK,ula.korczak@gmail.com,,ula.korczak@gmail.com,,7961953532,96.23.Z,massage,ceidg
 Body Form Studio Izabela Farat,Izabela Farat,Izaczcz@gmail.com,+48508718219,Izaczcz@gmail.com,,8711733698,96.23.Z,massage,ceidg
 Bright Future Sławomir Turek,Sławomir Turek,slawomir.turek@brightfuture.pl,,slawomir.turek@brightfuture.pl,,7961611524,96.23.Z,massage,ceidg
@@ -1246,7 +1246,7 @@ DESIGN FOR RETAIL Izabella Drabek,IZABELLA DRABEK,izabella.drabek@zacisze.com.pl
 DK LIFE DARIUSZ KOŁAKOWSKI,DARIUSZ KOŁAKOWSKI,darecki87@gmail.com,,darecki87@gmail.com,,1132639633,96.23.Z,massage,ceidg
 Dmytro Fedchenko,Dmytro Fedchenko,-,,,,5214118598,96.23.Z,massage,ceidg
 Easy B - Rafał Ostaszewski,Rafał Ostaszewski,rafal.ostaszewski.85@gmail.com,,rafal.ostaszewski.85@gmail.com,,5381801750,96.23.Z,massage,ceidg
-EFEKT KLIMASA Leszek Klimas,Leszek Klimas,-,,,efektklimasa.pl,9281095125,96.23.Z,massage,ceidg
+EFEKT KLIMASA Leszek Klimas,Leszek Klimas,-,,efektklimasa@gmail.com,efektklimasa.pl,9281095125,96.23.Z,massage,ceidg
 EFFOR Karolina Jach,Karolina Jach,karolina@effor.pl,,karolina@effor.pl,https://www.effor.pl,9512192332,96.23.Z,massage,ceidg
 Elwira Wieczorek fizjoterapia,Elwira Wieczorek,elwira.szczepanik@gmail.com,+48512949276,elwira.szczepanik@gmail.com,,5342278681,96.23.Z,massage,ceidg
 ENJOY FASHION SEBASTIAN KOROLUK,SEBASTIAN KOROLUK,-,,,,9512263658,96.23.Z,massage,ceidg
@@ -1256,7 +1256,7 @@ FABRYKA-RELAKSU MAGDALENA KOWALEWSKA,MAGDALENA KOWALEWSKA,-,,,booksy.com,5241496
 Face'n’Soul MARIA ŁUKOMSKA,MARIA ŁUKOMSKA,-,+48570026995,,facensoul.com,5311570972,96.23.Z,massage,ceidg
 Feel it Paweł Wieczorek,Paweł Wieczorek,p.wieczorek@feel-it.pl,+48516584544,p.wieczorek@feel-it.pl,,1181937230,96.23.Z,massage,ceidg
 Femi.Face Angela Szulc-Sówka,Angela Szulc-Sówka,-,,,booksy.com,1251533361,96.23.Z,massage,ceidg
-FERN MODERN DOROTA MATLAKIEWICZ-PAPIS,DOROTA MATLAKIEWICZ-PAPIS,-,,,krs-online.com.pl,7991279661,96.23.Z,massage,ceidg
+FERN MODERN DOROTA MATLAKIEWICZ-PAPIS,DOROTA MATLAKIEWICZ-PAPIS,-,,kontakt@wenet.pl,krs-online.com.pl,7991279661,96.23.Z,massage,ceidg
 Feylen Beauty Sylwia Wróblewska,Sylwia Wróblewska,-,,,,6551811051,96.23.Z,massage,ceidg
 FG HORSES S.C. Tadeusz Głoskowski,Tadeusz Głoskowski,-,,,,7712248007,96.23.Z,massage,ceidg
 Filip Szwejser - Pracownia Usług Niebanalnych,Filip Szwejser,filipszwejser@gmail.com,,filipszwejser@gmail.com,,9522000357,96.23.Z,massage,ceidg
@@ -1274,7 +1274,7 @@ FIT3K Sebastian Czerwiński,SEBASTIAN CZERWIŃSKI,-,,,,1133158611,96.23.Z,massag
 FIT-COPY DOROTA SZELIGA-KOBUS,DOROTA SZELIGA-KOBUS,-,,,,5272489093,96.23.Z,massage,ceidg
 FITNESS BOGUT MONIKA HOLC,MONIKA HOLC,monikabogut@op.pl,,monikabogut@op.pl,,1181430152,96.23.Z,massage,ceidg
 FITNESS & SUPPLEMENTS MARCIN CHOROSTECKI,MARCIN CHOROSTECKI,surowcechemiczne@gmail.com,,surowcechemiczne@gmail.com,,1181715647,96.23.Z,massage,ceidg
-FIZJOBOX PAWEŁ SZCZYGIEŁ,PAWEŁ SZCZYGIEŁ,-,,,fizjobox.pl,7752354885,96.23.Z,massage,ceidg
+FIZJOBOX PAWEŁ SZCZYGIEŁ,PAWEŁ SZCZYGIEŁ,-,,warszawakontakt@fizjobox.plponiedzia,fizjobox.pl,7752354885,96.23.Z,massage,ceidg
 FizjoLife Katarzyna Fabińska,Katarzyna Fabińska,-,,,,9521919578,96.23.Z,massage,ceidg
 FizjoMag MAGDALENA KACZMARCZYK,MAGDALENA KACZMARCZYK,-,,,booksy.com,8661623848,96.23.Z,massage,ceidg
 FizjoMegi MAGDALENA MAKOWSKA,MAGDALENA MAKOWSKA,magdanowicka1991@gmail.com,,magdanowicka1991@gmail.com,,1182037586,96.23.Z,massage,ceidg
@@ -1283,7 +1283,7 @@ Fizjo Naturalna - Katarzyna Mizerska,Katarzyna Mizerska,katarzyna.mizerska92@gma
 FizjooNaturoo Katarzyna Kwolek,Katarzyna Kwolek,kkwolek13@gmail.com,,kkwolek13@gmail.com,,6871901063,96.23.Z,massage,ceidg
 FIZJO-RUCH DOMINIK GALIŃSKI,DOMINIK GALIŃSKI,domi95@wp.pl,,domi95@wp.pl,,6562087044,96.23.Z,massage,ceidg
 Fizjo - Speed Karol Sutkowski,Karol Sutkowski,-,,,znanylekarz.pl,1182283598,96.23.Z,massage,ceidg
-Fizjoterapeuta Paweł Jasiński,Paweł Jasiński,-,,,jasinskifizjo.pl,9512222872,96.23.Z,massage,ceidg
+Fizjoterapeuta Paweł Jasiński,Paweł Jasiński,-,,jasinski.fizjo@gmail.com,jasinskifizjo.pl,9512222872,96.23.Z,massage,ceidg
 FIZJOTERAPIA - KAROL SAWICKI,KAROL SAWICKI,karol.sawicki91@gmail.com,,karol.sawicki91@gmail.com,,1132846094,96.23.Z,massage,ceidg
 FIZJOTERAPIA Marcin Oczachowski,Marcin Oczachowski,-,,,znanylekarz.pl,5242841674,96.23.Z,massage,ceidg
 FIZJOTERAPIA MICHAŁ ARAŹNY,MICHAŁ ARAŹNY,michal-arazny@wp.pl,+48608485475,michal-arazny@wp.pl,,5222909825,96.23.Z,massage,ceidg
@@ -1298,17 +1298,17 @@ FRIENDLY GHOST Kacper Pobikrowski,Kacper Pobikrowski,-,,,,9512253973,96.23.Z,mas
 """Fryzjer w czapce"" Sebastian Trociński",Sebastian Trociński,bastroq@gmail.com,+48500384917,bastroq@gmail.com,https://Www.fryzjerwczapce.pl,6292414911,96.23.Z,massage,ceidg
 AL fizjoterapia Anna Lengas,ANNA LENGAS,-,,,,7431943129,86.90.A,massage,ceidg
 ALINA ŁUNIEWSKA FIRMA HANDLOWO-USŁUGOWA ALVA,ALINA ŁUNIEWSKA,-,,,,9511255898,86.90.A,massage,ceidg
-ANETA MASENEK Fizjoterapia,ANETA MASENEK,-,,,biznesbaza.com,1182002464,86.90.A,massage,ceidg
+ANETA MASENEK Fizjoterapia,ANETA MASENEK,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,1182002464,86.90.A,massage,ceidg
 ANNA KIELAK Fizjoterapia,ANNA KIELAK,skulimka@o2.pl,,skulimka@o2.pl,,9512063155,86.90.A,massage,ceidg
 ANNA MARIA PLENZLER FIZJOTERAPIA,ANNA PLENZLER,-,,,znanylekarz.pl,1132352096,86.90.A,massage,ceidg
 Anna Siarkowska Usługi fizjoterapeutyczne,Anna Siarkowska,-,,,,7571424435,86.90.A,massage,ceidg
-Anna Szczypior-Nowak - Fizjoterapia,Anna Szczypior-Nowak,-,,,peron8.pl,7971909337,86.90.A,massage,ceidg
+Anna Szczypior-Nowak - Fizjoterapia,Anna Szczypior-Nowak,-,,opiniekontaktrejestracja@peron8.pl,peron8.pl,7971909337,86.90.A,massage,ceidg
 Artur Filipowicz Joga,Artur Filipowicz,jogart37@gmail.com,,jogart37@gmail.com,https://www.jogart.pl,5242320202,86.90.A,massage,ceidg
 ARTUR SERAFIN ADARA,ARTUR SERAFIN,ASER83@WP.PL,,ASER83@WP.PL,,5272430384,86.90.A,massage,ceidg
-Bartosz Hoffmann fizjoterapia i trening,Bartosz Hoffmann,-,,,sportslab.pl,5252955066,86.90.A,massage,ceidg
+Bartosz Hoffmann fizjoterapia i trening,Bartosz Hoffmann,-,,kontakt@sportslab.pl,sportslab.pl,5252955066,86.90.A,massage,ceidg
 Bartosz Zakrzewski - Fizjoterapia,Bartosz Zakrzewski,-,,,znanylekarz.pl,5252841701,86.90.A,massage,ceidg
 BEATA GRZEGORSKA FACTORY,BEATA GRZEGORSKA,mapa1010@onet.pl,,mapa1010@onet.pl,,5251026399,86.90.A,massage,ceidg
-BEATA KLIMKIEWICZ-FIZJOTERAPIA,BEATA KLIMKIEWICZ,-,,,orthosrehabilitacja.pl,9511892004,86.90.A,massage,ceidg
+BEATA KLIMKIEWICZ-FIZJOTERAPIA,BEATA KLIMKIEWICZ,-,,ursynow@orthosrehabilitacja.pl,orthosrehabilitacja.pl,9511892004,86.90.A,massage,ceidg
 Beata Mielańczuk-Lubecka Fizjoterapia,BEATA MIELAŃCZUK-LUBECKA,beataannalubecka@gmail.com,+48508098523,beataannalubecka@gmail.com,,2910129789,86.90.A,massage,ceidg
 BE FIT - Monika Janik,MONIKA JANIK,-,,,,5251489722,86.90.A,massage,ceidg
 BIOFEEDBACK GRAŻYNA UTZIG,GRAŻYNA UTZIG,cwiczeumysl@gmail.com,+48783301909,cwiczeumysl@gmail.com,https://cwiczeumysl.pl,9511654090,86.90.A,massage,ceidg
@@ -1317,7 +1317,7 @@ BODY TUNING BY JACEK FRANKE,JACEK FRANKE,m.franke@op.pl,,m.franke@op.pl,,5311592
 Bożena Kuciel-Stęślicka FIZJOTERAPIA,Bożena Kuciel-Stęślicka,-,,,,7491141327,86.90.A,massage,ceidg
 Buba Fitness Kamila Szymel,Kamila Szymel,-,,,,9512242202,86.90.A,massage,ceidg
 "Centrum Diagnozy i Terapii Logopedycznej ""Profectus"" ANETA ARMATOWICZ",ANETA ARMATOWICZ,-,,,owg.pl,7182133040,86.90.A,massage,ceidg
-CENTRUM POMOCY PROFESJONALNEJ CPP BARBARA BARANOWICZ,BARBARA BARANOWICZ,-,,,cpp.pl,5241329046,86.90.A,massage,ceidg
+CENTRUM POMOCY PROFESJONALNEJ CPP BARBARA BARANOWICZ,BARBARA BARANOWICZ,-,,30e-mailkontakt@cpp.plwhatsapp,cpp.pl,5241329046,86.90.A,massage,ceidg
 CENTRUM ROZWOJU BIOFEEDBACK EWA MICHAŁOWSKA,EWA MICHAŁOWSKA,eegbiofeedback@wp.pl,,eegbiofeedback@wp.pl,https://www.trening-uwagi.pl,5831859667,86.90.A,massage,ceidg
 Centrum Terapii Manualnej Krzysztof Lisowski,KRZYSZTOF LISOWSKI,-,,,hiredoc.com,5272114772,86.90.A,massage,ceidg
 "Chodorski Krzysztof, SALON FRYZJERSKI ""KRZYSZTOF""",Krzysztof Chodorski,info@salonykrzysztof.pl,,info@salonykrzysztof.pl,,5671130011,86.90.A,massage,ceidg
@@ -1336,7 +1336,7 @@ DZIAŁALNOŚĆ FIZJOTERAPEUTYCZNA WIOLETA POLAKOWSKA,WIOLETA POLAKOWSKA,-,,,,658
 Dzieciofizjoterapeuta Joanna Wesołowska-Lewandowska,Joanna Wesołowska-Lewandowska,-,,,,5252394107,86.90.A,massage,ceidg
 Angelika Pogońska Fizjoterapia Dzieci i Niemowląt,Angelika Pogońska,angelikapogonska.fizjoterapia@gmail.com,,angelikapogonska.fizjoterapia@gmail.com,,5252405236,86.99.D,massage,ceidg
 ANNA ANTOSIK-WÓJCIŃSKA PRAKTYKA LEKARSKA ANNA ZOFIA ANTOSIK,ANNA ANTOSIK-WÓJCIŃSKA,-,,,mp.pl,7681709676,86.99.D,massage,ceidg
-"ANNA CHĘCIAK - psycholog, oligofrenopedagog.",ANNA CHĘCIAK,-,,,multizdrowy.pl,5251544444,86.99.D,massage,ceidg
+"ANNA CHĘCIAK - psycholog, oligofrenopedagog.",ANNA CHĘCIAK,-,,kontakt@wenet.pl,multizdrowy.pl,5251544444,86.99.D,massage,ceidg
 AnnaMedica Centrum Profilaktyki Żywieniowej i Psychodietetyki Anna Moszczyńska,Anna Moszczyńska,zdrowarelacjazjedzeniem@gmail.com,,zdrowarelacjazjedzeniem@gmail.com,,5951402597,86.99.D,massage,ceidg
 Anna Paćkowska Foot Pro,Anna Paćkowska,-,,,,7743297142,86.99.D,massage,ceidg
 "Art Flow, MAŁGORZATA KARKOSZ",MAŁGORZATA KARKOSZ,malgorzata.karkosz@gmail.com,+48666660290,malgorzata.karkosz@gmail.com,,8672130434,86.99.D,massage,ceidg
@@ -1347,7 +1347,7 @@ BE PREPARED IZABELA FILIŃSKA-SZELENBAUM,IZABELA FILIŃSKA-SZELENBAUM,-,,,,70101
 Bieganie Pod Sokolim Okiem - Krzysztof Sokół,Krzysztof Sokół,-,,,pzla.pl,7393969290,86.99.D,massage,ceidg
 "Centrum Audio-Psycho-Fonologii ""ESPACE"" Małgorzata Szurlej",MAŁGORZATA SZURLEJ,-,,,centrumapf.pl,8132674509,86.99.D,massage,ceidg
 "Centrum Rozwoju i Profilaktyki ""Nasze Miejsce"" Dorota Olczyk",Dorota Olczyk,-,,,,5222466397,86.99.D,massage,ceidg
-Centrum Terapii Strefa Zmian Małgorzata Kabas,Małgorzata Kabas,-,,,strefazmian.com,5252209512,86.99.D,massage,ceidg
+Centrum Terapii Strefa Zmian Małgorzata Kabas,Małgorzata Kabas,-,,kontakt@strefazmian.com,strefazmian.com,5252209512,86.99.D,massage,ceidg
 Coffee Doctor Małgorzata Bergolc,Małgorzata Bergolc,-,,,,5691795274,86.99.D,massage,ceidg
 CYFRORAMA Michał Rynkiewicz,Michał Rynkiewicz,-,,,,5222764491,86.99.D,massage,ceidg
 Daria Gradziuk Mood Food,Daria Gradziuk,-,,,dariagradziuk.com,9542576445,86.99.D,massage,ceidg
@@ -1356,14 +1356,14 @@ EDYTA TRZASKA JAFRA,EDYTA TRZASKA,edytatrzaska@wp.pl,,edytatrzaska@wp.pl,,543135
 EFERAH Wojciech Wróblewski,Wojciech Wróblewski,-,,,,8732499931,86.99.D,massage,ceidg
 EFFECTIVE Adam Łupiński,Adam Łupiński,alupinski@gmail.com,,alupinski@gmail.com,,7742707454,86.99.D,massage,ceidg
 ELEVATE YOURSELF WADIM ŻARSKI,WADIM ŻARSKI,WWADIM@GMAIL.COM,,WWADIM@GMAIL.COM,,9511982813,86.99.D,massage,ceidg
-Elżbieta NOWIK-MROZIEWICZ PROGRAM PROFILAKTYCZNO-LECZNICZY,ELŻBIETA NOWIK-MROZIEWICZ,-,,,spzoz.wroc.pl,5261528085,86.99.D,massage,ceidg
+Elżbieta NOWIK-MROZIEWICZ PROGRAM PROFILAKTYCZNO-LECZNICZY,ELŻBIETA NOWIK-MROZIEWICZ,-,,dominikanski-rejestracja@spzoz.wroc.pl,spzoz.wroc.pl,5261528085,86.99.D,massage,ceidg
 EMBLAN Rafał Matysiak,Rafał Matysiak,-,,,,9521770366,86.99.D,massage,ceidg
 ENERGIA VITA MARTYNA FON ŽVEGELJ,MARTYNA FON ŽVEGELJ,info@energiavita.eu,,info@energiavita.eu,,9521198044,86.99.D,massage,ceidg
 ESTETICA PERFECTA WSPÓLNIK SPÓŁKI CYWILNEJ JOANNA MACKIEWICZ,JOANNA MACKIEWICZ,-,,,t.me,1132685811,86.99.D,massage,ceidg
 ESTETICA PERFECTA WSPÓLNIK SPÓŁKI CYWILNEJ PATRYCJA MACKIEWICZ-ŁĄCZYŃSKA,PATRYCJA MACKIEWICZ-ŁĄCZYŃSKA,-,,,,1132849419,86.99.D,massage,ceidg
 Ewa Bizon Fizjoterapia Osteopatia,Ewa Bizon,-,,,znanylekarz.pl,9452137297,86.99.D,massage,ceidg
-EWA FOLEY ISI (INSPIRATION SEMINARS INTERNATIONAL),EWA FOLEY,-,,,foley.com.pl,1180076079,86.99.D,massage,ceidg
-Ewelina Berlińska Fotografia,Ewelina Berlińska,-,,,ewelinaberlinska.pl,7162696076,86.99.D,massage,ceidg
+EWA FOLEY ISI (INSPIRATION SEMINARS INTERNATIONAL),EWA FOLEY,-,,foley@foley.com.pl,foley.com.pl,1180076079,86.99.D,massage,ceidg
+Ewelina Berlińska Fotografia,Ewelina Berlińska,-,,ewelinaberlinskafotografia@gmail.com,ewelinaberlinska.pl,7162696076,86.99.D,massage,ceidg
 FABRYKA MYŚLI KLAUDIA KLIMALA,KLAUDIA KLIMALA,-,,,,7811793469,86.99.D,massage,ceidg
 FACE-LAB PRACOWNIA PROTETYCZNA SEBASTIAN WALERZAK,SEBASTIAN WALERZAK,-,,,facelab.pl,5222742325,86.99.D,massage,ceidg
 Factory of Music Live Sound & Exclusive Event Mariusz Moćko,Mariusz Moćko,-,,,,6572686964,86.99.D,massage,ceidg
@@ -1374,18 +1374,18 @@ Fellow Company MAGDALENA TWOREK-CIECHOMSKA,MAGDALENA TWOREK-CIECHOMSKA,-,,,,1182
 Firma handlowo-usługowa Emilia Kasprzycka,Emilia Kasprzycka,-,,,,8631623341,86.99.D,massage,ceidg
 Firma Handlowo Usługowa EWA KONECKA-SZYMANIAK,EWA KONECKA-SZYMANIAK,-,,,owg.pl,7542938479,86.99.D,massage,ceidg
 FIRMA HANDLOWO USŁUGOWA ŁUKASZ SZYMANIAK,ŁUKASZ SZYMANIAK,-,,,,8442309537,86.99.D,massage,ceidg
-FIRST CARE PAWEŁ KIEZIK,PAWEŁ KIEZIK,-,,,firstcare.pl,9511254491,86.99.D,massage,ceidg
+FIRST CARE PAWEŁ KIEZIK,PAWEŁ KIEZIK,-,,kontakt@firstcare.pl,firstcare.pl,9511254491,86.99.D,massage,ceidg
 FitLove Anna Fritz-Fabijanek,Anna Fritz-Fabijanek,-,,,teraz-otwarte.pl,9512124655,86.99.D,massage,ceidg
 FIZJO AND WELL Dorota Chałubińska,Dorota Chałubińska,dorota.resz@gmail.com,+48669587257,dorota.resz@gmail.com,,7681800833,86.99.D,massage,ceidg
 FizjoDom Rehabilitacja Julita Gawłowska,JULITA GAWŁOWSKA,-,,,senioraktywnie.pl,8792372097,86.99.D,massage,ceidg
-Fizjologopedia Klara Francuz-Matwiejczyk,Klara Francuz-Matwiejczyk,-,,,fizjologopedia.pl,7133061122,86.99.D,massage,ceidg
+Fizjologopedia Klara Francuz-Matwiejczyk,Klara Francuz-Matwiejczyk,-,,kontakt@zmyslownia.com,fizjologopedia.pl,7133061122,86.99.D,massage,ceidg
 FIZJO-MED Bartosz Samborski,Bartosz Samborski,-,,,,9482022328,86.99.D,massage,ceidg
 Fizjo News Maciej Kokosza,Maciej Kokosza,maciek.kokos@gmail.com,,maciek.kokos@gmail.com,,7123062166,86.99.D,massage,ceidg
 FIZJONIKA WERONIKA KRZEMIŃSKA-POŁEĆ,WERONIKA KRZEMIŃSKA-POŁEĆ,fizjonikawaw@gmail.com,,fizjonikawaw@gmail.com,,1132759840,86.99.D,massage,ceidg
-FIZJO PELVI NATALIA WAWSZCZYK,NATALIA WAWSZCZYK,-,,,fizjopelvi.pl,8981453112,86.99.D,massage,ceidg
+FIZJO PELVI NATALIA WAWSZCZYK,NATALIA WAWSZCZYK,-,,kontakt@fizjopelvi.pl,fizjopelvi.pl,8981453112,86.99.D,massage,ceidg
 FIZJOplus AGNIESZKA ROSZCZYPAŁA,AGNIESZKA ROSZCZYPAŁA,-,,,obrzeki.waw.pl,7393139513,86.99.D,massage,ceidg
 Fizjoterapia Dorota Fryszkowska-Kot,Dorota Fryszkowska-Kot,dorota.fryszkowska@wp.pl,,dorota.fryszkowska@wp.pl,,7962756064,86.99.D,massage,ceidg
-Fizjoterapia Karolina Zych,Karolina Zych,-,,,re-active.pl,7981426617,86.99.D,massage,ceidg
+Fizjoterapia Karolina Zych,Karolina Zych,-,,kontakt@re-active.pl,re-active.pl,7981426617,86.99.D,massage,ceidg
 FIZJOTERAPIA Krzysztof Berg,Krzysztof Berg,bergkrzysztof@o2.pl,,bergkrzysztof@o2.pl,,9191763764,86.99.D,massage,ceidg
 Fizjoterapia Maciej Lendzion,Maciej Lendzion,maciej.lendzion@gmail.com,+48660864670,maciej.lendzion@gmail.com,,1182190922,86.99.D,massage,ceidg
 Fizjoterapia Małgorzata Górniewska,Małgorzata Górniewska,-,,,,5342150538,86.99.D,massage,ceidg
@@ -1395,7 +1395,7 @@ A1 Finance Łukasz Paciorek,Łukasz Paciorek,-,,,,7162560313,43.22.Z,plumbing,ce
 ACTIVE FUTURE ACCOUNTING DANTE TELĘGA,DANTE TELĘGA,-,,,,5242765536,43.22.Z,plumbing,ceidg
 Adrian Życzyński FIRMA TRANSPORTOWO-BUDOWLANA SŁUŻEWIEC,Adrian Życzyński,transportwywrotki@wp.pl,+48508470918,transportwywrotki@wp.pl,,5212789503,43.22.Z,plumbing,ceidg
 AF-cars Arkadiusz Furmański,Arkadiusz Furmański,furmanskiarek@gmail.com,,furmanskiarek@gmail.com,,5252351658,43.22.Z,plumbing,ceidg
-a/Firma Wielobranżowa DIMA - Sławomir Goździecki b/ SAP Serwis Sławomir Goździecki wspólnik spółki cywilnej,Sławomir Goździecki,-,,,mikroporady.pl,7271001682,43.22.Z,plumbing,ceidg
+a/Firma Wielobranżowa DIMA - Sławomir Goździecki b/ SAP Serwis Sławomir Goździecki wspólnik spółki cywilnej,Sławomir Goździecki,-,,inspektor@wiedza3g.pl,mikroporady.pl,7271001682,43.22.Z,plumbing,ceidg
 A&F Izolacje Natryskowe Filip Goński,Filip Goński,-,+48691230391,,,7622008274,43.22.Z,plumbing,ceidg
 AGASYSTEM FIRMA BUDOWLANA AGNIESZKA KĄDZIELA,AGNIESZKA KĄDZIELA,-,,,,5272816764,43.22.Z,plumbing,ceidg
 AGBUD AGNIESZKA FIJAŁKOWSKA,Agnieszka Fijałkowska,-,,,,5221031674,43.22.Z,plumbing,ceidg
@@ -1424,7 +1424,7 @@ AMF Anna Fijołek,Anna Fijołek,-,,,owg.pl,8262057347,43.22.Z,plumbing,ceidg
 Amper Rafał Dudek,Rafał Dudek,-,,,,5242532358,43.22.Z,plumbing,ceidg
 AND KLIMA Rafał Andrych,Rafał Andrych,biuro@andklima.pl,+48504100646,biuro@andklima.pl,,9512278128,43.22.Z,plumbing,ceidg
 Andrii Kasko ProfBUD,Andrii Kasko,-,,,,5252672150,43.22.Z,plumbing,ceidg
-"Andrzej Korzenecki ""FIRMA BUDOWLANA ANGO""",Andrzej Korzenecki,-,,,urbanity.pl,9521405566,43.22.Z,plumbing,ceidg
+"Andrzej Korzenecki ""FIRMA BUDOWLANA ANGO""",Andrzej Korzenecki,-,,piotr.m@urbanity.pl,urbanity.pl,9521405566,43.22.Z,plumbing,ceidg
 "ANDRZEJ KRZYSZTOF KOPKA ZAKŁAD USŁUG TECHNICZNYCH ""ROZRUCH""",ANDRZEJ KOPKA,andrzej.kopka20@gmail.com,+48602397580,andrzej.kopka20@gmail.com,,9511855368,43.22.Z,plumbing,ceidg
 "ANDRZEJ WILK Firma Projektowo-Wykonawcza ""WIROBUD II""",ANDRZEJ WILK,-,,,,1180365240,43.22.Z,plumbing,ceidg
 ANDRZEJ WRZECIONKOWSKI JAPOL FIRMA BUDOWLANA,ANDRZEJ WRZECIONKOWSKI,-,,,,9521799370,43.22.Z,plumbing,ceidg
@@ -1440,7 +1440,7 @@ ARCHITEKTURAWNETRZ.PL TOMASZ KONEFAŁ wspólnik spółki cywilnej,TOMASZ KONEFA�
 ARCTICAIR Stefan Marinov,Stefan Marinov,-,,,,9522253383,43.22.Z,plumbing,ceidg
 "a/ REMEDIUM wspólnik spółki cywilnej Piotr Kurzela, b/ SOFTTECH Piotr Kurzela",Piotr Kurzela,pkurzela@op.pl,,pkurzela@op.pl,,1131940046,43.22.Z,plumbing,ceidg
 Arigo Firma Instalacyjna Jarosław Jabłoński,Jarosław Jabłoński,jablonskijaroslaw@jmdi.pl,+48603070756,jablonskijaroslaw@jmdi.pl,,9520004693,43.22.Z,plumbing,ceidg
-Arinea System Krzysztof Luma,Krzysztof Luma,-,,,arinea.pl,1250910703,43.22.Z,plumbing,ceidg
+Arinea System Krzysztof Luma,Krzysztof Luma,-,,kontaktbiuro@arinea.pl,arinea.pl,1250910703,43.22.Z,plumbing,ceidg
 ARKADIUSZ DONOT ARCZIMOC F.H.U.,Arkadiusz Donot,-,+48696118517,,,6272448700,43.22.Z,plumbing,ceidg
 ARKADIUSZ TARACH INSTALACJA FILTRÓW I URZĄDZEŃ SANITARNYCH,ARKADIUSZ TARACH,-,,,,5241524960,43.22.Z,plumbing,ceidg
 ACTION ELECTRIC ANDRZEJ FILIPKOWSKI,ANDRZEJ FILIPKOWSKI,-,,,,5210324622,43.21.Z,plumbing,ceidg
@@ -1450,7 +1450,7 @@ Adam Fronczak POLSKA GRUPA SPRZEDAŻY,ADAM FRONCZAK,-,,,,5222883563,43.21.Z,plum
 AFS Agnieszka Strużewska,Agnieszka Strużewska,-,,,,9710712619,43.21.Z,plumbing,ceidg
 """AF SYSTEMS"" ARTUR MAZUREK",ARTUR MAZUREK,-,,,yellowpages.pl,8241663769,43.21.Z,plumbing,ceidg
 AG.ArchiArt Architektura Wnętrz/Wzornictwo Dyner Filip,Filip Dyner,ag.archiart@gmail.com,,ag.archiart@gmail.com,,9492082208,43.21.Z,plumbing,ceidg
-AGEMO AUTOMATYKA POŻAROWA RAFAŁ KOZŁOWSKI,RAFAŁ KOZŁOWSKI,-,,,krs-online.com.pl,5242204298,43.21.Z,plumbing,ceidg
+AGEMO AUTOMATYKA POŻAROWA RAFAŁ KOZŁOWSKI,RAFAŁ KOZŁOWSKI,-,,kontakt@wenet.pl,krs-online.com.pl,5242204298,43.21.Z,plumbing,ceidg
 AGIF Jadwiga Sobocińska,JADWIGA SOBOCIŃSKA,agif1@wp.pl,,agif1@wp.pl,,8791086113,43.21.Z,plumbing,ceidg
 Agile Conflux Sebastian Łubnicki,Sebastian Łubnicki,agile.conflux@gmail.com,,agile.conflux@gmail.com,,7231601157,43.21.Z,plumbing,ceidg
 AG LIFT ANDRZEJ GRANICKI,ANDRZEJ GRANICKI,a.granicki@gmail.com,,a.granicki@gmail.com,,5261444537,43.21.Z,plumbing,ceidg
@@ -1473,7 +1473,7 @@ AMF Electric Łukasz Barcz,ŁUKASZ BARCZ,-,,,amfelectricphilly.com,1132766662,43
 AMICOR Autoryzowany Zakład Elektronicznych Systemów Ochrony Mienia - Sławomir Foszer,Sławomir Foszer,-,,,,1130207390,43.21.Z,plumbing,ceidg
 AMLIN Krzysztof Staniszewski,Krzysztof Staniszewski,k.staniszewski@interia.pl,,k.staniszewski@interia.pl,,1181472498,43.21.Z,plumbing,ceidg
 AMPM.net Krzysztof Skomra,Krzysztof Skomra,-,,,,8652323667,43.21.Z,plumbing,ceidg
-"ANDRZEJ AJCHEL - wspólnik spółki cywilnej ""DAAF""",ANDRZEJ AJCHEL,-,,,daaf.nl,5261750671,43.21.Z,plumbing,ceidg
+"ANDRZEJ AJCHEL - wspólnik spółki cywilnej ""DAAF""",ANDRZEJ AJCHEL,-,,50amersfoort@daaf.nl,daaf.nl,5261750671,43.21.Z,plumbing,ceidg
 ADEXIM INTERNATIONAL REMOVALS Zbigniew Bekas,Zbigniew Bekas,bekas@adexim.com.pl,+48604462110,bekas@adexim.com.pl,,7971280997,81.21.Z,cleaning,ceidg
 Adgam Magda Płocińska,Magda Płocińska,-,,,,1231085209,81.21.Z,cleaning,ceidg
 ADITU Grzegorz Poznański,GRZEGORZ POZNAŃSKI,-,,,,5252305517,81.21.Z,cleaning,ceidg
@@ -1490,11 +1490,11 @@ Agnieszka Wronowska,Agnieszka Wronowska,awronowska@o2.pl,,awronowska@o2.pl,,5242
 A-GO Anna Gorzelska-Olik,Anna Gorzelska-Olik,Info@zaciskowe.pl,,Info@zaciskowe.pl,,8531460632,81.22.Z,cleaning,ceidg
 AGROL Andrzej Żarlak,Andrzej Żarlak,andrzej@agrol.com.pl,,andrzej@agrol.com.pl,,8121619381,81.22.Z,cleaning,ceidg
 AG-TUR Pośrednictwo Dorota Jaworska,DOROTA JAWORSKA,-,,,,5241907721,81.22.Z,cleaning,ceidg
-AIRGASTON JAROSŁAW KARWAT,JAROSŁAW KARWAT,-,,,krs-online.com.pl,1180252257,81.22.Z,cleaning,ceidg
+AIRGASTON JAROSŁAW KARWAT,JAROSŁAW KARWAT,-,,kontakt@wenet.pl,krs-online.com.pl,1180252257,81.22.Z,cleaning,ceidg
 Akant Krystyna Targaszewska,KRYSTYNA TARGASZEWSKA,-,,,,9511404105,81.22.Z,cleaning,ceidg
 ALEGRIA Marta Harazińska,Marta Harazińska,-,,,,8133331094,81.22.Z,cleaning,ceidg
 Aleksandra Gruszczyńska,ALEKSANDRA GRUSZCZYŃSKA,GRUSZCZYNSKA.ALEXANDRA@GMAIL.COM,+48693249290,GRUSZCZYNSKA.ALEXANDRA@GMAIL.COM,,5252390109,81.22.Z,cleaning,ceidg
-"Aleksandra Mokrzewska USŁUGI ODKAŻANIA,TĘPIENIA OWADÓW I ODSZCZURZANIA ""PEST AND RAT CONTROL""",Aleksandra Mokrzewska,-,,,odkazanie.pl,5222872536,81.22.Z,cleaning,ceidg
+"Aleksandra Mokrzewska USŁUGI ODKAŻANIA,TĘPIENIA OWADÓW I ODSZCZURZANIA ""PEST AND RAT CONTROL""",Aleksandra Mokrzewska,-,,serwisowych.piotr.rochniak@odkazanie.pl,odkazanie.pl,5222872536,81.22.Z,cleaning,ceidg
 ALEXEY MATUSEVICH REAGENTS,ALEXEY MATUSEVICH,ALEXEY.MATUSEVICH@ONET.PL,+48573963861,ALEXEY.MATUSEVICH@ONET.PL,,5213575833,81.22.Z,cleaning,ceidg
 ALGEO Piotr Kuźnicki,Piotr Kuźnicki,p_kuznicki@tlen.pl,+48502268276,p_kuznicki@tlen.pl,,5372240364,81.22.Z,cleaning,ceidg
 """ALIA"" Małgorzata Celińska",Małgorzata Celińska,-,,,,5361176817,81.22.Z,cleaning,ceidg
@@ -1506,19 +1506,19 @@ Agencja Detektywistyczna Ćma - Szymon Sikora,Szymon Sikora,-,,,,5321695787,81.2
 AG MAC MACIEJ KRAKOWSKI,MACIEJ KRAKOWSKI,-,,,,5222415129,81.29.Z,cleaning,ceidg
 """AGNES"" Agnieszka Kapka",Agnieszka Kapka,-,,,,9182138417,81.29.Z,cleaning,ceidg
 AGNES - AGNIESZKA WŁODARSKA,AGNIESZKA WŁODARSKA,AGNIESZKA.WLODARSKA79@GMAIL.COM,,AGNIESZKA.WLODARSKA79@GMAIL.COM,,5222420768,81.29.Z,cleaning,ceidg
-AGNES AGNIESZKA WOJDA,AGNIESZKA WOJDA,-,,,sklepagnes.pl,8231293087,81.29.Z,cleaning,ceidg
+AGNES AGNIESZKA WOJDA,AGNIESZKA WOJDA,-,,biuro@sklepagnes.plopens,sklepagnes.pl,8231293087,81.29.Z,cleaning,ceidg
 "Agnieszka Cieślowska ""ECO JARDIN""",Agnieszka Cieślowska,-,,,,5211014510,81.29.Z,cleaning,ceidg
-AGATA LITOŃSKA,AGATA LITOŃSKA,-,,,bowtechpolska.pl,1130756961,96.04.Z,massage,ceidg
+AGATA LITOŃSKA,AGATA LITOŃSKA,-,,stowarzyszenie@bowtechpolska.plregon,bowtechpolska.pl,1130756961,96.04.Z,massage,ceidg
 Agata Płatosz,Agata Płatosz,-,,,,6731862564,96.04.Z,massage,ceidg
 AGNIESZKA CZARNECKA,AGNIESZKA CZARNECKA,AZAKIERA@GMAIL.COM,+48509072242,AZAKIERA@GMAIL.COM,,6961701801,96.04.Z,massage,ceidg
 Agnieszka Kalińska NEW STYLE,Agnieszka Kalińska,-,,,booking.com,5221154425,96.04.Z,massage,ceidg
 "AGNIESZKA KOZŁOWSKA ""SZALONE NOŻYCZKI""",AGNIESZKA KOZŁOWSKA,-,,,,8451458099,96.04.Z,massage,ceidg
 AGNIESZKA LEPA Natalle Styl,AGNIESZKA LEPA,-,,,,5251615121,96.04.Z,massage,ceidg
-Agnieszka Malczewska LOLASANA,Agnieszka Malczewska,-,,,lolasana.pl,9481524909,96.04.Z,massage,ceidg
+Agnieszka Malczewska LOLASANA,Agnieszka Malczewska,-,,aga@lolasana.pl,lolasana.pl,9481524909,96.04.Z,massage,ceidg
 AGNIESZKA MICHALAK PRAKTYKA LEKARSKA DENTYSTYCZNA,AGNIESZKA MICHALAK,-,,,,5222737324,96.04.Z,massage,ceidg
 AGNIESZKA MORAWSKA STALL,AGNIESZKA MORAWSKA,-,,,,7971200521,96.04.Z,massage,ceidg
 AGNIESZKA PIŁAT PSYCHOLOG DZIECIĘCY,AGNIESZKA PIŁAT,-,,,,2910211812,96.04.Z,massage,ceidg
-AGNIESZKA PIONTEK,AGNIESZKA PIONTEK,-,,,partnersinternational.pl,6482339756,96.04.Z,massage,ceidg
+AGNIESZKA PIONTEK,AGNIESZKA PIONTEK,-,,info@partnersinternational.pl,partnersinternational.pl,6482339756,96.04.Z,massage,ceidg
 Agnieszka Radwańska TRINAD,Agnieszka Radwańska,-,,,,5213042539,96.04.Z,massage,ceidg
 AGNIESZKA SOSNOWSKA,AGNIESZKA SOSNOWSKA,-,,,researchgate.net,5271305783,96.04.Z,massage,ceidg
 AMARI Galyna Akhmatkulova,Galyna Akhmatkulova,g.akhmatkulova@gmail.com,+48501151582,g.akhmatkulova@gmail.com,,9522019167,96.23.Z,massage,ceidg
@@ -1529,7 +1529,7 @@ BEAUTY HAIR STANISŁAWA BYSYNGIER,STANISŁAWA BYSYNGIER,-,,,yandex.ru,9521382664
 Beauty Skin Gabriel Brzozowski,GABRIEL BRZOZOWSKI,-,,,,9710484816,96.23.Z,massage,ceidg
 BIG KAROTKA PISARSKA KATARZYNA,Katarzyna Pisarska,Bigkarotka@wp.pl,+48601305369,Bigkarotka@wp.pl,,1132371030,96.23.Z,massage,ceidg
 BIG little THINGS Sebastian Staniszewski,Sebastian Staniszewski,-,,,,5271554078,96.23.Z,massage,ceidg
-BIUROODNOWA URSZULA GAŁĄZKA,URSZULA GAŁĄZKA,-,,,strefazdrowiawilanow.pl,9522089015,96.23.Z,massage,ceidg
+BIUROODNOWA URSZULA GAŁĄZKA,URSZULA GAŁĄZKA,-,,kontakt@strefazdrowiawilanow.plna,strefazdrowiawilanow.pl,9522089015,96.23.Z,massage,ceidg
 BŁAŻEJ MARESZ BM Usługi,BŁAŻEJ MARESZ,bmaresz@o2.pl,,bmaresz@o2.pl,,9511921792,96.23.Z,massage,ceidg
 BODY CARE Gabinet Masażu Monika Brzyszczak,Monika Brzyszczak,-,,,booksy.com,1180524460,96.23.Z,massage,ceidg
 Body Jamming Barbara Smirnow-Kurp,Barbara Smirnow-Kurp,barbara.smirnow@yahoo.com,,barbara.smirnow@yahoo.com,,8461525124,96.23.Z,massage,ceidg
@@ -1543,13 +1543,13 @@ Chiroma Therapy Klaudia Dołęga,Klaudia Dołęga,-,,,booksy.com,1182285396,96.2
 """CHUNG HOA TRA"" ÐÀO THỊ HOA",THỊ HOA ÐÀO,-,,,truongnguyentatthanh.edu.vn,1132845143,96.23.Z,massage,ceidg
 CleanUp Pro Katarzyna Jagiełło,KATARZYNA JAGIEŁŁO,-,,,,5361837064,96.23.Z,massage,ceidg
 Clever Beauty OLGA SZYWIEL-SKRZYPCZAK,OLGA SZYWIEL-SKRZYPCZAK,-,,,vk.com,1182107619,96.23.Z,massage,ceidg
-Clinical Service Agnieszka Milewska-Kranc,Agnieszka Milewska-Kranc,-,,,milewskakranc.com,7181943038,96.23.Z,massage,ceidg
+Clinical Service Agnieszka Milewska-Kranc,Agnieszka Milewska-Kranc,-,,clinicalservice.cro@gmail.com,milewskakranc.com,7181943038,96.23.Z,massage,ceidg
 AGNIESZKA WISIOROWSKA,AGNIESZKA WISIOROWSKA,-,,,,5211137394,86.90.A,massage,ceidg
-Ale-Pink-Nie! Salon Piękności Marta Guliashvili,Marta Guliashvili,-,,,telefontajemniczegoklienta.pl,9511397150,86.90.A,massage,ceidg
+Ale-Pink-Nie! Salon Piękności Marta Guliashvili,Marta Guliashvili,-,,kontakt@imagopolska.pl,telefontajemniczegoklienta.pl,9511397150,86.90.A,massage,ceidg
 AMAZING TRAVEL MARIUSZ SERZYSKO,Mariusz Serzysko,-,,,,1132289392,86.90.A,massage,ceidg
 ANDRIEJ GORSZKOW,ANDRIEJ GORSZKOW,andriej.gorszkow@gmail.com,,andriej.gorszkow@gmail.com,,5221857523,86.90.A,massage,ceidg
-Anastasia Gulyeva,Anastasia Gulyeva,-,,,muztopa.com,1133112566,86.99.D,massage,ceidg
-Aneta Gryz,ANETA GRYZ,-,,,pressto.amu.edu.pl,5322097143,86.99.D,massage,ceidg
+Anastasia Gulyeva,Anastasia Gulyeva,-,,admin@muztopa.com,muztopa.com,1133112566,86.99.D,massage,ceidg
+Aneta Gryz,ANETA GRYZ,-,,ppuam@amu.edu.pl,pressto.amu.edu.pl,5322097143,86.99.D,massage,ceidg
 ANGA Magdalena Jaraszek,MAGDALENA JARASZEK,magdalena.radzinska@gmail.com,,magdalena.radzinska@gmail.com,,8481697265,86.99.D,massage,ceidg
 Angelika Szymańska,Angelika Szymańska,-,,,,5543012441,86.99.D,massage,ceidg
 Angie Medica Angelika Jasiukowicz,Angelika Jasiukowicz,angie.medica94@gmail.com,+48731379266,angie.medica94@gmail.com,,1182323429,86.99.D,massage,ceidg
@@ -1562,15 +1562,15 @@ ADAM GÓRSKI GÓRSKITRANS,ADAM GÓRSKI,-,,,,5222789605,43.22.Z,plumbing,ceidg
 ADAM GRZELAK,ADAM GRZELAK,-,,,,5212659746,43.22.Z,plumbing,ceidg
 "ADAM NAGÓRKA ""NAGÓRKA REMONTY""",ADAM NAGÓRKA,-,,,,1181266362,43.22.Z,plumbing,ceidg
 ADAM OSTOWICZ E-JAKO Adam Ostowicz; STARLIGHT Polska Adam Ostowicz wspólnik spółki cywilnej,ADAM OSTOWICZ,adamost@02.pl,,adamost@02.pl,,1131290915,43.22.Z,plumbing,ceidg
-ADAM RYTEL Usługi i Nadzory Elektryczne,ADAM RYTEL,-,,,multigeodeta.pl,5271000747,43.22.Z,plumbing,ceidg
+ADAM RYTEL Usługi i Nadzory Elektryczne,ADAM RYTEL,-,,kontakt@wenet.pl,multigeodeta.pl,5271000747,43.22.Z,plumbing,ceidg
 ADAM ŚLEPOWROŃSKI Przedsiębiorstwo Handlowo - Usługowe,ADAM ŚLEPOWROŃSKI,-,,,,1132305694,43.22.Z,plumbing,ceidg
 Adam Szymczak Przedsiębiorstwo Produkcyjno Handlowo Usługowe ELEKTRO-PC,ADAM SZYMCZAK,-,,,yellowpages.pl,1132321434,43.22.Z,plumbing,ceidg
-ADAM WINCZEWSKI GRANITEX,ADAM WINCZEWSKI,-,,,krs-online.com.pl,5221720149,43.22.Z,plumbing,ceidg
+ADAM WINCZEWSKI GRANITEX,ADAM WINCZEWSKI,-,,kontakt@wenet.pl,krs-online.com.pl,5221720149,43.22.Z,plumbing,ceidg
 Adam Wyczałkowski ARMA - GLAZ,Adam Wyczałkowski,adam11a@wp.pl,,adam11a@wp.pl,,9710642155,43.22.Z,plumbing,ceidg
 AD Consulting Dariusz Adamski,Dariusz Adamski,-,,,dnb.com,7761055159,43.22.Z,plumbing,ceidg
 A+D DARIUSZ GOCŁAWSKI,DARIUSZ GOCŁAWSKI,INFO@APLUSD.PL,+48509202627,INFO@APLUSD.PL,,9511668063,43.22.Z,plumbing,ceidg
 ADD MEDIA MARCIN GRACZYK,MARCIN GRACZYK,-,,,,8921374389,43.22.Z,plumbing,ceidg
-ADJUST MARKETING MARIUSZ JĘDRZEJCZAK,MARIUSZ JĘDRZEJCZAK,-,,,krs-online.com.pl,5222797444,43.22.Z,plumbing,ceidg
+ADJUST MARKETING MARIUSZ JĘDRZEJCZAK,MARIUSZ JĘDRZEJCZAK,-,,kontakt@wenet.pl,krs-online.com.pl,5222797444,43.22.Z,plumbing,ceidg
 ACTILO Usługi inżynieryjno-konsultingowe Cezary Szachewicz,CEZARY SZACHEWICZ,-,,,arch-projekty.pl,8212255967,43.21.Z,plumbing,ceidg
 ADAM KOZUBAL PRO - KOMPLEKS USŁUGI REMONTOWO - BUDOWLANE,ADAM KOZUBAL,prokompleks@o2.pl,,prokompleks@o2.pl,,1132797303,43.21.Z,plumbing,ceidg
 Adam Lewandowski Usługi Elektryczne LEW-EL,Adam Lewandowski,-,,,,5242362554,43.21.Z,plumbing,ceidg
@@ -1590,13 +1590,13 @@ AGNIESZKA OKULSKA-SINGH,AGNIESZKA OKULSKA-SINGH,-,,,,8392851747,81.21.Z,cleaning
 AGNIESZKA PULIŃSKA ADESSO BIURO RACHUNKOWE,AGNIESZKA PULIŃSKA,-,,,,5261099000,81.21.Z,cleaning,ceidg
 AHSANIT Przedsiębiorstwo Usługowe Andrzej Hajzik,Andrzej Hajzik,ahsanit.biuro@gmail.com,,ahsanit.biuro@gmail.com,,5261542381,81.21.Z,cleaning,ceidg
 AIM Michał Bazała,Michał Bazała,-,,,,8911512341,81.21.Z,cleaning,ceidg
-AJAX DARIUSZ HINCHA,DARIUSZ HINCHA,-,,,godzinyotwarcia24.pl,5272195032,81.21.Z,cleaning,ceidg
+AJAX DARIUSZ HINCHA,DARIUSZ HINCHA,-,,kontakt@godzinyotwarcia24.pl,godzinyotwarcia24.pl,5272195032,81.21.Z,cleaning,ceidg
 Ala Darashkevich,Ala Darashkevich,-,,,,5213745324,81.21.Z,cleaning,ceidg
 ALBUD DAMIAN CHMIELEWSKI,DAMIAN CHMIELEWSKI,-,,,,1133140686,81.21.Z,cleaning,ceidg
 Aleh Dashchynski CAR BUD.PL,Aleh Dashchynski,-,,,,5223162713,81.21.Z,cleaning,ceidg
 Aleksander Gierach RealStays,Aleksander Gierach,-,,,,5252450627,81.21.Z,cleaning,ceidg
 Aleksander Przeciński USŁUGI - HYDRAULICZNE,Aleksander Przeciński,olekp175@wp.pl,+48507658285,olekp175@wp.pl,,1131331399,81.21.Z,cleaning,ceidg
-ALENA TSISHKO,ALENA TSISHKO,-,,,jestporzadek.pl,5273109052,81.21.Z,cleaning,ceidg
+ALENA TSISHKO,ALENA TSISHKO,-,,kontakt@wenet.pl,jestporzadek.pl,5273109052,81.21.Z,cleaning,ceidg
 Alena Tyshkevich,Alena Tyshkevich,-,,,,5243038123,81.21.Z,cleaning,ceidg
 Aliaksandr Hatsko,Aliaksandr Hatsko,scvoznyk@gmail.com,+48539720990,scvoznyk@gmail.com,,7011272272,81.21.Z,cleaning,ceidg
 "ALICJA JAWORSKA PRALNIA CHEMICZNA ""ALICJA""",ALICJA JAWORSKA,-,,,pralniaalicja.pl,5251020385,81.21.Z,cleaning,ceidg
@@ -1604,7 +1604,7 @@ ALLCARE PIOTR CHMIELARZ,PIOTR CHMIELARZ,-,,,,1131862501,81.22.Z,cleaning,ceidg
 ALL HOUSE JUSTYNA SKWARSKA,JUSTYNA SKWARSKA,biuro@allhouse.com.pl,,biuro@allhouse.com.pl,,5311401040,81.22.Z,cleaning,ceidg
 ALOHA MACIEJ TKACZ,MACIEJ TKACZ,-,,,,8992222385,81.22.Z,cleaning,ceidg
 ALPIN-zone Michał Janoszek,MICHAŁ JANOSZEK,-,,,,6711669114,81.22.Z,cleaning,ceidg
-AMT Anna Chwalińska,Anna Chwalińska,-,,,polsatsport.pl,7122548783,81.22.Z,cleaning,ceidg
+AMT Anna Chwalińska,Anna Chwalińska,-,,warszawakontaktsport@polsat.com.plfacebook.com,polsatsport.pl,7122548783,81.22.Z,cleaning,ceidg
 A&M Technik Artur Duchnowski,Artur Duchnowski,-,,,,1251283183,81.22.Z,cleaning,ceidg
 ANDRZEJ PACH AWPOL AGENCJA OCHRONY MIENIA I OSÓB,Andrzej Pach,-,,,,5211903339,81.22.Z,cleaning,ceidg
 """ANGELS"" SONA & VAHE SONA HOLIKYAN",SONA HOLIKYAN,Angels1995@o2.pl,+48690531690,Angels1995@o2.pl,,5214053249,81.22.Z,cleaning,ceidg
@@ -1612,7 +1612,7 @@ ANITA TARGAŃSKA-HOROSZKO PPHU ANITA,ANITA TARGAŃSKA-HOROSZKO,-,,,,5221422914,8
 "ANNA CHROBAK ""ROKER sc"" Anna Chrobak wspólnik spółki cywilnej",ANNA CHROBAK,-,,,,5241074008,81.22.Z,cleaning,ceidg
 ANNA JASTRZĘBSKA Gramark-vip24h,ANNA JASTRZĘBSKA,susel12341@wp.pl,,susel12341@wp.pl,,1181189070,81.22.Z,cleaning,ceidg
 Anna Kożuchowska Zarządzanie Nieruchomościami,Anna Kożuchowska,biuro@annakozuchowska.pl,+48660049318,biuro@annakozuchowska.pl,,5381545933,81.22.Z,cleaning,ceidg
-ANNA MICHALAK ZAKŁAD USŁUG PORZĄDKOWYCH AMIS SPRZĄTANIE WNĘTRZ,ANNA MICHALAK,-,,,amis.rzetelnafirma.pl,1180082453,81.22.Z,cleaning,ceidg
+ANNA MICHALAK ZAKŁAD USŁUG PORZĄDKOWYCH AMIS SPRZĄTANIE WNĘTRZ,ANNA MICHALAK,-,,zup.amis@vp.pl,amis.rzetelnafirma.pl,1180082453,81.22.Z,cleaning,ceidg
 ANTON SHYROKORAD,ANTON SHYROKORAD,-,,,twitter.yandex.com.tr,5242798317,81.22.Z,cleaning,ceidg
 ARCADO Łukasz Puchalski,Łukasz Puchalski,lpuchalski@o2.pl,,lpuchalski@o2.pl,,5272407161,81.22.Z,cleaning,ceidg
 ARCHAG AGNIESZKA SOCHACKA,AGNIESZKA SOCHACKA,-,,,dnb.com,9521823861,81.22.Z,cleaning,ceidg
@@ -1633,14 +1633,14 @@ A.W. BEAUTY Anna Wojciechowska,Anna Wojciechowska,-,,,,5213425921,81.22.Z,cleani
 AYMAN AL RAMADNEH CORPORATION,AYMAN AL RAMADNEH,-,,,,6612081004,81.22.Z,cleaning,ceidg
 BARBARA GADOMSKA USŁUGI GASTRONOMICZNE I HOTELARSKIE,BARBARA GADOMSKA,-,,,,1130619649,81.22.Z,cleaning,ceidg
 Alla Hlovachevska,Alla Hlovachevska,allahlovachevska@gmail.com,+48731150007,allahlovachevska@gmail.com,,5242899567,81.29.Z,cleaning,ceidg
-ALTUS HOUSE Tomasz Sołtysiak,Tomasz Sołtysiak,-,,,zarzadzanie-nieruchomosciami.pl,5342089307,81.29.Z,cleaning,ceidg
+ALTUS HOUSE Tomasz Sołtysiak,Tomasz Sołtysiak,-,,biuro@altushouse.pl,zarzadzanie-nieruchomosciami.pl,5342089307,81.29.Z,cleaning,ceidg
 AMC Reaktywacja Adam Cholewiński,Adam Cholewiński,-,,,,1180187229,81.29.Z,cleaning,ceidg
 AMK CONSULTING AGNIESZKA MICHAŁOWSKA-KOMAR,AGNIESZKA MICHAŁOWSKA-KOMAR,-,,,biura-rachunkowe.waw.pl,5261299153,81.29.Z,cleaning,ceidg
 ANDRZEJ CHOWANIEC - USŁUGI,ANDRZEJ CHOWANIEC,-,,,,7010817798,81.29.Z,cleaning,ceidg
 Andrzej Janiuk BIURO USŁUG TECHNICZNO-ADMINISTRACYJNYCH,Andrzej Janiuk,-,,,,5212910258,81.29.Z,cleaning,ceidg
 "ANDRZEJ JANKOWSKI-GOLUBEV wspólnik spółki cywilnej 1/ ""BEST SECURITY AGENCY"", 2/ OCHRONA BEST SECURITY""",ANDRZEJ JANKOWSKI-GOLUBEV,-,+48786183405,,kdsinternational.org,5341270950,81.29.Z,cleaning,ceidg
 ANDRZEJ PARADOWSKI HAI TECHNOLOGY,ANDRZEJ PARADOWSKI,andrzej.paradowski@gmail.com,,andrzej.paradowski@gmail.com,,7131203380,81.29.Z,cleaning,ceidg
-ANDRZEJ SOCHA AS PARTNER,Andrzej SOCHA,-,,,biznesbaza.com,5311015644,81.29.Z,cleaning,ceidg
+ANDRZEJ SOCHA AS PARTNER,Andrzej SOCHA,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,5311015644,81.29.Z,cleaning,ceidg
 ANDRZEJ TECHMAŃSKI KONSERWACJA I INSTALACJE ELEKTRYCZNE,ANDRZEJ TECHMAŃSKI,-,,,,5241876682,81.29.Z,cleaning,ceidg
 ANDRZEJ ZYCHOWICZ,ANDRZEJ ZYCHOWICZ,-,,,,9511791852,81.29.Z,cleaning,ceidg
 Anna Murdoch,Anna Murdoch,2danae2@gmail.com,,2danae2@gmail.com,,5211786767,81.29.Z,cleaning,ceidg
@@ -1648,17 +1648,17 @@ ANYHOUR DAMIAN RYCHLICA,DAMIAN RYCHLICA,-,,,,5242622475,81.29.Z,cleaning,ceidg
 """APARTAMENT"" - BIURO DORADZTWA MAJĄTKOWEGO I USŁUG TECHNICZNYCH - Andrzej Milewski",Andrzej Milewski,-,,,,1130250517,81.29.Z,cleaning,ceidg
 ARBOR JERZY GĘSICKI KONSERWACJA OBIEKTÓW ZABYTKOWYCH-BUDOWNICTWO WSPÓŁCZESNE,JERZY GĘSICKI,biuro@arbor.com.pl,,biuro@arbor.com.pl,,9511179921,81.29.Z,cleaning,ceidg
 ARCHEOKOPTER Pracownia Archeologii Terenowej - Katarzyna Kmicik,KATARZYNA KMICIK,KANTOSIUK@WP.PL,,KANTOSIUK@WP.PL,,9661010313,81.29.Z,cleaning,ceidg
-ARCHITEKT PORZĄDKU AGNIESZKA WITKOWSKA,AGNIESZKA WITKOWSKA,-,,,architekturaporzadku.pl,1181716061,81.29.Z,cleaning,ceidg
-ARCHITEKTURA KRAJOBRAZU BENEDYKT KAWĘCKI,Benedykt Kawęcki,-,,,akbk.pl,5321864020,81.29.Z,cleaning,ceidg
+ARCHITEKT PORZĄDKU AGNIESZKA WITKOWSKA,AGNIESZKA WITKOWSKA,-,,architekturaporzadku@gmail.com,architekturaporzadku.pl,1181716061,81.29.Z,cleaning,ceidg
+ARCHITEKTURA KRAJOBRAZU BENEDYKT KAWĘCKI,Benedykt Kawęcki,-,,biuro@akbk.pl,akbk.pl,5321864020,81.29.Z,cleaning,ceidg
 AGNIESZKA STENCEL-PILCH INSTANT ADVISOR,AGNIESZKA STENCEL-PILCH,-,,,,5221858729,96.04.Z,massage,ceidg
 Akinom Events Łukasz Makuch,Łukasz Makuch,-,,,,1132495996,96.04.Z,massage,ceidg
-"ALEKSANDER MAJOR wspólnik spółki cywilnej ""Przychodnia Medyczno-Podologiczna""",ALEKSANDER MAJOR,-,,,biznesbaza.com,9512507132,96.04.Z,massage,ceidg
+"ALEKSANDER MAJOR wspólnik spółki cywilnej ""Przychodnia Medyczno-Podologiczna""",ALEKSANDER MAJOR,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,9512507132,96.04.Z,massage,ceidg
 ALICJA HYJEK,ALICJA HYJEK,alicja.hyjek@gmail.com,,alicja.hyjek@gmail.com,,9720891316,96.04.Z,massage,ceidg
 "Alina Sacchettino ""COSMORELAX"" ALINA SACCHETTINO",Alina Sacchettino,-,,,,5212319766,96.04.Z,massage,ceidg
 Andrei Ashmian,Andrei Ashmian,-,,,,5223273186,96.04.Z,massage,ceidg
 Andrzej Chyłek Zarządzanie i Doradztwo,Andrzej Chyłek,-,,,,5251344627,96.04.Z,massage,ceidg
-"ANDRZEJ GOSEK 1.SZKOŁA KYOKUSHIN KARATE ""MŁODE LWY"", 2. KYOKUSHIN DOJO ""MŁODE LWY"", 3. GODART",ANDRZEJ GOSEK,-,,,karatecy.pl,1181374330,96.04.Z,massage,ceidg
-ANDRZEJ KĘPCZYŃSKI KLINIKA RUCHU,ANDRZEJ KĘPCZYŃSKI,-,,,medfile.pl,7392143814,96.04.Z,massage,ceidg
+"ANDRZEJ GOSEK 1.SZKOŁA KYOKUSHIN KARATE ""MŁODE LWY"", 2. KYOKUSHIN DOJO ""MŁODE LWY"", 3. GODART",ANDRZEJ GOSEK,-,,mlodelwyakademia@gmail.com,karatecy.pl,1181374330,96.04.Z,massage,ceidg
+ANDRZEJ KĘPCZYŃSKI KLINIKA RUCHU,ANDRZEJ KĘPCZYŃSKI,-,,biuro@medfile.pl,medfile.pl,7392143814,96.04.Z,massage,ceidg
 "ANDRZEJ MURMUCHAMIATOW ""VIDOQ""",ANDRZEJ MURMUCHAMIATOW,-,,,,5242372216,96.04.Z,massage,ceidg
 Aneta Kucharska-Skoczeń USŁUGI SPORTOWO-REKREACYJNE,Aneta Kucharska-Skoczeń,SKOCZEN.TENIS@GMAIL.COM,+48664135772,SKOCZEN.TENIS@GMAIL.COM,,9522182068,96.04.Z,massage,ceidg
 Angelika Choma,Angelika Choma,-,,,,9222663303,96.04.Z,massage,ceidg
@@ -1668,7 +1668,7 @@ Anna Goluch MANIA ODŻYWIANIA,Anna Goluch,annamgoluch@gmail.com,+48600236156,ann
 Anna Lach,Anna Lach,-,,,mp.pl,5732920168,96.04.Z,massage,ceidg
 ANNA PUCHACZ SUPPORT ONE,ANNA PUCHACZ,-,+48602420014,,,7221461594,96.04.Z,massage,ceidg
 Anna Trusewicz-Michalska,Anna Trusewicz-Michalska,anna.trusewicz4@gmail.com,+48534440732,anna.trusewicz4@gmail.com,,1130692675,96.04.Z,massage,ceidg
-ANTHONY SCHULZ LEARN TO SWIM THE AUSSIE WAY,ANTHONY SCHULZ,-,,,ukiyoswimschool.com.pl,1132945175,96.04.Z,massage,ceidg
+ANTHONY SCHULZ LEARN TO SWIM THE AUSSIE WAY,ANTHONY SCHULZ,-,,enquiry@ukiyoswimschool.com.pluseful,ukiyoswimschool.com.pl,1132945175,96.04.Z,massage,ceidg
 Apus Consulting Łukasz Chyliński,Łukasz Chyliński,-,,,,8222029847,96.04.Z,massage,ceidg
 A&R Agnieszka Rajchert,Agnieszka Rajchert,-,,,,5262275522,96.04.Z,massage,ceidg
 Arkadiusz Hołownia,Arkadiusz Hołownia,-,,,,5372117735,96.04.Z,massage,ceidg
@@ -1685,7 +1685,7 @@ ASIIA Mykola Sekh,Mykola Sekh,-,,,,9860244864,96.23.Z,massage,ceidg
 Beauty&Health Nataliia Matorina,Nataliia Matorina,-,,,,1231326009,96.23.Z,massage,ceidg
 Beauty Olha Horbatenko,Olha Horbatenko,-,,,,1182313307,96.23.Z,massage,ceidg
 Biuro Rachunkowe Attar Urszula Wrońska,URSZULA WROŃSKA,-,,,,5241489100,96.23.Z,massage,ceidg
-"BIZNES PLANET, TANDOORI SPICES NOWSHAD H BABU",NOWSHAD H BABU,-,,,warsawfoodie.pl,5252720564,96.23.Z,massage,ceidg
+"BIZNES PLANET, TANDOORI SPICES NOWSHAD H BABU",NOWSHAD H BABU,-,,kontakt@warsawfoodie.pl,warsawfoodie.pl,5252720564,96.23.Z,massage,ceidg
 BLACKROLL POLSKA TAMARA CHUPRUN,TAMARA CHUPRUN,-,,,fitness.shop.pl,1133152206,96.23.Z,massage,ceidg
 BLUSHE VIOLETTA PIERZCHAŁA-POLAK,VIOLETTA PIERZCHAŁA-POLAK,-,,,,1130541568,96.23.Z,massage,ceidg
 Body Beauty Secrets Taisiia Ovcharenko,Taisiia Ovcharenko,-,,,t.me,5223363742,96.23.Z,massage,ceidg
@@ -1699,8 +1699,8 @@ Bubpha Smolarek,Bubpha Smolarek,tajskiecurry@gmail.com,+48730257469,tajskiecurry
 CAR RENTAL DINOO DAWID MICHAEL,Dawid Michael,DAWID.MICHAEL@ONET.PL,+48789982366,DAWID.MICHAEL@ONET.PL,,1132786788,96.23.Z,massage,ceidg
 CeRis Iryna Daushevich,Iryna Daushevich,-,,,otwartawarszawa.pl,7011292955,96.23.Z,massage,ceidg
 Check IT Mateusz Cechowski,Mateusz Cechowski,cechowskimateusz@gmail.com,+48506664790,cechowskimateusz@gmail.com,,5242634610,96.23.Z,massage,ceidg
-Chilli House Productions Hanna Struczewska,Hanna Struczewska,-,,,pracowniaed.pl,7392554078,96.23.Z,massage,ceidg
-ANARELLA MEDICA HANNA PELEC,Hanna Pelec,-,,,anarella.pl,1180313711,86.90.A,massage,ceidg
+Chilli House Productions Hanna Struczewska,Hanna Struczewska,-,,kontakt@kulczykfoundation.org.pl,pracowniaed.pl,7392554078,96.23.Z,massage,ceidg
+ANARELLA MEDICA HANNA PELEC,Hanna Pelec,-,,gabinet@anarella.pl,anarella.pl,1180313711,86.90.A,massage,ceidg
 ARTiSMED MARZENA LORKOWSKA-PRECHT,Marzena Lorkowska-Precht,-,,,znanylekarz.pl,5251603939,86.90.A,massage,ceidg
 Artur Chołuj,ARTUR CHOŁUJ,-,,,,1230901842,86.90.A,massage,ceidg
 ARTUR HENDZELEK OSTEOPATA,ARTUR HENDZELEK,-,,,znanylekarz.pl,8883035767,86.90.A,massage,ceidg
@@ -1712,7 +1712,7 @@ Bartosz Kościuch OLIMPIC STUDIO rehabilitacja-sport-edukacja,Bartosz Kościuch,
 BARTOSZ LAUDENCKI LAUDI-REHABILITACJA,BARTOSZ LAUDENCKI,blaudencki@op.pl,,blaudencki@op.pl,,1132287513,86.90.A,massage,ceidg
 BEATRYCZE DELORME GEBURAH-TIPHARET,BEATRYCZE DELORME,-,,,,5251290512,86.90.A,massage,ceidg
 BEAUTY CENTRUM Paulina Wypych,Paulina Wypych,-,+48516139569,,beauty-centrum.pl,9710717137,86.90.A,massage,ceidg
-"BEAUTY LIDER CENTRUM SZKOLEŃ KOSMETYCZNYCH, PODOLOGICZNYCH I MEDYCYNY ESTETYCZNEJ IOANNIS GKENAS",IOANNIS GKENAS,-,,,beautylider.com.pl,1231274181,86.90.A,massage,ceidg
+"BEAUTY LIDER CENTRUM SZKOLEŃ KOSMETYCZNYCH, PODOLOGICZNYCH I MEDYCYNY ESTETYCZNEJ IOANNIS GKENAS",IOANNIS GKENAS,-,,kontakt@beautylider.com.pl,beautylider.com.pl,1231274181,86.90.A,massage,ceidg
 BeHunter Health VIKTOR VOSKOBOINYK,VIKTOR VOSKOBOINYK,justdoit23101997@gmail.com,+48788276759,justdoit23101997@gmail.com,,5252960512,86.90.A,massage,ceidg
 BEST HANDS MACIEJ STAŃCZYK,MACIEJ STAŃCZYK,maciej.stanczyk@interia.pl,,maciej.stanczyk@interia.pl,,5472100390,86.90.A,massage,ceidg
 BETA-REH PAŁDYNA BEATA,BEATA PAŁDYNA,beata.paldyna@gmail.com,,beata.paldyna@gmail.com,,5242264308,86.90.A,massage,ceidg
@@ -1725,8 +1725,8 @@ Body Mechanics Magdalena Gąsowska,Magdalena Gąsowska,-,,,,9512490012,86.90.A,m
 Andrii Hrynkiv,Andrii Hrynkiv,-,,,,5242821447,86.99.D,massage,ceidg
 Anna Machowina Psycholog,ANNA MACHOWINA,-,,,,9512201611,86.99.D,massage,ceidg
 Anna Pasternak Insight Marketing,ANNA PASTERNAK,-,,,,7542818893,86.99.D,massage,ceidg
-ANNA TWIERDZIAŃSKA PSYCHOTERAPIA I EDUKACJA,ANNA TWIERDZIAŃSKA,-,,,zrodlo-rehabilitacji.pl,1181464174,86.99.D,massage,ceidg
-AnnMedica Opieka Medyczna ANNA MATHIA,ANNA MATHIA,-,,,annmedica.pl,5252236130,86.99.D,massage,ceidg
+ANNA TWIERDZIAŃSKA PSYCHOTERAPIA I EDUKACJA,ANNA TWIERDZIAŃSKA,-,,rejestracja@zrodlo-rehabilitacji.pl,zrodlo-rehabilitacji.pl,1181464174,86.99.D,massage,ceidg
+AnnMedica Opieka Medyczna ANNA MATHIA,ANNA MATHIA,-,,recepcja@annmedica.pl,annmedica.pl,5252236130,86.99.D,massage,ceidg
 Arkadiusz Miłośnicki Physio&Train,Arkadiusz Miłośnicki,-,,,,7394004330,86.99.D,massage,ceidg
 Arkadiusz Sosnowski REHMED,ARKADIUSZ SOSNOWSKI,-,,,,5221505764,86.99.D,massage,ceidg
 ARMEN MEKHAKYAN,ARMEN MEKHAKYAN,-,,,armen.info.pl,8961365681,86.99.D,massage,ceidg
@@ -1735,16 +1735,16 @@ ASSUM TWÓJ PSYCHOLOG KATARZYNA WÓJCIK,KATARZYNA WÓJCIK,-,,,assum.pl,951201243
 AS terapia Agata Suchecka,Agata Suchecka,asterapia1@gmail.com,,asterapia1@gmail.com,,1231509980,86.99.D,massage,ceidg
 ASYSTA Poradnia Psychologiczno-Pedagogiczna i Punkt Przedszkolny KATARZYNA OSAK,KATARZYNA OSAK,-,,,asysta.org,5213199531,86.99.D,massage,ceidg
 BEATA GRALAK-DĄBROWSKA CLINICAL RESEARCH,BEATA GRALAK-DĄBROWSKA,-,,,,5221916119,86.99.D,massage,ceidg
-"BEATA WÓJCIK.PSYCHOLOG,PSYCHOTERAPEUTA",BEATA WÓJCIK,-,,,2strona.pl,1230370072,86.99.D,massage,ceidg
+"BEATA WÓJCIK.PSYCHOLOG,PSYCHOTERAPEUTA",BEATA WÓJCIK,-,,cikontakt@2strona.pl,2strona.pl,1230370072,86.99.D,massage,ceidg
 BĘDZIE PAN ZADOWOLONY VIKTORIIA ZHADAN,VIKTORIIA ZHADAN,-,,,opiniana.pl,1182309116,86.99.D,massage,ceidg
-BESPOKE BUSINESS ENGLISH DOMINIC CHASE,Dominic Chase,-,,,bespokebusinessenglish.com,1132878355,86.99.D,massage,ceidg
+BESPOKE BUSINESS ENGLISH DOMINIC CHASE,Dominic Chase,-,,dominic@bespokebusinessenglish.com,bespokebusinessenglish.com,1132878355,86.99.D,massage,ceidg
 "Biuro rachunkowe ""Po Stokroć"", ""Sulikowska.Art"" - ILONA SULIKOWSKA",ILONA SULIKOWSKA,ksiegowosc.po.stokroc@gmail.com,+48501373135,ksiegowosc.po.stokroc@gmail.com,,5251613091,86.99.D,massage,ceidg
 Blisko Rodziny Ewelina Wiech,Ewelina Wiech,-,,,,7962286782,86.99.D,massage,ceidg
 "Bolesław Waszkiewicz PRZEDSIĘBIORSTWO PRODUKCYJNO-USŁUGOWO-HANDLOWE ""ULMAG""",Bolesław Waszkiewicz,-,,,,5320011901,86.99.D,massage,ceidg
 "Bożena WINCH PSYCHOTERAPIA, SZKOLENIA BOŻENA WINCH",Bożena WINCH,-,,,,1180369918,86.99.D,massage,ceidg
 Brachmed Jan Bracha,Jan Bracha,-,,,fundacjaavalon.pl,1133011256,86.99.D,massage,ceidg
 BYĆ BLIŻEJ Usługi psychologiczne Piotr Romanowski,Piotr Romanowski,piotrek.romanowski@gmail.com,,piotrek.romanowski@gmail.com,,7181911593,86.99.D,massage,ceidg
-Centrum Coachingu Grzybowscy Tomasz Grzybowski,Tomasz Grzybowski,-,,,businesscoachingwarszawa.pl,6881243377,86.99.D,massage,ceidg
+Centrum Coachingu Grzybowscy Tomasz Grzybowski,Tomasz Grzybowski,-,,todaysluckyday@gmail.com,businesscoachingwarszawa.pl,6881243377,86.99.D,massage,ceidg
 Centrum Medycyny Pracy Amygdala Michał Dolistowski,Michał Dolistowski,info@amygdala.pl,+48535021194,info@amygdala.pl,,9511932749,86.99.D,massage,ceidg
 "CENTRUM MEDYCZNE ""DARMED"" Dariusz Horszczaruk",Dariusz Horszczaruk,darekhorszczaruk@tim.com.pl,,darekhorszczaruk@tim.com.pl,,5321292687,86.99.D,massage,ceidg
 CENTRUM PSYCHIATRII I PSYCHOTERAPII JULITA GARBACKA,JULITA GARBACKA,-,,,znanylekarz.pl,7741759093,86.99.D,massage,ceidg
@@ -1752,14 +1752,14 @@ CENTRUM PSYCHOTERAPII I DIAGNOSTYKI PSYCHOLOGICZNEJ MGR KAMIL GALIŃSKI,KAMIL GA
 ACC KAMIL CIAŁUCH,KAMIL CIAŁUCH,-,,,,6342575758,43.22.Z,plumbing,ceidg
 ADAMEL ADAM ŻOCHOWSKI,ADAM ŻOCHOWSKI,ZOCHOWSKIADAM@O2.PL,+48731905805,ZOCHOWSKIADAM@O2.PL,,5222303270,43.22.Z,plumbing,ceidg
 ADAM HERMANN,ADAM HERMANN,-,,,,1130419100,43.22.Z,plumbing,ceidg
-Adam Kołsut Straż-tech,Adam Kołsut,-,,,straz-tech.pl,6010051539,43.22.Z,plumbing,ceidg
+Adam Kołsut Straż-tech,Adam Kołsut,-,,biuro@straz-tech.pl,straz-tech.pl,6010051539,43.22.Z,plumbing,ceidg
 ADAM ŁOCHOWSKI,Adam Łochowski,adaslochowski7@o2.pl,,adaslochowski7@o2.pl,,9521799424,43.22.Z,plumbing,ceidg
 ADAM WÓJCIK HYDRO-SYSTEM,ADAM WÓJCIK,-,,,,8241279315,43.22.Z,plumbing,ceidg
 """ADAR"" ANDRZEJ DAROCH",ANDRZEJ DAROCH,andrzejdaroch@gmail.com,,andrzejdaroch@gmail.com,,5251593508,43.22.Z,plumbing,ceidg
 ADELA MROZEK ALEDA BAU UND HANDEL,ADELA MROZEK,-,,,,7582328161,43.22.Z,plumbing,ceidg
 Aderia Zarządzanie Nieruchomościami Dariusz Kamiński,Dariusz Kamiński,aderia@op.pl,,aderia@op.pl,,9511917796,43.22.Z,plumbing,ceidg
 ADMINISTROWANIE NIERUCHOMOŚCIAMI BENEDYKT MAŁECKI,BENEDYKT MAŁECKI,makeneb@wp.pl,,makeneb@wp.pl,,5660006589,43.22.Z,plumbing,ceidg
-"""ADOM "" - NIRUCHOMOŚCI, REMONTY, BUDOWNICTWO EWA RAJKOWSKA",EWA RAJKOWSKA,-,,,budowle.pl,5241109669,43.22.Z,plumbing,ceidg
+"""ADOM "" - NIRUCHOMOŚCI, REMONTY, BUDOWNICTWO EWA RAJKOWSKA",EWA RAJKOWSKA,-,,kontakt@budowle.pl,budowle.pl,5241109669,43.22.Z,plumbing,ceidg
 Adrian Cichocki,ADRIAN CICHOCKI,-,,,,9512053435,43.22.Z,plumbing,ceidg
 "Adrian Górski PRZEDSIĘBIORSTWO HANDLOWO-USŁUGOWE ""ADI""",Adrian Górski,-,,,,1132161769,43.22.Z,plumbing,ceidg
 Adrian Tarasiuk Usługi hydrauliczne,ADRIAN TARASIUK,-,,,dnb.com,9521746646,43.22.Z,plumbing,ceidg
@@ -1767,7 +1767,7 @@ AEMAX MICHAŁ HAJEL,MICHAŁ HAJEL,biuro@aemax.pl,,biuro@aemax.pl,,8381743988,43.
 AERO-SUPPORT Wojciech Kruszewski,Wojciech Kruszewski,wojtek2170@gmail.com,,wojtek2170@gmail.com,,5272150443,43.22.Z,plumbing,ceidg
 AGAT AGATA TUCHOWSKA,AGATA TUCHOWSKA,-,,,,9511828012,43.22.Z,plumbing,ceidg
 "AGATA ROHOZIŃSKA, DOBRE STUDIO S.C.",AGATA ROHOZIŃSKA,-,,,,5251336065,43.22.Z,plumbing,ceidg
-Agata Sobkowiak Architektura,Agata Sobkowiak,-,,,designalive.pl,1250940354,43.22.Z,plumbing,ceidg
+Agata Sobkowiak Architektura,Agata Sobkowiak,-,,redakcja@designalive.pl,designalive.pl,1250940354,43.22.Z,plumbing,ceidg
 """AGAT"" BEATA PUERSCHEL",BEATA PUERSCHEL,-,,,,5251022131,43.22.Z,plumbing,ceidg
 AGATECH MARCIN MRÓZ,MARCIN MRÓZ,-,,,,5242269116,43.22.Z,plumbing,ceidg
 Agencja Artystyczna MOKRE BUTY Paweł Hordejuk,Paweł Hordejuk,pawel.hordejuk@mokrebuty.pl,+48601050848,pawel.hordejuk@mokrebuty.pl,,5271537619,43.22.Z,plumbing,ceidg
@@ -1787,7 +1787,7 @@ ADLIGHT DARIUSZ GRZEGORZEK,DARIUSZ GRZEGORZEK,-,,,,5861673789,43.21.Z,plumbing,c
 ADMITECH - PIOTR CZECHOWICZ,PIOTR CZECHOWICZ,-,,,,1132183512,43.21.Z,plumbing,ceidg
 Adrian Kozak - Wsparcie i Obsługa Techniczna UTB,Adrian Kozak,-,,,,7162734776,43.21.Z,plumbing,ceidg
 Adrian Tureniec - wspólnik spółek cywilnych 1. Xelibri S.C. 2. Adicom S.C.,ADRIAN TURENIEC,adrian.tureniec@gmail.com,,adrian.tureniec@gmail.com,,5222542862,43.21.Z,plumbing,ceidg
-ANASTAZJA AKSANA STOILIK,AKSANA STOILIK,-,,,repspolska.pl,5223185772,96.23.Z,massage,ceidg
+ANASTAZJA AKSANA STOILIK,AKSANA STOILIK,-,,kontakt@repspolska.pl,repspolska.pl,5223185772,96.23.Z,massage,ceidg
 Active Work Witalij Żukowski,Witalij Żukowski,-,,,,9820367170,81.21.Z,cleaning,ceidg
 ALDONA STEMPEL WSPÓLNIK SPÓŁKI CYWILNEJ ALST,ALDONA STEMPEL,-,,,,5222310264,81.22.Z,cleaning,ceidg
 Alicja Lewandowska - Magnolia,ALICJA LEWANDOWSKA,-,,,pracuj.pl,5691379630,81.22.Z,cleaning,ceidg
@@ -1813,11 +1813,11 @@ AJG Consulting Anna Janas-Gajdus,Anna Janas-Gajdus,-,+48502358782,,firma.egospod
 AJNA Sylwia Górska,Sylwia Górska,es.gorska@gmail.com,,es.gorska@gmail.com,,5213201268,96.04.Z,massage,ceidg
 AKM INVESTMENTS ADAM MAJ,Adam Maj,adam.k.maj@gmail.com,+48518245615,adam.k.maj@gmail.com,,5222955216,96.04.Z,massage,ceidg
 A la lampa Joanna Raminger,JOANNA RAMINGER,asia@light4.pl,,asia@light4.pl,,9511877683,96.04.Z,massage,ceidg
-ALEJA TALENTÓW JOLANTA WÓJCICKA,JOLANTA WÓJCICKA,-,,,elizjum-warszawa.pl,1230069160,96.04.Z,massage,ceidg
+ALEJA TALENTÓW JOLANTA WÓJCICKA,JOLANTA WÓJCICKA,-,,biuro@elizjum-warszawa.pl,elizjum-warszawa.pl,1230069160,96.04.Z,massage,ceidg
 Aleksander Janiszewski,Aleksander Janiszewski,-,,,,1132384535,96.04.Z,massage,ceidg
 Aleksandra Kajetaniak Laqier,Aleksandra Kajetaniak,-,,,booksy.com,1231031917,96.04.Z,massage,ceidg
 "ALICJA JASKULSKA ""MASAŻ LECZNICZY""",Alicja Jaskulska,alicja.jaskulska@onet.com.pl,,alicja.jaskulska@onet.com.pl,,5641152232,96.04.Z,massage,ceidg
-Alicja Łyżwińska AleMakeup,Alicja Łyżwińska,-,,,alemakeup.pl,5222892674,96.04.Z,massage,ceidg
+Alicja Łyżwińska AleMakeup,Alicja Łyżwińska,-,,kontakt@alemakeup.pl,alemakeup.pl,5222892674,96.04.Z,massage,ceidg
 ALINA MIELNIK wspólnik spółki cywilnej ALLAXIS S.C. A.MIELNIK P.MIELNIK,ALINA MIELNIK,alinamielnik@esculap.pl,+48603757374,alinamielnik@esculap.pl,,1131038251,96.04.Z,massage,ceidg
 ALUCARD MACIEJ RADKIEWICZ,MACIEJ RADKIEWICZ,maciej.radkiewicz@gmail.com,,maciej.radkiewicz@gmail.com,,5252181529,96.04.Z,massage,ceidg
 AMS MEDIA & TRANSPORT Jarosław Śliwka,Jarosław Śliwka,-,,,,5222749988,96.04.Z,massage,ceidg
@@ -1838,13 +1838,13 @@ CONSULTING PROPERTY SYSTEM MACIEJ SUŁEK,Maciej Sułek,kojot1133@wp.pl,,kojot113
 CRAZY WATER Maciej Sieczkowski,Maciej Sieczkowski,maciek_sieczkowski@op.pl,,maciek_sieczkowski@op.pl,,9521938854,96.23.Z,massage,ceidg
 CUD MACIEJ ZARZECKI,MACIEJ ZARZECKI,-,,,adzuna.pl,1181943012,96.23.Z,massage,ceidg
 czasmasazu.pl Piotr Gajdka,Piotr Gajdka,rezerwacje@czasmasazu.pl,+48728883438,rezerwacje@czasmasazu.pl,,5262074172,96.23.Z,massage,ceidg
-Czułe Ja Gabinet psychoterapeutyczny Iwona Kalinowska,Iwona Kalinowska,-,,,iwonakalinowska.pl,7621785900,96.23.Z,massage,ceidg
+Czułe Ja Gabinet psychoterapeutyczny Iwona Kalinowska,Iwona Kalinowska,-,,iwona.kalinowska.gabinet@gmail.com,iwonakalinowska.pl,7621785900,96.23.Z,massage,ceidg
 Alicja Rutkowska,Alicja Rutkowska,-,,,znanylekarz.pl,1130035078,86.90.A,massage,ceidg
 ALTAMED SPECJALISTYCZNA PRAKTYKA LEKARSKA PAWEŁ ŚLIWIŃSKI,PAWEŁ ŚLIWIŃSKI,-,,,,1130530139,86.90.A,massage,ceidg
 ANDRZEJ ADAM WIETECKI,Andrzej WIETECKI,-,,,,1180639430,86.90.A,massage,ceidg
 ANDRZEJ KIERLEWICZ A.K 73,ANDRZEJ KIERLEWICZ,-,,,,1180586722,86.90.A,massage,ceidg
 Andrzej Kościaniuk,Andrzej Kościaniuk,-,,,,5381037935,86.90.A,massage,ceidg
-ANDRZEJ TOŁOCZKO OŚRODEK TERAPII NATURALNEJ IM.O.CZ. KLIMUSZKI,Andrzej TOŁOCZKO,-,,,osrodekterapiinaturalnej.pl,5251003725,86.90.A,massage,ceidg
+ANDRZEJ TOŁOCZKO OŚRODEK TERAPII NATURALNEJ IM.O.CZ. KLIMUSZKI,Andrzej TOŁOCZKO,-,,biuro@osrodekterapiinaturalnej.pl,osrodekterapiinaturalnej.pl,5251003725,86.90.A,massage,ceidg
 ANDY- UNIVERSUM ANDRZEJ TRZPIL,ANDRZEJ TRZPIL,andrzejtrzpil@gmail.com,+48514355088,andrzejtrzpil@gmail.com,,1181604770,86.90.A,massage,ceidg
 ANEST-MED JAROSŁAW KORYCKI,JAROSŁAW KORYCKI,-,,,,9710670571,86.90.A,massage,ceidg
 ANETA JACZEWSKA KOLEKCJONER S.C.,ANETA JACZEWSKA,-,,,,1180153348,86.90.A,massage,ceidg
@@ -1854,7 +1854,7 @@ ANDRZEJ TOMASZEWSKI,ANDRZEJ TOMASZEWSKI,-,,,,8391583210,86.99.D,massage,ceidg
 ANETA SERWATKA INDYWIDUALNA SPECJALISTYCZNA PRAKTYKA LEKARSKA,ANETA SERWATKA,-,,,,1181738950,86.99.D,massage,ceidg
 ANIMA ALICJA CZYRSKA,Alicja Czyrska,-,,,,9281838158,86.99.D,massage,ceidg
 ANNA JANKOWSKA,ANNA JANKOWSKA,-,,,,5222669226,86.99.D,massage,ceidg
-Anna Kasprzycka Pracownia Rodzina w Relacji,Anna Kasprzycka,-,,,rodzinawrelacji.pl,5311334102,86.99.D,massage,ceidg
+Anna Kasprzycka Pracownia Rodzina w Relacji,Anna Kasprzycka,-,,anna.kasprzycka@rodzinawrelacji.pl,rodzinawrelacji.pl,5311334102,86.99.D,massage,ceidg
 Anna Sikorska CENTRUM TERAPII I WSPOMAGANIA ROZWOJU,Anna Sikorska,-,,,,9521240295,86.99.D,massage,ceidg
 ANO-CONSULTING MD Andrzej Ułas,Andrzej Ułas,-,,,,5211128834,86.99.D,massage,ceidg
 Aura Kinga Jasińska,Kinga Jasińska,kinga.jasinska@post.com,,kinga.jasinska@post.com,,5272089778,86.99.D,massage,ceidg
@@ -1880,7 +1880,7 @@ ALENA NOVIKAVA,ALENA NOVIKAVA,-,,,znanylekarz.pl,5252983536,86.90.A,massage,ceid
 Alert Ewa Karolina Matałowska,EWA MATAŁOWSKA,biuro@alert-szkolenia.pl,+48503431575,biuro@alert-szkolenia.pl,,5272357701,86.99.D,massage,ceidg
 ALINA ZELENIUK,ALINA ZELENIUK,-,,,stomatologiazarebscy.pl,9512595320,86.99.D,massage,ceidg
 6IT.PL Leszek Patorski,Leszek Patorski,-,,,,5741864618,43.22.Z,plumbing,ceidg
-511s.pl Paweł Naumiuk,Paweł Naumiuk,-,,,multi-elektronik.pl,1132047335,43.21.Z,plumbing,ceidg
+511s.pl Paweł Naumiuk,Paweł Naumiuk,-,,kontakt@wenet.pl,multi-elektronik.pl,1132047335,43.21.Z,plumbing,ceidg
 645 KATARZYNA KULER,KATARZYNA KULER,-,,,,1231254675,43.21.Z,plumbing,ceidg
 AICS Marek Nasiłowski,Marek Nasiłowski,info@aics.pl,,info@aics.pl,,9521824228,96.04.Z,massage,ceidg
 "AKADEMIA ARTYSTYCZNA ART DANCE, DOROTA SIERAKOWSKA",DOROTA SIERAKOWSKA,dorotasierakowska555@gmail.com,+48608739555,dorotasierakowska555@gmail.com,,5262120268,96.04.Z,massage,ceidg
@@ -1899,15 +1899,15 @@ ALPIN PRO ADAM KRYSIUK,ADAM KRYSIUK,-,,,yellowpages.pl,8461498953,81.22.Z,cleani
 ALPIN-TEAM KINGA ŁAZAROWICZ,KINGA ŁAZAROWICZ,-,,,,5242548454,81.22.Z,cleaning,ceidg
 A & M Monika Pyszkiewicz,Monika Pyszkiewicz,-,,,dnb.com,9521726276,81.22.Z,cleaning,ceidg
 AMW WIESŁAW CZOŁPIŃSKI,WIESŁAW CZOŁPIŃSKI,-,,,,5241734433,81.22.Z,cleaning,ceidg
-Agnieszka Nowicka Open Mind,Agnieszka Nowicka,-,,,biznesbaza.com,8451907976,81.29.Z,cleaning,ceidg
+Agnieszka Nowicka Open Mind,Agnieszka Nowicka,-,,vatopensanctionskontaktkontakt@biznesbaza.comapi,biznesbaza.com,8451907976,81.29.Z,cleaning,ceidg
 AGNIESZKA PAWLACZYK,AGNIESZKA PAWLACZYK,-,,,,5221795897,81.29.Z,cleaning,ceidg
 ALENA PRASKOUSKAYA,ALENA PRASKOUSKAYA,-,,,firma.egospodarka.pl,9522046773,81.29.Z,cleaning,ceidg
-Akupunktura i terapie LESZEK WANIEK,LESZEK WANIEK,-,,,waniek.pl,7961759882,96.04.Z,massage,ceidg
+Akupunktura i terapie LESZEK WANIEK,LESZEK WANIEK,-,,leszek@waniek.pl,waniek.pl,7961759882,96.04.Z,massage,ceidg
 Aldur - Magdalena Krupińska,Magdalena Krupińska,-,,,,1180542966,96.04.Z,massage,ceidg
 ALDUR Tomasz Krupiński,Tomasz Krupiński,tomasz.k.krupinski@gmail.com,,tomasz.k.krupinski@gmail.com,,7711038325,96.04.Z,massage,ceidg
 ALEKSANDER PAWŁOWSKI,ALEKSANDER PAWŁOWSKI,-,,,,5262727616,96.04.Z,massage,ceidg
 ALEKSANDRA SZCZEPANIAK,ALEKSANDRA SZCZEPANIAK,-,,,,8361877970,96.04.Z,massage,ceidg
-Alina Sakwa Active Sports,Alina Sakwa,-,,,festiwalbiegowy.pl,5212222268,96.04.Z,massage,ceidg
+Alina Sakwa Active Sports,Alina Sakwa,-,,info@festiwalbiegow.pl,festiwalbiegowy.pl,5212222268,96.04.Z,massage,ceidg
 Alpaca-Studio Grzegorz Nowak,Grzegorz Nowak,g.nowak@alpacastudio.pl,,g.nowak@alpacastudio.pl,,7382014920,96.04.Z,massage,ceidg
 ANNA PAWŁOWSKA,ANNA PAWŁOWSKA,pawlowska@acn.waw.pl,,pawlowska@acn.waw.pl,,5211757091,96.23.Z,massage,ceidg
 ANNA SZOPA,Anna Szopa,-,,,znanylekarz.pl,7511729881,96.23.Z,massage,ceidg
@@ -1915,7 +1915,7 @@ AP ARTUR PASIK,ARTUR PASIK,artur@pasik.eu,,artur@pasik.eu,,9462275813,96.23.Z,ma
 ARTEPLAZA NATALIA ORATOWSKA,NATALIA ORATOWSKA,-,,,,1130271614,96.23.Z,massage,ceidg
 Beauty Zone&PMU Iryna Baranova,Iryna Baranova,-,,,wildberries.ru,7272857445,96.23.Z,massage,ceidg
 BODY & SPIRIT CARE M&A Marcin Adamczyk,Marcin Adamczyk,adamczyk.marcin1@gmail.com,,adamczyk.marcin1@gmail.com,,5632149182,96.23.Z,massage,ceidg
-BP SPORT EVENTS BEATA PIONTEK,BEATA PIONTEK,-,,,sportmarketing.pl,4980093744,96.23.Z,massage,ceidg
+BP SPORT EVENTS BEATA PIONTEK,BEATA PIONTEK,-,,redakcja@sportmarketing.pl,sportmarketing.pl,4980093744,96.23.Z,massage,ceidg
 ANIMUS -Terapia.Anna Popowska,Anna Popowska,ann.popowska@tlen.pl,,ann.popowska@tlen.pl,,8461351718,86.90.A,massage,ceidg
 ANNA KATARZYNA LIPIŃSKA,ANNA LIPIŃSKA,-,,,,5261775671,86.90.A,massage,ceidg
 ANITA OKOŃ INDYWIDUALNA PRAKTYKA LEKARSKA,ANITA OKOŃ,-,,,placowki.mp.pl,5252048730,86.99.D,massage,ceidg
@@ -1962,7 +1962,7 @@ QESTATE Karolina Urbaczewska,Karolina Urbaczewska,biuroqestate@gmail.com,,biuroq
 Qinspect PRZEMYSŁAW DRABIŃSKI,PRZEMYSŁAW DRABIŃSKI,Przemyslaw.drabinski@gmail.com,+48507423238,Przemyslaw.drabinski@gmail.com,,9511905178,81.21.Z,cleaning,ceidg
 Qlka Cafe Agnieszka Bieńkowska,Agnieszka Bieńkowska,abik22@wp.pl,,abik22@wp.pl,,1131245406,81.21.Z,cleaning,ceidg
 QNL ANDRZEJ BRZYSKI,ANDRZEJ BRZYSKI,-,,,,5340200858,81.21.Z,cleaning,ceidg
-Qpack Łukasz Waliwender,ŁUKASZ WALIWENDER,-,,,qpackprzeprowadzki.pl,9211915907,81.21.Z,cleaning,ceidg
+Qpack Łukasz Waliwender,ŁUKASZ WALIWENDER,-,,biuro@qpackprzeprowadzki.pl,qpackprzeprowadzki.pl,9211915907,81.21.Z,cleaning,ceidg
 QQQ TOMASZ WITKOWSKI,TOMASZ WITKOWSKI,-,,,,5222679911,81.21.Z,cleaning,ceidg
 QRSANT2 Adam WYSOCKI,Adam WYSOCKI,-,,,yellowpages.pl,1181485325,81.21.Z,cleaning,ceidg
 QRS - Jakub Wróblewski,Jakub Wróblewski,-,,,,1132088110,81.21.Z,cleaning,ceidg
@@ -1974,7 +1974,7 @@ QUERCUS PIOTR RUSZCZAK,Piotr Ruszczak,piotr.ruszczak80@wp.pl,+48503681675,piotr.
 Quest Konrad Leszczyński,Konrad Leszczyński,-,,,dnb.com,5262341294,81.21.Z,cleaning,ceidg
 QUFIGO Daniel Sokołowski,Daniel Sokołowski,-,,,,8442122974,81.21.Z,cleaning,ceidg
 QUICK&GOOD ROBERT CHRZANOWSKI,ROBERT CHRZANOWSKI,-,,,,5242574196,81.21.Z,cleaning,ceidg
-"""QWEREXPRESS"" WASYL MAKAREWICZ",WASYL MAKAREWICZ,-,,,cmr24.ru,9271936008,81.21.Z,cleaning,ceidg
+"""QWEREXPRESS"" WASYL MAKAREWICZ",WASYL MAKAREWICZ,-,,info@cmr24.ru,cmr24.ru,9271936008,81.21.Z,cleaning,ceidg
 SISQ INTERNET TECHNOLOGIES Przemysław Sidor,Przemysław Sidor,przemyslaw.sidor@sisq.pl,+48663772597,przemyslaw.sidor@sisq.pl,,9521871127,81.21.Z,cleaning,ceidg
 SQ SOLUTIONS Karol WALENDZIK,Karol WALENDZIK,-,,,,5272357888,81.21.Z,cleaning,ceidg
 SQUARE Andrzej Pastor,Andrzej Pastor,andrzejpastor@wp.pl,,andrzejpastor@wp.pl,,5252404082,81.21.Z,cleaning,ceidg
@@ -1986,10 +1986,10 @@ Wiktoria Pawlak Aquaone,Wiktoria Pawlak,-,,,lokalny.infobel.pl,5273010632,81.21.
 AQUA MIND Bartosz Basiewicz,Bartosz Basiewicz,bartoszbasiewicz@gmail.com,,bartoszbasiewicz@gmail.com,,5272535410,81.22.Z,cleaning,ceidg
 Kancelaria Finansowa AGNIESZKA SADIQ,AGNIESZKA SADIQ,-,,,,5262691232,81.22.Z,cleaning,ceidg
 MARTYNA CICHORZEWSKA - USŁUGI SPRZĄTAJĄCE I BUDOQWLANE,MARTYNA CICHORZEWSKA,skibmartyna@wp.pl,+48500653368,skibmartyna@wp.pl,,7010919151,81.22.Z,cleaning,ceidg
-MONIQ APARTMENTS MONIKA GRYKA,MONIKA GRYKA,-,,,moniqapartments.pl,5213001701,81.22.Z,cleaning,ceidg
-PIOTR GUZOWSKI IQ-200,PIOTR GUZOWSKI,-,,,piotr-guzowski.pl,5221649670,81.22.Z,cleaning,ceidg
+MONIQ APARTMENTS MONIKA GRYKA,MONIKA GRYKA,-,,moniqapartments@gmail.com,moniqapartments.pl,5213001701,81.22.Z,cleaning,ceidg
+PIOTR GUZOWSKI IQ-200,PIOTR GUZOWSKI,-,,piotr@spedytorwruchu.pl,piotr-guzowski.pl,5221649670,81.22.Z,cleaning,ceidg
 ZAKAQUA Michał Zakrzewski,Michał Zakrzewski,michal@zakaqua.com.pl,+48602658764,michal@zakaqua.com.pl,,1131529919,81.22.Z,cleaning,ceidg
-EtnoArt Marco Quenallata Rodriguez,Marco Quenallata Rodriguez,-,,,etnoart.eu,5262635593,81.29.Z,cleaning,ceidg
+EtnoArt Marco Quenallata Rodriguez,Marco Quenallata Rodriguez,-,,7789info@etnoart.eu,etnoart.eu,5262635593,81.29.Z,cleaning,ceidg
 EVENT EQUIPMENT SERVICE PIOTR ABRAMCZUK,PIOTR ABRAMCZUK,-,,,,1131442590,81.29.Z,cleaning,ceidg
 ŁUKASZ HAŁAS NATURA AQUARIA,ŁUKASZ HAŁAS,naturaaquaria@tlen.pl,,naturaaquaria@tlen.pl,,6442992208,81.29.Z,cleaning,ceidg
 piooiq multimedia Adam Karpowicz,Adam Karpowicz,adam.karpowicz@hotmail.com,,adam.karpowicz@hotmail.com,,9512048612,81.29.Z,cleaning,ceidg
@@ -1997,7 +1997,7 @@ QENICK KAMIL KOENIG,KAMIL KOENIG,KAMIL.KOENIG@GMAIL.COM,,KAMIL.KOENIG@GMAIL.COM,
 QUB-ART STUDIO ANNA ZYCHORA,ANNA ZYCHORA,-,,,,8261857152,81.29.Z,cleaning,ceidg
 ZAK AQUA VISION Marcin Zakrzewski,Marcin Zakrzewski,BIURO@ZAKAQUA.PL,,BIURO@ZAKAQUA.PL,,1130729450,81.29.Z,cleaning,ceidg
 Aquarius IT M&C Przemysław Mik,Przemysław Mik,-,,,dzen.ru,6782794418,96.04.Z,massage,ceidg
-EQUANIMUS Małgorzata Romanek,MAŁGORZATA Romanek,-,,,jogawilanow.pl,8171770683,96.04.Z,massage,ceidg
+EQUANIMUS Małgorzata Romanek,MAŁGORZATA Romanek,-,,kontakt@equanimus.pl,jogawilanow.pl,8171770683,96.04.Z,massage,ceidg
 HolystiQ DOROTA KOTLARZ,DOROTA KOTLARZ,-,,,booksy.com,7121873268,96.04.Z,massage,ceidg
 "JAKUB TOMASZEWSKI QACTIVE, FITACTIVE",JAKUB TOMASZEWSKI,-,,,nipregon.pl,1132436025,96.04.Z,massage,ceidg
 "Justyna GRUCHALSKA ""QUATTRO""- wspólnik s.c.",Justyna GRUCHALSKA,justyna.gruchalska@gmail.com,,justyna.gruchalska@gmail.com,,8111622482,96.04.Z,massage,ceidg
@@ -2032,7 +2032,7 @@ Marzena Bogucka Symbolique Spółka Cywilna,MARZENA BOGUCKA,-,,,,1181340986,96.2
 "PIOTR SOBIECKI AQUA - PRO, AUTHIAS",PIOTR SOBIECKI,-,,,,1130000418,96.23.Z,massage,ceidg
 QAS Volha Tsvihun,Volha Tsvihun,-,,,warszawa.pl,5214064684,96.23.Z,massage,ceidg
 QUEEN'S STUDIO Tatsiana Klosinska,Tatsiana Klosinska,-,,,hanimetv.top,9860244516,96.23.Z,massage,ceidg
-withnoquestion Krzysztof Koszarek,Krzysztof Koszarek,-,,,tvn24.pl,5213330416,96.23.Z,massage,ceidg
+withnoquestion Krzysztof Koszarek,Krzysztof Koszarek,-,,kontakt24@tvn.pl,tvn24.pl,5213330416,96.23.Z,massage,ceidg
 CONQUEST COMPANY LIDIA WOJCIECHOWSKA,LIDIA WOJCIECHOWSKA,-,,,,5222990885,86.90.A,massage,ceidg
 EquiSpirit Pracownia Rozwoju Marta Stasiełowicz,Marta Stasiełowicz,-,,,,1132432694,86.90.A,massage,ceidg
 Oqlary-Oqlarki RENATA FUDAŁA wspólnik spółki cywilnej,RENATA FUDAŁA,-,,,,7742273725,86.90.A,massage,ceidg
@@ -2040,9 +2040,9 @@ UNIQUECENTER OLGA HAWRYLUK,OLGA HAWRYLUK,olganell@02.pl,,olganell@02.pl,,9671060
 "Centrum EDUKACYJNE IQ Bartłomiej Gordon; NZOZ ""GOR-DENT"" Bartłomiej Gordon Wspólnik Spółki Cywilnej",BARTŁOMIEJ GORDON,-,,,znanylekarz.pl,9511529870,86.99.D,massage,ceidg
 EQUILIBRIUM ANNA KUCZKOWSKA,ANNA KUCZKOWSKA,-,,,,5212224008,86.99.D,massage,ceidg
 IQOPTIQ PF Jakub Bieszczad,Jakub Bieszczad,-,,,groupon.pl,7011133346,86.99.D,massage,ceidg
-"Małgorzata Jaskulak LeaderQ Coaching, Szkolenia",MAŁGORZATA JASKULAK,-,,,leaderq.pl,8121187059,86.99.D,massage,ceidg
+"Małgorzata Jaskulak LeaderQ Coaching, Szkolenia",MAŁGORZATA JASKULAK,-,,biuro@leaderq.pl,leaderq.pl,8121187059,86.99.D,massage,ceidg
 MAŁYSZ MAREK RESQMED POLSKA,MAREK MAŁYSZ,-,,,poczta-polska.pl,7122608597,86.99.D,massage,ceidg
-Qclinique Angelika Dróżdż,Angelika Dróżdż,-,,,qclinique.pl,9522282568,86.99.D,massage,ceidg
+Qclinique Angelika Dróżdż,Angelika Dróżdż,-,,recepcja@qclinique.pl,qclinique.pl,9522282568,86.99.D,massage,ceidg
 QLMed Mateusz Spałek,Mateusz Spałek,-,,,,6452510576,86.99.D,massage,ceidg
 THERAPIN'QUEST Maja Ruszpel,Maja Ruszpel,-,,,,5272174633,86.99.D,massage,ceidg
 Warsaw First Aid Squad - August Borowski,August Borowski,wfas911@wp.pl,,wfas911@wp.pl,,9522276639,86.99.D,massage,ceidg
@@ -2052,15 +2052,15 @@ AquaBuild Jakub Sowiński,JAKUB SOWIŃSKI,-,,,,5252974916,43.22.Z,plumbing,ceidg
 AquaInstal Damian Świątkowski,Damian Świątkowski,aquainstal.swiatkowski@gmail.com,+48666302644,aquainstal.swiatkowski@gmail.com,,9512507959,43.22.Z,plumbing,ceidg
 AQUALINE MICHAŁ JEZIOREK,MICHAŁ JEZIOREK,-,,,,5342185494,43.22.Z,plumbing,ceidg
 AQUA MASTER Marek Wąsowski,MAREK WĄSOWSKI,-,,,,5262510704,43.22.Z,plumbing,ceidg
-AQUART GRZEGORZ PRZYTULSKI,GRZEGORZ PRZYTULSKI,-,,,domiporta.pl,5222357679,43.22.Z,plumbing,ceidg
+AQUART GRZEGORZ PRZYTULSKI,GRZEGORZ PRZYTULSKI,-,,bok@domiporta.pl,domiporta.pl,5222357679,43.22.Z,plumbing,ceidg
 AquaTerm Kamil Piątkowski,Kamil Piątkowski,kamilpiatkowski97@gmail.com,+48603346219,kamilpiatkowski97@gmail.com,,5223193487,43.22.Z,plumbing,ceidg
-Aqua-thermal Mariusz Brzozowski,Mariusz Brzozowski,-,,,aqua-thermal.pl,8241650962,43.22.Z,plumbing,ceidg
+Aqua-thermal Mariusz Brzozowski,Mariusz Brzozowski,-,,biuro@aqua-thermal.pl,aqua-thermal.pl,8241650962,43.22.Z,plumbing,ceidg
 Craftchaque Kacper Krawczak,Kacper Krawczak,craftchaque@gmail.com,,craftchaque@gmail.com,,9581656728,43.22.Z,plumbing,ceidg
 DANIEL JAROS JAROS SQUAD,DANIEL JAROS,-,,,,5262720347,43.22.Z,plumbing,ceidg
 DQD AGNIESZKA FABIJAŃSKA-ŚWIERŻEWSKA,AGNIESZKA FABIJAŃSKA-ŚWIERŻEWSKA,-,,,,7591171523,43.22.Z,plumbing,ceidg
 D&T pro toit David Pietquin,David Pietquin,-,,,,7011060446,43.22.Z,plumbing,ceidg
-EQTHERM SZYMON MILEWSKI,SZYMON MILEWSKI,-,,,eqtherm.pl,8471599182,43.22.Z,plumbing,ceidg
-GORAQUA ŁUKASZ GÓRECKI,ŁUKASZ GÓRECKI,-,,,pogotowiewodociagowe.pl,5671732572,43.22.Z,plumbing,ceidg
+EQTHERM SZYMON MILEWSKI,SZYMON MILEWSKI,-,,biuro@eqtherm.plszmilewski,eqtherm.pl,8471599182,43.22.Z,plumbing,ceidg
+GORAQUA ŁUKASZ GÓRECKI,ŁUKASZ GÓRECKI,-,,pogotowie-wodociagowe@wp.pl,pogotowiewodociagowe.pl,5671732572,43.22.Z,plumbing,ceidg
 IQ Energy JAN GAWLIK,JAN GAWLIK,-,,,,5272823356,43.22.Z,plumbing,ceidg
 IQ ZABEZPIECZENIA POŚREDNICTWO FINANSOWE PAWEŁ TOBER,PAWEŁ TOBER,pawel@iqzabezpieczenia.pl,,pawel@iqzabezpieczenia.pl,,7761610997,43.22.Z,plumbing,ceidg
 KONRAD RUBASZKIEWICZ AQUAZON,KONRAD RUBASZKIEWICZ,-,,,,8660000921,43.22.Z,plumbing,ceidg
@@ -2095,7 +2095,7 @@ SQ Metre Jakub Tomczyk,Jakub Tomczyk,-,,,,7831584059,43.22.Z,plumbing,ceidg
 T-Q-BUI DINH TUAN BUI,DINH BUI,-,,,,7010147234,43.22.Z,plumbing,ceidg
 AGNIESZKA STRZELBICKA AMQ,AGNIESZKA STRZELBICKA,-,,,,7311683513,43.21.Z,plumbing,ceidg
 "a/ QUALITEC RAFAŁ KOLANKIEWICZ, B/ ""QUALITEC S.C. KOLANKIEWICZ RAFAŁ, CZAPLICKI MARIUSZ"" wspólnik spółki cywilnej Rafał Kolankiewicz",Rafał Kolankiewicz,-,,,,1131918489,43.21.Z,plumbing,ceidg
-AQUILA RIFT MARCIN CHODKOWSKI,MARCIN CHODKOWSKI,-,,,krs-online.com.pl,5242999530,43.21.Z,plumbing,ceidg
+AQUILA RIFT MARCIN CHODKOWSKI,MARCIN CHODKOWSKI,-,,kontakt@wenet.pl,krs-online.com.pl,5242999530,43.21.Z,plumbing,ceidg
 BLUE SQUARE STUDIO Jarosław Księżyk,Jarosław Księżyk,-,,,,5242300493,43.21.Z,plumbing,ceidg
 COQIT MACIEJ GAJOWNIK,MACIEJ GAJOWNIK,MJGAJOWNIK@GMAIL.COM,+48606305505,MJGAJOWNIK@GMAIL.COM,,8262071867,43.21.Z,plumbing,ceidg
 """eMteQ"" Mariusz Mieczkowski",MARIUSZ MIECZKOWSKI,-,,,emteq.pl,5110189484,43.21.Z,plumbing,ceidg
