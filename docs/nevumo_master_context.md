@@ -563,7 +563,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - 233 фирми с уебсайт без имейл → Task 1З email extractor
   - Телефоните са call-tracking номера (unusable)
   - CEIDG re-scrape (1В): завършен — само 51 уебсайта (2.4%), Task 1Г пропусната
-  - Общо имейли досега: ~1,200 уникални (CEIDG 633 + Panoramafirm 612)
+  - Общо имейли преди 1З: ~1,200 уникални (CEIDG 633 + Panoramafirm 612)
+- **Claimed Profiles — Task 1З Website Email Extractor (June 17 2026):** ✅ ЗАВЪРШЕНА
+  - Script: apps/scripts/extract_emails_from_websites.py
+  - 308 уникални домейна посетени от 233 target реда
+  - 160 нови имейла извлечени (51.9% success rate)
+  - Техника: requests + BeautifulSoup, homepage + /kontakt + /contact
+  - Cleanup: regex двустъпков fix за мръсни имейли → 0 мръсни
+  - Общо уникални имейли след 1З: ~1,360 (CEIDG 633 + Panoramafirm 612 + websites 160)
+  - Следваща: Task 1Д — SMS кампания (230 телефона, SMSapi.pl, ~4 EUR)
   - CEIDG technical facts (critical for future scripts):
     * API dead, direct NIP URL doesn't work
     * Search by NIP (#MainContentForm_txtNip) + PKD (#MainContentForm_txtPkd) → button #MainContentForm_btnInputSearch

@@ -134,12 +134,17 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - Потенциал: +300-500 уебсайта → +150-250 нови имейла
 - Модел: Kimi-2.6
 
-**Задача 1З — Email extractor от Panoramafirm уебсайтове** ⏳ Следваща (преименувана)
-- 233 Panoramafirm фирми имат уебсайт НО нямат имейл в Panoramafirm
-- Playwright/requests посещава всеки сайт → търси mailto: и contact@ адреси
-- Потенциал: +100-150 нови имейла
-- Input: panoramafirm_emails_final.csv (редове с website != "" AND email == "")
-- Модел: Kimi-2.6
+**Задача 1З — Email extractor от Panoramafirm уебсайтове** ✅ Завършена (17 юни 2026)
+- Script: apps/scripts/extract_emails_from_websites.py
+- Input: panoramafirm_emails_final.csv (233 реда с website != "" AND email == "")
+- Уникални домейни посетени: 308
+- Нови имейла намерени: 160
+- Success rate: 51.9%
+- Стратегия: requests + BeautifulSoup, без Playwright
+- Страници на домейн: homepage → /kontakt → /contact (спира при първи намерен имейл)
+- Delay: 1.0s между домейни
+- Cleanup: 10 мръсни имейла → 0 след двустъпков regex fix
+- Output: panoramafirm_emails_final.csv (обновен in-place) + panoramafirm_1z_report.csv
 
 **Задача 1И — Google Places API скрипт** ⏳ Опционална (платена)
 - Търси: "sprzątanie Warszawa", "masażysta Warszawa", "hydraulik Warszawa"
@@ -161,8 +166,8 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 |---|---|---|---|
 | CEIDG (1А) | 633 | 230 | 51 |
 | Panoramafirm (1Е) | 612 уникални | — | 967 |
-| **Общо досега** | **~1,200** | **230** | **~1,000** |
-| След 1З (уебсайтове) | +100-150 | — | — |
+| **Общо досега** | **~1,360** | **230** | **~1,000** |
+| След 1З (уебсайтове) | +160 | — | — |
 | След 1Д (SMS) | — | 230 SMS | — |
 | След 1Ж (Bing) | +150-250 | — | — |
 | След 1И (Google, опц.) | +200-300 | +200 | — |
@@ -318,11 +323,10 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token);
 ## Следваща незабавна стъпка (17 юни 2026)
 
 **Приоритетен ред:**
-1. Задача 1З — Email extractor от 233 Panoramafirm уебсайта (Kimi-2.6) ← СЛЕДВАЩА
-2. Задача 1Д — SMS кампания 230 телефона (Kimi-2.6 + SMSapi.pl, ~4 EUR)
-3. Задача 1Ж — Bing Search API за фирми без уебсайт (Kimi-2.6, безплатно)
-4. Задача 1И — Google Places API (Kimi-2.6, ~$10-15, при нужда)
-5. Задача 1К — Oferteo.pl scraper (SWE-1.6, нисък приоритет)
+1. Задача 1Д — SMS кампания 230 телефона (Kimi-2.6 + SMSapi.pl, ~4 EUR) ← СЛЕДВАЩА
+2. Задача 1Ж — Bing Search API за фирми без уебсайт (Kimi-2.6, безплатно)
+3. Задача 1И — Google Places API (Kimi-2.6, ~$10-15, при нужда)
+4. Задача 1К — Oferteo.pl scraper (SWE-1.6, нисък приоритет)
 
 **Паралелно (не чака данните):**
 - Задача 2А — seed_unclaimed_providers.py (Kimi-2.6) — зарежда вече събраните данни
