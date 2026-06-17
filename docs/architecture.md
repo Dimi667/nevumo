@@ -2505,11 +2505,44 @@ Claim page очаква директен обект (не wrapper):
 - No client-side auth checks
 - Determines whether to show claim button or login/register CTAs
 
-### E2E Testing (June 16, 2026)
-- **Test 1 — Valid unclaimed profile**: ✅ PASS — business_name, translations, login/register buttons, category/city labels, no JS errors
-- **Test 2 — Invalid token**: ✅ PASS — shows not_found message with register CTA
-- **Test 3 — Login redirect**: ✅ PASS — redirects to `/bg/auth/login?redirect=/bg/claim/{token}`
-- **Fix applied**: Claim page updated to match API response format (commit 67ccc5a)
+### E2E Testing (June 17, 2026)
+- **Test 1 — Valid unclaimed profile**: ✅ PASS — business_name, urgency bar,
+  provider card (category + city), login/register CTAs, multilingual routing (pl)
+- **Test 2 — Invalid token**: ✅ PASS — not_found UI, support email, register CTA
+- **Test 3 — Already claimed**: ❌ FAIL — показва not_found UI вместо already_claimed UI
+
+**Root cause (Test 3):** GET /api/v1/providers/by-claim-token/{token} връща 404
+за ДВЕТЕ условия — несъществуващ token И is_claimed=TRUE. Frontend не може
+да различи двата случая. Translation keys claimed_title/claimed_desc/claimed_cta
+съществуват но никога не се тригерират.
+
+**Test scripts (commit 122dd0c):**
+- apps/api/scripts/e2e_claim_test_setup.py
+- apps/api/scripts/e2e_claim_mark_claimed.py
+- apps/api/scripts/e2e_claim_cleanup.py
+
+**Bugs discovered (backlog преди Task 5A):**
+
+🔴 КРИТИЧНИ (блокират bulk кампанията):
+1. already_claimed state: GET endpoint не различава not_found от already_claimed —
+   трябва да добави `is_claimed` в response при 404 ИЛИ нов статус код (409)
+2. Outreach email Jinja2: bulk скриптът трябва да използва Jinja2 Template rendering,
+   не string replace — иначе {{ claim_link }} и {{ business_name }} може да не се
+   рендерират правилно
+
+🟡 UX (важни преди launch):
+3. Двойно "Nevumo": redundant <h2>Nevumo</h2> под navbar-а на claim страницата —
+   translation key free_badge или kicker показва "Nevumo" вместо правилна стойност
+4. CTA above the fold: primary CTA бутон не е visible без скрол на мобилен (iPhone) —
+   нужен е sticky bottom bar или repositioning
+5. Email лого: nevumo-logo.png не е качено на R2 —
+   качи на images.nevumo.com/nevumo-logo.png преди Task 5A
+6. Email subject length: текущ subject е ~71 символа — truncate-ва се на мобилен
+   Gmail след ~50 символа, conversion CTA ("czy Twoi klienci Cię znajdą?")
+   не се вижда. Нужни са по-кратки варианти (под 50 символа) за A/B тест.
+   Предложения:
+   - "Twoi klienci w Warszawie Cię szukają — sprawdź" (47 chars)
+   - "10 707 firm w Warszawie — a Twoja?" (35 chars)
 
 **Redesign (June 16, 2026):**
 - High-conversion page: urgency bar, leads teaser (decorative),

@@ -252,6 +252,18 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - claimed_count от API за динамичен social proof
 - 1,190 нови превода: seed_claim_v2_p1.py + seed_claim_v2_p2.py (34 езика × 35 ключа)
 - E2E тестове: ✅ 4/4 минаха включително PL локализация
+E2E тест June 17, 2026 (production):
+- valid state: ✅ PASS
+- not_found state: ✅ PASS
+- already_claimed state: ❌ FAIL — backend бъг (виж bugs backlog в architecture.md)
+
+Bugs backlog преди Task 5A:
+🔴 already_claimed endpoint fix (apps/api/routes/providers.py)
+🔴 Outreach email Jinja2 rendering (bulk script Task 5A)
+🟡 Двойно "Nevumo" на claim страницата
+🟡 CTA above the fold на мобилен
+🟡 Email лого на R2
+🟡 Email subject под 50 символа (A/B тест)
 
 **Задача 4Б — "Unclaimed" банер на Provider Full Page**
 - Видим само за некредентовани профили (`is_claimed = FALSE`)
