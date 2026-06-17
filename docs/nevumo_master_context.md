@@ -554,13 +554,16 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - CEIDG re-scrape complete (June 16 2026): 51 websites from 2,122 rows (2.4%)
   - Output: apps/scripts/warszawa_providers_with_websites.csv
   - Next step: 1Ж — Bing API for remaining 2,071 firms without website
-- **Claimed Profiles — Panoramafirm.pl Scraper (June 15 2026):** 🟡 В процес
-  - Fixly.pl отхвърлен: activity feed (не directory), GraphQL само count, лични имена
-  - Panoramafirm.pl: реален business directory с фирмени имена + уебсайтове
-  - Скрипт: apps/scripts/scrape_panoramafirm.py | Output: warszawa_providers_panoramafirm.csv
-  - Статус: Running overnight — 780 records, page 32/250 cleaning
-  - Телефоните са call-tracking (unusable) | Уебсайтовете са реални → директно email extractor
-  - headless=False, GDPR cookie consent accepted programmatically
+- **Claimed Profiles — Panoramafirm.pl Scraper (June 15-17 2026):** ✅ ЗАВЪРШЕНА
+  - Fixly.pl отхвърлен: no browsable directory, GraphQL само count
+  - Скриптове: scrape_panoramafirm.py (Playwright за листинг) + panoramafirm_requests_only.py (requests за профили)
+  - Output: panoramafirm_emails_final.csv — 19,147 записа | 612 уникални имейла | 967 уебсайта
+  - Ключово откритие: data-popup-param-email атрибут в статичен HTML → не е нужен Playwright
+  - requests-only подход: 10x по-бързо, без Playwright memory leak
+  - 233 фирми с уебсайт без имейл → Task 1З email extractor
+  - Телефоните са call-tracking номера (unusable)
+  - CEIDG re-scrape (1В): завършен — само 51 уебсайта (2.4%), Task 1Г пропусната
+  - Общо имейли досега: ~1,200 уникални (CEIDG 633 + Panoramafirm 612)
   - CEIDG technical facts (critical for future scripts):
     * API dead, direct NIP URL doesn't work
     * Search by NIP (#MainContentForm_txtNip) + PKD (#MainContentForm_txtPkd) → button #MainContentForm_btnInputSearch
@@ -1678,7 +1681,7 @@ git push nevumo-git main  # архив на SSD
 - **Static Files URL Standardization** — Extend STATIC_FILES_BASE_URL pattern to other services that generate public URLs (e.g., QR codes, document uploads). Current implementation is specific to provider profile images; future services should use the same environment variable pattern for consistency across local and production environments.
 - **sw.js generation rule** — `sw.js` is a static committed file in `apps/web/public/sw.js` — no PWA library needed; postbuild appends push handlers via `[NEVUMO-CUSTOM-SW]` marker on every build
 - **Mobile tap zoom prevention** — `touch-action: manipulation` must be on all interactive elements globally in globals.css; input font-size must be `max(16px, 1em)` to prevent iOS auto-zoom; `max-width: 100%` on `*` prevents horizontal overflow. Do NOT revert these rules.
-- **Claimed Profiles Warsaw launch:** Full roadmap in `docs/claimed_profiles_plan.md`. Running overnight (June 15): CEIDG re-scrape (1В) + Panoramafirm.pl scraper (1Е, 780 records). Fixly rejected — no browsable directory, GraphQL returns only counts. Next after overnight: email extractors (1Г+1З), seed (2А). Parallel now: claim landing page (4А).
+- **Claimed Profiles Warsaw launch:** Full roadmap in `docs/claimed_profiles_plan.md`. Фаза 1 данни в ход: ~1,200 уникални имейла събрани (CEIDG 633 + Panoramafirm 612). Следващи: email extractor от 233 уебсайта (1З), SMS кампания (1Д), Bing API (1Ж). Паралелно: seed (2А), claim landing page (4А). Target: 1,700-2,000 имейла → 136-300 claimed профила.
 
 ## Email Notification Incident Log
 

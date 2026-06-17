@@ -81,99 +81,94 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 
 ### 🟦 ФАЗА 1 — ДАННИ
 
-**Цел: 3,000+ имейла и 750+ телефона за outreach кампанията**
+**Цел: максимален брой имейли и телефони за outreach кампанията**
 
-**Задача 1А — CEIDG скрипт** ✅ Завършена
+**Задача 1А — CEIDG скрипт** ✅ Завършена (14 юни 2026)
 - Събрани: 2,375 уникални доставчика
 - С имейл: 701 | С телефон: 257
 - Файл: apps/scripts/warszawa_providers_ceidg.csv
 
 **Задача 1Б — Преглед и почистване на CSV** ✅ Завършена (15 юни 2026)
 - Скрипт: apps/scripts/clean_ceidg_csv.py
-- Input: warszawa_providers_ceidg.csv (2,375 реда)
 - Output: warszawa_providers_clean.csv (2,122 реда)
 - Резултат: 633 валидни имейли, 230 валидни телефони (+48 формат)
-- Открит проблем: колона "address" съдържа имейли вместо физически адреси
-  (скраперът е записал email и в address полето) — при seed скрипта (2А)
-  address колоната се зарежда като ПРАЗНА
-- Открит проблем: 176 реда с партньорски бизнес имена ("1. FIRM A, 2. FIRM B
-  wspólnik s.c.") — seed скриптът (2А) взема само първото име преди запетаята
 
 **Задача 1В — CEIDG re-scrape за уебсайтове** ✅ Завършена (16 юни 2026)
-- Скрипт: apps/scripts/rescrape_websites.py (Python 3.13, sync Playwright)
-- Изпълнен: 16 юни 2026
-- Input: apps/scripts/warszawa_providers_clean.csv (2,122 реда)
-- Output: apps/scripts/warszawa_providers_with_websites.csv
-- Резултат: 51 уебсайта намерени от 2,122 реда (2.4%)
-- Бележка: Повечето малки полски фирми не попълват уебсайт в CEIDG.
-  Останалите 2,071 без уебсайт ще се обработят в Задача 1Ж (Bing API)
-- Технически бележки (критично за бъдещи CEIDG скриптове):
-  * CEIDG API (dane.biznes.gov.pl) — мъртво, връща 404
-  * Директен URL по NIP не работи
-  * Търсенето изисква NIP (#MainContentForm_txtNip) + PKD (#MainContentForm_txtPkd)
-  * Бутон: #MainContentForm_btnInputSearch
-  * headless=False задължително — Akamai CDN блокира headless Chromium
-  * Label за уебсайт: "Adres strony internetowej" (НЕ "Strona" — CEIDG го е сменил)
-  * Selector за резултати: a[href*='SearchDetails.aspx']
-  * Selector за полета: section.block → dt/dd двойки
-  * sync_playwright, viewport 1920x1080, реален Chrome UA
+- Output: apps/scripts/warszawa_providers_with_websites.csv (2,122 реда)
+- Резултат: само 51 уебсайта от 2,122 фирми (2.4%) — CEIDG не публикува сайтове
+- Технически бележки:
+  * headless=False задължително (Akamai)
+  * Label: "Adres strony internetowej"
 
-**Задача 1Г — Email extractor от уебсайтове**
-- Playwright скрипт посещава всеки уебсайт от 1В
-- Търси `mailto:` линкове и `contact@` адреси
-- Очаквано: +200-400 нови имейла
-- Модел: Kimi-2.6
+**Задача 1Г — Email extractor от CEIDG уебсайтове** ❌ ПРОПУСНАТА
+- Причина: само 51 уебсайта от CEIDG — не си струва усилието
+- Решение: Panoramafirm дава директно имейлите (Task 1Е)
 
-**Задача 1Д — SMS скрипт за телефоните**
-- 257 телефона от CEIDG → SMS чрез SMSapi.pl
+**Задача 1Д — SMS скрипт за телефоните** ⏳ Следваща
+- 230 телефона от CEIDG → SMS чрез SMSapi.pl
 - Цена: ~18 PLN (~4 EUR) за всички
-- Съдържание: кратко съобщение с claim линк
+- Съдържание: кратко съобщение на полски с claim линк
 - Модел: Kimi-2.6
 
-**Задача 1Е — Panoramafirm.pl scraper за бизнес имена** 🟡 В процес (15 юни 2026)
-- **Fixly.pl проучен и отхвърлен (15 юни 2026):**
-  * Не е browsable directory — activity feed модел, без pagination
-  * GraphQL API (api.fixly.pl/graphql) достъпен без auth, но searchProvidersByLonLatCategoryId връща само total: Int, не списък с провайдъри
-  * Имената на listing са предимно лични (Piotr Serocki, Mateusz G) — неподходящи за Bing API
-- **Pivot: Panoramafirm.pl** (проверен browsable business directory):
-  * Скрипт: apps/scripts/scrape_panoramafirm.py (Python 3.13, sync Playwright, headless=False)
-  * Output: apps/scripts/warszawa_providers_panoramafirm.csv
-  * Статус: Работи overnight (15 юни) — page 32/250 за cleaning, 780 records
-  * Колони: business_name, phone, website, category, source=panoramafirm, profile_url
-  * ВАЖНО: Телефоните от Panoramafirm са call-tracking номера (224573095) — не се ползват
-  * Уебсайтовете са реални → директно към Email extractor (Task 1З) без нужда от Bing API
-- Реалистично очаквани records: ~3,000-5,000 Warsaw фирми (3 категории)
-- Модел: SWE-1.6
+**Задача 1Е — Panoramafirm.pl scraper** ✅ Завършена (15-17 юни 2026)
+- Оригиналният план за Fixly отхвърлен: no browsable directory, GraphQL само count
+- Pivot: Panoramafirm.pl — реален business directory
+- Скриптове:
+  * apps/scripts/scrape_panoramafirm.py — scrape на листинг страници (Playwright)
+  * apps/scripts/panoramafirm_requests_only.py — email enrichment (само requests)
+- Output: apps/scripts/panoramafirm_emails_final.csv
+- Резултат: 19,147 записа | 612 уникални имейла | 967 уебсайта
+- Ключово откритие: имейлът е в data-popup-param-email атрибут в статичен HTML
+  → не е нужен Playwright за профилните страници
+- Разбивка по категория: plumbing 10,106 с имейл | cleaning 1,150 с имейл
+- Технически бележки:
+  * Playwright за листинг страници (h2 selector)
+  * requests за профилни страници (10x по-бързо, без memory leak)
+  * headless=True за листинг (не изисква Akamai обход)
+  * Телефоните от Panoramafirm са call-tracking (224573095) — не се ползват
+  * 233 уебсайта БЕЗ имейл → Task 1З
 
-**Задача 1Ж — Bing API → намиране на уебсайтове**
+**Задача 1Ж — Bing Search API → намиране на уебсайтове** ⏳ Следваща
 - Bing Search API (безплатно до 3,000 заявки/месец)
-- Търси по бизнес имена → намира уебсайтовете им
-- Модел: Kimi-2.6
-- ВАЖНО: Panoramafirm.pl вече дава уебсайтове директно → Task 1Ж нужен САМО за records от Panoramafirm без уебсайт
-
-**Задача 1З — Email extractor от Fixly уебсайтове**
-- Същия email extractor от Задача 1Г
-- Очаквано: +2,000-3,000 нови имейла
+- Търси по бизнес имена от Panoramafirm БЕЗ уебсайт → намира сайтовете им
+- Потенциал: +300-500 уебсайта → +150-250 нови имейла
 - Модел: Kimi-2.6
 
-**Задача 1И — Google Places API скрипт** *(опционален, при нужда от повече данни)*
+**Задача 1З — Email extractor от Panoramafirm уебсайтове** ⏳ Следваща (преименувана)
+- 233 Panoramafirm фирми имат уебсайт НО нямат имейл в Panoramafirm
+- Playwright/requests посещава всеки сайт → търси mailto: и contact@ адреси
+- Потенциал: +100-150 нови имейла
+- Input: panoramafirm_emails_final.csv (редове с website != "" AND email == "")
+- Модел: Kimi-2.6
+
+**Задача 1И — Google Places API скрипт** ⏳ Опционална (платена)
 - Търси: "sprzątanie Warszawa", "masażysta Warszawa", "hydraulik Warszawa"
 - Цена: ~$10-15 за 300-500 резултата
-- Използва се само ако 1А-1З не дадат достатъчно данни
+- Потенциал: +200-500 нови фирми с телефони и уебсайтове
+- Ползва се само ако 1Д+1Ж+1З не дадат достатъчно данни
 - Модел: Kimi-2.6
 
-**Очакван краен резултат от Фаза 1:**
+**Задача 1К — Oferteo.pl scraper** ⏳ Нисък приоритет
+- Втори marketplace след Fixly с публични профили
+- Потенциал: нови фирми извън Panoramafirm
+- Усилие: 2-3 дни за нов scraper
+- Пуска се само ако всички останали задачи не дадат достатъчно данни
+- Модел: SWE-1.6
 
-| Слой | Имейли | Телефони |
-|---|---|---|
-| CEIDG директно (1А) | 701 | 257 |
-| CEIDG уебсайтове (1Г) | +300 | — |
-| SMS кампания (1Д) | — | 257 |
-| Fixly → Bing → сайт (1З) | +2,000-3,000 | +500 |
-| Google Places (1И, опц.) | +200 | +200 |
-| **Общо** | **~3,000+** | **~750+** |
+**Текущ резултат от Фаза 1 (17 юни 2026):**
 
-При 8-15% конверсия = **240-450 claimed профила за Warsaw launch.**
+| Source | Имейли | Телефони | Уебсайтове |
+|---|---|---|---|
+| CEIDG (1А) | 633 | 230 | 51 |
+| Panoramafirm (1Е) | 612 уникални | — | 967 |
+| **Общо досега** | **~1,200** | **230** | **~1,000** |
+| След 1З (уебсайтове) | +100-150 | — | — |
+| След 1Д (SMS) | — | 230 SMS | — |
+| След 1Ж (Bing) | +150-250 | — | — |
+| След 1И (Google, опц.) | +200-300 | +200 | — |
+| **Прогнозен краен** | **~1,700-2,000** | **~430+** | — |
+
+При 8-15% конверсия = **136-300 claimed профила за Warsaw launch.**
 
 ---
 
@@ -320,14 +315,17 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token);
 
 ---
 
-## Следваща незабавна стъпка
+## Следваща незабавна стъпка (17 юни 2026)
 
-1. Задача 1Ж — Bing API за уебсайтове (Kimi-2.6) — за останалите 2,071 фирми без уебсайт
-2. Задача 1Г — Email extractor от CEIDG уебсайтове (Kimi-2.6) — изчаква повече уебсайтове
-3. Задача 1З — Email extractor от Panoramafirm уебсайтове (Kimi-2.6) — изчаква повече уебсайтове
-4. Задача 2А — seed_unclaimed_providers.py (Kimi-2.6) — изчаква 1В ✅
-4. Задача 5А — Bulk имейл кампания (Kimi-2.6) — изчаква 2А
+**Приоритетен ред:**
+1. Задача 1З — Email extractor от 233 Panoramafirm уебсайта (Kimi-2.6) ← СЛЕДВАЩА
+2. Задача 1Д — SMS кампания 230 телефона (Kimi-2.6 + SMSapi.pl, ~4 EUR)
+3. Задача 1Ж — Bing Search API за фирми без уебсайт (Kimi-2.6, безплатно)
+4. Задача 1И — Google Places API (Kimi-2.6, ~$10-15, при нужда)
+5. Задача 1К — Oferteo.pl scraper (SWE-1.6, нисък приоритет)
 
-**Паралелно (може веднага, не чака overnight):**
-- Задача 4Б — Unclaimed банер на Provider Full Page (Kimi-2.6)
-- Задача 3Б — Art. 14 Confirmation имейл шаблон (Claude)
+**Паралелно (не чака данните):**
+- Задача 2А — seed_unclaimed_providers.py (Kimi-2.6) — зарежда вече събраните данни
+- Задача 4А — /[lang]/claim/[token] страница (Kimi-2.6) — translations seed готов
+- Задача 4Б — Unclaimed банер (Kimi-2.6)
+- Задача 3Б — Art. 14 Confirmation имейл (Claude)
