@@ -432,13 +432,12 @@ async def claim_provider(
     if provider.is_claimed:
         raise HTTPException(
             status_code=409,
-            detail="already_claimed"
+            detail={"code": "ALREADY_CLAIMED", "message": "This profile has already been claimed"}
         )
     
     # Claim the profile
     provider.is_claimed = True
     provider.user_id = current_user.id
-    provider.claim_token = None
     db.commit()
     
     # Send welcome email

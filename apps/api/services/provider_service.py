@@ -1876,10 +1876,9 @@ def claim_provider(claim_token: str, user: "User", db: Session) -> Provider:
 
 
 def get_provider_by_claim_token(token: str, db: Session) -> Optional[Provider]:
-    """Get provider by claim token if not claimed."""
+    """Get provider by claim token. Returns provider regardless of is_claimed status."""
     return db.query(Provider).filter(
-        Provider.claim_token == token,
-        Provider.is_claimed == False
+        Provider.claim_token == token
     ).first()
 
 
