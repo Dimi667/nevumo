@@ -2057,6 +2057,7 @@ claim landing page to display provider info before the user authenticates.
   (differs from standard API format — discovered during Task 4A integration).
 
 **Errors:**
+- 200 with is_claimed: true — token exists but profile already claimed (frontend shows claimed UI)
 - 404 — token does not exist
 
 ---

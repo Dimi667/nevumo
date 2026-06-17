@@ -2509,12 +2509,12 @@ Claim page очаква директен обект (не wrapper):
 - **Test 1 — Valid unclaimed profile**: ✅ PASS — business_name, urgency bar,
   provider card (category + city), login/register CTAs, multilingual routing (pl)
 - **Test 2 — Invalid token**: ✅ PASS — not_found UI, support email, register CTA
-- **Test 3 — Already claimed**: ❌ FAIL — показва not_found UI вместо already_claimed UI
+- **Test 3 — Already claimed**: ✅ PASS — показва claimed_title/claimed_desc/claimed_cta UI (fix: June 17, 2026)
 
-**Root cause (Test 3):** GET /api/v1/providers/by-claim-token/{token} връща 404
-за ДВЕТЕ условия — несъществуващ token И is_claimed=TRUE. Frontend не може
-да различи двата случая. Translation keys claimed_title/claimed_desc/claimed_cta
-съществуват но никога не се тригерират.
+**Root cause (Test 3) — FIXED (June 17, 2026):** get_provider_by_claim_token
+филтрираше по is_claimed==False и нулираше claim_token след claim.
+Fix: премахнат is_claimed филтър, токенът се пази като audit trail,
+добавена 409 защита в POST. Frontend вече получава is_claimed:true → claimed UI.
 
 **Test scripts (commit 122dd0c):**
 - apps/api/scripts/e2e_claim_test_setup.py
@@ -2524,8 +2524,7 @@ Claim page очаква директен обект (не wrapper):
 **Bugs discovered (backlog преди Task 5A):**
 
 🔴 КРИТИЧНИ (блокират bulk кампанията):
-1. already_claimed state: GET endpoint не различава not_found от already_claimed —
-   трябва да добави `is_claimed` в response при 404 ИЛИ нов статус код (409)
+1. ✅ already_claimed state: FIXED June 17, 2026 (commit: виж git log)
 2. Outreach email Jinja2: bulk скриптът трябва да използва Jinja2 Template rendering,
    не string replace — иначе {{ claim_link }} и {{ business_name }} може да не се
    рендерират правилно
