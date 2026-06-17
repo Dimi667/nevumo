@@ -2525,9 +2525,15 @@ Fix: премахнат is_claimed филтър, токенът се пази к
 
 🔴 КРИТИЧНИ (блокират bulk кампанията):
 1. ✅ already_claimed state: FIXED June 17, 2026 (commit: виж git log)
-2. Outreach email Jinja2: bulk скриптът трябва да използва Jinja2 Template rendering,
-   не string replace — иначе {{ claim_link }} и {{ business_name }} може да не се
-   рендерират правилно
+2. ✅ Outreach email Jinja2: FIXED June 18, 2026
+   - send_outreach_bulk.py създаден: apps/api/scripts/send_outreach_bulk.py
+   - Използва jinja2.Template.render(business_name=..., claim_link=...) — никакъв str.replace()
+   - Шаблон копиран в: apps/api/scripts/templates/outreach_email_pl.html
+   - jinja2>=3.1.0 добавен в requirements.txt
+   - Features: --dry-run, --limit, --delay, --csv-file, idempotent log (outreach_sent_log.csv)
+   - Input CSV: apps/api/scripts/outreach_ready.csv (колони: email, business_name, claim_token)
+   - Произвежда се от Task 2A (seed_unclaimed_providers.py)
+   - Test command: railway run python3.13 -m apps.api.scripts.send_outreach_bulk --dry-run --limit 3
 
 🟡 UX (важни преди launch):
 3. Двойно "Nevumo": redundant <h2>Nevumo</h2> под navbar-а на claim страницата —

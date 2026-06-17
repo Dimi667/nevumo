@@ -545,6 +545,14 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - `apps/web/components/GlobalFooter.tsx` — added `readCurrentCity(currentLang)` helper + city-lock logic as first two lines of `handleLanguageChange`
   - **Result**: Hero city is unchanged when user switches language. City changes only on explicit selection via `/izberi-grad`.
 - **Web Push Notifications (June 7, 2026)** — COMPLETE: pywebpush backend, VAPID keys, push_subscriptions table, push service, 3 API endpoints, Service Worker push/notificationclick handlers, usePushNotifications hook, provider settings toggle. Full coverage: providers notified on new leads + new reviews; clients notified on lead status changes + review replies.
+- **Outreach email Jinja2 fix — FIXED (June 18, 2026):**
+  send_outreach_bulk.py създаден в apps/api/scripts/.
+  Template в apps/api/scripts/templates/outreach_email_pl.html.
+  jinja2>=3.1.0 добавен в requirements.txt.
+  Bulk скриптът чете outreach_ready.csv (email, business_name, claim_token),
+  рендерира с Jinja2 Template.render(), изпраща чрез Resend (support@nevumo.com),
+  rate limit 37s между имейли (100/час), idempotent via outreach_sent_log.csv.
+  Следваща стъпка: Task 2A seed_unclaimed_providers.py → произвежда outreach_ready.csv.
 - **Claimed Profiles — Data Collection (June 14 2026):** Warsaw CEIDG scraper complete (`apps/scripts/collect_ceidg_providers.py`). Collected 2,375 unique providers (701 with email, 257 with phone). PKD codes: cleaning 81.21.Z/81.22.Z/81.29.Z, massage 96.04.Z/96.23.Z/86.90.A/86.99.D, plumbing 43.22.Z/43.21.Z. Multi-layer acquisition planned: CEIDG website re-scrape → email extractor → Panoramafirm.pl scraper (Fixly отхвърлен — no browsable directory) → Bing API → SMS campaign. Full roadmap: `docs/claimed_profiles_plan.md`. Target: 3,000+ emails → 240-450 claimed profiles for Warsaw launch.
 - **Claimed Profiles — CSV Clean + CEIDG Re-scrape (June 15-16 2026):**
   - CSV cleaning complete: 2,375 → 2,122 rows, script: clean_ceidg_csv.py
