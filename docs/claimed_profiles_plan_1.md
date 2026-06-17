@@ -217,6 +217,13 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - Лого: конвертирано от SVG → PNG (cairosvg), вградено като base64 за преглед; за продъкшън се качва на `images.nevumo.com/nevumo-logo.png`
 - Sender: `Nevumo <support@nevumo.com>` via Resend
 - Gravatar: настроен за `support@nevumo.com` с apple-touch-icon (120×120px) ✅
+- **Subject lines (първа порция — за A/B тест и конвършън мониторинг):**
+  - plumbing: `10 707 firm instalacyjnych w Warszawie — czy Twoi klienci Cię znajdą?` 
+  - cleaning: `7 363 firm sprzątających w Warszawie — czy Twoi klienci Cię znajdą?` 
+  - massage: `3 635 gabinetów masażu w Warszawie — czy Twoi klienci Cię znajdą?` 
+  - Числата са от официален CEIDG регистър (PKD: 43.22.Z, 81.21.Z, 96.04.Z), верифицирани юни 2026
+  - Маппингът category → subject се имплементира в скрипта в Задача 5А
+  - ⚠️ При конвършън под 5% след първата порция — смени subject lines и тествай нов вариант
 
 **Задача 3Б — Art. 14 Confirmation имейл**
 - Изпраща се АВТОМАТИЧНО след успешен claim
