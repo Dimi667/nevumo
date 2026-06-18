@@ -178,7 +178,7 @@ export default async function ClaimPage({ params }: PageProps) {
         .replace('{city}', city_name);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pb-20 sm:pb-0">
       {/* URGENCY BAR */}
       <div className="bg-amber-100 border-b border-amber-200">
         <div className="max-w-7xl mx-auto px-6 py-2 text-center text-sm text-amber-800">
@@ -226,6 +226,34 @@ export default async function ClaimPage({ params }: PageProps) {
           </div>
         </div>
 
+        {/* Primary CTA (top) */}
+        <div id="cta-top" className="mb-8">
+          {isAuthenticated ? (
+            <form action={async () => {
+              'use server';
+              const claimResult = await claimProfile(token, authToken);
+              if (claimResult.success) {
+                redirect(`/${normalizedLang}/provider/dashboard`);
+              }
+              redirect(`/${normalizedLang}/claim/${token}?error=claim_failed`);
+            }}>
+              <button
+                type="submit"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors"
+              >
+                {t(claimT, 'cta_claim', 'Claim your profile for free')}
+              </button>
+            </form>
+          ) : (
+            <Link
+              href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+              className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors text-center"
+            >
+              {t(claimT, 'cta_register', 'Register and claim this profile for free')}
+            </Link>
+          )}
+        </div>
+
         {/* Leads teaser */}
         <div className="bg-gray-50 rounded-2xl p-6 mb-8 relative overflow-hidden">
           <h3 className="font-semibold text-gray-900 mb-4">
@@ -242,20 +270,12 @@ export default async function ClaimPage({ params }: PageProps) {
               <div className="h-2 bg-gray-100 rounded w-1/3 blur-sm"></div>
               <div className="text-xs text-gray-400 mt-2">преди 41 мин</div>
             </div>
-            <div className="bg-white rounded-lg p-3">
-              <div className="h-3 bg-gray-200 rounded w-4/5 mb-2 blur-sm"></div>
-              <div className="h-2 bg-gray-100 rounded w-2/5 blur-sm"></div>
-              <div className="text-xs text-gray-400 mt-2">днес, 09:14</div>
-            </div>
           </div>
           {/* Overlay */}
           <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center">
             <div className="text-4xl mb-2">🔒</div>
             <p className="font-semibold text-gray-900 text-center">
               {t(claimT, 'leads_overlay', 'Claim to see client requests')}
-            </p>
-            <p className="text-sm text-gray-600 text-center mt-1">
-              {t(claimT, 'leads_overlay_sub', 'Real requests from real clients')}
             </p>
           </div>
         </div>
@@ -400,6 +420,19 @@ export default async function ClaimPage({ params }: PageProps) {
           </span>
         </div>
       </main>
+
+      {/* Sticky bottom bar (mobile only) */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden
+                bg-white border-t border-gray-100 px-4 py-3"
+           style={{ boxShadow: '0 -2px 8px rgba(0,0,0,0.06)' }}>
+        <Link
+          href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+          className="block w-full bg-orange-500 text-white text-center
+                     py-3 rounded-xl font-medium text-sm"
+        >
+          {t(claimT, 'cta_register', 'Register and claim for free')}
+        </Link>
+      </div>
     </div>
   );
 }
