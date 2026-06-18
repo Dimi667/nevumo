@@ -178,7 +178,7 @@ export default async function ClaimPage({ params }: PageProps) {
         .replace('{city}', city_name);
 
   return (
-    <div className="min-h-screen bg-white pb-20 sm:pb-0">
+    <div className="min-h-screen bg-white pb-24 sm:pb-0">
       {/* URGENCY BAR */}
       <div className="bg-amber-100 border-b border-amber-200">
         <div className="max-w-7xl mx-auto px-6 py-2 text-center text-sm text-amber-800">
@@ -425,7 +425,8 @@ export default async function ClaimPage({ params }: PageProps) {
 
       {/* Sticky bottom bar (mobile only) */}
       <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden
-                bg-white border-t border-gray-100 px-4 py-3"
+                bg-white border-t border-gray-100 px-4 pt-3 transform-gpu
+                pb-[max(0.75rem,env(safe-area-inset-bottom))]"
            style={{ boxShadow: '0 -2px 8px rgba(0,0,0,0.06)' }}>
         <Link
           href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
