@@ -32,8 +32,14 @@ LOG_PATH: Path = Path(__file__).parent / "outreach_sent_log.csv"
 DEFAULT_CSV: Path = Path(__file__).parent / "outreach_ready.csv"
 
 FROM_EMAIL: str = "Nevumo <support@nevumo.com>"
-EMAIL_SUBJECT: str = "Twój profil na Nevumo czeka — przejmij go bezpłatnie"
 DEFAULT_DELAY: float = 37.0
+
+SUBJECT_BY_CATEGORY: dict[str, str] = {
+    "cleaning": "7 000 osób szuka sprzątania — ktoś inny je bierze",
+    "plumbing": "5 400 osób szuka hydraulika — ktoś inny je bierze",
+    "massage": "6 900 osób szuka masażu — ktoś inny je bierze",
+}
+DEFAULT_SUBJECT: str = "7 000 osób szuka sprzątania — ktoś inny je bierze"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -136,6 +142,10 @@ def main() -> None:
         business_name: str = (row.get("business_name") or email).strip()
         claim_token: str = row["claim_token"].strip()
         claim_link: str = f"{app_url}/pl/claim/{claim_token}"
+        category: str = row.get("category", "").strip()
+        subject: str = SUBJECT_BY_CATEGORY.get(category, DEFAULT_SUBJECT)
+
+        log.info("Sending to %s | category: %s | subject: %s", email, category, subject)
 
         if email in already_sent:
             log.info("[%d/%d] SKIP already sent: %s", i, total, email)
@@ -168,7 +178,7 @@ def main() -> None:
                 {
                     "from": FROM_EMAIL,
                     "to": [email],
-                    "subject": EMAIL_SUBJECT,
+                    "subject": subject,
                     "html": html,
                 }
             )

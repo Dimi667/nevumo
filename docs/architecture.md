@@ -2540,14 +2540,16 @@ Fix: премахнат is_claimed филтър, токенът се пази к
    translation key free_badge или kicker показва "Nevumo" вместо правилна стойност
 4. CTA above the fold: primary CTA бутон не е visible без скрол на мобилен (iPhone) —
    нужен е sticky bottom bar или repositioning
-5. Email лого: nevumo-logo.png не е качено на R2 —
-   качи на images.nevumo.com/nevumo-logo.png преди Task 5A
-6. Email subject length: текущ subject е ~71 символа — truncate-ва се на мобилен
-   Gmail след ~50 символа, conversion CTA ("czy Twoi klienci Cię znajdą?")
-   не се вижда. Нужни са по-кратки варианти (под 50 символа) за A/B тест.
-   Предложения:
-   - "Twoi klienci w Warszawie Cię szukają — sprawdź" (47 chars)
-   - "10 707 firm w Warszawie — a Twoja?" (35 chars)
+5. ✅ Email лого на R2 — COMPLETE (June 18, 2026) — nevumo-logo.png качен на images.nevumo.com/nevumo-logo.png, base64 src заменен в шаблона
+6. ✅ Email subject lines — COMPLETE (June 18, 2026):
+   **Subject lines (category-based, June 18, 2026):**
+   - cleaning: "7 000 osób szuka sprzątania — ktoś inny je bierze" (49 chars)
+   - plumbing: "5 400 osób szuka hydraulika — ktoś inny je bierze" (49 chars)
+   - massage: "6 900 osób szuka masażu — ktoś inny je bierze" (46 chars)
+   - Default fallback: cleaning subject
+   - Имплементирано в: apps/api/scripts/send_outreach_bulk.py като SUBJECT_BY_CATEGORY dict + DEFAULT_SUBJECT
+   - Числа базирани на Mangools keyword data за Варшава (юни 2026)
+   - ⚠️ При конвършън под 5% след първата порция — смени subject lines
 
 **Redesign (June 16, 2026):**
 - High-conversion page: urgency bar, leads teaser (decorative),

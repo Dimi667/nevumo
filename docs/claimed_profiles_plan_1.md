@@ -272,8 +272,8 @@ Bugs backlog преди Task 5A:
 🔴 Outreach email Jinja2 rendering (bulk script Task 5A)
 🟡 Двойно "Nevumo" на claim страницата
 🟡 CTA above the fold на мобилен
-🟡 Email лого на R2
-🟡 Email subject под 50 символа (A/B тест)
+✅ Email лого на R2 — COMPLETE (June 18, 2026)
+✅ Email subject lines — COMPLETE (June 18, 2026): category-based, под 50 символа, реални keyword данни
 
 **Задача 4Б — "Unclaimed" банер на Provider Full Page**
 - Видим само за некредентовани профили (`is_claimed = FALSE`)
