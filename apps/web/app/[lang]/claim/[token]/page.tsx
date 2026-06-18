@@ -344,30 +344,32 @@ export default async function ClaimPage({ params }: PageProps) {
         </div>
 
         {/* Primary CTA */}
-        {isAuthenticated ? (
-          <form action={async () => {
-            'use server';
-            const claimResult = await claimProfile(token, authToken);
-            if (claimResult.success) {
-              redirect(`/${normalizedLang}/provider/dashboard`);
-            }
-            redirect(`/${normalizedLang}/claim/${token}?error=claim_failed`);
-          }}>
-            <button
-              type="submit"
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors"
+        <div className="hidden sm:block">
+          {isAuthenticated ? (
+            <form action={async () => {
+              'use server';
+              const claimResult = await claimProfile(token, authToken);
+              if (claimResult.success) {
+                redirect(`/${normalizedLang}/provider/dashboard`);
+              }
+              redirect(`/${normalizedLang}/claim/${token}?error=claim_failed`);
+            }}>
+              <button
+                type="submit"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors"
+              >
+                {t(claimT, 'cta_claim', 'Claim your profile for free')}
+              </button>
+            </form>
+          ) : (
+            <Link
+              href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+              className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors text-center"
             >
-              {t(claimT, 'cta_claim', 'Claim your profile for free')}
-            </button>
-          </form>
-        ) : (
-          <Link
-            href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
-            className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors text-center"
-          >
-            {t(claimT, 'cta_register', 'Register and claim this profile for free')}
-          </Link>
-        )}
+              {t(claimT, 'cta_register', 'Register and claim this profile for free')}
+            </Link>
+          )}
+        </div>
 
         {/* Time signal */}
         <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
@@ -428,7 +430,7 @@ export default async function ClaimPage({ params }: PageProps) {
         <Link
           href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
           className="block w-full bg-orange-500 text-white text-center
-                     py-3 rounded-xl font-semibold text-base"
+                     py-4 rounded-xl font-bold text-lg"
         >
           {t(claimT, 'cta_register', 'Register and claim for free')}
         </Link>
