@@ -13,9 +13,34 @@ export default function StickyClaimBar({
   label,
 }: StickyClaimBarProps) {
   const [mounted, setMounted] = useState(false)
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     setMounted(true)
+
+    let lastY = window.scrollY
+
+    const onScroll = () => {
+      const y = window.scrollY
+      const delta = y - lastY
+
+      // Always show near the top of the page
+      if (y < 80) {
+        setVisible(true)
+        lastY = y
+        return
+      }
+
+      // Show when scrolling UP (iOS toolbar hides — bar appears)
+      // Hide when scrolling DOWN (iOS toolbar shows — bar hides)
+      if (delta < -6) setVisible(true)
+      if (delta > 6) setVisible(false)
+
+      lastY = y
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   if (!mounted) return null
@@ -25,12 +50,7 @@ export default function StickyClaimBar({
       className="sm:hidden"
       style={{
         position: 'fixed',
-        // iOS Safari toolbar fix — pure CSS, no JS needed.
-        // 100lvh = full layout height (stable, ignores toolbar)
-        // 100dvh = dynamic visible height (shrinks with toolbar)
-        // calc(100lvh - 100dvh) = exactly the toolbar height
-        // When toolbar hidden: bottom = 0. When shown: bottom = toolbar height.
-        bottom: 'calc(100lvh - 100dvh)',
+        bottom: 0,
         left: 0,
         right: 0,
         zIndex: 9999,
@@ -41,6 +61,9 @@ export default function StickyClaimBar({
         paddingRight: '1rem',
         paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))',
         boxShadow: '0 -2px 12px rgba(0,0,0,0.08)',
+        transform: visible ? 'translateY(0)' : 'translateY(110%)',
+        transition: 'transform 0.25s ease',
+        willChange: 'transform',
       }}
     >
       <a
