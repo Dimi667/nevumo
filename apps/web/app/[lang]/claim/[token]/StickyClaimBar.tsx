@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 interface StickyClaimBarProps {
@@ -9,13 +9,13 @@ interface StickyClaimBarProps {
 }
 
 export default function StickyClaimBar({ href, label }: StickyClaimBarProps) {
-  const mounted = useRef(false)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    mounted.current = true
+    setMounted(true)
   }, [])
 
-  if (!mounted.current) return null
+  if (!mounted) return null
 
   return createPortal(
     <div
