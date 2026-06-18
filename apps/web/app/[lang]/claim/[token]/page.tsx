@@ -227,7 +227,7 @@ export default async function ClaimPage({ params }: PageProps) {
         </div>
 
         {/* Primary CTA (top) */}
-        <div id="cta-top" className="mb-8">
+        <div id="cta-top" className="hidden sm:block mb-8">
           {isAuthenticated ? (
             <form action={async () => {
               'use server';
@@ -428,7 +428,7 @@ export default async function ClaimPage({ params }: PageProps) {
         <Link
           href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
           className="block w-full bg-orange-500 text-white text-center
-                     py-3 rounded-xl font-medium text-sm"
+                     py-3 rounded-xl font-semibold text-base"
         >
           {t(claimT, 'cta_register', 'Register and claim for free')}
         </Link>
