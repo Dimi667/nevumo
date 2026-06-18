@@ -5,6 +5,7 @@ import { fetchTranslations, t } from '@/lib/ui-translations';
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import StickyClaimBar from './StickyClaimBar';
 
 interface PageProps {
   params: Promise<{ lang: string; token: string }>;
@@ -424,18 +425,10 @@ export default async function ClaimPage({ params }: PageProps) {
       </main>
 
       {/* Sticky bottom bar (mobile only) */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden
-                bg-white border-t border-gray-100 px-4 pt-3 transform-gpu
-                pb-[max(0.75rem,env(safe-area-inset-bottom))]"
-           style={{ boxShadow: '0 -2px 8px rgba(0,0,0,0.06)' }}>
-        <Link
-          href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
-          className="block w-full bg-orange-500 text-white text-center
-                     py-4 rounded-xl font-bold text-lg"
-        >
-          {t(claimT, 'cta_register', 'Register and claim for free')}
-        </Link>
-      </div>
+      <StickyClaimBar
+        href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+        label={t(claimT, 'cta_register', 'Register and claim for free')}
+      />
     </div>
   );
 }
