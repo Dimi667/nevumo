@@ -107,15 +107,6 @@ export default async function ClaimPage({ params }: PageProps) {
   if (!result) {
     return (
       <div className="min-h-screen bg-white">
-        <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-          <Link href={`/${normalizedLang}`} className="text-2xl font-bold text-gray-900">
-            Nevumo
-          </Link>
-          <span className="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
-            {t(claimT, 'free_badge', '100% Free')}
-          </span>
-        </nav>
-
         <main className="max-w-md mx-auto px-6 py-20 text-center">
           <div className="text-5xl mb-6">🔗</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -150,15 +141,6 @@ export default async function ClaimPage({ params }: PageProps) {
   if (result.is_claimed) {
     return (
       <div className="min-h-screen bg-white">
-        <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-          <Link href={`/${normalizedLang}`} className="text-2xl font-bold text-gray-900">
-            Nevumo
-          </Link>
-          <span className="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
-            {t(claimT, 'free_badge', '100% Free')}
-          </span>
-        </nav>
-
         <main className="max-w-md mx-auto px-6 py-20 text-center">
           <div className="text-5xl mb-6">✓</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -197,16 +179,6 @@ export default async function ClaimPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* NAV */}
-      <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <Link href={`/${normalizedLang}`} className="text-2xl font-bold text-gray-900">
-          Nevumo
-        </Link>
-        <span className="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">
-          {t(claimT, 'free_badge', '100% Free')}
-        </span>
-      </nav>
-
       {/* URGENCY BAR */}
       <div className="bg-amber-100 border-b border-amber-200">
         <div className="max-w-7xl mx-auto px-6 py-2 text-center text-sm text-amber-800">
@@ -216,10 +188,12 @@ export default async function ClaimPage({ params }: PageProps) {
 
       {/* CONTENT */}
       <main className="max-w-[520px] mx-auto px-6 py-12">
-        {/* Kicker */}
-        <div className="text-center mb-4">
-          <span className="text-blue-600 text-sm font-medium">
-            {t(claimT, 'kicker', 'Your profile is waiting')}
+        {/* Free badge pill */}
+        <div className="flex justify-center mb-4">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full
+                   bg-green-50 text-green-700 text-sm font-medium
+                   border border-green-200">
+            ✓ {t(claimT, 'free_badge', 'Free for providers')}
           </span>
         </div>
 
