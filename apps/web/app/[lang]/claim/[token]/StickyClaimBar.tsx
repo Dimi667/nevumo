@@ -32,8 +32,8 @@ export default function StickyClaimBar({
     >
       <a
         href={href}
-        className="block w-full bg-orange-500 text-white
-                   text-center py-4 rounded-xl font-bold text-lg"
+        className="block w-full bg-orange-500 text-white text-center
+                   py-4 rounded-xl font-bold text-lg"
       >
         {label}
       </a>

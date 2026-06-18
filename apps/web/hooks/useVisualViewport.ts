@@ -4,12 +4,12 @@ import { useEffect, useRef } from 'react'
 
 /**
  * Fixes iOS Safari dynamic toolbar hiding position:fixed elements.
- * Attaches Visual Viewport API listeners to dynamically adjust
- * the bottom position of a fixed element.
  *
- * Usage:
- *   const ref = useVisualViewport<HTMLDivElement>()
- *   <div ref={ref} className="fixed bottom-0 ...">
+ * Strategy: keep bottom:0 (layout viewport), compensate with
+ * translateY by the difference between layout and visual viewport.
+ * This is the approach recommended by Google Chrome team.
+ *
+ * Ref: https://developer.chrome.com/blog/visual-viewport-api
  */
 export function useVisualViewport<T extends HTMLElement>() {
   const ref = useRef<T>(null)
@@ -21,13 +21,13 @@ export function useVisualViewport<T extends HTMLElement>() {
     const update = () => {
       const el = ref.current
       if (!el) return
-      const offsetBottom =
-        window.innerHeight - vv.height - vv.offsetTop
-      el.style.bottom = `${Math.max(0, offsetBottom)}px` 
+      // Distance toolbar takes from visual viewport
+      const offset = window.innerHeight - vv.height - vv.offsetTop
+      el.style.transform = `translateY(${-Math.max(0, offset)}px)` 
     }
 
-    vv.addEventListener('resize', update)
-    vv.addEventListener('scroll', update)
+    vv.addEventListener('resize', update, { passive: true })
+    vv.addEventListener('scroll', update, { passive: true })
     update()
 
     return () => {
