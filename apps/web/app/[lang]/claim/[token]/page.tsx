@@ -261,10 +261,10 @@ export default async function ClaimPage({ params }: PageProps) {
         </div>
 
         {/* Benefits grid */}
-        <div className="grid grid-cols-3 gap-4 mb-8 [&>*]:min-w-0">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 [&>*]:min-w-0">
           <div className="bg-gray-50 rounded-xl p-4 text-center">
             <div className="text-2xl mb-2">💰</div>
-            <h4 className="font-semibold text-gray-900 text-sm mb-1 break-words">
+            <h4 className="font-semibold text-gray-900 text-sm mb-1">
               {t(claimT, 'benefit_1_title', 'No commission')}
             </h4>
             <p className="text-xs text-gray-600">
@@ -273,7 +273,7 @@ export default async function ClaimPage({ params }: PageProps) {
           </div>
           <div className="bg-gray-50 rounded-xl p-4 text-center">
             <div className="text-2xl mb-2">⚡</div>
-            <h4 className="font-semibold text-gray-900 text-sm mb-1 break-words">
+            <h4 className="font-semibold text-gray-900 text-sm mb-1">
               {t(claimT, 'benefit_2_title', 'Instant leads')}
             </h4>
             <p className="text-xs text-gray-600">
@@ -282,7 +282,7 @@ export default async function ClaimPage({ params }: PageProps) {
           </div>
           <div className="border-2 border-orange-500 rounded-xl p-4 text-center bg-orange-50">
             <div className="text-2xl mb-2">🎯</div>
-            <h4 className="font-semibold text-orange-600 text-sm mb-1 break-words">
+            <h4 className="font-semibold text-orange-600 text-sm mb-1">
               {t(claimT, 'benefit_3_title', 'Targeted clients')}
             </h4>
             <p className="text-xs text-orange-600">
