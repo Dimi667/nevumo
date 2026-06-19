@@ -41,7 +41,7 @@ export function useIsIOS26Plus(): boolean {
     // (Apple froze "CPU iPhone OS" at 18_x in Safari UA on iOS 26)
     const safariVersionMatch = ua.match(/Version\/(\d+)/)
     const safariVersion = safariVersionMatch
-      ? parseInt(safariVersionMatch[1], 10)
+      ? parseInt(safariVersionMatch[1] ?? '0', 10)
       : 0
     const isSafariOnIOS26 = safariVersion >= 26
 
@@ -49,7 +49,7 @@ export function useIsIOS26Plus(): boolean {
     // (they still report real OS version in CPU string)
     const osVersionMatch = ua.match(/CPU (?:iPhone )?OS (\d+)/)
     const osVersion = osVersionMatch
-      ? parseInt(osVersionMatch[1], 10)
+      ? parseInt(osVersionMatch[1] ?? '0', 10)
       : 0
     const isThirdPartyOnIOS26 = osVersion >= 26
 
