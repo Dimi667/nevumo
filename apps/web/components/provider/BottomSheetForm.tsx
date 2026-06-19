@@ -469,29 +469,32 @@ export default function BottomSheetForm({
         onClick={onClose}
       />
       {/* Sheet */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[90vh] overflow-y-auto transform transition-transform duration-300 ease-out"
+      <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[90vh] flex flex-col transform transition-transform duration-300 ease-out"
            style={{ transform: isOpen ? 'translateY(0)' : 'translateY(100%)' }}>
-        {/* X Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 bg-transparent border-0 text-[var(--color-text-secondary)] hover:text-gray-900 transition-colors z-10"
-          aria-label="Close"
-        >
-          <X size={20} />
-        </button>
-
         {/* Header */}
-        <div className="px-5 py-4 border-b border-gray-100 pr-12">
-          <h2 className="text-base font-semibold text-gray-900">
-            {t['form_title'] ?? 'Изпратете заявка'}
-          </h2>
-          <p className="text-xs text-gray-400 mt-0.5">
-            {t['request_panel_free'] ?? 'Безплатно'} · {t['request_panel_no_commitment'] ?? 'Без ангажимент'}
-          </p>
+        <div className="shrink-0">
+          <div className="relative px-5 py-4 border-b border-gray-100">
+            <h2 className="text-base font-semibold text-gray-900 pr-8">
+              {t['form_title'] ?? 'Изпратете заявка'}
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">
+              {t['request_panel_free'] ?? 'Безплатно'} · {t['request_panel_no_commitment'] ?? 'Без ангажимент'}
+            </p>
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 p-2 bg-transparent border-0 text-[var(--color-text-secondary)] hover:text-gray-900 transition-colors"
+              aria-label="Close"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="px-5 py-4 flex flex-col gap-3">
+        <form
+          id="bottom-sheet-form"
+          onSubmit={handleSubmit}
+          className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-3">
           {/* ServiceChips */}
           {(services ?? []).length > 0 && (
             <div>
@@ -558,19 +561,22 @@ export default function BottomSheetForm({
               {submitError}
             </p>
           )}
+        </form>
 
-          {/* CTAButton */}
+        {/* Footer with Submit Button */}
+        <div className="shrink-0 px-5 pb-4 pt-3 border-t border-gray-50">
           <button
             type="submit"
+            form="bottom-sheet-form"
             disabled={isSubmitting}
             className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white text-base font-semibold rounded-xl transition-colors truncate"
           >
             {isSubmitting ? (t['sending'] ?? 'Изпращане...') : (t['form_submit'] ?? 'Заявете услуга')}
           </button>
-        </form>
+        </div>
 
         {/* TrustRow */}
-        <div className="grid grid-cols-3 border-t border-gray-100">
+        <div className="shrink-0 grid grid-cols-3 border-t border-gray-100">
           <div className="flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400">
             <span>✓ {t['trust_verified'] ?? 'Верифициран'}</span>
           </div>
