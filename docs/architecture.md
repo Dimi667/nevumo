@@ -747,6 +747,49 @@ This separation ensures that:
   - **ROOT CAUSE**: `overflow-x: hidden` on `html` and `body` elements in `apps/web/app/globals.css` completely breaks `position: sticky` for all descendants.
   - **SOLUTION**:
     - Changed `overflow-x: hidden` to `overflow-x: clip` in both `html` and `body` selectors in `apps/web/app/globals.css`
+
+#### iOS 26 Safari Sticky Bar Solution (June 2026)
+
+**Problem:** iOS 26 Liquid Glass toolbar covers `position: fixed; bottom: 0` elements. Private mode and older iOS (≤18) work correctly. Only iOS 26+ normal mode is affected.
+
+**Detection:**
+- File: `apps/web/hooks/useIsIOS26Plus.ts`
+- Detects via `Version/26` in Safari UA string (Apple froze OS version in Safari UA, but Safari version still reveals iOS 26)
+- Also catches Chrome/Brave on iOS 26 via `CPU iPhone OS 26_`
+- When Apple fixes this → update ONLY useIsIOS26Plus.ts
+
+**Global wrapper:**
+- File: `apps/web/components/ui/StickyBottomBar.tsx`
+- Wraps ALL sticky bottom elements
+- iOS 26 → shows optional `fallback` prop instead
+- Non-iOS 26 → shows children normally
+- Registers/unregisters with StickyBarContext automatically
+
+**Cookie banner offset:**
+- File: `apps/web/contexts/StickyBarContext.tsx`
+- Sticky components register on mount, unregister on unmount
+- `CookieConsentBanner` reads `hasStickyBar`:
+  - true → `bottom-24` (above sticky bar)
+  - false → `bottom-0`
+
+**Applied to:**
+- StickyClaimBar (fallback: ClaimMobileCTA ×2)
+- StickyProviderCTA (fallback: ProviderMobileCTA ×2)
+- StickyLeadFormButton (no fallback — form inline)
+- ProviderWidget sticky button (fallback: inline button)
+- MobileStickyCTA — REMOVED from homepage entirely
+
+**Adding new sticky component (future):**
+1. Wrap with `<StickyBottomBar fallback={...}>`
+2. Remove useStickyBar from component (StickyBottomBar handles registration)
+3. Done — iOS 26 handled automatically
+
+#### BottomSheetForm iOS Scroll Fix (June 2026)
+- Root cause: `overflow-hidden` on `<form>` captured iOS touch events before reaching inner scroll div
+- Fix: moved `overflow-y: scroll` directly to `<form>` element
+- Body scroll lock (`position: fixed` on body) prevents page scroll while sheet is open
+- Structure: shrink-0 header + flex-1 form + shrink-0 footer
+- Submit button always visible (in footer, never scrolls away)
     - `overflow-x: clip` provides the same horizontal overflow prevention as `hidden` but does NOT break sticky positioning
     - Also corrected invalid Tailwind class `align-self-start` to `self-start` in `apps/web/components/provider/ProviderFullPage.tsx`
   - **Verification**: Tested with Playwright - element now sticks at exactly 24px (top-6) when scrolling instead of scrolling with page

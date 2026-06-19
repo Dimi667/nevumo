@@ -279,10 +279,26 @@ E2E тест June 17, 2026 (production):
 Bugs backlog преди Task 5A:
 🔴 already_claimed endpoint fix — статус непроменен
 🔴 Outreach email Jinja2 rendering — ✅ FIXED + FINALIZED June 19, 2026
-🟡 Двойно "Nevumo" на claim страницата — статус непроменен
-🟡 CTA above the fold — ✅ FIXED June 19, 2026
+✅ Bug 3 — Double "Nevumo" на claim страницата: COMPLETE (June 19, 2026)
+  - Removed custom header row (all 3 states)
+  - Removed kicker element
+  - Added free_badge green pill before hero title
+  - Benefit cards: responsive (1 col mobile, 3 col desktop)
+✅ Bug 4 — CTA above the fold на mobile: COMPLETE (June 19, 2026)
+  - Desktop: 2 inline CTAs
+  - iOS 26 mobile: 2 ClaimMobileCTA inline buttons
+  - Non-iOS 26 mobile: StickyClaimBar (Portal-based)
 ✅ Email лого на R2 — COMPLETE (June 18, 2026)
 ✅ Email subject lines — COMPLETE (June 18, 2026): category-based, под 50 символа, реални keyword данни
+
+### Architecture notes for claim page sticky bar:
+- StickyClaimBar uses React Portal (renders in document.body)
+- ClaimMobileCTA: iOS 26 only (useIsIOS26Plus)
+- Positions: after provider card + after time_signal element
+- Translation updates:
+  - claim.kicker — 34 languages, no brand name
+  - claim.hero_title — "Профилът е тук. Само го вземи!"
+  - claim.cta_register — "Вземи профила безплатно!"
 
 Next step: Task 2A — seed_unclaimed_providers.py → outreach_ready.csv
 (колони: email, business_name, claim_token, category)
