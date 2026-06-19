@@ -16,6 +16,7 @@ import { resolveStaticUrl } from '@/lib/urlUtils';
 import LegalModal from '@/components/auth/LegalModal';
 import { useTranslation } from '@/lib/use-translation';
 import { getAuthUser } from '@/lib/auth-store';
+import StickyBottomBar from '@/components/ui/StickyBottomBar';
 
 interface ProviderWidgetProps {
   provider: ProviderDetail;
@@ -806,15 +807,17 @@ export default function ProviderWidget({
           )}
 
           {/* Sticky button mobile / inline desktop */}
-          <div ref={stickyDivRef} className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-100">
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
-            >
-              {loading ? (translations['sending'] ?? 'Изпращане...') : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
-            </button>
-          </div>
+          <StickyBottomBar>
+            <div ref={stickyDivRef} className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-100">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
+              >
+                {loading ? (translations['sending'] ?? 'Изпращане...') : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
+              </button>
+            </div>
+          </StickyBottomBar>
         </form>
       </div>
 
