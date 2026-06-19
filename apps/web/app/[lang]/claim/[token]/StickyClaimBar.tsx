@@ -18,11 +18,19 @@ export default function StickyClaimBar({
   const isIOS26Plus = useIsIOS26Plus()
   const { register } = useStickyBar()
 
+  // Effect 1: mount only
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  // Effect 2: register sticky bar ONLY when actually visible
+  // isIOS26Plus starts false, becomes true after hydration on iOS 26
+  // When it becomes true: cleanup unregisters, new run returns early
+  useEffect(() => {
+    if (isIOS26Plus) return
     const unregister = register()
     return () => unregister()
-  }, [register])
+  }, [register, isIOS26Plus])
 
   if (isIOS26Plus) return null
   if (!mounted) return null
