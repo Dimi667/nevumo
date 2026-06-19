@@ -12,6 +12,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import CookieConsentBanner from "@/components/ui/CookieConsentBanner";
 import { FaviconManager } from "@/components/FaviconManager";
 import ServiceWorkerRegistration from "@/components/sw/ServiceWorkerRegistration";
+import { StickyBarProvider } from "@/contexts/StickyBarContext";
 
 // Глобалните стилове с Tailwind
 import "./globals.css";
@@ -119,11 +120,13 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f9f9f9]`}
       >
-        <FaviconManager />
-        <GoogleAnalytics />
-        {children}
-        <CookieConsentBanner lang={lang} />
-        <ServiceWorkerRegistration />
+        <StickyBarProvider>
+          <FaviconManager />
+          <GoogleAnalytics />
+          {children}
+          <CookieConsentBanner lang={lang} />
+          <ServiceWorkerRegistration />
+        </StickyBarProvider>
       </body>
     </html>
   );

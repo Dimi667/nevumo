@@ -2,23 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { useCookieConsent, type ConsentCategories } from '@/hooks/useCookieConsent';
 import { useTranslation } from '@/lib/use-translation';
 import { CookieSettingsButton } from '@/components/ui/CookieSettingsButton';
+import { useStickyBar } from '@/contexts/StickyBarContext';
 
 interface CookieConsentBannerProps {
   lang: string;
 }
 
 export default function CookieConsentBanner({ lang }: CookieConsentBannerProps) {
-  const pathname = usePathname();
-
-  // Homepage routes: /bg /pl /sr etc. (lang prefix only, no sub-path)
-  // These pages have no sticky bars → cookie banner sits at bottom-0
-  // All other pages may have sticky bars → bottom-24 clears them
-  const isHomepage = /^\/[a-z]{2}(-[A-Z]{2})?\/?$/.test(pathname);
-  const bannerBottom = isHomepage ? 'bottom-0' : 'bottom-24';
+  const { hasStickyBar } = useStickyBar();
+  const bannerBottom = hasStickyBar ? 'bottom-24' : 'bottom-0';
 
   const { showBanner, saveConsent, acceptAll, rejectAll, consentData, openSettings } = useCookieConsent();
   const { t } = useTranslation('cookie_banner', lang);

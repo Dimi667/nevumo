@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { useStickyBar } from '@/contexts/StickyBarContext'
 
 interface StickyProviderCTAProps {
   lang: string
@@ -17,8 +18,10 @@ export default function StickyProviderCTA({
 }: StickyProviderCTAProps) {
   const btnRef = useRef<HTMLDivElement>(null)
   const formId = 'provider-lead-form'
+  const { register } = useStickyBar()
 
   useEffect(() => {
+    const unregister = register()
     const btn = btnRef.current
     if (!btn) return
 
@@ -31,7 +34,7 @@ export default function StickyProviderCTA({
         }
         return
       }
-      
+
       const rect = formEl.getBoundingClientRect()
       const isFormInView = rect.top < window.innerHeight && rect.bottom > 0
       if (btnRef.current) {
@@ -41,8 +44,11 @@ export default function StickyProviderCTA({
 
     window.addEventListener('scroll', checkScroll, { passive: true })
     checkScroll()
-    return () => window.removeEventListener('scroll', checkScroll)
-  }, [formId])
+    return () => {
+      window.removeEventListener('scroll', checkScroll)
+      unregister()
+    }
+  }, [formId, register])
 
   useEffect(() => {
     const btn = btnRef.current
