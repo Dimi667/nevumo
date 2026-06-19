@@ -469,7 +469,7 @@ export default function BottomSheetForm({
         onClick={onClose}
       />
       {/* Sheet */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[90vh] flex flex-col transform transition-transform duration-300 ease-out"
+      <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[90dvh] flex flex-col transform transition-transform duration-300 ease-out"
            style={{ transform: isOpen ? 'translateY(0)' : 'translateY(100%)' }}>
         {/* Header */}
         <div className="shrink-0">
@@ -494,7 +494,7 @@ export default function BottomSheetForm({
         <form
           id="bottom-sheet-form"
           onSubmit={handleSubmit}
-          className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-3">
+          className="flex-1 min-h-0 overflow-y-auto px-5 py-4 flex flex-col gap-3">
           {/* ServiceChips */}
           {(services ?? []).length > 0 && (
             <div>
