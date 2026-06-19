@@ -116,14 +116,37 @@ export default function BottomSheetForm({
   // Prevent body scroll when sheet is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      // Save current scroll position
+      const scrollY = window.scrollY
+      // Lock body scroll — iOS Safari scrolls body instead of
+      // inner element when body is not locked
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.left = '0'
+      document.body.style.right = '0'
+      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = '';
+      // Restore body scroll
+      const scrollY = document.body.style.top
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.left = ''
+      document.body.style.right = ''
+      document.body.style.overflow = ''
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1)
+      }
     }
+
     return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
+      // Cleanup on unmount
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.left = ''
+      document.body.style.right = ''
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
 
   // Social proof signal cascade logic
   const getSocialProofSignal = () => {
@@ -497,7 +520,12 @@ export default function BottomSheetForm({
           className="flex-1 min-h-0 overflow-hidden flex flex-col">
           <div
             className="flex-1 min-h-0 px-5 py-4 flex flex-col gap-3"
-            style={{ overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}
+            style={{
+              overflowY: 'scroll',
+              WebkitOverflowScrolling: 'touch',
+              touchAction: 'pan-y',
+              overscrollBehavior: 'contain',
+            }}
           >
             {/* ServiceChips */}
             {(services ?? []).length > 0 && (
