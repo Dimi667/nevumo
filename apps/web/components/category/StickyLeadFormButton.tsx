@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useStickyBar } from '@/contexts/StickyBarContext'
+import StickyBottomBar from '@/components/ui/StickyBottomBar'
 
 interface Props {
   label: string
@@ -55,25 +56,27 @@ export default function StickyLeadFormButton({
   }, [])
 
   return (
-    <div
-      ref={btnRef}
-      style={{ 
-        transform: 'translateY(100%)',
-        transition: 'transform 0.3s ease'
-      }}
-      className="fixed bottom-0 left-0 right-0 z-[9999] bg-white border-t border-gray-100 p-4 md:hidden"
-    >
-      <button
-        onClick={() => {
-          const formEl = document.getElementById(formId)
-          if (formEl) {
-            formEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          }
+    <StickyBottomBar>
+      <div
+        ref={btnRef}
+        style={{
+          transform: 'translateY(100%)',
+          transition: 'transform 0.3s ease'
         }}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base"
+        className="fixed bottom-0 left-0 right-0 z-[9999] bg-white border-t border-gray-100 p-4 md:hidden"
       >
-        {label}
-      </button>
-    </div>
+        <button
+          onClick={() => {
+            const formEl = document.getElementById(formId)
+            if (formEl) {
+              formEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }
+          }}
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base"
+        >
+          {label}
+        </button>
+      </div>
+    </StickyBottomBar>
   )
 }

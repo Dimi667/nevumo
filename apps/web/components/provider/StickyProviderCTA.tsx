@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useStickyBar } from '@/contexts/StickyBarContext'
-import { useIsIOS26Plus } from '@/hooks/useIsIOS26Plus'
+import StickyBottomBar from '@/components/ui/StickyBottomBar'
 
 interface StickyProviderCTAProps {
   lang: string
@@ -11,7 +11,7 @@ interface StickyProviderCTAProps {
   onOpenSheet: () => void
 }
 
-export default function StickyProviderCTA({ 
+export default function StickyProviderCTA({
   lang,
   translations,
   providerName,
@@ -20,7 +20,6 @@ export default function StickyProviderCTA({
   const btnRef = useRef<HTMLDivElement>(null)
   const formId = 'provider-lead-form'
   const { register } = useStickyBar()
-  const isIOS26Plus = useIsIOS26Plus()
 
   // Effect 1: scroll visibility logic (unchanged)
   useEffect(() => {
@@ -51,12 +50,11 @@ export default function StickyProviderCTA({
     }
   }, [formId])
 
-  // Effect 2: register sticky bar ONLY when visible (not iOS 26)
+  // Effect 2: register sticky bar
   useEffect(() => {
-    if (isIOS26Plus) return
     const unregister = register()
     return () => unregister()
-  }, [register, isIOS26Plus])
+  }, [register])
 
   useEffect(() => {
     const btn = btnRef.current
@@ -75,23 +73,23 @@ export default function StickyProviderCTA({
     }
   }, [])
 
-  if (isIOS26Plus) return null
-
   return (
-    <div
-      ref={btnRef}
-      style={{ 
-        transform: 'translateY(100%)',
-        transition: 'transform 0.3s ease'
-      }}
-      className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 p-4 md:hidden"
-    >
-      <button
-        onClick={onOpenSheet}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base truncate"
+    <StickyBottomBar>
+      <div
+        ref={btnRef}
+        style={{
+          transform: 'translateY(100%)',
+          transition: 'transform 0.3s ease'
+        }}
+        className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 p-4 md:hidden"
       >
-        {translations['cta_button']} {providerName}
-      </button>
-    </div>
+        <button
+          onClick={onOpenSheet}
+          className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base truncate"
+        >
+          {translations['cta_button']} {providerName}
+        </button>
+      </div>
+    </StickyBottomBar>
   )
 }
