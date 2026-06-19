@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useIsIOS26Plus } from '@/hooks/useIsIOS26Plus';
 
 interface MobileStickyCTAProps {
   children: React.ReactNode;
@@ -10,6 +11,9 @@ export default function MobileStickyCTA({ children }: MobileStickyCTAProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [transform, setTransform] = useState('translateY(0)');
   const mobileRef = useRef<HTMLDivElement>(null);
+  const isIOS26Plus = useIsIOS26Plus();
+
+  if (isIOS26Plus) return null;
 
   useEffect(() => {
     setIsMounted(true);
