@@ -721,10 +721,17 @@ export default function ProviderWidget({
 
       {/* Form Header */}
       <div className="px-6 py-4 border-b border-gray-100">
-        <h2 className="text-base font-semibold text-gray-700 mb-2 text-center">
-          {t('send_request_to', undefined, 'Send request to')} {provider.business_name}
-        </h2>
-        <p className="text-sm text-gray-400 text-center">
+        <button
+          type="submit"
+          form="widget-lead-form"
+          disabled={loading}
+          className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
+        >
+          {loading
+            ? (translations['sending'] ?? 'Изпращане...')
+            : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
+        </button>
+        <p className="text-sm text-gray-400 text-center mt-2">
           {t('disclaimer', undefined, 'Free request • No obligation')}
         </p>
       </div>
@@ -759,19 +766,6 @@ export default function ProviderWidget({
 
       {/* Form */}
       <div id="widget-form" className="px-6 py-6">
-
-        <div className="pb-4">
-          <button
-            type="submit"
-            form="widget-lead-form"
-            disabled={loading}
-            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
-          >
-            {loading
-              ? (translations['sending'] ?? 'Изпращане...')
-              : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
-          </button>
-        </div>
 
         <form id="widget-lead-form" onSubmit={handleSubmit} className="space-y-4">
           <div ref={phoneRef}>
