@@ -6,6 +6,7 @@ import { createLead, claimLeadEmail, type ProviderDetail, getCityBySlug, type Ci
 import { checkEmail } from '@/lib/auth-api';
 import { usePhone } from '@/hooks/usePhone';
 import { usePhoneValidation } from '@/hooks/usePhoneValidation';
+import { useIsIOS26Plus } from '@/hooks/useIsIOS26Plus';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { getPhonePrefix } from '@/lib/phoneUtils';
 import PWAInstallPrompt from '@/components/pwa/PWAInstallPrompt';
@@ -228,6 +229,7 @@ export default function ProviderWidget({
   const phoneRef = useRef<HTMLDivElement>(null);
   const stickyDivRef = useRef<HTMLDivElement>(null);
   const { isValid } = usePhoneValidation(phoneValue, cityInfo?.country_code || 'BG');
+  const isIOS26Plus = useIsIOS26Plus();
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const [descriptionValue, setDescriptionValue] = useState('');
   const [serviceNoteError, setServiceNoteError] = useState<string | null>(null);
@@ -721,16 +723,18 @@ export default function ProviderWidget({
 
       {/* Form Header */}
       <div className="px-6 py-4 border-b border-gray-100">
-        <button
-          type="submit"
-          form="widget-lead-form"
-          disabled={loading}
-          className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
-        >
-          {loading
-            ? (translations['sending'] ?? 'Изпращане...')
-            : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
-        </button>
+        {isIOS26Plus && (
+          <button
+            type="submit"
+            form="widget-lead-form"
+            disabled={loading}
+            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
+          >
+            {loading
+              ? (translations['sending'] ?? 'Изпращане...')
+              : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
+          </button>
+        )}
         <p className="text-sm text-gray-400 text-center mt-2">
           {t('disclaimer', undefined, 'Free request • No obligation')}
         </p>
