@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import StickyClaimBar from './StickyClaimBar';
+import ClaimMobileCTA from './ClaimMobileCTA';
 
 interface PageProps {
   params: Promise<{ lang: string; token: string }>;
@@ -227,6 +228,11 @@ export default async function ClaimPage({ params }: PageProps) {
           </div>
         </div>
 
+        <ClaimMobileCTA
+          href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+          label={t(claimT, 'cta_register', 'Register and claim this profile for free')}
+        />
+
         {/* Primary CTA (top) */}
         <div id="cta-top" className="hidden sm:block mb-8">
           {isAuthenticated ? (
@@ -377,6 +383,11 @@ export default async function ClaimPage({ params }: PageProps) {
           <span>⏱️</span>
           <span>{t(claimT, 'time_signal', 'Takes less than 2 minutes')}</span>
         </div>
+
+        <ClaimMobileCTA
+          href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+          label={t(claimT, 'cta_register', 'Register and claim this profile for free')}
+        />
 
         {/* Divider and ghost link (if not authenticated) */}
         {!isAuthenticated && (

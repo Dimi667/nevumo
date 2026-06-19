@@ -13,7 +13,7 @@ TRANSLATIONS = {
     "bg": {
         "urgency": "Профилът ви е видим за клиенти — но заявките им отиват към конкуренти",
         "kicker": "Намерихме вашата фирма в Nevumo",
-        "hero_title": "Той е тук. Трябва само вие да го вземете.",
+        "hero_title": "Профилът е тук. Само го вземи!",
         "your_profile_badge": "Вашият профил",
         "leads_title": "Последни заявки от клиенти",
         "leads_overlay": "Заяви профила за да виждаш заявките",
@@ -50,7 +50,7 @@ TRANSLATIONS = {
     "cs": {
         "urgency": "Váš profil je viditelný pro klienty — ale jejich poptávky jdou ke konkurenci",
         "kicker": "Našli jsme vaši firmu na Nevumo",
-        "hero_title": "Je tady. Potřebuje jen vás.",
+        "hero_title": "Profil je tady. Jen si ho vezmi!",
         "your_profile_badge": "Váš profil",
         "leads_title": "Poslední poptávky od klientů",
         "leads_overlay": "Převezměte profil a zobrazte si poptávky",
@@ -87,7 +87,7 @@ TRANSLATIONS = {
     "da": {
         "urgency": "Din profil er synlig for kunder — men deres anmodninger går til konkurrenter",
         "kicker": "Vi fandt din virksomhed på Nevumo",
-        "hero_title": "Den er her. Den venter bare på dig.",
+        "hero_title": "Profilen er her. Tag den bare!",
         "your_profile_badge": "Din profil",
         "leads_title": "Seneste kundeforespørgsler",
         "leads_overlay": "Tag profilen for at se forespørgsler",
@@ -124,7 +124,7 @@ TRANSLATIONS = {
     "de": {
         "urgency": "Ihr Profil ist für Kunden sichtbar — aber deren Anfragen gehen an Ihre Konkurrenz",
         "kicker": "Wir haben Ihr Unternehmen auf Nevumo gefunden",
-        "hero_title": "Es ist da. Es wartet nur auf Sie.",
+        "hero_title": "Das Profil ist hier. Hol es dir!",
         "your_profile_badge": "Ihr Profil",
         "leads_title": "Neueste Kundenanfragen",
         "leads_overlay": "Profil übernehmen, um Anfragen zu sehen",
@@ -161,7 +161,7 @@ TRANSLATIONS = {
     "el": {
         "urgency": "Το προφίλ σας είναι ορατό στους πελάτες — αλλά τα αιτήματά τους πηγαίνουν στους ανταγωνιστές",
         "kicker": "Βρήκαμε την επιχείρησή σας στο Nevumo",
-        "hero_title": "Είναι εδώ. Περιμένει μόνο εσάς.",
+        "hero_title": "Το προφίλ είναι εδώ. Απλά πάρτε το!",
         "your_profile_badge": "Το προφίλ σας",
         "leads_title": "Τελευταία αιτήματα πελατών",
         "leads_overlay": "Αξιώστε το προφίλ για να δείτε τα αιτήματα",
@@ -198,7 +198,7 @@ TRANSLATIONS = {
     "en": {
         "urgency": "Your profile is visible to clients — but their requests are going to your competitors",
         "kicker": "We found your business on Nevumo",
-        "hero_title": "It's here. It just needs you.",
+        "hero_title": "The profile is here. Just claim it!",
         "your_profile_badge": "Your profile",
         "leads_title": "Latest client requests",
         "leads_overlay": "Claim your profile to see requests",
@@ -235,7 +235,7 @@ TRANSLATIONS = {
     "es": {
         "urgency": "Tu perfil es visible para los clientes — pero sus solicitudes van a tus competidores",
         "kicker": "Encontramos tu empresa en Nevumo",
-        "hero_title": "Está aquí. Solo te necesita a ti.",
+        "hero_title": "El perfil está aquí. ¡Solo tómalo!",
         "your_profile_badge": "Tu perfil",
         "leads_title": "Últimas solicitudes de clientes",
         "leads_overlay": "Reclama el perfil para ver las solicitudes",
@@ -272,7 +272,7 @@ TRANSLATIONS = {
     "et": {
         "urgency": "Teie profiil on klientidele nähtav — kuid nende päringud lähevad konkurentidele",
         "kicker": "Leidsime teie ettevõtte Nevumolt",
-        "hero_title": "See on siin. See ootab ainult teid.",
+        "hero_title": "Profiil on siin. Võta see lihtsalt!",
         "your_profile_badge": "Teie profiil",
         "leads_title": "Viimased klientide päringud",
         "leads_overlay": "Võtke profiil üle, et näha päringuid",
@@ -309,7 +309,7 @@ TRANSLATIONS = {
     "fi": {
         "urgency": "Profiilisi on asiakkaiden näkyvissä — mutta heidän pyyntönsä menevät kilpailijoillesi",
         "kicker": "Löysimme yrityksesi Nevumosta",
-        "hero_title": "Se on täällä. Se odottaa vain sinua.",
+        "hero_title": "Profiili on täällä. Ota se vain!",
         "your_profile_badge": "Sinun profiilisi",
         "leads_title": "Viimeisimmät asiakaspyynnöt",
         "leads_overlay": "Ota profiili haltuun nähdäksesi pyynnöt",
@@ -346,7 +346,7 @@ TRANSLATIONS = {
     "fr": {
         "urgency": "Votre profil est visible par les clients — mais leurs demandes vont à vos concurrents",
         "kicker": "Nous avons trouvé votre entreprise sur Nevumo",
-        "hero_title": "Il est là. Il n'attend que vous.",
+        "hero_title": "Le profil est ici. Prenez-le!",
         "your_profile_badge": "Votre profil",
         "leads_title": "Dernières demandes de clients",
         "leads_overlay": "Revendiquez le profil pour voir les demandes",
@@ -383,7 +383,7 @@ TRANSLATIONS = {
     "ga": {
         "urgency": "Tá do phróifíl le feiceáil ag cliaint — ach téann a n-iarratais chuig do chuid iomaitheoirí",
         "kicker": "Fuaireamar do ghnólacht ar Nevumo",
-        "hero_title": "Tá sé anseo. Níl uaidh ach thú.",
+        "hero_title": "Tá an próifíl anseo. Glac léi!",
         "your_profile_badge": "Do phróifíl",
         "leads_title": "Na hiarratais is déanaí ó chliaint",
         "leads_overlay": "Éiligh an phróifíl chun iarratais a fheiceáil",
@@ -420,7 +420,7 @@ TRANSLATIONS = {
     "hr": {
         "urgency": "Vaš profil je vidljiv klijentima — ali njihovi zahtjevi idu konkurenciji",
         "kicker": "Pronašli smo vašu tvrtku na Nevumo",
-        "hero_title": "Ovdje je. Čeka samo vas.",
+        "hero_title": "Profil je ovdje. Samo ga preuzmite!",
         "your_profile_badge": "Vaš profil",
         "leads_title": "Najnoviji zahtjevi klijenata",
         "leads_overlay": "Preuzmite profil za prikaz zahtjeva",
@@ -457,7 +457,7 @@ TRANSLATIONS = {
     "hu": {
         "urgency": "Profilja látható az ügyfelek számára — de kéréseik a versenytársakhoz mennek",
         "kicker": "Megtaláltuk vállalkozását a Nevumón",
-        "hero_title": "Már itt van. Csak önre vár.",
+        "hero_title": "A profil itt van. Csak vedd át!",
         "your_profile_badge": "Az ön profilja",
         "leads_title": "Legutóbbi ügyfélkérések",
         "leads_overlay": "Igényelje a profilt a kérések megtekintéséhez",
@@ -494,7 +494,7 @@ TRANSLATIONS = {
     "is": {
         "urgency": "Prófíllinn þinn er sýnilegur viðskiptavinum — en beiðnir þeirra fara til keppinautanna",
         "kicker": "Við fundum fyrirtæki þitt á Nevumo",
-        "hero_title": "Hann er hér. Hann bíður bara eftir þér.",
+        "hero_title": "Prófíllinn er hér. Taktu hann bara!",
         "your_profile_badge": "Prófíllinn þinn",
         "leads_title": "Nýjustu beiðnir viðskiptavina",
         "leads_overlay": "Taktu yfir prófílinn til að sjá beiðnir",
@@ -531,7 +531,7 @@ TRANSLATIONS = {
     "it": {
         "urgency": "Il tuo profilo è visibile ai clienti — ma le loro richieste vanno ai tuoi concorrenti",
         "kicker": "Abbiamo trovato la tua azienda su Nevumo",
-        "hero_title": "È qui. Aspetta solo te.",
+        "hero_title": "Il profilo è qui. Prendilo!",
         "your_profile_badge": "Il tuo profilo",
         "leads_title": "Ultime richieste dei clienti",
         "leads_overlay": "Rivendica il profilo per vedere le richieste",
@@ -568,7 +568,7 @@ TRANSLATIONS = {
     "lb": {
         "urgency": "Äre Profil ass fir Clienten siichtbar — mä hir Ufroe ginn un d'Konkurrenz",
         "kicker": "Mir hunn Äre Betrib op Nevumo fonnt",
-        "hero_title": "Hien ass do. Hien waert nëmmen op Iech.",
+        "hero_title": "De Profil ass hei. Huel him einfach!",
         "your_profile_badge": "Äre Profil",
         "leads_title": "Lescht Ufroe vun Clienten",
         "leads_overlay": "Huel de Profil fir d'Ufroe ze gesinn",
@@ -605,7 +605,7 @@ TRANSLATIONS = {
     "lt": {
         "urgency": "Jūsų profilis matomas klientams — tačiau jų užklausos atitenka konkurentams",
         "kicker": "Radome jūsų įmonę Nevumo",
-        "hero_title": "Jis čia. Laukia tik jūsų.",
+        "hero_title": "Profilis čia. Tiesiog paimkite jį!",
         "your_profile_badge": "Jūsų profilis",
         "leads_title": "Naujausios klientų užklausos",
         "leads_overlay": "Perimkite profilį, kad matytumėte užklausas",
@@ -642,7 +642,7 @@ TRANSLATIONS = {
     "lv": {
         "urgency": "Jūsu profils ir redzams klientiem — taču viņu pieprasījumi nonāk pie konkurentiem",
         "kicker": "Mēs atradām jūsu uzņēmumu Nevumo",
-        "hero_title": "Tas ir šeit. Tas tikai gaida jūs.",
+        "hero_title": "Profils ir šeit. Vienkārši ņemiet to!",
         "your_profile_badge": "Jūsu profils",
         "leads_title": "Jaunākie klientu pieprasījumi",
         "leads_overlay": "Pārņemiet profilu, lai redzētu pieprasījumus",

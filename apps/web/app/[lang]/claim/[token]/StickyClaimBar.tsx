@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useIsIOS26Plus } from '@/hooks/useIsIOS26Plus'
 
 interface StickyClaimBarProps {
   href: string
@@ -14,6 +15,7 @@ export default function StickyClaimBar({
 }: StickyClaimBarProps) {
   const [mounted, setMounted] = useState(false)
   const [visible, setVisible] = useState(true)
+  const isIOS26Plus = useIsIOS26Plus()
 
   useEffect(() => {
     setMounted(true)
@@ -43,6 +45,7 @@ export default function StickyClaimBar({
     return () => document.removeEventListener('scroll', onScroll)
   }, [])
 
+  if (isIOS26Plus) return null
   if (!mounted) return null
 
   return createPortal(
