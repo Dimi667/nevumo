@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCookieConsent, type ConsentCategories } from '@/hooks/useCookieConsent';
 import { useTranslation } from '@/lib/use-translation';
 import { CookieSettingsButton } from '@/components/ui/CookieSettingsButton';
@@ -11,6 +12,14 @@ interface CookieConsentBannerProps {
 }
 
 export default function CookieConsentBanner({ lang }: CookieConsentBannerProps) {
+  const pathname = usePathname();
+
+  // Homepage routes: /bg /pl /sr etc. (lang prefix only, no sub-path)
+  // These pages have no sticky bars → cookie banner sits at bottom-0
+  // All other pages may have sticky bars → bottom-24 clears them
+  const isHomepage = /^\/[a-z]{2}(-[A-Z]{2})?\/?$/.test(pathname);
+  const bannerBottom = isHomepage ? 'bottom-0' : 'bottom-24';
+
   const { showBanner, saveConsent, acceptAll, rejectAll, consentData, openSettings } = useCookieConsent();
   const { t } = useTranslation('cookie_banner', lang);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -71,7 +80,7 @@ export default function CookieConsentBanner({ lang }: CookieConsentBannerProps) 
   };
 
   return (
-    <div data-testid="cookie-banner" className="fixed bottom-24 sm:bottom-0 left-0 right-0 z-[9998] bg-gray-900 text-white p-4 md:p-6 shadow-2xl transition-all duration-300 pointer-events-none">
+    <div data-testid="cookie-banner" className={`fixed ${bannerBottom} sm:bottom-0 left-0 right-0 z-[9998] bg-gray-900 text-white p-4 md:p-6 shadow-2xl transition-all duration-300 pointer-events-none`}>
       <div className="max-w-7xl mx-auto pointer-events-auto">
         {!isExpanded ? (
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
