@@ -1,0 +1,2510 @@
+=== STARTING BOTTOMSHEET SCROLL DIAGNOSTIC ===
+
+TEST 1: Chrome Mobile (Chromium)
+=====================================
+
+Navigating to: https://nevumo.com/bg/sofia/cleaning/lili
+Page title: Лили | Почистване | Nevumo
+Current URL: https://nevumo.com/bg/sofia/cleaning/lili
+Body text preview: София
+›
+Почистване
+›
+Лили
+Лили
+
+Почистване
+
+София
+
+⚡ Нов в Nevumo — отговаря бързо
+5
+Услуги
+8
+Завършени услуги
+Сподели
+Свържи ме с Лили
+За специалиста
+
+Почистване на прозорци и витрини
+
+Услуги и цени
+
+Initial buttons count: 27
+Accepting cookies
+Total buttons found after cookie accept: 24
+Clicking on "Свържи ме с Лили" button
+=== DEBUG: Fixed bottom elements ===
+[
+  {
+    "tag": "DIV",
+    "class": "fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[85dvh] flex flex-col transform transition-transform duration-300 ease-out",
+    "style": "transform: translateY(0px);"
+  }
+]
+=== CHROME MOBILE SCROLL INFO ===
+{
+  "depth": 0,
+  "tag": "DIV",
+  "id": null,
+  "class": "fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[85dvh] flex flex-col transform tran",
+  "computed": {
+    "overflow": "visible",
+    "overflowY": "visible",
+    "overflowX": "visible",
+    "height": "564.398px",
+    "maxHeight": "564.4px",
+    "minHeight": "0px",
+    "display": "flex",
+    "flexDirection": "column",
+    "flex": "0 1 auto",
+    "position": "fixed",
+    "touchAction": "auto"
+  },
+  "scroll": {
+    "scrollHeight": 564,
+    "clientHeight": 564,
+    "scrollTop": 0,
+    "canScroll": false
+  },
+  "childCount": 4,
+  "children": [
+    {
+      "depth": 1,
+      "tag": "DIV",
+      "id": null,
+      "class": "shrink-0 bg-white",
+      "computed": {
+        "overflow": "visible",
+        "overflowY": "visible",
+        "overflowX": "visible",
+        "height": "75px",
+        "maxHeight": "none",
+        "minHeight": "auto",
+        "display": "block",
+        "flexDirection": "row",
+        "flex": "0 0 auto",
+        "position": "static",
+        "touchAction": "auto"
+      },
+      "scroll": {
+        "scrollHeight": 75,
+        "clientHeight": 75,
+        "scrollTop": 0,
+        "canScroll": false
+      },
+      "childCount": 1,
+      "children": [
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "relative px-5 py-4 border-b border-gray-100",
+          "computed": {
+            "overflow": "visible",
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "height": "75px",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "block",
+            "flexDirection": "row",
+            "flex": "0 1 auto",
+            "position": "relative",
+            "touchAction": "auto"
+          },
+          "scroll": {
+            "scrollHeight": 74,
+            "clientHeight": 74,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "childCount": 3,
+          "children": [
+            {
+              "depth": 3,
+              "tag": "H2",
+              "id": null,
+              "class": "text-base font-semibold text-gray-900 pr-8",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "overflowX": "visible",
+                "height": "24px",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 24,
+                "clientHeight": 24,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "childCount": 0,
+              "children": []
+            },
+            {
+              "depth": 3,
+              "tag": "P",
+              "id": null,
+              "class": "text-xs text-gray-400 mt-0.5",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "overflowX": "visible",
+                "height": "16px",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 16,
+                "clientHeight": 16,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "childCount": 0,
+              "children": []
+            },
+            {
+              "depth": 3,
+              "tag": "BUTTON",
+              "id": null,
+              "class": "absolute top-4 right-4 p-2 bg-transparent border-0 text-[var(--color-text-secondary)] hover:text-gra",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "overflowX": "visible",
+                "height": "36px",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "absolute",
+                "touchAction": "manipulation"
+              },
+              "scroll": {
+                "scrollHeight": 36,
+                "clientHeight": 36,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "childCount": 1,
+              "children": [
+                {
+                  "depth": 4,
+                  "tag": "svg",
+                  "id": null,
+                  "class": "[object SVGAnimatedString]",
+                  "computed": {
+                    "overflow": "hidden",
+                    "overflowY": "hidden",
+                    "overflowX": "hidden",
+                    "height": "20px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "block",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 20,
+                    "clientHeight": 20,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "childCount": 2,
+                  "children": [
+                    {
+                      "depth": 5,
+                      "tag": "path",
+                      "id": null,
+                      "class": "[object SVGAnimatedString]",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "overflowX": "visible",
+                        "height": "auto",
+                        "maxHeight": "none",
+                        "minHeight": "0px",
+                        "display": "inline",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "auto"
+                      },
+                      "scroll": {
+                        "scrollHeight": 0,
+                        "clientHeight": 0,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "childCount": 0,
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "path",
+                      "id": null,
+                      "class": "[object SVGAnimatedString]",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "overflowX": "visible",
+                        "height": "auto",
+                        "maxHeight": "none",
+                        "minHeight": "0px",
+                        "display": "inline",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "auto"
+                      },
+                      "scroll": {
+                        "scrollHeight": 0,
+                        "clientHeight": 0,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "childCount": 0,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "depth": 1,
+      "tag": "FORM",
+      "id": "bottom-sheet-form",
+      "class": "flex-1 min-h-0 overflow-hidden flex flex-col",
+      "computed": {
+        "overflow": "hidden",
+        "overflowY": "hidden",
+        "overflowX": "hidden",
+        "height": "408.398px",
+        "maxHeight": "none",
+        "minHeight": "0px",
+        "display": "flex",
+        "flexDirection": "column",
+        "flex": "1 1 0%",
+        "position": "static",
+        "touchAction": "auto"
+      },
+      "scroll": {
+        "scrollHeight": 408,
+        "clientHeight": 408,
+        "scrollTop": 0,
+        "canScroll": false
+      },
+      "childCount": 1,
+      "children": [
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "flex-1 min-h-0 px-5 py-4 flex flex-col gap-3",
+          "computed": {
+            "overflow": "auto scroll",
+            "overflowY": "scroll",
+            "overflowX": "auto",
+            "height": "408.398px",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flex": "1 1 0%",
+            "position": "static",
+            "touchAction": "pan-y"
+          },
+          "scroll": {
+            "scrollHeight": 441,
+            "clientHeight": 408,
+            "scrollTop": 0,
+            "canScroll": true
+          },
+          "childCount": 4,
+          "children": [
+            {
+              "depth": 3,
+              "tag": "DIV",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "overflowX": "visible",
+                "height": "238px",
+                "maxHeight": "none",
+                "minHeight": "auto",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 238,
+                "clientHeight": 238,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "childCount": 2,
+              "children": [
+                {
+                  "depth": 4,
+                  "tag": "DIV",
+                  "id": null,
+                  "class": "flex flex-wrap gap-2 mb-2",
+                  "computed": {
+                    "overflow": "visible",
+                    "overflowY": "visible",
+                    "overflowX": "visible",
+                    "height": "214px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "flex",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 214,
+                    "clientHeight": 214,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "childCount": 5,
+                  "children": [
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "overflowX": "visible",
+                        "height": "46px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 44,
+                        "clientHeight": 44,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "childCount": 0,
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "overflowX": "visible",
+                        "height": "30px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 28,
+                        "clientHeight": 28,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "childCount": 0,
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "overflowX": "visible",
+                        "height": "30px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 28,
+                        "clientHeight": 28,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "childCount": 0,
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "overflowX": "visible",
+                        "height": "30px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 28,
+                        "clientHeight": 28,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "childCount": 0,
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "overflowX": "visible",
+                        "height": "46px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 44,
+                        "clientHeight": 44,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "childCount": 0,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "depth": 4,
+                  "tag": "P",
+                  "id": null,
+                  "class": "text-xs text-gray-500",
+                  "computed": {
+                    "overflow": "visible",
+                    "overflowY": "visible",
+                    "overflowX": "visible",
+                    "height": "16px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "block",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 16,
+                    "clientHeight": 16,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "childCount": 0,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "depth": 3,
+              "tag": "DIV",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "overflowX": "visible",
+                "height": "72.8516px",
+                "maxHeight": "none",
+                "minHeight": "auto",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 73,
+                "clientHeight": 73,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "childCount": 1,
+              "children": [
+                {
+                  "depth": 4,
+                  "tag": "DIV",
+                  "id": null,
+                  "class": "space-y-1 mb-0",
+                  "computed": {
+                    "overflow": "visible",
+                    "overflowY": "visible",
+                    "overflowX": "visible",
+                    "height": "72.8516px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "block",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 73,
+                    "clientHeight": 73,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "childCount": 2,
+                  "children": [
+                    {
+                      "depth": 5,
+                      "tag": "LABEL",
+                      "id": null,
+                      "class": "block text-sm font-bold text-gray-700",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "overflowX": "visible",
+                        "height": "20px",
+                        "maxHeight": "none",
+                        "minHeight": "0px",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "auto"
+                      },
+                      "scroll": {
+                        "scrollHeight": 20,
+                        "clientHeight": 20,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "childCount": 1,
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "INPUT",
+                      "id": null,
+                      "class": "w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-",
+                      "computed": {
+                        "overflow": "clip",
+                        "overflowY": "clip",
+                        "overflowX": "clip",
+                        "height": "48.8516px",
+                        "maxHeight": "none",
+                        "minHeight": "0px",
+                        "display": "inline-block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "auto"
+                      },
+                      "scroll": {
+                        "scrollHeight": 47,
+                        "clientHeight": 47,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "childCount": 0,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "depth": 3,
+              "tag": "TEXTAREA",
+              "id": null,
+              "class": "w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none foc",
+              "computed": {
+                "overflow": "auto",
+                "overflowY": "auto",
+                "overflowX": "auto",
+                "height": "22px",
+                "maxHeight": "none",
+                "minHeight": "auto",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 43,
+                "clientHeight": 20,
+                "scrollTop": 0,
+                "canScroll": true
+              },
+              "childCount": 0,
+              "children": []
+            },
+            {
+              "depth": 3,
+              "tag": "DIV",
+              "id": null,
+              "class": "bg-gray-50 rounded-xl p-3 text-xs text-gray-600",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "overflowX": "visible",
+                "height": "40px",
+                "maxHeight": "none",
+                "minHeight": "auto",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 40,
+                "clientHeight": 40,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "childCount": 1,
+              "children": [
+                {
+                  "depth": 4,
+                  "tag": "P",
+                  "id": null,
+                  "class": "",
+                  "computed": {
+                    "overflow": "visible",
+                    "overflowY": "visible",
+                    "overflowX": "visible",
+                    "height": "16px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "block",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 16,
+                    "clientHeight": 16,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "childCount": 0,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "depth": 1,
+      "tag": "DIV",
+      "id": null,
+      "class": "shrink-0 px-5 pb-4 pt-3 border-t border-gray-50",
+      "computed": {
+        "overflow": "visible",
+        "overflowY": "visible",
+        "overflowX": "visible",
+        "height": "81px",
+        "maxHeight": "none",
+        "minHeight": "auto",
+        "display": "block",
+        "flexDirection": "row",
+        "flex": "0 0 auto",
+        "position": "static",
+        "touchAction": "auto"
+      },
+      "scroll": {
+        "scrollHeight": 80,
+        "clientHeight": 80,
+        "scrollTop": 0,
+        "canScroll": false
+      },
+      "childCount": 1,
+      "children": [
+        {
+          "depth": 2,
+          "tag": "BUTTON",
+          "id": null,
+          "class": "w-full py-3.5 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white text-base font-sem",
+          "computed": {
+            "overflow": "hidden",
+            "overflowY": "hidden",
+            "overflowX": "hidden",
+            "height": "52px",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "inline-block",
+            "flexDirection": "row",
+            "flex": "0 1 auto",
+            "position": "static",
+            "touchAction": "manipulation"
+          },
+          "scroll": {
+            "scrollHeight": 52,
+            "clientHeight": 52,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "childCount": 0,
+          "children": []
+        }
+      ]
+    },
+    {
+      "depth": 1,
+      "tag": "DIV",
+      "id": null,
+      "class": "shrink-0 hidden sm:block grid grid-cols-3 border-t border-gray-100",
+      "computed": {
+        "overflow": "visible",
+        "overflowY": "visible",
+        "overflowX": "visible",
+        "height": "auto",
+        "maxHeight": "none",
+        "minHeight": "0px",
+        "display": "none",
+        "flexDirection": "row",
+        "flex": "0 0 auto",
+        "position": "static",
+        "touchAction": "auto"
+      },
+      "scroll": {
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "scrollTop": 0,
+        "canScroll": false
+      },
+      "childCount": 3,
+      "children": [
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400",
+          "computed": {
+            "overflow": "visible",
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "height": "auto",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flex": "0 1 auto",
+            "position": "static",
+            "touchAction": "auto"
+          },
+          "scroll": {
+            "scrollHeight": 0,
+            "clientHeight": 0,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "childCount": 1,
+          "children": [
+            {
+              "depth": 3,
+              "tag": "SPAN",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "overflowX": "visible",
+                "height": "auto",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 0,
+                "clientHeight": 0,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "childCount": 0,
+              "children": []
+            }
+          ]
+        },
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l border-gray-100",
+          "computed": {
+            "overflow": "visible",
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "height": "auto",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flex": "0 1 auto",
+            "position": "static",
+            "touchAction": "auto"
+          },
+          "scroll": {
+            "scrollHeight": 0,
+            "clientHeight": 0,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "childCount": 1,
+          "children": [
+            {
+              "depth": 3,
+              "tag": "SPAN",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "overflowX": "visible",
+                "height": "auto",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 0,
+                "clientHeight": 0,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "childCount": 0,
+              "children": []
+            }
+          ]
+        },
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l border-gray-100",
+          "computed": {
+            "overflow": "visible",
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "height": "auto",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flex": "0 1 auto",
+            "position": "static",
+            "touchAction": "auto"
+          },
+          "scroll": {
+            "scrollHeight": 0,
+            "clientHeight": 0,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "childCount": 1,
+          "children": [
+            {
+              "depth": 3,
+              "tag": "SPAN",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "overflowX": "visible",
+                "height": "auto",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 0,
+                "clientHeight": 0,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "childCount": 0,
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+=== CHROME SCROLL ATTEMPT RESULTS ===
+[
+  {
+    "tag": "DIV",
+    "class": "fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[85dvh] flex fle",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "shrink-0 bg-white",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "relative px-5 py-4 border-b border-gray-100",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "H2",
+    "class": "text-base font-semibold text-gray-900 pr-8",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "P",
+    "class": "text-xs text-gray-400 mt-0.5",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "absolute top-4 right-4 p-2 bg-transparent border-0 text-[var(--color-text-second",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "svg",
+    "class": "[object SVGAnimatedString]",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "path",
+    "class": "[object SVGAnimatedString]",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "path",
+    "class": "[object SVGAnimatedString]",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "FORM",
+    "class": "flex-1 min-h-0 overflow-hidden flex flex-col",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex-1 min-h-0 px-5 py-4 flex flex-col gap-3",
+    "scrolledFrom": 0,
+    "scrolledTo": 32.5,
+    "success": true
+  },
+  {
+    "tag": "DIV",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex flex-wrap gap-2 mb-2",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "P",
+    "class": "text-xs text-gray-500",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "space-y-1 mb-0",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "LABEL",
+    "class": "block text-sm font-bold text-gray-700",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "SPAN",
+    "class": "text-red-400 ml-1",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "INPUT",
+    "class": "w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gra",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "TEXTAREA",
+    "class": "w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-",
+    "scrolledFrom": 0,
+    "scrolledTo": 23,
+    "success": true
+  },
+  {
+    "tag": "DIV",
+    "class": "bg-gray-50 rounded-xl p-3 text-xs text-gray-600",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "P",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "shrink-0 px-5 pb-4 pt-3 border-t border-gray-50",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "w-full py-3.5 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-whit",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "shrink-0 hidden sm:block grid grid-cols-3 border-t border-gray-100",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "SPAN",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l ",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "SPAN",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l ",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  },
+  {
+    "tag": "SPAN",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "success": false
+  }
+]
+
+
+TEST 2: WebKit (Safari equivalent)
+=====================================
+
+Navigating to: https://nevumo.com/bg/sofia/cleaning/lili
+Page title: Лили | Почистване | Nevumo
+Current URL: https://nevumo.com/bg/sofia/cleaning/lili
+Body text preview: 
+София
+›
+Почистване
+›
+Лили
+
+Лили
+Почистване
+София
+⚡ Нов в Nevumo — отговаря бързо
+5
+Услуги
+8
+Завършени услуги
+
+Сподели
+Свържи ме с Лили
+За специалиста
+
+Почистване на прозорци и витрини
+Услуги и цени
+
+
+Initial buttons count: 27
+Accepting cookies
+Total buttons found after cookie accept: 24
+Clicking on "Свържи ме с Лили" button
+=== DEBUG: Fixed bottom elements ===
+[
+  {
+    "tag": "DIV",
+    "class": "fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[85dvh] flex flex-col transform transition-transform duration-300 ease-out",
+    "style": "transform: translateY(0px);"
+  }
+]
+=== WEBKIT SAFARI SCROLL INFO ===
+{
+  "depth": 0,
+  "tag": "DIV",
+  "id": null,
+  "class": "fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[85dvh] flex flex-col transform tran",
+  "computed": {
+    "overflow": "visible",
+    "overflowY": "visible",
+    "height": "564.390625px",
+    "maxHeight": "564.399963px",
+    "minHeight": "0px",
+    "display": "flex",
+    "flexDirection": "column",
+    "flex": "0 1 auto",
+    "position": "fixed",
+    "touchAction": "auto"
+  },
+  "scroll": {
+    "scrollHeight": 564,
+    "clientHeight": 564,
+    "scrollTop": 0,
+    "canScroll": false
+  },
+  "children": [
+    {
+      "depth": 1,
+      "tag": "DIV",
+      "id": null,
+      "class": "shrink-0 bg-white",
+      "computed": {
+        "overflow": "visible",
+        "overflowY": "visible",
+        "height": "74.984375px",
+        "maxHeight": "none",
+        "minHeight": "auto",
+        "display": "block",
+        "flexDirection": "row",
+        "flex": "0 0 auto",
+        "position": "static",
+        "touchAction": "auto"
+      },
+      "scroll": {
+        "scrollHeight": 75,
+        "clientHeight": 75,
+        "scrollTop": 0,
+        "canScroll": false
+      },
+      "children": [
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "relative px-5 py-4 border-b border-gray-100",
+          "computed": {
+            "overflow": "visible",
+            "overflowY": "visible",
+            "height": "74.984375px",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "block",
+            "flexDirection": "row",
+            "flex": "0 1 auto",
+            "position": "relative",
+            "touchAction": "auto"
+          },
+          "scroll": {
+            "scrollHeight": 74,
+            "clientHeight": 74,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "children": [
+            {
+              "depth": 3,
+              "tag": "H2",
+              "id": null,
+              "class": "text-base font-semibold text-gray-900 pr-8",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "height": "24px",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 24,
+                "clientHeight": 24,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "children": []
+            },
+            {
+              "depth": 3,
+              "tag": "P",
+              "id": null,
+              "class": "text-xs text-gray-400 mt-0.5",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "height": "15.984375px",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 16,
+                "clientHeight": 16,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "children": []
+            },
+            {
+              "depth": 3,
+              "tag": "BUTTON",
+              "id": null,
+              "class": "absolute top-4 right-4 p-2 bg-transparent border-0 text-[var(--color-text-secondary)] hover:text-gra",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "height": "36px",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "absolute",
+                "touchAction": "manipulation"
+              },
+              "scroll": {
+                "scrollHeight": 36,
+                "clientHeight": 36,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "children": [
+                {
+                  "depth": 4,
+                  "tag": "svg",
+                  "id": null,
+                  "class": "[object SVGAnimatedString]",
+                  "computed": {
+                    "overflow": "hidden",
+                    "overflowY": "hidden",
+                    "height": "20px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "block",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 20,
+                    "clientHeight": 20,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "children": [
+                    {
+                      "depth": 5,
+                      "tag": "path",
+                      "id": null,
+                      "class": "[object SVGAnimatedString]",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "height": "auto",
+                        "maxHeight": "none",
+                        "minHeight": "0px",
+                        "display": "inline",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "auto"
+                      },
+                      "scroll": {
+                        "scrollHeight": 0,
+                        "clientHeight": 0,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "path",
+                      "id": null,
+                      "class": "[object SVGAnimatedString]",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "height": "auto",
+                        "maxHeight": "none",
+                        "minHeight": "0px",
+                        "display": "inline",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "auto"
+                      },
+                      "scroll": {
+                        "scrollHeight": 0,
+                        "clientHeight": 0,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "depth": 1,
+      "tag": "FORM",
+      "id": "bottom-sheet-form",
+      "class": "flex-1 min-h-0 overflow-hidden flex flex-col",
+      "computed": {
+        "overflow": "hidden",
+        "overflowY": "hidden",
+        "height": "408.40625px",
+        "maxHeight": "none",
+        "minHeight": "0px",
+        "display": "flex",
+        "flexDirection": "column",
+        "flex": "1 1 0%",
+        "position": "static",
+        "touchAction": "auto"
+      },
+      "scroll": {
+        "scrollHeight": 408,
+        "clientHeight": 408,
+        "scrollTop": 0,
+        "canScroll": false
+      },
+      "children": [
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "flex-1 min-h-0 px-5 py-4 flex flex-col gap-3",
+          "computed": {
+            "overflow": "auto scroll",
+            "overflowY": "scroll",
+            "height": "408.40625px",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flex": "1 1 0%",
+            "position": "static",
+            "touchAction": "pan-y"
+          },
+          "scroll": {
+            "scrollHeight": 441,
+            "clientHeight": 408,
+            "scrollTop": 0,
+            "canScroll": true
+          },
+          "children": [
+            {
+              "depth": 3,
+              "tag": "DIV",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "height": "237.875px",
+                "maxHeight": "none",
+                "minHeight": "auto",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 238,
+                "clientHeight": 238,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "children": [
+                {
+                  "depth": 4,
+                  "tag": "DIV",
+                  "id": null,
+                  "class": "flex flex-wrap gap-2 mb-2",
+                  "computed": {
+                    "overflow": "visible",
+                    "overflowY": "visible",
+                    "height": "213.890625px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "flex",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 214,
+                    "clientHeight": 214,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "children": [
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "height": "45.96875px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 44,
+                        "clientHeight": 44,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "height": "29.984375px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 28,
+                        "clientHeight": 28,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "height": "29.984375px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 28,
+                        "clientHeight": 28,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "height": "29.984375px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 28,
+                        "clientHeight": 28,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "BUTTON",
+                      "id": null,
+                      "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-gray-300 text-gray-6",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "height": "45.96875px",
+                        "maxHeight": "none",
+                        "minHeight": "auto",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "manipulation"
+                      },
+                      "scroll": {
+                        "scrollHeight": 44,
+                        "clientHeight": 44,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "depth": 4,
+                  "tag": "P",
+                  "id": null,
+                  "class": "text-xs text-gray-500",
+                  "computed": {
+                    "overflow": "visible",
+                    "overflowY": "visible",
+                    "height": "15.984375px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "block",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 16,
+                    "clientHeight": 16,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "depth": 3,
+              "tag": "DIV",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "height": "72.84375px",
+                "maxHeight": "none",
+                "minHeight": "auto",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 73,
+                "clientHeight": 73,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "children": [
+                {
+                  "depth": 4,
+                  "tag": "DIV",
+                  "id": null,
+                  "class": "space-y-1 mb-0",
+                  "computed": {
+                    "overflow": "visible",
+                    "overflowY": "visible",
+                    "height": "72.84375px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "block",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 73,
+                    "clientHeight": 73,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "children": [
+                    {
+                      "depth": 5,
+                      "tag": "LABEL",
+                      "id": null,
+                      "class": "block text-sm font-bold text-gray-700",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "height": "20px",
+                        "maxHeight": "none",
+                        "minHeight": "0px",
+                        "display": "block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "auto"
+                      },
+                      "scroll": {
+                        "scrollHeight": 20,
+                        "clientHeight": 20,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "children": []
+                    },
+                    {
+                      "depth": 5,
+                      "tag": "INPUT",
+                      "id": null,
+                      "class": "w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-",
+                      "computed": {
+                        "overflow": "visible",
+                        "overflowY": "visible",
+                        "height": "48.84375px",
+                        "maxHeight": "none",
+                        "minHeight": "0px",
+                        "display": "inline-block",
+                        "flexDirection": "row",
+                        "flex": "0 1 auto",
+                        "position": "static",
+                        "touchAction": "auto"
+                      },
+                      "scroll": {
+                        "scrollHeight": 47,
+                        "clientHeight": 47,
+                        "scrollTop": 0,
+                        "canScroll": false
+                      },
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "depth": 3,
+              "tag": "TEXTAREA",
+              "id": null,
+              "class": "w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none foc",
+              "computed": {
+                "overflow": "auto",
+                "overflowY": "auto",
+                "height": "22px",
+                "maxHeight": "none",
+                "minHeight": "auto",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 43,
+                "clientHeight": 20,
+                "scrollTop": 0,
+                "canScroll": true
+              },
+              "children": []
+            },
+            {
+              "depth": 3,
+              "tag": "DIV",
+              "id": null,
+              "class": "bg-gray-50 rounded-xl p-3 text-xs text-gray-600",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "height": "39.984375px",
+                "maxHeight": "none",
+                "minHeight": "auto",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 40,
+                "clientHeight": 40,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "children": [
+                {
+                  "depth": 4,
+                  "tag": "P",
+                  "id": null,
+                  "class": "",
+                  "computed": {
+                    "overflow": "visible",
+                    "overflowY": "visible",
+                    "height": "15.984375px",
+                    "maxHeight": "none",
+                    "minHeight": "0px",
+                    "display": "block",
+                    "flexDirection": "row",
+                    "flex": "0 1 auto",
+                    "position": "static",
+                    "touchAction": "auto"
+                  },
+                  "scroll": {
+                    "scrollHeight": 16,
+                    "clientHeight": 16,
+                    "scrollTop": 0,
+                    "canScroll": false
+                  },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "depth": 1,
+      "tag": "DIV",
+      "id": null,
+      "class": "shrink-0 px-5 pb-4 pt-3 border-t border-gray-50",
+      "computed": {
+        "overflow": "visible",
+        "overflowY": "visible",
+        "height": "81px",
+        "maxHeight": "none",
+        "minHeight": "auto",
+        "display": "block",
+        "flexDirection": "row",
+        "flex": "0 0 auto",
+        "position": "static",
+        "touchAction": "auto"
+      },
+      "scroll": {
+        "scrollHeight": 80,
+        "clientHeight": 80,
+        "scrollTop": 0,
+        "canScroll": false
+      },
+      "children": [
+        {
+          "depth": 2,
+          "tag": "BUTTON",
+          "id": null,
+          "class": "w-full py-3.5 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white text-base font-sem",
+          "computed": {
+            "overflow": "hidden",
+            "overflowY": "hidden",
+            "height": "52px",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "inline-block",
+            "flexDirection": "row",
+            "flex": "0 1 auto",
+            "position": "static",
+            "touchAction": "manipulation"
+          },
+          "scroll": {
+            "scrollHeight": 52,
+            "clientHeight": 52,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "depth": 1,
+      "tag": "DIV",
+      "id": null,
+      "class": "shrink-0 hidden sm:block grid grid-cols-3 border-t border-gray-100",
+      "computed": {
+        "overflow": "visible",
+        "overflowY": "visible",
+        "height": "auto",
+        "maxHeight": "none",
+        "minHeight": "0px",
+        "display": "none",
+        "flexDirection": "row",
+        "flex": "0 0 auto",
+        "position": "static",
+        "touchAction": "auto"
+      },
+      "scroll": {
+        "scrollHeight": 0,
+        "clientHeight": 0,
+        "scrollTop": 0,
+        "canScroll": false
+      },
+      "children": [
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400",
+          "computed": {
+            "overflow": "visible",
+            "overflowY": "visible",
+            "height": "auto",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flex": "0 1 auto",
+            "position": "static",
+            "touchAction": "auto"
+          },
+          "scroll": {
+            "scrollHeight": 0,
+            "clientHeight": 0,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "children": [
+            {
+              "depth": 3,
+              "tag": "SPAN",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "height": "auto",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 0,
+                "clientHeight": 0,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l border-gray-100",
+          "computed": {
+            "overflow": "visible",
+            "overflowY": "visible",
+            "height": "auto",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flex": "0 1 auto",
+            "position": "static",
+            "touchAction": "auto"
+          },
+          "scroll": {
+            "scrollHeight": 0,
+            "clientHeight": 0,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "children": [
+            {
+              "depth": 3,
+              "tag": "SPAN",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "height": "auto",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 0,
+                "clientHeight": 0,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "depth": 2,
+          "tag": "DIV",
+          "id": null,
+          "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l border-gray-100",
+          "computed": {
+            "overflow": "visible",
+            "overflowY": "visible",
+            "height": "auto",
+            "maxHeight": "none",
+            "minHeight": "0px",
+            "display": "flex",
+            "flexDirection": "column",
+            "flex": "0 1 auto",
+            "position": "static",
+            "touchAction": "auto"
+          },
+          "scroll": {
+            "scrollHeight": 0,
+            "clientHeight": 0,
+            "scrollTop": 0,
+            "canScroll": false
+          },
+          "children": [
+            {
+              "depth": 3,
+              "tag": "SPAN",
+              "id": null,
+              "class": "",
+              "computed": {
+                "overflow": "visible",
+                "overflowY": "visible",
+                "height": "auto",
+                "maxHeight": "none",
+                "minHeight": "0px",
+                "display": "block",
+                "flexDirection": "row",
+                "flex": "0 1 auto",
+                "position": "static",
+                "touchAction": "auto"
+              },
+              "scroll": {
+                "scrollHeight": 0,
+                "clientHeight": 0,
+                "scrollTop": 0,
+                "canScroll": false
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+=== WEBKIT BODY STYLES ===
+{
+  "bodyInlineStyles": {
+    "position": "fixed",
+    "overflow": "hidden",
+    "top": "0px",
+    "left": "0px",
+    "right": "0px"
+  },
+  "bodyComputed": {
+    "position": "fixed",
+    "overflow": "hidden",
+    "height": "1864.125px"
+  }
+}
+
+=== WEBKIT SCROLL ATTEMPT RESULTS ===
+[
+  {
+    "tag": "DIV",
+    "class": "fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[85dvh] flex fle",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "shrink-0 bg-white",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "relative px-5 py-4 border-b border-gray-100",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "H2",
+    "class": "text-base font-semibold text-gray-900 pr-8",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "P",
+    "class": "text-xs text-gray-400 mt-0.5",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "absolute top-4 right-4 p-2 bg-transparent border-0 text-[var(--color-text-second",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "svg",
+    "class": "[object SVGAnimatedString]",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "path",
+    "class": "[object SVGAnimatedString]",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "path",
+    "class": "[object SVGAnimatedString]",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "FORM",
+    "class": "flex-1 min-h-0 overflow-hidden flex flex-col",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex-1 min-h-0 px-5 py-4 flex flex-col gap-3",
+    "scrolledFrom": 0,
+    "scrolledTo": 33,
+    "canScroll": true,
+    "success": true
+  },
+  {
+    "tag": "DIV",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex flex-wrap gap-2 mb-2",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors border-",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "P",
+    "class": "text-xs text-gray-500",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "space-y-1 mb-0",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "LABEL",
+    "class": "block text-sm font-bold text-gray-700",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "SPAN",
+    "class": "text-red-400 ml-1",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "INPUT",
+    "class": "w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gra",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "TEXTAREA",
+    "class": "w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-",
+    "scrolledFrom": 0,
+    "scrolledTo": 23,
+    "canScroll": true,
+    "success": true
+  },
+  {
+    "tag": "DIV",
+    "class": "bg-gray-50 rounded-xl p-3 text-xs text-gray-600",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "P",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "shrink-0 px-5 pb-4 pt-3 border-t border-gray-50",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "BUTTON",
+    "class": "w-full py-3.5 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-whit",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "shrink-0 hidden sm:block grid grid-cols-3 border-t border-gray-100",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "SPAN",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l ",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "SPAN",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "DIV",
+    "class": "flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400 border-l ",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  },
+  {
+    "tag": "SPAN",
+    "class": "",
+    "scrolledFrom": 0,
+    "scrolledTo": 0,
+    "canScroll": false,
+    "success": false
+  }
+]
+
+=== DIAGNOSTIC COMPLETE ===
