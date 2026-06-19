@@ -221,7 +221,7 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - Съдържа:
   - GDPR Art. 14 уведомление (CEIDG source, данни, права, mailto за изтриване)
   - FOMO блок: "Im wcześniej przejmiesz swój profil, tym wyżej pojawisz się w wynikах..."
-  - Сравнение Nevumo vs Fixly (9 ползи vs 6 недостатъка)
+  - Сравнение Nevumo vs традиционни платформи (9 ползи vs 6 недостатъка) — без competitor branding (June 19, 2026)
   - 2 CTA бутона: "Odbierz swój profil →" (унифицирани)
 - Дизайн: бял хедър с лого PNG, оранжеви CTA (#F97316), светлосив футър — идентичен на сайта
 - Лого: конвертирано от SVG → PNG (cairosvg), вградено като base64 за преглед; за продъкшън се качва на `images.nevumo.com/nevumo-logo.png`

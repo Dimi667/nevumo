@@ -171,6 +171,9 @@ Nevumo е уеб платформа за marketplace на услуги.
   - Изпраща се от: `support@nevumo.com` via Resend
   - Jinja2 templating
   - Лого: при deploy качи `nevumo-logo.png` на `images.nevumo.com/nevumo-logo.png` и замени base64 src
+  - **Competitor branding (June 19, 2026):** Премахнати всички споменавания на "Fixly/Oferteo" от имейла. Заменени с generic "Tradycyjne platformy". Причина: правен риск + стратегическо позициониране. Засегнати: heading, intro paragraph, right column label.
+  - **BG review template:** `apps/api/scripts/templates/outreach_email_bg_review.html` — същата промяна приложена (Fixly → Традиционни платформи)
+  - **Test utility:** `apps/api/scripts/test_outreach_send.py` — изпраща имейла до 2 тестови адреса с реалистични данни
 - **Gravatar:** настроен за `support@nevumo.com` с Nevumo иконка (apple-touch-icon 120×120px)
 - **FROM_EMAIL:** хардкоднат в кода (не е env var в Railway) — при следваща рефакторинг да се извади като `RESEND_FROM_EMAIL` env var
 

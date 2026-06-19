@@ -2470,9 +2470,10 @@ Claim page очаква директен обект (не wrapper):
 ### Frontend Implementation
 - **Page**: `apps/web/app/[lang]/claim/[token]/page.tsx` — Server Component
 - **Route**: `/[lang]/claim/[token]` (e.g., `/bg/claim/abc123xyz`)
-- **Translations**: namespace `claim`, 47 keys, 34 languages
+- **Translations**: namespace `claim`, 48 keys, 34 languages
   - Original 12 keys: seed_claim_translations.py (408 rows)
   - New 35 keys (v2 redesign): seed_claim_v2_p1.py + seed_claim_v2_p2.py (1,190 rows)
+  - New 1 key (June 19, 2026): seed_claim_vs_competitor_label.py (34 rows) — vs_competitor_label key, generic "Traditional platforms" label replacing hardcoded "Fixly"
   - New keys: urgency, kicker, hero_title, your_profile_badge, leads_title,
     leads_overlay, leads_overlay_sub, benefit_1/2/3 title+sub,
     vs_bad_1/2, vs_good_1/2, time_signal, login_hint,
@@ -2607,7 +2608,7 @@ Fix: премахнат is_claimed филтър, токенът се пази к
 
 **Redesign (June 16, 2026):**
 - High-conversion page: urgency bar, leads teaser (decorative),
-  benefits grid, Fixly comparison, social proof
+  benefits grid, VS section (generic — no competitor branding), social proof
 - Social proof 3-phase logic:
   count === 0 → social_proof_zero (early mover message)
   count < 10  → social_proof_few (traction message)
