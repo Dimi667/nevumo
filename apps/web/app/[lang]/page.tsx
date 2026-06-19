@@ -10,7 +10,6 @@ import Link from 'next/link';
 import RotatingCategory from '@/components/homepage/RotatingCategory';
 import { AuthIntentButton } from './AuthIntentButton';
 import CategoryIntentButton from '@/components/homepage/CategoryIntentButton';
-import MobileStickyCTA from '@/components/homepage/MobileStickyCTA';
 import Footer from '@/components/homepage/Footer';
 import CtxCapture from '@/components/CtxCapture';
 
@@ -346,17 +345,6 @@ export default async function Homepage({ params }: PageProps) {
         footerLinkMassage={getLocalizedCityText(t(homepageT, 'footer_link_massage', ''), normalizedLang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
         footerPopular={getLocalizedCityText(t(homepageT, 'footer_popular', ''), normalizedLang, cityName, cityT, 'nominative', { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
       />
-
-      {/* MOBILE STICKY CTA */}
-      <MobileStickyCTA>
-        <AuthIntentButton
-          href={`/${normalizedLang}/auth`}
-          intent="provider"
-          className="btn-primary w-full text-center block"
-        >
-          {t(homepageT, 'cta_hero', 'Start for free')}
-        </AuthIntentButton>
-      </MobileStickyCTA>
     </div>
   );
 }
