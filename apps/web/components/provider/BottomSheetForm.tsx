@@ -517,16 +517,15 @@ export default function BottomSheetForm({
         <form
           id="bottom-sheet-form"
           onSubmit={handleSubmit}
-          className="flex-1 min-h-0 overflow-hidden flex flex-col">
-          <div
-            className="flex-1 min-h-0 px-5 py-4 flex flex-col gap-3"
-            style={{
-              overflowY: 'scroll',
-              WebkitOverflowScrolling: 'touch',
-              touchAction: 'pan-y',
-              overscrollBehavior: 'contain',
-            }}
-          >
+          className="flex-1 min-h-0 flex flex-col"
+          style={{
+            overflowY: 'scroll',
+            WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-y',
+            overscrollBehavior: 'contain',
+          }}
+        >
+          <div className="px-5 py-4 flex flex-col gap-3">
             {/* ServiceChips */}
             {(services ?? []).length > 0 && (
               <div>
