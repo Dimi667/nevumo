@@ -760,6 +760,19 @@ export default function ProviderWidget({
       {/* Form */}
       <div id="widget-form" className="px-6 py-6">
 
+        <div className="pb-4">
+          <button
+            type="submit"
+            form="widget-lead-form"
+            disabled={loading}
+            className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
+          >
+            {loading
+              ? (translations['sending'] ?? 'Изпращане...')
+              : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
+          </button>
+        </div>
+
         <form id="widget-lead-form" onSubmit={handleSubmit} className="space-y-4">
           <div ref={phoneRef}>
             <PhoneInput
