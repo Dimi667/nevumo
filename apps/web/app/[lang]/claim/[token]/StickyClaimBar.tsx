@@ -18,7 +18,7 @@ export default function StickyClaimBar({
   useEffect(() => {
     setMounted(true)
 
-    let lastY = window.scrollY
+    let lastY = typeof window !== 'undefined' ? window.scrollY : 0
 
     const onScroll = () => {
       const y = window.scrollY
@@ -33,14 +33,14 @@ export default function StickyClaimBar({
 
       // Show when scrolling UP (iOS toolbar hides — bar appears)
       // Hide when scrolling DOWN (iOS toolbar shows — bar hides)
-      if (delta < -6) setVisible(true)
-      if (delta > 6) setVisible(false)
+      if (delta < -4) setVisible(true)
+      if (delta > 4) setVisible(false)
 
       lastY = y
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    document.addEventListener('scroll', onScroll, { passive: true })
+    return () => document.removeEventListener('scroll', onScroll)
   }, [])
 
   if (!mounted) return null
