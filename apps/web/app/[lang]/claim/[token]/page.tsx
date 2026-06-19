@@ -322,19 +322,6 @@ export default async function ClaimPage({ params }: PageProps) {
         <div className="bg-gray-100 rounded-2xl p-6 mb-8">
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-3">{t(claimT, 'vs_competitor_label', 'Traditional platforms')}</h4>
-              <div className="space-y-2 text-sm text-gray-600">
-                <div className="flex items-start gap-2">
-                  <span className="text-red-500">✗</span>
-                  <span>{t(claimT, 'vs_bad_1', '20-30% commission fee')}</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <span className="text-red-500">✗</span>
-                  <span>{t(claimT, 'vs_bad_2', 'Hidden fees and charges')}</span>
-                </div>
-              </div>
-            </div>
-            <div>
               <h4 className="font-semibold text-gray-900 mb-3">Nevumo</h4>
               <div className="space-y-2 text-sm text-gray-600">
                 <div className="flex items-start gap-2">
@@ -344,6 +331,19 @@ export default async function ClaimPage({ params }: PageProps) {
                 <div className="flex items-start gap-2">
                   <span className="text-green-500">✓</span>
                   <span>{t(claimT, 'vs_good_2', 'No hidden fees, ever')}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">{t(claimT, 'vs_competitor_label', 'Traditional platforms')}</h4>
+              <div className="space-y-2 text-sm text-gray-600">
+                <div className="flex items-start gap-2">
+                  <span className="text-red-500">✗</span>
+                  <span>{t(claimT, 'vs_bad_1', '20-30% commission fee')}</span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="text-red-500">✗</span>
+                  <span>{t(claimT, 'vs_bad_2', 'Hidden fees and charges')}</span>
                 </div>
               </div>
             </div>
