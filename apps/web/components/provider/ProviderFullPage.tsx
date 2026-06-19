@@ -6,6 +6,7 @@ import Image from 'next/image';
 import AboutSection from './AboutSection';
 import LeadPanel from './LeadPanel';
 import StickyProviderCTA from './StickyProviderCTA';
+import ProviderMobileCTA from './ProviderMobileCTA';
 import BottomSheetForm from './BottomSheetForm';
 import { ShareButton } from '@/components/shared/ShareButton';
 
@@ -499,6 +500,11 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
         {/* LEFT COLUMN */}
         <div className="flex-1 space-y-4">
           <HeroSection provider={provider} translations={t} />
+          <ProviderMobileCTA
+            label={translations['cta_button'] ?? 'Свържи се с'}
+            providerName={provider.business_name}
+            onOpenSheet={() => setIsSheetOpen(true)}
+          />
           {(provider.gallery ?? []).length > 1 && <GallerySection gallery={(provider.gallery ?? []).slice(1)} translations={t} />}
           <AboutSection description={provider.description} translations={t} />
           {(provider.services ?? []).length > 0 && (

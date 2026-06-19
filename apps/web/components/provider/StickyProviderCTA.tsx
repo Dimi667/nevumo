@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useStickyBar } from '@/contexts/StickyBarContext'
+import { useIsIOS26Plus } from '@/hooks/useIsIOS26Plus'
 
 interface StickyProviderCTAProps {
   lang: string
@@ -19,26 +20,27 @@ export default function StickyProviderCTA({
   const btnRef = useRef<HTMLDivElement>(null)
   const formId = 'provider-lead-form'
   const { register } = useStickyBar()
+  const isIOS26Plus = useIsIOS26Plus()
 
+  // Effect 1: scroll visibility logic (unchanged)
   useEffect(() => {
-    const unregister = register()
     const btn = btnRef.current
     if (!btn) return
 
     const checkScroll = () => {
       const formEl = document.getElementById(formId)
-      // On mobile, form is hidden so button should always be visible
       if (!formEl) {
         if (btnRef.current) {
           btnRef.current.style.transform = 'translateY(0)'
         }
         return
       }
-
       const rect = formEl.getBoundingClientRect()
       const isFormInView = rect.top < window.innerHeight && rect.bottom > 0
       if (btnRef.current) {
-        btnRef.current.style.transform = isFormInView ? 'translateY(100%)' : 'translateY(0)'
+        btnRef.current.style.transform = isFormInView
+          ? 'translateY(100%)'
+          : 'translateY(0)'
       }
     }
 
@@ -46,9 +48,15 @@ export default function StickyProviderCTA({
     checkScroll()
     return () => {
       window.removeEventListener('scroll', checkScroll)
-      unregister()
     }
-  }, [formId, register])
+  }, [formId])
+
+  // Effect 2: register sticky bar ONLY when visible (not iOS 26)
+  useEffect(() => {
+    if (isIOS26Plus) return
+    const unregister = register()
+    return () => unregister()
+  }, [register, isIOS26Plus])
 
   useEffect(() => {
     const btn = btnRef.current
@@ -66,6 +74,8 @@ export default function StickyProviderCTA({
       document.body.style.paddingBottom = ''
     }
   }, [])
+
+  if (isIOS26Plus) return null
 
   return (
     <div
