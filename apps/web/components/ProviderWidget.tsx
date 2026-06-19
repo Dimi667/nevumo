@@ -760,7 +760,7 @@ export default function ProviderWidget({
       {/* Form */}
       <div id="widget-form" className="px-6 py-6">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form id="widget-lead-form" onSubmit={handleSubmit} className="space-y-4">
           <div ref={phoneRef}>
             <PhoneInput
               onChange={handleChange}
@@ -805,20 +805,38 @@ export default function ProviderWidget({
               {t('error_message')}
             </p>
           )}
+        </form>
 
-          {/* Sticky button mobile / inline desktop */}
-          <StickyBottomBar>
-            <div ref={stickyDivRef} className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-100">
+        {/* Sticky button mobile / inline desktop */}
+        <StickyBottomBar
+          fallback={
+            <div className="px-4 py-3">
               <button
                 type="submit"
+                form="widget-lead-form"
                 disabled={loading}
                 className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
               >
-                {loading ? (translations['sending'] ?? 'Изпращане...') : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
+                {loading
+                  ? (translations['sending'] ?? 'Изпращане...')
+                  : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
               </button>
             </div>
-          </StickyBottomBar>
-        </form>
+          }
+        >
+          <div ref={stickyDivRef} className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-100">
+            <button
+              type="submit"
+              form="widget-lead-form"
+              disabled={loading}
+              className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
+            >
+              {loading
+                ? (translations['sending'] ?? 'Изпращане...')
+                : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
+            </button>
+          </div>
+        </StickyBottomBar>
       </div>
 
       {/* TrustRow */}
