@@ -494,73 +494,78 @@ export default function BottomSheetForm({
         <form
           id="bottom-sheet-form"
           onSubmit={handleSubmit}
-          className="flex-1 min-h-0 overflow-y-auto px-5 py-4 flex flex-col gap-3">
-          {/* ServiceChips */}
-          {(services ?? []).length > 0 && (
-            <div>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {(services ?? []).map((service) => (
-                  <button
-                    key={service.id}
-                    type="button"
-                    onClick={() => {
-                      setSelectedService(service.id);
-                    }}
-                    className={`text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors ${
-                      selectedService === service.id
-                        ? 'bg-orange-500 text-white border-orange-500'
-                        : 'border-gray-300 text-gray-600 bg-white hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50 active:border-orange-400 active:bg-orange-50'
-                    }`}
-                  >
-                    {service.title}  {formatServicePrice(service, t['price_per_hour'] ?? '/ч', t['price_on_request'] ?? 'По запитване')}
-                  </button>
-                ))}
+          className="flex-1 min-h-0 overflow-hidden flex flex-col">
+          <div
+            className="flex-1 min-h-0 px-5 py-4 flex flex-col gap-3"
+            style={{ overflowY: 'auto', WebkitOverflowScrolling: 'touch' }}
+          >
+            {/* ServiceChips */}
+            {(services ?? []).length > 0 && (
+              <div>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {(services ?? []).map((service) => (
+                    <button
+                      key={service.id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedService(service.id);
+                      }}
+                      className={`text-xs px-3 py-1.5 border rounded-full cursor-pointer transition-colors ${
+                        selectedService === service.id
+                          ? 'bg-orange-500 text-white border-orange-500'
+                          : 'border-gray-300 text-gray-600 bg-white hover:border-orange-400 hover:text-orange-500 hover:bg-orange-50 active:border-orange-400 active:bg-orange-50'
+                      }`}
+                    >
+                      {service.title}  {formatServicePrice(service, t['price_per_hour'] ?? '/ч', t['price_on_request'] ?? 'По запитване')}
+                    </button>
+                  ))}
+                </div>
+                {serviceNoteError && (
+                  <p className="text-xs text-red-600 mt-1">{serviceNoteError}</p>
+                )}
+                <p className="text-xs text-gray-500">
+                  {t['or_general_request'] ?? 'Or send a general request ↓'}
+                </p>
               </div>
-              {serviceNoteError && (
-                <p className="text-xs text-red-600 mt-1">{serviceNoteError}</p>
-              )}
-              <p className="text-xs text-gray-500">
-                {t['or_general_request'] ?? 'Or send a general request ↓'}
-              </p>
+            )}
+
+            {/* PhoneInput */}
+            <div ref={phoneRef}>
+              <PhoneInput
+                onChange={setPhoneValue}
+                countryCode={citySlug === 'warszawa' ? 'PL' : 'BG'}
+                required
+                label={t['phone_label'] ?? 'Телефон'}
+                className="mb-0"
+                lang={lang}
+                submitted={formSubmitted}
+              />
             </div>
-          )}
 
-          {/* PhoneInput */}
-          <div ref={phoneRef}>
-            <PhoneInput
-              onChange={setPhoneValue}
-              countryCode={citySlug === 'warszawa' ? 'PL' : 'BG'}
-              required
-              label={t['phone_label'] ?? 'Телефон'}
-              className="mb-0"
-              lang={lang}
-              submitted={formSubmitted}
+            {/* NotesField */}
+            <textarea
+              rows={3}
+              value={notes}
+              onChange={(e) => {
+                setNotes(e.target.value);
+                if (serviceNoteError) setServiceNoteError(null);
+              }}
+              placeholder={t['notes_placeholder'] ?? 'Опишете накратко какво ви трябва...'}
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 resize-none"
             />
+
+            {/* SocialProofSignal */}
+            <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-600">
+              {getSocialProofSignal()}
+            </div>
+
+            {/* Error Message */}
+            {submitError && (
+              <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                {submitError}
+              </p>
+            )}
           </div>
-
-          {/* NotesField */}
-          <textarea
-            rows={3}
-            value={notes}
-            onChange={(e) => {
-              setNotes(e.target.value);
-              if (serviceNoteError) setServiceNoteError(null);
-            }}
-            placeholder={t['notes_placeholder'] ?? 'Опишете накратко какво ви трябва...'}
-            className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white text-gray-900 outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-400/20 resize-none"
-          />
-
-          {/* SocialProofSignal */}
-          <div className="bg-gray-50 rounded-xl p-3 text-xs text-gray-600">
-            {getSocialProofSignal()}
-          </div>
-
-          {/* Error Message */}
-          {submitError && (
-            <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              {submitError}
-            </p>
-          )}
         </form>
 
         {/* Footer with Submit Button */}
