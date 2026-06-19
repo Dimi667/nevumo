@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useStickyBar } from '@/contexts/StickyBarContext'
 import StickyBottomBar from '@/components/ui/StickyBottomBar'
 
 interface StickyProviderCTAProps {
@@ -19,9 +18,8 @@ export default function StickyProviderCTA({
 }: StickyProviderCTAProps) {
   const btnRef = useRef<HTMLDivElement>(null)
   const formId = 'provider-lead-form'
-  const { register } = useStickyBar()
 
-  // Effect 1: scroll visibility logic (unchanged)
+  // Effect: scroll visibility logic
   useEffect(() => {
     const btn = btnRef.current
     if (!btn) return
@@ -49,12 +47,6 @@ export default function StickyProviderCTA({
       window.removeEventListener('scroll', checkScroll)
     }
   }, [formId])
-
-  // Effect 2: register sticky bar
-  useEffect(() => {
-    const unregister = register()
-    return () => unregister()
-  }, [register])
 
   useEffect(() => {
     const btn = btnRef.current

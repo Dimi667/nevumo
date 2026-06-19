@@ -1,45 +1,39 @@
 'use client'
 
-import { type ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
 import { useIsIOS26Plus } from '@/hooks/useIsIOS26Plus'
+import { useStickyBar } from '@/contexts/StickyBarContext'
 
 interface StickyBottomBarProps {
-  /** The sticky content (fixed bottom bar) */
   children: ReactNode
-  /**
-   * Optional fallback rendered on iOS 26+ instead of the sticky bar.
-   * If not provided, nothing is rendered on iOS 26+.
-   */
   fallback?: ReactNode
 }
 
 /**
  * Global wrapper for all sticky bottom bars.
  *
- * On iOS 26+: Safari's Liquid Glass toolbar covers position:fixed
- * bottom elements. This wrapper hides the sticky bar and optionally
- * renders an inline fallback instead.
+ * Handles TWO concerns in one place:
+ * 1. iOS 26+ detection — hides sticky, shows fallback
+ * 2. StickyBarContext registration — cookie banner offset
  *
- * When Apple fixes this in a future iOS version, update ONLY this
- * file — all sticky bars across the site are fixed automatically.
+ * On iOS 26+: does NOT register (bar not shown → no offset needed)
+ * On other devices: registers → cookie banner gets bottom-24
  *
- * Usage:
- *   <StickyBottomBar fallback={<InlineCTA />}>
- *     <div className="fixed bottom-0 ...">...</div>
- *   </StickyBottomBar>
- *
- * Without fallback (just hide on iOS 26):
- *   <StickyBottomBar>
- *     <div className="fixed bottom-0 ...">...</div>
- *   </StickyBottomBar>
+ * When Apple fixes iOS sticky behavior → update useIsIOS26Plus.ts only.
  */
 export default function StickyBottomBar({
   children,
   fallback,
 }: StickyBottomBarProps) {
   const isIOS26Plus = useIsIOS26Plus()
+  const { register } = useStickyBar()
+
+  useEffect(() => {
+    if (isIOS26Plus) return
+    const unregister = register()
+    return () => unregister()
+  }, [register, isIOS26Plus])
 
   if (isIOS26Plus) return fallback ? <>{fallback}</> : null
-
   return <>{children}</>
 }

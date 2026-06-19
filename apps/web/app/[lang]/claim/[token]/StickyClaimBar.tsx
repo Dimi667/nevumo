@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useStickyBar } from '@/contexts/StickyBarContext'
 import StickyBottomBar from '@/components/ui/StickyBottomBar'
 
 interface StickyClaimBarProps {
@@ -15,18 +14,11 @@ export default function StickyClaimBar({
   label,
 }: StickyClaimBarProps) {
   const [mounted, setMounted] = useState(false)
-  const { register } = useStickyBar()
 
-  // Effect 1: mount only
+  // Effect: mount only
   useEffect(() => {
     setMounted(true)
   }, [])
-
-  // Effect 2: register sticky bar
-  useEffect(() => {
-    const unregister = register()
-    return () => unregister()
-  }, [register])
 
   if (!mounted) return null
 

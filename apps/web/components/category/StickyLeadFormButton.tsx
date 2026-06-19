@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useStickyBar } from '@/contexts/StickyBarContext'
 import StickyBottomBar from '@/components/ui/StickyBottomBar'
 
 interface Props {
@@ -9,15 +8,13 @@ interface Props {
   formId?: string
 }
 
-export default function StickyLeadFormButton({ 
-  label, 
-  formId = 'lead-form-anchor' 
+export default function StickyLeadFormButton({
+  label,
+  formId = 'lead-form-anchor'
 }: Props) {
   const btnRef = useRef<HTMLDivElement>(null)
-  const { register } = useStickyBar()
 
   useEffect(() => {
-    const unregister = register()
     const btn = btnRef.current
     const formEl = document.getElementById(formId)
     if (!btn || !formEl) return
@@ -34,9 +31,8 @@ export default function StickyLeadFormButton({
     checkScroll()
     return () => {
       window.removeEventListener('scroll', checkScroll)
-      unregister()
     }
-  }, [formId, register])
+  }, [formId])
 
   useEffect(() => {
     const btn = btnRef.current
