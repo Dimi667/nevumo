@@ -318,11 +318,11 @@ export default async function ClaimPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Fixly comparison */}
+        {/* VS section */}
         <div className="bg-gray-100 rounded-2xl p-6 mb-8">
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold text-gray-900 mb-3">Fixly</h4>
+              <h4 className="font-semibold text-gray-900 mb-3">{t(claimT, 'vs_competitor_label', 'Traditional platforms')}</h4>
               <div className="space-y-2 text-sm text-gray-600">
                 <div className="flex items-start gap-2">
                   <span className="text-red-500">✗</span>
