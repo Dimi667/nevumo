@@ -516,13 +516,18 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
             />
           )}
           {provider.review_count > 0 && (
-            <ReviewsSection 
-              reviews={provider.reviews} 
-              reviewCount={provider.review_count} 
+            <ReviewsSection
+              reviews={provider.reviews}
+              reviewCount={provider.review_count}
               businessName={provider.business_name}
               translations={t}
             />
           )}
+          <ProviderMobileCTA
+            label={translations['cta_button'] ?? 'Свържи се с'}
+            providerName={provider.business_name}
+            onOpenSheet={() => setIsSheetOpen(true)}
+          />
         </div>
         
         {/* RIGHT COLUMN (sticky) */}
