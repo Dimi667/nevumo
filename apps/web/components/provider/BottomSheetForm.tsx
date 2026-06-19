@@ -608,7 +608,7 @@ export default function BottomSheetForm({
         </div>
 
         {/* TrustRow */}
-        <div className="shrink-0 hidden sm:block grid grid-cols-3 border-t border-gray-100">
+        <div className="shrink-0 grid grid-cols-3 border-t border-gray-100">
           <div className="flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400">
             <span>✓ {t['trust_verified'] ?? 'Верифициран'}</span>
           </div>
