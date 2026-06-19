@@ -2534,6 +2534,17 @@ Fix: премахнат is_claimed филтър, токенът се пази к
    - Input CSV: apps/api/scripts/outreach_ready.csv (колони: email, business_name, claim_token)
    - Произвежда се от Task 2A (seed_unclaimed_providers.py)
    - Test command: railway run python3.13 -m apps.api.scripts.send_outreach_bulk --dry-run --limit 3
+   - Jinja2 variables: {{ business_name }}, {{ service_label }}, {{ claim_link }},
+     {{ provider_phone }}, {{ provider_email }}, {{ provider_address }}, {{ provider_website }}
+     (service_label values: "hydraulika" / "sprzątania" / "masażu" per category)
+   - Template finalized June 19, 2026 — conversion-optimized for mobile Gmail:
+     - Dynamic H1 with {{ service_label }}
+     - business_name embedded in CEIDG paragraph (no separate "Dla:" line)
+     - CTA 1 above fold on mobile (FOMO box moved below CTA)
+     - Both CTAs unified: "Odbierz swój profil →"
+     - Logo header padding: 12px 40px 2px
+     - Mobile CSS (.eb): padding reduced to 10px 20px (was 24px 20px)
+     - Logo hosted on R2: images.nevumo.com/nevumo-logo.png ✅
 
 🟡 UX (важни преди launch):
 3. Двойно "Nevumo": redundant <h2>Nevumo</h2> под navbar-а на claim страницата —

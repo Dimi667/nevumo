@@ -214,26 +214,35 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 
 ### 🟨 ФАЗА 3 — ИМЕЙЛИ
 
-**Задача 3А — Outreach имейл шаблон** ✅ ЗАВЪРШЕНА (14 юни 2026)
+**Задача 3А — Outreach имейл шаблон** ✅ ЗАВЪРШЕНА И ФИНАЛИЗИРАНА (19 юни 2026)
 - Тема: "Twój profil jest już na Nevumo — odbierz go bezpłatnie"
 - Файл: `apps/api/scripts/templates/outreach_email_pl.html`
-- Jinja2 променливи: `{{ business_name }}`, `{{ claim_link }}`, `{{ provider_phone }}`, `{{ provider_email }}`, `{{ provider_address }}`, `{{ provider_website }}`
+- Jinja2 променливи: `{{ business_name }}`, `{{ service_label }}`, `{{ claim_link }}`, `{{ provider_phone }}`, `{{ provider_email }}`, `{{ provider_address }}`, `{{ provider_website }}`
 - Съдържа:
   - GDPR Art. 14 уведомление (CEIDG source, данни, права, mailto за изтриване)
-  - FOMO блок: "Im wcześniej przejmiesz swój profil, tym wyżej pojawisz się w wynikach..."
+  - FOMO блок: "Im wcześniej przejmiesz swój profil, tym wyżej pojawisz się w wynikах..."
   - Сравнение Nevumo vs Fixly (9 ползи vs 6 недостатъка)
-  - 2 CTA бутона: "Odbierz swój profil →" и "Przejmij profil bezpłatnie →"
+  - 2 CTA бутона: "Odbierz swój profil →" (унифицирани)
 - Дизайн: бял хедър с лого PNG, оранжеви CTA (#F97316), светлосив футър — идентичен на сайта
 - Лого: конвертирано от SVG → PNG (cairosvg), вградено като base64 за преглед; за продъкшън се качва на `images.nevumo.com/nevumo-logo.png`
 - Sender: `Nevumo <support@nevumo.com>` via Resend
 - Gravatar: настроен за `support@nevumo.com` с apple-touch-icon (120×120px) ✅
 - **Subject lines (първа порция — за A/B тест и конвършън мониторинг):**
-  - plumbing: `10 707 firm instalacyjnych w Warszawie — czy Twoi klienci Cię znajdą?` 
-  - cleaning: `7 363 firm sprzątających w Warszawie — czy Twoi klienci Cię znajdą?` 
-  - massage: `3 635 gabinetów masażu w Warszawie — czy Twoi klienci Cię znajdą?` 
+  - plumbing: `10 707 firm instalacyjnych w Warszawie — czy Twoi klienci Cię znajdą?`
+  - cleaning: `7 363 firm sprzątających w Warszawie — czy Twoi klienci Cię znajdą?`
+  - massage: `3 635 gabinetów masażu w Warszawie — czy Twoi klienci Cię znajdą?`
   - Числата са от официален CEIDG регистър (PKD: 43.22.Z, 81.21.Z, 96.04.Z), верифицирани юни 2026
   - Маппингът category → subject се имплементира в скрипта в Задача 5А
   - ⚠️ При конвършън под 5% след първата порция — смени subject lines и тествай нов вариант
+
+Финализация June 19, 2026:
+- Динамичен H1: {{ service_label }} (hydraulika / sprzątania / masażu)
+- CEIDG параграф: съкратен, business_name вграден в текста
+- Премахнат "Dla:" ред — спестява вертикално пространство
+- CTA 1 преместен над fold (преди FOMO box)
+- Двата бутона унифицирани: "Odbierz swój profil →"
+- Mobile padding оправен (.eb медия query: 24px → 10px)
+- Тестван в Gmail на iPhone ✅ — бутонът видим преди скрол ✅
 
 **Задача 3Б — Art. 14 Confirmation имейл**
 - Изпраща се АВТОМАТИЧНО след успешен claim
@@ -268,12 +277,15 @@ E2E тест June 17, 2026 (production):
 - already_claimed state: ❌ FAIL — backend бъг (виж bugs backlog в architecture.md)
 
 Bugs backlog преди Task 5A:
-🔴 already_claimed endpoint fix (apps/api/routes/providers.py)
-🔴 Outreach email Jinja2 rendering (bulk script Task 5A)
-🟡 Двойно "Nevumo" на claim страницата
-🟡 CTA above the fold на мобилен
+🔴 already_claimed endpoint fix — статус непроменен
+🔴 Outreach email Jinja2 rendering — ✅ FIXED + FINALIZED June 19, 2026
+🟡 Двойно "Nevumo" на claim страницата — статус непроменен
+🟡 CTA above the fold — ✅ FIXED June 19, 2026
 ✅ Email лого на R2 — COMPLETE (June 18, 2026)
 ✅ Email subject lines — COMPLETE (June 18, 2026): category-based, под 50 символа, реални keyword данни
+
+Next step: Task 2A — seed_unclaimed_providers.py → outreach_ready.csv
+(колони: email, business_name, claim_token, category)
 
 **Задача 4Б — "Unclaimed" банер на Provider Full Page**
 - Видим само за некредентовани профили (`is_claimed = FALSE`)
