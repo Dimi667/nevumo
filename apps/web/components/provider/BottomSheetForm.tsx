@@ -469,10 +469,10 @@ export default function BottomSheetForm({
         onClick={onClose}
       />
       {/* Sheet */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[90dvh] flex flex-col transform transition-transform duration-300 ease-out"
+      <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[85dvh] flex flex-col transform transition-transform duration-300 ease-out"
            style={{ transform: isOpen ? 'translateY(0)' : 'translateY(100%)' }}>
         {/* Header */}
-        <div className="shrink-0">
+        <div className="shrink-0 bg-white">
           <div className="relative px-5 py-4 border-b border-gray-100">
             <h2 className="text-base font-semibold text-gray-900 pr-8">
               {t['form_title'] ?? 'Изпратете заявка'}
@@ -576,7 +576,7 @@ export default function BottomSheetForm({
         </div>
 
         {/* TrustRow */}
-        <div className="shrink-0 grid grid-cols-3 border-t border-gray-100">
+        <div className="shrink-0 hidden sm:block grid grid-cols-3 border-t border-gray-100">
           <div className="flex flex-col items-center py-3 px-2 text-center text-xs text-gray-400">
             <span>✓ {t['trust_verified'] ?? 'Верифициран'}</span>
           </div>
