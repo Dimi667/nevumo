@@ -1,5 +1,13 @@
 # Nevumo Web Architecture
 
+**%26 URL Fix (June 2026)** — COMPLETE:
+- Problem: URLs like /bg/%26/masaz returned HTTP 200, causing Google to index "%26" in page titles
+- Root cause: Next.js [city] route accepted any URL-encoded value without decoding or validation
+- Fix: Added decodeURIComponent(params.city) + notFound() guard in apps/web/app/[lang]/[city]/page.tsx and apps/web/app/[lang]/[city]/[category]/page.tsx
+- Result: Invalid city slugs now return HTTP 404; valid pages unaffected
+
+---
+
 **PWA Library Migration (June 11, 2026)** — COMPLETE:
 - **Problem**: Both next-pwa v5 and @ducanh2912/next-pwa v10 incompatible with Turbopack — both rely on Webpack plugin to generate sw.js. turbopack:{} in next.config.mjs prevents Webpack from running → sw.js never generated in production.
 - **Solution**: Removed all PWA libraries. Static sw.js created directly in apps/web/public/sw.js.
