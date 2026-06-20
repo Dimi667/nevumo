@@ -1,7 +1,7 @@
 # Nevumo — Claimed Profiles: Пълен план
 
-**Статус:** 🟡 В процес — Задача 1Ж ✅, 1Ж-ext ✅, 2Б ✅, 3А ✅, 4А ✅ и 4А редизайн ✅ завършени
-**Последна актуализация:** 17 юни 2026
+**Статус:** 🟡 В процес — Задача 1Ж ✅, 1Ж-ext ✅, 2Б ✅, 3А ✅, 3Б ✅, 4А ✅ и 4А редизайн ✅ завършени
+**Последна актуализация:** 20 юни 2026
 **Приоритет:** 🔴 Висок — преди Warsaw outreach кампания
 
 ---
@@ -244,10 +244,29 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - Mobile padding оправен (.eb медия query: 24px → 10px)
 - Тестван в Gmail на iPhone ✅ — бутонът видим преди скрол ✅
 
-**Задача 3Б — Art. 14 Confirmation имейл**
-- Изпраща се АВТОМАТИЧНО след успешен claim
-- Съдържа: "Данните, които обработвахме преди: [name, phone, website]. Вече контролираш профила си напълно."
-- **Аз (Claude) пиша шаблона**
+**Задача 3Б — Art. 14 GDPR Confirmation имейл** ✅ ЗАВЪРШЕНА (20 юни 2026)
+- Изпраща се АВТОМАТИЧНО след успешен claim (non-blocking, AFTER db.commit())
+- Trigger: send_article14_notification() в apps/api/routes/provider.py (call site ~line 675)
+- Template: apps/api/services/templates/article14_confirmation_pl.html
+- Test script: apps/api/scripts/test_article14_send.py
+- Тестван: ✅ изпратен до dimitar.j.dimitroff@gmail.com, всички секции и линкове верни
+- Sender: Nevumo <noreply@nevumo.com> via Resend
+- Subject: "Profil aktywny ✓ — informacja o danych (art. 14 RODO)"
+- Jinja2 variables: {{ business_name }}, {{ dashboard_link }}, {{ nip }},
+  {{ provider_phone }}, {{ scraped_email }}, {{ provider_website }}, {{ category_label }}
+- nip/provider_phone/scraped_email/provider_website → None засега (Provider model няма тези полета)
+  → показват се като "nie podano"; ще се попълнят след Task 2A
+- category_label: "sprzątanie" / "usługi hydrauliczne" / "usługi masażu" (CATEGORY_LABEL_PL dict)
+- Съдържание (layered approach — EDPB compliant):
+  - Таблица с данните обработвани преди claim (CEIDG source)
+  - Администратор: „PHILIPS CENTER BULGARIA" Ltd, UIC 175369610
+  - Цел + правна основа: чл. 6(1)(ж) → чл. 6(1)(б) GDPR след claim
+  - Автоматизирана обработка: ranking + badge (не произвеждат правни последици)
+  - Права: достъп, коригиране, изтриване, ограничаване, преносимост, възражение → privacy@nevumo.com
+  - Жалби: UODO (Полша) uodo.gov.pl · КЗЛД (България) cpdp.bg
+  - Линкове: Privacy Policy → /pl/privacy · Provider T&C → /pl/terms-provider
+- Bug fixed (20 юни 2026): грешен URL /pl/terms-providers → верен /pl/terms-provider
+  (same fix applied to outreach_email_pl.html)
 
 ---
 

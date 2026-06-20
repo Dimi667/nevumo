@@ -556,6 +556,22 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   рендерира с Jinja2 Template.render(), изпраща чрез Resend (support@nevumo.com),
   rate limit 37s между имейли (100/час), idempotent via outreach_sent_log.csv.
   Следваща стъпка: Task 2A seed_unclaimed_providers.py → произвежда outreach_ready.csv.
+- **Claimed Profiles — Task 3Б Art. 14 GDPR Confirmation Email (June 20, 2026):** ✅ ЗАВЪРШЕНА
+  Template: apps/api/services/templates/article14_confirmation_pl.html.
+  send_article14_notification() updated in email_service.py — new signature:
+  (to_email, business_name, dashboard_link, nip=None, provider_phone=None,
+  scraped_email=None, provider_website=None, category_label="usługi").
+  Renders Jinja2 template, sends via noreply@nevumo.com, non-blocking (try/except + [EMAIL_WARNING]).
+  Call site updated in apps/api/routes/provider.py ~line 675.
+  Test script: apps/api/scripts/test_article14_send.py.
+  Email tested ✅ — correct design, data table, legal blocks, links verified.
+  GDPR compliance: layered approach (EDPB approved) — key info inline, details via Privacy Policy link.
+  Automated processing disclosed: ranking + badge systems (no legal effects, commercial visibility impact).
+  Supervisory authorities: UODO (Poland) + КЗЛД (Bulgaria) both mentioned.
+  URL bug fixed (June 20, 2026): /pl/terms-providers → /pl/terms-provider in both
+  apps/api/services/templates/article14_confirmation_pl.html AND
+  apps/api/scripts/templates/outreach_email_pl.html.
+  Next: Task 2A seed_unclaimed_providers.py → outreach_ready.csv (Kimi-2.6).
 - **Claimed Profiles — Data Collection (June 14 2026):** Warsaw CEIDG scraper complete (`apps/scripts/collect_ceidg_providers.py`). Collected 2,375 unique providers (701 with email, 257 with phone). PKD codes: cleaning 81.21.Z/81.22.Z/81.29.Z, massage 96.04.Z/96.23.Z/86.90.A/86.99.D, plumbing 43.22.Z/43.21.Z. Multi-layer acquisition planned: CEIDG website re-scrape → email extractor → Panoramafirm.pl scraper (Fixly отхвърлен — no browsable directory) → Bing API → SMS campaign. Full roadmap: `docs/claimed_profiles_plan.md`. Target: 3,000+ emails → 240-450 claimed profiles for Warsaw launch.
 - **Claimed Profiles — CSV Clean + CEIDG Re-scrape (June 15-16 2026):**
   - CSV cleaning complete: 2,375 → 2,122 rows, script: clean_ceidg_csv.py
