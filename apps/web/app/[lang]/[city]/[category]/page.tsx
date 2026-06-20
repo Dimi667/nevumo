@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { getProviderBySlug, getProviders, getPriceRange, PriceRangeData, getCityBySlug, ServiceOut, getCategories } from '@/lib/api';
 import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
@@ -227,11 +228,15 @@ function buildFaqJsonLd(
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang, city, category } = await params;
+  const decodedCitySlug = decodeURIComponent(city);
   const categoryT = await fetchTranslations(lang, 'category');
   const homepageT = await fetchTranslations(lang, 'homepage');
   const cityT = await fetchTranslations(lang, 'city');
-  const cityData = await getCityBySlug(city, lang);
-  const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+  const cityData = await getCityBySlug(decodedCitySlug, lang);
+  if (!cityData) {
+    notFound();
+  }
+  const cityName = cityData?.city || decodedCitySlug.charAt(0).toUpperCase() + decodedCitySlug.slice(1);
   // Slavic languages that use grammatical cases (locative/genitive)
   const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
   const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
@@ -245,7 +250,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   
   // Fetch price range for metadata
   const apiSlug = getApiSlug(category);
-  const priceData = await getPriceRange(apiSlug, city);
+  const priceData = await getPriceRange(apiSlug, decodedCitySlug);
   const priceMetaText = getPriceText(priceData, categoryT, 'price_meta', '');
   const description = priceMetaText ? `${baseDescription} ${priceMetaText}` : baseDescription;
 
@@ -255,8 +260,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: {
-      canonical: `${SITE_URL}/${lang}/${city}/${category}`,
-      languages: generateHreflangAlternates(`/${city}/${category}`),
+      canonical: `${SITE_URL}/${lang}/${decodedCitySlug}/${category}`,
+      languages: generateHreflangAlternates(`/${decodedCitySlug}/${category}`),
     },
     openGraph: {
       title,
@@ -312,6 +317,7 @@ async function getEnrichedProviders(
 
 export default async function CategoryPage({ params }: PageProps) {
   const { lang, city, category } = await params;
+  const decodedCitySlug = decodeURIComponent(city);
   const categoryT = await fetchTranslations(lang, 'category');
   const homepageT = await fetchTranslations(lang, 'homepage');
   const cityT = await fetchTranslations(lang, 'city');
@@ -320,8 +326,11 @@ export default async function CategoryPage({ params }: PageProps) {
   const apiSlug = getApiSlug(category);
   const catKey = getCategoryTranslationKey(category);
 
-  const cityData = await getCityBySlug(city, lang);
-  const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+  const cityData = await getCityBySlug(decodedCitySlug, lang);
+  if (!cityData) {
+    notFound();
+  }
+  const cityName = cityData?.city || decodedCitySlug.charAt(0).toUpperCase() + decodedCitySlug.slice(1);
   // Slavic languages that use grammatical cases (locative/genitive)
   const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
   const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
@@ -330,7 +339,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const catNameKey = `cat_${catKey}_name` as const;
   const categoryName = getLocalizedCityText((homepageT[catNameKey] || catKey), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
 
-  const content = getCategoryContent(category, cityName, categoryName, lang, city);
+  const content = getCategoryContent(category, cityName, categoryName, lang, decodedCitySlug);
 
   const prepBaseCat = categoryT['preposition_base'] || 'in';
   const heading = getLocalizedCityText((categoryT[`h1_${catKey}`] || `${categoryName} ${prepBaseCat} {city}`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form });
@@ -354,7 +363,7 @@ export default async function CategoryPage({ params }: PageProps) {
   const relatedLinks = allCategories
     .filter((cat) => cat.slug !== category)
     .map((cat) => ({
-      href: `/${lang}/${city}/${cat.slug}`,
+      href: `/${lang}/${decodedCitySlug}/${cat.slug}`,
       label: getLocalizedCityText(
         `${cat.name} ${prepBaseCat} {city}`,
         lang,
@@ -365,8 +374,8 @@ export default async function CategoryPage({ params }: PageProps) {
       ),
     }));
 
-  const { providers, allCount, averageRating } = await getEnrichedProviders(lang, city, apiSlug);
-  const priceData = await getPriceRange(apiSlug, city);
+  const { providers, allCount, averageRating } = await getEnrichedProviders(lang, decodedCitySlug, apiSlug);
+  const priceData = await getPriceRange(apiSlug, decodedCitySlug);
   const priceText = getPriceText(priceData, categoryT, 'price_text', '');
   
   const cityCountryCode = cityData?.country_code || 'PL';
@@ -492,10 +501,10 @@ export default async function CategoryPage({ params }: PageProps) {
 
   // Create a pseudo-provider for the category in this city for LocalBusiness schema
   const categoryPseudoProvider: ProviderDetail = {
-    id: `cat-${city}-${category}`,
+    id: `cat-${decodedCitySlug}-${category}`,
     business_name: heading,
     description: subtitle,
-    slug: `${city}/${category}`,
+    slug: `${decodedCitySlug}/${category}`,
     profile_image_url: null,
     rating: averageRating || 4.8,
     verified: true,
@@ -539,13 +548,13 @@ export default async function CategoryPage({ params }: PageProps) {
         '@type': 'ListItem',
         position: 2,
         name: cityName,
-        item: `${SITE_URL}/${lang}/${city}`,
+        item: `${SITE_URL}/${lang}/${decodedCitySlug}`,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: categoryName,
-        item: `${SITE_URL}/${lang}/${city}/${category}`,
+        item: `${SITE_URL}/${lang}/${decodedCitySlug}/${category}`,
       },
     ],
   };
@@ -559,7 +568,7 @@ export default async function CategoryPage({ params }: PageProps) {
       <div className="min-h-screen bg-white text-gray-900">
         <header className="border-b border-orange-100 bg-white/90 backdrop-blur">
           <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8 gap-y-2">
-            <Link href={`/${lang}/auth?mode=register&role=provider&city=${city}&category=${category}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
+            <Link href={`/${lang}/auth?mode=register&role=provider&city=${decodedCitySlug}&category=${category}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
               <span className="flex flex-col items-end text-right text-sm font-semibold md:flex-row md:items-center md:gap-1">
                 <span>{categoryT['nav_cta_line1'] || 'Do you offer'} {categoryName}?</span>
                 <span>{categoryT['nav_cta_line2'] || 'Join for free!'} →</span>
@@ -571,7 +580,7 @@ export default async function CategoryPage({ params }: PageProps) {
           <div className="mx-auto w-full max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
             <ol className="flex items-center gap-2 text-sm text-gray-500">
               <li>
-                <Link href={`/${lang}/${city}`} className="hover:text-gray-700 transition-colors">
+                <Link href={`/${lang}/${decodedCitySlug}`} className="hover:text-gray-700 transition-colors">
                   {cityName}
                 </Link>
               </li>
@@ -617,8 +626,8 @@ export default async function CategoryPage({ params }: PageProps) {
               <CategoryPageClient
                 translations={categoryT}
                 categorySlug={apiSlug}
-                citySlug={city}
-                city={city}
+                citySlug={decodedCitySlug}
+                city={decodedCitySlug}
                 category={category}
                 lang={lang}
                 cityName={cityName}
@@ -687,7 +696,7 @@ export default async function CategoryPage({ params }: PageProps) {
             <p className="text-sm text-gray-500">
               {getLocalizedCityText((categoryT['provider_cta_prefix'] || 'Do you offer'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })} {categoryName} {getLocalizedCityText((categoryT['provider_cta_suffix'] || `${prepBaseCat} {city}?`), lang, cityName, categoryT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
             </p>
-            <Link href={`/${lang}/auth?mode=register&role=provider&city=${city}&category=${category}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
+            <Link href={`/${lang}/auth?mode=register&role=provider&city=${decodedCitySlug}&category=${category}`} className="mt-2 inline-block text-sm font-semibold text-orange-500 hover:text-orange-600 underline underline-offset-2">
               {getLocalizedCityText((categoryT['provider_cta_link'] || 'Join for free →'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form })}
             </Link>
           </section>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { getCategories, getCityBySlug, API_BASE } from '@/lib/api';
 import CityPageHero from '@/components/city/CityPageHero';
 import { generateHreflangAlternates, generateOrganizationJsonLd, generateWebSiteJsonLd, generateLocalBusinessJsonLd } from '@/lib/seo';
@@ -45,9 +46,13 @@ const fallbackCategories = [
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang, city } = await params;
+  const decodedCitySlug = decodeURIComponent(city);
   const cityT = await fetchTranslations(lang, 'city');
-  const cityData = await getCityBySlug(city, lang);
-  const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+  const cityData = await getCityBySlug(decodedCitySlug, lang);
+  if (!cityData) {
+    notFound();
+  }
+  const cityName = cityData?.city || decodedCitySlug.charAt(0).toUpperCase() + decodedCitySlug.slice(1);
   // Slavic languages that use grammatical cases (locative/genitive)
   const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
   const grammaticalCase = slavicLanguagesWithDeclension.includes(lang) ? 'locative' : 'nominative';
@@ -64,8 +69,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: {
-      canonical: `${SITE_URL}/${lang}/${city}`,
-      languages: generateHreflangAlternates(`/${city}`),
+      canonical: `${SITE_URL}/${lang}/${decodedCitySlug}`,
+      languages: generateHreflangAlternates(`/${decodedCitySlug}`),
     },
     openGraph: {
       title,
@@ -76,12 +81,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CityPage({ params }: PageProps) {
   const { lang, city } = await params;
+  const decodedCitySlug = decodeURIComponent(city);
   const cityT = await fetchTranslations(lang, 'city');
   const categoryT = await fetchTranslations(lang, 'category');
   const cookieT = await fetchTranslations(lang, 'cookie_banner');
   const categories = await getCategories(lang);
-  const cityData = await getCityBySlug(city, lang);
-  const cityName = cityData?.city || city.charAt(0).toUpperCase() + city.slice(1);
+  const cityData = await getCityBySlug(decodedCitySlug, lang);
+  if (!cityData) {
+    notFound();
+  }
+  const cityName = cityData?.city || decodedCitySlug.charAt(0).toUpperCase() + decodedCitySlug.slice(1);
   const cityCountryCode = cityData?.country_code ?? 'BG';
   // Slavic languages that use grammatical cases (locative/genitive)
   const slavicLanguagesWithDeclension = ['bg', 'cs', 'sk', 'ru', 'uk', 'sr', 'hr', 'mk', 'sl', 'pl'];
@@ -90,7 +99,7 @@ export default async function CityPage({ params }: PageProps) {
   // Fetch city stats
   let cityStats = { provider_count: 0, request_count: 0, average_rating: 0 };
   try {
-    const statsRes = await fetch(`${API_BASE}/api/v1/cities/${city}/stats`, {
+    const statsRes = await fetch(`${API_BASE}/api/v1/cities/${decodedCitySlug}/stats`, {
       next: { revalidate: 3600 }
     });
     if (statsRes.ok) {
@@ -110,10 +119,10 @@ export default async function CityPage({ params }: PageProps) {
   
   // Create a pseudo-provider to represent the platform in this city for LocalBusiness schema
   const cityPseudoProvider: ProviderDetail = {
-    id: `city-${city}`,
+    id: `city-${decodedCitySlug}`,
     business_name: getLocalizedCityText(t(cityT, 'seo_title', '{city} — Local Services | Nevumo'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
     description: getLocalizedCityText(t(cityT, 'seo_description', 'Find trusted local services in {city}.'), lang, cityName, cityT, grammaticalCase, { locative_form: cityData?.locative_form, genitive_form: cityData?.genitive_form }),
-    slug: city,
+    slug: decodedCitySlug,
     profile_image_url: null,
     rating: cityStats.average_rating || 4.8,
     verified: true,
@@ -151,10 +160,10 @@ export default async function CityPage({ params }: PageProps) {
       <JsonLd data={websiteJsonLd} />
       <JsonLd data={localBusinessJsonLd} />
       <div className="min-h-screen bg-white">
-      <CtxCapture city={city} />
+      <CtxCapture city={decodedCitySlug} />
       {/* NAVBAR */}
       <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <Link href={`/${lang}/auth?mode=register&role=provider&city=${city}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
+        <Link href={`/${lang}/auth?mode=register&role=provider&city=${decodedCitySlug}`} className="text-sm font-semibold text-gray-700 transition hover:text-orange-600">
           <span className="flex flex-col items-end text-right text-sm font-semibold md:flex-row md:items-center md:gap-1">
             <span>{cityT['nav_cta_line1'] || 'Do you offer services in'} {cityName}?</span>
             <span>{cityT['nav_cta_line2'] || 'Join for free!'} →</span>
@@ -170,7 +179,7 @@ export default async function CityPage({ params }: PageProps) {
         requestCount={cityStats.request_count}
         averageRating={cityStats.average_rating === 0 ? null : cityStats.average_rating}
         lang={lang}
-        citySlug={city}
+        citySlug={decodedCitySlug}
         categories={displayCategories}
         categoryTranslations={categoryT}
         countryCode={cityData?.country_code}
@@ -187,7 +196,7 @@ export default async function CityPage({ params }: PageProps) {
             {displayCategories.map((category) => (
               <Link
                 key={category.id}
-                href={`/${lang}/${city}/${category.slug}`}
+                href={`/${lang}/${decodedCitySlug}/${category.slug}`}
                 className="nevumo-card text-center hover:shadow-lg transition-shadow"
               >
                 <div className="text-orange-500 mb-3">
@@ -284,7 +293,7 @@ export default async function CityPage({ params }: PageProps) {
               return (
                 <Link
                   key={cat.id}
-                  href={`/${lang}/${city}/${cat.slug}`}
+                  href={`/${lang}/${decodedCitySlug}/${cat.slug}`}
                   className="text-gray-600 hover:text-orange-600 transition"
                 >
                   {cat.name} {prep} {displayedCityName}
