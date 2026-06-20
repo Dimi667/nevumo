@@ -165,6 +165,8 @@ export default async function Page(props: {
           cities: [],
           services: provider.services.map(s => ({ ...s, id: s.id })),
           latest_review: null,
+          claim_token: provider.claim_token ?? null,
+          search_volume: provider.search_volume ?? null,
         }}
         translations={mergedT}
         lang={lang}

@@ -170,6 +170,8 @@ export interface ProviderDetail {
   is_claimed: boolean;
   verification_level: number;
   gallery: GalleryImage[];
+  claim_token: string | null;
+  search_volume: number | null;
 }
 
 export interface Review {

@@ -134,7 +134,9 @@ export default async function CityPage({ params }: PageProps) {
     is_claimed: true,
     reviews: [],
     verification_level: 0,
-    gallery: []
+    gallery: [],
+    claim_token: null,
+    search_volume: null
   };
   const localBusinessJsonLd = generateLocalBusinessJsonLd(
     cityPseudoProvider,

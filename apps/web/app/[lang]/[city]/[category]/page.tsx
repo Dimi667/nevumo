@@ -518,7 +518,9 @@ export default async function CategoryPage({ params }: PageProps) {
     is_claimed: true,
     reviews: [],
     verification_level: 0,
-    gallery: []
+    gallery: [],
+    claim_token: null,
+    search_volume: null
   };
 
   const localBusinessJsonLd = generateLocalBusinessJsonLd(categoryPseudoProvider, categoryName, cityName, cityCountryCode);
