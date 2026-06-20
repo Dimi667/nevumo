@@ -9,6 +9,7 @@ import StickyProviderCTA from './StickyProviderCTA';
 import ProviderMobileCTA from './ProviderMobileCTA';
 import BottomSheetForm from './BottomSheetForm';
 import { ShareButton } from '@/components/shared/ShareButton';
+import ClaimProfileBanner from '@/components/ClaimProfileBanner';
 
 interface GalleryImage {
   id: number;
@@ -59,6 +60,9 @@ interface ProviderFullPageProps {
     latest_review?: Review | null;
     latest_lead_city?: string | null;
     latest_lead_client_name?: string | null;
+    is_claimed: boolean;
+    claim_token: string | null;
+    search_volume: number | null;
   };
   translations: Record<string, string>;
   lang: string;
@@ -500,6 +504,23 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
         {/* LEFT COLUMN */}
         <div className="flex-1 space-y-4">
           <HeroSection provider={provider} translations={t} />
+          {!provider.is_claimed && provider.claim_token && (
+            <ClaimProfileBanner
+              businessName={provider.business_name}
+              lang={lang}
+              claimToken={provider.claim_token}
+              searchVolume={provider.search_volume}
+              categoryLabel={provider.category_name}
+              cityLabel={provider.city_name}
+              translations={{
+                title: t['unclaimed_banner_title'] ?? 'Is this your business?',
+                subtitle: t['unclaimed_banner_subtitle'] ?? 'Claim your free profile for {businessName}',
+                desc: t['unclaimed_banner_desc'] ?? '{count} clients are looking for {category} in {city}. Don\'t miss out!',
+                cta: t['unclaimed_banner_cta'] ?? 'Claim your profile for free →',
+                trust: t['unclaimed_banner_trust'] ?? 'No commitment • Takes 2 minutes',
+              }}
+            />
+          )}
           <ProviderMobileCTA
             label={translations['cta_button'] ?? 'Свържи се с'}
             providerName={provider.business_name}

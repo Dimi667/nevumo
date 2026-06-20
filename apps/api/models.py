@@ -665,3 +665,15 @@ class PushSubscription(Base):
     __table_args__ = (
         Index("ix_push_subscriptions_user_id", "user_id"),
     )
+
+
+# -------------------------
+# City Category Search Volume
+# -------------------------
+
+class CitySearchVolume(Base):
+    __tablename__ = "city_category_search_volume"
+
+    city_slug: Mapped[str] = mapped_column(String, primary_key=True)
+    category_slug: Mapped[str] = mapped_column(String, primary_key=True)
+    search_volume: Mapped[int] = mapped_column(Integer, nullable=False)

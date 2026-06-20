@@ -6,13 +6,13 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from sqlalchemy import func, and_
+from sqlalchemy import func, and_, select
 import redis as redis_lib
 
 from apps.api.config import settings
 from apps.api.dependencies import get_db, get_redis, get_current_user
 from apps.api.exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
-from apps.api.models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation, Lead, Review, User
+from apps.api.models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation, Lead, Review, User, CitySearchVolume
 from apps.api.schemas import (
     ProviderListItem,
     ProviderListResponse,
@@ -491,6 +491,25 @@ async def get_provider(
 
     services = db.query(Service).filter(Service.provider_id == provider.id).all()
 
+    # Fetch search volume for the provider's city and category
+    search_volume = None
+    first_city = db.query(ProviderCity).filter(ProviderCity.provider_id == provider.id).first()
+    first_service = db.query(Service).filter(Service.provider_id == provider.id).first()
+    
+    if first_city and first_service:
+        city = db.query(Location).filter(Location.id == first_city.city_id).first()
+        category = db.query(Category).filter(Category.id == first_service.category_id).first()
+        
+        if city and category:
+            volume_row = db.execute(
+                select(CitySearchVolume).where(
+                    CitySearchVolume.city_slug == city.slug,
+                    CitySearchVolume.category_slug == category.slug,
+                )
+            ).scalar_one_or_none()
+            
+            search_volume = volume_row.search_volume if volume_row else None
+
     service_items = []
     for s in services:
         cat = db.query(Category).filter(Category.id == s.category_id).first()
@@ -588,6 +607,8 @@ async def get_provider(
         availability_status=provider.availability_status,
         created_at=provider.created_at,
         is_claimed=provider.is_claimed or False,
+        claim_token=provider.claim_token if not provider.is_claimed else None,
+        search_volume=search_volume,
         services=service_items,
         jobs_completed=jobs_completed,
         review_count=review_count,

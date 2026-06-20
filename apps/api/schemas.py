@@ -125,6 +125,8 @@ class ProviderDetail(BaseModel):
     availability_status: str
     created_at: datetime
     is_claimed: bool = False
+    claim_token: Optional[str] = None
+    search_volume: int | None = None
     services: List[ServiceOut] = []
     jobs_completed: int = 0
     review_count: int = 0

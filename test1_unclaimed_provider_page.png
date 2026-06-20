@@ -1,0 +1,96 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - link "Nevumo" [ref=e3] [cursor=pointer]:
+      - /url: /en
+      - img "Nevumo" [ref=e4]
+    - button "Go to dashboard" [ref=e113] [cursor=pointer]: "N"
+  - generic [ref=e5]:
+    - navigation [ref=e6]:
+      - list [ref=e7]:
+        - listitem [ref=e8]:
+          - link "Sofia" [ref=e9] [cursor=pointer]:
+            - /url: /en/sofia
+        - listitem [ref=e10]: ›
+        - listitem [ref=e11]:
+          - link "Massage" [ref=e12] [cursor=pointer]:
+            - /url: /en/sofia/massage
+        - listitem [ref=e13]: ›
+        - listitem [ref=e14]: Serwis Hydrauliczny Kowalski
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e20]: S
+            - generic [ref=e21]:
+              - heading "Serwis Hydrauliczny Kowalski" [level=1] [ref=e22]
+              - paragraph [ref=e23]: Massage
+              - paragraph [ref=e24]: Sofia
+          - generic [ref=e26]: ⚡ New to Nevumo — responds quickly
+          - generic [ref=e28]:
+            - generic [ref=e29]: "1"
+            - generic [ref=e30]: Services
+          - button "Share" [ref=e33] [cursor=pointer]:
+            - img [ref=e34]
+            - generic [ref=e37]: Share
+        - generic [ref=e38]:
+          - heading "About the specialist" [level=2] [ref=e39]
+          - paragraph [ref=e40]: Profesjonalne usługi hydrauliczne w Warszawie. Awarie 24h.
+        - generic [ref=e41]:
+          - heading "Services and prices" [level=2] [ref=e42]
+          - generic [ref=e45] [cursor=pointer]:
+            - heading "Massage" [level=3] [ref=e47]
+            - generic [ref=e48]:
+              - paragraph [ref=e49]: On request
+              - button "Select the service" [ref=e50]
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - heading "Send a request to Serwis Hydrauliczny Kowalski" [level=2] [ref=e54]
+          - paragraph [ref=e55]: ✓ Free • No commitment
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - button "Massage On request" [ref=e59] [cursor=pointer]
+            - paragraph [ref=e60]: Or send a general request ↓
+          - generic [ref=e62]:
+            - generic [ref=e63]: Your phone*
+            - textbox "+359 888123456" [ref=e64]: +359 878619149
+          - textbox "Briefly describe what you need..." [ref=e65]
+          - paragraph [ref=e67]: 47 заявки за Massage в Sofia тази година
+          - button "Connect me with Serwis Hydrauliczny Kowalski" [ref=e68] [cursor=pointer]
+        - generic [ref=e69]:
+          - generic [ref=e71]: ✓ No registration
+          - generic [ref=e73]: ✓ No costs!
+          - generic [ref=e75]: ✓ Direct contact
+  - contentinfo [ref=e76]:
+    - generic [ref=e77]:
+      - button "Share" [ref=e79] [cursor=pointer]:
+        - img [ref=e80]
+        - text: Share
+      - generic [ref=e83]:
+        - button "Privacy Policy" [ref=e84] [cursor=pointer]
+        - button "Cookie Policy" [ref=e85] [cursor=pointer]
+        - button "Terms & Conditions" [ref=e86] [cursor=pointer]
+        - button "Terms for Providers" [ref=e87] [cursor=pointer]
+        - button "Withdrawal Form" [ref=e88] [cursor=pointer]
+        - button "DSA Contact Point" [ref=e89] [cursor=pointer]
+        - button "Cookie Settings" [ref=e90] [cursor=pointer]
+      - generic [ref=e91]:
+        - link "support@nevumo.com" [ref=e92] [cursor=pointer]:
+          - /url: mailto:support@nevumo.com
+        - button "🇬🇧 English" [ref=e94] [cursor=pointer]:
+          - generic [ref=e95]: 🇬🇧
+          - generic [ref=e96]: English
+          - img [ref=e97]
+      - generic [ref=e99]: © 2026 Nevumo
+  - alert [ref=e100]
+  - generic [ref=e102]:
+    - generic [ref=e103]:
+      - heading "We use cookies" [level=3] [ref=e114]
+      - paragraph [ref=e105]:
+        - generic [ref=e106]:
+          - text: We use cookies and similar technologies to improve your experience, analyse traffic and show relevant content. You can choose which categories to allow.
+          - link "Privacy Policy" [ref=e107] [cursor=pointer]:
+            - /url: /en/privacy
+    - generic [ref=e108]:
+      - button "Customize" [ref=e109] [cursor=pointer]
+      - button "Reject All" [ref=e110] [cursor=pointer]
+      - button "Accept All" [ref=e111] [cursor=pointer]
