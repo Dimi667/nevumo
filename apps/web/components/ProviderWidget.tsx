@@ -732,7 +732,16 @@ export default function ProviderWidget({
           >
             {loading
               ? (translations['sending'] ?? 'Изпращане...')
-              : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
+              : provider.business_name.length <= 22 ? (
+                  <span>{`${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}</span>
+                ) : (
+                  <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+                    <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>{translations['cta_button'] ?? 'Свържи ме с'}</span>
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+                      {provider.business_name}
+                    </span>
+                  </span>
+                )}
           </button>
         )}
         <p className="text-sm text-gray-400 text-center mt-2">
@@ -830,7 +839,16 @@ export default function ProviderWidget({
               >
                 {loading
                   ? (translations['sending'] ?? 'Изпращане...')
-                  : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
+                  : provider.business_name.length <= 22 ? (
+                      <span>{`${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}</span>
+                    ) : (
+                      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+                        <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>{translations['cta_button'] ?? 'Свържи ме с'}</span>
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+                          {provider.business_name}
+                        </span>
+                      </span>
+                    )}
               </button>
             </div>
           }
@@ -844,7 +862,16 @@ export default function ProviderWidget({
             >
               {loading
                 ? (translations['sending'] ?? 'Изпращане...')
-                : `${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}
+                : provider.business_name.length <= 22 ? (
+                    <span>{`${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}</span>
+                  ) : (
+                    <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+                      <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>{translations['cta_button'] ?? 'Свържи ме с'}</span>
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+                        {provider.business_name}
+                      </span>
+                    </span>
+                  )}
             </button>
           </div>
         </StickyBottomBar>
