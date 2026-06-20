@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Profil aktywny ✓ — informacja o danych (art. 14 RODO)</title>
+  <style type="text/css">
+    body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+    table,td{mso-table-lspace:0pt;mso-table-rspace:0pt}
+    img{-ms-interpolation-mode:bicubic;border:0;height:auto;line-height:100%;outline:none;text-decoration:none}
+    *{box-sizing:border-box}
+    body{margin:0!important;padding:0!important;background-color:#F3F4F6;
+         font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
+    @media only screen and (max-width:620px){
+      .ew{width:100%!important}
+      .eb{padding:10px 20px!important}
+      .cta{display:block!important;width:100%!important;text-align:center!important}
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#F3F4F6;">
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F3F4F6;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table class="ew" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600"
+               style="background:#ffffff;border-radius:12px;overflow:hidden;
+                      box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+
+          <!-- SECTION 1 — HEADER -->
+          <tr>
+            <td style="background:#ffffff;padding:12px 40px 2px;text-align:center;">
+              <a href="https://nevumo.com" target="_blank" style="text-decoration:none;">
+                <img src="https://images.nevumo.com/nevumo-logo.png"
+                     alt="Nevumo" width="140"
+                     style="display:inline-block;border:0;height:auto;max-width:140px;"/>
+              </a>
+            </td>
+          </tr>
+
+          <!-- SECTION 2 — HERO -->
+          <tr>
+            <td class="eb" style="padding:4px 40px 28px;">
+              <div style="width:44px;height:44px;background:#22C55E;border-radius:50%;margin:0 auto 16px;display:block;">
+                <span style="font-size:22px;font-weight:700;color:#ffffff;display:block;text-align:center;line-height:44px;">✓</span>
+              </div>
+              <h1 style="margin:0 0 12px;font-size:24px;font-weight:800;color:#111827;line-height:1.25;">
+                Gratulacje — profil przejęty!
+              </h1>
+              <p style="margin:0 0 24px;font-size:15px;color:#4B5563;line-height:1.65;">
+                Profil <strong style="color:#111827;">{{ business_name }}</strong> jest teraz
+                w pełni aktywny na Nevumo. Klienci mogą Cię znaleźć i kontaktować się bezpośrednio.
+              </p>
+
+              <!-- SECTION 3 — CTA BUTTON (PRIMARY) -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="border-radius:10px;background:#F97316;box-shadow:0 4px 12px rgba(249,115,22,0.30);">
+                    <a href="{{ dashboard_link }}" target="_blank" class="cta"
+                       style="display:inline-block;padding:14px 32px;font-size:15px;
+                              font-weight:700;color:#ffffff;text-decoration:none;border-radius:10px;">
+                      Przejdź do panelu zarządzania →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- SECTION 4 — DIVIDER -->
+          <tr><td style="padding:0 40px;"><hr style="border:none;border-top:1px solid #F3F4F6;margin:0;"/></td></tr>
+
+          <!-- SECTION 5 — DATA TABLE -->
+          <tr>
+            <td class="eb" style="padding:28px 40px;">
+              <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-left:4px solid #D1D5DB;
+                         border-radius:8px;padding:20px 24px;">
+                <p style="margin:0 0 10px;font-size:11px;font-weight:700;color:#6B7280;
+                         text-transform:uppercase;letter-spacing:0.8px;">
+                  DANE PRZETWARZANE PRZED PRZEJĘCIEM PROFILU (ART. 14 RODO)
+                </p>
+                <p style="margin:0 0 14px;font-size:13px;color:#4B5563;line-height:1.6;">
+                  Zanim profil został przejęty, Nevumo pozyskało poniższe dane
+                  z publicznie dostępnego rejestru <strong>CEIDG</strong> (dane.biznes.gov.pl)
+                  oraz z publicznie dostępnych stron internetowych firm:
+                </p>
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"
+                       style="border-collapse:collapse;font-size:13px;">
+                  <tr>
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">Nazwa firmy</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">{{ business_name }}</td>
+                  </tr>
+                  <tr style="background:#F9FAFB;">
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">NIP</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">{{ nip | default("nie podano") }}</td>
+                  </tr>
+                  <tr>
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">Telefon</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">{{ provider_phone | default("nie podano") }}</td>
+                  </tr>
+                  <tr style="background:#F9FAFB;">
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">Adres e-mail</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">{{ scraped_email | default("nie podano") }}</td>
+                  </tr>
+                  <tr>
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">Strona www</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">{{ provider_website | default("nie podano") }}</td>
+                  </tr>
+                  <tr style="background:#F9FAFB;">
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">Kategoria usług</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">{{ category_label }}</td>
+                  </tr>
+                  <tr>
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">Miasto</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">Warszawa</td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+
+          <!-- SECTION 6 — LEGAL INFO BLOCKS -->
+          <tr>
+            <td class="eb" style="padding:24px 40px 0;">
+              <!-- Block A -->
+              <p style="margin:0 0 6px;font-size:10px;font-weight:700;color:#9CA3AF;
+                         text-transform:uppercase;letter-spacing:1px;">
+                ADMINISTRATOR DANYCH
+              </p>
+              <p style="margin:0 0 14px;font-size:13px;color:#4B5563;line-height:1.65;">
+                „PHILIPS CENTER BULGARIA" Ltd (marka: Nevumo) · UIC: 175369610 ·
+                ul. Petko Karavelov 77, kl. A, m. 19, 1408 Sofia, Bułgaria ·
+                <a href="mailto:privacy@nevumo.com" style="color:#F97316;text-decoration:none;">
+                  privacy@nevumo.com
+                </a>
+              </p>
+
+              <hr style="border:none;border-top:1px solid #F3F4F6;margin:14px 0;"/>
+
+              <!-- Block B -->
+              <p style="margin:0 0 6px;font-size:10px;font-weight:700;color:#9CA3AF;
+                         text-transform:uppercase;letter-spacing:1px;">
+                CEL I PODSTAWA PRAWNA
+              </p>
+              <p style="margin:0 0 14px;font-size:13px;color:#4B5563;line-height:1.65;">
+                Tworzenie profilu dostawcy usług — prawnie uzasadniony interes administratora
+                (art. 6 ust. 1 lit. f RODO). Po przejęciu profilu — wykonanie umowy
+                (art. 6 ust. 1 lit. b RODO).
+              </p>
+
+              <hr style="border:none;border-top:1px solid #F3F4F6;margin:14px 0;"/>
+
+              <!-- Block C -->
+              <p style="margin:0 0 6px;font-size:10px;font-weight:700;color:#9CA3AF;
+                         text-transform:uppercase;letter-spacing:1px;">
+                ZAUTOMATYZOWANE PRZETWARZANIE
+              </p>
+              <p style="margin:0 0 14px;font-size:13px;color:#4B5563;line-height:1.65;">
+                Nevumo automatycznie oblicza pozycję rankingową i odznakę statusu
+                (⚡ Nowy / ✓ Zweryfikowany / ★ Top Specjalista) na podstawie obiektywnych
+                kryteriów (Regulamin dla Dostawców, pkt 5). Systemy te nie wywołują skutków
+                prawnych, lecz mogą wpływać na widoczność profilu na Platformie.
+              </p>
+
+              <hr style="border:none;border-top:1px solid #F3F4F6;margin:14px 0;"/>
+
+              <!-- Block D -->
+              <p style="margin:0 0 6px;font-size:10px;font-weight:700;color:#9CA3AF;
+                         text-transform:uppercase;letter-spacing:1px;">
+                TWOJE PRAWA · PRAWO DO SKARGI
+              </p>
+              <p style="margin:0 0 6px;font-size:13px;color:#4B5563;line-height:1.65;">
+                Dostęp · Sprostowanie · Usunięcie · Ograniczenie · Przenoszenie · Sprzeciw →
+                <a href="mailto:privacy@nevumo.com" style="color:#F97316;text-decoration:none;">
+                  privacy@nevumo.com
+                </a>
+              </p>
+              <p style="margin:0;font-size:12px;color:#6B7280;">
+                Skarga: UODO (Polska) —
+                <a href="https://uodo.gov.pl" style="color:#6B7280;">uodo.gov.pl</a>
+                · КЗЛД (Bułgaria) —
+                <a href="https://cpdp.bg" style="color:#6B7280;">cpdp.bg</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- SECTION 7 — LINKS ROW -->
+          <tr>
+            <td style="padding:20px 40px;text-align:center;font-size:13px;">
+              <a href="https://nevumo.com/pl/privacy" style="color:#4B5563;text-decoration:underline;">
+                Pełna Polityka prywatności
+              </a>
+              &nbsp;·&nbsp;
+              <a href="https://nevumo.com/pl/terms-providers" style="color:#4B5563;text-decoration:underline;">
+                Regulamin dla Dostawców
+              </a>
+            </td>
+          </tr>
+
+          <!-- SECTION 8 — FOOTER -->
+          <tr>
+            <td style="background:#F9FAFB;padding:20px 40px;text-align:center;font-size:12px;color:#9CA3AF;">
+              <p style="margin:0;">Nevumo · „PHILIPS CENTER BULGARIA" Ltd · UIC 175369610</p>
+              <p style="margin:0;">
+                ul. Petko Karavelov 77, kl. A, m. 19, 1408 Sofia, Bułgaria ·
+                <a href="mailto:privacy@nevumo.com" style="color:#9CA3AF;">privacy@nevumo.com</a>
+              </p>
+              <p style="margin:10px 0 0;">
+                Wiadomość transakcyjna — nie jest wiadomością marketingową.
+              </p>
+              <p style="margin:0;">© 2026 Nevumo. Wszelkie prawa zastrzeżone.</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

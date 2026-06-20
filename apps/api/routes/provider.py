@@ -659,9 +659,28 @@ def claim_provider_endpoint(
     provider = claim_provider(body.claim_token, current_user, db)
     try:
         if provider and current_user.email:
+            CATEGORY_LABEL_PL = {
+                "cleaning": "sprzątanie",
+                "plumbing": "usługi hydrauliczne",
+                "massage": "usługi masażu",
+            }
+
+            category_slug = None
+            if provider.services:
+                first_service = provider.services[0]
+                category_slug = getattr(first_service, "category_slug", None) or \
+                                getattr(getattr(first_service, "category", None), "slug", None)
+            category_label = CATEGORY_LABEL_PL.get(category_slug or "", "usługi")
+
             email_service.send_article14_notification(
-                provider_email=current_user.email,
-                provider_name=provider.business_name or current_user.email,
+                to_email=current_user.email,
+                business_name=provider.business_name or "",
+                dashboard_link="https://nevumo.com/pl/dashboard",
+                nip=None,
+                provider_phone=None,
+                scraped_email=None,
+                provider_website=None,
+                category_label=category_label,
             )
     except Exception as e:
         print(f"[EMAIL_WARNING] {type(e).__name__}: {e}", flush=True)

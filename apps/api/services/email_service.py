@@ -363,24 +363,40 @@ This withdrawal form was submitted via the Nevumo online form.
 
     def send_article14_notification(
         self,
-        provider_email: str,
-        provider_name: str,
-    ) -> bool:
-        subject = "Information about your Nevumo profile — GDPR Article 14"
-        html_body = f"""<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;color:#333;">
-    <div style="max-width:600px;margin:0 auto;padding:20px;">
-    <h2 style="color:#f97316;">Information about your profile on Nevumo</h2>
-    <p>Dear {provider_name},</p>
-    <p>You have claimed a profile on Nevumo. In accordance with <strong>Article 14 GDPR</strong>, we inform you of the following:</p>
-    <div style="background:#f3f4f6;padding:15px;border-radius:8px;margin:20px 0;">
-    <p><strong>Data held:</strong> Business name, location, service category, contact details sourced from publicly available directories.</p>
-    <p><strong>Purpose:</strong> Connecting service providers with clients on the Nevumo marketplace.</p>
-    <p><strong>Legal basis:</strong> Article 6(1)(b) GDPR — performance of a contract.</p>
-    <p><strong>Your rights:</strong> Access, rectification, erasure, portability. Contact: <a href="mailto:privacy@nevumo.com">privacy@nevumo.com</a></p>
-    </div>
-    <p><a href="{self._app_url}/en/privacy" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Read Privacy Policy</a></p>
-    </div></body></html>"""
-        return self._send_email(provider_email, subject, html_body)
+        to_email: str,
+        business_name: str,
+        dashboard_link: str,
+        nip: str | None = None,
+        provider_phone: str | None = None,
+        scraped_email: str | None = None,
+        provider_website: str | None = None,
+        category_label: str = "usługi",
+    ) -> None:
+        try:
+            import jinja2
+            import pathlib
+
+            template_dir = pathlib.Path(__file__).parent / "templates"
+            env = jinja2.Environment(loader=jinja2.FileSystemLoader(str(template_dir)))
+            template = env.get_template("article14_confirmation_pl.html")
+
+            html = template.render(
+                business_name=business_name,
+                dashboard_link=dashboard_link,
+                nip=nip,
+                provider_phone=provider_phone,
+                scraped_email=scraped_email,
+                provider_website=provider_website,
+                category_label=category_label,
+            )
+
+            self._send_email(
+                to=to_email,
+                subject="Profil aktywny ✓ — informacja o danych (art. 14 RODO)",
+                html=html,
+            )
+        except Exception as e:
+            print(f"[EMAIL_WARNING] send_article14_notification failed: {e}", flush=True)
 
     def send_claim_welcome_email(
         self,
