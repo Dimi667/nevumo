@@ -158,7 +158,7 @@ Google OAuth + claim flow → може да попадне на onboarding
 
 ---
 
-### Блокер 2 — Art. 14 GDPR имейл в providers.py (Задача 4Е) 🔴
+### Блокер 2 — Art. 14 GDPR имейл в providers.py (Задача 4Е) ✅ ЗАВЪРШЕН (22 юни 2026)
 
 **Проблем:** `send_article14_notification()` липсва в `POST /api/v1/providers/claim/{token}` в `providers.py`. Изпраща се само от `provider.py` (dashboard flow). Правно задължение.
 
@@ -166,6 +166,12 @@ Google OAuth + claim flow → може да попадне на onboarding
 
 **Файл:** `apps/api/routes/providers.py`
 **Модел:** Kimi-2.6
+
+**Имплементация (22 юни 2026):**
+- Добавено извикване на send_article14_notification() след db.commit() в claim_provider
+- Fix: _send_email() параметри to→to_email, html→html_body (ca8957c)
+- Commits: f967053, ca8957c
+- E2E тест: ✅ Art. 14 изпратен успешно (без [EMAIL_WARNING] в Railway логове)
 
 ---
 
@@ -198,6 +204,24 @@ CREATE TABLE outreach_unsubscribes (
 
 **Файлове:** нова `outreach_unsubscribes` таблица, `apps/api/routes/outreach.py`, `send_outreach_bulk.py`
 **Модел:** SWE-1.6 (backend) + Kimi-2.6 (bulk script update)
+
+---
+
+### Блокер 3Б — Welcome имейл след claim (await bug) 🟡
+
+**Проблем:** `send_claim_welcome_email` хвърля `object bool can't be used in 'await' expression`.
+Функцията не е async, но се извиква с await. Pre-existing bug, открит при E2E теста на Блокер 2.
+
+**Последствие:** Провайдърът не получава welcome имейл след успешен claim.
+Не е правно задължение, но влияе пряко на Фунел 2 (Activation).
+
+**Файл:** `apps/api/routes/providers.py` — функцията claim_provider, блокът Send welcome email
+
+**Решение:** Премахни await пред извикването на send_claim_welcome_email() или
+направи функцията async — провери сигнатурата в email_service.py преди fix.
+
+**Модел:** Kimi-2.6
+**Приоритет:** Преди QA Gate, след Блокер 3.
 
 ---
 
@@ -1059,8 +1083,9 @@ CATEGORY_LABEL_PL = {
 ```
 БЛОКЕРИ (наредени по зависимост):
 [✅] Блокер 1: Auto-claim (4Д) — ЗАВЪРШЕН (22 юни 2026)
-[ ] Блокер 2: Art.14 в providers.py (4Е)         → Kimi-2.6
+[✅] Блокер 2: Art.14 в providers.py (4Е) — ЗАВЪРШЕН (22 юни 2026)
 [ ] Блокер 3: Unsubscribe механизъм              → SWE-1.6 (backend) + Kimi-2.6 (script)
+[ ] Блокер 3Б: Welcome имейл след claim (await bug fix)  → Kimi-2.6 (преди QA Gate)
 [ ] Блокер 4: Resend Webhooks                    → SWE-1.6
 [ ] Блокер 5: outreach_sequence_log таблица      → SWE-1.6
 [ ] Блокер 6: Верификация при claim (4Г)         → SWE-1.6 (backend + DB) + Kimi-2.6 (frontend + template)

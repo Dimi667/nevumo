@@ -1741,10 +1741,13 @@ git push nevumo-git main  # архив на SSD
 **Pre-Task 5A checklist:**
 - ✅ Auto-claim after login (skip second visit to claim page) — ЗАВЪРШЕНО (22 юни 2026)
 - 🔴 Test email/password login redirect flow
-- 🔴 Art. 14 GDPR email in providers.py POST endpoint
+- ✅ Art. 14 GDPR email in providers.py POST endpoint — ЗАВЪРШЕНО (22 юни 2026)
 - 🟡 Browser test all 5 error states
 - 🟡 Test neli and nevumo.dev claim flows
 - 🟡 Cleanup e2e_test providers from Neon DB
+
+**Known gaps:**
+- send_claim_welcome_email await bug: object bool can't be used in 'await' expression — Блокер 3Б, преди QA Gate
 
 - **Claimed Profiles — Task 4Б Unclaimed Banner (June 21, 2026):** ✅ ЗАВЪРШЕНА
   - ClaimProfileBanner.tsx рефакториран (translations + correct claim URL)
