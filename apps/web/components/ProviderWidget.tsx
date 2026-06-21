@@ -830,7 +830,7 @@ export default function ProviderWidget({
         {/* Sticky button mobile / inline desktop */}
         <StickyBottomBar
           fallback={
-            <div className="px-4 py-3">
+            <div className="px-6 py-4">
               <button
                 type="submit"
                 form="widget-lead-form"
