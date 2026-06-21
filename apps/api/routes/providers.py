@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, select
+from sqlalchemy.exc import IntegrityError
 import redis as redis_lib
 
 from apps.api.config import settings
@@ -417,6 +418,16 @@ async def claim_provider(
     """Claim an unclaimed provider profile (JWT required)."""
     logger = logging.getLogger(__name__)
     
+    # Check if user already has a provider profile
+    existing_provider = db.query(Provider).filter(
+        Provider.user_id == current_user.id
+    ).first()
+    if existing_provider:
+        raise HTTPException(
+            status_code=409,
+            detail={"code": "USER_ALREADY_HAS_PROVIDER", "message": "Your account already has a provider profile"}
+        )
+    
     # Find the provider by token
     provider = db.query(Provider).filter(
         Provider.claim_token == token
@@ -438,7 +449,14 @@ async def claim_provider(
     # Claim the profile
     provider.is_claimed = True
     provider.user_id = current_user.id
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail={"code": "USER_ALREADY_HAS_PROVIDER", "message": "Your account already has a provider profile"}
+        )
     
     # Send welcome email
     try:
