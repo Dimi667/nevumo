@@ -43,11 +43,11 @@ export default function ProviderMobileCTA({
         {providerName.length <= 22 ? (
           <span>{label} {providerName}</span>
         ) : (
-          <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+          <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', width: '100%' }}>
             <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>
               {label}
             </span>
-            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+            <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', textAlign: 'center', width: '100%' }}>
               {providerName}
             </span>
           </span>
