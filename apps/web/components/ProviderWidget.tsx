@@ -735,9 +735,9 @@ export default function ProviderWidget({
               : provider.business_name.length <= 22 ? (
                   <span>{`${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}</span>
                 ) : (
-                  <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+                  <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', width: '100%' }}>
                     <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>{translations['cta_button'] ?? 'Свържи ме с'}</span>
-                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+                    <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', textAlign: 'center', width: '100%' }}>
                       {provider.business_name}
                     </span>
                   </span>
@@ -842,9 +842,9 @@ export default function ProviderWidget({
                   : provider.business_name.length <= 22 ? (
                       <span>{`${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}</span>
                     ) : (
-                      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+                      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', width: '100%' }}>
                         <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>{translations['cta_button'] ?? 'Свържи ме с'}</span>
-                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+                        <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', textAlign: 'center', width: '100%' }}>
                           {provider.business_name}
                         </span>
                       </span>
@@ -865,9 +865,9 @@ export default function ProviderWidget({
                 : provider.business_name.length <= 22 ? (
                     <span>{`${translations['cta_button'] ?? 'Свържи ме с'} ${provider.business_name}`}</span>
                   ) : (
-                    <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+                    <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', width: '100%' }}>
                       <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>{translations['cta_button'] ?? 'Свържи ме с'}</span>
-                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+                      <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', textAlign: 'center', width: '100%' }}>
                         {provider.business_name}
                       </span>
                     </span>
