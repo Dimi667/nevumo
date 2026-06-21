@@ -10,6 +10,7 @@ import ClaimMobileCTA from './ClaimMobileCTA';
 
 interface PageProps {
   params: Promise<{ lang: string; token: string }>;
+  searchParams?: { error?: string };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -68,7 +69,7 @@ async function fetchProviderByToken(token: string, lang: string): Promise<Provid
   }
 }
 
-async function claimProfile(token: string, authToken: string): Promise<{ success: boolean; error?: string }> {
+async function claimProfile(token: string, authToken: string): Promise<{ success: boolean; errorCode?: string }> {
   try {
     const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
     const response = await fetch(`${apiUrl}/api/v1/providers/claim/${token}`, {
@@ -80,23 +81,28 @@ async function claimProfile(token: string, authToken: string): Promise<{ success
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        return { success: false, errorCode: 'auth_expired' };
+      }
       const errorData = await response.json().catch(() => ({}));
-      return {
-        success: false,
-        error: errorData?.detail?.message || errorData?.detail || 'Claim failed'
-      };
+      const code = errorData?.detail?.code || '';
+      if (code === 'ALREADY_CLAIMED') return { success: false, errorCode: 'already_claimed' };
+      if (code === 'USER_ALREADY_HAS_PROVIDER') return { success: false, errorCode: 'user_has_provider' };
+      if (response.status === 404) return { success: false, errorCode: 'not_found' };
+      return { success: false, errorCode: 'network' };
     }
 
     return { success: true };
   } catch {
-    return { success: false, error: 'Network error' };
+    return { success: false, errorCode: 'network' };
   }
 }
 
-export default async function ClaimPage({ params }: PageProps) {
+export default async function ClaimPage({ params, searchParams }: PageProps) {
   const { lang, token } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'en';
   const claimT = await fetchTranslations(normalizedLang, 'claim');
+  const errorParam = searchParams?.error ?? null;
 
   // Check auth status via cookie
   const cookieStore = await cookies();
@@ -228,6 +234,47 @@ export default async function ClaimPage({ params }: PageProps) {
           </div>
         </div>
 
+        {errorParam && errorParam !== 'already_claimed' && (
+          <div className="mb-6 rounded-xl border border-orange-200 bg-orange-50 p-4">
+            {errorParam === 'user_has_provider' && (
+              <>
+                <p className="text-sm text-orange-800 mb-3">{t(claimT, 'error_user_has_provider')}</p>
+                <Link
+                  href={`/${normalizedLang}/provider/dashboard`}
+                  className="inline-block rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+                >
+                  {t(claimT, 'error_user_has_provider_cta')}
+                </Link>
+              </>
+            )}
+            {errorParam === 'auth_expired' && (
+              <>
+                <p className="text-sm text-orange-800 mb-3">{t(claimT, 'error_auth_expired')}</p>
+                <Link
+                  href={`/${normalizedLang}/auth/login?redirect=/${normalizedLang}/claim/${token}`}
+                  className="inline-block rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+                >
+                  {t(claimT, 'error_auth_expired_cta')}
+                </Link>
+              </>
+            )}
+            {errorParam === 'not_found' && (
+              <p className="text-sm text-orange-800">{t(claimT, 'error_not_found')}</p>
+            )}
+            {errorParam === 'network' && (
+              <>
+                <p className="text-sm text-orange-800 mb-3">{t(claimT, 'error_network')}</p>
+                <Link
+                  href={`/${normalizedLang}/claim/${token}`}
+                  className="inline-block rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
+                >
+                  {t(claimT, 'error_network_cta')}
+                </Link>
+              </>
+            )}
+          </div>
+        )}
+
         <ClaimMobileCTA
           href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
           label={t(claimT, 'cta_register', 'Register and claim this profile for free')}
@@ -242,7 +289,7 @@ export default async function ClaimPage({ params }: PageProps) {
               if (claimResult.success) {
                 redirect(`/${normalizedLang}/provider/dashboard`);
               }
-              redirect(`/${normalizedLang}/claim/${token}?error=claim_failed`);
+              redirect(`/${normalizedLang}/claim/${token}?error=${claimResult.errorCode || 'network'}`);
             }}>
               <button
                 type="submit"
@@ -359,7 +406,7 @@ export default async function ClaimPage({ params }: PageProps) {
               if (claimResult.success) {
                 redirect(`/${normalizedLang}/provider/dashboard`);
               }
-              redirect(`/${normalizedLang}/claim/${token}?error=claim_failed`);
+              redirect(`/${normalizedLang}/claim/${token}?error=${claimResult.errorCode || 'network'}`);
             }}>
               <button
                 type="submit"
