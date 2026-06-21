@@ -322,11 +322,50 @@ Bugs backlog преди Task 5A:
 Next step: Task 2A — seed_unclaimed_providers.py → outreach_ready.csv
 (колони: email, business_name, claim_token, category)
 
-**Задача 4Б — "Unclaimed" банер на Provider Full Page**
-- Видим само за некредентовани профили (`is_claimed = FALSE`)
-- Текст: "Собственик ли сте на тази фирма? [Вземете профила безплатно →]"
-- Линк към `/[lang]/claim/[token]`
-- **Модел: Kimi-2.6**
+**Задача 4Б — "Unclaimed" банер на Provider Full Page** ✅ ЗАВЪРШЕНА (June 21, 2026)
+
+Компоненти:
+- ClaimProfileBanner.tsx — рефакториран с пълна translation поддръжка + correct claim URL
+- ProviderFullPage.tsx — условно рендерира банера когато is_claimed=false AND claim_token!=null
+- 170 translation реда seeded (34 езика, namespace: provider_page)
+
+Translation keys (provider_page namespace):
+- unclaimed_banner_title
+- unclaimed_banner_subtitle ({businessName})
+- unclaimed_banner_desc ({count}, {category}, {city})
+- unclaimed_banner_cta
+- unclaimed_banner_trust
+
+Нова DB таблица: city_category_search_volume
+- city_slug, category_slug, search_volume (composite PK)
+- Warsaw seed: cleaning=7000, plumbing=5400, massage=6900
+- Script: apps/api/scripts/seed_unclaimed_banner_translations.py
+
+Backend changes:
+- schemas.py: claim_token: Optional[str] = None, search_volume: int | None = None
+- routes/providers.py: returns claim_token (only when is_claimed=False), search_volume
+- lib/api.ts: ProviderDetail interface updated with claim_token + search_volume
+
+E2E тест резултати:
+✅ Banner видим на unclaimed провайдър
+✅ Banner скрит на claimed провайдър
+✅ CTA линк /[lang]/claim/[token] работи
+⏳ search_volume число ще се появи след Task 2A (Warsaw провайдъри)
+
+**Задача 4В — CTA бутон адаптивен layout за дълги имена** ✅ ЗАВЪРШЕНА (June 21, 2026)
+
+Проблем: "Connect me with Serwis Hydrauliczny Kowalski" се отрязваше в бутона.
+
+Решение: adaptive 2-line layout когато providerName.length > 22:
+- Ред 1: "Connect me with" (по-малък шрифт, по-нисък opacity)
+- Ред 2: пълното бизнес име (word-break: break-word)
+
+Засегнати компоненти:
+- apps/web/components/ProviderWidget.tsx (3 инстанции)
+- apps/web/components/provider/StickyProviderCTA.tsx
+- apps/web/components/provider/LeadPanel.tsx
+- apps/web/components/provider/ProviderMobileCTA.tsx
+- apps/web/components/StickyBottomBar.tsx fallback wrapper: px-0 py-4 (без horizontal padding — родителят вече има px-6)
 
 ---
 

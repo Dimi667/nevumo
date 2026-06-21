@@ -1732,6 +1732,21 @@ git push nevumo-git main  # архив на SSD
 - **Mobile tap zoom prevention** — `touch-action: manipulation` must be on all interactive elements globally in globals.css; input font-size must be `max(16px, 1em)` to prevent iOS auto-zoom; `max-width: 100%` on `*` prevents horizontal overflow. Do NOT revert these rules.
 - **Claimed Profiles Warsaw launch:** Full roadmap in `docs/claimed_profiles_plan.md`. Фаза 1 данни в ход: ~1,200 уникални имейла събрани (CEIDG 633 + Panoramafirm 612). Следващи: email extractor от 233 уебсайта (1З), SMS кампания (1Д), Bing API (1Ж). Паралелно: seed (2А), claim landing page (4А). Target: 1,700-2,000 имейла → 136-300 claimed профила. E2E тест June 17, 2026: valid ✅, not_found ✅, already_claimed ❌ (backend бъг). Бъгове backlog: 6 открити (2 критични преди Task 5A, 4 UX). Виж architecture.md.
 
+- **Claimed Profiles — Task 4Б Unclaimed Banner (June 21, 2026):** ✅ ЗАВЪРШЕНА
+  - ClaimProfileBanner.tsx рефакториран (translations + correct claim URL)
+  - Нова DB таблица city_category_search_volume (Warsaw: cleaning=7000, plumbing=5400, massage=6900)
+  - Seed script: apps/api/scripts/seed_unclaimed_banner_translations.py (170 rows, 34 езика)
+  - Backend: claim_token + search_volume добавени в GET /api/v1/providers/{slug} response
+  - Frontend: ProviderDetail TypeScript interface обновен в lib/api.ts
+  - Alembic migration: 20260620_add_city_category_search_volume.py
+  - Next: Task 2A seed_unclaimed_providers.py → outreach_ready.csv
+
+- **Claimed Profiles — Task 4В CTA Button Adaptive Layout (June 21, 2026):** ✅ ЗАВЪРШЕНА
+  - Adaptive 2-line layout за имена > 22 символа
+  - Засегнати: ProviderWidget.tsx, StickyProviderCTA.tsx, LeadPanel.tsx, ProviderMobileCTA.tsx
+  - Root cause диагноза: ProviderMobileCTA.tsx рендерира се 2 пъти на iOS 26 (StickyBottomBar returns null)
+  - Padding fix: StickyBottomBar fallback wrapper px-0 (без дублиран padding)
+
 ### Known gap
 - already_claimed state не работи: GET endpoint не различава claimed от not_found
 - Email subject >50 chars: truncate-ва се на мобилен — нужни по-кратки варианти

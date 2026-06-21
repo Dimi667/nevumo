@@ -784,6 +784,12 @@ This separation ensures that:
 2. Remove useStickyBar from component (StickyBottomBar handles registration)
 3. Done — iOS 26 handled automatically
 
+### iOS 26 CTA Button Architecture (June 21, 2026)
+- StickyBottomBar: returns null on iOS 26 → StickyProviderCTA not shown
+- ProviderMobileCTA: renders inline, used TWICE in ProviderFullPage.tsx (before gallery + after reviews)
+- StickyBottomBar fallback wrapper: MUST use px-0 horizontal padding (parent form already has px-6)
+- Adaptive button layout: providerName.length <= 22 → 1 line | > 22 → 2 lines (word-break: break-word)
+
 #### BottomSheetForm iOS Scroll Fix (June 2026)
 - Root cause: `overflow-hidden` on `<form>` captured iOS touch events before reaching inner scroll div
 - Fix: moved `overflow-y: scroll` directly to `<form>` element
