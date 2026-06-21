@@ -22,23 +22,10 @@ export default function ProviderMobileCTA({
   if (!isIOS26Plus) return null
 
   return (
-    <div className="md:hidden px-0 py-3">
+    <div className="md:hidden px-6 py-3">
       <button
         onClick={onOpenSheet}
-        style={{
-          display: 'block',
-          width: '100%',
-          background: '#f97316',
-          color: 'white',
-          textAlign: 'center',
-          padding: '1rem',
-          borderRadius: '0.75rem',
-          fontWeight: 700,
-          fontSize: '1.125rem',
-          lineHeight: '1.4',
-          border: 'none',
-          cursor: 'pointer',
-        }}
+        className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-3 rounded-lg transition-colors text-xl"
       >
         {providerName.length <= 22 ? (
           <span>{label} {providerName}</span>
