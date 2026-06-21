@@ -186,10 +186,11 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
     
     // Claim token forces provider intent
     const urlIntent = searchParams.get('intent') as 'client' | 'provider' | null;
+    const urlRole = searchParams.get('role') as 'client' | 'provider' | null;
     const storedIntent = (stored.intent === 'client' || stored.intent === 'provider') ? stored.intent : null;
     const resolvedIntent: 'client' | 'provider' | null = claimToken
       ? 'provider'
-      : urlIntent ?? storedIntent ?? (initialRole === 'provider' ? 'provider' : null);
+      : urlIntent ?? urlRole ?? storedIntent ?? (initialRole === 'provider' ? 'provider' : null);
 
     const savedEmail = (urlEmail || sessionStorage.getItem(SESSION_EMAIL_KEY)) ?? '';
 
