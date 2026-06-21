@@ -114,6 +114,72 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
 
   // STATE 1: not_found (404 from API)
   if (!result) {
+    // If page was redirected back with a specific error code, show that error UI
+    if (errorParam && errorParam !== 'already_claimed') {
+      return (
+        <div className="min-h-screen bg-white">
+          <main className="max-w-md mx-auto px-6 py-20 text-center">
+            <div className="text-5xl mb-6">⚠️</div>
+
+            {errorParam === 'user_has_provider' && (
+              <>
+                <p className="text-lg font-semibold text-gray-900 mb-3">
+                  {t(claimT, 'error_user_has_provider', 'You already have an active profile on Nevumo.')}
+                </p>
+                <Link
+                  href={`/${normalizedLang}/provider/dashboard`}
+                  className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                >
+                  {t(claimT, 'error_user_has_provider_cta', 'Go to my dashboard')}
+                </Link>
+              </>
+            )}
+
+            {errorParam === 'auth_expired' && (
+              <>
+                <p className="text-lg font-semibold text-gray-900 mb-3">
+                  {t(claimT, 'error_auth_expired', 'Your session has expired. Log in again.')}
+                </p>
+                <Link
+                  href={`/${normalizedLang}/auth/login?redirect=/${normalizedLang}/claim/${token}`}
+                  className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                >
+                  {t(claimT, 'error_auth_expired_cta', 'Log in again')}
+                </Link>
+              </>
+            )}
+
+            {errorParam === 'network' && (
+              <>
+                <p className="text-lg font-semibold text-gray-900 mb-3">
+                  {t(claimT, 'error_network', 'Something went wrong. Check your connection and try again.')}
+                </p>
+                <Link
+                  href={`/${normalizedLang}/claim/${token}`}
+                  className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+                >
+                  {t(claimT, 'error_network_cta', 'Try again')}
+                </Link>
+              </>
+            )}
+
+            {errorParam === 'not_found' && (
+              <>
+                <p className="text-lg font-semibold text-gray-900 mb-3">
+                  {t(claimT, 'error_not_found', 'This invitation is no longer valid.')}
+                </p>
+                <p className="text-sm text-gray-600">
+                  support@nevumo.com
+                </p>
+              </>
+            )}
+
+          </main>
+        </div>
+      );
+    }
+
+    // No error param — genuine not found case
     return (
       <div className="min-h-screen bg-white">
         <main className="max-w-md mx-auto px-6 py-20 text-center">
