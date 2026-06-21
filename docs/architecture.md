@@ -3477,6 +3477,134 @@ python scripts/seed_review_translations.py
 
 ---
 
+## Claimed Profiles — E2E Test & Bug Fixes (June 21, 2026)
+
+### E2E Test Infrastructure
+- **Setup script**: apps/api/scripts/e2e_outreach_full_setup.py
+  - Creates 3 unclaimed test providers (data_source="e2e_test") in Neon DB
+  - Categories: cleaning (nevumo.dev@gmail.com), plumbing (dimitar.j.dimitroff@gmail.com), massage (neli.b.bojilova@gmail.com)
+  - Location: Warszawa (id=2, slug="warszawa")
+  - Generates apps/api/scripts/e2e_test_outreach.csv for send_outreach_bulk.py
+  - Run: railway run python3.13 -m apps.api.scripts.e2e_outreach_full_setup
+
+- **Cleanup script**: apps/api/scripts/e2e_outreach_cleanup.py
+  - Safely deletes ONLY providers with data_source="e2e_test"
+  - Run: railway run python3.13 -m apps.api.scripts.e2e_outreach_cleanup
+
+- **Outreach send**: railway run python3.13 -m apps.api.scripts.send_outreach_bulk --csv-file apps/api/scripts/e2e_test_outreach.csv --limit 3 --delay 5
+
+### Bugs Fixed During E2E Test
+
+**1. Auth redirect URLs broken (providers.py claim page)**
+- Problem: Claim page used /auth/login and /auth/register routes that don't exist
+- Fix: All auth URLs updated to /auth (the correct route)
+- Affected file: apps/web/app/[lang]/claim/[token]/page.tsx
+- 10 occurrences updated
+
+**2. searchParams not awaited in Next.js 16**
+- Problem: searchParams in claim page declared as plain object, not Promise — always undefined in Next.js 16
+- Fix: PageProps interface updated: searchParams?: Promise<{ error?: string }>
+- Added: const resolvedSearchParams = searchParams ? await searchParams : {};
+- Affected file: apps/web/app/[lang]/claim/[token]/page.tsx
+
+**3. Error banner showed 404 instead of error message**
+- Problem: When fetchProviderByToken returned null, page immediately showed notFound UI — error banner in STATE 3 was never reached
+- Fix: Added errorParam check INSIDE the if (!result) block — if errorParam is set, shows specific error UI instead of notFound
+- Affected file: apps/web/app/[lang]/claim/[token]/page.tsx
+
+**4. Error handling — 5 specific error states implemented**
+- New translation keys seeded: seed_claim_error_translations.py (272 rows, 8 keys × 34 languages)
+- Keys: claim.error_already_claimed, claim.error_user_has_provider, claim.error_not_found,
+  claim.error_auth_expired, claim.error_network, claim.error_network_cta,
+  claim.error_user_has_provider_cta, claim.error_auth_expired_cta
+- Error codes returned from backend: auth_expired (401), already_claimed (409 ALREADY_CLAIMED),
+  user_has_provider (409 USER_ALREADY_HAS_PROVIDER), not_found (404), network (catch/other)
+- Status: IMPLEMENTED but NOT YET TESTED in browser
+
+**5. USER_ALREADY_HAS_PROVIDER missing in providers.py**
+- Problem: POST /providers/claim/{token} in providers.py had no check for existing provider
+- Fix: Added check before token lookup + IntegrityError catch on db.commit()
+- Affected file: apps/api/routes/providers.py
+
+**6. Draft provider blocks claim**
+- Problem: Google OAuth registration auto-creates a draft provider (slug starts with "draft",
+  business_name = user email). This draft triggered USER_ALREADY_HAS_PROVIDER and blocked claim.
+- Fix: Added draft detection logic in providers.py claim endpoint:
+  is_draft = slug.startswith("draft") AND business_name == current_user.email
+  If draft → db.delete(existing_provider) + db.flush() → proceed with claim
+- Pattern documented in api_contracts.md — now implemented in providers.py
+- Affected file: apps/api/routes/providers.py
+
+**7. saveAuth() did not set cookie — claim page could not read auth token**
+- Problem: saveAuth() only wrote to localStorage. Claim page is a Server Component
+  and reads from cookies. authToken was always null → POST claim never sent → redirect to Dashboard
+  without actual claim being executed.
+- Fix: saveAuth() now also sets document.cookie: nevumo_auth_token={token}; path=/; max-age=31536000; SameSite=Lax
+- clearAuth() now also clears the cookie: max-age=0
+- Affected file: apps/web/lib/auth-store.ts
+
+**8. LoginClient redirect after login/register**
+- Problem: handleLogin() ignored redirectAfterLogin prop — always went to dashboard
+- Problem: Google OAuth handlers did not save redirect to localStorage before navigation
+- Fix: handleLogin() now uses redirectAfterLogin if present
+- Fix: All 3 Google OAuth handlers now call localStorage.setItem('nevumo_redirect', redirectAfterLogin)
+- Fix: auth/page.tsx now reads and passes redirect param to LoginClient
+- Affected files: apps/web/app/[lang]/auth/LoginClient.tsx, apps/web/app/[lang]/auth/page.tsx
+
+**9. OAuthTermsClient ignored saved redirect**
+- Problem: New users via Google OAuth went through OAuthTermsClient which ignored nevumo_redirect
+- Fix: OAuthTermsClient checks localStorage.getItem('nevumo_redirect') before role-based redirect
+- Affected file: apps/web/app/[lang]/auth/OAuthTermsClient.tsx
+
+**10. oauth-callback reads nevumo_redirect from localStorage**
+- Problem: Existing users via Google OAuth went through oauth-callback which only checked URL params
+- Fix: oauth-callback now also checks localStorage.getItem('nevumo_redirect') as fallback
+- Clears localStorage after redirect
+- Affected file: apps/web/app/[lang]/auth/oauth-callback/page.tsx
+
+### E2E Test Results (June 21, 2026)
+
+| Step | Status |
+|---|---|
+| 3 test providers created in Neon DB | ✅ PASS |
+| Outreach emails sent via send_outreach_bulk.py | ✅ PASS |
+| Claim page renders correctly (unauthenticated) | ✅ PASS |
+| Auth redirect back to claim page | ✅ PASS (Google OAuth) |
+| Draft provider auto-deleted on claim | ✅ PASS |
+| Claim button → Provider Dashboard | ✅ PASS |
+| Welcome email received | ✅ PASS (English only) |
+| Art. 14 GDPR email | ❌ NOT SENT — missing from providers.py |
+| Error states (5 types) | ⚠️ IMPLEMENTED, NOT BROWSER TESTED |
+| Email/password login flow | ⚠️ NOT TESTED |
+| Auto-claim after OAuth (skip return to claim page) | ❌ NOT IMPLEMENTED |
+
+### Known Issues & Next Steps (Priority Order)
+
+🔴 CRITICAL (blocks real campaign conversion):
+1. Two-click claim flow: user must return to claim page and click button after auth.
+   Ideal: auto-claim triggered immediately after successful login/registration.
+   Not yet implemented.
+
+2. Google OAuth → Onboarding Step 1 instead of claimed provider dashboard.
+   When new user registers via Google from claim page, after claim they may see
+   onboarding ("Jesteś 2 kroki od pierwszych klientów") instead of claimed provider panel.
+   Needs investigation after auto-claim is implemented.
+
+3. Email/password login flow: redirect behavior not tested.
+   Fix was implemented in handleLogin() but not verified in browser.
+
+🟡 IMPORTANT (before bulk campaign):
+4. Art. 14 GDPR email missing from POST /providers/claim/{token} in providers.py.
+   Currently only send_claim_welcome_email() is called. send_article14_notification()
+   must be added after db.commit().
+
+5. Error states (5 types) not browser-tested — need E2E verification.
+
+🟢 LOW PRIORITY:
+6. Welcome email in English only — no localization in send_claim_welcome_email().
+
+---
+
 **slugs.ts Consistency Fix (June 11, 2026)**:
 - getValidCitySlugs() в apps/web/lib/slugs.ts сменена от getActiveCities() на getAllCities()
 - Причина: несъответствие с sitemap.ts — градове без активни провайдъри (warszawa, belgrade) връщаха 404 при директен достъп

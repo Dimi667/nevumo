@@ -1730,7 +1730,21 @@ git push nevumo-git main  # архив на SSD
 - **Static Files URL Standardization** — Extend STATIC_FILES_BASE_URL pattern to other services that generate public URLs (e.g., QR codes, document uploads). Current implementation is specific to provider profile images; future services should use the same environment variable pattern for consistency across local and production environments.
 - **sw.js generation rule** — `sw.js` is a static committed file in `apps/web/public/sw.js` — no PWA library needed; postbuild appends push handlers via `[NEVUMO-CUSTOM-SW]` marker on every build
 - **Mobile tap zoom prevention** — `touch-action: manipulation` must be on all interactive elements globally in globals.css; input font-size must be `max(16px, 1em)` to prevent iOS auto-zoom; `max-width: 100%` on `*` prevents horizontal overflow. Do NOT revert these rules.
-- **Claimed Profiles Warsaw launch:** Full roadmap in `docs/claimed_profiles_plan.md`. Фаза 1 данни в ход: ~1,200 уникални имейла събрани (CEIDG 633 + Panoramafirm 612). Следващи: email extractor от 233 уебсайта (1З), SMS кампания (1Д), Bing API (1Ж). Паралелно: seed (2А), claim landing page (4А). Target: 1,700-2,000 имейла → 136-300 claimed профила. E2E тест June 17, 2026: valid ✅, not_found ✅, already_claimed ❌ (backend бъг). Бъгове backlog: 6 открити (2 критични преди Task 5A, 4 UX). Виж architecture.md.
+- **Claimed Profiles Warsaw launch:** Full roadmap in `docs/claimed_profiles_plan.md`. Фаза 1 данни в ход: ~1,200 уникални имейла събрани (CEIDG 633 + Panoramafirm 612). Следващи: email extractor от 233 уебсайта (1З), SMS кампания (1Д), Bing API (1Ж). Паралелно: seed (2А), claim landing page (4А). Target: 1,700-2,000 имейла → 136-300 claimed профила.
+
+**Claimed Profiles — E2E Test Status (June 21, 2026):**
+- E2E тест completed за dimitar.j.dimitroff@gmail.com → claimed "Hydraulik Testowy E2E" ✅
+- Critical bugs found and fixed: auth cookie, draft detection, redirect flow, error handling
+- Test scripts: e2e_outreach_full_setup.py, e2e_outreach_cleanup.py
+- BEFORE bulk campaign (Task 5A): must fix auto-claim flow + Art. 14 email + test email/password + test error states
+
+**Pre-Task 5A checklist:**
+- 🔴 Auto-claim after login (skip second visit to claim page)
+- 🔴 Test email/password login redirect flow
+- 🔴 Art. 14 GDPR email in providers.py POST endpoint
+- 🟡 Browser test all 5 error states
+- 🟡 Test neli and nevumo.dev claim flows
+- 🟡 Cleanup e2e_test providers from Neon DB
 
 - **Claimed Profiles — Task 4Б Unclaimed Banner (June 21, 2026):** ✅ ЗАВЪРШЕНА
   - ClaimProfileBanner.tsx рефакториран (translations + correct claim URL)
