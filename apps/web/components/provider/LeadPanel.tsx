@@ -516,11 +516,11 @@ export default function LeadPanel({
           {isSubmitting ? (t['sending'] ?? 'Изпращане...') : providerName.length <= 22 ? (
             <span>{`${t['cta_button']} ${providerName}`}</span>
           ) : (
-            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', width: '100%' }}>
               <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>
                 {t['cta_button']}
               </span>
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+              <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', textAlign: 'center', width: '100%' }}>
                 {providerName}
               </span>
             </span>

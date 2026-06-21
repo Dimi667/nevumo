@@ -73,7 +73,7 @@ export default function StickyProviderCTA({
           transform: 'translateY(100%)',
           transition: 'transform 0.3s ease'
         }}
-        className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 p-4 md:hidden"
+        className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-100 px-6 py-4 md:hidden"
       >
         <button
           onClick={onOpenSheet}
@@ -82,11 +82,11 @@ export default function StickyProviderCTA({
           {providerName.length <= 22 ? (
             <span>{translations['cta_button']} {providerName}</span>
           ) : (
-            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px', width: '100%' }}>
               <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>
                 {translations['cta_button']}
               </span>
-              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+              <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', textAlign: 'center', width: '100%' }}>
                 {providerName}
               </span>
             </span>
