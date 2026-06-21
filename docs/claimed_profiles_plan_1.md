@@ -367,6 +367,45 @@ E2E тест резултати:
 - apps/web/components/provider/ProviderMobileCTA.tsx
 - apps/web/components/StickyBottomBar.tsx fallback wrapper: px-0 py-4 (без horizontal padding — родителят вече има px-6)
 
+**Задача 4Г — Email верификация при claim (сигурност)**
+
+Проблем: claim_token е публично видим в URL-а на банера → всеки може да поеме
+чужд профил ако посети страницата и кликне CTA.
+
+Решение: при claim flow изпращаме верификационен имейл до scraped_email на
+провайдъра. Само реалният собственик (с достъп до имейла) може да потвърди.
+
+Предпоставки:
+- Provider модел трябва да има `scraped_email: str | None` поле (Alembic миграция)
+- Task 2A seed скриптът трябва да попълва `scraped_email` от CSV колоната
+- scraped_email НЕ е публично видим в API response-а
+
+Flow:
+1. Потребител кликва CTA на банера → отива на /[lang]/claim/[token]
+2. Кликва "Вземи профила" → регистрация/login
+3. POST /api/v1/providers/claim/{token} → backend НЕ клеймва веднага
+4. Backend изпраща верификационен имейл до provider.scraped_email
+5. Имейлът съдържа: "Потвърдете собствеността" + уникален verification_code (6 цифри, TTL 24h)
+6. Потребителят въвежда кода → POST /api/v1/providers/claim/{token}/verify
+7. Backend верифицира кода → is_claimed=TRUE → Art. 14 GDPR имейл
+
+Нови endpoints:
+- POST /api/v1/providers/claim/{token} → изпраща верификационен имейл, връща pending_verification
+- POST /api/v1/providers/claim/{token}/verify → приема verification_code, завършва claim
+
+Нови DB полета:
+- providers.scraped_email: Text | NULL (добавя се в Task 2A)
+- pending_claims таблица (вече съществува на line 566 в models.py) → проверить дали може да се reuse-не
+
+Нов имейл шаблон:
+- apps/api/scripts/templates/claim_verification_pl.html
+- Subject: "Potwierdź przejęcie profilu [business_name] na Nevumo"
+- Sender: noreply@nevumo.com
+- Съдържа: 6-цифрен код, TTL 24h, business_name
+
+Приоритет: 🔴 КРИТИЧНО — преди Task 5A bulk outreach
+Модел: SWE-1.6 (backend) + Kimi-2.6 (frontend verification UI)
+
 ---
 
 ### 🟥 ФАЗА 5 — OUTREACH
