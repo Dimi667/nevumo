@@ -1739,7 +1739,7 @@ git push nevumo-git main  # архив на SSD
 - BEFORE bulk campaign (Task 5A): must fix auto-claim flow + Art. 14 email + test email/password + test error states
 
 **Pre-Task 5A checklist:**
-- 🔴 Auto-claim after login (skip second visit to claim page)
+- ✅ Auto-claim after login (skip second visit to claim page) — ЗАВЪРШЕНО (22 юни 2026)
 - 🔴 Test email/password login redirect flow
 - 🔴 Art. 14 GDPR email in providers.py POST endpoint
 - 🟡 Browser test all 5 error states
@@ -1760,6 +1760,14 @@ git push nevumo-git main  # архив на SSD
   - Засегнати: ProviderWidget.tsx, StickyProviderCTA.tsx, LeadPanel.tsx, ProviderMobileCTA.tsx
   - Root cause диагноза: ProviderMobileCTA.tsx рендерира се 2 пъти на iOS 26 (StickyBottomBar returns null)
   - Padding fix: StickyBottomBar fallback wrapper px-0 (без дублиран padding)
+
+- **Claimed Profiles — Блокер 1 Auto-claim (June 22, 2026):** ✅ ЗАВЪРШЕНА
+  - AutoClaimTrigger.tsx детектира ?from=auth в URL след auth redirect
+  - и автоматично изпраща POST claim без втори клик от потребителя.
+  - addFromAuthParam() добавен в LoginClient, oauth-callback, OAuthTermsClient.
+  - Fix: ?role=provider се чете като intent при регистрация.
+  - 10 нови translation ключа seeded в claim namespace.
+  - Commit: 7394f73
 
 ### Known gap
 - already_claimed state не работи: GET endpoint не различава claimed от not_found

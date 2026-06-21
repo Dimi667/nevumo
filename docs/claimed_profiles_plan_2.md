@@ -123,7 +123,7 @@ SMS: изпраща се паралелно с Email #1 и #4.
 > ⛔ **НИЩО не се изпраща докато тези задачи не са 100% завършени.**
 > Наредени по приоритет и зависимост.
 
-### Блокер 1 — Auto-claim след login (Задача 4Д) 🔴
+### Блокер 1 — Auto-claim след login (Задача 4Д) ✅ ЗАВЪРШЕН (22 юни 2026)
 
 **Проблем:** Потребителят трябва да кликне бутона ДВА ПЪТИ (claim страница → auth → обратно → claim). Огромна загуба на конверсия.
 
@@ -131,6 +131,30 @@ SMS: изпраща се паралелно с Email #1 и #4.
 
 **Файлове:** `apps/web/app/[lang]/claim/[token]/page.tsx`, нов `AutoClaimTrigger.tsx`
 **Модел:** Kimi-2.6
+
+**Имплементация (22 юни 2026):**
+- Нов: `AutoClaimTrigger.tsx` — Client Component с useRef idempotency guard
+- Нов: `ClaimCTAWrapper.tsx` — скрива CTA по време на auto-claim
+- Нов: `actions.ts` — Server Action за manual claim
+- Променен: `page.tsx` — интегрира AutoClaimTrigger и ClaimCTAWrapper
+- Променен: `LoginClient.tsx` — addFromAuthParam() + urlRole fix
+- Променен: `oauth-callback/page.tsx` — addFromAuthParam()
+- Променен: `OAuthTermsClient.tsx` — addFromAuthParam()
+- Seeded: 10 нови translation ключа в claim namespace (34 езика)
+- Bug fix: ?role=provider не се четеше за intent при регистрация
+
+**QA резултати:**
+- Сценарий 1 (Main flow): ✅
+- Сценарий 2 (Direct link): ✅
+- Сценарий 3 (Already claimed): ✅
+- Сценарий 4 (Reload idempotency): ✅
+- Сценарий 5 (Auth expired): ✅
+- Сценарий 6 (Network retry): ⚠️ Код OK, не тестван
+  (Playwright не поддържа network blocking)
+
+**Known issue (не е от Блокер 1):**
+Google OAuth + claim flow → може да попадне на onboarding
+вместо директно на claimed dashboard. Tracker-ва се отделно.
 
 ---
 
@@ -1034,7 +1058,7 @@ CATEGORY_LABEL_PL = {
 
 ```
 БЛОКЕРИ (наредени по зависимост):
-[ ] Блокер 1: Auto-claim (4Д)                    → Kimi-2.6
+[✅] Блокер 1: Auto-claim (4Д) — ЗАВЪРШЕН (22 юни 2026)
 [ ] Блокер 2: Art.14 в providers.py (4Е)         → Kimi-2.6
 [ ] Блокер 3: Unsubscribe механизъм              → SWE-1.6 (backend) + Kimi-2.6 (script)
 [ ] Блокер 4: Resend Webhooks                    → SWE-1.6

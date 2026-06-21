@@ -2529,6 +2529,20 @@ Claim page очаква директен обект (не wrapper):
 - **Content**: Congratulations, profile activation confirmation, dashboard link
 - **Error handling**: Email failure logged with `[EMAIL_WARNING]` pattern, does not block claim response
 
+### AutoClaimTrigger Architecture (June 22, 2026)
+- **Client Component**: `apps/web/app/[lang]/claim/[token]/AutoClaimTrigger.tsx`
+- **Detection**: Checks for `?from=auth` URL parameter (added by LoginClient after login/register)
+- **Idempotency**: `useRef` guard prevents double POST on page reload
+- **Error code matching**: `detail?.code === 'ALREADY_CLAIMED'` and `detail?.code === 'USER_ALREADY_HAS_PROVIDER'` (object, not string)
+- **API endpoint**: Uses `API_BASE` from `@/lib/api` (relative URL in browser)
+- **Custom events**: Dispatches `auto-claim-start` and `auto-claim-end` for ClaimCTAWrapper coordination
+- **addFromAuthParam()**: Helper function that adds `&from=auth` if URL has `?`, otherwise `?from=auth`
+- **Integration points**:
+  - `LoginClient.tsx` — adds `?from=auth` to all redirect URLs after login/register
+  - `oauth-callback/page.tsx` — adds `?from=auth` to OAuth redirect URLs
+  - `OAuthTermsClient.tsx` — adds `?from=auth` to OAuth terms completion redirects
+- **Bug fix**: `?role=provider` parameter now read as intent during registration (previously only `?intent=` was checked)
+
 ### Translation Keys (claim namespace)
 - `title` — Page title
 - `subtitle` — "Is this your business on Nevumo?"
