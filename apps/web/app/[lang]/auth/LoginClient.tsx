@@ -81,6 +81,13 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const SESSION_EMAIL_KEY = "nevumo_auth_email";
 
+function addFromAuthParam(url: string): string {
+  if (url.includes('?')) {
+    return url + '&from=auth';
+  }
+  return url + '?from=auth';
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -318,7 +325,7 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
           );
           sessionStorage.removeItem('nevumo_claim_token');
           if (claimRes.ok) {
-            window.location.href = `/${lang}/provider/dashboard/profile`;
+            window.location.href = addFromAuthParam(`/${lang}/provider/dashboard/profile`);
             return;
           }
         } catch {
@@ -328,10 +335,10 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
 
       const role = result.user.role;
       const loginRedirectPath = redirectAfterLogin
-        ? redirectAfterLogin
+        ? addFromAuthParam(redirectAfterLogin)
         : role === 'provider'
-        ? `/${lang}/provider/dashboard`
-        : `/${lang}/client/dashboard`;
+        ? addFromAuthParam(`/${lang}/provider/dashboard`)
+        : addFromAuthParam(`/${lang}/client/dashboard`);
       window.location.href = loginRedirectPath;
     } catch (err) {
       if (err instanceof ApiError) {
@@ -399,7 +406,7 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
           );
           sessionStorage.removeItem('nevumo_claim_token');
           if (claimRes.ok) {
-            window.location.href = `/${lang}/provider/dashboard/profile`;
+            window.location.href = addFromAuthParam(`/${lang}/provider/dashboard/profile`);
             return;
           }
         } catch {
@@ -416,10 +423,10 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
       }
 
       const redirectPath = redirectAfterLogin
-        ? redirectAfterLogin
+        ? addFromAuthParam(redirectAfterLogin)
         : result.user.role === 'provider'
-        ? `/${lang}/provider/dashboard/profile`
-        : `/${lang}/client/dashboard`;
+        ? addFromAuthParam(`/${lang}/provider/dashboard/profile`)
+        : addFromAuthParam(`/${lang}/client/dashboard`);
       setTimeout(() => { window.location.href = redirectPath; }, 1000);
     } catch (err) {
       if (err instanceof ApiError) {

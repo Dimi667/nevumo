@@ -41,3 +41,35 @@ You are a senior full-stack developer working on Nevumo — a Turborepo monorepo
 ## Component Rules
 - **CtxCapture правило**: Всяка page.tsx която съдържа [city] или [category] в пътя си, или е landing page за конкретен град, ЗАДЪЛЖИТЕЛНО включва <CtxCapture> компонент от @/components/CtxCapture. Примери: /[lang]/[city]/page.tsx, /[lang]/[city]/[category]/page.tsx, /[lang]/dolacz/page.tsx
 - Виж apps/web/components/CtxCapture.tsx и apps/web/lib/ctx.ts
+
+## Prompt Architecture Rules (when acting as prompt architect for other AI models)
+
+- ALWAYS verify the actual codebase structure with grep/read before asserting file paths, patterns, or conventions
+- NEVER assume common patterns (e.g., `locales/en.json` for i18n, `.env` for config, `npm run dev` for starting) — verify against the actual codebase
+- ALWAYS include exact file paths and line ranges from verified source code in prompts
+- ALWAYS specify which existing patterns to follow, with references to actual code
+- When drafting prompts that reference i18n: remember Nevumo uses PostgreSQL `translations` table seeded via Python scripts in `apps/api/scripts/seed_*_translations.py`
+
+## Environment & Testing Rules
+
+### Production Stack (NEVER use local alternatives)
+- Backend: Railway (Python 3.13.13)
+- Database: Neon (PostgreSQL) — NOT local Docker postgres
+- Cache: Upstash Redis — NOT docker exec nevumo-redis
+- Frontend: Vercel
+
+### Забранени команди в Devin
+- НИКОГА: `docker exec`, `docker compose`, `npm run dev` 
+- НИКОГА: `python3`, `python` — само `python3.13` 
+- НИКОГА: локален alembic — само `railway run alembic` 
+
+### Правилни команди
+- Seed скриптове: `railway run python3.13 -m apps.api.scripts.SCRIPT` 
+- Migrations: `railway run alembic upgrade head` 
+- Redis flush: `railway run python3.13 -c "import redis,os; ..."` 
+
+### Тестване
+- ВИНАГИ с @mcp-playwright срещу production URL: https://nevumo.com
+- НИКОГА "cannot test — Docker not available"
+- Ако @mcp-playwright не може да тества сценарий — обясни защо,
+  не пропускай теста

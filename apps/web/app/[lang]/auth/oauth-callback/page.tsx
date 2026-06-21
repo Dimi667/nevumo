@@ -6,6 +6,13 @@ import { saveAuth } from '@/lib/auth-store';
 import type { UserInfo } from '@/lib/auth-types';
 import { setCtx } from '@/lib/ctx';
 
+function addFromAuthParam(url: string): string {
+  if (url.includes('?')) {
+    return url + '&from=auth';
+  }
+  return url + '?from=auth';
+}
+
 export default function OAuthCallbackPage() {
   const searchParams = useSearchParams();
   const params = useParams();
@@ -38,10 +45,10 @@ export default function OAuthCallbackPage() {
         ? localStorage.getItem('nevumo_redirect')
         : null;
       const redirectPath = redirectParam || localStorageRedirect
-        ? (redirectParam || localStorageRedirect)!
-        : parsedUser.role === 'provider'
+        ? addFromAuthParam((redirectParam || localStorageRedirect)!)
+        : addFromAuthParam(parsedUser.role === 'provider'
         ? `/${lang}/provider/dashboard`
-        : `/${lang}/izberi-grad`;
+        : `/${lang}/izberi-grad`);
 
       if (city) setCtx({ city });
       if (category) setCtx({ category });

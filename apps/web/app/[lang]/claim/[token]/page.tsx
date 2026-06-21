@@ -7,6 +7,9 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import StickyClaimBar from './StickyClaimBar';
 import ClaimMobileCTA from './ClaimMobileCTA';
+import AutoClaimTrigger from './AutoClaimTrigger';
+import ClaimCTAWrapper from './ClaimCTAWrapper';
+import { claimProfile } from './actions';
 
 interface PageProps {
   params: Promise<{ lang: string; token: string }>;
@@ -69,35 +72,6 @@ async function fetchProviderByToken(token: string, lang: string): Promise<Provid
   }
 }
 
-async function claimProfile(token: string, authToken: string): Promise<{ success: boolean; errorCode?: string }> {
-  try {
-    const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    const response = await fetch(`${apiUrl}/api/v1/providers/claim/${token}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        return { success: false, errorCode: 'auth_expired' };
-      }
-      const errorData = await response.json().catch(() => ({}));
-      const code = errorData?.detail?.code || '';
-      if (code === 'ALREADY_CLAIMED') return { success: false, errorCode: 'already_claimed' };
-      if (code === 'USER_ALREADY_HAS_PROVIDER') return { success: false, errorCode: 'user_has_provider' };
-      if (response.status === 404) return { success: false, errorCode: 'not_found' };
-      return { success: false, errorCode: 'network' };
-    }
-
-    return { success: true };
-  } catch {
-    return { success: false, errorCode: 'network' };
-  }
-}
-
 export default async function ClaimPage({ params, searchParams }: PageProps) {
   const { lang, token } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'en';
@@ -107,7 +81,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
 
   // Check auth status via cookie
   const cookieStore = await cookies();
-  const authToken = cookieStore.get('nevumo_auth_token')?.value;
+  const authToken = cookieStore.get('nevumo_auth_token')?.value || '';
   const isAuthenticated = !!authToken;
 
   const result = await fetchProviderByToken(token, normalizedLang);
@@ -347,32 +321,23 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
           label={t(claimT, 'cta_register', 'Register and claim this profile for free')}
         />
 
-        {/* Primary CTA (top) */}
+        {/* AutoClaimTrigger - handles auto-claim after auth redirect */}
+        <AutoClaimTrigger
+          token={token}
+          isAuthenticated={isAuthenticated}
+          isClaimed={result.is_claimed}
+          lang={normalizedLang}
+        />
+
+        {/* Primary CTA (top) - hidden during auto-claim */}
         <div id="cta-top" className="hidden sm:block mb-8">
-          {isAuthenticated ? (
-            <form action={async () => {
-              'use server';
-              const claimResult = await claimProfile(token, authToken);
-              if (claimResult.success) {
-                redirect(`/${normalizedLang}/provider/dashboard`);
-              }
-              redirect(`/${normalizedLang}/claim/${token}?error=${claimResult.errorCode || 'network'}`);
-            }}>
-              <button
-                type="submit"
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors"
-              >
-                {t(claimT, 'cta_claim', 'Claim your profile for free')}
-              </button>
-            </form>
-          ) : (
-            <Link
-              href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
-              className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors text-center"
-            >
-              {t(claimT, 'cta_register', 'Register and claim this profile for free')}
-            </Link>
-          )}
+          <ClaimCTAWrapper
+            isAuthenticated={isAuthenticated}
+            token={token}
+            normalizedLang={normalizedLang}
+            claimT={claimT}
+            authToken={authToken}
+          />
         </div>
 
         {/* Leads teaser */}
@@ -466,30 +431,13 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
 
         {/* Primary CTA */}
         <div className="hidden sm:block">
-          {isAuthenticated ? (
-            <form action={async () => {
-              'use server';
-              const claimResult = await claimProfile(token, authToken);
-              if (claimResult.success) {
-                redirect(`/${normalizedLang}/provider/dashboard`);
-              }
-              redirect(`/${normalizedLang}/claim/${token}?error=${claimResult.errorCode || 'network'}`);
-            }}>
-              <button
-                type="submit"
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors"
-              >
-                {t(claimT, 'cta_claim', 'Claim your profile for free')}
-              </button>
-            </form>
-          ) : (
-            <Link
-              href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
-              className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors text-center"
-            >
-              {t(claimT, 'cta_register', 'Register and claim this profile for free')}
-            </Link>
-          )}
+          <ClaimCTAWrapper
+            isAuthenticated={isAuthenticated}
+            token={token}
+            normalizedLang={normalizedLang}
+            claimT={claimT}
+            authToken={authToken}
+          />
         </div>
 
         {/* Time signal */}
