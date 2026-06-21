@@ -391,9 +391,9 @@ This withdrawal form was submitted via the Nevumo online form.
             )
 
             self._send_email(
-                to=to_email,
+                to_email=to_email,
                 subject="Profil aktywny ✓ — informacja o danych (art. 14 RODO)",
-                html=html,
+                html_body=html,
             )
         except Exception as e:
             print(f"[EMAIL_WARNING] send_article14_notification failed: {e}", flush=True)
