@@ -513,7 +513,18 @@ export default function LeadPanel({
           disabled={isSubmitting}
           className="w-full py-3.5 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white text-base font-semibold rounded-xl transition-colors truncate"
         >
-          {isSubmitting ? (t['sending'] ?? 'Изпращане...') : `${t['cta_button']} ${providerName}`}
+          {isSubmitting ? (t['sending'] ?? 'Изпращане...') : providerName.length <= 22 ? (
+            <span>{`${t['cta_button']} ${providerName}`}</span>
+          ) : (
+            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+              <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>
+                {t['cta_button']}
+              </span>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+                {providerName}
+              </span>
+            </span>
+          )}
         </button>
       </form>
 

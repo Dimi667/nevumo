@@ -79,7 +79,18 @@ export default function StickyProviderCTA({
           onClick={onOpenSheet}
           className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-base truncate"
         >
-          {translations['cta_button']} {providerName}
+          {providerName.length <= 22 ? (
+            <span>{translations['cta_button']} {providerName}</span>
+          ) : (
+            <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+              <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>
+                {translations['cta_button']}
+              </span>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+                {providerName}
+              </span>
+            </span>
+          )}
         </button>
       </div>
     </StickyBottomBar>

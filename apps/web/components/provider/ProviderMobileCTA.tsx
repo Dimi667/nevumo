@@ -40,7 +40,18 @@ export default function ProviderMobileCTA({
           cursor: 'pointer',
         }}
       >
-        {label} {providerName}
+        {providerName.length <= 22 ? (
+          <span>{label} {providerName}</span>
+        ) : (
+          <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1px' }}>
+            <span style={{ fontSize: '0.8em', opacity: 0.85, fontWeight: 400 }}>
+              {label}
+            </span>
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>
+              {providerName}
+            </span>
+          </span>
+        )}
       </button>
     </div>
   )
