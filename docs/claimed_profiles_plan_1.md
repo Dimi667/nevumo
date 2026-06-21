@@ -1,7 +1,7 @@
 # Nevumo — Claimed Profiles: Пълен план
 
-**Статус:** 🟡 В процес — Задача 1Ж ✅, 1Ж-ext ✅, 2Б ✅, 3А ✅, 3Б ✅, 4А ✅ и 4А редизайн ✅ завършени
-**Последна актуализация:** 20 юни 2026
+**Статус:** 🟡 В процес — E2E тест завършен (21 юни 2026), claim flow работи, pending: auto-claim + Art. 14 в providers.py + email/password тест
+**Последна актуализация:** 21 юни 2026
 **Приоритет:** 🔴 Висок — преди Warsaw outreach кампания
 
 ---
@@ -208,6 +208,9 @@ python3.13 apps/scripts/collect_ceidg_providers.py
 - Изтрива draft provider row ако съществува (slug startswith "draft" AND business_name == user.email)
 - is_claimed = TRUE, claim_token = NULL, verification_level рекалкулиран
 - Art. 14 GDPR имейл изпратен автоматично (non-blocking)
+- ⚠️ КОРЕКЦИЯ (21 юни 2026): Art. 14 НЕ се изпраща от providers.py endpoint!
+  Изпраща се само от provider.py (dashboard flow). providers.py изпраща само welcome email.
+  → Задача 4Д трябва да добави send_article14_notification() в providers.py
 - Имплементирано в: apps/api/routes/providers.py
 
 ---
@@ -319,6 +322,18 @@ Bugs backlog преди Task 5A:
   - claim.hero_title — "Профилът е тук. Само го вземи!"
   - claim.cta_register — "Вземи профила безплатно!"
 
+**Бъгове открити и оправени по време на E2E тест (21 юни 2026):**
+- ✅ /auth/login и /auth/register не съществуват → всички auth URLs → /auth
+- ✅ searchParams не е await-нат в Next.js 16 → Promise<{error?: string}> + await
+- ✅ Error banner показваше 404 вместо съобщение → errorParam check в if(!result) блока
+- ✅ 5 специфични error states с преводи на 34 езика (seed_claim_error_translations.py, 272 реда)
+  ⚠️ СТАТУС: Имплементирани, НЕ са browser-тествани
+- ✅ saveAuth() не записваше cookie → добавен document.cookie nevumo_auth_token
+- ✅ handleLogin() игнорираше redirectAfterLogin → оправен
+- ✅ Google OAuth handlers не запазваха nevumo_redirect в localStorage → оправено
+- ✅ OAuthTermsClient игнорираше savedRedirect → оправен
+- ✅ oauth-callback не четеше nevumo_redirect от localStorage → оправен
+
 Next step: Task 2A — seed_unclaimed_providers.py → outreach_ready.csv
 (колони: email, business_name, claim_token, category)
 
@@ -408,6 +423,58 @@ Flow:
 
 ---
 
+**Задача 4Д — Auto-claim след login (конверсионен приоритет)** 🔴 КРИТИЧНА
+
+Проблем: Потребителят трябва да кликне бутона ДВА ПЪТИ:
+1. Claim страница → кликва бутон → Auth страница
+2. Auth → редиректва ОБРАТНО на claim страница → кликва бутона ОТНОВО → Dashboard
+
+Идеален flow (един клик):
+1. Claim страница → кликва бутон → Auth страница
+2. Auth → AUTO-CLAIM → Dashboard
+
+Решение: Добави Client Component в claim страницата който:
+- Открива: потребителят е логнат (cookie exists) И страницата е заредена след redirect от auth
+- Автоматично изпраща POST /api/v1/providers/claim/{token}
+- Показва "Claiming..." spinner
+- Redirect към Provider Dashboard при успех
+
+Признак за "дошъл от auth": URL не съдържа ?error= параметър И потребителят е authenticated.
+Алтернативно: добави ?claimed=pending параметър в redirect URL от auth страницата.
+
+Засегнати файлове:
+- apps/web/app/[lang]/claim/[token]/page.tsx — добави AutoClaimTrigger client component
+- Нов файл: apps/web/components/claim/AutoClaimTrigger.tsx
+
+Модел: Kimi-2.6
+Приоритет: 🔴 КРИТИЧНА — преди Task 5A bulk outreach
+
+**Задача 4Е — Art. 14 GDPR имейл в providers.py** 🔴 КРИТИЧНА
+
+Проблем: POST /api/v1/providers/claim/{token} в providers.py изпраща само welcome email.
+send_article14_notification() липсва — изпраща се само от provider.py (dashboard flow).
+
+Решение: Добави send_article14_notification() в claim_provider функцията в providers.py
+СЛЕД db.commit(), следвайки същия pattern като в provider.py (~line 675).
+
+Засегнат файл: apps/api/routes/providers.py
+Модел: Kimi-2.6
+Приоритет: 🔴 КРИТИЧНА — GDPR задължение
+
+**Задача 4Ж — Тест на email/парола login flow** ⚠️ НЕ ТЕСТВАН
+
+Проблем: Redirect след login с email/парола не е тестван в браузър.
+Fix е имплементиран в handleLogin() но не е верифициран.
+
+Тест стъпки:
+1. Пусни e2e_outreach_full_setup.py за нови тестови провайдъри
+2. В incognito: отвори claim URL → кликни бутон → auth страница
+3. Въведи email + парола (не Google) → логни се
+4. Провери дали redirect е обратно към claim страницата
+5. Кликни claim бутона → провери Dashboard
+
+---
+
 ### 🟥 ФАЗА 5 — OUTREACH
 
 **Задача 5А — Bulk имейл кампания**
@@ -474,16 +541,39 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token);
 
 ---
 
-## Следваща незабавна стъпка (17 юни 2026)
+## Следваща незабавна стъпка (21 юни 2026)
 
-**Приоритетен ред:**
-1. Задача 1Д — SMS кампания 230 телефона (Kimi-2.6 + SMSapi.pl, ~4 EUR) ← СЛЕДВАЩА
-2. Задача 1Ж — Bing Search API за фирми без уебсайт (Kimi-2.6, безплатно)
-3. Задача 1И — Google Places API (Kimi-2.6, ~$10-15, при нужда)
-4. Задача 1К — Oferteo.pl scraper (SWE-1.6, нисък приоритет)
+### 🔴 БЛОКЕРИ ПРЕДИ Task 5A (bulk outreach)
 
-**Паралелно (не чака данните):**
-- Задача 2А — seed_unclaimed_providers.py (Kimi-2.6) — зарежда вече събраните данни
-- Задача 4А — /[lang]/claim/[token] страница (Kimi-2.6) — translations seed готов
-- Задача 4Б — Unclaimed банер (Kimi-2.6)
-- Задача 3Б — Art. 14 Confirmation имейл (Claude)
+По ред на изпълнение:
+
+**1. Задача 4Д — Auto-claim след login** (Kimi-2.6)
+   Без това: всеки реален потребител трябва да кликне 2 пъти → ниска конверсия
+
+**2. Задача 4Е — Art. 14 GDPR имейл в providers.py** (Kimi-2.6)
+   GDPR задължение — без това кампанията е non-compliant
+
+**3. Задача 4Ж — Тест email/парола login flow** (ръчно)
+   Провери дали redirectAfterLogin работи при password login
+
+**4. Browser тест на 5-те error states** (ръчно)
+   Тригерирай всеки error case и провери UI
+
+**5. Задача 2А — seed_unclaimed_providers.py** (Kimi-2.6)
+   Зарежда реалните Warsaw провайдъри от CSV в Neon DB
+   Input: warszawa_providers_ceidg.csv + panoramafirm_emails_final.csv
+   Output: outreach_ready.csv (email, business_name, claim_token, category)
+
+**6. Cleanup на E2E тестови провайдъри**
+   railway run python3.13 -m apps.api.scripts.e2e_outreach_cleanup
+
+### 🟡 ПАРАЛЕЛНО (не блокира):
+- Задача 4Г — Email верификация при claim (сигурност, след bulk launch)
+- Задача 1Д — SMS кампания 230 телефона (Kimi-2.6, ~4 EUR)
+- Задача 6А — Tracking dashboard (нисък приоритет)
+
+### ✅ ЗАВЪРШЕНО:
+- Фаза 1 (данни): ~1,636 имейла + 230 телефона събрани
+- Фаза 3 (имейли): outreach шаблон + Art. 14 имейл готови
+- Фаза 4 (frontend): claim страница, unclaimed банер, CTA бутон, error handling
+- E2E тест: claim flow работи end-to-end (June 21, 2026)
