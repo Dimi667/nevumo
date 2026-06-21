@@ -423,10 +423,18 @@ async def claim_provider(
         Provider.user_id == current_user.id
     ).first()
     if existing_provider:
-        raise HTTPException(
-            status_code=409,
-            detail={"code": "USER_ALREADY_HAS_PROVIDER", "message": "Your account already has a provider profile"}
+        is_draft = (
+            existing_provider.slug.startswith("draft") and
+            existing_provider.business_name == current_user.email
         )
+        if is_draft:
+            db.delete(existing_provider)
+            db.flush()
+        else:
+            raise HTTPException(
+                status_code=409,
+                detail={"code": "USER_ALREADY_HAS_PROVIDER", "message": "Your account already has a provider profile"}
+            )
     
     # Find the provider by token
     provider = db.query(Provider).filter(
