@@ -853,7 +853,7 @@ export default function ProviderWidget({
             </div>
           }
         >
-          <div ref={stickyDivRef} className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white border-t border-gray-100">
+          <div ref={stickyDivRef} className="fixed bottom-0 left-0 right-0 z-50 px-6 py-4 bg-white border-t border-gray-100">
             <button
               type="submit"
               form="widget-lead-form"
