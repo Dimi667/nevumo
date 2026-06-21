@@ -465,7 +465,35 @@ async def claim_provider(
             status_code=409,
             detail={"code": "USER_ALREADY_HAS_PROVIDER", "message": "Your account already has a provider profile"}
         )
-    
+
+    # Send GDPR Art. 14 notification
+    try:
+        CATEGORY_LABEL_PL = {
+            "cleaning": "sprzątanie",
+            "plumbing": "usługi hydrauliczne",
+            "massage": "usługi masażu",
+        }
+
+        category_slug = None
+        if provider.services:
+            first_service = provider.services[0]
+            category_slug = getattr(first_service, "category_slug", None) or \
+                            getattr(getattr(first_service, "category", None), "slug", None)
+        category_label = CATEGORY_LABEL_PL.get(category_slug or "", "usługi")
+
+        email_service.send_article14_notification(
+            to_email=current_user.email,
+            business_name=provider.business_name or "",
+            dashboard_link="https://nevumo.com/pl/dashboard",
+            nip=None,
+            provider_phone=None,
+            scraped_email=None,
+            provider_website=None,
+            category_label=category_label,
+        )
+    except Exception as e:
+        print(f"[EMAIL_WARNING] {type(e).__name__}: {e}", flush=True)
+
     # Send welcome email
     try:
         await email_service.send_claim_welcome_email(
