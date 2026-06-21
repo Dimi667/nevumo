@@ -84,11 +84,11 @@ export default function AutoClaimTrigger({ token, isAuthenticated, isClaimed, la
           setErrorCode('auth_expired');
         } else {
           const errorData = await response.json().catch(() => ({}));
-          const code = errorData?.detail || '';
+          const code = errorData?.detail?.code || '';
           
-          if (code === 'already_claimed') {
+          if (code === 'ALREADY_CLAIMED') {
             setErrorCode('already_claimed');
-          } else if (code === 'user_has_provider') {
+          } else if (code === 'USER_ALREADY_HAS_PROVIDER') {
             setErrorCode('user_has_provider');
           } else if (response.status === 404) {
             setErrorCode('not_found');

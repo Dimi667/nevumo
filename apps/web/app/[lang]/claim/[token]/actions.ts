@@ -18,9 +18,9 @@ export async function claimProfile(token: string, authToken: string): Promise<{ 
         return { success: false, errorCode: 'auth_expired' };
       }
       const errorData = await response.json().catch(() => ({}));
-      const code = errorData?.detail || '';
-      if (code === 'already_claimed') return { success: false, errorCode: 'already_claimed' };
-      if (code === 'user_has_provider') return { success: false, errorCode: 'user_has_provider' };
+      const code = errorData?.detail?.code || '';
+      if (code === 'ALREADY_CLAIMED') return { success: false, errorCode: 'already_claimed' };
+      if (code === 'USER_ALREADY_HAS_PROVIDER') return { success: false, errorCode: 'user_has_provider' };
       if (response.status === 404) return { success: false, errorCode: 'not_found' };
       return { success: false, errorCode: 'network' };
     }
