@@ -141,7 +141,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
                   {t(claimT, 'error_auth_expired', 'Your session has expired. Log in again.')}
                 </p>
                 <Link
-                  href={`/${normalizedLang}/auth/login?redirect=/${normalizedLang}/claim/${token}`}
+                  href={`/${normalizedLang}/auth?redirect=/${normalizedLang}/claim/${token}`}
                   className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
                 >
                   {t(claimT, 'error_auth_expired_cta', 'Log in again')}
@@ -194,7 +194,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
             {t(claimT, 'notfound_support', 'Need help? Contact our support team.')}
           </div>
           <Link
-            href={`/${normalizedLang}/auth/register?intent=provider`}
+            href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
             className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
           >
             {t(claimT, 'notfound_cta', 'Register as a provider')}
@@ -225,7 +225,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
             {t(claimT, 'claimed_desc', 'This profile has already been claimed by another user.')}
           </p>
           <Link
-            href={`/${normalizedLang}/auth/login`}
+            href={`/${normalizedLang}/auth`}
             className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
           >
             {t(claimT, 'claimed_cta', 'Log in to your account')}
@@ -318,7 +318,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
               <>
                 <p className="text-sm text-orange-800 mb-3">{t(claimT, 'error_auth_expired')}</p>
                 <Link
-                  href={`/${normalizedLang}/auth/login?redirect=/${normalizedLang}/claim/${token}`}
+                  href={`/${normalizedLang}/auth?redirect=/${normalizedLang}/claim/${token}`}
                   className="inline-block rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-600"
                 >
                   {t(claimT, 'error_auth_expired_cta')}
@@ -343,7 +343,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
         )}
 
         <ClaimMobileCTA
-          href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+          href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
           label={t(claimT, 'cta_register', 'Register and claim this profile for free')}
         />
 
@@ -367,7 +367,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
             </form>
           ) : (
             <Link
-              href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+              href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
               className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors text-center"
             >
               {t(claimT, 'cta_register', 'Register and claim this profile for free')}
@@ -484,7 +484,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
             </form>
           ) : (
             <Link
-              href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+              href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
               className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl text-lg transition-colors text-center"
             >
               {t(claimT, 'cta_register', 'Register and claim this profile for free')}
@@ -499,7 +499,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
         </div>
 
         <ClaimMobileCTA
-          href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+          href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
           label={t(claimT, 'cta_register', 'Register and claim this profile for free')}
         />
 
@@ -513,7 +513,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
             </div>
             <div className="text-center">
               <Link
-                href={`/${normalizedLang}/auth/login?redirect=/${normalizedLang}/claim/${token}`}
+                href={`/${normalizedLang}/auth?redirect=/${normalizedLang}/claim/${token}`}
                 className="text-gray-600 hover:text-gray-900 text-sm"
               >
                 {t(claimT, 'login_hint', 'Already have an account? Log in')}
@@ -551,7 +551,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
 
       {/* Sticky bottom bar (mobile only) */}
       <StickyClaimBar
-        href={`/${normalizedLang}/auth/register?redirect=/${normalizedLang}/claim/${token}&intent=provider`}
+        href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
         label={t(claimT, 'cta_register', 'Register and claim for free')}
       />
     </div>
