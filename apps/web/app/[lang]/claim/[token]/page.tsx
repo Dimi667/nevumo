@@ -10,7 +10,7 @@ import ClaimMobileCTA from './ClaimMobileCTA';
 
 interface PageProps {
   params: Promise<{ lang: string; token: string }>;
-  searchParams?: { error?: string };
+  searchParams?: Promise<{ error?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -102,7 +102,8 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
   const { lang, token } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'en';
   const claimT = await fetchTranslations(normalizedLang, 'claim');
-  const errorParam = searchParams?.error ?? null;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const errorParam = resolvedSearchParams?.error ?? null;
 
   // Check auth status via cookie
   const cookieStore = await cookies();
