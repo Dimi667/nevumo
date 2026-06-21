@@ -22,7 +22,7 @@ export default function ProviderMobileCTA({
   if (!isIOS26Plus) return null
 
   return (
-    <div className="md:hidden px-4 py-3">
+    <div className="md:hidden px-0 py-3">
       <button
         onClick={onOpenSheet}
         style={{
