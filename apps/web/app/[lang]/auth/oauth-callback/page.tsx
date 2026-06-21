@@ -34,8 +34,11 @@ export default function OAuthCallbackPage() {
       saveAuth(token, parsedUser);
 
       const redirectParam = searchParams.get('redirect');
-      const redirectPath = redirectParam
-        ? redirectParam
+      const localStorageRedirect = typeof window !== 'undefined'
+        ? localStorage.getItem('nevumo_redirect')
+        : null;
+      const redirectPath = redirectParam || localStorageRedirect
+        ? (redirectParam || localStorageRedirect)!
         : parsedUser.role === 'provider'
         ? `/${lang}/provider/dashboard`
         : `/${lang}/izberi-grad`;
@@ -44,6 +47,7 @@ export default function OAuthCallbackPage() {
       if (category) setCtx({ category });
 
       setTimeout(() => {
+        localStorage.removeItem('nevumo_redirect');
         window.location.href = redirectPath;
       }, 100);
     } catch {

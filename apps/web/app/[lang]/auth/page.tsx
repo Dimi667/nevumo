@@ -24,11 +24,11 @@ export default async function AuthPage({
   searchParams,
 }: {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<{ role?: string }>;
+  searchParams: Promise<{ role?: string; redirect?: string }>;
 }) {
   const { lang } = await params;
-  const { role } = await searchParams;
+  const { role, redirect } = await searchParams;
   const authDict = await fetchTranslations(lang, "auth");
   const footerDict = await fetchTranslations(lang, "footer");
-  return <LoginClient lang={lang} initialRole={role ?? null} authDict={authDict} footerDict={footerDict} />;
+  return <LoginClient lang={lang} initialRole={role ?? null} authDict={authDict} footerDict={footerDict} redirectAfterLogin={redirect ?? null} />;
 }

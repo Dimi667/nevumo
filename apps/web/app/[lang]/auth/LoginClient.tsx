@@ -90,9 +90,10 @@ interface LoginClientProps {
   initialRole: string | null;
   authDict: Record<string, string>;
   footerDict: Record<string, string>;
+  redirectAfterLogin?: string | null;
 }
 
-export default function LoginClient({ lang, initialRole, authDict, footerDict }: LoginClientProps) {
+export default function LoginClient({ lang, initialRole, authDict, footerDict, redirectAfterLogin }: LoginClientProps) {
   console.log('[AuthPage] authDict keys:', Object.keys(authDict));
   console.log('[AuthPage] authDict sample:', authDict);
   const t = (dict: Record<string, string>, key: string, fallback: string): string => dict[key] ?? fallback;
@@ -326,11 +327,12 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
       }
 
       const role = result.user.role;
-      if (role === 'provider') {
-        window.location.href = `/${lang}/provider/dashboard`;
-      } else {
-        window.location.href = `/${lang}/client/dashboard`;
-      }
+      const loginRedirectPath = redirectAfterLogin
+        ? redirectAfterLogin
+        : role === 'provider'
+        ? `/${lang}/provider/dashboard`
+        : `/${lang}/client/dashboard`;
+      window.location.href = loginRedirectPath;
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'INVALID_CREDENTIALS' || err.message.includes('Invalid credentials')) {
@@ -413,7 +415,9 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
         if (categoryParam) setCtx({ category: categoryParam });
       }
 
-      const redirectPath = result.user.role === 'provider'
+      const redirectPath = redirectAfterLogin
+        ? redirectAfterLogin
+        : result.user.role === 'provider'
         ? `/${lang}/provider/dashboard/profile`
         : `/${lang}/client/dashboard`;
       setTimeout(() => { window.location.href = redirectPath; }, 1000);
@@ -563,6 +567,9 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
                   const intent = currentIntent ?? '';
                   const category = searchParams.get('category') ?? '';
                   const city = citySlug ?? '';
+                  if (redirectAfterLogin) {
+                    localStorage.setItem('nevumo_redirect', redirectAfterLogin);
+                  }
                   window.location.href = `${API_BASE}/api/v1/auth/google?lang=${lang}&intent=${intent}&category=${category}&city=${city}`;
                 }}
                 className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
@@ -689,6 +696,9 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
                   if (state._pendingGoogle) {
                     const category = searchParams.get('category') ?? '';
                     const city = citySlug ?? '';
+                    if (redirectAfterLogin) {
+                      localStorage.setItem('nevumo_redirect', redirectAfterLogin);
+                    }
                     window.location.href = `${API_BASE}/api/v1/auth/google?lang=${lang}&intent=client&category=${category}&city=${city}`;
                   } else {
                     setState(s => ({ ...s, intent: 'client', step: 'register', _pendingGoogle: false }));
@@ -709,6 +719,9 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict }:
                   if (state._pendingGoogle) {
                     const category = searchParams.get('category') ?? '';
                     const city = citySlug ?? '';
+                    if (redirectAfterLogin) {
+                      localStorage.setItem('nevumo_redirect', redirectAfterLogin);
+                    }
                     window.location.href = `${API_BASE}/api/v1/auth/google?lang=${lang}&intent=provider&category=${category}&city=${city}`;
                   } else {
                     setState(s => ({ ...s, intent: 'provider', step: 'register', _pendingGoogle: false }));
