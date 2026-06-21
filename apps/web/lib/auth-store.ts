@@ -7,6 +7,9 @@ export function saveAuth(token: string, user: UserInfo): void {
   if (typeof window === "undefined") return;
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(USER_KEY, JSON.stringify(user));
+  if (typeof document !== 'undefined') {
+    document.cookie = `nevumo_auth_token=${token}; path=/; max-age=31536000; SameSite=Lax`;
+  }
 }
 
 export function getAuthToken(): string | null {
@@ -28,6 +31,9 @@ export function clearAuth(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
+  if (typeof document !== 'undefined') {
+    document.cookie = 'nevumo_auth_token=; path=/; max-age=0; SameSite=Lax';
+  }
 }
 
 export function isAuthenticated(): boolean {
