@@ -88,6 +88,14 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
       if (city) setCtx({ city });
       if (category) setCtx({ category });
       const isNewUser = result.data.is_new_user;
+      const savedRedirect = typeof window !== 'undefined'
+        ? localStorage.getItem('nevumo_redirect')
+        : null;
+      if (savedRedirect) {
+        localStorage.removeItem('nevumo_redirect');
+        window.location.href = savedRedirect;
+        return;
+      }
       if (intent === 'provider') {
         window.location.href = isNewUser
           ? `/${lang}/provider/dashboard/profile`

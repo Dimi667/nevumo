@@ -564,7 +564,7 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
               <button
                 onClick={() => {
                   const currentIntent = localStorage.getItem('nevumo_intent');
-                  const intent = currentIntent ?? '';
+                  const intent = redirectAfterLogin ? 'provider' : (currentIntent ?? '');
                   const category = searchParams.get('category') ?? '';
                   const city = citySlug ?? '';
                   if (redirectAfterLogin) {
