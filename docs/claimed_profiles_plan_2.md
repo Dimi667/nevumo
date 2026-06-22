@@ -280,7 +280,7 @@ Events: delivered, opened, clicked, bounced, complained
 
 ---
 
-### Блокер 5 — outreach_sequence_log DB таблица (НОВ) 🔴
+### Блокер 5 — outreach_sequence_log DB таблица ✅ ЗАВЪРШЕН (22 юни 2026)
 
 **Проблем:** `outreach_sent_log.csv` е локален файл — не работи с Railway scheduler и е ненадежден.
 
@@ -294,16 +294,27 @@ CREATE TABLE outreach_sequence_log (
     sequence_step INTEGER NOT NULL,  -- 1/2/3/4
     resend_message_id TEXT,
     sent_at TIMESTAMPTZ DEFAULT NOW(),
-    status TEXT DEFAULT 'sent',  -- sent/failed/skipped
+    status TEXT DEFAULT 'sent',  -- sent/failed
     UNIQUE(email, sequence_step)
 );
+CREATE INDEX idx_outreach_seq_email ON outreach_sequence_log(email);
 ```
 
 **Интеграция:** `send_outreach_bulk.py` пише в таблицата вместо CSV.
 Scheduler проверява: "Кой email на коя стъпка е следващ?"
 
-**Файлове:** Alembic migration, `apps/api/models.py`, `send_outreach_bulk.py`
+**Файлове:** Alembic migration `w1x2y3z4a5b6_add_outreach_sequence_log.py`, `apps/api/models.py`, `send_outreach_bulk.py`
 **Модел:** SWE-1.6
+
+**Имплементация (22 юни 2026):**
+- `OutreachSequenceLog` модел добавен в `models.py` с UNIQUE(email, sequence_step)
+- Alembic migration `w1x2y3z4a5b6_add_outreach_sequence_log.py` — приложена успешно
+- `send_outreach_bulk.py` — пълна замяна: CSV → DB (SessionLocal, ON CONFLICT DO NOTHING)
+- `--sequence-step` CLI аргумент добавен (default: 1, range: 1-4)
+- Alembic merge migrations: 4 merge файла за почистване на натрупани heads
+- `alembic_version.version_num` разширена от VARCHAR(32) → VARCHAR(128) (pre-existing issue)
+- Commits: `4cbdb17` (implementation), `d70616d` (merge migrations)
+- Dry-run тест: ✅ 3/3 реда, 0 грешки, template рендерира коректно
 
 ---
 
@@ -1106,7 +1117,7 @@ CATEGORY_LABEL_PL = {
 [✅] Блокер 3: Unsubscribe механизъм — ЗАВЪРШЕН (22 юни 2026)
 [✅] Блокер 3Б: Welcome имейл след claim (await bug fix) — ЗАВЪРШЕН (22 юни 2026)
 [✅] Блокер 4: Resend Webhooks — ЗАВЪРШЕН (22 юни 2026, commit 5b186c0)
-[ ] Блокер 5: outreach_sequence_log таблица      → SWE-1.6
+[✅] Блокер 5: outreach_sequence_log таблица      → ЗАВЪРШЕН (22 юни 2026, commits 4cbdb17 + d70616d)
 [ ] Блокер 6: Верификация при claim (4Г)         → SWE-1.6 (backend + DB) + Kimi-2.6 (frontend + template)
               email match → директен claim
               email mismatch → 6-цифрен код до scraped_email

@@ -685,3 +685,34 @@ CREATE INDEX idx_outreach_events_occurred ON outreach_events(occurred_at);
 - reason='bounce' — reserved for Resend webhook (Blocker 4)
 - reason='complaint' — reserved for Resend webhook (Blocker 4)
 - Checked by send_outreach_bulk.py before every send (DB query, not CSV)
+
+---
+
+## Outreach Sequence Log
+
+CREATE TABLE outreach_sequence_log (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL,
+    business_name TEXT,
+    category TEXT,
+    sequence_step INTEGER NOT NULL,
+    resend_message_id TEXT,
+    sent_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+    status TEXT NOT NULL DEFAULT 'sent',
+    UNIQUE(email, sequence_step)
+);
+CREATE INDEX idx_outreach_seq_email ON outreach_sequence_log(email);
+
+### Notes
+- Added: June 22, 2026 — Blocker 5 (replaces outreach_sent_log.csv)
+- Alembic migration: w1x2y3z4a5b6_add_outreach_sequence_log.py
+- Commits: 4cbdb17 (implementation), d70616d (alembic merge migrations)
+- Replaces local CSV file `outreach_sent_log.csv` — reliable with Railway scheduler + multi-instance
+- UNIQUE(email, sequence_step) provides built-in idempotency
+- status values: 'sent', 'failed'
+- category values: 'cleaning', 'plumbing', 'massage'
+- sequence_step values: 1, 2, 3, 4 (one per outreach email)
+- Written by send_outreach_bulk.py via ON CONFLICT DO NOTHING (idempotent inserts)
+- Dry-run mode: NO DB writes (read-only behavior preserved)
+- Used by Railway scheduler (run_outreach_sequence.py — Blocker 8) to track sequence state
+- Used for 30-day campaign analytics query (Section 7 of claimed_profiles_plan_2.md)
