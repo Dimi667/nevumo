@@ -457,8 +457,10 @@ async def claim_provider(
         )
 
     # --- Blocker 6: email verification ---
+    logger.info(f"[B6_DEBUG] current_user.email={current_user.email}, provider.scraped_email={provider.scraped_email}, match={current_user.email == provider.scraped_email}")
     if current_user.email == provider.scraped_email:
         # Fast path: email matches — claim directly (fall through to existing commit logic)
+        logger.info("[B6_DEBUG] Taking fast path - email matches")
         pass
 
     elif provider.scraped_email is None:
