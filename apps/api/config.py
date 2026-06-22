@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     FROM_EMAIL: str = "Nevumo <noreply@nevumo.com>"
     LEGAL_EMAIL: str = "legal@nevumo.com"
 
+    # Outreach unsubscribe HMAC
+    OUTREACH_HMAC_SECRET: str = ""
+
     # Web Push Notifications (VAPID)
     vapid_public_key: str = ""
     vapid_private_key: str = ""

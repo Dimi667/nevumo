@@ -677,3 +677,24 @@ class CitySearchVolume(Base):
     city_slug: Mapped[str] = mapped_column(String, primary_key=True)
     category_slug: Mapped[str] = mapped_column(String, primary_key=True)
     search_volume: Mapped[int] = mapped_column(Integer, nullable=False)
+
+
+# -------------------------
+# Outreach Unsubscribes
+# -------------------------
+
+class OutreachUnsubscribe(Base):
+    __tablename__ = "outreach_unsubscribes"
+
+    email: Mapped[str] = mapped_column(Text, primary_key=True)
+    unsubscribed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    __table_args__ = (
+        CheckConstraint(
+            "reason IN ('user_request', 'bounce', 'complaint')",
+            name="ck_outreach_unsub_reason",
+        ),
+    )
