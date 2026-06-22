@@ -1767,7 +1767,7 @@ git push nevumo-git main  # архив на SSD
 - 🟡 Cleanup e2e_test providers from Neon DB
 
 **Known gaps:**
-- send_claim_welcome_email await bug: object bool can't be used in 'await' expression — Блокер 3Б, преди QA Gate
+- ✅ send_claim_welcome_email await bug — FIXED (22 юни 2026, Kimi-2.6): removed await from sync function call in providers.py
 
 - **Claimed Profiles — Task 4Б Unclaimed Banner (June 21, 2026):** ✅ ЗАВЪРШЕНА
   - ClaimProfileBanner.tsx рефакториран (translations + correct claim URL)

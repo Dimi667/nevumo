@@ -230,6 +230,12 @@ CREATE TABLE outreach_unsubscribes (
 **Модел:** Kimi-2.6
 **Приоритет:** Преди QA Gate, след Блокер 3.
 
+**Имплементация (22 юни 2026):**
+- Премахнат `await` пред `email_service.send_claim_welcome_email()` в `apps/api/routes/providers.py` ред 499
+- Функцията е синхронна (`def`, не `async def`) — `await` върху sync функция хвърляше `TypeError`
+- Fix: Kimi-2.6
+- E2E тест: ✅ Claim flow завършен без грешки, redirect към dashboard успешен
+
 ---
 
 ### Блокер 4 — Resend Webhooks (НОВ — tracking + bounce protection) 🔴
@@ -1091,8 +1097,8 @@ CATEGORY_LABEL_PL = {
 БЛОКЕРИ (наредени по зависимост):
 [✅] Блокер 1: Auto-claim (4Д) — ЗАВЪРШЕН (22 юни 2026)
 [✅] Блокер 2: Art.14 в providers.py (4Е) — ЗАВЪРШЕН (22 юни 2026)
-[ ] Блокер 3: Unsubscribe механизъм              → SWE-1.6 (backend) + Kimi-2.6 (script)
-[ ] Блокер 3Б: Welcome имейл след claim (await bug fix)  → Kimi-2.6 (преди QA Gate)
+[✅] Блокер 3: Unsubscribe механизъм — ЗАВЪРШЕН (22 юни 2026)
+[✅] Блокер 3Б: Welcome имейл след claim (await bug fix) — ЗАВЪРШЕН (22 юни 2026)
 [ ] Блокер 4: Resend Webhooks                    → SWE-1.6
 [ ] Блокер 5: outreach_sequence_log таблица      → SWE-1.6
 [ ] Блокер 6: Верификация при claim (4Г)         → SWE-1.6 (backend + DB) + Kimi-2.6 (frontend + template)
