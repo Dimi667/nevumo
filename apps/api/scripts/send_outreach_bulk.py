@@ -19,13 +19,17 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
+import hmac
 import logging
 import os
 import time
+import urllib.parse
 from datetime import datetime, timezone
 from pathlib import Path
 
 from jinja2 import Template, TemplateError
+from sqlalchemy import create_engine, text
 
 TEMPLATE_PATH: Path = Path(__file__).parent / "templates" / "outreach_email_pl.html"
 LOG_PATH: Path = Path(__file__).parent / "outreach_sent_log.csv"
@@ -47,6 +51,20 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 log = logging.getLogger(__name__)
+
+_db_engine = None
+
+def _get_db():
+    global _db_engine
+    if _db_engine is None:
+        _db_engine = create_engine(os.environ["DATABASE_URL"], pool_pre_ping=True)
+    return _db_engine
+
+def _generate_unsubscribe_url(email: str, secret: str) -> str:
+    """Generate HMAC-SHA256 signed unsubscribe URL."""
+    token = hmac.new(secret.encode(), email.encode(), hashlib.sha256).hexdigest()
+    encoded_email = urllib.parse.quote(email)
+    return f"https://nevumo.com/pl/outreach/unsubscribe?email={encoded_email}&token={token}"
 
 
 def load_template() -> Template:
@@ -152,10 +170,23 @@ def main() -> None:
             skipped += 1
             continue
 
+        # Skip unsubscribed emails
+        with _get_db().connect() as conn:
+            unsub = conn.execute(
+                text("SELECT 1 FROM outreach_unsubscribes WHERE email = :email"),
+                {"email": email}
+            ).fetchone()
+        if unsub:
+            log.info("UNSUBSCRIBED skip: %s", email)
+            skipped += 1
+            continue
+
         try:
+            unsubscribe_url = _generate_unsubscribe_url(email, os.environ.get("OUTREACH_HMAC_SECRET", ""))
             html: str = template.render(
                 business_name=business_name,
                 claim_link=claim_link,
+                unsubscribe_url=unsubscribe_url,
             )
         except TemplateError as exc:
             log.error("[%d/%d] Template error for %s: %s", i, total, email, exc)
