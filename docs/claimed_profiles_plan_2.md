@@ -272,6 +272,12 @@ Events: delivered, opened, clicked, bounced, complained
 **Файлове:** `apps/api/routes/webhooks.py`, Alembic migration, `apps/api/models.py`
 **Модел:** SWE-1.6
 
+**Имплементация (22 юни 2026):**
+- Step 1: `OutreachEvent` модел в `models.py` + `RESEND_WEBHOOK_SECRET` в `Settings` + Alembic migration `v1w2x3y4z5a6_add_outreach_events.py`
+- Step 2: `apps/api/routes/webhooks.py` — svix signature verification, event logging, bounce/complaint suppression; регистриран в `main.py`
+- Ръчна конфигурация: Webhook създаден в Resend Dashboard (Enabled), `RESEND_WEBHOOK_SECRET` добавен в Railway
+- E2E тест: ✅ изпратен реален имейл → `email.sent` + `email.delivered` записани в `outreach_events` (resend_message_id: 9764744d-5be9-4425-8a87-147535920076)
+
 ---
 
 ### Блокер 5 — outreach_sequence_log DB таблица (НОВ) 🔴
@@ -1099,7 +1105,7 @@ CATEGORY_LABEL_PL = {
 [✅] Блокер 2: Art.14 в providers.py (4Е) — ЗАВЪРШЕН (22 юни 2026)
 [✅] Блокер 3: Unsubscribe механизъм — ЗАВЪРШЕН (22 юни 2026)
 [✅] Блокер 3Б: Welcome имейл след claim (await bug fix) — ЗАВЪРШЕН (22 юни 2026)
-[ ] Блокер 4: Resend Webhooks                    → SWE-1.6
+[✅] Блокер 4: Resend Webhooks — ЗАВЪРШЕН (22 юни 2026, commit 5b186c0)
 [ ] Блокер 5: outreach_sequence_log таблица      → SWE-1.6
 [ ] Блокер 6: Верификация при claim (4Г)         → SWE-1.6 (backend + DB) + Kimi-2.6 (frontend + template)
               email match → директен claim

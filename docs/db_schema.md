@@ -656,6 +656,30 @@ CREATE TABLE outreach_unsubscribes (
 ### Notes
 - Added: June 22, 2026 — Blocker 3 (GDPR/RODO unsubscribe mechanism)
 - Alembic migration: u1v2w3x4y5z6_add_outreach_unsubscribes.py
+
+---
+
+## Outreach Events
+
+CREATE TABLE outreach_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    resend_message_id TEXT NOT NULL,
+    email TEXT NOT NULL,
+    event_type TEXT NOT NULL,
+    occurred_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+CREATE INDEX idx_outreach_events_email ON outreach_events(email);
+CREATE INDEX idx_outreach_events_type ON outreach_events(event_type);
+CREATE INDEX idx_outreach_events_occurred ON outreach_events(occurred_at);
+
+### Notes
+- Added: June 22, 2026 — Blocker 4 (Resend Webhooks)
+- Alembic migration: v1w2x3y4z5a6_add_outreach_events.py
+- Populated by POST /api/v1/webhooks/resend (svix signature verification)
+- event_type values: email.sent, email.delivered, email.opened, email.clicked, email.bounced, email.complained
+- email.bounced → also writes to outreach_unsubscribes (reason='bounce')
+- email.complained → also writes to outreach_unsubscribes (reason='complaint')
+- Used for 30-day campaign analytics (Section 7 of claimed_profiles_plan_2.md)
 - email is PRIMARY KEY (one record per address, idempotent)
 - reason='user_request' — set when user clicks unsubscribe link in email
 - reason='bounce' — reserved for Resend webhook (Blocker 4)

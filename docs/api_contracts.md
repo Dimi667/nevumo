@@ -473,6 +473,47 @@ Idempotent — second call for same email is silently accepted.
 
 ---
 
+## 🔹 WEBHOOK ENDPOINTS (Internal — Resend only)
+
+### POST /api/v1/webhooks/resend
+
+**Purpose:** Receives Resend email event notifications.
+
+**Auth:** Resend svix signature (headers: svix-id, svix-timestamp, svix-signature)
+
+**Body (Resend format):**
+```json
+{
+  "type": "email.delivered",
+  "data": {
+    "email_id": "resend_message_id",
+    "to": ["recipient@example.com"]
+  }
+}
+```
+
+**Response (200) — valid signature:**
+```json
+{"received": true}
+```
+
+**Response (401) — invalid signature:**
+```json
+{"detail": "invalid_signature"}
+```
+
+**Behavior:**
+- Logs all events to outreach_events table
+- email.bounced → also inserts into outreach_unsubscribes (reason='bounce')
+- email.complained → also inserts into outreach_unsubscribes (reason='complaint')
+- Idempotent: duplicate events safely handled
+- Returns 200 for malformed payloads (prevents Resend retry loops)
+
+**Config:** RESEND_WEBHOOK_SECRET (Railway env var, from Resend Dashboard → Webhooks → Signing Secret)
+**File:** apps/api/routes/webhooks.py
+
+---
+
 ## 🔹 USER PROFILE ENDPOINTS (JWT Required)
 
 ### GET /api/v1/user/profile

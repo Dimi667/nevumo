@@ -1467,6 +1467,25 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Added SQLAlchemy engine setup for DB queries
 - E2E verified: invalid token → 400, valid token → 302, DB record created, bulk skip confirmed
 
+**Blocker 4 — Resend Webhooks (June 22, 2026)** — COMPLETE:
+- New table: `outreach_events` (UUID PK, resend_message_id, email, event_type, occurred_at TIMESTAMPTZ)
+- Alembic migration: `v1w2x3y4z5a6_add_outreach_events.py`
+- New model: `OutreachEvent` in `models.py`
+- New config: `RESEND_WEBHOOK_SECRET: str` in `Settings` (loaded from Railway env var)
+- New router: `apps/api/routes/webhooks.py` — `POST /api/v1/webhooks/resend`
+  - Verifies Resend svix signature (svix-id, svix-timestamp, svix-signature headers)
+  - Logs all events to outreach_events table
+  - email.bounced → also writes to outreach_unsubscribes (reason='bounce')
+  - email.complained → also writes to outreach_unsubscribes (reason='complaint')
+  - Idempotent: duplicate events safely handled
+  - Returns 200 for malformed payloads (prevents Resend retry loops)
+- Registered in: `apps/api/main.py` (webhooks_router)
+- New dependency: svix>=1.0.0 in requirements.txt
+- Manual config: Webhook created in Resend Dashboard (Enabled), RESEND_WEBHOOK_SECRET added to Railway
+- E2E verified: email.sent + email.delivered recorded in outreach_events (resend_message_id: 9764744d-5be9-4425-8a87-147535920076)
+
+Next: Blocker 5 (outreach_sequence_log table), Blocker 6 (claim verification email mismatch).
+
 **April 21 — City Page Enhancements, Leads Dashboard UX, Next.js 16 Proxy & Client Dashboard i18n**
   - **City Page Hero (4 States)**: Implemented `CityPageHero.tsx` with dynamic content based on provider count, request count, and ratings.
   - **City Stats API**: Added `GET /api/v1/cities/{slug}/stats` with Redis caching (1h TTL) to power the hero section.
