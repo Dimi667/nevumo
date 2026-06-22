@@ -720,3 +720,27 @@ class OutreachEvent(Base):
         Index("idx_outreach_events_type", "event_type"),
         Index("idx_outreach_events_occurred", "occurred_at"),
     )
+
+
+# -------------------------
+# Outreach Sequence Log
+# -------------------------
+
+class OutreachSequenceLog(Base):
+    __tablename__ = "outreach_sequence_log"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    email: Mapped[str] = mapped_column(Text, nullable=False)
+    business_name: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    category: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    sequence_step: Mapped[int] = mapped_column(Integer, nullable=False)
+    resend_message_id: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    sent_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    status: Mapped[str] = mapped_column(Text, nullable=False, server_default="sent")
+
+    __table_args__ = (
+        UniqueConstraint("email", "sequence_step", name="uq_outreach_seq_email_step"),
+        Index("idx_outreach_seq_email", "email"),
+    )

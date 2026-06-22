@@ -3,16 +3,17 @@ apps/api/scripts/send_outreach_bulk.py
 
 Bulk outreach email sender — Task 5A, Nevumo Claimed Profiles Campaign.
 
-Input CSV columns: email, business_name, claim_token
+Input CSV columns: email, business_name, claim_token, category
 Template: apps/api/scripts/templates/outreach_email_pl.html
 Sender: support@nevumo.com via Resend
 Rate limit: 100 emails/hour (Resend free tier) → 37s delay between sends
+Idempotency: outreach_sequence_log DB table (UNIQUE email + sequence_step)
 
 Run (dry-run test):
   railway run python3.13 -m apps.api.scripts.send_outreach_bulk --dry-run --limit 3
 
-Run (live):
-  railway run python3.13 -m apps.api.scripts.send_outreach_bulk --limit 100
+Run (live, step 1):
+  railway run python3.13 -m apps.api.scripts.send_outreach_bulk --sequence-step 1 --limit 100
 """
 
 from __future__ import annotations
@@ -25,14 +26,14 @@ import logging
 import os
 import time
 import urllib.parse
-from datetime import datetime, timezone
 from pathlib import Path
 
 from jinja2 import Template, TemplateError
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
+
+from apps.api.database import SessionLocal
 
 TEMPLATE_PATH: Path = Path(__file__).parent / "templates" / "outreach_email_pl.html"
-LOG_PATH: Path = Path(__file__).parent / "outreach_sent_log.csv"
 DEFAULT_CSV: Path = Path(__file__).parent / "outreach_ready.csv"
 
 FROM_EMAIL: str = "Nevumo <support@nevumo.com>"
@@ -52,13 +53,6 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-_db_engine = None
-
-def _get_db():
-    global _db_engine
-    if _db_engine is None:
-        _db_engine = create_engine(os.environ["DATABASE_URL"], pool_pre_ping=True)
-    return _db_engine
 
 def _generate_unsubscribe_url(email: str, secret: str) -> str:
     """Generate HMAC-SHA256 signed unsubscribe URL."""
@@ -73,42 +67,58 @@ def load_template() -> Template:
     return Template(TEMPLATE_PATH.read_text(encoding="utf-8"))
 
 
-def load_sent_emails() -> set[str]:
-    """Return set of already-sent emails for idempotency."""
-    if not LOG_PATH.exists():
-        return set()
-    sent: set[str] = set()
-    with LOG_PATH.open(encoding="utf-8", newline="") as fh:
-        for row in csv.DictReader(fh):
-            if row.get("status") == "sent":
-                sent.add(row["email"].strip().lower())
-    return sent
+def _is_already_sent(db, email: str, sequence_step: int) -> bool:
+    """Check outreach_sequence_log for existing sent record (DB idempotency)."""
+    row = db.execute(
+        text(
+            "SELECT 1 FROM outreach_sequence_log "
+            "WHERE email = :email AND sequence_step = :step AND status = 'sent'"
+        ),
+        {"email": email, "step": sequence_step},
+    ).fetchone()
+    return row is not None
 
 
-def append_log(
+def _is_unsubscribed(db, email: str) -> bool:
+    """Check outreach_unsubscribes table."""
+    row = db.execute(
+        text("SELECT 1 FROM outreach_unsubscribes WHERE email = :email"),
+        {"email": email},
+    ).fetchone()
+    return row is not None
+
+
+def _log_to_db(
+    db,
     *,
     email: str,
     business_name: str,
+    category: str,
+    sequence_step: int,
+    resend_message_id: str | None,
     status: str,
-    error: str = "",
 ) -> None:
-    is_new = not LOG_PATH.exists()
-    with LOG_PATH.open("a", encoding="utf-8", newline="") as fh:
-        writer = csv.DictWriter(
-            fh,
-            fieldnames=["timestamp", "email", "business_name", "status", "error"],
-        )
-        if is_new:
-            writer.writeheader()
-        writer.writerow(
-            {
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-                "email": email,
-                "business_name": business_name,
-                "status": status,
-                "error": error,
-            }
-        )
+    """Insert send record into outreach_sequence_log. ON CONFLICT DO NOTHING (idempotent)."""
+    db.execute(
+        text(
+            """
+            INSERT INTO outreach_sequence_log
+                (email, business_name, category, sequence_step, resend_message_id, status)
+            VALUES
+                (:email, :business_name, :category, :step, :resend_id, :status)
+            ON CONFLICT (email, sequence_step) DO NOTHING
+            """
+        ),
+        {
+            "email": email,
+            "business_name": business_name,
+            "category": category,
+            "step": sequence_step,
+            "resend_id": resend_message_id,
+            "status": status,
+        },
+    )
+    db.commit()
 
 
 def main() -> None:
@@ -117,10 +127,14 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--delay", type=float, default=DEFAULT_DELAY)
+    parser.add_argument("--sequence-step", type=int, default=1,
+                        help="Outreach sequence step (1-4). Default: 1")
     args = parser.parse_args()
 
     api_key: str = os.environ.get("RESEND_API_KEY", "")
     app_url: str = os.environ.get("APP_URL", "https://www.nevumo.com").rstrip("/")
+    hmac_secret: str = os.environ.get("OUTREACH_HMAC_SECRET", "")
+    sequence_step: int = args.sequence_step
 
     if not args.dry_run and not api_key:
         raise RuntimeError(
@@ -136,9 +150,7 @@ def main() -> None:
 
     template = load_template()
     log.info("Template loaded: %s", TEMPLATE_PATH)
-
-    already_sent: set[str] = load_sent_emails()
-    log.info("Previously sent (will skip): %d", len(already_sent))
+    log.info("Sequence step: %d", sequence_step)
 
     with args.csv_file.open(encoding="utf-8", newline="") as fh:
         all_rows: list[dict[str, str]] = list(csv.DictReader(fh))
@@ -155,80 +167,104 @@ def main() -> None:
 
     sent = skipped = failed = 0
 
-    for i, row in enumerate(valid_rows, start=1):
-        email: str = row["email"].strip().lower()
-        business_name: str = (row.get("business_name") or email).strip()
-        claim_token: str = row["claim_token"].strip()
-        claim_link: str = f"{app_url}/pl/claim/{claim_token}"
-        category: str = row.get("category", "").strip()
-        subject: str = SUBJECT_BY_CATEGORY.get(category, DEFAULT_SUBJECT)
+    db = SessionLocal()
+    try:
+        for i, row in enumerate(valid_rows, start=1):
+            email: str = row["email"].strip().lower()
+            business_name: str = (row.get("business_name") or email).strip()
+            claim_token: str = row["claim_token"].strip()
+            claim_link: str = f"{app_url}/pl/claim/{claim_token}"
+            category: str = row.get("category", "").strip()
+            subject: str = SUBJECT_BY_CATEGORY.get(category, DEFAULT_SUBJECT)
 
-        log.info("Sending to %s | category: %s | subject: %s", email, category, subject)
+            # Idempotency check — DB (replaces CSV)
+            if not args.dry_run and _is_already_sent(db, email, sequence_step):
+                log.info("[%d/%d] SKIP already sent (DB): %s step=%d", i, total, email, sequence_step)
+                skipped += 1
+                continue
 
-        if email in already_sent:
-            log.info("[%d/%d] SKIP already sent: %s", i, total, email)
-            skipped += 1
-            continue
+            # Unsubscribe check — DB
+            if not args.dry_run and _is_unsubscribed(db, email):
+                log.info("[%d/%d] SKIP unsubscribed: %s", i, total, email)
+                skipped += 1
+                continue
 
-        # Skip unsubscribed emails
-        with _get_db().connect() as conn:
-            unsub = conn.execute(
-                text("SELECT 1 FROM outreach_unsubscribes WHERE email = :email"),
-                {"email": email}
-            ).fetchone()
-        if unsub:
-            log.info("UNSUBSCRIBED skip: %s", email)
-            skipped += 1
-            continue
+            try:
+                unsubscribe_url = _generate_unsubscribe_url(email, hmac_secret)
+                html: str = template.render(
+                    business_name=business_name,
+                    claim_link=claim_link,
+                    unsubscribe_url=unsubscribe_url,
+                )
+            except TemplateError as exc:
+                log.error("[%d/%d] Template error for %s: %s", i, total, email, exc)
+                if not args.dry_run:
+                    _log_to_db(
+                        db,
+                        email=email,
+                        business_name=business_name,
+                        category=category,
+                        sequence_step=sequence_step,
+                        resend_message_id=None,
+                        status="failed",
+                    )
+                failed += 1
+                continue
 
-        try:
-            unsubscribe_url = _generate_unsubscribe_url(email, os.environ.get("OUTREACH_HMAC_SECRET", ""))
-            html: str = template.render(
-                business_name=business_name,
-                claim_link=claim_link,
-                unsubscribe_url=unsubscribe_url,
-            )
-        except TemplateError as exc:
-            log.error("[%d/%d] Template error for %s: %s", i, total, email, exc)
-            append_log(email=email, business_name=business_name, status="failed", error=str(exc))
-            failed += 1
-            continue
+            if args.dry_run:
+                log.info(
+                    "[DRY-RUN] [%d/%d] Would send: %s | step=%d | category=%s | html=%d chars",
+                    i, total, email, sequence_step, category, len(html),
+                )
+                sent += 1
+                continue
 
-        if args.dry_run:
-            log.info(
-                "[DRY-RUN] [%d/%d] Would send to: %s | %s | claim_link: %s | html: %d chars",
-                i, total, email, business_name, claim_link, len(html),
-            )
-            sent += 1
-            continue
+            try:
+                import resend  # lazy import — dry-run works without resend installed
+                resend.api_key = api_key
+                response = resend.Emails.send(
+                    {
+                        "from": FROM_EMAIL,
+                        "to": [email],
+                        "subject": subject,
+                        "html": html,
+                    }
+                )
+                resend_message_id: str = response.get("id", "")
+                log.info("[%d/%d] SENT: %s | step=%d | id=%s", i, total, email, sequence_step, resend_message_id)
+                _log_to_db(
+                    db,
+                    email=email,
+                    business_name=business_name,
+                    category=category,
+                    sequence_step=sequence_step,
+                    resend_message_id=resend_message_id,
+                    status="sent",
+                )
+                sent += 1
+            except Exception as exc:  # noqa: BLE001
+                log.error("[%d/%d] FAILED: %s | %s", i, total, email, exc)
+                _log_to_db(
+                    db,
+                    email=email,
+                    business_name=business_name,
+                    category=category,
+                    sequence_step=sequence_step,
+                    resend_message_id=None,
+                    status="failed",
+                )
+                failed += 1
 
-        try:
-            import resend  # lazy import — dry-run works without resend installed
-            resend.api_key = api_key
-            response = resend.Emails.send(
-                {
-                    "from": FROM_EMAIL,
-                    "to": [email],
-                    "subject": subject,
-                    "html": html,
-                }
-            )
-            log.info("[%d/%d] SENT: %s | id=%s", i, total, email, response.get("id", "?"))
-            append_log(email=email, business_name=business_name, status="sent")
-            already_sent.add(email)
-            sent += 1
-        except Exception as exc:  # noqa: BLE001
-            log.error("[%d/%d] FAILED: %s | %s", i, total, email, exc)
-            append_log(email=email, business_name=business_name, status="failed", error=str(exc))
-            failed += 1
+            if i < total:
+                time.sleep(args.delay)
 
-        if i < total:
-            time.sleep(args.delay)
+    finally:
+        db.close()
 
     mode = "DRY-RUN" if args.dry_run else "LIVE"
     log.info(
-        "\n%s\n[%s] DONE  Sent: %d | Skipped: %d | Failed: %d | Log: %s\n%s",
-        "=" * 60, mode, sent, skipped, failed, LOG_PATH, "=" * 60,
+        "\n%s\n[%s] DONE  Sent: %d | Skipped: %d | Failed: %d\n%s",
+        "=" * 60, mode, sent, skipped, failed, "=" * 60,
     )
 
 
