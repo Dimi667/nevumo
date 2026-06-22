@@ -1447,6 +1447,26 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Засегнати файлове: apps/api/services/provider_service.py, apps/api/alembic/versions/cdf063316609_add_cancelled_to_lead_matches_status.py
 
 ### Recent Changes (April 2026)
+**Blocker 3 — Outreach Unsubscribe Mechanism (June 22, 2026)** — COMPLETE:
+- New table: `outreach_unsubscribes` (email PK, unsubscribed_at TIMESTAMPTZ, reason CHECK)
+- Alembic migration: `u1v2w3x4y5z6_add_outreach_unsubscribes.py`
+- New model: `OutreachUnsubscribe` in `models.py`
+- New config: `OUTREACH_HMAC_SECRET: str` in `Settings` (loaded from Railway env var)
+- New router: `apps/api/routes/outreach.py` — `GET /api/v1/outreach/unsubscribe`
+  - Verifies HMAC-SHA256 token, writes to DB, 302 redirect to confirmation page
+  - Invalid token → 400 `{"detail": "invalid_token"}`
+- New page: `apps/web/app/[lang]/outreach/unsubscribe/page.tsx`
+  - async Server Component with `await searchParams` (Next.js 16 required)
+  - Two states: confirmed (green checkmark) / invalid link (gray icon)
+  - Static Polish text, no translation keys
+- Updated: `apps/api/scripts/templates/outreach_email_pl.html`
+  - Added `{{ unsubscribe_url }}` Jinja2 variable in footer
+- Updated: `apps/api/scripts/send_outreach_bulk.py`
+  - Added `_generate_unsubscribe_url()` — HMAC token generation
+  - Added DB check against `outreach_unsubscribes` before every send
+  - Added SQLAlchemy engine setup for DB queries
+- E2E verified: invalid token → 400, valid token → 302, DB record created, bulk skip confirmed
+
 **April 21 — City Page Enhancements, Leads Dashboard UX, Next.js 16 Proxy & Client Dashboard i18n**
   - **City Page Hero (4 States)**: Implemented `CityPageHero.tsx` with dynamic content based on provider count, request count, and ratings.
   - **City Stats API**: Added `GET /api/v1/cities/{slug}/stats` with Redis caching (1h TTL) to power the hero section.

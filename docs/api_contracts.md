@@ -443,6 +443,36 @@ Handles client-only, provider-only, and dual-role accounts.
 
 ---
 
+## 🔹 OUTREACH ENDPOINTS (Public — No Auth)
+
+### GET /api/v1/outreach/unsubscribe
+
+**Purpose:** GDPR/RODO-compliant unsubscribe from outreach emails.
+
+**Query Params:**
+- `email` (required) — URL-encoded email address
+- `token` (required) — HMAC-SHA256 signature of email using OUTREACH_HMAC_SECRET
+
+**Response (302) — valid token:**
+Redirect to `/pl/outreach/unsubscribe?confirmed=1`
+Side effect: inserts row in outreach_unsubscribes (email, reason='user_request')
+Idempotent — second call for same email is silently accepted.
+
+**Response (400) — invalid token:**
+```json
+{"detail": "invalid_token"}
+```
+
+**Security:**
+- No authentication required (public endpoint)
+- HMAC-SHA256 prevents forged unsubscribe requests
+- Token: `hmac.new(OUTREACH_HMAC_SECRET, email, sha256).hexdigest()`
+- Email is lowercased + stripped before verification
+
+**Files:** `apps/api/routes/outreach.py`, `apps/api/config.py` (OUTREACH_HMAC_SECRET)
+
+---
+
 ## 🔹 USER PROFILE ENDPOINTS (JWT Required)
 
 ### GET /api/v1/user/profile

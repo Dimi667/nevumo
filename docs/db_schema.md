@@ -642,3 +642,22 @@ CREATE INDEX idx_reviews_provider_reply_at ON reviews(provider_reply_at);
 - Use NUMERIC for all financial values (never FLOAT)
 - Use UUID for distributed-safe IDs
 - Use JSONB for flexible event tracking
+
+---
+
+## Outreach Unsubscribes
+
+CREATE TABLE outreach_unsubscribes (
+    email TEXT PRIMARY KEY,
+    unsubscribed_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+    reason TEXT CHECK (reason IN ('user_request', 'bounce', 'complaint'))
+);
+
+### Notes
+- Added: June 22, 2026 — Blocker 3 (GDPR/RODO unsubscribe mechanism)
+- Alembic migration: u1v2w3x4y5z6_add_outreach_unsubscribes.py
+- email is PRIMARY KEY (one record per address, idempotent)
+- reason='user_request' — set when user clicks unsubscribe link in email
+- reason='bounce' — reserved for Resend webhook (Blocker 4)
+- reason='complaint' — reserved for Resend webhook (Blocker 4)
+- Checked by send_outreach_bulk.py before every send (DB query, not CSV)
