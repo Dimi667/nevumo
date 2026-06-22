@@ -1,11 +1,12 @@
 import Link from 'next/link';
 
-export default function OutreachUnsubscribePage({
+export default async function OutreachUnsubscribePage({
   searchParams,
 }: {
-  searchParams: { confirmed?: string };
+  searchParams: Promise<{ confirmed?: string }>;
 }) {
-  const confirmed = searchParams.confirmed === '1';
+  const params = await searchParams;
+  const confirmed = params.confirmed === '1';
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
