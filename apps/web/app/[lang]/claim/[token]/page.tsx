@@ -148,6 +148,17 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
               </>
             )}
 
+            {errorParam === 'ownership_blocked' && (
+              <>
+                <p className="text-lg font-semibold text-gray-900 mb-3">
+                  {t(claimT, 'error_ownership_blocked_title', 'Cannot verify ownership')}
+                </p>
+                <p className="text-sm text-gray-600 mb-6">
+                  {t(claimT, 'error_ownership_blocked_desc', 'We don\'t have a contact email for this profile. Please contact us at support@nevumo.com and we\'ll help you claim it.')}
+                </p>
+              </>
+            )}
+
           </main>
         </div>
       );

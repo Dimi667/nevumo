@@ -1,13 +1,18 @@
 """Email service for review-related notifications."""
 
+import logging
 from datetime import date
+from pathlib import Path
 from typing import Optional
 from uuid import UUID
 
+from jinja2 import Template
 from sqlalchemy.orm import Session
 
 from apps.api.config import settings
 from apps.api.models import Review, User, Provider
+
+logger = logging.getLogger(__name__)
 
 
 class EmailService:
@@ -417,6 +422,30 @@ This withdrawal form was submitted via the Nevumo online form.
     <p style="font-size:12px;color:#6b7280;">If you have any questions, feel free to contact our support team.</p>
     </div></body></html>"""
         return self._send_email(provider_email, subject, html_body)
+
+    def send_claim_verification_email(
+        self,
+        to_email: str,
+        business_name: str,
+        code: str,
+    ) -> bool:
+        """Send 6-digit verification code to the business scraped_email."""
+        try:
+            template_path = Path(__file__).parent.parent / "scripts" / "templates" / "claim_verification_pl.html"
+            html_body = Template(template_path.read_text(encoding="utf-8")).render(
+                business_name=business_name,
+                code=f"{code[:3]} {code[3:]}",  # format as "483 921"
+                expires_hours=24,
+            )
+            self._send_email(
+                to_email=to_email,
+                subject=f"Kod weryfikacyjny Nevumo — {business_name}",
+                html_body=html_body,
+            )
+            return True
+        except Exception as exc:
+            logger.error("[EMAIL_WARNING] send_claim_verification_email failed: %s", exc)
+            return False
 
 
 # Global email service instance

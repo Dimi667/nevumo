@@ -11,7 +11,10 @@ from apps.api.models import (
     Base,
     User,
     Provider,
+    ProviderImage,
+    ProviderTranslation,
     Location,
+    LocationTranslation,
     ProviderCity,
     Category,
     CategoryTranslation,
@@ -25,6 +28,12 @@ from apps.api.models import (
     PageEvent,
     PasswordResetToken,
     AuthRateLimit,
+    ProviderSlugHistory,
+    UrlRedirect,
+    Review,
+    PushSubscription,
+    OutreachSequenceLog,
+    PendingClaimVerification,
 )
 
 # this is the Alembic Config object, which provides

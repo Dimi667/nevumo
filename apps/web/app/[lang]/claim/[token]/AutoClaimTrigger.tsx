@@ -82,6 +82,13 @@ export default function AutoClaimTrigger({ token, isAuthenticated, isClaimed, la
       if (!response.ok) {
         if (response.status === 401) {
           setErrorCode('auth_expired');
+        } else if (response.status === 422) {
+          const errorData = await response.json().catch(() => ({}));
+          if (errorData?.detail === 'cannot_verify_ownership') {
+            window.location.href = `/${lang}/claim/${token}?error=ownership_blocked`;
+            return;
+          }
+          setErrorCode('network');
         } else {
           const errorData = await response.json().catch(() => ({}));
           const code = errorData?.detail?.code || '';
@@ -99,6 +106,15 @@ export default function AutoClaimTrigger({ token, isAuthenticated, isClaimed, la
         setState('error');
         window.dispatchEvent(new CustomEvent('auto-claim-end'));
         return;
+      }
+
+      // Check for pending_verification (202 status)
+      if (response.status === 202) {
+        const data = await response.json().catch(() => ({}));
+        if (data?.status === 'pending_verification') {
+          window.location.href = `/${lang}/claim/${token}/verify`;
+          return;
+        }
       }
 
       // Success

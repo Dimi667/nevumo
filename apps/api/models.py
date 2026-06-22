@@ -90,6 +90,7 @@ class Provider(Base):
     # Claimed profile fields
     is_claimed: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     claim_token: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, unique=True)
+    scraped_email: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     data_source: Mapped[str] = mapped_column(String(20), default="manual", nullable=False)
 
     user: Mapped["User"] = relationship(back_populates="provider")
@@ -743,4 +744,30 @@ class OutreachSequenceLog(Base):
     __table_args__ = (
         UniqueConstraint("email", "sequence_step", name="uq_outreach_seq_email_step"),
         Index("idx_outreach_seq_email", "email"),
+    )
+
+
+# -------------------------
+# Pending Claim Verifications
+# -------------------------
+
+class PendingClaimVerification(Base):
+    __tablename__ = "pending_claim_verifications"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    claim_token: Mapped[str] = mapped_column(Text, nullable=False)
+    user_id: Mapped[Optional[UUID]] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=True
+    )
+    code: Mapped[str] = mapped_column(Text, nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(nullable=False)
+    used: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False)
+
+    __table_args__ = (
+        Index("idx_pending_claim_verif_token", "claim_token"),
+        Index("idx_pending_claim_verif_user", "user_id"),
+        Index("idx_pending_claim_verif_expires", "expires_at"),
     )

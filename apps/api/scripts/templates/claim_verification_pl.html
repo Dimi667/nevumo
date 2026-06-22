@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--
+  NEVUMO — Claim Verification Email (Polish)
+  Jinja2: {{ business_name }}, {{ code }}, {{ expires_hours }}
+  Sender: Nevumo <noreply@nevumo.com> via Resend
+  Sent TO: provider.scraped_email
+  Triggered by: POST /api/v1/providers/claim/{token} when email mismatch
+-->
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Kod weryfikacyjny do przejęcia profilu {{ business_name }} na Nevumo</title>
+  <style type="text/css">
+    body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+    table,td{mso-table-lspace:0pt;mso-table-rspace:0pt}
+    img{-ms-interpolation-mode:bicubic;border:0;height:auto;line-height:100%;outline:none;text-decoration:none}
+    *{box-sizing:border-box}
+    body{margin:0!important;padding:0!important;background-color:#F3F4F6;
+         font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
+    @media only screen and (max-width:620px){
+      .ew{width:100%!important}
+      .eb{padding:10px 20px!important}
+      .cta{display:block!important;width:100%!important;text-align:center!important}
+      .bc{display:block!important;width:100%!important;padding:0 0 14px!important}
+      h1{font-size:22px!important}
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#F3F4F6;">
+
+  <div style="display:none;font-size:1px;color:#F3F4F6;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+    Kod weryfikacyjny do przejęcia profilu {{ business_name }} na Nevumo — {{ code }}
+  </div>
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F3F4F6;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table class="ew" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600"
+               style="background:#ffffff;border-radius:12px;overflow:hidden;
+                      box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+
+          <!-- ORANGE TOP ACCENT STRIP -->
+          <tr>
+            <td style="background:#F97316;height:4px;font-size:0;line-height:0;">&nbsp;</td>
+          </tr>
+
+          <!-- WHITE HEADER with logo -->
+          <tr>
+            <td style="background:#ffffff;padding:12px 40px 2px;text-align:center;">
+              <a href="https://nevumo.com/pl" target="_blank" style="text-decoration:none;">
+                <img src="https://images.nevumo.com/nevumo-logo.png"
+                     alt="Nevumo" width="120" height="20"
+                     style="display:inline-block;border:0;height:auto;max-width:120px;"/>
+              </a>
+            </td>
+          </tr>
+
+          <!-- HERO -->
+          <tr>
+            <td class="eb" style="padding:4px 40px 28px;">
+              <h1 style="margin:0 0 18px;font-size:26px;font-weight:800;color:#111827;line-height:1.25;">
+                Ktoś chce przejąć profil Twojej firmy na Nevumo
+              </h1>
+              <p style="margin:0 0 24px;font-size:16px;color:#4B5563;line-height:1.7;">
+                Otrzymaliśmy prośbę o przejęcie profilu firmy
+                <strong>{{ business_name }}</strong> na platformie Nevumo.pl.
+              </p>
+              <p style="margin:0 0 24px;font-size:16px;color:#4B5563;line-height:1.7;">
+                Jeśli to Ty chcesz przejąć ten profil, wpisz poniższy kod weryfikacyjny w otwartej karcie przeglądarki.
+              </p>
+
+              <!-- CODE DISPLAY BLOCK -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 24px;">
+                <tr>
+                  <td style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:12px;padding:24px;text-align:center;">
+                    <p style="margin:0 0 12px;font-size:13px;color:#6B7280;font-weight:600;">
+                      Twój kod weryfikacyjny:
+                    </p>
+                    <p style="margin:0 0 12px;font-size:48px;font-weight:700;color:#F97316;letter-spacing:0.15em;line-height:1;">
+                      {{ code }}
+                    </p>
+                    <p style="margin:0;font-size:13px;color:#9CA3AF;">
+                      Kod jest ważny przez {{ expires_hours }} godziny
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- SECURITY NOTE BOX -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:0 0 24px;">
+                <tr>
+                  <td style="background:#F9FAFB;border-left:3px solid #E5E7EB;padding:14px 18px;">
+                    <p style="margin:0;font-size:13px;color:#6B7280;line-height:1.6;">
+                      Jeśli nie składałeś(aś) prośby o przejęcie tego profilu, zignoruj tę wiadomość.
+                      Kod wygaśnie automatycznie i nikt nie uzyska dostępu do Twojego profilu.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- CLOSING -->
+              <p style="margin:0;font-size:14px;color:#4B5563;line-height:1.6;">
+                Masz pytania? Napisz do nas:
+                <a href="mailto:support@nevumo.com" style="color:#F97316;text-decoration:none;">support@nevumo.com</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background:#F9FAFB;border-top:1px solid #E5E7EB;padding:24px 40px;text-align:center;">
+              <p style="margin:0 0 10px;font-size:13px;color:#6B7280;line-height:1.7;">
+                <a href="mailto:support@nevumo.com" style="color:#6B7280;text-decoration:none;">support@nevumo.com</a>
+                &nbsp;·&nbsp;
+                <a href="https://nevumo.com/pl/privacy" target="_blank" style="color:#6B7280;text-decoration:none;">Polityka prywatności</a>
+                &nbsp;·&nbsp;
+                <a href="https://nevumo.com/pl/terms-provider" target="_blank" style="color:#6B7280;text-decoration:none;">Regulamin dla usługodawców</a>
+              </p>
+              <p style="margin:0 0 8px;font-size:11px;color:#9CA3AF;line-height:1.5;">
+                ФИЛИПС ЦЕНТЬР БЪЛГАРИЯ ООД (FILIPIS CENTAR BALGARIYA OOD) · EIK: 175369610 ·
+                <a href="https://nevumo.com" target="_blank" style="color:#9CA3AF;text-decoration:none;">nevumo.com</a>
+              </p>
+              <p style="margin:0;font-size:11px;color:#D1D5DB;line-height:1.5;">
+                Tę wiadomość otrzymujesz, ponieważ ktoś próbuje przejąć profil Twojej firmy na Nevumo.com.
+              </p>
+              <p style="margin:8px 0 0;font-size:11px;color:#D1D5DB;">© 2026 Nevumo</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

@@ -1,10 +1,12 @@
 import json
 import logging
+import secrets
+from datetime import datetime, timezone, timedelta
 from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, select
 from sqlalchemy.exc import IntegrityError
@@ -13,7 +15,7 @@ import redis as redis_lib
 from apps.api.config import settings
 from apps.api.dependencies import get_db, get_redis, get_current_user
 from apps.api.exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
-from apps.api.models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation, Lead, Review, User, CitySearchVolume
+from apps.api.models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation, Lead, Review, User, CitySearchVolume, PendingClaimVerification
 from apps.api.schemas import (
     ProviderListItem,
     ProviderListResponse,
@@ -453,7 +455,52 @@ async def claim_provider(
             status_code=409,
             detail={"code": "ALREADY_CLAIMED", "message": "This profile has already been claimed"}
         )
-    
+
+    # --- Blocker 6: email verification ---
+    if current_user.email == provider.scraped_email:
+        # Fast path: email matches — claim directly (fall through to existing commit logic)
+        pass
+
+    elif provider.scraped_email is None:
+        # Cannot verify ownership — no scraped email available
+        raise HTTPException(
+            status_code=422,
+            detail="cannot_verify_ownership"
+        )
+
+    else:
+        # Email mismatch — generate 6-digit code, send to scraped_email
+        raw_code = str(secrets.randbelow(900000) + 100000)  # 100000-999999
+        expires_at = datetime.now(timezone.utc) + timedelta(hours=24)
+
+        # Invalidate any previous unused codes for this token
+        db.query(PendingClaimVerification).filter(
+            PendingClaimVerification.claim_token == token,
+            PendingClaimVerification.used == False,
+        ).delete(synchronize_session=False)
+
+        pending = PendingClaimVerification(
+            claim_token=token,
+            user_id=current_user.id,
+            code=raw_code,
+            expires_at=expires_at,
+            used=False,
+        )
+        db.add(pending)
+        db.commit()
+
+        email_service.send_claim_verification_email(
+            to_email=provider.scraped_email,
+            business_name=provider.business_name or "",
+            code=raw_code,
+        )
+
+        return JSONResponse(
+            status_code=202,
+            content={"status": "pending_verification"}
+        )
+    # --- end Blocker 6 ---
+
     # Claim the profile
     provider.is_claimed = True
     provider.user_id = current_user.id
@@ -487,7 +534,7 @@ async def claim_provider(
             dashboard_link="https://nevumo.com/pl/dashboard",
             nip=None,
             provider_phone=None,
-            scraped_email=None,
+            scraped_email=provider.scraped_email,
             provider_website=None,
             category_label=category_label,
         )
@@ -506,6 +553,77 @@ async def claim_provider(
     return {
         "success": True,
         "provider_id": str(provider.id)
+    }
+
+
+@router.post("/providers/claim/{token}/verify")
+async def verify_claim_code(
+    token: str,
+    body: dict,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    """Verify 6-digit code and complete the claim."""
+    code: str = body.get("code", "").strip().replace(" ", "")
+
+    if not code or not code.isdigit() or len(code) != 6:
+        raise HTTPException(status_code=400, detail="invalid_code_format")
+
+    # Find valid pending verification
+    pending = (
+        db.query(PendingClaimVerification)
+        .filter(
+            PendingClaimVerification.claim_token == token,
+            PendingClaimVerification.user_id == current_user.id,
+            PendingClaimVerification.code == code,
+            PendingClaimVerification.used == False,
+            PendingClaimVerification.expires_at > datetime.now(timezone.utc),
+        )
+        .first()
+    )
+
+    if not pending:
+        raise HTTPException(status_code=400, detail="invalid_or_expired_code")
+
+    # Find and claim the provider
+    provider = (
+        db.query(Provider)
+        .filter(Provider.claim_token == token, Provider.is_claimed == False)
+        .first()
+    )
+    if not provider:
+        raise HTTPException(status_code=409, detail="already_claimed")
+
+    # Complete the claim
+    provider.is_claimed = True
+    provider.user_id = current_user.id
+    provider.claim_token = None
+    pending.used = True
+    db.commit()
+
+    # Send post-claim emails (non-blocking)
+    try:
+        email_service.send_article14_notification(
+            to_email=current_user.email,
+            business_name=provider.business_name or "",
+            dashboard_link=f"https://nevumo.com/pl/provider/dashboard",
+            scraped_email=provider.scraped_email,
+        )
+    except Exception as exc:
+        logger.error("[EMAIL_WARNING] Art.14 after verify failed: %s", exc)
+
+    try:
+        email_service.send_claim_welcome_email(
+            provider_email=current_user.email,
+            provider_name=provider.business_name or "",
+        )
+    except Exception as exc:
+        logger.error("[EMAIL_WARNING] Welcome email after verify failed: %s", exc)
+
+    return {
+        "success": True,
+        "provider_slug": provider.slug,
+        "business_name": provider.business_name,
     }
 
 
