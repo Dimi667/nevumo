@@ -496,7 +496,7 @@ async def claim_provider(
 
     # Send welcome email
     try:
-        await email_service.send_claim_welcome_email(
+        email_service.send_claim_welcome_email(
             provider_email=current_user.email,
             provider_name=provider.business_name
         )
