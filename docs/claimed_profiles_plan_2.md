@@ -175,7 +175,7 @@ Google OAuth + claim flow → може да попадне на onboarding
 
 ---
 
-### Блокер 3 — Unsubscribe механизъм (НОВ — GDPR/RODO задължение) 🔴
+### Блокер 3 — Unsubscribe механизъм (НОВ — GDPR/RODO задължение) ✅
 
 **Проблем:** Нямаме unsubscribe линк в outreach имейлите. 4 последователни имейла без opt-out = нарушение на RODO (Полша) и GDPR Чл. 21.
 
@@ -204,6 +204,13 @@ CREATE TABLE outreach_unsubscribes (
 
 **Файлове:** нова `outreach_unsubscribes` таблица, `apps/api/routes/outreach.py`, `send_outreach_bulk.py`
 **Модел:** SWE-1.6 (backend) + Kimi-2.6 (bulk script update)
+
+**Имплементация (22 юни 2026):**
+- Step 2: `OutreachUnsubscribe` model в `models.py` + `OUTREACH_HMAC_SECRET` в `Settings` + Alembic migration `u1v2w3x4y5z6_add_outreach_unsubscribes.py`
+- Step 3: `GET /api/v1/outreach/unsubscribe` — HMAC-SHA256 верификация, DB write, 302 redirect; регистриран в `main.py`
+- Step 4: `apps/web/app/[lang]/outreach/unsubscribe/page.tsx` — async Server Component с `await searchParams` (Next.js 16 compatible)
+- Step 5: `{{ unsubscribe_url }}` добавен в `outreach_email_pl.html` + `_generate_unsubscribe_url()` + DB check в `send_outreach_bulk.py`
+- E2E тест: ✅ invalid token → 400, valid token → 302, DB record created (reason=user_request), bulk skip logic верифицирана, cleanup OK
 
 ---
 
