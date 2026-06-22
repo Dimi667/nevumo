@@ -698,3 +698,25 @@ class OutreachUnsubscribe(Base):
             name="ck_outreach_unsub_reason",
         ),
     )
+
+
+# -------------------------
+# Outreach Events (Resend Webhooks)
+# -------------------------
+
+class OutreachEvent(Base):
+    __tablename__ = "outreach_events"
+
+    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=uuid4)
+    resend_message_id: Mapped[str] = mapped_column(Text, nullable=False)
+    email: Mapped[str] = mapped_column(Text, nullable=False)
+    event_type: Mapped[str] = mapped_column(Text, nullable=False)
+    occurred_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    __table_args__ = (
+        Index("idx_outreach_events_email", "email"),
+        Index("idx_outreach_events_type", "event_type"),
+        Index("idx_outreach_events_occurred", "occurred_at"),
+    )

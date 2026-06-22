@@ -43,6 +43,8 @@ class Settings(BaseSettings):
 
     # Outreach unsubscribe HMAC
     OUTREACH_HMAC_SECRET: str = ""
+    # Resend Webhook signing secret (from Resend Dashboard → Webhooks → Signing Secret)
+    RESEND_WEBHOOK_SECRET: str = ""
 
     # Web Push Notifications (VAPID)
     vapid_public_key: str = ""
