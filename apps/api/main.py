@@ -51,6 +51,7 @@ from apps.api.routes.price_range import router as price_range_router
 from apps.api.routes.translations import router as translations_router
 from apps.api.routes.consent import router as consent_router
 from apps.api.routes.legal import router as legal_router
+from apps.api.routes.outreach import router as outreach_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -160,6 +161,7 @@ app.include_router(price_range_router, prefix="/api/v1")
 app.include_router(legal_router)
 app.include_router(consent_router, prefix="/api/v1", tags=["consent"])
 app.include_router(push_router, prefix="/api/v1")
+app.include_router(outreach_router)
 
 # Serve uploaded provider images
 from apps.api.config import settings
