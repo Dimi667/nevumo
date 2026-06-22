@@ -46,6 +46,8 @@ export interface ProviderProfile {
   missing_fields: string[];
   current_category?: { slug: string; name: string } | null;
   current_city?: { slug: string; name: string } | null;
+  category_slug?: string | null;
+  data_source?: string;
 }
 
 export interface DashboardStats {

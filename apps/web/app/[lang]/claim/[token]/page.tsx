@@ -86,6 +86,23 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
 
   const result = await fetchProviderByToken(token, normalizedLang);
 
+  // STATE 0: ownership_blocked (422 from API - provider exists but no scraped_email)
+  if (errorParam === 'ownership_blocked') {
+    return (
+      <div className="min-h-screen bg-white">
+        <main className="max-w-md mx-auto px-6 py-20 text-center">
+          <div className="text-5xl mb-6">⚠️</div>
+          <p className="text-lg font-semibold text-gray-900 mb-3">
+            {t(claimT, 'error_ownership_blocked_title', 'Cannot verify ownership')}
+          </p>
+          <p className="text-sm text-gray-600 mb-6">
+            {t(claimT, 'error_ownership_blocked_desc', 'We don\'t have a contact email for this profile. Please contact us at support@nevumo.com and we\'ll help you claim it.')}
+          </p>
+        </main>
+      </div>
+    );
+  }
+
   // STATE 1: not_found (404 from API)
   if (!result) {
     // If page was redirected back with a specific error code, show that error UI
@@ -144,17 +161,6 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
                 </p>
                 <p className="text-sm text-gray-600">
                   support@nevumo.com
-                </p>
-              </>
-            )}
-
-            {errorParam === 'ownership_blocked' && (
-              <>
-                <p className="text-lg font-semibold text-gray-900 mb-3">
-                  {t(claimT, 'error_ownership_blocked_title', 'Cannot verify ownership')}
-                </p>
-                <p className="text-sm text-gray-600 mb-6">
-                  {t(claimT, 'error_ownership_blocked_desc', 'We don\'t have a contact email for this profile. Please contact us at support@nevumo.com and we\'ll help you claim it.')}
                 </p>
               </>
             )}

@@ -385,9 +385,10 @@ export default function ProfilePage({ params }: PageProps) {
         setImageUrl(p.profile_image_url);
         
         // Check if we should skip to Step 2 (user has profile but no services)
-        if (!dashboard.profile.is_complete && 
+        if (!dashboard.profile.is_complete &&
             dashboard.profile.missing_fields?.includes('service') &&
-            p.business_name && !p.business_name.includes('@')) {
+            p.business_name && !p.business_name.includes('@') &&
+            dashboard.profile.data_source !== 'scraped') {
           setStep(2);
         }
       })
@@ -405,6 +406,22 @@ export default function ProfilePage({ params }: PageProps) {
       }
     }
   }, [cities]);
+
+  // Pre-fill category and city for scraped providers
+  useEffect(() => {
+    if (dashboard.profile.data_source === 'scraped') {
+      if (dashboard.profile.category_slug) {
+        setStep2(f => ({ ...f, category_slug: dashboard.profile.category_slug || '' }));
+      }
+      // Pre-select Warsaw from the cities list
+      if (cities.length > 0) {
+        const warsaw = cities.find(c => c.slug === 'warszawa');
+        if (warsaw) {
+          setStep2(f => f.city_ids.length === 0 ? { ...f, city_ids: [String(warsaw.id)] } : f);
+        }
+      }
+    }
+  }, [dashboard.profile.data_source, dashboard.profile.category_slug, cities]);
 
   async function runStep1SlugCheck(candidate: string): Promise<boolean> {
     const trimmed = candidate.trim();
@@ -770,10 +787,21 @@ export default function ProfilePage({ params }: PageProps) {
     return (
       <div className="max-w-lg mx-auto space-y-6 pb-24 min-h-[calc(100vh+1px)]">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">{t('label_complete_profile', 'Complete your profile')}</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
-            {t('msg_start_receiving', 'Start receiving client requests in minutes')}
-          </p>
+          {dashboard.profile.data_source === 'scraped' ? (
+            <>
+              <h1 className="text-xl font-bold text-gray-900">Znaleźliśmy Twoją firmę na Nevumo!</h1>
+              <p className="text-sm text-gray-500 mt-0.5">
+                Uzupełnij opis i dodaj zdjęcie, aby Twój profil był widoczny dla klientów.
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-xl font-bold text-gray-900">{t('label_complete_profile', 'Complete your profile')}</h1>
+              <p className="text-sm text-gray-500 mt-0.5">
+                {t('msg_start_receiving', 'Start receiving client requests in minutes')}
+              </p>
+            </>
+          )}
         </div>
 
         <StepIndicator step={step} step1Valid={step1Valid} step2Valid={step2Valid} t={t} />
