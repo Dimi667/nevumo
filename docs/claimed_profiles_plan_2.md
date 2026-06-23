@@ -387,7 +387,144 @@ Scheduler проверява: "Кой email на коя стъпка е след
 
 ---
 
-### Блокер 7 — Task 2A: seed_unclaimed_providers.py 🔴
+### Блокер 7А — Banner Flow Redesign: No auth before code 🔴
+(Изисква: Блокер 6. Блокира: Блокери 7Б–7Ж, Блокер 8)
+Проблем: Сегашният banner flow изисква login ПРЕДИ потребителят да въведе кода.
+
+Това е грешна архитектура — кодът сам по себе си е доказателство за собственост.
+Правилен flow:
+Banner click → POST /claim/{token}?source=banner (без JWT) →
+  backend: генерира код → изпраща до scraped_email → връща 202
+  frontend: redirect → /claim/{token}/verify?sent_to=b***@firma.pl
+User въвежда код → POST /claim/{token}/verify →
+  backend: verify code → get_or_create_claim_user(scraped_email) →
+  claims provider → връща JWT + user данни
+Frontend: saveAuth(JWT) → redirect → /provider/dashboard/profile (wizard)
+
+Промени в backend (apps/api/routes/providers.py):
+- claim_provider() при source=banner: НЕ изисква auth
+- Ако provider.scraped_email = NULL → 422 NO_EMAIL
+- Ако provider.is_claimed = True → 409 ALREADY_CLAIMED
+- В противен случай: генерира код, записва PendingClaimVerification,
+  изпраща email, връща 202 с masked sent_to — без JWT проверка
+- verify_claim(): след валиден код → извиква get_or_create_claim_user(scraped_email) →
+  claims provider → връща JWT + user + redirect info
+
+Промени в frontend:
+- ClaimProcessor.tsx: премахни 401 handler — banner flow не изисква auth
+- ClaimProcessor.tsx: при 202 — redirect директно към /verify (вече е)
+- VerifyCodeForm.tsx: след успешен verify → saveAuth(JWT) → redirect към wizard
+
+Модел: SWE-1.6 (backend) + Kimi-2.6 (frontend)
+
+---
+
+### Блокер 7Б — Magic Link Login за passwordless потребители 🔴
+(Изисква: Блокер 7А. Блокира: Блокер 8)
+Проблем: Потребители, създадени чрез get_or_create_claim_user(), нямат парола.
+
+Ако затворят браузъра — нямат начин да се върнат. Заключени са завинаги.
+Решение — Magic Link система:
+
+Нов endpoint: POST /api/v1/auth/magic-link — приема email, изпраща magic link
+Нов endpoint: GET /api/v1/auth/magic-link/verify?token={token} — верифицира, връща JWT
+Magic link: https://nevumo.com/{lang}/auth/magic-link?token={token} (24h TTL)
+DB: нова таблица magic_link_tokens (token, user_id, expires_at, used)
+Email template: magic_link_pl.html
+Работи паралелно с парола и Google OAuth
+
+Файлове:
+- apps/api/routes/auth.py — 2 нови endpoints
+- apps/api/models.py — MagicLinkToken модел
+- Alembic migration
+- apps/api/services/email_service.py — send_magic_link_email()
+- apps/web/app/[lang]/auth/magic-link/page.tsx — landing за magic link
+
+Модел: SWE-1.6 (backend) + Kimi-2.6 (frontend)
+
+---
+
+### Блокер 7В — "Add/Change password" в Provider Settings 🔴
+(Изисква: Блокер 7А. Може паралелно с 7Б)
+Проблем: Passwordless потребители (от banner claim) нямат парола в акаунта.
+
+Трябва опция да добавят парола след като са влезли.
+Решение:
+- Provider Settings → секция "Сигурност" → бутон "Задай парола" (ако няма) / "Смени парола" (ако има)
+- Backend: POST /api/v1/provider/settings/password
+  - Ако passwordless: просто задава нова парола (без old_password)
+  - Ако има парола: изисква old_password за потвърждение
+- Field has_password: bool добавен в provider profile response
+
+Забележка: Client settings вече има тази функционалност — следва същия pattern.
+Модел: Kimi-2.6 (frontend) + SWE-1.6 (backend endpoint)
+
+---
+
+### Блокер 7Г — "Изпрати ми нов login link" на Auth страницата 🟡
+(Изисква: Блокер 7Б. Може паралелно с 7В)
+Проблем: Passwordless потребители, загубили magic link-а, нямат начин за вход.
+Решение:
+- Auth страница → под email/password формата → link "Нямате парола? Влезте с имейл линк →"
+- Кликване → показва поле за email → изпраща нов magic link
+- Използва POST /api/v1/auth/magic-link от Блокер 7Б
+
+Модел: Kimi-2.6
+
+---
+
+### Блокер 7Д — Потвърждение на Outreach Flow 🟢
+(Може веднага — само верификация)
+Задача: Потвърди, че outreach email flow (email клик → claim) все още работи
+след промените от Блокер 7А. Не е код — само E2E тест.
+
+Тест сценарий:
+- Изпрати тестов outreach email
+- Кликни claim link (без ?source=banner)
+- Потвърди: auto-claim работи, JWT се връща, wizard се зарежда
+
+Модел: SWE-1.6 + @mcp-playwright
+
+---
+
+### Блокер 7Е — Onboarding Redirect Logic 🟡
+(Изисква: Блокер 7А)
+Проблем: При повторен login на вече claimнал потребител — системата не знае
+на коя стъпка от onboarding-а е спрял.
+
+Решение:
+- При login → GET /api/v1/provider/profile → проверка на missing_fields
+- Logic:
+  - Няма description/photo → Step 1 (profile)
+  - Няма услуги → Step 2 (services)
+  - Всичко попълнено → Dashboard Overview
+
+Файлове: ClaimProcessor.tsx, apps/api/routes/provider.py (добави missing_fields в response)
+Модел: SWE-1.6 (backend) + Kimi-2.6 (frontend)
+
+---
+
+### Блокер 7Ж — Onboarding Pre-fill за Scraped Providers 🟡
+(Изисква: Блокер 7А. Може паралелно с 7Е)
+Проблем: Scraped провайдъри виждат празен wizard въпреки че имаме техните данни.
+
+Налични данни за pre-fill:
+- business_name ✅ (вече се pre-fill-ва)
+- category_slug ✅ (вече се pre-fill-ва)
+- city (Warszawa) ✅ (вече се pre-fill-ва)
+- description — от scraped данни (ако има) → зарежда се в textarea
+- phone — от scraped данни (ако има) → зарежда се в phone поле
+
+Onboarding старт за scraped providers: Step 1 (Profile) — НЕ Step 2.
+Насърчава попълване на снимка и description (препоръчителни, влияят на конверсия).
+
+Проверка на текущото състояние преди имплементация: Провери какво вече е
+pre-fill-нато и какво липсва. Не презаписвай работещ код.
+Модел: SWE-1.6 (диагноза) → Kimi-2.6 (имплементация)
+
+---
+
+### Блокер 8 — Task 2A: seed_unclaimed_providers.py 🔴
 
 **Проблем:** Реалните Warsaw провайдъри все още не са в Neon DB.
 
@@ -1119,9 +1256,16 @@ CATEGORY_LABEL_PL = {
               ClaimProcessor.tsx replaces AutoClaimTrigger
               sessionStorage-based wizard welcome heading
               3 new translation keys (34 languages each)
-[ ] Блокер 7: Task 2A seed_unclaimed_providers   → Kimi-2.6 (изисква Блокер 5)
-[ ] Блокер 8: Railway Scheduler script           → Kimi-2.6 (изисква Блокер 7)
-[ ] Блокер 9: E2E cleanup                        → CLI команда
+[ ] Блокер 7А: Banner Flow Redesign (без auth)   → SWE-1.6 + Kimi-2.6
+[ ] Блокер 7Б: Magic Link Login                  → SWE-1.6 + Kimi-2.6
+[ ] Блокер 7В: Add/Change Password Settings      → SWE-1.6 + Kimi-2.6
+[ ] Блокер 7Г: "Нов login link" на Auth page     → Kimi-2.6 (изисква 7Б)
+[ ] Блокер 7Д: Outreach Flow потвърждение        → @mcp-playwright
+[ ] Блокер 7Е: Onboarding Redirect Logic         → SWE-1.6 + Kimi-2.6
+[ ] Блокер 7Ж: Onboarding Pre-fill Scraped       → SWE-1.6 → Kimi-2.6
+[ ] Блокер 8:  Task 2A seed_unclaimed_providers  → Kimi-2.6 (изисква 7А–7Ж)
+[ ] Блокер 9:  Railway Scheduler script          → Kimi-2.6 (изисква Блокер 8)
+[ ] Блокер 10: E2E cleanup                       → CLI команда
 
 СЪДЪРЖАНИЕ (паралелно с блокерите):
 [ ] Email #2, #3, #4 templates (× 3 категории)  → Claude пише текст
@@ -1188,10 +1332,22 @@ POST-CAMPAIGN:
 
 ### 🟡 ВАЖНИ — Влияят на UX
 
-**Issue 5 — Provider fullpage banner не води към wizard**
-- "Przejmij profil" банерът на публичната страница
-- Трябва верификация flow (6-цифрен код на scraped_email)
-- Приоритет: СРЕДЕН — след Warsaw launch
+**Issue 5 — Banner Claim Flow 🟡 ЧАСТИЧНО ИМПЛЕМЕНТИРАН (24 юни 2026)**
+Имплементирано:
+- ClaimProfileBanner.tsx: показва scraped_email под името на бизнеса
+- ClaimProfileBanner.tsx: ?source=banner добавен към href
+- ClaimProcessor.tsx: обработва 202 → redirect към /verify?sent_to=...
+- ClaimProcessor.tsx: обработва 401 → redirect към /auth
+- verify/page.tsx: подава sentTo prop към VerifyCodeForm
+- VerifyCodeForm.tsx: показва "Kod wysłano na: {sentTo}"
+- providers.py: source=banner логика (401/422/202/200 сценарии)
+- providers.py: masked email в sent_to полето на 202 response
+
+Проблем (открит при E2E тест): Архитектурата изисква login ПРЕДИ кода.
+
+Правилният flow: Banner → /verify директно (без login) → код →
+get_or_create_claim_user → JWT → onboarding.
+Пълният план за финализиране: вж. Блокери 7A–7G по-долу.
 
 ### 🧹 ТЕХНИЧЕСКИ ДЪЛГ
 

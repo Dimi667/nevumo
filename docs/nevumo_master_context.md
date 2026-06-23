@@ -1497,6 +1497,17 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Frontend: AutoClaimTrigger redirect → /provider/dashboard/profile (wizard)
 - Alembic current head: c1d2e3f4g5h6 (непроменен)
 
+**Issue 5 Partial Implementation (June 24, 2026)** — PARTIAL:
+- ClaimProfileBanner.tsx: scraped_email показан под business name (пълен, не masked)
+- ClaimProfileBanner.tsx: ?source=banner добавен към claim href
+- ClaimProcessor.tsx: 202 handler → redirect към /verify?sent_to=...
+- ClaimProcessor.tsx: 401 handler → redirect към /auth (ще се промени в 7А)
+- verify/page.tsx: sentTo prop → VerifyCodeForm
+- VerifyCodeForm.tsx: "Kod wysłano na: {sentTo}" UI
+- providers.py: source=banner → 401/422/202 сценарии + masked email
+- E2E тест открил: flow изисква login преди код — архитектурен проблем
+- Plan: 7 нови блокера (7А–7Ж) преди seed_unclaimed_providers
+
 Next: Blocker 7 (seed_unclaimed_providers.py), Blocker 8 (Railway Scheduler).
 
 **April 21 — City Page Enhancements, Leads Dashboard UX, Next.js 16 Proxy & Client Dashboard i18n**
@@ -1883,6 +1894,12 @@ Next.js App Router: child pages with `generateMetadata` override `icons` from ro
 ✅ Issue 3: Photo upload — ЗАВЪРШЕН
 ✅ Issue 4: JWT expiry → безкраен loop — РЕШЕН (23 юни 2026)
    (401 interceptor в provider-api.ts + client-api.ts → clearAuth() + redirect)
-🟡 Issue 5: Provider fullpage banner не води към wizard
+🟡 Issue 5: Banner Claim Flow — частично имплементиран, нужен редизайн
+
+Частично: scraped_email в банера, ?source=banner, 202 flow, masked sent_to,
+VerifyCodeForm показва email
+Проблем: изисква login ПРЕДИ код — грешна архитектура
+План: Блокери 7А–7Ж в claimed_profiles_plan_2.md
+Всички 7А–7Ж трябва да са завършени преди Блокер 8 (seed_unclaimed_providers)
 
 Details: claimed_profiles_plan_2.md → секция KNOWN ISSUES

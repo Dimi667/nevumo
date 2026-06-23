@@ -74,6 +74,13 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token) WHERE cl
 - Index: `CREATE INDEX idx_providers_verification_level ON providers(verification_level);`
 - Изчислява се автоматично от `calculate_verification_level()` при всяка промяна на профила
 
+### Промени в providers таблица (June 23, 2026)
+- Добавена колона: `scraped_email TEXT` — email от scraping за banner claim verification
+- Добавена колона: `category_slug TEXT` — категория за scraped providers
+- Notes:
+  - Banner flow: verification created WITHOUT user_id (nullable) — user_id се попълва след като get_or_create_claim_user() създаде/намери потребителя в verify endpoint
+  - Magic link tokens table: ще бъде добавена в Блокер 7Б
+
 ---
 
 ## 3. Provider Availability (Cities)
