@@ -508,13 +508,32 @@ async def claim_provider(
             existing_provider.business_name == active_user.email
         )
         if is_draft:
+            # Draft created by OAuth registration — delete and proceed with claim
             db.delete(existing_provider)
             db.flush()
         else:
-            raise HTTPException(
-                status_code=409,
-                detail={"code": "USER_ALREADY_HAS_PROVIDER", "message": "Your account already has a provider profile"}
+            # User already has a real provider profile on Nevumo.
+            # They clicked the outreach email — they're already registered.
+            # Delete the scraped stub (it's a duplicate) and send them to
+            # their existing real dashboard.
+            db.delete(provider)
+            db.commit()
+            existing_jwt = create_jwt(
+                user_id=active_user.id,
+                email=active_user.email,
+                role=active_user.role,
             )
+            return {
+                "success": True,
+                "jwt_token": existing_jwt,
+                "user": {
+                    "id": str(active_user.id),
+                    "email": active_user.email,
+                    "role": active_user.role,
+                },
+                "provider_slug": existing_provider.slug,
+                "is_returning": True,
+            }
 
     # Claim the profile
     provider.is_claimed = True
