@@ -513,7 +513,7 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
               searchVolume={provider.search_volume}
               categoryLabel={provider.category_name}
               cityLabel={provider.city_name}
-              scrapedEmail={provider.scraped_email}
+              scrapedEmail={provider.scraped_email ?? undefined}
               translations={{
                 title: t['unclaimed_banner_title'] ?? 'Is this your business?',
                 subtitle: t['unclaimed_banner_subtitle'] ?? 'Claim your free profile for {businessName}',
