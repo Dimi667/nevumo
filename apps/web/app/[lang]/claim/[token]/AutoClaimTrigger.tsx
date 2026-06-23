@@ -25,7 +25,6 @@ export default function AutoClaimTrigger({ token, isAuthenticated, isClaimed, la
   useEffect(() => {
     // Only trigger if:
     // - Authenticated
-    // - URL contains ?from=auth or &from=auth
     // - Not already claimed
     // - Haven't triggered before (idempotency)
     // - Dictionary is loaded
@@ -35,14 +34,10 @@ export default function AutoClaimTrigger({ token, isAuthenticated, isClaimed, la
       !hasTriggered.current &&
       !isDictLoading
     ) {
-      const fromAuth = searchParams.get('from') === 'auth';
-      
-      if (fromAuth) {
-        hasTriggered.current = true;
-        performAutoClaim();
-      }
+      hasTriggered.current = true;
+      performAutoClaim();
     }
-  }, [isAuthenticated, isClaimed, isDictLoading, searchParams]);
+  }, [isAuthenticated, isClaimed, isDictLoading]);
 
   async function performAutoClaim() {
     setState('loading');

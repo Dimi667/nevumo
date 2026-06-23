@@ -1156,5 +1156,50 @@ POST-CAMPAIGN:
 
 ---
 
+## KNOWN ISSUES — Pre-Launch (June 23, 2026)
+
+### 🔴 CRITICAL
+
+**Issue 1 — Claim flow requires registration (too much friction)**
+- Current: email → claim page → button → /auth → register → redirect back
+  with ?from=auth → AutoClaimTrigger → wizard Step 1
+- Expected: email → claim page → button → wizard Step 1 (no registration step)
+- Root cause: AutoClaimTrigger requires authenticated user (JWT) to POST claim
+- Solution needed: Magic link flow — claim token creates/logs in account automatically
+- Priority: HIGH — blocks campaign conversion
+
+**Issue 2 — Logged-in user on claim URL without ?from=auth**
+- If user is already logged in and visits claim URL directly (no ?from=auth),
+  AutoClaimTrigger does not fire → claim never happens
+- Root cause: AutoClaimTrigger checks for ?from=auth before executing
+- Solution needed: AutoClaimTrigger should fire if user is authenticated,
+  regardless of ?from=auth parameter
+- Status: Fix deployed (commit TBD)
+- Priority: HIGH — affects returning users and re-visit scenarios
+
+**Issue 3 — Photo upload button broken**
+- Clicking "Prześlij zdjęcie" does nothing
+- Root cause: style={{ pointerEvents: 'none' }} on file input blocks .click()
+- Fix: remove pointerEvents: 'none' from inline style
+- Status: Fix deployed (commit 3d10487)
+- Priority: HIGH — affects onboarding completion rate
+
+### 🟡 IMPORTANT
+
+**Issue 4 — 401 JWT expiry causes infinite loop**
+- When JWT token expires, backend returns 401 "User not found or inactive"
+- Frontend does not handle 401 on dashboard → infinite redirect loop
+  between /provider/dashboard and /client/dashboard
+- Solution needed: On 401 → clear auth cookies/localStorage → redirect to /auth
+- Priority: MEDIUM — affects users with expired sessions
+
+**Issue 5 — Provider fullpage banner does not lead to wizard**
+- "Przejmij profil" banner on public provider page should lead directly
+  to wizard Step 1 after claim
+- Status: not yet implemented/tested
+- Priority: MEDIUM — affects acquisition from organic traffic
+
+---
+
 *Документът се обновява след всяка завършена задача.*
 *Git: `git push nevumo-git main` след всяка актуализация.*

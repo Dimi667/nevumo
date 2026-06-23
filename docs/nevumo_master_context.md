@@ -1860,3 +1860,13 @@ Next.js App Router: child pages with `generateMetadata` override `icons` from ro
 - `apps/web/public/apple-touch-icon.png`, `apple-touch-icon-76x76.png`, `apple-touch-icon-120x120.png`, `apple-touch-icon-152x152.png`
 - `apps/web/scripts/generate-favicons.js`
 - `apps/web/components/FaviconManager.tsx`
+
+### Known Issues — Pre-Launch (June 23, 2026)
+
+🔴 Issue 1: Claim flow requires registration — magic link flow needed
+🔴 Issue 2: AutoClaimTrigger requires ?from=auth — fails for already-logged-in users
+🔴 Issue 3: Photo upload button broken (pointerEvents: none fix pending)
+🟡 Issue 4: JWT expiry causes infinite loop between dashboards
+🟡 Issue 5: Provider fullpage banner does not lead to wizard
+
+Details in claimed_profiles_plan_2.md → KNOWN ISSUES section.
