@@ -67,8 +67,11 @@ export default function ClaimProcessor({
         // Save auth from response JWT
         saveAuth(data.jwt_token, data.user);
 
-        // Redirect: returning provider → dashboard, new claim → wizard
-        if (data.is_returning) {
+        // Redirect logic:
+        // - New claim → always wizard (profile page)
+        // - Returning, onboarding complete → dashboard overview
+        // - Returning, onboarding incomplete → wizard (profile page)
+        if (data.is_returning && data.is_onboarding_complete) {
           router.push(`/${lang}/provider/dashboard`);
         } else {
           router.push(`/${lang}/provider/dashboard/profile?claimed=success`);
