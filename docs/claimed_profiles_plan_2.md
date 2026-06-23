@@ -364,6 +364,29 @@ Scheduler проверява: "Кой email на коя стъпка е след
 
 ---
 
+### Блокер 6 — Magic Link Flow + Cookie Source of Truth ✅ ЗАВЪРШЕН (23 юни 2026)
+
+**Архитектура:**
+- Claim token от email = proof of identity (без login)
+- POST /providers/claim/{token} — no JWT required
+- get_or_create_claim_user() в auth_service.py
+- Cookie = единствен source of truth
+
+**Файлове:**
+- apps/api/services/auth_service.py — нова get_or_create_claim_user()
+- apps/api/routes/providers.py — claim endpoint redesign
+- apps/web/lib/auth-store.ts — isAuthenticated() чете Cookie
+- apps/web/app/[lang]/claim/[token]/ClaimProcessor.tsx — нов компонент
+- apps/web/app/[lang]/claim/[token]/page.tsx — интегриран ClaimProcessor
+- apps/web/app/[lang]/provider/dashboard/profile/page.tsx — wizard heading логика
+
+**Translations добавени:**
+- claim.processing — 34 езика
+- provider_dashboard.wizard_welcome_heading — 34 езика
+- provider_dashboard.wizard_welcome_subtitle — 34 езика
+
+---
+
 ### Блокер 7 — Task 2A: seed_unclaimed_providers.py 🔴
 
 **Проблем:** Реалните Warsaw провайдъри все още не са в Neon DB.
@@ -1089,6 +1112,13 @@ CATEGORY_LABEL_PL = {
               email verification премахната от token flow (токенът е доказателство)
               wizard pre-fill за scraped провайдъри (category_slug + data_source в API)
               photo upload fix pending (pointerEvents: none)
+[✅] Блокер 6: Magic Link Flow + Cookie Source of Truth → ЗАВЪРШЕН (23 юни 2026, commit c705215)
+              claim token = proof of identity, no JWT required
+              get_or_create_claim_user() auto-login/register
+              Cookie = единствен source of truth
+              ClaimProcessor.tsx replaces AutoClaimTrigger
+              sessionStorage-based wizard welcome heading
+              3 new translation keys (34 languages each)
 [ ] Блокер 7: Task 2A seed_unclaimed_providers   → Kimi-2.6 (изисква Блокер 5)
 [ ] Блокер 8: Railway Scheduler script           → Kimi-2.6 (изисква Блокер 7)
 [ ] Блокер 9: E2E cleanup                        → CLI команда
@@ -1125,46 +1155,48 @@ POST-CAMPAIGN:
 
 ## KNOWN ISSUES — Pre-Launch (June 23, 2026)
 
-### 🔴 CRITICAL — Блокират кампанията
+### ✅ РЕШЕНИ (23 юни 2026)
 
-**Issue 1 — Claim flow изисква регистрация (излишно триене)**
-- Текущо: имейл → claim страница → бутон → /auth → регистрация →
-  redirect обратно с ?from=auth → AutoClaimTrigger → wizard Step 1
-- Правилно: имейл → claim страница → бутон → wizard Step 1 директно
-- Root cause: AutoClaimTrigger изисква authenticated user (JWT) за POST claim
-- Решение: Magic link flow — claim токенът създава/логва акаунт автоматично
-- Приоритет: КРИТИЧЕН — директно влияе на конверсията от кампанията
+**Issue 1 + Issue 2 — Magic Link Claim Flow** ✅ ЗАВЪРШЕН
+- Решение: claim токенът от имейла = доказателство за самоличност
+- POST /providers/claim/{token} вече работи БЕЗ JWT
+- auto-login/register от scraped_email чрез get_or_create_claim_user()
+- Нов ClaimProcessor.tsx замества AutoClaimTrigger + ClaimCTAWrapper
+- Cookie = единствен source of truth (auth-store.ts)
+- Redirect логика:
+  * Нов провайдър → wizard Step 1 (category + city pre-filled)
+  * Returning незавършен → wizard Step 1
+  * Returning завършен (description + photo + услуги) → dashboard overview
+  * Вече регистриран с реален профил → реален dashboard (scraped stub изтрит)
+- Wizard heading: "Witamy!" при първо влизане (sessionStorage)
+- Wizard subtitle: wizard_welcome_subtitle (34 езика) докато не завърши
+- Commits: c705215
+- Тествани сценарии: ✅ нов провайдър, ✅ returning незавършен,
+  ✅ returning завършен, ✅ вече регистриран
 
-**Issue 2 — Логнат потребител на claim URL без ?from=auth**
-- Ако потребителят вече е логнат и отиде на claim URL директно
-  (без ?from=auth), AutoClaimTrigger не се изпълнява → claim не се случва
-- Root cause: AutoClaimTrigger проверява за ?from=auth преди изпълнение
-- Решение: AutoClaimTrigger да се изпълнява ако потребителят е логнат,
-  независимо от ?from=auth параметъра
-- Приоритет: КРИТИЧЕН — засяга повторни посещения и вече логнати потребители
-
-**Issue 3 — Photo upload бутон не работи**
-- Кликването на "Prześlij zdjęcie" не отваря file picker
-- Root cause: style={{ pointerEvents: 'none' }} блокира .click() на file input
-- Fix: премахни pointerEvents: 'none' от inline style на file input
-- File: apps/web/app/[lang]/provider/dashboard/profile/page.tsx
-- Status: Fix prompt готов, pending deployment
-- Приоритет: ВИСОК — влияе на completion rate на онбординга
+**Issue 3 — Photo upload** ✅ ЗАВЪРШЕН
+- Photo upload работи на desktop (тестван 23 юни 2026)
+- Fix беше деплойнат в по-ранен commit
 
 ### 🟡 ВАЖНИ — Влияят на UX
 
 **Issue 4 — JWT expiry причинява безкраен loop**
-- При изтекъл JWT токен → backend връща 401 "User not found or inactive"
+- При изтекъл JWT токен → backend връща 401
 - Frontend не обработва 401 на dashboard → безкраен redirect loop
-  между /provider/dashboard и /client/dashboard
-- Решение: При 401 → изчисти auth cookies/localStorage → redirect към /auth
-- Приоритет: СРЕДЕН — засяга потребители с изтекли сесии
+- Решение: При 401 → clearAuth() → redirect към /auth
+- Приоритет: СРЕДЕН
 
 **Issue 5 — Provider fullpage banner не води към wizard**
-- "Przejmij profil" банерът на публичната страница на провайдъра трябва
-  да води директно към wizard Step 1 след claim
-- Status: не е имплементирано/тествано
-- Приоритет: СРЕДЕН — засяга acquisition от органичен трафик
+- "Przejmij profil" банерът на публичната страница
+- Трябва верификация flow (6-цифрен код на scraped_email)
+- Приоритет: СРЕДЕН — след Warsaw launch
+
+### 🧹 ТЕХНИЧЕСКИ ДЪЛГ
+
+**Cleanup — остарели файлове (не блокират кампанията):**
+- AutoClaimTrigger.tsx — заменен от ClaimProcessor, не е изтрит
+- ClaimCTAWrapper.tsx — заменен от ClaimProcessor, не е изтрит
+- LoginClient.tsx — ?from=auth логиката не е почистена
 
 ---
 

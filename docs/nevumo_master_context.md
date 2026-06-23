@@ -1490,7 +1490,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - DB: category_slug column on providers (migration c1d2e3f4g5h6)
 - Backend: data_source + category_slug added to get_provider_profile() response
 - Frontend: AutoClaimTrigger redirect → /provider/dashboard/profile (wizard)
-- Alembic current head: c1d2e3f4g5h6
+- Alembic current head: c1d2e3f4g5h6 (непроменен)
 
 Next: Blocker 7 (seed_unclaimed_providers.py), Blocker 8 (Railway Scheduler).
 
@@ -1871,11 +1871,11 @@ Next.js App Router: child pages with `generateMetadata` override `icons` from ro
 
 ### Known Issues — Pre-Launch (June 23, 2026)
 
-🔴 Issue 1: Claim flow изисква регистрация — нужен magic link flow
-   (токенът да създава акаунт автоматично)
-🔴 Issue 2: AutoClaimTrigger изисква ?from=auth — не работи за
-   вече логнати потребители
-🔴 Issue 3: Photo upload бутон не работи (pointerEvents: none fix pending)
+✅ Issue 1: Magic link claim flow — ЗАВЪРШЕН (23 юни 2026)
+   (claim token = proof of identity, auto-login/register, zero friction)
+✅ Issue 2: Auth redirect → claim wizard — ЗАВЪРШЕН (23 юни 2026)
+   (решен като част от Magic Link Flow)
+✅ Issue 3: Photo upload — ЗАВЪРШЕН
 🟡 Issue 4: JWT expiry → безкраен loop между dashboard-ите
 🟡 Issue 5: Provider fullpage banner не води към wizard
 
