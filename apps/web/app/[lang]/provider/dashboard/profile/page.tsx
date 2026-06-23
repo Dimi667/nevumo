@@ -143,7 +143,7 @@ function AvatarUpload({
         )}
       </div>
       <div>
-        <input ref={ref} type="file" accept=".heic,.heif,image/heic,image/heif,image/jpeg,image/png,image/webp" className="hidden" onChange={onFileChange} aria-label="Upload profile photo" />
+        <input ref={ref} type="file" accept=".heic,.heif,image/heic,image/heif,image/jpeg,image/png,image/webp" style={{ position: 'absolute', opacity: 0, width: 0, height: 0, pointerEvents: 'none' }} onChange={onFileChange} aria-label="Upload profile photo" />
         <button
           type="button"
           onClick={() => ref.current?.click()}
