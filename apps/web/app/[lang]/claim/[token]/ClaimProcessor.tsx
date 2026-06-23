@@ -63,7 +63,7 @@ export default function ClaimProcessor({
         // Handle 401 — login required (banner flow)
         if (res.status === 401) {
           const currentUrl = encodeURIComponent(window.location.href);
-          router.push(`/${lang}/auth?redirect=${currentUrl}`);
+          router.push(`/${lang}/auth?redirect=${currentUrl}&claim=${token}`);
           return;
         }
 
