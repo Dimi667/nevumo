@@ -472,7 +472,11 @@ async def claim_provider(
             },
             "provider_slug": provider.slug,
             "is_returning": True,
-            "is_onboarding_complete": bool(provider.description and provider.profile_image_url),
+            "is_onboarding_complete": bool(
+                provider.description
+                and provider.profile_image_url
+                and provider.services
+            ),
         }
 
     # ── NEW CLAIM: profile not yet claimed ───────────────────────────────
@@ -534,7 +538,11 @@ async def claim_provider(
                 },
                 "provider_slug": existing_provider.slug,
                 "is_returning": True,
-                "is_onboarding_complete": bool(existing_provider.description and existing_provider.profile_image_url),
+                "is_onboarding_complete": bool(
+                existing_provider.description
+                and existing_provider.profile_image_url
+                and existing_provider.services
+            ),
             }
 
     # Claim the profile
