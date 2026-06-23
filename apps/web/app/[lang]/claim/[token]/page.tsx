@@ -11,7 +11,7 @@ import { claimProfile } from './actions';
 
 interface PageProps {
   params: Promise<{ lang: string; token: string }>;
-  searchParams?: Promise<{ error?: string }>;
+  searchParams?: Promise<{ error?: string; source?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -76,6 +76,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
   const claimT = await fetchTranslations(normalizedLang, 'claim');
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const errorParam = resolvedSearchParams?.error ?? null;
+  const sourceParam = resolvedSearchParams?.source;
 
   // Translation keys for ClaimProcessor
   const processingText = t(claimT, 'processing', 'Activating your profile...');
@@ -229,6 +230,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
         <ClaimProcessor
           token={token}
           lang={normalizedLang}
+          source={sourceParam}
           processingText={processingText}
           errorText={errorText}
           errorAlreadyClaimedText={errorText}

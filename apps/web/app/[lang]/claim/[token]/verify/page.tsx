@@ -8,6 +8,7 @@ import VerifyCodeForm from './VerifyCodeForm';
 
 interface PageProps {
   params: Promise<{ lang: string; token: string }>;
+  searchParams?: Promise<{ sent_to?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -29,10 +30,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function VerifyPage({ params }: PageProps) {
+export default async function VerifyPage({ params, searchParams }: PageProps) {
   const { lang, token } = await params;
   const normalizedLang = SUPPORTED_LANGUAGES.includes(lang) ? lang : 'en';
   const claimT = await fetchTranslations(normalizedLang, 'claim');
+
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const sentTo = (resolvedSearchParams as Record<string, string>)?.sent_to ?? '';
 
   // Check auth status via cookie
   const cookieStore = await cookies();
@@ -63,6 +67,7 @@ export default async function VerifyPage({ params }: PageProps) {
               token={token}
               authToken={authToken}
               dict={claimT}
+              sentTo={sentTo}
             />
 
             <div className="mt-6 text-center">

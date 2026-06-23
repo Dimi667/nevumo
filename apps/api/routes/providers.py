@@ -1,11 +1,11 @@
 import json
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, select
 from sqlalchemy.exc import IntegrityError
@@ -415,6 +415,7 @@ async def get_claim_preview(
 async def claim_provider(
     token: str,
     lang: str = Query(default="pl"),
+    source: str = Query(default="email"),
     optional_user: Optional[User] = Depends(get_optional_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
@@ -438,6 +439,63 @@ async def claim_provider(
             status_code=404,
             detail={"code": "NOT_FOUND", "message": "Provider not found"}
         )
+
+    # ── BANNER FLOW: public token, must verify business ownership ─────────────
+    if source == "banner":
+        if not optional_user:
+            raise HTTPException(
+                status_code=401,
+                detail={"code": "AUTH_REQUIRED", "message": "Login required for banner claim"}
+            )
+        if not provider.scraped_email:
+            raise HTTPException(
+                status_code=422,
+                detail={"code": "NO_EMAIL", "message": "No scraped email for verification"}
+            )
+        if optional_user.email == provider.scraped_email:
+            # Email matches — treat same as direct claim, fall through to main logic
+            pass  # Continue to existing claim logic below
+        else:
+            # Email mismatch — require 6-digit code verification
+            import secrets
+            code = str(secrets.randbelow(1000000)).zfill(6)
+            expires_at = datetime.now(timezone.utc) + timedelta(hours=24)
+
+            # Invalidate any previous pending verifications for this token+user
+            db.query(PendingClaimVerification).filter(
+                PendingClaimVerification.claim_token == token,
+                PendingClaimVerification.user_id == optional_user.id,
+                PendingClaimVerification.used == False,
+            ).delete()
+
+            pending = PendingClaimVerification(
+                claim_token=token,
+                user_id=optional_user.id,
+                code=code,
+                expires_at=expires_at,
+            )
+            db.add(pending)
+            db.commit()
+
+            email_service.send_claim_verification_email(
+                to_email=provider.scraped_email,
+                business_name=provider.business_name,
+                code=code,
+            )
+
+            # Mask the email for display (e.g. business@firm.pl → b****@firm.pl)
+            local, domain = provider.scraped_email.rsplit('@', 1)
+            mask_len = min(len(local) - 1, 4)
+            masked_email = local[0] + ('*' * mask_len) + '@' + domain
+
+            return JSONResponse(
+                status_code=202,
+                content={
+                    "status": "verification_required",
+                    "message": "Verification code sent to business email",
+                    "sent_to": masked_email
+                }
+            )
 
     # ── RETURNING PROVIDER: profile already claimed ──────────────────────
     # Re-authenticate the owner and return a fresh JWT.

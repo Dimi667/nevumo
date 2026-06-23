@@ -7,9 +7,10 @@ interface VerifyCodeFormProps {
   token: string;
   authToken: string;
   dict: Record<string, string>;
+  sentTo?: string;
 }
 
-export default function VerifyCodeForm({ lang, token, authToken, dict }: VerifyCodeFormProps) {
+export default function VerifyCodeForm({ lang, token, authToken, dict, sentTo }: VerifyCodeFormProps) {
   const [code, setCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -83,6 +84,13 @@ export default function VerifyCodeForm({ lang, token, authToken, dict }: VerifyC
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {sentTo && (
+        <p className="text-sm text-gray-600 mb-4">
+          Kod weryfikacyjny został wysłany na adres:{' '}
+          <span className="font-medium text-gray-900">{sentTo}</span>
+        </p>
+      )}
+
       <div>
         <label htmlFor="code" className="block text-sm font-medium text-gray-700 mb-2">
           {t('verify_code_label', 'Verification code')}

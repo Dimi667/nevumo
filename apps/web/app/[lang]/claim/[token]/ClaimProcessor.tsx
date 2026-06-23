@@ -9,6 +9,7 @@ import { API_BASE } from '@/lib/api';
 interface ClaimProcessorProps {
   token: string;
   lang: string;
+  source?: string;
   processingText: string;
   errorText: string;
   errorAlreadyClaimedText: string;
@@ -26,6 +27,7 @@ type ErrorCode =
 export default function ClaimProcessor({
   token,
   lang,
+  source,
   processingText,
   errorText,
   errorAlreadyClaimedText,
@@ -52,11 +54,28 @@ export default function ClaimProcessor({
         }
 
         const res = await fetch(
-          `${API_BASE}/api/v1/providers/claim/${token}?lang=${lang}`,
+          `${API_BASE}/api/v1/providers/claim/${token}?lang=${lang}&source=${source ?? 'email'}`,
           { method: 'POST', headers }
         );
 
         const data = await res.json();
+
+        // Handle 401 — login required (banner flow)
+        if (res.status === 401) {
+          const currentUrl = encodeURIComponent(window.location.href);
+          router.push(`/${lang}/auth?redirect=${currentUrl}`);
+          return;
+        }
+
+        // Handle 202 — verification code sent (banner flow)
+        if (res.status === 202) {
+          const sentTo = data?.sent_to ?? '';
+          const verifyUrl = sentTo
+            ? `/${lang}/claim/${token}/verify?sent_to=${encodeURIComponent(sentTo)}`
+            : `/${lang}/claim/${token}/verify`;
+          router.push(verifyUrl);
+          return;
+        }
 
         if (!res.ok) {
           const code = data?.detail?.code as ErrorCode;
@@ -85,7 +104,7 @@ export default function ClaimProcessor({
     };
 
     processClaim();
-  }, [token, lang]);
+  }, [token, lang, source]);
 
   // ── Error states ─────────────────────────────────────────────────────
   if (errorCode === 'USER_ALREADY_HAS_PROVIDER') {

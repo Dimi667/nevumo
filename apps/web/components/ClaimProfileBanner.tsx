@@ -60,7 +60,7 @@ export default function ClaimProfileBanner({
         {/* Right side */}
         <div className="flex flex-col items-center">
           <Link
-            href={`/${lang}/claim/${claimToken}`}
+            href={`/${lang}/claim/${claimToken}?source=banner`}
             className="bg-white text-orange-600 font-semibold px-6 py-2.5 rounded-lg hover:bg-orange-50 transition-colors whitespace-nowrap text-sm"
           >
             {translations.cta}
