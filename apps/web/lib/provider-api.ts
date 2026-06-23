@@ -1,5 +1,5 @@
 import { API_BASE } from '@/lib/api';
-import { getAuthToken } from '@/lib/auth-store';
+import { getAuthToken, clearAuth } from '@/lib/auth-store';
 import type { UserInfo } from '@/lib/auth-types';
 import type {
   AnalyticsData,
@@ -55,6 +55,15 @@ async function authFetch<T>(
       ...(options.headers ?? {}),
     },
   });
+
+  if (res.status === 401) {
+    clearAuth();
+    if (typeof window !== 'undefined') {
+      const lang = window.location.pathname.split('/')[1] || 'en';
+      window.location.replace(`/${lang}/auth`);
+    }
+    throw new ProviderApiError('SESSION_EXPIRED', 'Session expired', 401);
+  }
 
   console.log(`NETWORK: Response status: ${res.status}`);
   console.log(`NETWORK: Response headers:`, Object.fromEntries(res.headers.entries()));
