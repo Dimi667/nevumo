@@ -2698,7 +2698,8 @@ trackPageEvent("event_name", "page_name", { key: "value" });
 - `apps/web/lib/api.ts` — `ApiError` class + `apiPost<T>()` generic fetch wrapper
 - `apps/web/lib/auth-types.ts` — `UserInfo`, `AuthResult`, `CheckEmailResult`, `ValidateTokenResult`, `MessageResult` 
 - `apps/web/lib/auth-api.ts` — 6 typed functions wrapping `apiPost` 
-- `apps/web/lib/auth-store.ts` — `saveAuth`, `getAuthToken`, `getAuthUser`, `clearAuth`, `isAuthenticated` 
+- `apps/web/lib/auth-store.ts` — `saveAuth`, `getAuthToken`, `getAuthUser`, `clearAuth`, `isAuthenticated`
+- **401 Handling Pattern**: Both `authFetch()` (provider-api.ts) and `clientFetch()` (client-api.ts) intercept HTTP 401 responses → call `clearAuth()` → `window.location.replace(/{lang}/auth)`. This prevents JWT expiry redirect loops. Null safety added: `json.error?.code ?? 'UNKNOWN_ERROR'`. 
 
 ### Backend Endpoints (COMPLETE — Phase A)
 - POST /api/v1/auth/check-email → { exists: boolean }
@@ -3616,6 +3617,9 @@ python scripts/seed_review_translations.py
 
 🟢 LOW PRIORITY:
 6. Welcome email in English only — no localization in send_claim_welcome_email().
+
+✅ RESOLVED (June 23, 2026):
+- JWT expiry redirect loop — 401 interceptor added in provider-api.ts + client-api.ts → clearAuth() + redirect to /auth
 
 ---
 

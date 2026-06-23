@@ -1178,13 +1178,15 @@ POST-CAMPAIGN:
 - Photo upload работи на desktop (тестван 23 юни 2026)
 - Fix беше деплойнат в по-ранен commit
 
-### 🟡 ВАЖНИ — Влияят на UX
+**Issue 4 — JWT expiry причинява безкраен loop** ✅ РЕШЕН (23 юни 2026)
+- Root cause: authFetch() и clientFetch() не обработваха 401 → redirect loop между provider и client dashboard
+- Fix 1: 401 interceptor в authFetch() → apps/web/lib/provider-api.ts
+- Fix 2: 401 interceptor + null safety в clientFetch() → apps/web/lib/client-api.ts
+- Pattern: 401 → clearAuth() → window.location.replace(/{lang}/auth) → full page reload
+- Null safety: json.error?.code ?? 'UNKNOWN_ERROR' предотвратява crash при нестандартен error body
+- Тестван мануално в production: provider dashboard ✅ + client dashboard ✅
 
-**Issue 4 — JWT expiry причинява безкраен loop**
-- При изтекъл JWT токен → backend връща 401
-- Frontend не обработва 401 на dashboard → безкраен redirect loop
-- Решение: При 401 → clearAuth() → redirect към /auth
-- Приоритет: СРЕДЕН
+### 🟡 ВАЖНИ — Влияят на UX
 
 **Issue 5 — Provider fullpage banner не води към wizard**
 - "Przejmij profil" банерът на публичната страница

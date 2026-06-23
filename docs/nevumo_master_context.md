@@ -902,6 +902,11 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
     - `apps/web/app/[lang]/client/dashboard/settings/SettingsClient.tsx`
   - On success: `clearAuth()` + localStorage cleanup + redirect to `/${lang}`
   - Translations: 5 keys × 34 languages × 2 namespaces (`provider_dashboard`, `client_dashboard`) = 340 rows seeded
+- **Issue 4 Fix — JWT Expiry Redirect Loop (June 23, 2026)** — RESOLVED:
+  - **Problem**: Expired JWT caused infinite redirect loop between provider and client dashboard. `authFetch()` and `clientFetch()` did not handle 401 responses — provider layout redirected to client dashboard, client layout detected role=provider and redirected back, creating endless loop.
+  - **Fix**: Added 401 interceptor in `apps/web/lib/provider-api.ts` (authFetch) and `apps/web/lib/client-api.ts` (clientFetch). On 401: `clearAuth()` removes cookie and localStorage, `window.location.replace()` redirects to `/{lang}/auth` with full page reload.
+  - **Null safety**: Added `json.error?.code ?? 'UNKNOWN_ERROR'` in clientFetch to prevent crash when backend returns 401 with non-standard error body.
+  - **Tested**: Manually verified in production on both provider and client dashboard.
 - **Delete Account Bug Fix (June 16, 2026)**
   - **Root cause**: `reviews.client_id` FK is `NO ACTION` (not CASCADE). Users with reviews could not delete their account — PostgreSQL threw `ForeignKeyViolation: reviews_client_id_fkey`.
   - **Secondary issue**: `leads.phone` was not nullified on account deletion — personal data remained in DB after GDPR Art. 17 erasure request.
@@ -1876,7 +1881,8 @@ Next.js App Router: child pages with `generateMetadata` override `icons` from ro
 ✅ Issue 2: Auth redirect → claim wizard — ЗАВЪРШЕН (23 юни 2026)
    (решен като част от Magic Link Flow)
 ✅ Issue 3: Photo upload — ЗАВЪРШЕН
-🟡 Issue 4: JWT expiry → безкраен loop между dashboard-ите
+✅ Issue 4: JWT expiry → безкраен loop — РЕШЕН (23 юни 2026)
+   (401 interceptor в provider-api.ts + client-api.ts → clearAuth() + redirect)
 🟡 Issue 5: Provider fullpage banner не води към wizard
 
 Details: claimed_profiles_plan_2.md → секция KNOWN ISSUES
