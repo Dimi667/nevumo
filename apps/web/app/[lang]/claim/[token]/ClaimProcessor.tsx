@@ -67,6 +67,9 @@ export default function ClaimProcessor({
         // Save auth from response JWT
         saveAuth(data.jwt_token, data.user);
 
+        // Mark as just claimed for welcome heading in wizard
+        sessionStorage.setItem('nevumo_just_claimed', '1');
+
         // Redirect logic:
         // - New claim → always wizard (profile page)
         // - Returning, onboarding complete → dashboard overview

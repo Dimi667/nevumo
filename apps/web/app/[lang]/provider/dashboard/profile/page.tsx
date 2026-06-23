@@ -292,6 +292,7 @@ export default function ProfilePage({ params }: PageProps) {
   const [editSaving, setEditSaving] = useState(false);
   const [editSuccess, setEditSuccess] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
+  const [justClaimed, setJustClaimed] = useState(false);
   const [publicUrl, setPublicUrl] = useState<string | null>(null);
   const slugCheckRequestRef = useRef(0);
 
@@ -395,6 +396,13 @@ export default function ProfilePage({ params }: PageProps) {
       .catch((e: Error) => setLoadError(e.message))
       .finally(() => setLoading(false));
   }, [lang]);
+
+  useEffect(() => {
+    if (sessionStorage.getItem('nevumo_just_claimed') === '1') {
+      sessionStorage.removeItem('nevumo_just_claimed');
+      setJustClaimed(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (cities.length === 0) return;
@@ -787,21 +795,18 @@ export default function ProfilePage({ params }: PageProps) {
     return (
       <div className="max-w-lg mx-auto space-y-6 pb-24 min-h-[calc(100vh+1px)]">
         <div>
-          {profile?.data_source === 'scraped' ? (
-            <>
-              <h1 className="text-xl font-bold text-gray-900">Znaleźliśmy Twoją firmę na Nevumo!</h1>
-              <p className="text-sm text-gray-500 mt-0.5">
-                Uzupełnij opis i dodaj zdjęcie, aby Twój profil był widoczny dla klientów.
-              </p>
-            </>
+          {justClaimed ? (
+            <h1 className="text-xl font-bold text-gray-900">
+              {t('wizard_welcome_heading', 'Welcome!')}
+            </h1>
           ) : (
-            <>
-              <h1 className="text-xl font-bold text-gray-900">{t('label_complete_profile', 'Complete your profile')}</h1>
-              <p className="text-sm text-gray-500 mt-0.5">
-                {t('msg_start_receiving', 'Start receiving client requests in minutes')}
-              </p>
-            </>
+            <h1 className="text-xl font-bold text-gray-900">
+              {t('label_complete_profile', 'Complete your profile')}
+            </h1>
           )}
+          <p className="text-sm text-gray-500 mt-0.5">
+            {t('wizard_welcome_subtitle', 'Add a photo, description and then services to start receiving clients')}!
+          </p>
         </div>
 
         <StepIndicator step={step} step1Valid={step1Valid} step2Valid={step2Valid} t={t} />
