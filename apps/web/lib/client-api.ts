@@ -1,4 +1,5 @@
 import { ApiError, type ApiResponse, API_BASE } from '@/lib/api';
+import { clearAuth } from './auth-store';
 
 export type ClientLeadFilterStatus = 'all' | 'active' | 'done' | 'rejected';
 export type ClientLeadStatus = 'created' | 'pending_match' | 'matched' | 'contacted' | 'done' | 'rejected' | 'expired' | 'cancelled';
@@ -124,6 +125,15 @@ async function clientFetch<T>(token: string, path: string, options: RequestInit 
     },
   });
 
+  if (response.status === 401) {
+    clearAuth();
+    if (typeof window !== 'undefined') {
+      const lang = window.location.pathname.split('/')[1] || 'en';
+      window.location.replace(`/${lang}/auth`);
+    }
+    throw new ApiError('SESSION_EXPIRED', 'Session expired');
+  }
+
   const json = (await response.json().catch(() => null)) as ApiResponse<T> | null;
 
   if (!json) {
@@ -131,7 +141,10 @@ async function clientFetch<T>(token: string, path: string, options: RequestInit 
   }
 
   if (!json.success) {
-    throw new ApiError(json.error.code, json.error.message);
+    throw new ApiError(
+      json.error?.code ?? 'UNKNOWN_ERROR',
+      json.error?.message ?? 'An unexpected error occurred'
+    );
   }
 
   return json.data;
