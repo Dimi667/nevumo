@@ -472,7 +472,7 @@ async def claim_provider(
             },
             "provider_slug": provider.slug,
             "is_returning": True,
-            "is_onboarding_complete": bool(provider.is_complete),
+            "is_onboarding_complete": bool(provider.description and provider.profile_image_url),
         }
 
     # ── NEW CLAIM: profile not yet claimed ───────────────────────────────
@@ -534,7 +534,7 @@ async def claim_provider(
                 },
                 "provider_slug": existing_provider.slug,
                 "is_returning": True,
-                "is_onboarding_complete": bool(existing_provider.is_complete),
+                "is_onboarding_complete": bool(existing_provider.description and existing_provider.profile_image_url),
             }
 
     # Claim the profile
