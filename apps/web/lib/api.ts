@@ -172,6 +172,7 @@ export interface ProviderDetail {
   gallery: GalleryImage[];
   claim_token: string | null;
   search_volume: number | null;
+  scraped_email?: string | null;
 }
 
 export interface Review {

@@ -903,6 +903,7 @@ async def get_provider(
         latest_review=latest_review,
         reviews=reviews,
         gallery=[ProviderImageItem.model_validate(img) for img in get_provider_gallery(db, provider.id)],
+        scraped_email=provider.scraped_email,
     )
 
     return ProviderDetailResponse(data=detail)

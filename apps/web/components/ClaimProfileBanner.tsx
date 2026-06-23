@@ -9,6 +9,7 @@ interface ClaimProfileBannerProps {
   searchVolume: number | null;
   categoryLabel: string;
   cityLabel: string;
+  scrapedEmail?: string;
   translations: {
     title: string;
     subtitle: string;
@@ -25,6 +26,7 @@ export default function ClaimProfileBanner({
   searchVolume,
   categoryLabel,
   cityLabel,
+  scrapedEmail,
   translations,
 }: ClaimProfileBannerProps) {
   const formatDesc = () => {
@@ -52,6 +54,11 @@ export default function ClaimProfileBanner({
           <h2 className="text-white text-lg font-bold">
             {subtitle}
           </h2>
+          {scrapedEmail && (
+            <p className="text-orange-100 text-xs">
+              {scrapedEmail}
+            </p>
+          )}
           <p className="text-orange-100 text-sm">
             {formatDesc()}
           </p>

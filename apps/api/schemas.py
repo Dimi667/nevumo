@@ -140,6 +140,7 @@ class ProviderDetail(BaseModel):
     latest_review: Optional["LatestReviewPreview"] = None
     reviews: List["ReviewConversationItem"] = []
     gallery: list[ProviderImageItem] = []
+    scraped_email: Optional[str] = None
 
     @field_validator("rating", mode="before")
     @classmethod
