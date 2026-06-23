@@ -121,7 +121,7 @@ export default function AutoClaimTrigger({ token, isAuthenticated, isClaimed, la
       setState('success');
       window.dispatchEvent(new CustomEvent('auto-claim-end'));
       // Redirect to dashboard with claimed=success
-      router.push(`/${lang}/provider/dashboard?claimed=success`);
+      router.push(`/${lang}/provider/dashboard/profile?claimed=success`);
     } catch (error) {
       setErrorCode('network');
       setState('error');

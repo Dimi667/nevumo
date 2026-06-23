@@ -1,12 +1,11 @@
 import json
 import logging
-import secrets
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import func, and_, select
 from sqlalchemy.exc import IntegrityError
@@ -455,51 +454,6 @@ async def claim_provider(
             status_code=409,
             detail={"code": "ALREADY_CLAIMED", "message": "This profile has already been claimed"}
         )
-
-    # --- Blocker 6: email verification ---
-    if current_user.email == provider.scraped_email:
-        # Fast path: email matches — claim directly (fall through to existing commit logic)
-        pass
-
-    elif provider.scraped_email is None:
-        # Cannot verify ownership — no scraped email available
-        raise HTTPException(
-            status_code=422,
-            detail="cannot_verify_ownership"
-        )
-
-    else:
-        # Email mismatch — generate 6-digit code, send to scraped_email
-        raw_code = str(secrets.randbelow(900000) + 100000)  # 100000-999999
-        expires_at = datetime.now(timezone.utc) + timedelta(hours=24)
-
-        # Invalidate any previous unused codes for this token
-        db.query(PendingClaimVerification).filter(
-            PendingClaimVerification.claim_token == token,
-            PendingClaimVerification.used == False,
-        ).delete(synchronize_session=False)
-
-        pending = PendingClaimVerification(
-            claim_token=token,
-            user_id=current_user.id,
-            code=raw_code,
-            expires_at=expires_at,
-            used=False,
-        )
-        db.add(pending)
-        db.commit()
-
-        email_service.send_claim_verification_email(
-            to_email=provider.scraped_email,
-            business_name=provider.business_name or "",
-            code=raw_code,
-        )
-
-        return JSONResponse(
-            status_code=202,
-            content={"status": "pending_verification"}
-        )
-    # --- end Blocker 6 ---
 
     # Claim the profile
     provider.is_claimed = True

@@ -49,7 +49,7 @@ export async function claimProfile(token: string, authToken: string): Promise<{ 
 export async function claimProfileAction(token: string, authToken: string, normalizedLang: string) {
   const claimResult = await claimProfile(token, authToken);
   if (claimResult.success) {
-    redirect(`/${normalizedLang}/provider/dashboard`);
+    redirect(`/${normalizedLang}/provider/dashboard/profile`);
   }
   if (claimResult.pendingVerification) {
     redirect(`/${normalizedLang}/claim/${token}/verify`);
