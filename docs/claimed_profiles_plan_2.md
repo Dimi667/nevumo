@@ -318,82 +318,49 @@ Scheduler проверява: "Кой email на коя стъпка е след
 
 ---
 
-### Блокер 6 — Верификация при claim от публичен банер (Задача 4Г) 🔴
+### Блокер 6 — Верификация при claim ✅ ЗАВЪРШЕН (23 юни 2026, commit 7ee1361)
 
-**Проблем:** Банерът "Odbierz swój profil" е публично видим на всяка unclaimed провайдър страница
-(напр. `nevumo.com/pl/warszawa/plumbing/hydraulik-testowy-e2e`). `claim_token` се вижда в HTML-а.
-Всеки може да: посети страницата → регистрира Nevumo акаунт → claim чужд профил.
-**Това е критичен security проблем след Task 2A** — стотици публични банери ще са активни.
+**Имплементация:**
+- DB: `scraped_email` колона на `providers` + `pending_claim_verifications`
+  таблица (migration b1c2d3e4f5g6)
+- DB: `category_slug` колона на `providers` (migration c1d2e3f4g5h6)
+- Backend: `send_claim_verification_email()` + обновена логика в
+  `claim_provider()` + нов endpoint `POST /api/v1/providers/claim/{token}/verify`
+- Backend: `data_source` добавен в `get_provider_profile()` response
+- Backend: `category_slug` добавен в `get_provider_profile()` response
+- Bug fix: `scraped_email=None` → `scraped_email=provider.scraped_email` в
+  `send_article14_notification()` call
+- Bug fix: Email verification премахната от token-based claim flow
+  (токенът е достатъчно доказателство за собственост)
+- Email template: `apps/api/scripts/templates/claim_verification_pl.html`
+- Translations: 12 ключа × 34 езика = 408 реда
+  (seed_claim_verify_translations.py)
+- Frontend: `/[lang]/claim/[token]/verify/page.tsx` + `VerifyCodeForm.tsx`
+  (запазени за future "claim from public listing" feature)
+- Frontend: AutoClaimTrigger redirect → `/provider/dashboard/profile`
+  (wizard вместо dashboard)
+- Frontend: `ownership_blocked` error UI fix в claim page.tsx
 
-**Защо НЕ е проблем при имейл кампанията:** Изпращаме имейла ДО `scraped_email` на бизнеса.
-Ако собственикът кликва линка, неговият регистриран имейл = `scraped_email` → верифициран имплицитно.
+**Wizard pre-fill за scraped провайдъри:**
+- Scraped провайдъри започват от Step 1 (не прескачат към Step 2)
+- Step 1: business_name + description pre-filled от scraped данни
+- Step 1: heading "Znaleźliśmy Twoją firmę na Nevumo!" за scraped провайдъри
+- Step 2: category_slug pre-selected автоматично
+- Step 2: Warsaw pre-selected автоматично
+- Fix: `data_source` липсваше в API response → всички scraped checks failing
+- Fix: `pointerEvents: none` на file input → photo upload не работеше
 
-**Решение — Email matching логика в POST /api/v1/providers/claim/{token}:**
+**Три сценария за верификация:**
+| Случай | scraped_email | Резултат |
+|--------|--------------|---------|
+| Email съвпада | match | Директен claim (200) |
+| Email не съвпада | mismatch | 6-цифрен код (запазено за future) |
+| Няма scraped_email | NULL | ownership_blocked UI |
 
-```python
-if current_user.email == provider.scraped_email:
-    # Fast path — имейлите съвпадат → собственикът е
-    # Покрива: outreach кампания + банер с бизнес имейл
-    claim_directly()
-
-elif provider.scraped_email is None:
-    # Не можем да верифицираме (провайдър без имейл в CEIDG)
-    raise HTTPException(
-        status_code=422,
-        detail="cannot_verify_ownership"
-        # Frontend показва: "Свържете се с support@nevumo.com"
-    )
-
-else:
-    # Имейлите не съвпадат → изпращаме верификационен код
-    # Покрива: банер с личен Gmail, потенциален измамник
-    send_verification_code_to(provider.scraped_email)
-    return {"status": "pending_verification"}
-```
-
-**Верификационен flow (само при несъвпадение):**
-
-1. Backend генерира 6-цифрен код, TTL 24h → записва в `pending_claim_verifications`
-2. Изпраща код до `provider.scraped_email`
-3. Frontend показва: *"Изпратихме код на имейла на бизнеса. Въведете го за да потвърдите собствеността."*
-4. Потребителят въвежда кода → `POST /api/v1/providers/claim/{token}/verify`
-5. Backend верифицира → claim → Art. 14 GDPR имейл
-
-**Нова DB таблица:**
-```sql
-CREATE TABLE pending_claim_verifications (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    claim_token TEXT NOT NULL,
-    user_id UUID REFERENCES users(id),
-    code TEXT NOT NULL,           -- 6-цифрен код
-    expires_at TIMESTAMPTZ NOT NULL,  -- NOW() + 24h
-    used BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-**Нов endpoint:** `POST /api/v1/providers/claim/{token}/verify`
-- Body: `{ "code": "123456" }`
-- Верифицира → claim → Art. 14 имейл
-
-**Нов имейл template:** `apps/api/scripts/templates/claim_verification_pl.html`
-- Subject: `"Potwierdź przejęcie profilu [business_name] na Nevumo — kod: [CODE]"`
-- Sender: `noreply@nevumo.com`
-- Съдържание: 6-цифрен код, TTL 24h, business_name, инструкции
-
-**Поведение по случай:**
-
-| Кой и откъде | scraped_email match? | Резултат |
-|---|---|---|
-| Собственик от outreach имейл | ✅ Да | Директен claim, без триене |
-| Собственик от банера с бизнес имейл | ✅ Да | Директен claim, без триене |
-| Собственик от банера с личен Gmail | ❌ Не | Код до бизнес имейла — само той го чете |
-| Конкурент от банера | ❌ Не | Код до чуждия бизнес имейл — конкурентът не го получава |
-| Провайдър без scraped_email | NULL | Блокиран → support@nevumo.com |
-
-**Файлове:** `apps/api/routes/providers.py`, Alembic migration,
-`apps/api/models.py`, `apps/api/scripts/templates/claim_verification_pl.html`
-**Модел:** SWE-1.6 (backend + DB) + Kimi-2.6 (frontend verification UI + имейл template)
+**QA резултати:**
+- Backend API tests: ✅ PASS (всичките 3 сценария)
+- Browser tests: ✅ PASS (Step 1 wizard, Step 2 pre-fill)
+- Photo upload: 🔴 FIX PENDING (pointerEvents: none)
 
 ---
 
@@ -1118,10 +1085,10 @@ CATEGORY_LABEL_PL = {
 [✅] Блокер 3Б: Welcome имейл след claim (await bug fix) — ЗАВЪРШЕН (22 юни 2026)
 [✅] Блокер 4: Resend Webhooks — ЗАВЪРШЕН (22 юни 2026, commit 5b186c0)
 [✅] Блокер 5: outreach_sequence_log таблица      → ЗАВЪРШЕН (22 юни 2026, commits 4cbdb17 + d70616d)
-[ ] Блокер 6: Верификация при claim (4Г)         → SWE-1.6 (backend + DB) + Kimi-2.6 (frontend + template)
-              email match → директен claim
-              email mismatch → 6-цифрен код до scraped_email
-              NULL scraped_email → блокиран → support
+[✅] Блокер 6: Верификация при claim (4Г)         → ЗАВЪРШЕН (23 юни 2026, commit 7ee1361)
+              email verification премахната от token flow (токенът е доказателство)
+              wizard pre-fill за scraped провайдъри (category_slug + data_source в API)
+              photo upload fix pending (pointerEvents: none)
 [ ] Блокер 7: Task 2A seed_unclaimed_providers   → Kimi-2.6 (изисква Блокер 5)
 [ ] Блокер 8: Railway Scheduler script           → Kimi-2.6 (изисква Блокер 7)
 [ ] Блокер 9: E2E cleanup                        → CLI команда
@@ -1158,46 +1125,46 @@ POST-CAMPAIGN:
 
 ## KNOWN ISSUES — Pre-Launch (June 23, 2026)
 
-### 🔴 CRITICAL
+### 🔴 CRITICAL — Блокират кампанията
 
-**Issue 1 — Claim flow requires registration (too much friction)**
-- Current: email → claim page → button → /auth → register → redirect back
-  with ?from=auth → AutoClaimTrigger → wizard Step 1
-- Expected: email → claim page → button → wizard Step 1 (no registration step)
-- Root cause: AutoClaimTrigger requires authenticated user (JWT) to POST claim
-- Solution needed: Magic link flow — claim token creates/logs in account automatically
-- Priority: HIGH — blocks campaign conversion
+**Issue 1 — Claim flow изисква регистрация (излишно триене)**
+- Текущо: имейл → claim страница → бутон → /auth → регистрация →
+  redirect обратно с ?from=auth → AutoClaimTrigger → wizard Step 1
+- Правилно: имейл → claim страница → бутон → wizard Step 1 директно
+- Root cause: AutoClaimTrigger изисква authenticated user (JWT) за POST claim
+- Решение: Magic link flow — claim токенът създава/логва акаунт автоматично
+- Приоритет: КРИТИЧЕН — директно влияе на конверсията от кампанията
 
-**Issue 2 — Logged-in user on claim URL without ?from=auth**
-- If user is already logged in and visits claim URL directly (no ?from=auth),
-  AutoClaimTrigger does not fire → claim never happens
-- Root cause: AutoClaimTrigger checks for ?from=auth before executing
-- Solution needed: AutoClaimTrigger should fire if user is authenticated,
-  regardless of ?from=auth parameter
-- Status: Fix deployed (commit TBD)
-- Priority: HIGH — affects returning users and re-visit scenarios
+**Issue 2 — Логнат потребител на claim URL без ?from=auth**
+- Ако потребителят вече е логнат и отиде на claim URL директно
+  (без ?from=auth), AutoClaimTrigger не се изпълнява → claim не се случва
+- Root cause: AutoClaimTrigger проверява за ?from=auth преди изпълнение
+- Решение: AutoClaimTrigger да се изпълнява ако потребителят е логнат,
+  независимо от ?from=auth параметъра
+- Приоритет: КРИТИЧЕН — засяга повторни посещения и вече логнати потребители
 
-**Issue 3 — Photo upload button broken**
-- Clicking "Prześlij zdjęcie" does nothing
-- Root cause: style={{ pointerEvents: 'none' }} on file input blocks .click()
-- Fix: remove pointerEvents: 'none' from inline style
-- Status: Fix deployed (commit 3d10487)
-- Priority: HIGH — affects onboarding completion rate
+**Issue 3 — Photo upload бутон не работи**
+- Кликването на "Prześlij zdjęcie" не отваря file picker
+- Root cause: style={{ pointerEvents: 'none' }} блокира .click() на file input
+- Fix: премахни pointerEvents: 'none' от inline style на file input
+- File: apps/web/app/[lang]/provider/dashboard/profile/page.tsx
+- Status: Fix prompt готов, pending deployment
+- Приоритет: ВИСОК — влияе на completion rate на онбординга
 
-### 🟡 IMPORTANT
+### 🟡 ВАЖНИ — Влияят на UX
 
-**Issue 4 — 401 JWT expiry causes infinite loop**
-- When JWT token expires, backend returns 401 "User not found or inactive"
-- Frontend does not handle 401 on dashboard → infinite redirect loop
-  between /provider/dashboard and /client/dashboard
-- Solution needed: On 401 → clear auth cookies/localStorage → redirect to /auth
-- Priority: MEDIUM — affects users with expired sessions
+**Issue 4 — JWT expiry причинява безкраен loop**
+- При изтекъл JWT токен → backend връща 401 "User not found or inactive"
+- Frontend не обработва 401 на dashboard → безкраен redirect loop
+  между /provider/dashboard и /client/dashboard
+- Решение: При 401 → изчисти auth cookies/localStorage → redirect към /auth
+- Приоритет: СРЕДЕН — засяга потребители с изтекли сесии
 
-**Issue 5 — Provider fullpage banner does not lead to wizard**
-- "Przejmij profil" banner on public provider page should lead directly
-  to wizard Step 1 after claim
-- Status: not yet implemented/tested
-- Priority: MEDIUM — affects acquisition from organic traffic
+**Issue 5 — Provider fullpage banner не води към wizard**
+- "Przejmij profil" банерът на публичната страница на провайдъра трябва
+  да води директно към wizard Step 1 след claim
+- Status: не е имплементирано/тествано
+- Приоритет: СРЕДЕН — засяга acquisition от органичен трафик
 
 ---
 

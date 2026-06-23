@@ -230,3 +230,56 @@ def get_or_create_oauth_user(email: str, name: str, oauth_provider: str, oauth_i
     db.commit()
     token = create_jwt(user.id, user.email, user.role)
     return user, token
+
+
+def get_or_create_claim_user(
+    email: str,
+    lang: str,
+    db: Session,
+) -> tuple["User", str]:
+    """
+    Find or create a user for the magic-link claim flow.
+    The claim token from the outreach email is proof of identity —
+    no password or OAuth required.
+
+    - If user exists with role='provider': issue new JWT, return as-is.
+    - If user exists with role='client': update role to 'provider',
+      issue new JWT, return updated user.
+    - If user does not exist: create new User with role='provider',
+      password_hash=None (passwordless), issue JWT, return new user.
+
+    Returns: (user, jwt_token)
+    """
+    from apps.api.models import User  # local import to avoid circular
+
+    email = email.strip().lower()
+
+    # Find existing user by email
+    user = db.query(User).filter(User.email == email).first()
+
+    if user:
+        # Ensure user has provider role for claim flow
+        if user.role != "provider":
+            user.role = "provider"
+            db.commit()
+            db.refresh(user)
+    else:
+        # Create new passwordless provider account
+        user = User(
+            email=email,
+            role="provider",
+            password_hash=None,
+            is_active=True,
+            locale=lang,
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    jwt_token = create_jwt(
+        user_id=user.id,
+        email=user.email,
+        role=user.role,
+    )
+
+    return user, jwt_token

@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers';
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
 import { generateHreflangAlternates } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
@@ -7,8 +6,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import StickyClaimBar from './StickyClaimBar';
 import ClaimMobileCTA from './ClaimMobileCTA';
-import AutoClaimTrigger from './AutoClaimTrigger';
-import ClaimCTAWrapper from './ClaimCTAWrapper';
+import ClaimProcessor from './ClaimProcessor';
 import { claimProfile } from './actions';
 
 interface PageProps {
@@ -79,98 +77,16 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const errorParam = resolvedSearchParams?.error ?? null;
 
-  // Check auth status via cookie
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get('nevumo_auth_token')?.value || '';
-  const isAuthenticated = !!authToken;
+  // Translation keys for ClaimProcessor
+  const processingText = t(claimT, 'processing', 'Activating your profile...');
+  const errorText = t(claimT, 'error_not_found', 'This invitation is no longer valid.');
+  const errorUserHasProviderText = t(claimT, 'error_user_has_provider', 'You already have an active profile on Nevumo.');
+  const errorNetworkText = t(claimT, 'error_network', 'Something went wrong. Check your connection and try again.');
 
   const result = await fetchProviderByToken(token, normalizedLang);
 
-  // STATE 0: ownership_blocked (422 from API - provider exists but no scraped_email)
-  if (errorParam === 'ownership_blocked') {
-    return (
-      <div className="min-h-screen bg-white">
-        <main className="max-w-md mx-auto px-6 py-20 text-center">
-          <div className="text-5xl mb-6">⚠️</div>
-          <p className="text-lg font-semibold text-gray-900 mb-3">
-            {t(claimT, 'error_ownership_blocked_title', 'Cannot verify ownership')}
-          </p>
-          <p className="text-sm text-gray-600 mb-6">
-            {t(claimT, 'error_ownership_blocked_desc', 'We don\'t have a contact email for this profile. Please contact us at support@nevumo.com and we\'ll help you claim it.')}
-          </p>
-        </main>
-      </div>
-    );
-  }
-
   // STATE 1: not_found (404 from API)
   if (!result) {
-    // If page was redirected back with a specific error code, show that error UI
-    if (errorParam && errorParam !== 'already_claimed') {
-      return (
-        <div className="min-h-screen bg-white">
-          <main className="max-w-md mx-auto px-6 py-20 text-center">
-            <div className="text-5xl mb-6">⚠️</div>
-
-            {errorParam === 'user_has_provider' && (
-              <>
-                <p className="text-lg font-semibold text-gray-900 mb-3">
-                  {t(claimT, 'error_user_has_provider', 'You already have an active profile on Nevumo.')}
-                </p>
-                <Link
-                  href={`/${normalizedLang}/provider/dashboard`}
-                  className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
-                >
-                  {t(claimT, 'error_user_has_provider_cta', 'Go to my dashboard')}
-                </Link>
-              </>
-            )}
-
-            {errorParam === 'auth_expired' && (
-              <>
-                <p className="text-lg font-semibold text-gray-900 mb-3">
-                  {t(claimT, 'error_auth_expired', 'Your session has expired. Log in again.')}
-                </p>
-                <Link
-                  href={`/${normalizedLang}/auth?redirect=/${normalizedLang}/claim/${token}`}
-                  className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
-                >
-                  {t(claimT, 'error_auth_expired_cta', 'Log in again')}
-                </Link>
-              </>
-            )}
-
-            {errorParam === 'network' && (
-              <>
-                <p className="text-lg font-semibold text-gray-900 mb-3">
-                  {t(claimT, 'error_network', 'Something went wrong. Check your connection and try again.')}
-                </p>
-                <Link
-                  href={`/${normalizedLang}/claim/${token}`}
-                  className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
-                >
-                  {t(claimT, 'error_network_cta', 'Try again')}
-                </Link>
-              </>
-            )}
-
-            {errorParam === 'not_found' && (
-              <>
-                <p className="text-lg font-semibold text-gray-900 mb-3">
-                  {t(claimT, 'error_not_found', 'This invitation is no longer valid.')}
-                </p>
-                <p className="text-sm text-gray-600">
-                  support@nevumo.com
-                </p>
-              </>
-            )}
-
-          </main>
-        </div>
-      );
-    }
-
-    // No error param — genuine not found case
     return (
       <div className="min-h-screen bg-white">
         <main className="max-w-md mx-auto px-6 py-20 text-center">
@@ -203,31 +119,8 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
     );
   }
 
-  // STATE 2: already_claimed
-  if (result.is_claimed) {
-    return (
-      <div className="min-h-screen bg-white">
-        <main className="max-w-md mx-auto px-6 py-20 text-center">
-          <div className="text-5xl mb-6">✓</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            {t(claimT, 'claimed_title', 'Profile already claimed')}
-          </h2>
-          <p className="text-gray-600 mb-6">
-            {t(claimT, 'claimed_desc', 'This profile has already been claimed by another user.')}
-          </p>
-          <Link
-            href={`/${normalizedLang}/auth`}
-            className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
-          >
-            {t(claimT, 'claimed_cta', 'Log in to your account')}
-          </Link>
-          <div className="mt-6 bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
-            {t(claimT, 'claimed_support', 'If you believe this is an error, please contact support.')}
-          </div>
-        </main>
-      </div>
-    );
-  }
+  // Returning provider — ClaimProcessor will re-authenticate them
+  // (fall through to ClaimProcessor below)
 
   // STATE 3: valid unclaimed (main state)
   const { business_name, category_slug, city_name, claimed_count } = result;
@@ -333,29 +226,15 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
           </div>
         )}
 
-        <ClaimMobileCTA
-          href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
-          label={t(claimT, 'cta_register', 'Register and claim this profile for free')}
-        />
-
-        {/* AutoClaimTrigger - handles auto-claim after auth redirect */}
-        <AutoClaimTrigger
+        <ClaimProcessor
           token={token}
-          isAuthenticated={isAuthenticated}
-          isClaimed={result.is_claimed}
           lang={normalizedLang}
+          processingText={processingText}
+          errorText={errorText}
+          errorAlreadyClaimedText={errorText}
+          errorUserHasProviderText={errorUserHasProviderText}
+          errorNetworkText={errorNetworkText}
         />
-
-        {/* Primary CTA (top) - hidden during auto-claim */}
-        <div id="cta-top" className="hidden sm:block mb-8">
-          <ClaimCTAWrapper
-            isAuthenticated={isAuthenticated}
-            token={token}
-            normalizedLang={normalizedLang}
-            claimT={claimT}
-            authToken={authToken}
-          />
-        </div>
 
         {/* Leads teaser */}
         <div className="bg-gray-50 rounded-2xl p-6 mb-8 relative overflow-hidden">
@@ -446,46 +325,11 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
           </div>
         </div>
 
-        {/* Primary CTA */}
-        <div className="hidden sm:block">
-          <ClaimCTAWrapper
-            isAuthenticated={isAuthenticated}
-            token={token}
-            normalizedLang={normalizedLang}
-            claimT={claimT}
-            authToken={authToken}
-          />
-        </div>
-
         {/* Time signal */}
         <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
           <span>⏱️</span>
           <span>{t(claimT, 'time_signal', 'Takes less than 2 minutes')}</span>
         </div>
-
-        <ClaimMobileCTA
-          href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
-          label={t(claimT, 'cta_register', 'Register and claim this profile for free')}
-        />
-
-        {/* Divider and ghost link (if not authenticated) */}
-        {!isAuthenticated && (
-          <>
-            <div className="flex items-center gap-4 my-6">
-              <div className="flex-1 h-px bg-gray-200"></div>
-              <span className="text-gray-400 text-sm">или</span>
-              <div className="flex-1 h-px bg-gray-200"></div>
-            </div>
-            <div className="text-center">
-              <Link
-                href={`/${normalizedLang}/auth?redirect=/${normalizedLang}/claim/${token}`}
-                className="text-gray-600 hover:text-gray-900 text-sm"
-              >
-                {t(claimT, 'login_hint', 'Already have an account? Log in')}
-              </Link>
-            </div>
-          </>
-        )}
 
         {/* Social proof */}
         <div className="mt-8 flex items-center justify-center gap-2">

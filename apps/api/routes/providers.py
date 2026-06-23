@@ -12,7 +12,7 @@ from sqlalchemy.exc import IntegrityError
 import redis as redis_lib
 
 from apps.api.config import settings
-from apps.api.dependencies import get_db, get_redis, get_current_user
+from apps.api.dependencies import get_db, get_redis, get_current_user, get_optional_current_user
 from apps.api.exceptions import CATEGORY_NOT_FOUND, CITY_NOT_FOUND, PROVIDER_NOT_FOUND
 from apps.api.models import Provider, Service, Category, Location, ProviderCity, CategoryTranslation, ProviderTranslation, LocationTranslation, Lead, Review, User, CitySearchVolume, PendingClaimVerification
 from apps.api.schemas import (
@@ -41,6 +41,7 @@ from apps.api.services.provider_service import (
 )
 from apps.api.services.review_service import get_public_latest_review_preview, get_provider_reviews
 from apps.api.services.email_service import email_service
+from apps.api.services.auth_service import get_or_create_claim_user, create_jwt
 
 
 def get_widget_translations(lang: str, db: Session) -> dict:
@@ -413,20 +414,98 @@ async def get_claim_preview(
 @router.post("/providers/claim/{token}")
 async def claim_provider(
     token: str,
-    current_user: User = Depends(get_current_user),
+    lang: str = Query(default="pl"),
+    optional_user: Optional[User] = Depends(get_optional_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
-    """Claim an unclaimed provider profile (JWT required)."""
+    """
+    Claim a provider profile via magic-link flow.
+    No JWT required — the claim token IS the proof of identity.
+    Auto-authenticates the provider and returns a JWT.
+
+    Also handles returning providers (already claimed):
+    re-authenticates the owner and returns a fresh JWT.
+    """
     logger = logging.getLogger(__name__)
-    
+
+    # Find provider by claim token (regardless of is_claimed status)
+    provider = db.query(Provider).filter(
+        Provider.claim_token == token
+    ).first()
+
+    if not provider:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "NOT_FOUND", "message": "Provider not found"}
+        )
+
+    # ── RETURNING PROVIDER: profile already claimed ──────────────────────
+    # Re-authenticate the owner and return a fresh JWT.
+    # No emails — they were already sent during the original claim.
+    if provider.is_claimed:
+        if not provider.user_id:
+            raise HTTPException(
+                status_code=404,
+                detail={"code": "NOT_FOUND", "message": "Provider owner not found"}
+            )
+
+        owner = db.query(User).filter(User.id == provider.user_id).first()
+        if not owner:
+            raise HTTPException(
+                status_code=404,
+                detail={"code": "NOT_FOUND", "message": "Provider owner not found"}
+            )
+
+        jwt_token = create_jwt(
+            user_id=owner.id,
+            email=owner.email,
+            role=owner.role,
+        )
+
+        return {
+            "success": True,
+            "jwt_token": jwt_token,
+            "user": {
+                "id": str(owner.id),
+                "email": owner.email,
+                "role": owner.role,
+            },
+            "provider_slug": provider.slug,
+            "is_returning": True,
+        }
+
+    # ── NEW CLAIM: profile not yet claimed ───────────────────────────────
+
+    # Determine the active user:
+    # Use JWT user if present, otherwise auto-create from scraped_email
+    if optional_user:
+        active_user = optional_user
+        jwt_token = create_jwt(
+            user_id=active_user.id,
+            email=active_user.email,
+            role=active_user.role,
+        )
+    else:
+        # scraped_email is guaranteed for email campaign providers
+        if not provider.scraped_email:
+            raise HTTPException(
+                status_code=422,
+                detail={"code": "NO_EMAIL", "message": "Cannot auto-authenticate: provider has no scraped email"}
+            )
+        active_user, jwt_token = get_or_create_claim_user(
+            email=provider.scraped_email,
+            lang=lang,
+            db=db,
+        )
+
     # Check if user already has a provider profile
     existing_provider = db.query(Provider).filter(
-        Provider.user_id == current_user.id
+        Provider.user_id == active_user.id
     ).first()
     if existing_provider:
         is_draft = (
             existing_provider.slug.startswith("draft") and
-            existing_provider.business_name == current_user.email
+            existing_provider.business_name == active_user.email
         )
         if is_draft:
             db.delete(existing_provider)
@@ -436,28 +515,10 @@ async def claim_provider(
                 status_code=409,
                 detail={"code": "USER_ALREADY_HAS_PROVIDER", "message": "Your account already has a provider profile"}
             )
-    
-    # Find the provider by token
-    provider = db.query(Provider).filter(
-        Provider.claim_token == token
-    ).first()
-    
-    if not provider:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "NOT_FOUND", "message": "Provider not found"}
-        )
-    
-    # Check if already claimed
-    if provider.is_claimed:
-        raise HTTPException(
-            status_code=409,
-            detail={"code": "ALREADY_CLAIMED", "message": "This profile has already been claimed"}
-        )
 
     # Claim the profile
     provider.is_claimed = True
-    provider.user_id = current_user.id
+    provider.user_id = active_user.id
     try:
         db.commit()
     except IntegrityError:
@@ -467,7 +528,7 @@ async def claim_provider(
             detail={"code": "USER_ALREADY_HAS_PROVIDER", "message": "Your account already has a provider profile"}
         )
 
-    # Send GDPR Art. 14 notification
+    # Send GDPR Art. 14 notification (non-blocking)
     try:
         CATEGORY_LABEL_PL = {
             "cleaning": "sprzątanie",
@@ -483,7 +544,7 @@ async def claim_provider(
         category_label = CATEGORY_LABEL_PL.get(category_slug or "", "usługi")
 
         email_service.send_article14_notification(
-            to_email=current_user.email,
+            to_email=active_user.email,
             business_name=provider.business_name or "",
             dashboard_link="https://nevumo.com/pl/dashboard",
             nip=None,
@@ -495,18 +556,27 @@ async def claim_provider(
     except Exception as e:
         print(f"[EMAIL_WARNING] {type(e).__name__}: {e}", flush=True)
 
-    # Send welcome email
+    # Send welcome email (non-blocking)
     try:
         email_service.send_claim_welcome_email(
-            provider_email=current_user.email,
+            provider_email=active_user.email,
             provider_name=provider.business_name
         )
     except Exception as e:
-        logger.warning(f"[EMAIL_WARNING] Claim welcome email failed for provider {provider.id}: {e}")
-    
+        logger.warning(
+            f"[EMAIL_WARNING] Claim welcome email failed for provider {provider.id}: {e}"
+        )
+
     return {
         "success": True,
-        "provider_id": str(provider.id)
+        "jwt_token": jwt_token,
+        "user": {
+            "id": str(active_user.id),
+            "email": active_user.email,
+            "role": active_user.role,
+        },
+        "provider_slug": provider.slug,
+        "is_returning": False,
     }
 
 

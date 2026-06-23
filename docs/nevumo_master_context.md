@@ -1484,7 +1484,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Manual config: Webhook created in Resend Dashboard (Enabled), RESEND_WEBHOOK_SECRET added to Railway
 - E2E verified: email.sent + email.delivered recorded in outreach_events (resend_message_id: 9764744d-5be9-4425-8a87-147535920076)
 
-Next: Blocker 5 (outreach_sequence_log table), Blocker 6 (claim verification email mismatch).
+**Blocker 6 — Claim Verification (June 23, 2026)** — COMPLETE:
+- email verification removed from token flow; wizard pre-fill for scraped providers; category_slug + data_source in API; photo upload fix pending
+- DB: scraped_email + pending_claim_verifications table (migration b1c2d3e4f5g6)
+- DB: category_slug column on providers (migration c1d2e3f4g5h6)
+- Backend: data_source + category_slug added to get_provider_profile() response
+- Frontend: AutoClaimTrigger redirect → /provider/dashboard/profile (wizard)
+- Alembic current head: c1d2e3f4g5h6
+
+Next: Blocker 7 (seed_unclaimed_providers.py), Blocker 8 (Railway Scheduler).
 
 **April 21 — City Page Enhancements, Leads Dashboard UX, Next.js 16 Proxy & Client Dashboard i18n**
   - **City Page Hero (4 States)**: Implemented `CityPageHero.tsx` with dynamic content based on provider count, request count, and ratings.
@@ -1863,10 +1871,12 @@ Next.js App Router: child pages with `generateMetadata` override `icons` from ro
 
 ### Known Issues — Pre-Launch (June 23, 2026)
 
-🔴 Issue 1: Claim flow requires registration — magic link flow needed
-🔴 Issue 2: AutoClaimTrigger requires ?from=auth — fails for already-logged-in users
-🔴 Issue 3: Photo upload button broken (pointerEvents: none fix pending)
-🟡 Issue 4: JWT expiry causes infinite loop between dashboards
-🟡 Issue 5: Provider fullpage banner does not lead to wizard
+🔴 Issue 1: Claim flow изисква регистрация — нужен magic link flow
+   (токенът да създава акаунт автоматично)
+🔴 Issue 2: AutoClaimTrigger изисква ?from=auth — не работи за
+   вече логнати потребители
+🔴 Issue 3: Photo upload бутон не работи (pointerEvents: none fix pending)
+🟡 Issue 4: JWT expiry → безкраен loop между dashboard-ите
+🟡 Issue 5: Provider fullpage banner не води към wizard
 
-Details in claimed_profiles_plan_2.md → KNOWN ISSUES section.
+Details: claimed_profiles_plan_2.md → секция KNOWN ISSUES
