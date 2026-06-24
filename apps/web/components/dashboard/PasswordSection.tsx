@@ -31,6 +31,7 @@ function EyeOffIcon() {
 export default function PasswordSection({ hasPassword, lang, onSuccess }: PasswordSectionProps) {
   const { t } = useTranslation('account_settings', lang);
   
+  const [localHasPassword, setLocalHasPassword] = useState<boolean>(hasPassword);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -74,7 +75,7 @@ export default function PasswordSection({ hasPassword, lang, onSuccess }: Passwo
         new_password: newPassword,
       };
 
-      if (hasPassword) {
+      if (localHasPassword) {
         body.current_password = currentPassword;
       }
 
@@ -101,7 +102,15 @@ export default function PasswordSection({ hasPassword, lang, onSuccess }: Passwo
     } catch (err: unknown) {
       if (err instanceof Error && 'code' in err) {
         const code = (err as { code: string }).code;
-        if (code === 'INVALID_CURRENT_PASSWORD' || code === 'CURRENT_PASSWORD_REQUIRED') {
+        if (code === 'CURRENT_PASSWORD_REQUIRED') {
+          setLocalHasPassword(true);
+          setCurrentPassword('');
+          setNewPassword('');
+          setConfirmPassword('');
+          setError(null);
+          return;
+        }
+        if (code === 'INVALID_CURRENT_PASSWORD') {
           setError(t('error_current_password_invalid', 'Current password is incorrect.'));
         } else {
           setError(err.message);
@@ -120,7 +129,7 @@ export default function PasswordSection({ hasPassword, lang, onSuccess }: Passwo
     <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
       <h2 className="text-sm font-semibold text-gray-800">{t('section_security', 'Security')}</h2>
       <p className="text-sm text-gray-500">
-        {hasPassword
+        {localHasPassword
           ? t('security_description_has_password', 'Change your account password.')
           : t('security_description_no_password', 'You signed in without a password. Set one now so you can log in anytime.')
         }
@@ -139,7 +148,7 @@ export default function PasswordSection({ hasPassword, lang, onSuccess }: Passwo
       )}
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        {hasPassword && (
+        {localHasPassword && (
           <div className="space-y-1">
             <label className="block text-xs font-medium text-gray-500" htmlFor="current-password">
               {t('label_current_password', 'Current password')}
@@ -228,7 +237,7 @@ export default function PasswordSection({ hasPassword, lang, onSuccess }: Passwo
           disabled={loading}
           className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition-colors"
         >
-          {loading ? t('btn_save_password', 'Save') : (hasPassword ? t('btn_change_password', 'Change password') : t('btn_set_password', 'Set password'))}
+          {loading ? t('btn_save_password', 'Save') : (localHasPassword ? t('btn_change_password', 'Change password') : t('btn_set_password', 'Set password'))}
         </button>
       </form>
     </div>
