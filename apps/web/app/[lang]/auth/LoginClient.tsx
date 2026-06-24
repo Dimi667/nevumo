@@ -126,8 +126,6 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy'>('terms');
-  const [showMagicLink, setShowMagicLink] = useState(false);
-  const [magicEmail, setMagicEmail] = useState("");
   const [magicStatus, setMagicStatus] = useState<"idle"|"loading"|"success"|"error"|"rate_limit">("idle");
 
   const { dict: termsDict } = useTranslation('terms', lang);
@@ -462,9 +460,9 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
   }
 
   const handleMagicLink = async () => {
-    if (!magicEmail.trim()) return;
+    if (!state.email.trim()) return;
     setMagicStatus("loading");
-    const result = await requestMagicLink(magicEmail.trim(), lang);
+    const result = await requestMagicLink(state.email.trim(), lang);
     if (result.success) {
       setMagicStatus("success");
     } else if (result.error === "RATE_LIMIT") {
@@ -684,84 +682,45 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
                 </button>
               </div>
 
-              {!showMagicLink ? (
-                <button
-                  type="button"
-                  onClick={() => setShowMagicLink(true)}
-                  className="mt-4 text-sm text-orange-500 hover:underline w-full text-center"
-                >
-                  {t(authDict, 'magic_link_no_password', "Don't have a password?")}
-                </button>
-              ) : (
-                <div className="mt-4 border-t pt-4">
-                  {magicStatus === "success" ? (
-                    <div className="text-center space-y-2">
-                      <p className="text-sm font-medium text-gray-800">
-                        {t(authDict, 'magic_link_success', 'Login link sent to {email}').replace("{email}", magicEmail)}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => { setShowMagicLink(false); setMagicStatus("idle"); setMagicEmail(""); }}
-                        className="text-sm text-orange-500 hover:underline"
-                      >
-                        {t(authDict, 'magic_link_back_to_login', 'Back to login')}
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      <p className="text-sm font-semibold text-gray-800">
-                        {t(authDict, 'magic_link_request_title', 'Send me a login link')}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {t(authDict, 'magic_link_request_description', 'We\'ll send you a link to sign in to your account')}
-                      </p>
-                      <input
-                        type="email"
-                        value={magicEmail}
-                        onChange={(e) => setMagicEmail(e.target.value)}
-                        placeholder="email@firma.pl"
-                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
-                      />
-                      {magicStatus === "rate_limit" && (
-                        <p className="text-xs text-red-500">{t(authDict, 'magic_link_rate_limit', 'Please wait before requesting another link')}</p>
-                      )}
-                      {magicStatus === "error" && (
-                        <p className="text-xs text-red-500">{t(authDict, 'magic_link_error', 'Something went wrong. Please try again.')}</p>
-                      )}
-                      <div className="flex gap-2">
-                        <button
-                          type="button"
-                          onClick={() => { setShowMagicLink(false); setMagicStatus("idle"); setMagicEmail(""); }}
-                          className="text-sm text-gray-400 hover:underline"
-                        >
-                          {t(authDict, 'magic_link_back_to_login', 'Back to login')}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleMagicLink}
-                          disabled={magicStatus === "loading" || !magicEmail.trim()}
-                          className="ml-auto bg-orange-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-orange-600 disabled:opacity-50"
-                        >
-                          {magicStatus === "loading"
-                            ? t(authDict, 'magic_link_send_button', 'Send link') + "..."
-                            : t(authDict, 'magic_link_send_button', 'Send link')}
-                        </button>
-                      </div>
-                    </div>
-                  )}
+              <button
+                type="button"
+                onClick={handleMagicLink}
+                disabled={magicStatus === "loading"}
+                className="mt-4 text-sm text-orange-500 hover:underline w-full text-center disabled:opacity-50"
+              >
+                {magicStatus === "loading"
+                  ? t(authDict, 'magic_link_send_button', 'Send link') + "..."
+                  : t(authDict, 'magic_link_no_password', "Don't have a password?")}
+              </button>
+
+              {magicStatus === "success" && (
+                <div className="mt-3 text-center">
+                  <p className="text-sm font-medium text-gray-800">
+                    {t(authDict, 'magic_link_success', 'Login link sent to {email}').replace("{email}", state.email)}
+                  </p>
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={state.password.length === 0 || state.loading}
-                className={`w-full py-2.5 rounded-lg text-base font-semibold text-white transition-colors mt-4
-                  ${state.password.length > 0 && !state.loading
-                    ? 'bg-orange-500 hover:bg-orange-600 cursor-pointer'
-                    : 'bg-gray-400 opacity-50 cursor-not-allowed'}`}
-              >
-                {state.loading ? t(authDict, 'logging_in_btn', 'Signing in...') : t(authDict, 'login_btn', 'Sign in')}
-              </button>
+              {magicStatus === "rate_limit" && (
+                <p className="mt-2 text-xs text-red-500 text-center">{t(authDict, 'magic_link_rate_limit', 'Please wait before requesting another link')}</p>
+              )}
+
+              {magicStatus === "error" && (
+                <p className="mt-2 text-xs text-red-500 text-center">{t(authDict, 'magic_link_error', 'Something went wrong. Please try again.')}</p>
+              )}
+
+              {magicStatus !== "success" && (
+                <button
+                  type="submit"
+                  disabled={state.password.length === 0 || state.loading}
+                  className={`w-full py-2.5 rounded-lg text-base font-semibold text-white transition-colors mt-4
+                    ${state.password.length > 0 && !state.loading
+                      ? 'bg-orange-500 hover:bg-orange-600 cursor-pointer'
+                      : 'bg-gray-400 opacity-50 cursor-not-allowed'}`}
+                >
+                  {state.loading ? t(authDict, 'logging_in_btn', 'Signing in...') : t(authDict, 'login_btn', 'Sign in')}
+                </button>
+              )}
             </form>
 
             {genericError}
