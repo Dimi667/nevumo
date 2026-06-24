@@ -434,7 +434,7 @@ This withdrawal form was submitted via the Nevumo online form.
             template_path = Path(__file__).parent.parent / "scripts" / "templates" / "claim_verification_pl.html"
             html_body = Template(template_path.read_text(encoding="utf-8")).render(
                 business_name=business_name,
-                code=f"{code[:3]} {code[3:]}",  # format as "483 921"
+                code=code,
                 expires_hours=24,
             )
             self._send_email(
