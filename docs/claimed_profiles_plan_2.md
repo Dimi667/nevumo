@@ -524,6 +524,27 @@ pre-fill-нато и какво липсва. Не презаписвай раб
 
 ---
 
+### Задача 6А — Profile Strength Email 🟡
+(Не е блокер. Изпълнява се след Блокер 7А. Критична за макс ефект от кампанията.)
+
+**Кога се изпраща:**
+При първото завършване на onboarding (is_complete: False → True).
+Тригер: POST /api/v1/provider/services (добавяне на първа услуга) →
+backend проверява completeness → ако is_complete стане True → изпраща имейла.
+
+**Какво проверява и съдържа имейлът:**
+- Липсва снимка → "Добави профилна снимка — профилите със снимка получават значително повече запитвания. Качи снимка тук → [линк]"
+- Галерия празна → "Имаш място за 8 снимки — покажи работата си. Клиентите искат да видят резултати. Добави снимки → [линк]"
+- Описание < 100 символа → "Подобри описанието си — добри описания обясняват специализацията, опита и района. Пример: 'Хидравличен специалист с 10г. опит в Варшава. Авария 24/7. Безплатна оценка.'"
+- Телефон липсва → "Добави телефон — клиентите предпочитат да се свържат директно. Добави → [линк]"
+
+**Език:** lang от provider.locale
+**Template:** apps/api/scripts/templates/profile_strength_pl.html (+ 34 езика)
+**Тригер в код:** apps/api/routes/provider.py → POST /services → след db.commit()
+**Модел:** Claude (текст на имейла на 34 езика) → Kimi-2.6 (template) → SWE-1.6 (backend тригер)
+
+---
+
 ### Блокер 8 — Task 2A: seed_unclaimed_providers.py 🔴
 
 **Проблем:** Реалните Warsaw провайдъри все още не са в Neon DB.
@@ -1256,7 +1277,41 @@ CATEGORY_LABEL_PL = {
               ClaimProcessor.tsx replaces AutoClaimTrigger
               sessionStorage-based wizard welcome heading
               3 new translation keys (34 languages each)
-[ ] Блокер 7А: Banner Flow Redesign (без auth)   → SWE-1.6 + Kimi-2.6
+[✅] Блокер 7А: Banner Flow Redesign (без auth)  → ЗАВЪРШЕН (24 юни 2026)
+
+### Блокер 7А — Banner Flow Redesign ✅ ЗАВЪРШЕН (24 юни 2026)
+
+**Промени в backend (apps/api/routes/providers.py):**
+- claim_provider(): при source=banner не изисква JWT — get_optional_current_user се игнорира
+- claim_provider(): при source=banner проверява само scraped_email + is_claimed
+- verify_claim_code(): сменен от get_current_user на get_optional_current_user
+- verify_claim_code(): вика get_or_create_claim_user(scraped_email) → връща JWT + user + redirect
+- verify_claim_code(): PendingClaimVerification query филтрира само по claim_token + code + user_id==None
+- verify_claim_code(): catch IntegrityError при db.commit() → 409 USER_ALREADY_HAS_PROVIDER
+- verify_claim_code(): Art.14 email dashboard_link използва lang параметъра
+- verify_claim_code(): welcome email ПРЕМАХНАТ — ще се изпраща от Task 6A след попълнен профил
+
+**Промени в frontend:**
+- verify/page.tsx: премахнат auth guard (проверката за nevumo_auth_token cookie)
+- VerifyCodeForm.tsx: премахнат Authorization header; след успех → saveAuth(token) + window.location.replace(redirect)
+- ClaimProcessor.tsx: sessionStorage guard (claim_{token}): 'processing' блокира дублиране, removeItem при success/error
+- ClaimProcessor.tsx: 401 handler → setErrorCode('NETWORK') вместо redirect към /auth
+
+**Промени в apps/web/public/sw.js:**
+- Добавен ред: if (event.request.url.includes('/_next/')) return;
+- Причина: SW прихващаше Next.js chunk-ове при router.push() → Application error
+
+**E2E тест резултати (24 юни 2026):**
+- Banner click → POST без JWT → 202 ✅
+- Имейл с код пристига ✅ (само 1 имейл — sessionStorage guard работи)
+- Код → verify → get_or_create_claim_user → JWT ✅
+- Redirect → /provider/dashboard/profile (wizard, Step 1) ✅
+- Pre-fill: business_name + description + category_slug ✅
+- Art.14 RODO имейл пристига с правилен lang и dashboard_link ✅
+- Welcome имейл НЕ се изпраща (премахнат) ✅
+
+---
+
 [ ] Блокер 7Б: Magic Link Login                  → SWE-1.6 + Kimi-2.6
 [ ] Блокер 7В: Add/Change Password Settings      → SWE-1.6 + Kimi-2.6
 [ ] Блокер 7Г: "Нов login link" на Auth page     → Kimi-2.6 (изисква 7Б)
@@ -1273,6 +1328,7 @@ CATEGORY_LABEL_PL = {
 [ ] Activation emails #1-4                       → Claude пише текст
 [ ] SMS templates                                → Claude пише текст
 [ ] Pilot wave CSV (20-30 адреса)               → Dimitar избира ръчно
+[ ] Задача 6А: Profile Strength Email              → Claude (текст) + SWE-1.6 + Kimi-2.6
 
 QA GATE (след всички блокери):
 [ ] QA Checklist 5.1 A-H (всички ✅)           → SWE-1.6 + mcp-playwright + ръчно

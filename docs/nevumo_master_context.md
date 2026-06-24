@@ -1497,6 +1497,24 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Frontend: AutoClaimTrigger redirect → /provider/dashboard/profile (wizard)
 - Alembic current head: c1d2e3f4g5h6 (непроменен)
 
+**Blocker 7A — Banner Flow Redesign (June 24, 2026)** — COMPLETE:
+- claim_provider(): no JWT required for source=banner
+- verify_claim_code(): get_or_create_claim_user(scraped_email) → returns JWT + redirect
+- PendingClaimVerification: filtered by user_id==None (banner flow)
+- IntegrityError catch → 409 USER_ALREADY_HAS_PROVIDER
+- verify/page.tsx: auth guard removed
+- VerifyCodeForm.tsx: saveAuth(token) after successful verify
+- ClaimProcessor.tsx: sessionStorage guard replaces useRef
+- sw.js: /_next/ exclusion prevents Application error on router.push()
+- Art.14 email: dashboard_link uses lang parameter correctly
+- Welcome email removed from verify flow → moved to Task 6A
+- E2E verified: full banner flow working end-to-end
+
+**Task 6A — Profile Strength Email** — PLANNED:
+- Trigger: first service added (is_complete: False → True)
+- Content: personalized advice based on missing profile fields
+- Languages: 34 (provider.locale)
+
 **Issue 5 Partial Implementation (June 24, 2026)** — PARTIAL:
 - ClaimProfileBanner.tsx: scraped_email показан под business name (пълен, не masked)
 - ClaimProfileBanner.tsx: ?source=banner добавен към claim href
