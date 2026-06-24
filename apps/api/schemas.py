@@ -360,6 +360,16 @@ class MagicLinkRequest(BaseModel):
     token: str
 
 
+class RequestMagicLinkBody(BaseModel):
+    email: str
+    lang: str = "en"
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, v: str) -> str:
+        return v.strip().lower()
+
+
 class SwitchRoleRequest(BaseModel):
     role: str
     business_name: Optional[str] = None

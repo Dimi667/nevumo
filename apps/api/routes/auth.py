@@ -1,4 +1,6 @@
+import hashlib
 import json
+import secrets
 import urllib.parse
 from datetime import datetime, timedelta
 from secrets import token_hex
@@ -22,6 +24,7 @@ from apps.api.schemas import (
     LoginRequest,
     MagicLinkRequest,
     RegisterRequest,
+    RequestMagicLinkBody,
     ResetPasswordRequest,
     ResetPasswordResponse,
     SlugCheckResponse,
@@ -424,6 +427,55 @@ async def magic_link_auth(
         "token": token,
         "user": {"id": str(user.id), "email": user.email, "role": user.role},
     })
+
+
+@router.post("/request-magic-link", status_code=200)
+async def request_magic_link(
+    body: RequestMagicLinkBody,
+    db: Session = Depends(get_db),
+) -> dict:
+    email = body.email.strip().lower()
+
+    # Rate limit check: allow only 1 request per minute per email
+    cutoff = datetime.utcnow() - timedelta(seconds=60)
+    recent = db.query(MagicLinkToken).filter(
+        MagicLinkToken.email == email,
+        MagicLinkToken.created_at >= cutoff,
+    ).first()
+    if recent:
+        return JSONResponse(status_code=429, content={
+            "success": False,
+            "error": {"code": "RATE_LIMIT_EXCEEDED", "message": "Please wait before requesting another link"}
+        })
+
+    # Delete existing unused tokens for this email (cleanup)
+    db.query(MagicLinkToken).filter(
+        MagicLinkToken.email == email,
+        MagicLinkToken.used_at.is_(None),
+    ).delete()
+
+    # Generate token
+    raw_token = secrets.token_urlsafe(32)
+    token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
+
+    # Create DB record
+    magic_token = MagicLinkToken(
+        email=email,
+        token_hash=token_hash,
+        expires_at=datetime.utcnow() + timedelta(hours=24),
+        lead_id=None,
+    )
+    db.add(magic_token)
+    db.commit()
+
+    # Build magic link URL
+    magic_link_url = f"{settings.APP_URL}/{body.lang}/auth/magic?token={raw_token}"
+
+    # Send email
+    email_service.send_login_magic_link_email(email, magic_link_url, body.lang)
+
+    # Always return 200 (never reveal if email exists)
+    return {"success": True, "message": "If this email is registered, you will receive a login link shortly"}
 
 
 @router.delete("/account")

@@ -6,7 +6,7 @@ import { useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
 import { trackPageEvent } from "@/lib/tracking";
 import { getStoredIntent, clearStoredIntent } from "@/lib/intent";
-import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword } from "@/lib/auth-api";
+import { checkEmail, loginWithEmail, registerWithEmail, forgotPassword, requestMagicLink } from "@/lib/auth-api";
 import { saveAuth, isAuthenticated, getAuthUser } from "@/lib/auth-store";
 import { setCtx } from "@/lib/ctx";
 import { ApiError, API_BASE, getCityBySlug } from "@/lib/api";
@@ -126,6 +126,9 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalModalType, setLegalModalType] = useState<'terms' | 'terms-provider' | 'privacy'>('terms');
+  const [showMagicLink, setShowMagicLink] = useState(false);
+  const [magicEmail, setMagicEmail] = useState("");
+  const [magicStatus, setMagicStatus] = useState<"idle"|"loading"|"success"|"error"|"rate_limit">("idle");
 
   const { dict: termsDict } = useTranslation('terms', lang);
   const { dict: termsProviderDict } = useTranslation('provider_terms', lang);
@@ -458,6 +461,19 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
     }
   }
 
+  const handleMagicLink = async () => {
+    if (!magicEmail.trim()) return;
+    setMagicStatus("loading");
+    const result = await requestMagicLink(magicEmail.trim(), lang);
+    if (result.success) {
+      setMagicStatus("success");
+    } else if (result.error === "RATE_LIMIT") {
+      setMagicStatus("rate_limit");
+    } else {
+      setMagicStatus("error");
+    }
+  };
+
   function handleBack() {
     if (state.step === 'forgot') {
       setState(s => ({ ...s, step: 'login', error: null, forgotSuccess: false }));
@@ -667,6 +683,74 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
                   {t(authDict, 'forgot_password_link', 'Forgot password?')}
                 </button>
               </div>
+
+              {!showMagicLink ? (
+                <button
+                  type="button"
+                  onClick={() => setShowMagicLink(true)}
+                  className="mt-4 text-sm text-orange-500 hover:underline w-full text-center"
+                >
+                  {t(authDict, 'magic_link_no_password', "Don't have a password?")}
+                </button>
+              ) : (
+                <div className="mt-4 border-t pt-4">
+                  {magicStatus === "success" ? (
+                    <div className="text-center space-y-2">
+                      <p className="text-sm font-medium text-gray-800">
+                        {t(authDict, 'magic_link_success', 'Login link sent to {email}').replace("{email}", magicEmail)}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => { setShowMagicLink(false); setMagicStatus("idle"); setMagicEmail(""); }}
+                        className="text-sm text-orange-500 hover:underline"
+                      >
+                        {t(authDict, 'magic_link_back_to_login', 'Back to login')}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <p className="text-sm font-semibold text-gray-800">
+                        {t(authDict, 'magic_link_request_title', 'Send me a login link')}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {t(authDict, 'magic_link_request_description', 'We\'ll send you a link to sign in to your account')}
+                      </p>
+                      <input
+                        type="email"
+                        value={magicEmail}
+                        onChange={(e) => setMagicEmail(e.target.value)}
+                        placeholder="email@firma.pl"
+                        className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      />
+                      {magicStatus === "rate_limit" && (
+                        <p className="text-xs text-red-500">{t(authDict, 'magic_link_rate_limit', 'Please wait before requesting another link')}</p>
+                      )}
+                      {magicStatus === "error" && (
+                        <p className="text-xs text-red-500">{t(authDict, 'magic_link_error', 'Something went wrong. Please try again.')}</p>
+                      )}
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => { setShowMagicLink(false); setMagicStatus("idle"); setMagicEmail(""); }}
+                          className="text-sm text-gray-400 hover:underline"
+                        >
+                          {t(authDict, 'magic_link_back_to_login', 'Back to login')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleMagicLink}
+                          disabled={magicStatus === "loading" || !magicEmail.trim()}
+                          className="ml-auto bg-orange-500 text-white text-sm px-4 py-2 rounded-lg hover:bg-orange-600 disabled:opacity-50"
+                        >
+                          {magicStatus === "loading"
+                            ? t(authDict, 'magic_link_send_button', 'Send link') + "..."
+                            : t(authDict, 'magic_link_send_button', 'Send link')}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <button
                 type="submit"

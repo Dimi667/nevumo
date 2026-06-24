@@ -54,6 +54,23 @@ export function magicLinkAuth(token: string): Promise<AuthResult> {
   return apiPost<AuthResult>("/api/v1/auth/magic-link", { token });
 }
 
+export async function requestMagicLink(
+  email: string,
+  lang: string
+): Promise<{ success: boolean; error?: string }> {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/request-magic-link`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, lang }),
+    }
+  );
+  if (res.status === 429) return { success: false, error: "RATE_LIMIT" };
+  if (!res.ok) return { success: false, error: "ERROR" };
+  return { success: true };
+}
+
 export async function checkRegistrationSlugAvailability(
   slug: string,
   citySlug?: string,

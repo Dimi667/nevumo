@@ -293,6 +293,40 @@ This withdrawal form was submitted via the Nevumo online form.
     </div></body></html>"""
         return self._send_email(email, subject, html_body)
 
+    def send_login_magic_link_email(
+        self,
+        email: str,
+        magic_link_url: str,
+        lang: str = "en",
+    ) -> bool:
+        if lang.startswith("pl"):
+            subject = "Twój link do logowania w Nevumo"
+            html_body = f"""<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;color:#333;background-color:#ffffff;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+        <h2 style="color:#f97316;">Zaloguj się do Nevumo</h2>
+        <p>Kliknij poniższy przycisk, aby zalogować się na swoje konto. Link jest ważny przez 24 godziny i może być użyty tylko raz.</p>
+        <p><a href="{magic_link_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Zaloguj się →</a></p>
+        <p style="font-size:12px;color:#666;">Jeśli nie prosiłeś/aś o ten link, zignoruj tę wiadomość.</p>
+    </div>
+</body>
+</html>"""
+        else:
+            subject = "Your Nevumo login link"
+            html_body = f"""<!DOCTYPE html>
+<html>
+<body style="font-family:Arial,sans-serif;color:#333;background-color:#ffffff;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+        <h2 style="color:#f97316;">Sign in to Nevumo</h2>
+        <p>Click below to sign in to your account. This link expires in 24 hours and can only be used once.</p>
+        <p><a href="{magic_link_url}" style="background:#f97316;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;">Sign in →</a></p>
+        <p style="font-size:12px;color:#666;">If you didn't request this link, you can safely ignore this email.</p>
+    </div>
+</body>
+</html>"""
+        return self._send_email(email, subject, html_body)
+
     def send_new_lead_notification(
         self,
         provider_email: str,
