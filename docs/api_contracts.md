@@ -382,6 +382,69 @@ Handles client-only, provider-only, and dual-role accounts.
 
 ---
 
+## GET /api/v1/auth/me
+
+### Auth
+Bearer JWT token required (Authorization header)
+
+### Response (200)
+```json
+{
+  "success": true,
+  "data": {
+    "id": "uuid",
+    "email": "user@example.com",
+    "role": "client|provider",
+    "has_password": true|false,
+    "locale": "en"
+  }
+}
+```
+
+### Description
+Returns current authenticated user information including password status. Single source of truth for password status in the application.
+
+### Errors
+- 401 SESSION_EXPIRED — missing or invalid JWT
+
+---
+
+## POST /api/v1/auth/password
+
+### Auth
+Bearer JWT token required (Authorization header)
+
+### Body
+```json
+{
+  "current_password": "old_password",  // Required only if user has password
+  "new_password": "min8chars"
+}
+```
+
+### Response (200)
+```json
+{
+  "success": true,
+  "data": {
+    "message": "password_set" | "password_changed"
+  }
+}
+```
+
+### Description
+Set or change password for authenticated user. Works for both passwordless users (set password) and existing password users (change password). Rate limited to 5 attempts per 15 minutes per user_id.
+
+### Errors
+- 400 VALIDATION_ERROR — password too short (minimum 8 characters)
+- 401 SESSION_EXPIRED — missing or invalid JWT
+- 400 CURRENT_PASSWORD_REQUIRED — user has password but current_password not provided
+- 400 INVALID_CURRENT_PASSWORD — current_password is incorrect
+- 429 RATE_LIMIT_EXCEEDED — too many attempts (5/15 min per user_id)
+- 404 USER_NOT_FOUND — user not found
+
+---
+
 ## Auth Error Codes
 
 | Code | Status | Meaning |
@@ -396,6 +459,10 @@ Handles client-only, provider-only, and dual-role accounts.
 | TOKEN_EXPIRED | 400 | Reset token expired (30 min TTL) |
 | TOKEN_USED | 400 | Reset token already used |
 | VALIDATION_ERROR | 422 | Request body validation failed |
+| SESSION_EXPIRED | 401 | JWT token expired or invalid |
+| CURRENT_PASSWORD_REQUIRED | 400 | User has password but current_password not provided |
+| INVALID_CURRENT_PASSWORD | 400 | Current password is incorrect |
+| USER_NOT_FOUND | 404 | User not found |
 
 ---
 

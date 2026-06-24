@@ -444,20 +444,43 @@ Email template: magic_link_pl.html
 
 ---
 
-### Блокер 7В — "Add/Change password" в Provider Settings 🔴
+### Блокер 7В — "Add/Change password" в Provider Settings ✅ ЗАВЪРШЕН (24 юни 2026)
 (Изисква: Блокер 7А. Може паралелно с 7Б)
 Проблем: Passwordless потребители (от banner claim) нямат парола в акаунта.
 
 Трябва опция да добавят парола след като са влезли.
 Решение:
 - Provider Settings → секция "Сигурност" → бутон "Задай парола" (ако няма) / "Смени парола" (ако има)
-- Backend: POST /api/v1/provider/settings/password
+- Backend: POST /api/v1/auth/password (global endpoint, не provider-specific)
   - Ако passwordless: просто задава нова парола (без old_password)
   - Ако има парола: изисква old_password за потвърждение
-- Field has_password: bool добавен в provider profile response
+- Backend: GET /api/v1/auth/me (single source of truth за has_password)
+- Frontend: PasswordSection.tsx (shared компонент за provider и client)
+  - Използва getMe() за зареждане на password status от /api/v1/auth/me
+  - Автоматично показва 2-field (set password) или 3-field (change password) форма
+- Translations: account_settings namespace (14 ключа × 34 езика = 476 rows)
+  - seed_account_settings_translations.py
+  - Keys: section_security, security_description_no_password, security_description_has_password, label_current_password, label_new_password, label_confirm_password, btn_set_password, btn_change_password, btn_save_password, msg_password_set, msg_password_changed, error_current_password_invalid, error_passwords_dont_match, error_password_too_short
+- Architecture refactor: Премахнат has_password от provider profile и client dashboard responses
+  - Централизиран password status в /api/v1/auth/me endpoint
+  - Елиминира stale context data проблеми
+  - Опростява компонент interface (не са нужни props)
 
-Забележка: Client settings вече има тази функционалност — следва същия pattern.
 Модел: Kimi-2.6 (frontend) + SWE-1.6 (backend endpoint)
+
+**Имплементация (24 юни 2026):**
+- Initial implementation: POST /api/v1/auth/password endpoint + PasswordSection.tsx (commit 3c8cda9)
+- Bug fix: authFetch response handling (commit a7f8344)
+- Self-healing: local state + CURRENT_PASSWORD_REQUIRED handling (commit 6c382ea)
+- Backend refactor: GET /api/v1/auth/me endpoint + removed has_password from dashboard responses (commit 7602bb4)
+- Frontend refactor: PasswordSection uses /api/v1/auth/me as single source of truth (commit 5228cc3)
+
+**QA резултати:**
+- ✅ Работи за provider settings
+- ✅ Работи за client settings
+- ✅ Работи паралелно с magic link login
+- ✅ Работи паралелно с Google OAuth login
+- ✅ Правилно показва 2-field (set password) vs 3-field (change password) форма
 
 ---
 

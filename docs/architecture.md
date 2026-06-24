@@ -188,6 +188,19 @@ This document reflects the major architectural optimization performed in April 2
     - Does not require explicit consent under GDPR for basic functionality
     - Must be documented in Privacy Policy and Cookie Policy when those documents are created (future task)
     - User can clear preference via browser localStorage management
+- **Password Status Architecture (June 24, 2026)**:
+  - **Single Source of Truth**: Password status (`has_password`) is centralized in `GET /api/v1/auth/me` endpoint
+  - **Removed from Dashboard Responses**: `has_password` field removed from both provider profile and client dashboard responses to eliminate stale data issues
+  - **Frontend Component**: `PasswordSection.tsx` directly fetches password status from `/api/v1/auth/me` on mount via `getMe()` function
+  - **Benefits**:
+    - Eliminates stale context data issues
+    - Simplifies component interface (no props needed for password status)
+    - Works identically for both provider and client roles
+    - Supports passwordless users (magic link, OAuth) and password users
+  - **Global Password Endpoint**: `POST /api/v1/auth/password` works for all users regardless of role
+    - Passwordless users: set new password (no current_password required)
+    - Existing password users: change password (current_password required)
+    - Rate limiting: 5 attempts per 15 minutes per user_id
 
 ### 6. Handling Empty Categories & Price Fallbacks ("Golden Standard")
 - **Core Logic**: When a category contains no active providers, the system must preserve the marketing value of the FAQ section while ensuring no broken price strings are shown.

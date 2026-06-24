@@ -144,6 +144,11 @@ Nevumo е уеб платформа за marketplace на услуги.
 - **Robustness**: BFCache support and auto-login recovery for duplicate registration attempts (back button flow). Replaced legacy hidden iframe hacks with the **Credential Management API** (`navigator.credentials.store`) for robust password saving, including iOS Safari.
 - **Password save robustness**: Credential Management API replaces legacy iframe hack. Hidden email input in register form ensures Safari associates email+password. onInput handler fixes browser autofill not triggering React state. Native browser strong password suggestion replaces custom generator.
 - Phase 2 (future): OAuth Google + Facebook, email sending via Resend/SendGrid ✅ COMPLETE
+- Phase 3 (COMPLETE June 24, 2026): Magic Link Login + Add/Change Password
+  - Passwordless authentication via magic links (POST /api/v1/auth/request-magic-link)
+  - Password management via POST /api/v1/auth/password (set/change password)
+  - Single source of truth for password status via GET /api/v1/auth/me
+  - Works parallel with email/password and Google OAuth authentication
 
 ### Email Service (Resend) — COMPLETE (June 5, 2026)
 - Provider: Resend (resend>=2.0.0)
@@ -152,7 +157,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 - Domain verified: nevumo.com (SPF + DKIM verified in Resend)
 - Fallback: console.log when RESEND_API_KEY is empty
 
-### 11 transactional emails implemented in apps/api/services/email_service.py:
+### 12 transactional emails implemented in apps/api/services/email_service.py:
 1. send_password_reset_email — forgot password (auth.py:223)
 2. send_welcome_email — new registration (auth.py:136)
 3. send_magic_link_email — anonymous lead claim (send_magic_links.py:43)
@@ -164,6 +169,7 @@ Nevumo е уеб платформа за marketplace на услуги.
 9. send_withdrawal_form_email — legal@nevumo.com (legal.py:86)
 10. send_article14_notification — GDPR Art.14 on claimed profile (provider.py:621)
 11. send_welcome_email — covers both client and provider roles
+12. send_login_magic_link_email — passwordless login (auth.py + email_service.py)
 
 ### Claimed Profiles Email Templates
 - **Outreach template:** `apps/api/scripts/templates/outreach_email_pl.html`
@@ -1530,6 +1536,32 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Known limitations (technical debt, not blocking campaign):
   - Email is PL/EN only; other 32 languages receive EN
   - Magic link login redirect is only partially role-aware
+
+**Blocker 7В — Add/Change Password in Settings (June 24, 2026)** — COMPLETE:
+- Backend: POST /api/v1/auth/password endpoint (auth.py)
+  - Global endpoint works for all users regardless of role
+  - Passwordless users: set new password (no current_password required)
+  - Existing password users: change password (current_password required)
+  - Rate limiting: 5 attempts per 15 minutes per user_id
+  - Error codes: CURRENT_PASSWORD_REQUIRED, INVALID_CURRENT_PASSWORD, RATE_LIMIT_EXCEEDED, USER_NOT_FOUND
+- Backend: GET /api/v1/auth/me endpoint (auth.py)
+  - Returns current user info including has_password status
+  - Single source of truth for password status
+  - Response: id, email, role, has_password, locale
+- Frontend: PasswordSection.tsx component
+  - Shared component for both provider and client settings
+  - Uses getMe() to fetch password status from /api/v1/auth/me on mount
+  - Automatically shows 2-field form (set password) or 3-field form (change password)
+  - Password visibility toggles, client-side validation
+- Translations: account_settings namespace (14 keys × 34 languages = 476 rows)
+  - seed_account_settings_translations.py
+  - Keys: section_security, security_description_no_password, security_description_has_password, label_current_password, label_new_password, label_confirm_password, btn_set_password, btn_change_password, btn_save_password, msg_password_set, msg_password_changed, error_current_password_invalid, error_passwords_dont_match, error_password_too_short
+- Architecture refactor: Removed has_password from provider profile and client dashboard responses
+  - Centralized password status in /api/v1/auth/me endpoint
+  - Eliminates stale context data issues
+  - Simplifies component interface (no props needed)
+- Tested: ✅ Works for provider settings, ✅ Works for client settings, ✅ Works parallel with magic link login, ✅ Works parallel with Google OAuth login
+- Commits: 3c8cda9 (initial), a7f8344 (bug fix), 6c382ea (self-healing), 7602bb4 (/me endpoint), 5228cc3 (refactor)
 
 **Task 6A — Profile Strength Email** — PLANNED:
 - Trigger: first service added (is_complete: False → True)
