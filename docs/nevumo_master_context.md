@@ -1510,6 +1510,27 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Welcome email removed from verify flow → moved to Task 6A
 - E2E verified: full banner flow working end-to-end
 
+**Blocker 7B — Magic Link Login (June 24, 2026)** — COMPLETE:
+- Backend: POST /api/v1/auth/request-magic-link endpoint (auth.py)
+  - Rate limiting: 1 request/minute per email
+  - Cleanup of unused tokens before generating new one
+  - secrets.token_urlsafe(32) → SHA256 hash → MagicLinkToken record
+  - 24h TTL, single-use, always returns 200 (no email enumeration)
+- Backend: send_login_magic_link_email() method (email_service.py)
+  - Separate from send_magic_link_email() (client leads flow)
+  - PL/EN support (technical debt: other 32 languages → EN)
+- Frontend: requestMagicLink() function (auth-api.ts)
+- Frontend: LoginClient.tsx — "Brak hasła? Zaloguj się linkiem na email →"
+  - Appears on step 2 (after email entry)
+  - Click → sends link to already-entered email → success message
+  - No second email field
+- Translations: 8 keys × 34 languages (seed_magic_link_translations.py)
+- Existing infrastructure: MagicLinkToken model + POST /auth/magic-link (consumes token, issues JWT) — untouched
+- Tested: passwordless provider → magic link → provider dashboard ✅
+- Known limitations (technical debt, not blocking campaign):
+  - Email is PL/EN only; other 32 languages receive EN
+  - Magic link login redirect is only partially role-aware
+
 **Task 6A — Profile Strength Email** — PLANNED:
 - Trigger: first service added (is_complete: False → True)
 - Content: personalized advice based on missing profile fields

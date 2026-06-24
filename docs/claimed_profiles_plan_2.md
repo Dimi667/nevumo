@@ -1312,7 +1312,50 @@ CATEGORY_LABEL_PL = {
 
 ---
 
-[ ] Блокер 7Б: Magic Link Login                  → SWE-1.6 + Kimi-2.6
+### Блокер 7Б — Magic Link Login ✅ ЗАВЪРШЕН (24 юни 2026)
+
+**Проблем:** Потребители създадени чрез get_or_create_claim_user() нямат парола.
+При затворен браузър нямат начин да влязат обратно.
+
+**Имплементация:**
+- Backend: POST /api/v1/auth/request-magic-link (нов endpoint в auth.py)
+  - Rate limiting: 1 заявка/минута на email
+  - Cleanup на неизползвани токени преди генериране на нов
+  - Генерира secrets.token_urlsafe(32) → SHA256 hash → MagicLinkToken record
+  - 24h TTL, еднократен
+  - Винаги връща 200 (не разкрива дали email съществува)
+- Backend: send_login_magic_link_email() — нова функция в email_service.py
+  - Отделна от send_magic_link_email() (клиентски leads flow)
+  - PL/EN поддръжка (технически дълг: останалите 32 езика → EN)
+- Frontend: requestMagicLink() в auth-api.ts
+- Frontend: LoginClient.tsx — "Brak hasła? Zaloguj się linkiem na email →"
+  - Появява се на стъпка 2 (след въвеждане на email)
+  - Клик → изпраща линк на вече въведения email → success съобщение
+  - Без второ email поле
+- Translations: 8 ключа × 34 езика (seed_magic_link_translations.py)
+- Съществуваща инфраструктура: MagicLinkToken модел + POST /auth/magic-link
+  (консумира токен, издава JWT) — не са пипани
+
+**Тествани сценарии:**
+- Passwordless провайдър → magic link → provider dashboard ✅
+- Email пристига коректно (PL) ✅
+- Rate limiting работи ✅
+
+**Известни ограничения (технически дълг — не блокират кампанията):**
+- Имейлът е само PL/EN; останалите 32 езика получават EN
+- Redirect след magic link login е role-aware само частично (вж. Known Issues)
+
+**⚠️ ВАЖНО — Глобална система, multi-role потребители:**
+Nevumo ще има потребители с двойна роля (провайдър + клиент едновременно).
+Magic link системата трябва да работи коректно за всички случаи:
+- role='provider' → redirect към /provider/dashboard
+- role='client' → redirect към /client/dashboard
+- Потребител и с двете роли → redirect по последно активната роля;
+  switch-role endpoint съществува и работи
+Текущото MagicLinkClient.tsx redirect поведение трябва да се верифицира
+преди bulk кампанията (вж. QA Gate 5.1).
+
+---
 [ ] Блокер 7В: Add/Change Password Settings      → SWE-1.6 + Kimi-2.6
 [ ] Блокер 7Г: "Нов login link" на Auth page     → Kimi-2.6 (изисква 7Б)
 [ ] Блокер 7Д: Outreach Flow потвърждение        → @mcp-playwright
