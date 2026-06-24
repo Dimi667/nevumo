@@ -22,6 +22,7 @@ self.addEventListener('activate', function(event) {
 self.addEventListener('fetch', function(event) {
   if (event.request.method !== 'GET') return;
   if (event.request.url.includes('/api/')) return;
+  if (event.request.url.includes('/_next/')) return;
   event.respondWith(
     fetch(event.request).catch(function() {
       return caches.match(event.request);
