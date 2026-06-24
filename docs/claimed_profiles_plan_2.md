@@ -502,6 +502,16 @@ Email template: magic_link_pl.html
 Файлове: ClaimProcessor.tsx, apps/api/routes/provider.py (добави missing_fields в response)
 Модел: SWE-1.6 (backend) + Kimi-2.6 (frontend)
 
+**⚠️ Dual-role потребители (добавено към 7Е):**
+Nevumo ще има потребители с едновременна роля провайдър + клиент.
+Redirect логиката при login (magic link, OAuth, email/password) трябва да покрива:
+- role='provider' → /provider/dashboard
+- role='client' → /client/dashboard
+- Dual-role потребител → redirect по последно активната роля (use last_active_role
+  field или role от JWT); switch-role endpoint съществува
+Верифицирай MagicLinkClient.tsx redirect преди bulk кампанията.
+Ако last_active_role не съществува в User модела → добави го като part of 7Е.
+
 ---
 
 ### Блокер 7Ж — Onboarding Pre-fill за Scraped Providers 🟡
