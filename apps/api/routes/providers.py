@@ -739,14 +739,6 @@ async def verify_claim_code(
     except Exception as exc:
         logger.error("[EMAIL_WARNING] Art.14 after verify failed: %s", exc)
 
-    try:
-        email_service.send_claim_welcome_email(
-            provider_email=user.email,
-            provider_name=provider.business_name or "",
-        )
-    except Exception as exc:
-        logger.error("[EMAIL_WARNING] Welcome email after verify failed: %s", exc)
-
     return {
         "success": True,
         "token": jwt_token,
