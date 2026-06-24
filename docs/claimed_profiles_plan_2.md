@@ -1389,10 +1389,149 @@ Magic link системата трябва да работи коректно з
 преди bulk кампанията (вж. QA Gate 5.1).
 
 ---
-[ ] Блокер 7В: Add/Change Password Settings      → SWE-1.6 + Kimi-2.6
-[ ] Блокер 7Г: "Нов login link" на Auth page     → Kimi-2.6 (изисква 7Б)
+
+### Блокер 7В — Add/Change Password в Provider Settings ✅ ЗАВЪРШЕН (24 юни 2026)
+
+**Проблем:** Passwordless потребители (от banner claim) нямат парола в акаунта.
+При затворен браузър не могат да сменят паролата.
+
+**Имплементация:**
+- Backend: POST /api/v1/auth/password (global endpoint)
+  - Passwordless: задава нова парола (без old_password)
+  - С парола: изисква old_password за потвърждение
+- Backend: GET /api/v1/auth/me — single source of truth за has_password
+- Frontend: PasswordSection.tsx (shared компонент за provider и client)
+  - Чете has_password от /api/v1/auth/me
+  - Автоматично показва 2-field (set) или 3-field (change) форма
+- Translations: account_settings namespace (14 ключа × 34 езика)
+  - seed_account_settings_translations.py
+- Architecture: Премахнат has_password от provider profile и client dashboard responses
+  - Централизиран в /api/v1/auth/me
+
+**QA резултати:**
+- ✅ Работи за provider settings
+- ✅ Работи за client settings
+- ✅ Работи паралелно с magic link login
+- ✅ Работи паралелно с Google OAuth login
+- ✅ Правилно показва 2-field vs 3-field форма
+
+**Commits:** 3c8cda9, a7f8344, 6c382ea, 7602bb4, 5228cc3
+
+---
+
+### Блокер 7Г+7Е — Глобална Auth Архитектура 🔴 ПРЕДСТОИ
+
+**Произход:** Блокер 7Г ("Нов login link") еволюира до пълна архитектурна задача,
+която покрива едновременно 7Г (smart detection) и 7Е (onboarding redirect logic).
+Решава се с един имплементационен цикъл.
+
+**Проблеми, които решава:**
+1. MagicLinkClient.tsx има hardcoded redirect към /client/dashboard
+2. check-email не връща has_password → passwordless потребители не се разпознават рано
+3. Redirect логиката е разпръсната в login, register, magic-link, google oauth — всеки прави нещо различно
+4. Google OAuth не проверява onboarding completeness
+5. Passwordless потребители (от banner claim) нямат очевиден начин за вход
+
+**Архитектурни принципи:**
+- Single Source of Truth: backend взима всички redirect решения
+- Separation of Concerns: check-email = само smart detection; determine_post_auth_redirect() = само redirect
+- Read-Only Functions: determine_post_auth_redirect() не мутира DB
+- Нула DB миграции за Фаза 1
+
+---
+
+#### Фаза 1 — За кампанията (нула DB миграции)
+
+**Backend промени:**
+
+1. POST /api/v1/auth/check-email — опростен response (само 4 полета):
+exists: bool
+has_password: bool          ← НОВО
+role: Optional[str]         ← НОВО
+oauth_connected: bool       ← НОВО
+   Премахнати: has_provider_profile, provider_is_claimed, provider_is_complete
+   Причина: никое от тях не се използва в smart detection логиката.
+   check-email СПИРА да вика check_onboarding_complete() → нула двоен DB call.
+
+2. apps/api/services/auth_service.py — нова функция determine_post_auth_redirect():
+Приоритет:
+claim_token → /auth/claim?token={claim_token}
+intent ('client'|'provider') → провайдър онбординг проверка → dashboard
+user.role (default) → провайдър онбординг проверка → dashboard
+   - READ-ONLY: не мутира DB
+   - Единственото място в системата което вика check_onboarding_complete()
+
+3. Всички auth endpoints връщат redirect в response:
+   - POST /api/v1/auth/login → добавя intent в LoginRequest + redirect в response
+   - POST /api/v1/auth/register → redirect в response
+   - POST /api/v1/auth/magic-link → добавя intent + claim_token в MagicLinkRequest + redirect в response
+   - GET /api/v1/auth/google/callback → минава през determine_post_auth_redirect()
+   - POST /api/v1/auth/google/complete → добавя intent в GoogleOAuthCompleteRequest + redirect в response
+
+4. apps/api/schemas.py — нови Optional полета:
+   - LoginRequest.intent: Optional[str]
+   - MagicLinkRequest.intent: Optional[str]
+   - MagicLinkRequest.claim_token: Optional[str]
+   - GoogleOAuthCompleteRequest.intent: Optional[str]
+
+**Frontend промени:**
+
+5. apps/web/app/[lang]/auth/LoginClient.tsx — smart detection в handleCheckEmail():
+!exists          → select_role или register (ако има intent)
+!has_password    → auto изпраща magic link (без да показва password field)
+has_password     → показва password field
+   При грешна парола → показва ЕДНОВРЕМЕННО:
+   - "Забравена парола?"
+   - "Влез с имейл линк"
+
+6. apps/web/app/[lang]/auth/magic/MagicLinkClient.tsx:
+   - Премахва hardcoded redirect към /client/dashboard
+   - Използва result.redirect от backend
+   - Fallback: /{lang}/{role}/dashboard
+
+7. apps/web/lib/auth-api.ts:
+   - checkEmail() return type → { exists, has_password, role, oauth_connected }
+   - magicLinkAuth() return type → включва redirect поле
+
+**Модел:** SWE-1.6 (backend) + Kimi-2.6 (frontend)
+**Зависимости:** Изисква Блокер 7Б ✅
+
+---
+
+#### Фаза 2 — След кампанията (2 DB миграции, когато има dual-role потребители)
+
+**2.1 Dual-Role Support:**
+- DB migration: users.last_active_role (Optional[str], nullable)
+- Нова функция: update_last_active_role(user, role, db) — мутира отделно от redirect логиката
+- determine_post_auth_redirect() разширена с last_active_role като стъпка 3
+- switch-role endpoint: записва last_active_role при всеки превключване
+- GET /api/v1/auth/me: включва last_active_role в response
+
+**2.2 Magic Link Intent Persistence:**
+- DB migration: magic_link_tokens.intent (Optional[str], nullable)
+- POST /auth/request-magic-link: записва intent в MagicLinkToken записа
+- POST /auth/magic-link: чете intent от DB токена (не от URL)
+- URL на линка остава чист: /auth/magic?token=xxx (без ?intent=)
+- Причина за Фаза 2: dual-role потребители нямаме сега; за single-role user.role е достатъчен
+
+**Защо Фаза 2 е отделна:**
+- Нямаме нито един dual-role потребител в production
+- DB миграции върху Neon production = риск за кампанията
+- Архитектурата е проектирана така че добавянето на last_active_role е additive (не рефакторинг)
+
+---
+
+**⚠️ ВАЖНО — Dual-Role честност:**
+Фаза 1 НЕ решава dual-role. При fresh login на dual-role потребител системата
+ще redirect-ва по user.role (base role), не по последно активната роля.
+Това е съзнателен компромис за кампанията. Фаза 2 го решава правилно с DB.
+
+---
+[✅] Блокер 7В: Add/Change Password Settings     → ЗАВЪРШЕН (24 юни 2026)
+[ ] Блокер 7Г+7Е: Глобална Auth Архитектура     → SWE-1.6 (backend) + Kimi-2.6 (frontend)
+    Фаза 1 (кампания): check-email, determine_post_auth_redirect(), Google OAuth fix, smart detection
+    Фаза 2 (пост-кампания): last_active_role + magic_link_tokens.intent
 [ ] Блокер 7Д: Outreach Flow потвърждение        → @mcp-playwright
-[ ] Блокер 7Е: Onboarding Redirect Logic         → SWE-1.6 + Kimi-2.6
 [ ] Блокер 7Ж: Onboarding Pre-fill Scraped       → SWE-1.6 → Kimi-2.6
 [ ] Блокер 8:  Task 2A seed_unclaimed_providers  → Kimi-2.6 (изисква 7А–7Ж)
 [ ] Блокер 9:  Railway Scheduler script          → Kimi-2.6 (изисква Блокер 8)
