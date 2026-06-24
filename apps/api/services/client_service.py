@@ -95,7 +95,6 @@ def get_client_dashboard(client_id: UUID, db: Session, lang: str = 'en') -> dict
     # Priority 1: user.city_id
     user = db.query(User).filter(User.id == client_id).first()
     last_city_slug = None
-    has_password = user.password_hash is not None if user else False
     if user and user.city_id:
         last_city_slug = db.query(Location.slug).filter(Location.id == user.city_id).scalar()
 
@@ -134,7 +133,6 @@ def get_client_dashboard(client_id: UUID, db: Session, lang: str = 'en') -> dict
         },
         "recent_leads": recent_leads,
         "last_city_slug": last_city_slug,
-        "has_password": has_password,
     }
 
 

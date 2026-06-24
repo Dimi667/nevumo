@@ -970,7 +970,6 @@ def get_provider_profile(provider: Provider, db: Optional[Session] = None) -> di
         "created_at": provider.created_at.isoformat(),
         "category_slug": provider.category_slug,
         "data_source": provider.data_source,
-        "has_password": provider.user.password_hash is not None if provider.user else False,
     }
 
     if db is not None:

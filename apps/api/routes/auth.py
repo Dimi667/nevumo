@@ -4,7 +4,7 @@ import secrets
 import urllib.parse
 from datetime import datetime, timedelta
 from secrets import token_hex
-from typing import Optional
+from typing import Optional, Any
 
 import httpx
 from fastapi import APIRouter, Depends, Query, Request, status
@@ -544,6 +544,20 @@ async def delete_account(
     if result["success"]:
         return JSONResponse(status_code=200, content=result)
     return JSONResponse(status_code=500, content=result)
+
+
+@router.get("/me")
+def get_me(current_user: User = Depends(get_current_user)) -> dict[str, Any]:
+    return {
+        "success": True,
+        "data": {
+            "id": str(current_user.id),
+            "email": current_user.email,
+            "role": current_user.role,
+            "has_password": current_user.password_hash is not None,
+            "locale": current_user.locale,
+        }
+    }
 
 
 @router.get("/google")
