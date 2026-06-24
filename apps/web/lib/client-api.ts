@@ -25,6 +25,7 @@ export interface ClientDashboardData {
   stats: ClientDashboardStats;
   recent_leads: ClientDashboardRecentLead[];
   last_city_slug?: string;
+  has_password?: boolean;
 }
 
 export interface ReviewableProvider {

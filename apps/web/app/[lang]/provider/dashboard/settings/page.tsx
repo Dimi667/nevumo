@@ -20,6 +20,7 @@ import PhoneInput from '@/components/ui/PhoneInput';
 import { useDashboardI18n } from '@/lib/provider-dashboard-i18n';
 import { useTranslation } from '@/lib/use-translation';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
+import PasswordSection from '@/components/dashboard/PasswordSection';
 
 function getAvailabilityOptions(t: (key: string, fallback?: string) => string): { value: AvailabilityStatus; label: string }[] {
   return [
@@ -361,6 +362,9 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+
+      {/* Password */}
+      <PasswordSection hasPassword={profile?.has_password ?? false} lang={lang} />
 
       {/* Availability */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">

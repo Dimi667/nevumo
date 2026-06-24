@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { clearAuth, getAuthToken, getAuthUser, saveAuth } from '@/lib/auth-store';
 import { getReviewPreferences, updateReviewPreferences, type ReviewPreferences } from '@/lib/client-api';
@@ -13,10 +13,14 @@ import { usePhoneValidation } from '@/hooks/usePhoneValidation';
 import PhoneInput from '@/components/ui/PhoneInput';
 import { useTranslation } from '@/lib/use-translation';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
+import PasswordSection from '@/components/dashboard/PasswordSection';
+import { ClientDashboardContext } from '../layout';
 
 export default function SettingsClient({ lang }: { lang: string }) {
   const router = useRouter();
   const user = getAuthUser();
+  const dashboardContext = useContext(ClientDashboardContext);
+  const hasPassword = dashboardContext?.dashboardData?.has_password ?? false;
 
   const [preferences, setPreferences] = useState<ReviewPreferences | null>(null);
   const [loading, setLoading] = useState(true);
@@ -250,18 +254,7 @@ export default function SettingsClient({ lang }: { lang: string }) {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
-        <h2 className="text-sm font-semibold text-gray-800">{t('section_security', 'Security')}</h2>
-        <p className="text-sm text-gray-500">
-          {t('settings_security', 'Manage access...')}
-        </p>
-        <Link
-          href={`/${lang}/auth/reset-password`}
-          className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-100 text-sm font-medium rounded-lg transition-colors"
-        >
-          {t('btn_change_password', 'Change Password')}
-        </Link>
-      </div>
+      <PasswordSection hasPassword={hasPassword} lang={lang} />
 
       {/* Push Notifications */}
       {pushSupported && (

@@ -16,6 +16,8 @@ from apps.api.dependencies import get_db, get_current_user
 from apps.api.models import Location, MagicLinkToken, PasswordResetToken, Provider, User
 from apps.api.schemas import (
     AuthTokenResponse,
+    ChangePasswordRequest,
+    ChangePasswordResponse,
     CheckEmailRequest,
     CheckEmailResponse,
     ForgotPasswordRequest,
@@ -303,6 +305,61 @@ async def reset_password(
         "token": token,
         "user": {"id": str(user.id), "email": user.email, "role": user.role},
     })
+
+
+@router.post("/password", response_model=ChangePasswordResponse)
+async def change_password(
+    body: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> ChangePasswordResponse:
+    """Change or set password for authenticated user.
+    
+    - If user is passwordless (password_hash is None): set new password (current_password ignored)
+    - If user has password: verify current_password, then set new password
+    """
+    # Rate limit: 5 attempts per 15 minutes per user
+    if not check_rate_limit(db, str(current_user.id), "change_password"):
+        return JSONResponse(
+            status_code=429,
+            content={"success": False, "error": {"code": "RATE_LIMIT_EXCEEDED", "message": "Too many attempts. Please try again later."}}
+        )
+
+    # Reload user from DB to get fresh password_hash
+    user = db.query(User).filter(User.id == current_user.id).first()
+    if not user:
+        return JSONResponse(
+            status_code=404,
+            content={"success": False, "error": {"code": "USER_NOT_FOUND", "message": "User not found"}}
+        )
+
+    # Passwordless user: set password directly
+    if user.password_hash is None:
+        user.password_hash = hash_password(body.new_password)
+        db.commit()
+        record_rate_limit(db, str(current_user.id), "change_password")
+        return ChangePasswordResponse(data={"message": "password_set"})
+
+    # User has password: verify current password
+    if body.current_password is None:
+        record_rate_limit(db, str(current_user.id), "change_password")
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "error": {"code": "CURRENT_PASSWORD_REQUIRED", "message": "Current password is required"}}
+        )
+
+    if not verify_password(body.current_password, user.password_hash):
+        record_rate_limit(db, str(current_user.id), "change_password")
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "error": {"code": "INVALID_CURRENT_PASSWORD", "message": "Current password is invalid"}}
+        )
+
+    # Set new password
+    user.password_hash = hash_password(body.new_password)
+    db.commit()
+    record_rate_limit(db, str(current_user.id), "change_password")
+    return ChangePasswordResponse(data={"message": "password_changed"})
 
 
 @router.post("/switch-role", response_model=AuthTokenResponse)

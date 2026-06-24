@@ -356,6 +356,23 @@ class ResetPasswordResponse(BaseModel):
     data: dict
 
 
+class ChangePasswordRequest(BaseModel):
+    current_password: Optional[str] = None
+    new_password: str = Field(min_length=8)
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError("Password must be at least 8 characters long")
+        return v
+
+
+class ChangePasswordResponse(BaseModel):
+    success: bool = True
+    data: dict
+
+
 class MagicLinkRequest(BaseModel):
     token: str
 

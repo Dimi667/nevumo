@@ -10,11 +10,20 @@ import { getClientDashboard, type ClientDashboardData } from '@/lib/client-api';
 import { useTranslation } from '@/lib/use-translation';
 import PushNotificationBanner from '@/components/pwa/PushNotificationBanner';
 import SmartGlobalFooter from '@/components/SmartGlobalFooter';
+import { createContext } from 'react';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
   params: Promise<{ lang: string }>;
 }
+
+export interface ClientDashboardContextValue {
+  dashboardData: ClientDashboardData | null;
+}
+
+const ClientDashboardContext = createContext<ClientDashboardContextValue | null>(null);
+
+export { ClientDashboardContext };
 
 function OverviewIcon() {
   return (
@@ -352,7 +361,9 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
 
         <main className="flex-1 p-4 md:p-6 overflow-auto min-h-0 touch-pan-y">
           <PushNotificationBanner lang={lang} role="client" />
-          {children}
+          <ClientDashboardContext.Provider value={{ dashboardData }}>
+            {children}
+          </ClientDashboardContext.Provider>
           <SmartGlobalFooter lang={lang} force={true} />
         </main>
       </div>
