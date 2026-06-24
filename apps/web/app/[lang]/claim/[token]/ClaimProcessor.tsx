@@ -60,13 +60,6 @@ export default function ClaimProcessor({
 
         const data = await res.json();
 
-        // Handle 401 — login required (banner flow)
-        if (res.status === 401) {
-          const currentUrl = encodeURIComponent(window.location.href);
-          router.push(`/${lang}/auth?redirect=${currentUrl}&claim=${token}`);
-          return;
-        }
-
         // Handle 202 — verification code sent (banner flow)
         if (res.status === 202) {
           const sentTo = data?.sent_to ?? '';

@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { saveAuth } from '@/lib/auth-store';
 
 interface VerifyCodeFormProps {
   lang: string;
   token: string;
-  authToken: string;
   dict: Record<string, string>;
   sentTo?: string;
 }
 
-export default function VerifyCodeForm({ lang, token, authToken, dict, sentTo }: VerifyCodeFormProps) {
+export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCodeFormProps) {
   const [code, setCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +45,6 @@ export default function VerifyCodeForm({ lang, token, authToken, dict, sentTo }:
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`,
         },
         body: JSON.stringify({ code: cleanCode }),
       });
@@ -54,8 +53,9 @@ export default function VerifyCodeForm({ lang, token, authToken, dict, sentTo }:
 
       if (response.ok && data.success) {
         setSuccess(true);
-        // Redirect to dashboard on success
-        window.location.href = `/${lang}/provider/dashboard`;
+        // Save JWT from backend response and redirect
+        saveAuth(data.token);
+        window.location.replace(data.redirect);
         return;
       }
 

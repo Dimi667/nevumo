@@ -442,60 +442,57 @@ async def claim_provider(
 
     # ── BANNER FLOW: public token, must verify business ownership ─────────────
     if source == "banner":
-        if not optional_user:
-            raise HTTPException(
-                status_code=401,
-                detail={"code": "AUTH_REQUIRED", "message": "Login required for banner claim"}
-            )
         if not provider.scraped_email:
             raise HTTPException(
                 status_code=422,
                 detail={"code": "NO_EMAIL", "message": "No scraped email for verification"}
             )
-        if optional_user.email == provider.scraped_email:
-            # Email matches — treat same as direct claim, fall through to main logic
-            pass  # Continue to existing claim logic below
-        else:
-            # Email mismatch — require 6-digit code verification
-            import secrets
-            code = str(secrets.randbelow(1000000)).zfill(6)
-            expires_at = datetime.now(timezone.utc) + timedelta(hours=24)
-
-            # Invalidate any previous pending verifications for this token+user
-            db.query(PendingClaimVerification).filter(
-                PendingClaimVerification.claim_token == token,
-                PendingClaimVerification.user_id == optional_user.id,
-                PendingClaimVerification.used == False,
-            ).delete()
-
-            pending = PendingClaimVerification(
-                claim_token=token,
-                user_id=optional_user.id,
-                code=code,
-                expires_at=expires_at,
-            )
-            db.add(pending)
-            db.commit()
-
-            email_service.send_claim_verification_email(
-                to_email=provider.scraped_email,
-                business_name=provider.business_name,
-                code=code,
+        if provider.is_claimed:
+            raise HTTPException(
+                status_code=409,
+                detail={"code": "ALREADY_CLAIMED", "message": "Provider already claimed"}
             )
 
-            # Mask the email for display (e.g. business@firm.pl → b****@firm.pl)
-            local, domain = provider.scraped_email.rsplit('@', 1)
-            mask_len = min(len(local) - 1, 4)
-            masked_email = local[0] + ('*' * mask_len) + '@' + domain
+        # Generate 6-digit code and send to scraped_email
+        import secrets
+        code = str(secrets.randbelow(1000000)).zfill(6)
+        expires_at = datetime.now(timezone.utc) + timedelta(hours=24)
 
-            return JSONResponse(
-                status_code=202,
-                content={
-                    "status": "verification_required",
-                    "message": "Verification code sent to business email",
-                    "sent_to": masked_email
-                }
-            )
+        # Invalidate any previous pending verifications for this token (user_id=None for banner flow)
+        db.query(PendingClaimVerification).filter(
+            PendingClaimVerification.claim_token == token,
+            PendingClaimVerification.user_id == None,
+            PendingClaimVerification.used == False,
+        ).delete()
+
+        pending = PendingClaimVerification(
+            claim_token=token,
+            user_id=None,
+            code=code,
+            expires_at=expires_at,
+        )
+        db.add(pending)
+        db.commit()
+
+        email_service.send_claim_verification_email(
+            to_email=provider.scraped_email,
+            business_name=provider.business_name,
+            code=code,
+        )
+
+        # Mask the email for display (e.g. business@firm.pl → b****@firm.pl)
+        local, domain = provider.scraped_email.rsplit('@', 1)
+        mask_len = min(len(local) - 1, 4)
+        masked_email = local[0] + ('*' * mask_len) + '@' + domain
+
+        return JSONResponse(
+            status_code=202,
+            content={
+                "status": "verification_required",
+                "message": "Verification code sent to business email",
+                "sent_to": masked_email
+            }
+        )
 
     # ── RETURNING PROVIDER: profile already claimed ──────────────────────
     # Re-authenticate the owner and return a fresh JWT.
@@ -672,7 +669,8 @@ async def claim_provider(
 async def verify_claim_code(
     token: str,
     body: dict,
-    current_user: User = Depends(get_current_user),
+    lang: str = Query(default="pl"),
+    optional_user: Optional[User] = Depends(get_optional_current_user),
     db: Session = Depends(get_db),
 ) -> dict:
     """Verify 6-digit code and complete the claim."""
@@ -681,18 +679,21 @@ async def verify_claim_code(
     if not code or not code.isdigit() or len(code) != 6:
         raise HTTPException(status_code=400, detail="invalid_code_format")
 
-    # Find valid pending verification
-    pending = (
-        db.query(PendingClaimVerification)
-        .filter(
-            PendingClaimVerification.claim_token == token,
-            PendingClaimVerification.user_id == current_user.id,
-            PendingClaimVerification.code == code,
-            PendingClaimVerification.used == False,
-            PendingClaimVerification.expires_at > datetime.now(timezone.utc),
-        )
-        .first()
+    # Find valid pending verification (support both user_id=None for banner flow and user_id for non-banner)
+    query = db.query(PendingClaimVerification).filter(
+        PendingClaimVerification.claim_token == token,
+        PendingClaimVerification.code == code,
+        PendingClaimVerification.used == False,
+        PendingClaimVerification.expires_at > datetime.now(timezone.utc),
     )
+
+    # If user is present, filter by user_id; otherwise look for user_id=None (banner flow)
+    if optional_user:
+        query = query.filter(PendingClaimVerification.user_id == optional_user.id)
+    else:
+        query = query.filter(PendingClaimVerification.user_id == None)
+
+    pending = query.first()
 
     if not pending:
         raise HTTPException(status_code=400, detail="invalid_or_expired_code")
@@ -706,9 +707,22 @@ async def verify_claim_code(
     if not provider:
         raise HTTPException(status_code=409, detail="already_claimed")
 
+    if not provider.scraped_email:
+        raise HTTPException(
+            status_code=422,
+            detail="NO_EMAIL_FOR_CLAIM"
+        )
+
+    # Get or create user from scraped_email
+    user, jwt_token = get_or_create_claim_user(
+        email=provider.scraped_email,
+        lang=lang,
+        db=db,
+    )
+
     # Complete the claim
     provider.is_claimed = True
-    provider.user_id = current_user.id
+    provider.user_id = user.id
     provider.claim_token = None
     pending.used = True
     db.commit()
@@ -716,9 +730,9 @@ async def verify_claim_code(
     # Send post-claim emails (non-blocking)
     try:
         email_service.send_article14_notification(
-            to_email=current_user.email,
+            to_email=user.email,
             business_name=provider.business_name or "",
-            dashboard_link=f"https://nevumo.com/pl/provider/dashboard",
+            dashboard_link=f"https://nevumo.com/{lang}/provider/dashboard/profile",
             scraped_email=provider.scraped_email,
         )
     except Exception as exc:
@@ -726,11 +740,17 @@ async def verify_claim_code(
 
     try:
         email_service.send_claim_welcome_email(
-            provider_email=current_user.email,
+            provider_email=user.email,
             provider_name=provider.business_name or "",
         )
     except Exception as exc:
         logger.error("[EMAIL_WARNING] Welcome email after verify failed: %s", exc)
+
+    return {
+        "success": True,
+        "token": jwt_token,
+        "redirect": f"/{lang}/provider/dashboard/profile"
+    }
 
     return {
         "success": True,

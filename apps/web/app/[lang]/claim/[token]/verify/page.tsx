@@ -1,9 +1,7 @@
-import { cookies } from 'next/headers';
 import { SUPPORTED_LANGUAGES } from '@/lib/locales';
 import { generateHreflangAlternates } from '@/lib/seo';
 import { fetchTranslations, t } from '@/lib/ui-translations';
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import VerifyCodeForm from './VerifyCodeForm';
 
 interface PageProps {
@@ -38,14 +36,6 @@ export default async function VerifyPage({ params, searchParams }: PageProps) {
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const sentTo = (resolvedSearchParams as Record<string, string>)?.sent_to ?? '';
 
-  // Check auth status via cookie
-  const cookieStore = await cookies();
-  const authToken = cookieStore.get('nevumo_auth_token')?.value || '';
-
-  if (!authToken) {
-    redirect(`/${normalizedLang}/auth?redirect=/${normalizedLang}/claim/${token}/verify`);
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
@@ -65,7 +55,6 @@ export default async function VerifyPage({ params, searchParams }: PageProps) {
             <VerifyCodeForm
               lang={normalizedLang}
               token={token}
-              authToken={authToken}
               dict={claimT}
               sentTo={sentTo}
             />
