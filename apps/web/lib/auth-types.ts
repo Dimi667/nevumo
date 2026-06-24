@@ -9,10 +9,14 @@ export interface UserInfo {
 export interface AuthResult {
   token: string;
   user: UserInfo;
+  redirect?: string;
 }
 
 export interface CheckEmailResult {
   exists: boolean;
+  has_password: boolean;
+  role: string | null;
+  oauth_connected: boolean;
 }
 
 export interface ValidateTokenResult {

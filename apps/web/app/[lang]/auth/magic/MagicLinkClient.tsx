@@ -51,7 +51,12 @@ export default function MagicLinkClient({ lang, token }: MagicLinkClientProps) {
 
       // Auto-redirect after 2 seconds
       setTimeout(() => {
-        window.location.href = `/${lang}/client/dashboard`;
+        if (result.redirect) {
+          window.location.href = result.redirect;
+        } else {
+          const role = result.user?.role ?? 'client';
+          window.location.href = `/${lang}/${role}/dashboard`;
+        }
       }, 2000);
     }).catch(err => {
       if (err instanceof ApiError) {

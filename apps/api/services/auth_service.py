@@ -10,7 +10,7 @@ from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 
 from apps.api.config import settings
-from apps.api.models import AuthRateLimit, Lead, LeadMatch, Message, PendingLeadClaim, Provider, ProviderCity, Review, Service, User
+from apps.api.models import AuthRateLimit, Lead, LeadMatch, Message, PendingLeadClaim, Provider, ProviderCity, Review, Service, ServiceCity, User
 
 logger = logging.getLogger(__name__)
 
@@ -283,3 +283,85 @@ def get_or_create_claim_user(
     )
 
     return user, jwt_token
+
+
+def determine_post_auth_redirect(
+    user: "User",
+    db: "Session",
+    lang: Optional[str] = None,
+    claim_token: Optional[str] = None,
+    intent: Optional[str] = None,
+) -> str:
+    """
+    Determine the appropriate redirect URL after successful authentication.
+    
+    Priority order:
+    1. claim_token: redirect to claim flow
+    2. effective_role (intent or user.role): client or provider
+    3. For providers: check onboarding completeness and redirect accordingly
+    
+    This function is READ-ONLY — it does not mutate the database.
+    """
+    # Priority 1: claim_token
+    if claim_token:
+        effective_lang = lang or user.locale or "en"
+        return f"/{effective_lang}/claim/{claim_token}"
+    
+    # Priority 2: determine effective role
+    effective_role = intent if intent in ("client", "provider") else user.role
+    effective_lang = lang or user.locale or "en"
+    
+    # Priority 3: client role
+    if effective_role == "client":
+        return f"/{effective_lang}/client/dashboard"
+    
+    # Priority 4: provider role with onboarding check
+    if effective_role == "provider":
+        # Find provider profile linked to user
+        provider = db.query(Provider).filter(Provider.user_id == user.id).first()
+        
+        if not provider:
+            # New provider — send to wizard step 1
+            return f"/{effective_lang}/provider/dashboard/profile"
+        
+        # Use existing check_onboarding_complete function if available
+        try:
+            from apps.api.services.provider_service import check_onboarding_complete
+            is_complete, missing_fields = check_onboarding_complete(db, provider.id)
+            
+            if not is_complete:
+                # Redirect based on what's missing
+                if "business_name" in missing_fields:
+                    return f"/{effective_lang}/provider/dashboard/profile"
+                if "service" in missing_fields or "city" in missing_fields:
+                    # /provider/dashboard/services exists
+                    return f"/{effective_lang}/provider/dashboard/services"
+            
+            # All complete — dashboard
+            return f"/{effective_lang}/provider/dashboard"
+        except ImportError:
+            # Fallback: check fields directly if check_onboarding_complete not available
+            has_description = bool(provider.description and len(provider.description) > 10)
+            has_photo = bool(getattr(provider, "profile_image_url", None))
+            
+            # Check if provider has at least 1 service with a city
+            has_services = (
+                db.query(ServiceCity)
+                .join(Service, Service.id == ServiceCity.service_id)
+                .filter(Service.provider_id == provider.id)
+                .first()
+            ) is not None
+            
+            if not has_description or not has_photo:
+                # Step 1 — profile (description + photo)
+                return f"/{effective_lang}/provider/dashboard/profile"
+            
+            if not has_services:
+                # Step 2 — services
+                return f"/{effective_lang}/provider/dashboard/services"
+            
+            # All complete — dashboard
+            return f"/{effective_lang}/provider/dashboard"
+    
+    # Fallback
+    return f"/{effective_lang}/client/dashboard"

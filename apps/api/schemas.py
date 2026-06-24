@@ -304,6 +304,7 @@ class RegisterRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: str
     password: str
+    intent: Optional[str] = None
 
     @field_validator("email")
     @classmethod
@@ -375,11 +376,24 @@ class ChangePasswordResponse(BaseModel):
 
 class MagicLinkRequest(BaseModel):
     token: str
+    intent: Optional[str] = None
+    claim_token: Optional[str] = None
 
 
 class RequestMagicLinkBody(BaseModel):
     email: str
     lang: str = "en"
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, v: str) -> str:
+        return v.strip().lower()
+
+
+class MagicLinkSendRequest(BaseModel):
+    email: str
+    intent: Optional[str] = None
+    claim_token: Optional[str] = None
 
     @field_validator("email")
     @classmethod

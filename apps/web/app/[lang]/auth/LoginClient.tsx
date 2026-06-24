@@ -61,7 +61,7 @@ function EyeOffIcon() {
 // Types
 // ---------------------------------------------------------------------------
 
-type AuthStep = 'initial' | 'login' | 'register' | 'forgot' | 'select_role';
+type AuthStep = 'initial' | 'login' | 'register' | 'forgot' | 'select_role' | 'magic_link_sent';
 
 interface AuthState {
   step: AuthStep;
@@ -231,12 +231,24 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
 
     setState(s => ({ ...s, loading: true, error: null }));
     try {
-      const { exists } = await checkEmail(emailToCheck);
-      trackPageEvent('auth_email_entered', 'auth', { is_new: String(!exists) });
-      const currentIntent = localStorage.getItem('nevumo_intent');
-      const nextStep: AuthStep = exists ? 'login' : (!currentIntent ? 'select_role' : 'register');
-      trackPageEvent('auth_password_shown', 'auth', { step: nextStep });
-      setState(s => ({ ...s, loading: false, step: nextStep, password: '' }));
+      const result = await checkEmail(emailToCheck);
+      trackPageEvent('auth_email_entered', 'auth', { is_new: String(!result.exists) });
+
+      if (!result.exists) {
+        const currentIntent = localStorage.getItem('nevumo_intent');
+        const nextStep: AuthStep = !currentIntent ? 'select_role' : 'register';
+        trackPageEvent('auth_password_shown', 'auth', { step: nextStep });
+        setState(s => ({ ...s, loading: false, step: nextStep, password: '' }));
+        return;
+      }
+
+      if (!result.has_password) {
+        await handleMagicLink();
+        setState(s => ({ ...s, loading: false, step: 'magic_link_sent' }));
+        return;
+      }
+
+      setState(s => ({ ...s, loading: false, step: 'login', password: '' }));
     } catch {
       setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
     }
@@ -275,12 +287,24 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
 
     setState(s => ({ ...s, loading: true, error: null }));
     try {
-      const { exists } = await checkEmail(state.email);
-      trackPageEvent('auth_email_entered', 'auth', { is_new: String(!exists) });
-      const currentIntent = localStorage.getItem('nevumo_intent');
-      const nextStep: AuthStep = exists ? 'login' : (!currentIntent ? 'select_role' : 'register');
-      trackPageEvent('auth_password_shown', 'auth', { step: nextStep });
-      setState(s => ({ ...s, loading: false, step: nextStep, password: '' }));
+      const result = await checkEmail(state.email);
+      trackPageEvent('auth_email_entered', 'auth', { is_new: String(!result.exists) });
+
+      if (!result.exists) {
+        const currentIntent = localStorage.getItem('nevumo_intent');
+        const nextStep: AuthStep = !currentIntent ? 'select_role' : 'register';
+        trackPageEvent('auth_password_shown', 'auth', { step: nextStep });
+        setState(s => ({ ...s, loading: false, step: nextStep, password: '' }));
+        return;
+      }
+
+      if (!result.has_password) {
+        await handleMagicLink();
+        setState(s => ({ ...s, loading: false, step: 'magic_link_sent' }));
+        return;
+      }
+
+      setState(s => ({ ...s, loading: false, step: 'login', password: '' }));
     } catch {
       setState(s => ({ ...s, loading: false, error: t(authDict, 'error_generic', 'An error occurred. Please try again.') }));
     }
@@ -335,13 +359,17 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
         }
       }
 
-      const role = result.user.role;
-      const loginRedirectPath = redirectAfterLogin
-        ? addFromAuthParam(redirectAfterLogin)
-        : role === 'provider'
-        ? addFromAuthParam(`/${lang}/provider/dashboard`)
-        : addFromAuthParam(`/${lang}/client/dashboard`);
-      window.location.href = loginRedirectPath;
+      if (result.redirect) {
+        window.location.href = result.redirect;
+      } else {
+        const role = result.user.role;
+        const loginRedirectPath = redirectAfterLogin
+          ? addFromAuthParam(redirectAfterLogin)
+          : role === 'provider'
+          ? addFromAuthParam(`/${lang}/provider/dashboard`)
+          : addFromAuthParam(`/${lang}/client/dashboard`);
+        window.location.href = loginRedirectPath;
+      }
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.code === 'INVALID_CREDENTIALS' || err.message.includes('Invalid credentials')) {
@@ -475,6 +503,8 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
   function handleBack() {
     if (state.step === 'forgot') {
       setState(s => ({ ...s, step: 'login', error: null, forgotSuccess: false }));
+    } else if (state.step === 'magic_link_sent') {
+      setState(s => ({ ...s, step: 'initial', password: '', error: null }));
     } else {
       setState(s => ({ ...s, step: 'initial', password: '', error: null }));
     }
@@ -926,6 +956,25 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
             )}
 
             {genericError}
+          </>
+        )}
+
+        {/* ---- MAGIC LINK SENT STEP ---- */}
+        {state.step === 'magic_link_sent' && (
+          <>
+            <div className="mb-5">
+              <h2 className="text-[17px] font-bold text-[#171717]">{t(authDict, 'magic_link_sent_title', 'Check your email')}</h2>
+              <p className="text-sm text-gray-500 mt-1">{t(authDict, 'magic_link_sent_subtitle', "We've sent you a login link")}</p>
+            </div>
+
+            {emailPill}
+
+            <button
+              onClick={() => setState(s => ({ ...s, step: 'initial', error: null }))}
+              className="w-full py-2.5 rounded-lg text-base font-semibold text-white bg-orange-500 hover:bg-orange-600 transition-colors mt-4"
+            >
+              {t(authDict, 'magic_link_use_different_email', 'Use a different email')}
+            </button>
           </>
         )}
 

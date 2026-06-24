@@ -38,6 +38,7 @@ from apps.api.services.auth_service import (
     check_rate_limit,
     create_jwt,
     delete_user_account,
+    determine_post_auth_redirect,
     generate_reset_token,
     get_dummy_hash,
     get_or_create_oauth_user,
@@ -59,7 +60,24 @@ async def check_email(
     db: Session = Depends(get_db),
 ) -> CheckEmailResponse:
     user = db.query(User).filter(User.email == body.email).first()
-    return CheckEmailResponse(data={"exists": user is not None})
+    
+    if user is None:
+        return CheckEmailResponse(data={
+            "exists": False,
+            "has_password": False,
+            "role": None,
+            "oauth_connected": False,
+        })
+    
+    # Check if user has OAuth connected
+    has_oauth = bool(getattr(user, "oauth_provider", None) or getattr(user, "oauth_id", None))
+    
+    return CheckEmailResponse(data={
+        "exists": True,
+        "has_password": user.password_hash is not None,
+        "role": user.role,
+        "oauth_connected": has_oauth,
+    })
 
 
 @router.get("/register/slug/check", response_model=SlugCheckResponse)
@@ -146,9 +164,19 @@ async def register(
     email_service.send_welcome_email(user.email, user.role)
 
     token = create_jwt(user.id, user.email, user.role)
+    
+    # Determine redirect based on user and intent
+    redirect = determine_post_auth_redirect(
+        user=user,
+        db=db,
+        lang=None,  # RegisterRequest doesn't have lang field
+        intent=body.role,  # Use role as intent for registration
+    )
+    
     return AuthTokenResponse(data={
         "token": token,
         "user": {"id": str(user.id), "email": user.email, "role": user.role, "locale": user.locale},
+        "redirect": redirect,
     })
 
 
@@ -192,9 +220,19 @@ async def login(
         pass
 
     token = create_jwt(user.id, user.email, user.role)
+    
+    # Determine redirect based on user and intent
+    redirect = determine_post_auth_redirect(
+        user=user,
+        db=db,
+        lang=None,  # LoginRequest doesn't have lang field
+        intent=body.intent,
+    )
+    
     return AuthTokenResponse(data={
         "token": token,
         "user": {"id": str(user.id), "email": user.email, "role": user.role, "city_slug": city_slug},
+        "redirect": redirect,
     })
 
 
@@ -480,9 +518,20 @@ async def magic_link_auth(
     
     # Create JWT
     token = create_jwt(user.id, user.email, user.role)
+    
+    # Determine redirect based on user, claim_token, and intent
+    redirect = determine_post_auth_redirect(
+        user=user,
+        db=db,
+        lang=None,  # MagicLinkRequest doesn't have lang field
+        claim_token=body.claim_token,
+        intent=body.intent,
+    )
+    
     return AuthTokenResponse(data={
         "token": token,
         "user": {"id": str(user.id), "email": user.email, "role": user.role},
+        "redirect": redirect,
     })
 
 
@@ -663,11 +712,12 @@ async def google_oauth_callback(
             "locale": user.locale,
         })
 
-        # Determine redirect based on role
-        if user.role == "provider":
-            redirect = f"/{lang}/provider/dashboard"
-        else:  # client
-            redirect = f"/{lang}/client/dashboard"
+        # Determine redirect using centralized function
+        redirect = determine_post_auth_redirect(
+            user=user,
+            db=db,
+            lang=lang,
+        )
 
         redirect_url = f"{settings.OAUTH_REDIRECT_BASE}/{lang}/auth/oauth-callback?token={jwt_token}&user={user_data}&redirect={redirect}"
         return RedirectResponse(url=redirect_url)
@@ -711,10 +761,20 @@ async def google_oauth_complete(
                 db.add(provider)
                 db.commit()
         token = create_jwt(existing_user.id, existing_user.email, existing_user.role)
+        
+        # Determine redirect using centralized function
+        redirect = determine_post_auth_redirect(
+            user=existing_user,
+            db=db,
+            lang=body.lang,
+            intent=body.intent,
+        )
+        
         return AuthTokenResponse(data={
             "token": token,
             "user": {"id": str(existing_user.id), "email": existing_user.email, "role": existing_user.role},
             "is_new_user": False,
+            "redirect": redirect,
         })
 
     # If not exists → create user
@@ -750,8 +810,18 @@ async def google_oauth_complete(
 
     # Return JWT token
     token = create_jwt(user.id, user.email, user.role)
+    
+    # Determine redirect using centralized function
+    redirect = determine_post_auth_redirect(
+        user=user,
+        db=db,
+        lang=body.lang,
+        intent=body.intent,
+    )
+    
     return AuthTokenResponse(data={
         "token": token,
         "user": {"id": str(user.id), "email": user.email, "role": user.role},
         "is_new_user": True,
+        "redirect": redirect,
     })
