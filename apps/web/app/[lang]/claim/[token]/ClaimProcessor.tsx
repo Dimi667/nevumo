@@ -41,7 +41,7 @@ export default function ClaimProcessor({
     const claimKey = `claim_${token}`;
 
     // Prevent duplicate requests
-    if (sessionStorage.getItem(claimKey)) return;
+    if (sessionStorage.getItem(claimKey) === 'processing') return;
     sessionStorage.setItem(claimKey, 'processing');
 
     const processClaim = async () => {
@@ -64,7 +64,7 @@ export default function ClaimProcessor({
 
         // Handle 202 — verification code sent (banner flow)
         if (res.status === 202) {
-          sessionStorage.setItem(claimKey, 'done');
+          sessionStorage.removeItem(claimKey);
           const sentTo = data?.sent_to ?? '';
           const verifyUrl = sentTo
             ? `/${lang}/claim/${token}/verify?sent_to=${encodeURIComponent(sentTo)}`
@@ -85,7 +85,7 @@ export default function ClaimProcessor({
 
         // Mark as just claimed for welcome heading in wizard
         sessionStorage.setItem('nevumo_just_claimed', '1');
-        sessionStorage.setItem(claimKey, 'done');
+        sessionStorage.removeItem(claimKey);
 
         // Redirect logic:
         // - New claim → always wizard (profile page)
