@@ -364,7 +364,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Password */}
-      <PasswordSection hasPassword={profile?.has_password ?? false} lang={lang} />
+      <PasswordSection lang={lang} />
 
       {/* Availability */}
       <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">

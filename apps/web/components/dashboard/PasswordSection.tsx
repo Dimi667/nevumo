@@ -1,11 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { authFetch } from '@/lib/provider-api';
+import { useState, useEffect } from 'react';
+import { authFetch, getMe } from '@/lib/provider-api';
 import { useTranslation } from '@/lib/use-translation';
 
 interface PasswordSectionProps {
-  hasPassword: boolean;
   lang: string;
   onSuccess?: () => void;
 }
@@ -28,10 +27,10 @@ function EyeOffIcon() {
   );
 }
 
-export default function PasswordSection({ hasPassword, lang, onSuccess }: PasswordSectionProps) {
+export default function PasswordSection({ lang, onSuccess }: PasswordSectionProps) {
   const { t } = useTranslation('account_settings', lang);
   
-  const [localHasPassword, setLocalHasPassword] = useState<boolean>(hasPassword);
+  const [localHasPassword, setLocalHasPassword] = useState<boolean>(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -42,6 +41,18 @@ export default function PasswordSection({ hasPassword, lang, onSuccess }: Passwo
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    async function loadMe() {
+      try {
+        const me = await getMe();
+        setLocalHasPassword(me.has_password);
+      } catch (err) {
+        console.error('Failed to load user info:', err);
+      }
+    }
+    loadMe();
+  }, []);
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
@@ -102,14 +113,6 @@ export default function PasswordSection({ hasPassword, lang, onSuccess }: Passwo
     } catch (err: unknown) {
       if (err instanceof Error && 'code' in err) {
         const code = (err as { code: string }).code;
-        if (code === 'CURRENT_PASSWORD_REQUIRED') {
-          setLocalHasPassword(true);
-          setCurrentPassword('');
-          setNewPassword('');
-          setConfirmPassword('');
-          setError(null);
-          return;
-        }
         if (code === 'INVALID_CURRENT_PASSWORD') {
           setError(t('error_current_password_invalid', 'Current password is incorrect.'));
         } else {

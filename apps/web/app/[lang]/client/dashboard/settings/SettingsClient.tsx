@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { clearAuth, getAuthToken, getAuthUser, saveAuth } from '@/lib/auth-store';
 import { getReviewPreferences, updateReviewPreferences, type ReviewPreferences } from '@/lib/client-api';
@@ -14,13 +14,10 @@ import PhoneInput from '@/components/ui/PhoneInput';
 import { useTranslation } from '@/lib/use-translation';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import PasswordSection from '@/components/dashboard/PasswordSection';
-import { ClientDashboardContext } from '../layout';
 
 export default function SettingsClient({ lang }: { lang: string }) {
   const router = useRouter();
   const user = getAuthUser();
-  const dashboardContext = useContext(ClientDashboardContext);
-  const hasPassword = dashboardContext?.dashboardData?.has_password ?? false;
 
   const [preferences, setPreferences] = useState<ReviewPreferences | null>(null);
   const [loading, setLoading] = useState(true);
@@ -254,7 +251,7 @@ export default function SettingsClient({ lang }: { lang: string }) {
         </div>
       </div>
 
-      <PasswordSection hasPassword={hasPassword} lang={lang} />
+      <PasswordSection lang={lang} />
 
       {/* Push Notifications */}
       {pushSupported && (

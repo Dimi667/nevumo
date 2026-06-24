@@ -16,6 +16,14 @@ import type {
   UpdateProfileInput,
 } from '@/types/provider';
 
+export interface MeResponse {
+  id: string;
+  email: string;
+  role: string;
+  has_password: boolean;
+  locale: string;
+}
+
 export class ProviderApiError extends Error {
   code: string;
   status: number;
@@ -115,6 +123,14 @@ async function authFetch<T>(
 }
 
 export { authFetch };
+
+// ---------------------------------------------------------------------------
+// Auth / Me
+// ---------------------------------------------------------------------------
+
+export async function getMe(): Promise<MeResponse> {
+  return authFetch<MeResponse>('/api/v1/auth/me');
+}
 
 // ---------------------------------------------------------------------------
 // Dashboard
