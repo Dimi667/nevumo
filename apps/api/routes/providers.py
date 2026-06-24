@@ -720,7 +720,13 @@ async def verify_claim_code(
     provider.user_id = user.id
     provider.claim_token = None
     pending.used = True
-    db.commit()
+    try:
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        if "unique constraint" in str(e).lower() and "user_id" in str(e).lower():
+            raise HTTPException(status_code=409, detail="USER_ALREADY_HAS_PROVIDER")
+        raise
 
     # Send post-claim emails (non-blocking)
     try:
