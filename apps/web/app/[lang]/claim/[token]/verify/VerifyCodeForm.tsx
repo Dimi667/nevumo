@@ -54,7 +54,7 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
       if (response.ok && data.success) {
         setSuccess(true);
         // Save JWT from backend response and redirect
-        saveAuth(data.token);
+        saveAuth(data.token, data.user);
         window.location.replace(data.redirect);
         return;
       }

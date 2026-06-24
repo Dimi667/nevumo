@@ -749,6 +749,12 @@ async def verify_claim_code(
     return {
         "success": True,
         "token": jwt_token,
+        "user": {
+            "id": str(user.id),
+            "email": user.email,
+            "role": user.role,
+            "locale": user.locale,
+        },
         "redirect": f"/{lang}/provider/dashboard/profile"
     }
 
