@@ -78,7 +78,7 @@ export default function PasswordSection({ hasPassword, lang, onSuccess }: Passwo
         body.current_password = currentPassword;
       }
 
-      const response = await authFetch<{ success: boolean; data: { message: string } }>(
+      const response = await authFetch<{ message: string }>(
         '/api/v1/auth/password',
         {
           method: 'POST',
@@ -86,26 +86,28 @@ export default function PasswordSection({ hasPassword, lang, onSuccess }: Passwo
         }
       );
 
-      if (response.data.message === 'password_set') {
+      if (response.message === 'password_set') {
         setSuccessMessage(t('msg_password_set', 'Password set successfully.'));
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
         onSuccess?.();
-      } else if (response.data.message === 'password_changed') {
+      } else if (response.message === 'password_changed') {
         setSuccessMessage(t('msg_password_changed', 'Password changed successfully.'));
         setCurrentPassword('');
         setNewPassword('');
         setConfirmPassword('');
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        const errorStr = err.message;
-        if (errorStr.includes('INVALID_CURRENT_PASSWORD') || errorStr.includes('CURRENT_PASSWORD_REQUIRED')) {
+      if (err instanceof Error && 'code' in err) {
+        const code = (err as { code: string }).code;
+        if (code === 'INVALID_CURRENT_PASSWORD' || code === 'CURRENT_PASSWORD_REQUIRED') {
           setError(t('error_current_password_invalid', 'Current password is incorrect.'));
         } else {
-          setError(errorStr);
+          setError(err.message);
         }
+      } else if (err instanceof Error) {
+        setError(err.message);
       } else {
         setError('An unexpected error occurred.');
       }
