@@ -679,19 +679,14 @@ async def verify_claim_code(
     if not code or not code.isdigit() or len(code) != 6:
         raise HTTPException(status_code=400, detail="invalid_code_format")
 
-    # Find valid pending verification (support both user_id=None for banner flow and user_id for non-banner)
+    # Find valid pending verification by claim_token + code only (banner flow)
     query = db.query(PendingClaimVerification).filter(
         PendingClaimVerification.claim_token == token,
         PendingClaimVerification.code == code,
+        PendingClaimVerification.user_id == None,
         PendingClaimVerification.used == False,
         PendingClaimVerification.expires_at > datetime.now(timezone.utc),
     )
-
-    # If user is present, filter by user_id; otherwise look for user_id=None (banner flow)
-    if optional_user:
-        query = query.filter(PendingClaimVerification.user_id == optional_user.id)
-    else:
-        query = query.filter(PendingClaimVerification.user_id == None)
 
     pending = query.first()
 

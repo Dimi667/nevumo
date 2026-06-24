@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { saveAuth } from '@/lib/auth-store';
 import { getAuthToken } from '@/lib/auth-store';
@@ -35,12 +35,14 @@ export default function ClaimProcessor({
   errorNetworkText,
 }: ClaimProcessorProps) {
   const router = useRouter();
-  const hasTriggered = useRef(false);
   const [errorCode, setErrorCode] = useState<ErrorCode>(null);
 
   useEffect(() => {
-    if (hasTriggered.current) return;
-    hasTriggered.current = true;
+    const claimKey = `claim_${token}`;
+
+    // Prevent duplicate requests
+    if (sessionStorage.getItem(claimKey)) return;
+    sessionStorage.setItem(claimKey, 'processing');
 
     const processClaim = async () => {
       try {
@@ -62,6 +64,7 @@ export default function ClaimProcessor({
 
         // Handle 202 — verification code sent (banner flow)
         if (res.status === 202) {
+          sessionStorage.setItem(claimKey, 'done');
           const sentTo = data?.sent_to ?? '';
           const verifyUrl = sentTo
             ? `/${lang}/claim/${token}/verify?sent_to=${encodeURIComponent(sentTo)}`
@@ -73,6 +76,7 @@ export default function ClaimProcessor({
         if (!res.ok) {
           const code = data?.detail?.code as ErrorCode;
           setErrorCode(code ?? 'NETWORK');
+          sessionStorage.removeItem(claimKey);
           return;
         }
 
@@ -81,6 +85,7 @@ export default function ClaimProcessor({
 
         // Mark as just claimed for welcome heading in wizard
         sessionStorage.setItem('nevumo_just_claimed', '1');
+        sessionStorage.setItem(claimKey, 'done');
 
         // Redirect logic:
         // - New claim → always wizard (profile page)
@@ -93,6 +98,7 @@ export default function ClaimProcessor({
         }
       } catch {
         setErrorCode('NETWORK');
+        sessionStorage.removeItem(claimKey);
       }
     };
 
