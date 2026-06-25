@@ -56,7 +56,17 @@
 { "email": "user@example.com" }
 
 ### Response
-{ "success": true, "data": { "exists": true } }
+```json
+{
+  "success": true,
+  "data": {
+    "exists": boolean,
+    "has_password": boolean,
+    "role": string | null,
+    "oauth_connected": boolean
+  }
+}
+```
 
 ---
 
@@ -76,7 +86,14 @@
 
 ### Response (201)
 ```json
-{ "success": true, "data": { "token": "JWT", "user": { "id": "uuid", "email": "...", "role": "client" } } }
+{
+  "success": true,
+  "data": {
+    "token": "JWT",
+    "user": { "id": "uuid", "email": "...", "role": "client" },
+    "redirect": "/en/client/dashboard"
+  }
+}
 ```
 
 ### Errors
@@ -140,10 +157,26 @@ GET /api/v1/auth/register/slug/check?slug=devs&city_slug=sofia&category_slug=mas
 ## POST /api/v1/auth/login
 
 ### Body
-{ "email": "user@example.com", "password": "..." }
+```json
+{
+  "email": "user@example.com",
+  "password": "...",
+  "intent": "client | provider (optional)",
+  "lang": "en (optional)"
+}
+```
 
 ### Response
-{ "success": true, "data": { "token": "JWT", "user": { "id": "uuid", "email": "...", "role": "client" } } }
+```json
+{
+  "success": true,
+  "data": {
+    "token": "JWT",
+    "user": { "id": "uuid", "email": "...", "role": "client" },
+    "redirect": "/en/client/dashboard"
+  }
+}
+```
 
 ### Errors
 - 401 INVALID_CREDENTIALS
@@ -195,10 +228,26 @@ GET /api/v1/auth/register/slug/check?slug=devs&city_slug=sofia&category_slug=mas
 ## POST /api/v1/auth/magic-link
 
 ### Body
-{ "token": "raw_token_from_url" }
+```json
+{
+  "token": "raw_token_from_url",
+  "intent": "client | provider (optional)",
+  "claim_token": "string (optional)",
+  "lang": "en (optional)"
+}
+```
 
 ### Response — auto-login (returns JWT)
-{ "success": true, "data": { "token": "JWT", "user": { "id": "uuid", "email": "...", "role": "client" } } }
+```json
+{
+  "success": true,
+  "data": {
+    "token": "JWT",
+    "user": { "id": "uuid", "email": "...", "role": "client" },
+    "redirect": "/en/client/dashboard"
+  }
+}
+```
 
 ### Description
 - Authenticates user via magic link token
@@ -337,7 +386,8 @@ Completes Google OAuth registration after user accepts terms. Creates user accou
       "email": "...",
       "role": "client | provider"
     },
-    "is_new_user": true
+    "is_new_user": true,
+    "redirect": "/en/client/dashboard"
   }
 }
 ```

@@ -519,6 +519,10 @@ CREATE INDEX idx_translations_key ON translations(key);
   - Keys: dismiss_button (added May 27, 2026 for LegalModal close button)
   - Total: 1 key × 34 languages = 34 rows
   - Seed script: seed_auth_translations.py (dismiss_button seeded from pwa.dismiss_button)
+- **auth namespace (June 25, 2026)**: Magic link sent UI translations
+  - Keys: magic_link_sent_title, magic_link_sent_subtitle, magic_link_use_different_email
+  - Total: 3 keys × 34 languages = 102 rows
+  - Seed script: apps/api/scripts/seed_magic_link_sent_translations.py
 - **client_dashboard namespace**: Client dashboard UI strings
 - **provider_dashboard namespace**: 168 keys × 34 languages = 5,712 rows (includes 8 onboarding hero keys added April 10, 2026)
   Keys include: nav_overview, nav_analytics, nav_leads, nav_qr_code, nav_reviews,

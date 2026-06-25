@@ -2994,6 +2994,37 @@ NEXTAUTH_URL=http://localhost:3000
 
 ---
 
+## Global Auth Architecture (June 25, 2026)
+
+### Overview
+Централизирана система за auth redirect решения, заместваща разпръсната логика в различни endpoints.
+
+### Core Principles
+- **Single Source of Truth за redirects**: `determine_post_auth_redirect()` в `auth_service.py` е единственото място в системата което взима redirect решения след auth
+- **Redirect приоритети**: claim_token → intent/role → provider onboarding check → dashboard
+- **Smart Detection**: `POST /auth/check-email` връща `has_password` → frontend автоматично изпраща magic link за passwordless потребители без да показва password field
+- **Lang propagation**: Всички auth endpoints (login, register, magic-link) приемат `lang` параметър и го подават на `determine_post_auth_redirect()` за коректен redirect locale
+- **Архитектурен принцип**: Backend взима всички redirect решения; frontend само следва `result.redirect`
+
+### Backend Implementation
+- **apps/api/services/auth_service.py**: `determine_post_auth_redirect(user, db, lang, intent)` — READ-ONLY функция, не мутира DB
+- **apps/api/routes/auth.py**: Всички auth endpoints (login, register, magic-link, google/callback, google/complete) връщат `redirect` в response
+- **apps/api/schemas.py**: `LoginRequest`, `RegisterRequest`, `MagicLinkRequest` разширени с `intent` и `lang` полета
+
+### Frontend Implementation
+- **apps/web/lib/auth-types.ts**: `CheckEmailResult` разширен с `has_password`, `role`, `oauth_connected`; `AuthResult` включва `redirect`
+- **apps/web/lib/auth-api.ts**: `loginWithEmail()`, `registerWithEmail()`, `magicLinkAuth()` разширени с `lang` параметър
+- **apps/web/app/[lang]/auth/LoginClient.tsx**: Smart detection → passwordless users → auto magic link → magic_link_sent UI
+- **apps/web/app/[lang]/auth/magic/MagicLinkClient.tsx**: Използва `result.redirect` от backend вместо hardcoded path
+
+### Translation Keys Added
+- `auth.magic_link_sent_title` — 34 езика
+- `auth.magic_link_sent_subtitle` — 34 езика
+- `auth.magic_link_use_different_email` — 34 езика
+- Seed script: `apps/api/scripts/seed_magic_link_sent_translations.py`
+
+---
+
 ## Lead Capture → Account Linking Flow
 
 ### Overview

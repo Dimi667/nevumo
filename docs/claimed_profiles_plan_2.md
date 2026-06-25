@@ -1419,7 +1419,7 @@ Magic link системата трябва да работи коректно з
 
 ---
 
-### Блокер 7Г+7Е — Глобална Auth Архитектура 🔴 ПРЕДСТОИ
+### Блокер 7Г+7Е — Глобална Auth Архитектура ✅ ЗАВЪРШЕН (25 юни 2026)
 
 **Произход:** Блокер 7Г ("Нов login link") еволюира до пълна архитектурна задача,
 която покрива едновременно 7Г (smart detection) и 7Е (onboarding redirect logic).
@@ -1526,9 +1526,50 @@ has_password     → показва password field
 ще redirect-ва по user.role (base role), не по последно активната роля.
 Това е съзнателен компромис за кампанията. Фаза 2 го решава правилно с DB.
 
+**Имплементация (25 юни 2026):**
+
+Backend:
+- determine_post_auth_redirect() добавена в apps/api/services/auth_service.py
+  Приоритети: claim_token → intent/role → provider onboarding check → dashboard
+  READ-ONLY функция, не мутира DB
+- POST /auth/check-email: разширен response с has_password, role, oauth_connected
+- POST /auth/login: приема intent + lang, връща redirect в response
+- POST /auth/register: връща redirect в response
+- POST /auth/magic-link: приема intent, claim_token, lang; връща redirect
+- GET /auth/google/callback: заменена hardcoded if/else с determine_post_auth_redirect()
+- POST /auth/google/complete: връща redirect в response
+- Bug fix: lang=body.lang за login, register, magic-link (коректен redirect locale)
+
+Frontend:
+- apps/web/lib/auth-types.ts: CheckEmailResult разширен (has_password, role, oauth_connected); AuthResult включва redirect
+- apps/web/lib/auth-api.ts: checkEmail(), magicLinkAuth(), loginWithEmail(), registerWithEmail() — добавен lang параметър
+- apps/web/app/[lang]/auth/LoginClient.tsx:
+  - AuthStep добавен 'magic_link_sent'
+  - handleCheckEmail() smart detection: passwordless → auto magic link → magic_link_sent UI
+  - handleLogin() използва redirect от backend response
+- apps/web/app/[lang]/auth/magic/MagicLinkClient.tsx:
+  - Премахнат hardcoded redirect към /client/dashboard
+  - Използва result.redirect от backend; fallback: /{lang}/{role}/dashboard
+  - lang подаден към magicLinkAuth() за коректен locale в redirect
+
+Translations:
+- 3 нови ключа в auth namespace: magic_link_sent_title, magic_link_sent_subtitle, magic_link_use_different_email
+- 102 rows × 34 езика seeded в Neon
+- Seed script: apps/api/scripts/seed_magic_link_sent_translations.py
+
+**QA резултати (25 юни 2026):**
+- ✅ check-email response: exists, has_password, role, oauth_connected
+- ✅ Passwordless user → auto magic link → magic_link_sent UI
+- ✅ Login redirect от backend (коректен lang)
+- ✅ Magic link redirect: /bg/ → /bg/client/dashboard (не /pl/)
+- ✅ Register redirect от backend (коректен lang)
+- ✅ Google OAuth redirect (ръчен тест)
+
+**Commits:** feat: implement frontend for Blocker 7Г+7Е, fix: lang fixes за login/register/magic-link
+
 ---
 [✅] Блокер 7В: Add/Change Password Settings     → ЗАВЪРШЕН (24 юни 2026)
-[ ] Блокер 7Г+7Е: Глобална Auth Архитектура     → SWE-1.6 (backend) + Kimi-2.6 (frontend)
+[✅] Блокер 7Г+7Е: Глобална Auth Архитектура     → ЗАВЪРШЕН (25 юни 2026)
     Фаза 1 (кампания): check-email, determine_post_auth_redirect(), Google OAuth fix, smart detection
     Фаза 2 (пост-кампания): last_active_role + magic_link_tokens.intent
 [ ] Блокер 7Д: Outreach Flow потвърждение        → @mcp-playwright
