@@ -12,8 +12,8 @@ export function checkEmail(email: string): Promise<CheckEmailResult> {
   return apiPost<CheckEmailResult>("/api/v1/auth/check-email", { email });
 }
 
-export function loginWithEmail(email: string, password: string): Promise<AuthResult> {
-  return apiPost<AuthResult>("/api/v1/auth/login", { email, password });
+export function loginWithEmail(email: string, password: string, lang?: string): Promise<AuthResult> {
+  return apiPost<AuthResult>("/api/v1/auth/login", { email, password, lang });
 }
 
 export function registerWithEmail(
@@ -25,6 +25,7 @@ export function registerWithEmail(
   citySlug?: string,
   categorySlug?: string,
   cityId?: number | null,
+  lang?: string,
 ): Promise<AuthResult> {
   return apiPost<AuthResult>("/api/v1/auth/register", { 
     email, 
@@ -35,6 +36,7 @@ export function registerWithEmail(
     city_slug: citySlug,
     category_slug: categorySlug,
     city_id: cityId,
+    lang,
   });
 }
 

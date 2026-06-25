@@ -169,7 +169,7 @@ async def register(
     redirect = determine_post_auth_redirect(
         user=user,
         db=db,
-        lang=None,  # RegisterRequest doesn't have lang field
+        lang=body.lang,
         intent=body.role,  # Use role as intent for registration
     )
     
@@ -225,7 +225,7 @@ async def login(
     redirect = determine_post_auth_redirect(
         user=user,
         db=db,
-        lang=None,  # LoginRequest doesn't have lang field
+        lang=body.lang,
         intent=body.intent,
     )
     

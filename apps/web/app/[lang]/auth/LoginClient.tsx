@@ -326,7 +326,7 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
 
     setState(s => ({ ...s, loading: true, error: null }));
     try {
-      const result = await loginWithEmail(state.email, state.password);
+      const result = await loginWithEmail(state.email, state.password, lang);
       saveAuth(result.token, result.user);
       await saveCredentials(state.email, state.password);
       trackPageEvent('auth_success', 'auth', { method: 'email' });
@@ -410,7 +410,8 @@ export default function LoginClient({ lang, initialRole, authDict, footerDict, r
         undefined, 
         undefined, 
         undefined, 
-        cityId ?? null
+        cityId ?? null,
+        lang
       );
       saveAuth(result.token, result.user);
       await saveCredentials(state.email, state.password);

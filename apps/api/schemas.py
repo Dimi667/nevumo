@@ -268,6 +268,7 @@ class RegisterRequest(BaseModel):
     slug: Optional[str] = None  # User's preferred slug
     city_slug: Optional[str] = None  # For suggestions context
     category_slug: Optional[str] = None  # For suggestions context
+    lang: Optional[str] = None
 
     @field_validator("email")
     @classmethod
@@ -305,6 +306,7 @@ class LoginRequest(BaseModel):
     email: str
     password: str
     intent: Optional[str] = None
+    lang: Optional[str] = None
 
     @field_validator("email")
     @classmethod
