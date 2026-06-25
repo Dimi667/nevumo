@@ -50,8 +50,8 @@ export function resetPassword(token: string, password: string): Promise<AuthResu
   return apiPost<AuthResult>("/api/v1/auth/reset-password", { token, password });
 }
 
-export function magicLinkAuth(token: string, intent?: string, claim_token?: string): Promise<AuthResult> {
-  return apiPost<AuthResult>("/api/v1/auth/magic-link", { token, intent, claim_token });
+export function magicLinkAuth(token: string, intent?: string, claim_token?: string, lang?: string): Promise<AuthResult> {
+  return apiPost<AuthResult>("/api/v1/auth/magic-link", { token, intent, claim_token, lang });
 }
 
 export async function requestMagicLink(

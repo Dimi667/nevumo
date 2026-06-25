@@ -43,8 +43,8 @@ export default function MagicLinkClient({ lang, token }: MagicLinkClientProps) {
     }
 
     setState(s => ({ ...s, loading: true }));
-    
-    magicLinkAuth(token).then(result => {
+
+    magicLinkAuth(token, undefined, undefined, lang).then(result => {
       saveAuth(result.token, result.user);
       trackPageEvent('magic_link_success', 'magic-link', {});
       setState(s => ({ ...s, loading: false, page: 'success' }));

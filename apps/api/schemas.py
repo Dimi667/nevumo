@@ -378,6 +378,7 @@ class MagicLinkRequest(BaseModel):
     token: str
     intent: Optional[str] = None
     claim_token: Optional[str] = None
+    lang: Optional[str] = None
 
 
 class RequestMagicLinkBody(BaseModel):
