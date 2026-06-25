@@ -523,7 +523,7 @@ async def magic_link_auth(
     redirect = determine_post_auth_redirect(
         user=user,
         db=db,
-        lang=None,  # MagicLinkRequest doesn't have lang field
+        lang=body.lang,
         claim_token=body.claim_token,
         intent=body.intent,
     )
