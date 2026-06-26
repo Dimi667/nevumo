@@ -496,17 +496,15 @@ Email template: magic_link_pl.html
 
 ---
 
-### Блокер 7Д — Потвърждение на Outreach Flow 🟢
-(Може веднага — само верификация)
-Задача: Потвърди, че outreach email flow (email клик → claim) все още работи
-след промените от Блокер 7А. Не е код — само E2E тест.
+### Блокер 7Д — Потвърждение на Outreach Flow ✅ ЗАВЪРШЕН (26 юни 2026)
+(E2E верификация — само тестове, без код)
 
-Тест сценарий:
-- Изпрати тестов outreach email
-- Кликни claim link (без ?source=banner)
-- Потвърди: auto-claim работи, JWT се връща, wizard се зарежда
+**QA резултати (26 юни 2026):**
+- ✅ T1 (Happy Path): `/pl/claim/{token}` (без ?source=banner) → 200 → cookie `nevumo_auth_token` → redirect `/pl/provider/dashboard/profile?claimed=success` → wizard зареден, 0 console errors
+- ✅ T2 (Already Claimed): Същият token → error UI "Ten link jest nieprawidłowy lub wygasł" → без unauthorized достъп, 0 console errors
+- ✅ T3 (Invalid Token): Фалшив token → error UI "Profil, do którego prowadzi ten link, nie został znaleziony..." → чист error page, 0 console errors
 
-Модел: SWE-1.6 + @mcp-playwright
+Заключение: Email claim flow работи коректно след Блокер 7А промените в providers.py.
 
 ---
 
@@ -1572,7 +1570,7 @@ Translations:
 [✅] Блокер 7Г+7Е: Глобална Auth Архитектура     → ЗАВЪРШЕН (25 юни 2026)
     Фаза 1 (кампания): check-email, determine_post_auth_redirect(), Google OAuth fix, smart detection
     Фаза 2 (пост-кампания): last_active_role + magic_link_tokens.intent
-[ ] Блокер 7Д: Outreach Flow потвърждение        → @mcp-playwright
+[✅] Блокер 7Д: Outreach Flow потвърждение        → ЗАВЪРШЕН (26 юни 2026)
 [ ] Блокер 7Ж: Onboarding Pre-fill Scraped       → SWE-1.6 → Kimi-2.6
 [ ] Блокер 8:  Task 2A seed_unclaimed_providers  → Kimi-2.6 (изисква 7А–7Ж)
 [ ] Блокер 9:  Railway Scheduler script          → Kimi-2.6 (изисква Блокер 8)

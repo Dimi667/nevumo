@@ -1563,6 +1563,23 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Tested: ✅ Works for provider settings, ✅ Works for client settings, ✅ Works parallel with magic link login, ✅ Works parallel with Google OAuth login
 - Commits: 3c8cda9 (initial), a7f8344 (bug fix), 6c382ea (self-healing), 7602bb4 (/me endpoint), 5228cc3 (refactor)
 
+**Blocker 7Г+7Е — Global Auth Architecture (June 25, 2026)** — COMPLETE:
+- New endpoint: POST /api/v1/auth/check-email → returns {exists, has_password, role, oauth_connected}
+- New function: determine_post_auth_redirect() — single source of truth for all post-auth redirects
+- LoginClient.tsx: smart detection flow (check-email → passwordless auto magic link → magic_link_sent UI)
+- Google OAuth fix: correct lang in redirect URL
+- magic_link_tokens.lang column added (flows through full request chain)
+- QA: ✅ check-email response, ✅ passwordless auto magic link, ✅ login redirect (correct lang), ✅ magic link redirect /bg/ → /bg/client/dashboard, ✅ register redirect, ✅ Google OAuth redirect
+- Commits: feat: implement frontend for Blocker 7Г+7Е, fix: lang fixes за login/register/magic-link
+
+**Blocker 7Д — Outreach Email Claim Flow Verification (June 26, 2026)** — COMPLETE:
+- E2E verified: direct email claim flow (/pl/claim/{token}, no ?source=banner) still works after Blocker 7A
+- T1 (Happy Path): POST /api/v1/providers/claim/{token} → 200 → nevumo_auth_token cookie → /pl/provider/dashboard/profile?claimed=success → wizard visible
+- T2 (Already Claimed): same token → error UI (no crash, no unauthorized access)
+- T3 (Invalid Token): fake token → error UI (no crash, clean error page)
+- All 3 tests: 0 console errors
+- Tool: SWE-1.6 + @mcp-playwright
+
 **Task 6A — Profile Strength Email** — PLANNED:
 - Trigger: first service added (is_complete: False → True)
 - Content: personalized advice based on missing profile fields
