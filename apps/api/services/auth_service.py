@@ -236,6 +236,7 @@ def get_or_create_claim_user(
     email: str,
     lang: str,
     db: Session,
+    scraped_phone: Optional[str] = None,
 ) -> tuple["User", str]:
     """
     Find or create a user for the magic-link claim flow.
@@ -263,6 +264,12 @@ def get_or_create_claim_user(
             user.role = "provider"
             db.commit()
             db.refresh(user)
+        
+        # Pre-fill phone from scraped data if user has no phone
+        if scraped_phone and not user.phone:
+            user.phone = scraped_phone
+            db.commit()
+            db.refresh(user)
     else:
         # Create new passwordless provider account
         user = User(
@@ -275,6 +282,12 @@ def get_or_create_claim_user(
         db.add(user)
         db.commit()
         db.refresh(user)
+        
+        # Pre-fill phone from scraped data if user has no phone
+        if scraped_phone and not user.phone:
+            user.phone = scraped_phone
+            db.commit()
+            db.refresh(user)
 
     jwt_token = create_jwt(
         user_id=user.id,

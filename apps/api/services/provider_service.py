@@ -970,6 +970,7 @@ def get_provider_profile(provider: Provider, db: Optional[Session] = None) -> di
         "created_at": provider.created_at.isoformat(),
         "category_slug": provider.category_slug,
         "data_source": provider.data_source,
+        "scraped_phone": provider.scraped_phone,
     }
 
     if db is not None:

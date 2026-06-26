@@ -556,6 +556,7 @@ async def claim_provider(
             email=provider.scraped_email,
             lang=lang,
             db=db,
+            scraped_phone=provider.scraped_phone,
         )
 
     # Check if user already has a provider profile
@@ -713,6 +714,7 @@ async def verify_claim_code(
         email=provider.scraped_email,
         lang=lang,
         db=db,
+        scraped_phone=provider.scraped_phone,
     )
 
     # Complete the claim

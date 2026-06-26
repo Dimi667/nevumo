@@ -91,6 +91,7 @@ class Provider(Base):
     is_claimed: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     claim_token: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, unique=True)
     scraped_email: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    scraped_phone: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     category_slug: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     data_source: Mapped[str] = mapped_column(String(20), default="manual", nullable=False)
 
