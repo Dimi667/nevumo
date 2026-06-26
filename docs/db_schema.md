@@ -49,6 +49,7 @@ CREATE TABLE providers (
     is_claimed BOOLEAN NOT NULL DEFAULT TRUE, -- FALSE for unclaimed (scraped/auto-created) profiles
     claim_token TEXT UNIQUE,                  -- Magic token for claiming unclaimed profiles
     data_source TEXT NOT NULL DEFAULT 'manual', -- 'manual', 'scraped', 'imported', etc.
+    scraped_phone TEXT,                         -- phone от scraping, pre-fills user.phone при claim
     created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -80,6 +81,12 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token) WHERE cl
 - Notes:
   - Banner flow: verification created WITHOUT user_id (nullable) — user_id се попълва след като get_or_create_claim_user() създаде/намери потребителя в verify endpoint
   - Magic link tokens table: ще бъде добавена в Блокер 7Б
+
+### Промени в providers таблица (June 26, 2026)
+- Добавена колона: `scraped_phone TEXT` — телефон от scraping
+- Alembic migration: d2e3f4g5h6i7_add_scraped_phone_to_providers.py
+- Логика: при claim → ако user.phone е NULL → get_or_create_claim_user() записва scraped_phone в user.phone
+- Попълва се от seed_unclaimed_providers.py (Блокер 8) от CEIDG/Panoramafirm CSV
 
 ---
 

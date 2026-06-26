@@ -1580,6 +1580,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - All 3 tests: 0 console errors
 - Tool: SWE-1.6 + @mcp-playwright
 
+**Blocker 7Ж — Onboarding Pre-fill Scraped Providers (June 26, 2026)** — COMPLETE:
+- DB: scraped_phone TEXT column added to providers (migration d2e3f4g5h6i7)
+- models.py: scraped_phone field added to Provider model
+- provider_service.py: scraped_phone included in get_provider_profile() response
+- auth_service.py: get_or_create_claim_user() pre-fills user.phone from scraped_phone if user.phone is None
+- providers.py: both call sites pass scraped_phone=provider.scraped_phone
+- E2E verified: claim flow → user.phone populated from scraped_phone ✅
+- Alembic current head: d2e3f4g5h6i7
+
 **Task 6A — Profile Strength Email** — PLANNED:
 - Trigger: first service added (is_complete: False → True)
 - Content: personalized advice based on missing profile fields

@@ -1571,7 +1571,7 @@ Translations:
     Фаза 1 (кампания): check-email, determine_post_auth_redirect(), Google OAuth fix, smart detection
     Фаза 2 (пост-кампания): last_active_role + magic_link_tokens.intent
 [✅] Блокер 7Д: Outreach Flow потвърждение        → ЗАВЪРШЕН (26 юни 2026)
-[ ] Блокер 7Ж: Onboarding Pre-fill Scraped       → SWE-1.6 → Kimi-2.6
+[✅] Блокер 7Ж: Onboarding Pre-fill Scraped       → ЗАВЪРШЕН (26 юни 2026)
 [ ] Блокер 8:  Task 2A seed_unclaimed_providers  → Kimi-2.6 (изисква 7А–7Ж)
 [ ] Блокер 9:  Railway Scheduler script          → Kimi-2.6 (изисква Блокер 8)
 [ ] Блокер 10: E2E cleanup                       → CLI команда

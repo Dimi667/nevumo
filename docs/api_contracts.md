@@ -803,6 +803,7 @@ Provider must have a provider record (role=provider + completed registration).
 ### Notes
 - The `public_url` in the response includes the language specified in the `lang` query parameter
 - If `lang` is not provided, defaults to `en`
+- get_provider_profile() response includes scraped_phone (TEXT, nullable) — added June 26, 2026
 
 ### Onboarding Completeness (missing_fields)
 
