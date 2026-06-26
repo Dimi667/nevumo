@@ -155,17 +155,21 @@ export default function ClientDashboardLayout({ children, params }: DashboardLay
       }
 
       // Redirect provider users to provider dashboard
+      let payload: { role?: string } = {};
       try {
         const payloadBase64 = token.split('.')[1];
         if (payloadBase64) {
-          const decodedPayload = JSON.parse(atob(payloadBase64));
-          if (decodedPayload.role === 'provider') {
+          payload = JSON.parse(atob(payloadBase64));
+          if (payload.role === 'provider') {
             router.replace(`/${lang}/provider/dashboard`);
             return;
           }
         }
       } catch (e) {
         console.error('Error decoding token:', e);
+        clearAuth();
+        router.replace(`/${lang}/auth`);
+        return;
       }
 
       try {

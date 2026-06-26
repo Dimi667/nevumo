@@ -2,11 +2,12 @@ import type { UserInfo } from "@/lib/auth-types";
 
 const TOKEN_KEY = "nevumo_auth_token";
 const USER_KEY = "nevumo_auth_user";
+const AUTH_SCHEMA_VERSION = "2";
 
 export function saveAuth(token: string, user: UserInfo): void {
   if (typeof window === "undefined") return;
   localStorage.setItem(TOKEN_KEY, token);
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+  localStorage.setItem(USER_KEY, JSON.stringify({ v: AUTH_SCHEMA_VERSION, user }));
   if (typeof document !== 'undefined') {
     document.cookie = `nevumo_auth_token=${token}; path=/; max-age=31536000; SameSite=Lax`;
   }
@@ -34,7 +35,14 @@ export function getAuthUser(): UserInfo | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(USER_KEY);
-    return raw ? (JSON.parse(raw) as UserInfo) : null;
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    // Check schema version - if missing or mismatched, clear and return null
+    if (!parsed.v || parsed.v !== AUTH_SCHEMA_VERSION) {
+      clearAuth();
+      return null;
+    }
+    return parsed.user as UserInfo;
   } catch {
     return null;
   }
