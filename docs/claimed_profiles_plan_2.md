@@ -1293,7 +1293,7 @@ CATEGORY_LABEL_PL = {
 
 ### ФАЗА 0 — Оправяме всичко преди кампанията
 
-[ ] Stale localStorage crash (production bug) — defensive try-catch в auth-store.ts + error boundaries → SWE-1.6
+[x] Stale localStorage crash (production bug) — RESOLVED (June 26, 2026): defensive try-catch в getAuthUser() + saveAuth(); clearAuth() при parse error или schema version mismatch; schema v:"2" confirmed in production
 [ ] Pre-launch UX fixes:
     [ ] Double "Nevumo" на claim page → Kimi-2.6
     [ ] CTA above fold на мобилно → Kimi-2.6

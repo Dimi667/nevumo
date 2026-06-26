@@ -1991,6 +1991,8 @@ Next.js App Router: child pages with `generateMetadata` override `icons` from ro
 ✅ Issue 3: Photo upload — ЗАВЪРШЕН
 ✅ Issue 4: JWT expiry → безкраен loop — РЕШЕН (23 юни 2026)
    (401 interceptor в provider-api.ts + client-api.ts → clearAuth() + redirect)
+✅ Stale localStorage auth crash — RESOLVED (June 26, 2026)
+   (defensive try-catch в auth-store.ts getAuthUser() + saveAuth(); clearAuth() при JSON parse error или schema version mismatch; localStorage schema v:"2" confirmed in production with lili@test.bg)
 🟡 Issue 5: Banner Claim Flow — частично имплементиран, нужен редизайн
 
 Частично: scraped_email в банера, ?source=banner, 202 flow, masked sent_to,
