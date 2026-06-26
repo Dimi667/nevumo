@@ -1313,7 +1313,11 @@ CATEGORY_LABEL_PL = {
        - Sticky bar остава за non-iOS 26 mobile
        - Файлове: apps/web/app/[lang]/claim/[token]/page.tsx
        - E2E verified: бутоните работят коректно на desktop и mobile
-    [ ] Email logo качен на R2 (images.nevumo.com) → Dimitar (ръчно)
+    [x] Email logo качен на R2 (images.nevumo.com) ✅ ЗАВЪРШЕН (26 юни 2026)
+       - Логото е качено на https://images.nevumo.com/nevumo-logo.png
+       - Всички email templates използват R2 URL
+       - Скрипт: apps/api/scripts/upload_logo_to_r2.py
+       - Templates: outreach_email_pl.html, claim_verification_pl.html, article14_confirmation_pl.html
     [ ] Email subject line под 50 символа → проверка + корекция
 [ ] Технически дълг (cleanup):
     [ ] AutoClaimTrigger.tsx — изтриване (заменен от ClaimProcessor)
