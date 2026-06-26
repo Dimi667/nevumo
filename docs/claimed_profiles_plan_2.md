@@ -1293,7 +1293,13 @@ CATEGORY_LABEL_PL = {
 
 ### ФАЗА 0 — Оправяме всичко преди кампанията
 
-[x] Stale localStorage crash (production bug) — RESOLVED (June 26, 2026): defensive try-catch в getAuthUser() + saveAuth(); clearAuth() при parse error или schema version mismatch; schema v:"2" confirmed in production
+[x] Stale localStorage crash (all code paths) — RESOLVED (June 26, 2026):
+    - getAuthToken() wrapped in try-catch
+    - isAuthenticated() document.cookie wrapped in try-catch
+    - ClaimProcessor.tsx sessionStorage wrapped in try-catch
+    - AuthHeaderButton.tsx: replaced direct localStorage read with getAuthUser()/getAuthToken() from auth-store.ts
+    - Root cause: AuthHeaderButton read raw { v:"2", user: UserInfo } wrapper as AuthUser → user.email undefined → charAt crash
+    - E2E verified: claim flow works for returning visitors (no incognito)
 [ ] Pre-launch UX fixes:
     [ ] Double "Nevumo" на claim page → Kimi-2.6
     [ ] CTA above fold на мобилно → Kimi-2.6
