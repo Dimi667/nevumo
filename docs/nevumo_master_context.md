@@ -1458,6 +1458,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
   - Засегнати файлове: apps/api/services/provider_service.py, apps/api/alembic/versions/cdf063316609_add_cancelled_to_lead_matches_status.py
 
 ### Recent Changes (April 2026)
+**CTA Above Fold on Claim Page (June 26, 2026)** — COMPLETE:
+- Added 2 inline CTA buttons for desktop and iOS 26+ mobile
+- First button: after provider card (above fold on mobile)
+- Second button: before time signal (bottom of page)
+- Sticky bar remains for non-iOS 26 mobile
+- Files: `apps/web/app/[lang]/claim/[token]/page.tsx`, `ClaimMobileCTA.tsx`
+- E2E verified: buttons work correctly on desktop and mobile
+- Translation key: `claim.cta_register` (34 languages supported)
+
 **Blocker 3 — Outreach Unsubscribe Mechanism (June 22, 2026)** — COMPLETE:
 - New table: `outreach_unsubscribes` (email PK, unsubscribed_at TIMESTAMPTZ, reason CHECK)
 - Alembic migration: `u1v2w3x4y5z6_add_outreach_unsubscribes.py`

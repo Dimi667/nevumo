@@ -3665,6 +3665,41 @@ python scripts/seed_review_translations.py
 ✅ RESOLVED (June 23, 2026):
 - JWT expiry redirect loop — 401 interceptor added in provider-api.ts + client-api.ts → clearAuth() + redirect to /auth
 
+### Claim Page CTA Strategy (June 26, 2026)
+
+#### Desktop (≥640px)
+- 2 инлайн CTA бутона в main content
+- Първи бутон: след provider card (above fold)
+- Втори бутон: преди time signal (bottom of page)
+- Използва същия translation key: `cta_register`
+- CSS: `hidden sm:block` (visible only on desktop)
+
+#### Mobile (<640px)
+- **iOS 26+**: 2 инлайн CTA бутона (същите позиции като desktop)
+  - Компонент: ClaimMobileCTA.tsx
+  - Hook: useIsIOS26Plus()
+  - CSS: `sm:hidden` (visible only on mobile)
+- **Non-iOS 26**: Sticky bar (fixed position)
+  - Компонент: StickyClaimBar.tsx
+  - Позиция: fixed bottom, z-index 9999
+  - CSS: `sm:hidden` (visible only on mobile)
+
+#### Translation Key
+- `claim.cta_register` = "Register and claim for free" (EN)
+- Същият ключ се използва за всички CTA бутони
+- Поддържа 34 езика чрез PostgreSQL translations table
+
+#### Implementation Files
+- `apps/web/app/[lang]/claim/[token]/page.tsx` - Main page with inline CTAs
+- `apps/web/app/[lang]/claim/[token]/ClaimMobileCTA.tsx` - iOS 26+ specific CTA
+- `apps/web/app/[lang]/claim/[token]/StickyClaimBar.tsx` - Sticky bar for non-iOS 26 mobile
+
+#### E2E Test Results (June 26, 2026)
+- Desktop CTA buttons: ✅ PASS (both buttons redirect correctly)
+- Mobile sticky bar: ✅ PASS (redirects correctly)
+- iOS 26+ inline CTAs: ⚠️ NOT TESTED (requires iOS 26+ device)
+- ClaimProcessor integration: ✅ PASS (auto-claim works correctly)
+
 ---
 
 **slugs.ts Consistency Fix (June 11, 2026)**:

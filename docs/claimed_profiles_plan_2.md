@@ -1302,7 +1302,13 @@ CATEGORY_LABEL_PL = {
     - E2E verified: claim flow works for returning visitors (no incognito)
 [ ] Pre-launch UX fixes:
     [ ] Double "Nevumo" на claim page → Kimi-2.6
-    [ ] CTA above fold на мобилно → Kimi-2.6
+    [x] CTA above fold на мобилно и десктоп ✅ ЗАВЪРШЕН (26 юни 2026)
+       - Добавени 2 инлайн CTA бутона за desktop и iOS 26+ mobile
+       - Първи бутон: след provider card (above fold на мобилно)
+       - Втори бутон: преди time signal (най-долу)
+       - Sticky bar остава за non-iOS 26 mobile
+       - Файлове: apps/web/app/[lang]/claim/[token]/page.tsx
+       - E2E verified: бутоните работят коректно на desktop и mobile
     [ ] Email logo качен на R2 (images.nevumo.com) → Dimitar (ръчно)
     [ ] Email subject line под 50 символа → проверка + корекция
 [ ] Технически дълг (cleanup):
