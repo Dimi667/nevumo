@@ -3,12 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { UserCircle } from 'lucide-react';
-
-interface AuthUser {
-  name: string;
-  email: string;
-  role: 'provider' | 'client';
-}
+import { getAuthUser, getAuthToken } from '@/lib/auth-store';
+import type { UserInfo } from '@/lib/auth-types';
 
 interface AuthHeaderButtonProps {
   lang: string;
@@ -39,20 +35,11 @@ export default function AuthHeaderButton({ lang }: AuthHeaderButtonProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<UserInfo | null>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('nevumo_auth_token');
-    const storedUser = localStorage.getItem('nevumo_auth_user');
-    
-    setToken(storedToken);
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch {
-        setUser(null);
-      }
-    }
+    setToken(getAuthToken());
+    setUser(getAuthUser());
   }, []);
 
   // Hide on specific routes
@@ -84,9 +71,7 @@ export default function AuthHeaderButton({ lang }: AuthHeaderButtonProps) {
   };
 
   if (token && user) {
-    const initial = user.name 
-      ? user.name.charAt(0).toUpperCase() 
-      : user.email.charAt(0).toUpperCase();
+    const initial = (user.email ?? '').charAt(0).toUpperCase() || '?';
 
     return (
       <div>
