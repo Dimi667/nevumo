@@ -1285,325 +1285,122 @@ CATEGORY_LABEL_PL = {
 
 ---
 
-## Appendix: Пълен Task Order (хронологичен)
+## Appendix: Пълен Task Order — Правилен ред за изпълнение
 
-> Задачите без зависимости могат да вървят паралелно.
-
-```
-БЛОКЕРИ (наредени по зависимост):
-[✅] Блокер 1: Auto-claim (4Д) — ЗАВЪРШЕН (22 юни 2026)
-[✅] Блокер 2: Art.14 в providers.py (4Е) — ЗАВЪРШЕН (22 юни 2026)
-[✅] Блокер 3: Unsubscribe механизъм — ЗАВЪРШЕН (22 юни 2026)
-[✅] Блокер 3Б: Welcome имейл след claim (await bug fix) — ЗАВЪРШЕН (22 юни 2026)
-[✅] Блокер 4: Resend Webhooks — ЗАВЪРШЕН (22 юни 2026, commit 5b186c0)
-[✅] Блокер 5: outreach_sequence_log таблица      → ЗАВЪРШЕН (22 юни 2026, commits 4cbdb17 + d70616d)
-[✅] Блокер 6: Верификация при claim (4Г)         → ЗАВЪРШЕН (23 юни 2026, commit 7ee1361)
-              email verification премахната от token flow (токенът е доказателство)
-              wizard pre-fill за scraped провайдъри (category_slug + data_source в API)
-              photo upload fix pending (pointerEvents: none)
-[✅] Блокер 6: Magic Link Flow + Cookie Source of Truth → ЗАВЪРШЕН (23 юни 2026, commit c705215)
-              claim token = proof of identity, no JWT required
-              get_or_create_claim_user() auto-login/register
-              Cookie = единствен source of truth
-              ClaimProcessor.tsx replaces AutoClaimTrigger
-              sessionStorage-based wizard welcome heading
-              3 new translation keys (34 languages each)
-[✅] Блокер 7А: Banner Flow Redesign (без auth)  → ЗАВЪРШЕН (24 юни 2026)
-
-### Блокер 7А — Banner Flow Redesign ✅ ЗАВЪРШЕН (24 юни 2026)
-
-**Промени в backend (apps/api/routes/providers.py):**
-- claim_provider(): при source=banner не изисква JWT — get_optional_current_user се игнорира
-- claim_provider(): при source=banner проверява само scraped_email + is_claimed
-- verify_claim_code(): сменен от get_current_user на get_optional_current_user
-- verify_claim_code(): вика get_or_create_claim_user(scraped_email) → връща JWT + user + redirect
-- verify_claim_code(): PendingClaimVerification query филтрира само по claim_token + code + user_id==None
-- verify_claim_code(): catch IntegrityError при db.commit() → 409 USER_ALREADY_HAS_PROVIDER
-- verify_claim_code(): Art.14 email dashboard_link използва lang параметъра
-- verify_claim_code(): welcome email ПРЕМАХНАТ — ще се изпраща от Task 6A след попълнен профил
-
-**Промени в frontend:**
-- verify/page.tsx: премахнат auth guard (проверката за nevumo_auth_token cookie)
-- VerifyCodeForm.tsx: премахнат Authorization header; след успех → saveAuth(token) + window.location.replace(redirect)
-- ClaimProcessor.tsx: sessionStorage guard (claim_{token}): 'processing' блокира дублиране, removeItem при success/error
-- ClaimProcessor.tsx: 401 handler → setErrorCode('NETWORK') вместо redirect към /auth
-
-**Промени в apps/web/public/sw.js:**
-- Добавен ред: if (event.request.url.includes('/_next/')) return;
-- Причина: SW прихващаше Next.js chunk-ове при router.push() → Application error
-
-**E2E тест резултати (24 юни 2026):**
-- Banner click → POST без JWT → 202 ✅
-- Имейл с код пристига ✅ (само 1 имейл — sessionStorage guard работи)
-- Код → verify → get_or_create_claim_user → JWT ✅
-- Redirect → /provider/dashboard/profile (wizard, Step 1) ✅
-- Pre-fill: business_name + description + category_slug ✅
-- Art.14 RODO имейл пристига с правилен lang и dashboard_link ✅
-- Welcome имейл НЕ се изпраща (премахнат) ✅
+> Никаква фаза не стартира докато предишната не е 100% завършена и тествана.
 
 ---
 
-### Блокер 7Б — Magic Link Login ✅ ЗАВЪРШЕН (24 юни 2026)
+### ФАЗА 0 — Оправяме всичко преди кампанията
 
-**Проблем:** Потребители създадени чрез get_or_create_claim_user() нямат парола.
-При затворен браузър нямат начин да влязат обратно.
-
-**Имплементация:**
-- Backend: POST /api/v1/auth/request-magic-link (нов endpoint в auth.py)
-  - Rate limiting: 1 заявка/минута на email
-  - Cleanup на неизползвани токени преди генериране на нов
-  - Генерира secrets.token_urlsafe(32) → SHA256 hash → MagicLinkToken record
-  - 24h TTL, еднократен
-  - Винаги връща 200 (не разкрива дали email съществува)
-- Backend: send_login_magic_link_email() — нова функция в email_service.py
-  - Отделна от send_magic_link_email() (клиентски leads flow)
-  - PL/EN поддръжка (технически дълг: останалите 32 езика → EN)
-- Frontend: requestMagicLink() в auth-api.ts
-- Frontend: LoginClient.tsx — "Brak hasła? Zaloguj się linkiem na email →"
-  - Появява се на стъпка 2 (след въвеждане на email)
-  - Клик → изпраща линк на вече въведения email → success съобщение
-  - Без второ email поле
-- Translations: 8 ключа × 34 езика (seed_magic_link_translations.py)
-- Съществуваща инфраструктура: MagicLinkToken модел + POST /auth/magic-link
-  (консумира токен, издава JWT) — не са пипани
-
-**Тествани сценарии:**
-- Passwordless провайдър → magic link → provider dashboard ✅
-- Email пристига коректно (PL) ✅
-- Rate limiting работи ✅
-
-**Известни ограничения (технически дълг — не блокират кампанията):**
-- Имейлът е само PL/EN; останалите 32 езика получават EN
-- Redirect след magic link login е role-aware само частично (вж. Known Issues)
-
-**⚠️ ВАЖНО — Глобална система, multi-role потребители:**
-Nevumo ще има потребители с двойна роля (провайдър + клиент едновременно).
-Magic link системата трябва да работи коректно за всички случаи:
-- role='provider' → redirect към /provider/dashboard
-- role='client' → redirect към /client/dashboard
-- Потребител и с двете роли → redirect по последно активната роля;
-  switch-role endpoint съществува и работи
-Текущото MagicLinkClient.tsx redirect поведение трябва да се верифицира
-преди bulk кампанията (вж. QA Gate 5.1).
+[ ] Stale localStorage crash (production bug) — defensive try-catch в auth-store.ts + error boundaries → SWE-1.6
+[ ] Pre-launch UX fixes:
+    [ ] Double "Nevumo" на claim page → Kimi-2.6
+    [ ] CTA above fold на мобилно → Kimi-2.6
+    [ ] Email logo качен на R2 (images.nevumo.com) → Dimitar (ръчно)
+    [ ] Email subject line под 50 символа → проверка + корекция
+[ ] Технически дълг (cleanup):
+    [ ] AutoClaimTrigger.tsx — изтриване (заменен от ClaimProcessor)
+    [ ] ClaimCTAWrapper.tsx — изтриване (заменен от ClaimProcessor)
+    [ ] LoginClient.tsx — почистване на ?from=auth логиката
 
 ---
 
-### Блокер 7В — Add/Change Password в Provider Settings ✅ ЗАВЪРШЕН (24 юни 2026)
+### ФАЗА 1 — БАНЕР
 
-**Проблем:** Passwordless потребители (от banner claim) нямат парола в акаунта.
-При затворен браузър не могат да сменят паролата.
+⚠️ Ред е критичен: първо тест, после реални данни.
 
-**Имплементация:**
-- Backend: POST /api/v1/auth/password (global endpoint)
-  - Passwordless: задава нова парола (без old_password)
-  - С парола: изисква old_password за потвърждение
-- Backend: GET /api/v1/auth/me — single source of truth за has_password
-- Frontend: PasswordSection.tsx (shared компонент за provider и client)
-  - Чете has_password от /api/v1/auth/me
-  - Автоматично показва 2-field (set) или 3-field (change) форма
-- Translations: account_settings namespace (14 ключа × 34 езика)
-  - seed_account_settings_translations.py
-- Architecture: Премахнат has_password от provider profile и client dashboard responses
-  - Централизиран в /api/v1/auth/me
-
-**QA резултати:**
-- ✅ Работи за provider settings
-- ✅ Работи за client settings
-- ✅ Работи паралелно с magic link login
-- ✅ Работи паралелно с Google OAuth login
-- ✅ Правилно показва 2-field vs 3-field форма
-
-**Commits:** 3c8cda9, a7f8344, 6c382ea, 7602bb4, 5228cc3
+[ ] Ръчен тест на целия Banner flow — симулирани провайдъри с имейли до които имаме достъп:
+    [ ] Сценарий: Banner → /verify директно → код → get_or_create_claim_user → JWT → wizard (onboarding)
+    [ ] Сценарий: Banner → вече регистриран потребител → директен claim → dashboard
+    [ ] Сценарий: Banner → email mismatch → 6-цифрен код до scraped_email
+    [ ] Сценарий: Banner → вече claimed → error UI
+    [ ] Art. 14 GDPR имейл пристига след успешен claim
+    [ ] Welcome имейл НЕ се изпраща (премахнат)
+    [ ] Wizard pre-fill: business_name, description, category, city
+    Инструмент: Claude in Chrome + ръчно
+[ ] Блокер 8: seed_unclaimed_providers.py — реалните Warsaw провайдъри в Neon → Kimi-2.6
+    Input: warszawa_providers_ceidg.csv + panoramafirm_emails_final.csv
+    Output: outreach_ready.csv
 
 ---
 
-### Блокер 7Г+7Е — Глобална Auth Архитектура ✅ ЗАВЪРШЕН (25 юни 2026)
+### ФАЗА 2 — ИМЕЙЛ
 
-**Произход:** Блокер 7Г ("Нов login link") еволюира до пълна архитектурна задача,
-която покрива едновременно 7Г (smart detection) и 7Е (onboarding redirect logic).
-Решава се с един имплементационен цикъл.
-
-**Проблеми, които решава:**
-1. MagicLinkClient.tsx има hardcoded redirect към /client/dashboard
-2. check-email не връща has_password → passwordless потребители не се разпознават рано
-3. Redirect логиката е разпръсната в login, register, magic-link, google oauth — всеки прави нещо различно
-4. Google OAuth не проверява onboarding completeness
-5. Passwordless потребители (от banner claim) нямат очевиден начин за вход
-
-**Архитектурни принципи:**
-- Single Source of Truth: backend взима всички redirect решения
-- Separation of Concerns: check-email = само smart detection; determine_post_auth_redirect() = само redirect
-- Read-Only Functions: determine_post_auth_redirect() не мутира DB
-- Нула DB миграции за Фаза 1
-
----
-
-#### Фаза 1 — За кампанията (нула DB миграции)
-
-**Backend промени:**
-
-1. POST /api/v1/auth/check-email — опростен response (само 4 полета):
-exists: bool
-has_password: bool          ← НОВО
-role: Optional[str]         ← НОВО
-oauth_connected: bool       ← НОВО
-   Премахнати: has_provider_profile, provider_is_claimed, provider_is_complete
-   Причина: никое от тях не се използва в smart detection логиката.
-   check-email СПИРА да вика check_onboarding_complete() → нула двоен DB call.
-
-2. apps/api/services/auth_service.py — нова функция determine_post_auth_redirect():
-Приоритет:
-claim_token → /auth/claim?token={claim_token}
-intent ('client'|'provider') → провайдър онбординг проверка → dashboard
-user.role (default) → провайдър онбординг проверка → dashboard
-   - READ-ONLY: не мутира DB
-   - Единственото място в системата което вика check_onboarding_complete()
-
-3. Всички auth endpoints връщат redirect в response:
-   - POST /api/v1/auth/login → добавя intent в LoginRequest + redirect в response
-   - POST /api/v1/auth/register → redirect в response
-   - POST /api/v1/auth/magic-link → добавя intent + claim_token в MagicLinkRequest + redirect в response
-   - GET /api/v1/auth/google/callback → минава през determine_post_auth_redirect()
-   - POST /api/v1/auth/google/complete → добавя intent в GoogleOAuthCompleteRequest + redirect в response
-
-4. apps/api/schemas.py — нови Optional полета:
-   - LoginRequest.intent: Optional[str]
-   - MagicLinkRequest.intent: Optional[str]
-   - MagicLinkRequest.claim_token: Optional[str]
-   - GoogleOAuthCompleteRequest.intent: Optional[str]
-
-**Frontend промени:**
-
-5. apps/web/app/[lang]/auth/LoginClient.tsx — smart detection в handleCheckEmail():
-!exists          → select_role или register (ако има intent)
-!has_password    → auto изпраща magic link (без да показва password field)
-has_password     → показва password field
-   При грешна парола → показва ЕДНОВРЕМЕННО:
-   - "Забравена парола?"
-   - "Влез с имейл линк"
-
-6. apps/web/app/[lang]/auth/magic/MagicLinkClient.tsx:
-   - Премахва hardcoded redirect към /client/dashboard
-   - Използва result.redirect от backend
-   - Fallback: /{lang}/{role}/dashboard
-
-7. apps/web/lib/auth-api.ts:
-   - checkEmail() return type → { exists, has_password, role, oauth_connected }
-   - magicLinkAuth() return type → включва redirect поле
-
-**Модел:** SWE-1.6 (backend) + Kimi-2.6 (frontend)
-**Зависимости:** Изисква Блокер 7Б ✅
+[ ] HTML шаблони:
+    [ ] outreach_email_pl.html — добавяне на preview text (текстът е в Раздел 3.2)
+    [ ] outreach_email_2_pl.html — Email #2 × 3 категории (текстът е в Раздел 3.3)
+    [ ] outreach_email_3_pl.html — Email #3 × 3 категории (текстът е в Раздел 3.4)
+    [ ] outreach_email_4_pl.html — Email #4 × 3 категории (текстът е в Раздел 3.5)
+    [ ] activation_email_1_pl.html — post-claim #1 (текстът е в Раздел 4)
+    [ ] activation_email_2_pl.html — post-claim #2
+    [ ] activation_email_3_pl.html — post-claim #3
+    [ ] activation_email_4_pl.html — post-claim #4
+    Модел: Kimi-2.6
+[ ] Задача 6А: Profile Strength Email — Claude (текст) → Kimi-2.6 (template) → SWE-1.6 (backend trigger)
+[ ] Блокер 9: run_outreach_sequence.py — Railway Cron scheduler за 4-email sequence → Kimi-2.6
+[ ] Преглед на всички имейл текстове (с Dimitar)
+[ ] Реален тест — изпращане до собствени имейли:
+    [ ] mail-tester.com score ≥ 9/10 (и трите категории)
+    [ ] SPF / DKIM / DMARC верифицирани (MXToolbox)
+    [ ] Gmail web desktop — layout ОК
+    [ ] Gmail mobile iOS — CTA видим ПРЕДИ скрол
+    [ ] Outlook 365 — layout не е счупен
+    [ ] Preview text видим в Gmail inbox list
+    [ ] Unsubscribe линк видим в footer
+    [ ] Jinja2 variables попълнени (без {{ }} в output)
+    [ ] Subject lines под 50 символа
+    Инструмент: Claude in Chrome + ръчно
 
 ---
 
-#### Фаза 2 — След кампанията (2 DB миграции, когато има dual-role потребители)
+### ФАЗА 3 — СМС
 
-**2.1 Dual-Role Support:**
-- DB migration: users.last_active_role (Optional[str], nullable)
-- Нова функция: update_last_active_role(user, role, db) — мутира отделно от redirect логиката
-- determine_post_auth_redirect() разширена с last_active_role като стъпка 3
-- switch-role endpoint: записва last_active_role при всеки превключване
-- GET /api/v1/auth/me: включва last_active_role в response
-
-**2.2 Magic Link Intent Persistence:**
-- DB migration: magic_link_tokens.intent (Optional[str], nullable)
-- POST /auth/request-magic-link: записва intent в MagicLinkToken записа
-- POST /auth/magic-link: чете intent от DB токена (не от URL)
-- URL на линка остава чист: /auth/magic?token=xxx (без ?intent=)
-- Причина за Фаза 2: dual-role потребители нямаме сега; за single-role user.role е достатъчен
-
-**Защо Фаза 2 е отделна:**
-- Нямаме нито един dual-role потребител в production
-- DB миграции върху Neon production = риск за кампанията
-- Архитектурата е проектирана така че добавянето на last_active_role е additive (не рефакторинг)
+[ ] SMS скрипт за SMSapi.pl (230 телефона) → Kimi-2.6
+[ ] Тест до собствен номер:
+    [ ] Claim линк е коректен
+    [ ] Дължина ≤ 160 символа
+    [ ] STOP механизъм работи
+    [ ] Delivery report получен от SMSapi.pl Dashboard
 
 ---
 
-**⚠️ ВАЖНО — Dual-Role честност:**
-Фаза 1 НЕ решава dual-role. При fresh login на dual-role потребител системата
-ще redirect-ва по user.role (base role), не по последно активната роля.
-Това е съзнателен компромис за кампанията. Фаза 2 го решава правилно с DB.
+### ФАЗА 4 — QA GATE ⛔
 
-**Имплементация (25 юни 2026):**
-
-Backend:
-- determine_post_auth_redirect() добавена в apps/api/services/auth_service.py
-  Приоритети: claim_token → intent/role → provider onboarding check → dashboard
-  READ-ONLY функция, не мутира DB
-- POST /auth/check-email: разширен response с has_password, role, oauth_connected
-- POST /auth/login: приема intent + lang, връща redirect в response
-- POST /auth/register: връща redirect в response
-- POST /auth/magic-link: приема intent, claim_token, lang; връща redirect
-- GET /auth/google/callback: заменена hardcoded if/else с determine_post_auth_redirect()
-- POST /auth/google/complete: връща redirect в response
-- Bug fix: lang=body.lang за login, register, magic-link (коректен redirect locale)
-
-Frontend:
-- apps/web/lib/auth-types.ts: CheckEmailResult разширен (has_password, role, oauth_connected); AuthResult включва redirect
-- apps/web/lib/auth-api.ts: checkEmail(), magicLinkAuth(), loginWithEmail(), registerWithEmail() — добавен lang параметър
-- apps/web/app/[lang]/auth/LoginClient.tsx:
-  - AuthStep добавен 'magic_link_sent'
-  - handleCheckEmail() smart detection: passwordless → auto magic link → magic_link_sent UI
-  - handleLogin() използва redirect от backend response
-- apps/web/app/[lang]/auth/magic/MagicLinkClient.tsx:
-  - Премахнат hardcoded redirect към /client/dashboard
-  - Използва result.redirect от backend; fallback: /{lang}/{role}/dashboard
-  - lang подаден към magicLinkAuth() за коректен locale в redirect
-
-Translations:
-- 3 нови ключа в auth namespace: magic_link_sent_title, magic_link_sent_subtitle, magic_link_use_different_email
-- 102 rows × 34 езика seeded в Neon
-- Seed script: apps/api/scripts/seed_magic_link_sent_translations.py
-
-**QA резултати (25 юни 2026):**
-- ✅ check-email response: exists, has_password, role, oauth_connected
-- ✅ Passwordless user → auto magic link → magic_link_sent UI
-- ✅ Login redirect от backend (коректен lang)
-- ✅ Magic link redirect: /bg/ → /bg/client/dashboard (не /pl/)
-- ✅ Register redirect от backend (коректен lang)
-- ✅ Google OAuth redirect (ръчен тест)
-
-**Commits:** feat: implement frontend for Blocker 7Г+7Е, fix: lang fixes за login/register/magic-link
+[ ] Пълен Checklist 5.1 A-H (всички ✅) → SWE-1.6 + mcp-playwright + ръчно
+    (Вж. Раздел 5 за пълния списък)
 
 ---
-[✅] Блокер 7В: Add/Change Password Settings     → ЗАВЪРШЕН (24 юни 2026)
-[✅] Блокер 7Г+7Е: Глобална Auth Архитектура     → ЗАВЪРШЕН (25 юни 2026)
-    Фаза 1 (кампания): check-email, determine_post_auth_redirect(), Google OAuth fix, smart detection
-    Фаза 2 (пост-кампания): last_active_role + magic_link_tokens.intent
-[✅] Блокер 7Д: Outreach Flow потвърждение        → ЗАВЪРШЕН (26 юни 2026)
-[✅] Блокер 7Ж: Onboarding Pre-fill Scraped       → ЗАВЪРШЕН (26 юни 2026)
-[ ] Блокер 8:  Task 2A seed_unclaimed_providers  → Kimi-2.6 (изисква 7А–7Ж)
-[ ] Блокер 9:  Railway Scheduler script          → Kimi-2.6 (изисква Блокер 8)
-[ ] Блокер 10: E2E cleanup                       → CLI команда
 
-СЪДЪРЖАНИЕ (паралелно с блокерите):
-[ ] Email #2, #3, #4 templates (× 3 категории)  → Claude пише текст
-[ ] Preview text за Email #1                     → Claude пише текст
-[ ] Activation emails #1-4                       → Claude пише текст
-[ ] SMS templates                                → Claude пише текст
-[ ] Pilot wave CSV (20-30 адреса)               → Dimitar избира ръчно
-[ ] Задача 6А: Profile Strength Email              → Claude (текст) + SWE-1.6 + Kimi-2.6
+### ФАЗА 5 — ПИЛОТ
 
-QA GATE (след всички блокери):
-[ ] QA Checklist 5.1 A-H (всички ✅)           → SWE-1.6 + mcp-playwright + ръчно
-[ ] Pilot Wave изпратен                          → Railway scheduler
-[ ] Pilot Wave анализ (ден 14)                   → Claude + Resend Dashboard
-[ ] Go/No-Go решение                             → Dimitar
+[ ] Блокер 10: E2E cleanup — railway run python3.13 -m apps.api.scripts.e2e_outreach_cleanup
+[ ] Resend Pro upgrade ($20/мес) → Dimitar (ръчно в Resend Dashboard)
+[ ] Pilot wave CSV — 20-30 ръчно избрани адреса → Dimitar
+    (пилотните адреси да бъдат ИЗКЛЮЧЕНИ от bulk CSV)
+[ ] Pilot wave изпращане → Email #1 → #2 → #3 → #4
+[ ] Анализ след 14 дни → Claude + Resend Dashboard
+[ ] Go/No-Go решение → Dimitar
 
-ПРЕДИ BULK:
-[ ] Resend Pro upgrade ($20/мес)                 → Dimitar (ръчно в Resend Dashboard)
+---
 
-BULK CAMPAIGN:
-[ ] Email #1 + SMS bulk send                     → Railway scheduler
-[ ] Monitoring (24h след #1)                     → Resend Dashboard + DB
-[ ] Email #2, #3, #4 автоматично                → Railway scheduler
-[ ] 30-дневен анализ                             → SQL + Claude
+### ФАЗА 6 — BULK CAMPAIGN
 
-POST-CAMPAIGN:
-[ ] "NOT NOW" feedback processing               → DB analysis
-[ ] 90-дневен re-engagement setup               → Railway scheduler
-[ ] Task 4Г пълна имплементация (6-цифрен код) → SWE-1.6 + Kimi-2.6
-```
+Стартира само след: ✅ QA Gate + ✅ Пилот Go + ✅ Resend Pro
+
+[ ] Email #1 bulk send (вторник 10:00 Warsaw) → Railway scheduler
+[ ] SMS bulk send (230 телефона) → SMSapi.pl скрипт
+[ ] Monitoring 24h след #1 → Resend Dashboard + DB
+[ ] Email #2, #3, #4 → Railway scheduler (автоматично)
+[ ] 30-дневен анализ → SQL + Claude
+
+---
+
+### POST-CAMPAIGN
+
+[ ] "NOT NOW" feedback processing → DB analysis
+[ ] 90-дневен re-engagement setup → Railway scheduler
+[ ] Task 4Г пълна имплементация (6-цифрен код за email mismatch) → SWE-1.6 + Kimi-2.6
 
 ---
 
