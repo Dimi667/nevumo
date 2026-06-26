@@ -1301,7 +1301,11 @@ CATEGORY_LABEL_PL = {
     - Root cause: AuthHeaderButton read raw { v:"2", user: UserInfo } wrapper as AuthUser → user.email undefined → charAt crash
     - E2E verified: claim flow works for returning visitors (no incognito)
 [ ] Pre-launch UX fixes:
-    [ ] Double "Nevumo" на claim page → Kimi-2.6
+    [x] Double "Nevumo" на claim page ✅ ЗАВЪРШЕН (26 юни 2026)
+       - Анализ показа, че няма проблем с double "Nevumo"
+       - Всички срещания са логични и контекстуално правилни
+       - Header лого е стандартно за всички страници
+       - Няма нужда от корекции
     [x] CTA above fold на мобилно и десктоп ✅ ЗАВЪРШЕН (26 юни 2026)
        - Добавени 2 инлайн CTA бутона за desktop и iOS 26+ mobile
        - Първи бутон: след provider card (above fold на мобилно)
