@@ -44,6 +44,7 @@ export function getAuthUser(): UserInfo | null {
     }
     return parsed.user as UserInfo;
   } catch {
+    clearAuth();
     return null;
   }
 }
