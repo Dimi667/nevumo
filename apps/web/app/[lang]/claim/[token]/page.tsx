@@ -186,6 +186,22 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
           </div>
         </div>
 
+        {/* First CTA button - after provider card (desktop + iOS 26+) */}
+        <div className="hidden sm:block">
+          <Link
+            href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
+            className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-xl text-center transition-colors"
+          >
+            {t(claimT, 'cta_register', 'Register and claim for free')}
+          </Link>
+        </div>
+
+        {/* First CTA button - after provider card (iOS 26+ mobile) */}
+        <ClaimMobileCTA
+          href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
+          label={t(claimT, 'cta_register', 'Register and claim for free')}
+        />
+
         {errorParam && errorParam !== 'already_claimed' && (
           <div className="mb-6 rounded-xl border border-orange-200 bg-orange-50 p-4">
             {errorParam === 'user_has_provider' && (
@@ -227,7 +243,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
           </div>
         )}
 
-        <ClaimProcessor
+        {/* <ClaimProcessor
           token={token}
           lang={normalizedLang}
           source={sourceParam}
@@ -236,7 +252,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
           errorAlreadyClaimedText={errorText}
           errorUserHasProviderText={errorUserHasProviderText}
           errorNetworkText={errorNetworkText}
-        />
+        /> */}
 
         {/* Leads teaser */}
         <div className="bg-gray-50 rounded-2xl p-6 mb-8 relative overflow-hidden">
@@ -326,6 +342,22 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
             </div>
           </div>
         </div>
+
+        {/* Second CTA button - before time signal (desktop + iOS 26+) */}
+        <div className="hidden sm:block">
+          <Link
+            href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
+            className="block w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-xl text-center transition-colors"
+          >
+            {t(claimT, 'cta_register', 'Register and claim for free')}
+          </Link>
+        </div>
+
+        {/* Second CTA button - before time signal (iOS 26+ mobile) */}
+        <ClaimMobileCTA
+          href={`/${normalizedLang}/auth?role=provider&redirect=/${normalizedLang}/claim/${token}`}
+          label={t(claimT, 'cta_register', 'Register and claim for free')}
+        />
 
         {/* Time signal */}
         <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
