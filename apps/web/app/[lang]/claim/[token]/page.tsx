@@ -243,7 +243,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
           </div>
         )}
 
-        {/* <ClaimProcessor
+        <ClaimProcessor
           token={token}
           lang={normalizedLang}
           source={sourceParam}
@@ -252,7 +252,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
           errorAlreadyClaimedText={errorText}
           errorUserHasProviderText={errorUserHasProviderText}
           errorNetworkText={errorNetworkText}
-        /> */}
+        />
 
         {/* Leads teaser */}
         <div className="bg-gray-50 rounded-2xl p-6 mb-8 relative overflow-hidden">
