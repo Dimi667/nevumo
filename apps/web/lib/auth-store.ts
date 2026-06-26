@@ -17,16 +17,25 @@ export function getAuthToken(): string | null {
   // Read from cookie first (source of truth), fallback to localStorage
   // for backwards compatibility during transition.
   if (typeof document !== 'undefined') {
-    const cookie = document.cookie
-      .split(';')
-      .find(c => c.trim().startsWith('nevumo_auth_token='));
-    if (cookie) {
-      return cookie.trim().split('=').slice(1).join('=');
+    try {
+      const cookie = document.cookie
+        .split(';')
+        .find(c => c.trim().startsWith('nevumo_auth_token='));
+      if (cookie) {
+        return cookie.trim().split('=').slice(1).join('=');
+      }
+    } catch {
+      // Cookie access failed, continue to localStorage fallback
     }
   }
   // Fallback: localStorage (will be empty after users re-authenticate)
   if (typeof localStorage !== 'undefined') {
-    return localStorage.getItem(TOKEN_KEY);
+    try {
+      return localStorage.getItem(TOKEN_KEY);
+    } catch {
+      clearAuth();
+      return null;
+    }
   }
   return null;
 }
@@ -62,7 +71,11 @@ export function isAuthenticated(): boolean {
   // Cookie is the single source of truth.
   // Works consistently with Server Components which also read the cookie.
   if (typeof document === 'undefined') return false;
-  return document.cookie
-    .split(';')
-    .some(c => c.trim().startsWith('nevumo_auth_token='));
+  try {
+    return document.cookie
+      .split(';')
+      .some(c => c.trim().startsWith('nevumo_auth_token='));
+  } catch {
+    return false;
+  }
 }

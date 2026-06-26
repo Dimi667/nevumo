@@ -41,8 +41,12 @@ export default function ClaimProcessor({
     const claimKey = `claim_${token}`;
 
     // Prevent duplicate requests
-    if (sessionStorage.getItem(claimKey) === 'processing') return;
-    sessionStorage.setItem(claimKey, 'processing');
+    try {
+      if (sessionStorage.getItem(claimKey) === 'processing') return;
+      sessionStorage.setItem(claimKey, 'processing');
+    } catch {
+      console.warn('[ClaimProcessor] sessionStorage access failed, continuing claim flow');
+    }
 
     const processClaim = async () => {
       try {
