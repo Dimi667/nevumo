@@ -7,7 +7,6 @@ import Link from 'next/link';
 import StickyClaimBar from './StickyClaimBar';
 import ClaimMobileCTA from './ClaimMobileCTA';
 import ClaimProcessor from './ClaimProcessor';
-import { claimProfile } from './actions';
 
 interface PageProps {
   params: Promise<{ lang: string; token: string }>;

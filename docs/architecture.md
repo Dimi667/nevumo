@@ -2542,18 +2542,12 @@ Claim page очаква директен обект (не wrapper):
 - **Content**: Congratulations, profile activation confirmation, dashboard link
 - **Error handling**: Email failure logged with `[EMAIL_WARNING]` pattern, does not block claim response
 
-### AutoClaimTrigger Architecture (June 22, 2026)
-- **Client Component**: `apps/web/app/[lang]/claim/[token]/AutoClaimTrigger.tsx`
-- **Detection**: Checks for `?from=auth` URL parameter (added by LoginClient after login/register)
-- **Idempotency**: `useRef` guard prevents double POST on page reload
-- **Error code matching**: `detail?.code === 'ALREADY_CLAIMED'` and `detail?.code === 'USER_ALREADY_HAS_PROVIDER'` (object, not string)
+### ClaimProcessor Architecture (June 22, 2026, updated June 28, 2026)
+- **Client Component**: `apps/web/app/[lang]/claim/[token]/ClaimProcessor.tsx`
+- **Idempotency**: SessionStorage guard prevents double POST on page reload
+- **Error handling**: USER_ALREADY_HAS_PROVIDER, NOT_FOUND, NO_EMAIL, NETWORK
 - **API endpoint**: Uses `API_BASE` from `@/lib/api` (relative URL in browser)
-- **Custom events**: Dispatches `auto-claim-start` and `auto-claim-end` for ClaimCTAWrapper coordination
-- **addFromAuthParam()**: Helper function that adds `&from=auth` if URL has `?`, otherwise `?from=auth`
-- **Integration points**:
-  - `LoginClient.tsx` — adds `?from=auth` to all redirect URLs after login/register
-  - `oauth-callback/page.tsx` — adds `?from=auth` to OAuth redirect URLs
-  - `OAuthTermsClient.tsx` — adds `?from=auth` to OAuth terms completion redirects
+- **Redirect logic**: New claim → wizard (profile page), returning with complete onboarding → dashboard
 - **Bug fix**: `?role=provider` parameter now read as intent during registration (previously only `?intent=` was checked)
 
 ### Translation Keys (claim namespace)

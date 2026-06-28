@@ -1442,10 +1442,10 @@ CATEGORY_LABEL_PL = {
        - Скрипт: apps/api/scripts/upload_logo_to_r2.py
        - Templates: outreach_email_pl.html, claim_verification_pl.html, article14_confirmation_pl.html
     [x] Email subject line под 50 символа → проверка + корекция ✅ ЗАВЪРШЕН (28 юни 2026)
-[ ] Технически дълг (cleanup):
-    [ ] AutoClaimTrigger.tsx — изтриване (заменен от ClaimProcessor)
-    [ ] ClaimCTAWrapper.tsx — изтриване (заменен от ClaimProcessor)
-    [ ] LoginClient.tsx — почистване на ?from=auth логиката
+[x] Технически дълг (cleanup) ✅ ЗАВЪРШЕН (28 юни 2026):
+    [x] AutoClaimTrigger.tsx — изтрит (заменен от ClaimProcessor) ✅
+    [x] ClaimCTAWrapper.tsx — изтрит (заменен от ClaimProcessor) ✅
+    [x] LoginClient.tsx, OAuthTermsClient.tsx, oauth-callback/page.tsx — addFromAuthParam() премахнат, actions.ts изтрит ✅
 
 ---
 

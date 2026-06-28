@@ -1509,7 +1509,7 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - DB: scraped_email + pending_claim_verifications table (migration b1c2d3e4f5g6)
 - DB: category_slug column on providers (migration c1d2e3f4g5h6)
 - Backend: data_source + category_slug added to get_provider_profile() response
-- Frontend: AutoClaimTrigger redirect → /provider/dashboard/profile (wizard)
+- Frontend: ClaimProcessor handles auto-claim flow
 - Alembic current head: c1d2e3f4g5h6 (непроменен)
 
 **Blocker 7A — Banner Flow Redesign (June 24, 2026)** — COMPLETE:
@@ -1934,12 +1934,12 @@ git push nevumo-git main  # архив на SSD
   - Padding fix: StickyBottomBar fallback wrapper px-0 (без дублиран padding)
 
 - **Claimed Profiles — Блокер 1 Auto-claim (June 22, 2026):** ✅ ЗАВЪРШЕНА
-  - AutoClaimTrigger.tsx детектира ?from=auth в URL след auth redirect
-  - и автоматично изпраща POST claim без втори клик от потребителя.
-  - addFromAuthParam() добавен в LoginClient, oauth-callback, OAuthTermsClient.
+  - ClaimProcessor.tsx handles auto-claim flow with idempotency guard
+  - Automatic POST claim after auth without second user click.
   - Fix: ?role=provider се чете като intent при регистрация.
   - 10 нови translation ключа seeded в claim namespace.
   - Commit: 7394f73
+  - Cleanup (June 28, 2026): AutoClaimTrigger.tsx, ClaimCTAWrapper.tsx, actions.ts deleted; addFromAuthParam() removed from LoginClient, OAuthTermsClient, oauth-callback
 
 ### Known gap
 - already_claimed state не работи: GET endpoint не различава claimed от not_found

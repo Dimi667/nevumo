@@ -14,13 +14,6 @@ interface OAuthTermsClientProps {
   authDict: Record<string, string>;
 }
 
-function addFromAuthParam(url: string): string {
-  if (url.includes('?')) {
-    return url + '&from=auth';
-  }
-  return url + '?from=auth';
-}
-
 export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientProps) {
   const t = (dict: Record<string, string>, key: string, fallback: string): string => dict[key] ?? fallback;
   const searchParams = useSearchParams();
@@ -100,15 +93,15 @@ export default function OAuthTermsClient({ lang, authDict }: OAuthTermsClientPro
         : null;
       if (savedRedirect) {
         localStorage.removeItem('nevumo_redirect');
-        window.location.href = addFromAuthParam(savedRedirect);
+        window.location.href = savedRedirect;
         return;
       }
       if (intent === 'provider') {
-        window.location.href = addFromAuthParam(isNewUser
+        window.location.href = isNewUser
           ? `/${lang}/provider/dashboard/profile`
-          : `/${lang}/provider/dashboard`);
+          : `/${lang}/provider/dashboard`;
       } else {
-        window.location.href = addFromAuthParam(`/${lang}/client/dashboard`);
+        window.location.href = `/${lang}/client/dashboard`;
       }
     } catch {
       setError(t(authDict, 'oauth_error_generic', 'An error occurred. Please try again.'));
