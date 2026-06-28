@@ -41,7 +41,7 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
     try {
       const API_BASE = typeof window === 'undefined' ? process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || '' : process.env.NEXT_PUBLIC_API_URL || '';
       
-      const response = await fetch(`${API_BASE}/api/v1/providers/claim/${token}/verify`, {
+      const response = await fetch(`${API_BASE}/api/v1/providers/claim/${token}/verify?lang=${lang}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
