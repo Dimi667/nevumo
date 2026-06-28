@@ -82,6 +82,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
   const errorText = t(claimT, 'error_not_found', 'This invitation is no longer valid.');
   const errorUserHasProviderText = t(claimT, 'error_user_has_provider', 'You already have an active profile on Nevumo.');
   const errorNetworkText = t(claimT, 'error_network', 'Something went wrong. Check your connection and try again.');
+  const alreadyClaimedRedirectText = t(claimT, 'already_claimed_redirect', 'This profile has already been claimed. Go to your dashboard.');
 
   const result = await fetchProviderByToken(token, normalizedLang);
 
@@ -251,6 +252,7 @@ export default async function ClaimPage({ params, searchParams }: PageProps) {
           errorAlreadyClaimedText={errorText}
           errorUserHasProviderText={errorUserHasProviderText}
           errorNetworkText={errorNetworkText}
+          alreadyClaimedRedirectText={alreadyClaimedRedirectText}
         />
 
         {/* Leads teaser */}

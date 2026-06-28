@@ -15,10 +15,12 @@ interface ClaimProcessorProps {
   errorAlreadyClaimedText: string;
   errorUserHasProviderText: string;
   errorNetworkText: string;
+  alreadyClaimedRedirectText: string;
 }
 
 type ErrorCode =
   | 'USER_ALREADY_HAS_PROVIDER'
+  | 'ALREADY_CLAIMED'
   | 'NOT_FOUND'
   | 'NO_EMAIL'
   | 'NETWORK'
@@ -33,16 +35,35 @@ export default function ClaimProcessor({
   errorAlreadyClaimedText,
   errorUserHasProviderText,
   errorNetworkText,
+  alreadyClaimedRedirectText,
 }: ClaimProcessorProps) {
   const router = useRouter();
   const [errorCode, setErrorCode] = useState<ErrorCode>(null);
 
   useEffect(() => {
     const claimKey = `claim_${token}`;
+    const sentToKey = `claim_sent_to_${token}`;
 
-    // Prevent duplicate requests
+    // Check if verification code was already sent
     try {
-      if (sessionStorage.getItem(claimKey) === 'processing') return;
+      const claimStatus = sessionStorage.getItem(claimKey);
+      if (claimStatus === 'sent') {
+        // If already authenticated (has JWT), redirect to dashboard
+        const existingToken = getAuthToken();
+        if (existingToken) {
+          router.push(`/${lang}/provider/dashboard`);
+          return;
+        }
+        // Otherwise redirect to verify page with saved sent_to
+        const savedSentTo = sessionStorage.getItem(sentToKey) ?? '';
+        const verifyUrl = savedSentTo
+          ? `/${lang}/claim/${token}/verify?sent_to=${encodeURIComponent(savedSentTo)}`
+          : `/${lang}/claim/${token}/verify`;
+        router.push(verifyUrl);
+        return;
+      }
+      // Prevent duplicate requests during processing
+      if (claimStatus === 'processing') return;
       sessionStorage.setItem(claimKey, 'processing');
     } catch {
       console.warn('[ClaimProcessor] sessionStorage access failed, continuing claim flow');
@@ -68,8 +89,14 @@ export default function ClaimProcessor({
 
         // Handle 202 — verification code sent (banner flow)
         if (res.status === 202) {
-          sessionStorage.removeItem(claimKey);
           const sentTo = data?.sent_to ?? '';
+          // Save sent_to for redirect after refresh/back
+          try {
+            sessionStorage.setItem(sentToKey, sentTo);
+            sessionStorage.setItem(claimKey, 'sent');
+          } catch {
+            console.warn('[ClaimProcessor] sessionStorage write failed, continuing redirect');
+          }
           const verifyUrl = sentTo
             ? `/${lang}/claim/${token}/verify?sent_to=${encodeURIComponent(sentTo)}`
             : `/${lang}/claim/${token}/verify`;
@@ -80,7 +107,12 @@ export default function ClaimProcessor({
         if (!res.ok) {
           const code = data?.detail?.code as ErrorCode;
           setErrorCode(code ?? 'NETWORK');
-          sessionStorage.removeItem(claimKey);
+          try {
+            sessionStorage.removeItem(claimKey);
+            sessionStorage.removeItem(sentToKey);
+          } catch {
+            console.warn('[ClaimProcessor] sessionStorage cleanup failed');
+          }
           return;
         }
 
@@ -114,6 +146,20 @@ export default function ClaimProcessor({
     return (
       <div className="mt-8 rounded-xl border border-orange-200 bg-orange-50 p-6 text-center">
         <p className="text-sm text-orange-700">{errorUserHasProviderText}</p>
+      </div>
+    );
+  }
+
+  if (errorCode === 'ALREADY_CLAIMED') {
+    return (
+      <div className="mt-8 rounded-xl border border-orange-200 bg-orange-50 p-6 text-center">
+        <p className="text-sm text-orange-700 mb-4">{alreadyClaimedRedirectText}</p>
+        <button
+          onClick={() => router.push(`/${lang}/provider/dashboard`)}
+          className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+        >
+          Go to dashboard
+        </button>
       </div>
     );
   }

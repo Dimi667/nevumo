@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { saveAuth } from '@/lib/auth-store';
 
 interface VerifyCodeFormProps {
@@ -15,14 +15,73 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [showResend, setShowResend] = useState(false);
+  const [resending, setResending] = useState(false);
 
   const t = (key: string, fallback: string = ''): string => dict[key] || fallback;
+
+  // 60-second timer to show resend button on mount
+  useEffect(() => {
+    const timer = setTimeout(() => setShowResend(true), 60000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Cooldown timer for resend button
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const interval = setInterval(() => {
+      setResendCooldown(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setShowResend(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [resendCooldown]);
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Strip non-digits and limit to 6 characters
     const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 6);
     setCode(digitsOnly);
     setError(null);
+  };
+
+  const handleResend = async () => {
+    if (resendCooldown > 0 || resending) return;
+
+    setResending(true);
+    try {
+      const API_BASE = typeof window === 'undefined' ? process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || '' : process.env.NEXT_PUBLIC_API_URL || '';
+      const res = await fetch(`${API_BASE}/api/v1/providers/claim/${token}?lang=${lang}&source=banner`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // Update sessionStorage with new sent_to
+        try {
+          sessionStorage.setItem(`claim_sent_to_${token}`, data.sent_to ?? '');
+        } catch {}
+        setError(null);
+        setShowResend(false);
+        // Start 30-second cooldown
+        setResendCooldown(30);
+      } else {
+        setError(t('verify_error_network'));
+        setShowResend(true);
+      }
+    } catch {
+      setError(t('verify_error_network'));
+      setShowResend(true);
+    } finally {
+      setResending(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,6 +91,7 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
     const cleanCode = code.replace(/\D/g, '');
     if (cleanCode.length !== 6) {
       setError(t('verify_error_format', 'Code must be exactly 6 digits.'));
+      setShowResend(true);
       return;
     }
 
@@ -61,22 +121,28 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
 
       // Handle errors
       if (response.status === 400) {
-        if (data.detail === 'invalid_or_expired_code') {
-          setError(t('verify_error_invalid', 'Invalid or expired code. Check your business email inbox.'));
+        const code = data?.detail?.code;
+        if (code === 'CODE_INVALID') {
+          setError(t('verify_error_invalid'));
+        } else if (code === 'CODE_EXPIRED') {
+          setError(t('verify_error_expired'));
         } else if (data.detail === 'invalid_code_format') {
-          setError(t('verify_error_format', 'Code must be exactly 6 digits.'));
+          setError(t('verify_error_format'));
         } else {
-          setError(t('verify_error_invalid', 'Invalid or expired code. Check your business email inbox.'));
+          setError(t('verify_error_invalid'));
         }
+        setShowResend(true);
       } else if (response.status === 409) {
         // Already claimed - redirect back to claim page with error
         window.location.href = `/${lang}/claim/${token}?error=already_claimed`;
         return;
       } else {
-        setError(t('verify_error_invalid', 'Invalid or expired code. Check your business email inbox.'));
+        setError(t('verify_error_invalid'));
+        setShowResend(true);
       }
-    } catch (err) {
-      setError(t('verify_error_invalid', 'Invalid or expired code. Check your business email inbox.'));
+    } catch {
+      setError(t('verify_error_network'));
+      setShowResend(true);
     } finally {
       setSubmitting(false);
     }
@@ -113,6 +179,17 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4">
           <p className="text-sm text-red-800">{error}</p>
+          {showResend && (
+            <button
+              onClick={handleResend}
+              disabled={resending || resendCooldown > 0}
+              className="mt-3 text-sm text-blue-600 hover:underline disabled:text-gray-400 disabled:no-underline"
+            >
+              {resendCooldown > 0
+                ? `${t('resend_cooldown')} ${resendCooldown}s`
+                : t('resend_code')}
+            </button>
+          )}
         </div>
       )}
 

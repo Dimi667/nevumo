@@ -680,19 +680,28 @@ async def verify_claim_code(
     if not code or not code.isdigit() or len(code) != 6:
         raise HTTPException(status_code=400, detail="invalid_code_format")
 
-    # Find valid pending verification by claim_token + code only (banner flow)
+    # Find pending verification by claim_token + code (banner flow)
     query = db.query(PendingClaimVerification).filter(
         PendingClaimVerification.claim_token == token,
         PendingClaimVerification.code == code,
         PendingClaimVerification.user_id == None,
         PendingClaimVerification.used == False,
-        PendingClaimVerification.expires_at > datetime.now(timezone.utc),
     )
 
     pending = query.first()
 
     if not pending:
-        raise HTTPException(status_code=400, detail="invalid_or_expired_code")
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "CODE_INVALID", "message": "Invalid verification code"}
+        )
+
+    # Check if code has expired
+    if pending.expires_at < datetime.now(timezone.utc):
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "CODE_EXPIRED", "message": "Verification code has expired"}
+        )
 
     # Find and claim the provider
     provider = (
