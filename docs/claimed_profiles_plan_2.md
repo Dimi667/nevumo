@@ -555,6 +555,48 @@ pre-fill-нато и какво липсва. Не презаписвай раб
 
 ---
 
+### Блокер 7З — Claim Flow UX Hardening 🔴
+(Изисква: Блокер 7Д. Блокира: Блокер 8, QA Gate)
+Проблем: Тест на Banner flow с реален акаунт разкри 3 класа дефекти при нестандартно потребителско поведение (грешка, изтекъл код, Back/Refresh). Happy path работи. Edge cases — не.
+Компонент 1 — Различни error messages
+
+Backend verify_claim() → CODE_EXPIRED vs CODE_INVALID (различни body кодове)
+Frontend VerifyCodeForm.tsx → различни translation ключа за двата случая
+Seed: 2 нови ключа × 34 езика в claim namespace
+
+Компонент 2 — "Изпрати нов код" бутон
+
+Backend: вече работи (повторен POST /claim/{token}?source=banner генерира нов код)
+Frontend VerifyCodeForm.tsx:
+
+Бутон се показва: след error ИЛИ след 60s без действие
+30-секунден cooldown след натискане
+Translation ключове: claim.resend_code, claim.resend_cooldown (34 езика)
+
+
+
+Компонент 3 — State management на целия Banner Claim flow
+ТочкаСценарийЖелано поведениеClaim pageRefresh след POST 202SessionStorage banner_sent_{token} → redirect към /verify, не нов POSTClaim pageBack от /verifyСъщото — "Email изпратен" state + линк към /verify/verifyRefreshФорма се зарежда отново → OK (код валиден 24h)/verifySubmit след вече claimedBackend → ALREADY_CLAIMED → redirect към dashboard/verifyNetwork error"Опитайте отново" бутон, не мъртъв екранWizard Step 1/2RefreshЗарежда от API — диагнозата ще потвърдиWizardBack към claim pageClaim page проверява is_claimed → "already claimed" state
+Засегнати файлове:
+
+apps/api/routes/providers.py — verify_claim()
+apps/web/app/[lang]/claim/[token]/ClaimProcessor.tsx
+apps/web/app/[lang]/claim/[token]/page.tsx
+apps/web/app/[lang]/claim/[token]/verify/VerifyCodeForm.tsx
+apps/api/scripts/seed_*.py — нови translation ключове
+
+Ред на изпълнение:
+
+Диагноза (SWE-1.6, read-only) → картографира реалното поведение при Back/Refresh на всяка стъпка
+Backend fix (SWE-1.6)
+Frontend fix + seed (Kimi-2.6)
+Мануален регресионен тест
+
+Модели: SWE-1.6 (диагноза + backend) → Kimi-2.6 (frontend + seed)
+
+
+---
+
 ### Задача 6А — Profile Strength Email 🟡
 (Не е блокер. Изпълнява се след Блокер 7А. Критична за макс ефект от кампанията.)
 
