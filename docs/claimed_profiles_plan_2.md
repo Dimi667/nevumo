@@ -1622,6 +1622,7 @@ CATEGORY_LABEL_PL = {
 - ClaimProcessor.tsx: обработва 401 → redirect към /auth
 - verify/page.tsx: подава sentTo prop към VerifyCodeForm
 - VerifyCodeForm.tsx: показва "Kod wysłano na: {sentTo}"
+- VerifyCodeForm.tsx: праща lang параметър към API за запазване на езиковата преценност (28 юни 2026)
 - providers.py: source=banner логика (401/422/202/200 сценарии)
 - providers.py: masked email в sent_to полето на 202 response
 
