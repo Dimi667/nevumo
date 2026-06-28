@@ -1453,18 +1453,8 @@ CATEGORY_LABEL_PL = {
 
 ⚠️ Ред е критичен: първо тест, после реални данни.
 
-[ ] Ръчен тест на целия Banner flow — симулирани провайдъри с имейли до които имаме достъп:
-    [ ] Сценарий: Banner → /verify директно → код → get_or_create_claim_user → JWT → wizard (onboarding)
-    [ ] Сценарий: Banner → вече регистриран потребител → директен claim → dashboard
-    [ ] Сценарий: Banner → email mismatch → 6-цифрен код до scraped_email
-    [ ] Сценарий: Banner → вече claimed → error UI
-    [ ] Art. 14 GDPR имейл пристига след успешен claim
-    [ ] Welcome имейл НЕ се изпраща (премахнат)
-    [ ] Wizard pre-fill: business_name, description, category, city
-    Инструмент: Claude in Chrome + ръчно
-[ ] Блокер 8: seed_unclaimed_providers.py — реалните Warsaw провайдъри в Neon → Kimi-2.6
-    Input: warszawa_providers_ceidg.csv + panoramafirm_emails_final.csv
-    Output: outreach_ready.csv
+[ ] Ръчен тест на целия Banner flow (симулирани провайдъри)
+[ ] Блокер 8: seed_unclaimed_providers.py — реалните Warsaw провайдъри в Neon
 
 ---
 
