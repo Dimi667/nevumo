@@ -59,7 +59,7 @@ export default function ClaimProcessor({
         const verifyUrl = savedSentTo
           ? `/${lang}/claim/${token}/verify?sent_to=${encodeURIComponent(savedSentTo)}`
           : `/${lang}/claim/${token}/verify`;
-        router.push(verifyUrl);
+        router.replace(verifyUrl);
         return;
       }
       // Prevent duplicate requests during processing
