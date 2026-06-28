@@ -649,146 +649,269 @@ railway run python3.13 -m apps.api.scripts.e2e_outreach_cleanup
 
 ---
 
-## РАЗДЕЛ 3 — Съдържание (12 имейл шаблона + SMS)
+## РАЗДЕЛ 3 — Съдържание (имейл шаблони)
 
-> Тук се описва КАКВО се пише. Текстовете се създават паралелно с блокерите.
+> BG версиите са финализирани (28 юни 2026).
+> PL версиите се създават в следващата фаза.
 
 ### 3.1 Категорийна персонализация
 
-Всеки имейл има **3 версии** — по категория. Различни са:
-- Subject line (вече имаме за Email #1)
-- Opening sentence
-- Pain point
-- Social proof числа
-- Call to action
-
-| | 🧹 Cleaning | 🔧 Plumbing | 💆 Massage |
+| | 🧹 Почистване | 🔧 ВиК | 💆 Масаж |
 |---|---|---|---|
-| Search vol. | 7,000/мес | 5,400/мес | 6,900/мес |
-| Key pain | Конкуренция → невидимост | Спешни повиквания → нощни часове | Постоянни клиенти → лоялност |
-| Social proof angle | "Фирмите за почистване намират нови обекти" | "Хидравлиците взимат спешни заявки нощно" | "Масажистите изграждат лоялна клиентела" |
+| Search vol. | 7 363/мес | 10 707/мес | 3 635/мес |
+| Email #2 protagonist | Хигиенисти | ВиК майстор | Масажисти |
+| Email #3 protagonist | Хигиенисти (мн.ч.) | ВиК майстор (ед.ч.) | Масажист (ед.ч.) |
 
-### 3.2 Email #1 — Introduction (Вторник 10:00)
+---
 
-**Subject (вече финализирани):**
-- Cleaning: `7 363 firm sprzątających w Warszawie — czy Twoi klienci Cię znajdą?`
-- Plumbing: `10 707 firm instalacyjnych w Warszawie — czy Twoi klienci Cię znajdą?`
-- Massage: `3 635 gabinetów masażu w Warszawie — czy Twoi klienci Cię znajdą?`
-
-**Preview text (НОВ — добавя се в outreach_email_pl.html):**
-- Cleaning: `Bezpłatnie, bez prowizji — Twój profil czeka na Ciebie.`
-- Plumbing: `Klienci szukają hydraulika o 21:00 — bądź tam pierwszy.`
-- Massage: `Stali klienci zaczynają od online — Twój profil jest gotowy.`
-
-**Body:** Съществуващият `outreach_email_pl.html` — само се добавя preview text и unsubscribe линк.
-
-### 3.3 Email #2 — Insight (Петък 18:00)
-
-**Format:** Plain text (изглежда като личен имейл, не marketing)
-**Tone:** "Quick follow-up" — не formal, не повторение
+### 3.2 Email #1 — Представяне (Вт 10:00) — HTML с лого
 
 **Subject:**
-- Cleaning: `Jak firma sprzątająca zdobyła 8 zleceń w pierwszym tygodniu`
-- Plumbing: `Hydraulicy na Nevumo: zgłoszenia też w nocy i weekendy`
-- Massage: `Masażyści na Nevumo: rezerwacje z 2 tygodniowym wyprzedzeniem`
+- Почистване: `7 363 клиента за почистване — намират ли те?`
+- ВиК: `10 707 клиента с ВиК проблеми — намират ли те?`
+- Масаж: `3 635 клиента търсят масаж — намират ли те?`
 
-**Body (template — персонализира се по категория):**
-```
-Cześć [business_name],
+**Preview text:**
+- Почистване: `Профилът ви чака — безплатно, без комисиона.`
+- ВиК: `Клиентите търсят ВиК майстор в 21:00 — бъдете там пръв.`
+- Масаж: `Постоянните клиенти започват онлайн — профилът ви е готов.`
 
-Krótka wiadomość — sprawdziłem, ile zapytań trafia do [kategoria] w Warszawie.
+**BG шаблон — Почистване:**
+[HTML с лого]
+7 363 клиента търсят почистване във Варшава всеки месец. Намират ли именно Вас?
+БУТОН[Вземете профила си безплатно →]
+Подготвихме профил за [business_name] в Nevumo — платформата, където клиентите намират услуги за почистване във Варшава. Профилът ви чака. Нужни са само 2 минути.
+С Nevumo ✓
 
-W zeszłym tygodniu: [liczba] klientów szukało [usługi]. Większość dostawców
-nie jest widoczna w tym miejscu.
+Профилът ви е видим при търсене в Google
+Клиентите се свързват директно с вас
+Без комисиони
 
-Jedno pytanie: czy teraz pojawiasz się, gdy ktoś szuka [usługi] w Google wieczorem?
+Комисионни платформи ✗
 
-Jeśli nie — mogę pokazać dokładnie jak działa profil na Nevumo. Bez zobowiązań.
+Клиентите търсят онлайн но не намират вас...
+Комисионите на платформите растат всяка година
+Комисиони от всяка поръчка
 
-Dimitar
+БУТОН[Вземете профила си безплатно →]
+Димитър
+
 Nevumo
-[unsubscribe link]
-```
 
-### 3.4 Email #3 — Social Proof (Сряда 10:00)
+Информация за обработване на лични данни (чл. 14 GDPR):
 
-**Format:** Plain text
-**Важно:** Хипотетична рамка — не измислени testimonials
+Nevumo обработва публично достъпни данни за вашата фирма от регистъра CEIDG (Полша).
+
+Фирма: [business_name] | Адрес: [address] | Тел: [phone] | Имейл: [email]
+
+Цел: показване на фирмен профил в Nevumo. Основание: чл. 6(1)(f) GDPR — законен интерес.
+
+Администратор: ФИЛИПС ЦЕНТЬР БЪЛГАРИЯ ООД | privacy@nevumo.com
+
+Права: достъп, коригиране, изтриване — пишете на privacy@nevumo.com
+[Отписване от имейли]
+
+**BG шаблон — ВиК:** (същата структура, различни данни)
+[HTML с лого]
+10 707 клиента търсят ВиК услуги във Варшава всеки месец. Намират ли именно Вас?
+БУТОН[Вземете профила си безплатно →]
+Подготвихме профил за [business_name] в Nevumo — платформата, където клиентите намират ВиК майстори в Варшава. Профилът ви чака. Нужни са само 2 минути.
+С Nevumo ✓
+
+Профилът ви е видим при търсене в Google
+Клиентите се свързват директно с вас
+Без комисиони
+
+Комисионни платформи ✗
+
+Клиентите търсят онлайн — вас не ви намират
+Комисионите на платформите растат всяка година
+Комисиони от всяка поръчка
+
+БУТОН[Вземете профила си безплатно →]
+Димитър
+
+Nevumo
+[Същият GDPR footer]
+
+[Отписване от имейли]
+
+**BG шаблон — Масаж:**
+[HTML с лого]
+3 635 клиента търсят масаж в Варшава всеки месец. Намират ли именно Вас?
+БУТОН[Вземете профила си безплатно →]
+Подготвихме профил за [business_name] в Nevumo — платформата, където клиентите резервират масаж в Варшава. Профилът ви чака. Нужни са само 2 минути.
+С Nevumo ✓
+
+Профилът ви е видим при търсене в Google
+Резервации онлайн — дни напред
+Без комисиони
+
+Комисионни платформи ✗
+
+Клиентите търсят онлайн но не намират вас
+Комисионите на платформите растат всяка година
+Нямате директен контакт с клиента
+
+БУТОН[Вземете профила си безплатно →]
+Димитър
+
+Nevumo
+[Същият GDPR footer]
+
+[Отписване от имейли]
+
+---
+
+### 3.3 Email #2 — Инсайт (Пт 18:00) — Plain text
 
 **Subject:**
-- Cleaning: `Firma sprzątająca: +30% przychodów w 60 dni (jak to zrobili)`
-- Plumbing: `Hydraulik z Krakowa: 23 zgłoszenia w pierwszym miesiącu`
-- Massage: `Gabinet masażu: lista oczekujących w 45 dni`
+- Почистване: `Хигиенисти получават по 8 поръчки на седмица`
+- ВиК: `ВиК майстор получава заявки 24/7`
+- Масаж: `Масажисти получават резервации за 2 седмици напред`
 
-**Body (template):**
-```
-Cześć [business_name],
+**BG шаблон — Почистване:**
+Здравейте, [business_name],
+Забелязах нещо за Варшава. Хигиенисти като вас получават по 8 нови поръчки на седмица в Nevumo — директно, без посредник.
 
-Jedna rzecz, zanim zamknę Twój profil.
+Въпрос: когато клиент търси почистване в Google, ще намери ли именно вас?
+[Вземете профила си безплатно →]
 
-Wyobraź sobie: dostawca [usług] w Warszawie, podobny do Twojego biznesu,
-dołączył do Nevumo 60 dni temu.
+Без ангажименти.
+Поздрави
 
-Rezultaty, które widzimy przy kompletnych profilach:
-- 15-25 nowych zapytań w pierwszym miesiącu
-- Klienci rezerwują bezpośrednio — bez pośredników
-- Zero prowizji od każdego zlecenia
+Димитър
 
-Chcesz, żebym przesłał więcej szczegółów? Albo — czy to po prostu nie jest
-odpowiedni moment?
-
-Dimitar
-[unsubscribe link]
-```
-
-### 3.5 Email #4 — Break-up (Понеделник 10:00)
-
-**Format:** Plain text — НАЙ-КРАТЪК от всички
-**Subject:** `Zamykam Twoje miejsce na Nevumo — ostatnia wiadomość`
-
-**Body:**
-```
-Cześć [business_name],
-
-Rozumiem, jeśli teraz nie jest odpowiedni moment.
-
-Zamykam listę wczesnych dostawców dla Warszawy w tym tygodniu —
-chciałem sprawdzić ostatni raz przed przejściem dalej.
-
-Jeśli jesteś zainteresowany, odpowiedz TAK — zachowam Twoje miejsce.
-Jeśli nie — odpowiedz NIE TERAZ — sprawdzę za 3 miesiące.
-
-W obu przypadkach — bez pretensji.
-
-Dimitar
 Nevumo
-[unsubscribe link]
-```
+[Отписване от имейли]
 
-### 3.6 SMS Template (паралелно с Email #1 и #4)
+**BG шаблон — ВиК:**
+Здравейте, [business_name],
+Забелязах нещо за пазара във Варшава.
 
-**При Email #1 (ден 0):**
-```
-Nevumo: Twój profil [business_name] czeka. Przejmij go bezpłatnie →
-nevumo.com/pl/claim/[token]
-Odpowiedz STOP aby zrezygnować
-```
+ВиК майстор като вас е в Nevumo от седмица. Получава заявки 24/7.
 
-**При Email #4 (ден 17):**
-```
-Nevumo: Ostatnia szansa — zamykamy Twoje miejsce w Warszawie jutro.
-nevumo.com/pl/claim/[token]
-```
+Въпрос: когато клиент има авария в 21:00 и търси в Google, ще ви намери ли?
+[Вземете профила си безплатно →]
 
-⚠️ **SMS дължина:** Максимум 160 символа (1 SMS). Проверявай преди изпращане.
-**STOP механизъм** е задължителен — SMSapi.pl го поддържа нативно.
+Без ангажименти.
+Поздрави
 
-### 3.7 Claim Page — Social Proof Update
+Димитър
 
-**Добавяне на `claimed_count` в реално изброяване на claim страницата:**
-- `claimed_count` вече се връща от API
-- Текст: `"[N] dostawców usług dołączyło do Nevumo w Warszawie w tym miesiącu"`
-- Показва се само ако `claimed_count > 0`
+Nevumo
+[Отписване от имейли]
+
+**BG шаблон — Масаж:**
+Здравейте, [business_name],
+Забелязах нещо за Варшава. Масажисти в Nevumo получават заявки за 2 седмици напред — предвидим график, постоянни клиенти…
+
+Въпрос: запълнен ли е графикът ви напред?
+[Вземете профила си безплатно →]
+
+Без ангажименти.
+Поздрави
+
+Димитър
+
+Nevumo
+[Отписване от имейли]
+
+---
+
+### 3.4 Email #3 — Социално доказателство (Ср 10:00) — Plain text
+
+**Subject:**
+- Почистване: `Ето какво стана с онези хигиенисти`
+- ВиК: `Ето какво стана с онзи ВиК майстор`
+- Масаж: `Ето какво стана с онзи масажист`
+
+**BG шаблон — Почистване:**
+Здравейте, [business_name],
+Нещо преди да затворя профила ви:
+
+Хигиенистите за които писах, след 10 дни в Nevumo избират кои поръчки да приемат. Без комисиони…
+
+А как е при вас?
+[Вземете профила си безплатно →]
+[Отписване от имейли]
+Поздрави
+
+Димитър
+
+**BG шаблон — ВиК:**
+Здравейте, [business_name],
+Нещо преди да затворя профила ви:
+
+ВиК майсторът за когото писах, след 10 дни в Nevumo избира кои поръчки да приема. Без комисиони…
+
+А как е при вас?
+[Вземете профила си безплатно →]
+[Отписване от имейли]
+Поздрави
+
+Димитър
+
+**BG шаблон — Масаж:**
+Здравейте, [business_name],
+Нещо преди да затворя профила ви:
+
+Масажистът за когото писах, след 10 дни в Nevumo избира кои поръчки да приема. Без комисиони…
+
+А как е при вас?
+[Вземете профила си безплатно →]
+[Отписване от имейли]
+Поздрави
+
+Димитър
+
+---
+
+### 3.5 Email #4 — Break-up (Пн 10:00) — Plain text — Общ за всички категории
+
+**Subject:** `Тази седмица изтриваме непотърсените профили`
+
+**BG шаблон:**
+Здравейте, [business_name],
+Разбирам ако моментът не е подходящ. Тази седмица изтриваме непотърсените профили за Варшава. Исках да проверя все пак преди да продължа.
+Ако сте заинтересовани — вземете профила си тук: → [Да, искам профила си]
+Ако не сега — кликнете тук и ще се върна след време: → [Не сега]
+В двата случая — без ангажимент.
+Димитър
+
+Nevumo
+[Отписване от имейли]
+
+---
+
+### 3.6 Feedback Page — nevumo.com/pl/outreach/feedback
+
+**Заглавие:** `Разбирам, ако моментът не е подходящ`
+
+**Текст:** `За да можем да подобрим комуникацията, кажете ни защо не сега:`
+
+**Опции (radio buttons):**
+1. `Вече работя с друга платформа`
+2. `Не ми трябва нови клиенти в момента`
+3. `Искам повече информация`
+4. `Друго` (с опционално текстово поле)
+
+**Бутон:** `Изпрати`
+
+**Success messages:**
+- Опции 1 и 2: `Благодаря! Ще се свържем отново след 3 месеца.`
+- Опция 3: `Благодаря! Ще се свържем до 48 часа с вас.`
+- Опция 4: `Получено. Димитър ще го прочете лично.`
+
+**Footer:** `Димитър | Nevumo | privacy@nevumo.com`
+
+**Технически детайли:**
+- URL параметри: `email={email}&token={hmac}` за валидация
+- Backend endpoint: `POST /api/v1/outreach/feedback`
+- DB таблица: `outreach_feedback` (email, reason, custom_text, created_at)
+- Security: HMAC валидация на токена
+
+> ⚠️ PL версиите на всички шаблони се създават в следващата фаза.
 
 ---
 
@@ -1318,7 +1441,7 @@ CATEGORY_LABEL_PL = {
        - Всички email templates използват R2 URL
        - Скрипт: apps/api/scripts/upload_logo_to_r2.py
        - Templates: outreach_email_pl.html, claim_verification_pl.html, article14_confirmation_pl.html
-    [ ] Email subject line под 50 символа → проверка + корекция
+    [x] Email subject line под 50 символа → проверка + корекция ✅ ЗАВЪРШЕН (28 юни 2026)
 [ ] Технически дълг (cleanup):
     [ ] AutoClaimTrigger.tsx — изтриване (заменен от ClaimProcessor)
     [ ] ClaimCTAWrapper.tsx — изтриване (заменен от ClaimProcessor)
