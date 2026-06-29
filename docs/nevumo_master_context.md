@@ -1598,6 +1598,13 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - E2E verified: claim flow → user.phone populated from scraped_phone ✅
 - Alembic current head: d2e3f4g5h6i7
 
+**Blocker 7З — Claim Flow UX Hardening (June 29, 2026)** — COMPLETE:
+- verify_claim(): CODE_EXPIRED vs CODE_INVALID разграничени (отделни detail.code в HTTPException)
+- VerifyCodeForm.tsx: error handling за CODE_INVALID/CODE_EXPIRED/network; resend бутон (60s auto-show, show-on-error, 30s cooldown, sessionStorage update)
+- ClaimProcessor.tsx: sessionStorage flag 'sent' (not 'processing') after 202; router.replace() for Back loop fix; ALREADY_CLAIMED ErrorCode + UI; getAuthToken() check skips /verify if already authenticated
+- seed_claim_verify_errors.py: 238 translations, 7 keys × 34 languages
+- Alembic: unchanged (no DB migrations)
+
 **Task 6A — Profile Strength Email** — PLANNED:
 - Trigger: first service added (is_complete: False → True)
 - Content: personalized advice based on missing profile fields

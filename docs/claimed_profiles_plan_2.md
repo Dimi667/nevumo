@@ -555,9 +555,17 @@ pre-fill-нато и какво липсва. Не презаписвай раб
 
 ---
 
-### Блокер 7З — Claim Flow UX Hardening 🔴
+### Блокер 7З — Claim Flow UX Hardening ✅ ЗАВЪРШЕН (29 юни 2026)
 (Изисква: Блокер 7Д. Блокира: Блокер 8, QA Gate)
 Проблем: Тест на Banner flow с реален акаунт разкри 3 класа дефекти при нестандартно потребителско поведение (грешка, изтекъл код, Back/Refresh). Happy path работи. Edge cases — не.
+
+**Имплементирани компоненти:**
+- Backend: verify_claim() разграничава CODE_EXPIRED vs CODE_INVALID (отделни detail.code)
+- Frontend VerifyCodeForm.tsx: отделни error messages за CODE_INVALID, CODE_EXPIRED, network error; resend бутон с 60s delay + 30s cooldown след error
+- Frontend ClaimProcessor.tsx: sessionStorage='sent' при 202 + claim_sent_to_{token} за sentTo; router.replace() при Back (елиминира loop); ALREADY_CLAIMED UI state с redirect към dashboard; getAuthToken() check при mount
+- Seed: seed_claim_verify_errors.py — 238 translations (7 ключа × 34 езика): verify_error_invalid, verify_error_expired, verify_error_network, verify_error_format, resend_code, resend_cooldown, already_claimed_redirect
+- QA: T1 PASS, T2 by design (router.replace елиминира loop), T3 PASS, T4 PASS, T5 PASS, T6 PASS
+
 Компонент 1 — Различни error messages
 
 Backend verify_claim() → CODE_EXPIRED vs CODE_INVALID (различни body кодове)
