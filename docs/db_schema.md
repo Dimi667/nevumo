@@ -88,6 +88,11 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token) WHERE cl
 - Логика: при claim → ако user.phone е NULL → get_or_create_claim_user() записва scraped_phone в user.phone
 - Попълва се от seed_unclaimed_providers.py (Блокер 8) от CEIDG/Panoramafirm CSV
 
+### Промени в ProviderDetail API schema (June 29, 2026)
+- Добавено поле: `city_locative_form TEXT` — локативна форма на града за езици с граматическа деклинсия
+- Използва се в ClaimProfileBanner за правилна граматика (напр. полски: "w Warszawie" вместо "w Warszawa")
+- Данните идват от location_translations.locative_form, не са директно поле на providers таблица
+
 ---
 
 ## 3. Provider Availability (Cities)

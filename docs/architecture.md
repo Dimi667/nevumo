@@ -108,6 +108,7 @@ This document reflects the major architectural optimization performed in April 2
     - **✅ Completed**: Homepage, city page, and category page components updated with Slavic language support
     - **✅ Completed (May 6, 2026)**: Category page preposition logic fix - Changed from hardcoded "in" to dynamic `prepBase` from `categoryT` namespace; Updated title, heading, related links, and provider CTA to use `categoryT` instead of `cityT` for preposition logic; Added regex-based replacement in cityHelpers.ts to handle prepositions without leading space
     - **✅ Completed (May 10, 2026)**: city.locative_form / city.genitive_form премахнати от translations таблицата; данните преместени в location_translations; getLocalizedCityText обновен с cityForms параметър; category h1/subtitle/provider_cta_suffix ключове обновени с {city} placeholder за всички 34 езика
+    - **✅ Completed (June 29, 2026)**: ClaimProfileBanner integration - Added city_locative_form to ProviderDetail API response; Banner now uses locative form for Polish language (e.g., "w Warszawie" instead of "w Warszawa"); Capitalized first letter of all unclaimed_banner_desc translations for all 34 languages
   - **Metadata & UI Integration**:
     - **Homepage** (`apps/web/app/[lang]/page.tsx`): Fully integrated for meta tags, heroes, categories grid, SEO content blocks, and footer links with Slavic language support
     - **City Page** (`apps/web/app/[lang]/[city]/page.tsx`): Fully integrated for all UI elements with Slavic language support

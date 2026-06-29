@@ -46,7 +46,7 @@
 ### ✅ Фаза 4 — Frontend (ЗАВЪРШЕНА с pending)
 
 - Claim страница `/[lang]/claim/[token]` — висококонверсионен дизайн
-- Unclaimed banner на Provider Full Page (Task 4Б)
+- Unclaimed banner на Provider Full Page (Task 4Б) — **ПОДОБРЕНО (29 юни 2026)**: Капитализирана първа буква на всички преводи; Добавена локативна форма за градове в полския език (напр. "w Warszawie" вместо "w Warszawa")
 - CTA бутон adaptive layout за дълги имена (Task 4В)
 - 5 error states с преводи (имплементирани, НЕ browser-тествани → в QA Gate)
 - Auth redirect bugs: 9 бъга намерени и оправени по E2E тест (21 юни 2026)

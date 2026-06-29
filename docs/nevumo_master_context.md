@@ -1605,6 +1605,14 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - seed_claim_verify_errors.py: 238 translations, 7 keys × 34 languages
 - Alembic: unchanged (no DB migrations)
 
+**Unclaimed Banner UX Improvements (June 29, 2026)** — COMPLETE:
+- Capitalized first letter of all unclaimed_banner_desc translations for all 34 languages (e.g., "klientów szuka" → "Klientów szuka")
+- Added city_locative_form to ProviderDetail API schema and TypeScript interface
+- ClaimProfileBanner now uses locative form for Polish language (e.g., "w Warszawie" instead of "w Warszawa")
+- Backend: /api/v1/providers/{provider_slug} endpoint fetches locative_form from location_translations table
+- Frontend: ClaimProfileBanner component updated with cityLocativeForm prop and Polish-specific logic
+- seed_unclaimed_banner_translations.py: Updated and re-seeded to database
+
 **Task 6A — Profile Strength Email** — PLANNED:
 - Trigger: first service added (is_complete: False → True)
 - Content: personalized advice based on missing profile fields

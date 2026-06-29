@@ -1594,6 +1594,7 @@ Language must be one of: en, bg, pl.
       "comment_preview": "Excellent service, very professional!",
       "created_at": "2025-04-01T10:30:00"
     },
+    "city_locative_form": "Warszawie",
     "translations": {
       "verified_label": "✓ Verified professional",
       "rating_label": "rating",
@@ -1630,6 +1631,7 @@ Language must be one of: en, bg, pl.
 - **latest_lead_preview.client_image_url** is currently nullable and returns `null` because the public user model has no client avatar field
 - **latest_review** contains the most recent review for this provider; `comment_preview` may be `null`
 - **latest_review.client_name** uses `users.name` when available and falls back to `Client`; email local-parts are never exposed
+- **city_locative_form** contains the grammatical locative form of the city name for languages that require declension (e.g., Polish: "Warszawa" → "Warszawie")
 - **translations** contains widget-specific translations for the requested language
 - **slug_change_count** indicates remaining URL changes (0 = 1 change allowed, 1 = locked)
 - The embed widget treats the top and bottom trust sections independently:
