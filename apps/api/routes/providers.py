@@ -810,6 +810,18 @@ async def get_provider(
     first_city = db.query(ProviderCity).filter(ProviderCity.provider_id == provider.id).first()
     first_service = db.query(Service).filter(Service.provider_id == provider.id).first()
     
+    # Get city locative form for banner
+    city_locative_form = None
+    if first_city:
+        city = db.query(Location).filter(Location.id == first_city.city_id).first()
+        if city:
+            city_translation = db.query(LocationTranslation).filter(
+                LocationTranslation.location_id == city.id,
+                LocationTranslation.lang == lang
+            ).first()
+            if city_translation and city_translation.locative_form:
+                city_locative_form = city_translation.locative_form
+    
     if first_city and first_service:
         city = db.query(Location).filter(Location.id == first_city.city_id).first()
         category = db.query(Category).filter(Category.id == first_service.category_id).first()
@@ -934,6 +946,7 @@ async def get_provider(
         reviews=reviews,
         gallery=[ProviderImageItem.model_validate(img) for img in get_provider_gallery(db, provider.id)],
         scraped_email=provider.scraped_email,
+        city_locative_form=city_locative_form,
     )
 
     return ProviderDetailResponse(data=detail)

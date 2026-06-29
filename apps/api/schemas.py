@@ -141,6 +141,7 @@ class ProviderDetail(BaseModel):
     reviews: List["ReviewConversationItem"] = []
     gallery: list[ProviderImageItem] = []
     scraped_email: Optional[str] = None
+    city_locative_form: Optional[str] = None
 
     @field_validator("rating", mode="before")
     @classmethod

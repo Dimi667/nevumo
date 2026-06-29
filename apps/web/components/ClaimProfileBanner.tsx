@@ -9,6 +9,7 @@ interface ClaimProfileBannerProps {
   searchVolume: number | null;
   categoryLabel: string;
   cityLabel: string;
+  cityLocativeForm?: string | null;
   scrapedEmail?: string;
   translations: {
     title: string;
@@ -26,6 +27,7 @@ export default function ClaimProfileBanner({
   searchVolume,
   categoryLabel,
   cityLabel,
+  cityLocativeForm,
   scrapedEmail,
   translations,
 }: ClaimProfileBannerProps) {
@@ -37,7 +39,9 @@ export default function ClaimProfileBanner({
       desc = desc.replace('{count}', searchVolume.toLocaleString(lang));
     }
     desc = desc.replace('{category}', categoryLabel);
-    desc = desc.replace('{city}', cityLabel);
+    // Use locative form for Polish if available
+    const cityToUse = (lang === 'pl' && cityLocativeForm) ? cityLocativeForm : cityLabel;
+    desc = desc.replace('{city}', cityToUse);
     return desc;
   };
 

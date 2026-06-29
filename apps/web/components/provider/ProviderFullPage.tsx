@@ -64,6 +64,7 @@ interface ProviderFullPageProps {
     claim_token: string | null;
     search_volume: number | null;
     scraped_email?: string | null;
+    city_locative_form?: string | null;
   };
   translations: Record<string, string>;
   lang: string;
@@ -513,6 +514,7 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
               searchVolume={provider.search_volume}
               categoryLabel={provider.category_name}
               cityLabel={provider.city_name}
+              cityLocativeForm={provider.city_locative_form}
               scrapedEmail={provider.scraped_email ?? undefined}
               translations={{
                 title: t['unclaimed_banner_title'] ?? 'Is this your business?',

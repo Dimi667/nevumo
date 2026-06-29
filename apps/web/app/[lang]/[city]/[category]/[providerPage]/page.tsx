@@ -168,6 +168,7 @@ export default async function Page(props: {
           claim_token: provider.claim_token ?? null,
           search_volume: provider.search_volume ?? null,
           scraped_email: provider.scraped_email ?? null,
+          city_locative_form: provider.city_locative_form ?? null,
         }}
         translations={mergedT}
         lang={lang}
