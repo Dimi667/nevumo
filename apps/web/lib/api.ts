@@ -173,6 +173,7 @@ export interface ProviderDetail {
   claim_token: string | null;
   search_volume: number | null;
   scraped_email?: string | null;
+  city_locative_form?: string | null;
 }
 
 export interface Review {
