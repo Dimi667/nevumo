@@ -456,7 +456,7 @@ async def claim_provider(
         # Generate 6-digit code and send to scraped_email
         import secrets
         code = str(secrets.randbelow(1000000)).zfill(6)
-        expires_at = datetime.now(timezone.utc) + timedelta(hours=24)
+        expires_at = datetime.utcnow() + timedelta(hours=24)
 
         # Invalidate any previous pending verifications for this token (user_id=None for banner flow)
         db.query(PendingClaimVerification).filter(
@@ -698,7 +698,7 @@ async def verify_claim_code(
         )
 
     # Check if code has expired
-    if pending.expires_at < datetime.now(timezone.utc):
+    if pending.expires_at < datetime.utcnow():
         raise HTTPException(
             status_code=400,
             detail={"code": "CODE_EXPIRED", "message": "Verification code has expired"}
