@@ -704,6 +704,104 @@ railway run python3.13 -m apps.api.scripts.e2e_outreach_cleanup
 
 ---
 
+## РАЗДЕЛ 2.1 — Нови блокери преди Banner-only launch (30 юни 2026)
+
+> Контекст: кампанията стартира САМО с Banner канал (Email/SMS outreach
+> отложени за следваща фаза). По-долу логиката GATE = твърдо изискване
+> преди production run на Б14 (seed-а), останалите следват успоредно/след.
+
+### Блокер 11 — Banner Tracking Statistics 🔴 GATE
+Проблем: Нямаме жива статистика за Banner funnel-а (view → claim) преди
+сийдването да направи профилите публични.
+Решение: Event tracking за claim funnel стъпки, лек автоматизиран отчет
+(Railway Scheduler → SQL → имейл summary), без нужда от dashboard UI.
+Модел: SWE-1.6 (backend events) + Kimi-2.6 (frontend instrumentation при нужда)
+
+### Блокер 12 — Автоматизиран GDPR Objection/Delete Flow 🔴 GATE
+(Изисква: чл.14 текст от Б14)
+Проблем: Без ръчен капацитет за обработка на чл.21 възражения при >1,000
+потенциални получателя.
+Решение: HMAC token линк в чл.14 имейла → GET confirmation страница
+(без авто-действие, защита срещу email scanner-и) → POST бутон → еднократно
+занулява лични полета (business_name, scraped_email, scraped_phone, nip,
+address, website) + маха от listing/sitemap + пази минимален audit trail
+(id, category_slug, city_id, data_source, created_at, objected_at, honored_at).
+Модел: SWE-1.6 (backend endpoint + migration) + Kimi-2.6 (confirmation
+страница + 34 езика)
+
+### Блокер 13 — Потвърждение Email/Password Login Flow за Banner 🔴 GATE
+Проблем: Стар checklist елемент, никога browser-тестван за Banner flow
+конкретно (само OAuth тестван при E2E).
+Решение: mcp-playwright тест на email/password регистрация/login през
+Banner claim flow.
+Модел: SWE-1.6 + @mcp-playwright
+
+### Блокер 14 — Seed Script: CSV обработка + листинг + sitemap + Art.14 тригер 🔴 GATE — финална стъпка
+(Изисква: Б11, Б12, Б13 завършени)
+Проблем: seed_unclaimed_providers.py не съществува; provider страници не
+влизат в категориен листинг/sitemap без Service+ProviderCity записи
+(INNER JOIN изисква и двете); чл.14 имейлът тригерира само при claim,
+не при публикуване.
+Решение:
+- Филтър: само редове с реален email (third "-"/празно/NULL = липсва);
+  изключва business_name=empty
+- Insert: providers + placeholder Service (price_type='request', title
+  от category_translations) + ProviderCity (Warszawa)
+- чл.14 имейл тригер преместен от claim_provider() в самия seed insert
+  момент, нов текст (не "профилът е поет", а "създадохме профил")
+- phone-only редове (без реален email, 25 от CEIDG) → отделен
+  phone_only_providers.csv, архивирани за бъдеща SMS фаза
+Модел: Kimi-2.6
+
+### Блокер 15 — Resend Webhook Одит + Dead-Email Feedback Loop 🟡
+Проблем: Неясно дали bounce/complaint webhook резултатите влияят на claim
+verification сценария (различно от outreach marketing skip логиката).
+Решение: read-only диагностика на текущата webhook логика спрямо
+scraped_email verification path.
+Модел: SWE-1.6
+
+### Блокер 16 — UX Конфликт /auth CTA на Claim Страницата 🟡
+Проблем: Потенциален конфликт между auth бутоните и claim flow-а на
+основната конверсионна страница — неанализиран.
+Модел: SWE-1.6 (диагностика) → решение по резултат
+
+### Блокер 17 — Badge Логика преди Claim 🟡
+Проблем: Unclaimed провайдъри не би трябвало да показват verification
+badge статус въобще.
+Решение: потвърждение, че Level 0/1/2 логиката изключва unclaimed профили
+(вероятно вече вярно структурно, нужно явно потвърждение, не предположение).
+Модел: SWE-1.6 (read-only диагностика)
+
+### Блокер 18 — Abandoned Banner Claim Reminder Sequence 🟢 (не gate, висок leverage)
+Проблем: Потребител отваря /claim?source=banner, получава 202 (код изпратен),
+не въвежда код — няма follow-up в момента.
+Решение: transactional reminder (1ч + 24ч), SMS reminder ако има
+scraped_phone — преизползва съществуваща magic-link инфраструктура, не
+чака маркетинг QA Gate (не е marketing имейл).
+Модел: SWE-1.6 (backend job) + Kimi-2.6 (templates, 34 езика)
+
+### Блокер 19 — Бързо Индексиране (Google Indexing API / IndexNow) 🟢 (веднага след go-live)
+Решение: автоматично подаване на нови provider URL-и след всеки seed run.
+Модел: SWE-1.6
+
+### Блокер 20 — Технически Дълг: AutoClaimTrigger/ClaimCTAWrapper 🟢
+Проблем: Заменени от ClaimProcessor.tsx, не изтрити — риск при бъдещ
+рефакторинг от агент, незапознат с актуалното състояние.
+Решение: потвърждение, че никой активен code path ги ползва → изтриване.
+Модел: SWE-1.6
+
+### Блокер 21 — Конкурентен Натиск Social Proof ⏸️ (отложен)
+Условие за активиране: поне 1 claimed конкурент в категория+град.
+Засега N=0 навсякъде — неприложимо до първите реални claim-ове.
+
+### [Разгледан и отхвърлен] — Retargeting/Lookalike Audiences
+Meta pixel / Google Ads remarketing / custom audience от scraped_email —
+отпада. Различна цел на обработване от установената правна основа
+(легитимен интерес за marketplace функционалност), риск за balancing test.
+Изисква отделен правен преглед преди евентуално бъдещо преразглеждане.
+
+---
+
 ## РАЗДЕЛ 3 — Съдържание (имейл шаблони)
 
 > BG версиите са финализирани (28 юни 2026).
