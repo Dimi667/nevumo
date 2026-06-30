@@ -600,6 +600,7 @@ class MagicLinkToken(Base):
     token_hash: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
     expires_at: Mapped[datetime] = mapped_column(nullable=False)
     used_at: Mapped[Optional[datetime]] = mapped_column(nullable=True)
+    multi_use: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, nullable=False)
 
     __table_args__ = (

@@ -55,7 +55,7 @@ def generate_reset_token() -> tuple[str, str]:
     return raw, hashed
 
 
-def generate_magic_link_token(email: str, db: Session, hours: int = 24, invalidate_existing: bool = True) -> str:
+def generate_magic_link_token(email: str, db: Session, hours: int = 24, invalidate_existing: bool = True, multi_use: bool = False) -> str:
     """Generate and persist a magic link token for the given email. Returns raw_token. Caller must commit."""
     import secrets
     import hashlib
@@ -73,6 +73,7 @@ def generate_magic_link_token(email: str, db: Session, hours: int = 24, invalida
         token_hash=token_hash,
         expires_at=datetime.utcnow() + timedelta(hours=hours),
         lead_id=None,
+        multi_use=multi_use,
     )
     db.add(magic_token)
     return raw_token

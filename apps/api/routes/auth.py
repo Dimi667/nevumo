@@ -485,7 +485,7 @@ async def magic_link_auth(
             content={"success": False, "error": {"code": "TOKEN_EXPIRED", "message": "Magic link has expired"}}
         )
     
-    if token_record.used_at is not None:
+    if token_record.used_at is not None and not token_record.multi_use:
         return JSONResponse(
             status_code=400,
             content={"success": False, "error": {"code": "TOKEN_USED", "message": "Magic link has already been used"}}
@@ -504,8 +504,9 @@ async def magic_link_auth(
         db.add(user)
         db.flush()
     
-    # Mark token as used
-    token_record.used_at = datetime.utcnow()
+    # Mark token as used (preserve first-use timestamp for analytics)
+    if token_record.used_at is None:
+        token_record.used_at = datetime.utcnow()
     
     # Link pending claims
     try:

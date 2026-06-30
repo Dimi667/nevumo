@@ -60,7 +60,10 @@ def main() -> None:
             WHERE
                 p.business_name IS NOT NULL
                 AND p.category_slug IS NOT NULL
-                AND p.profile_strength_email_sent_at IS NULL
+                AND (
+                    p.profile_strength_email_sent_at IS NULL
+                    OR p.profile_strength_email_sent_at < NOW() - INTERVAL '14 days'
+                )
                 AND u.email IS NOT NULL
                 AND (
                     p.profile_image_url IS NULL
@@ -86,11 +89,11 @@ def main() -> None:
             locale        = row.locale or "en"
             category_slug = row.category_slug or "plumbing"
 
-            token_photo = generate_magic_link_token(row.email, db, hours=24, invalidate_existing=False)
-            token_gallery = generate_magic_link_token(row.email, db, hours=24, invalidate_existing=False)
-            token_description = generate_magic_link_token(row.email, db, hours=24, invalidate_existing=False)
-            token_phone = generate_magic_link_token(row.email, db, hours=24, invalidate_existing=False)
-            token_main = generate_magic_link_token(row.email, db, hours=24, invalidate_existing=False)
+            token_photo = generate_magic_link_token(row.email, db, hours=336, invalidate_existing=False, multi_use=True)
+            token_gallery = generate_magic_link_token(row.email, db, hours=336, invalidate_existing=False, multi_use=True)
+            token_description = generate_magic_link_token(row.email, db, hours=336, invalidate_existing=False, multi_use=True)
+            token_phone = generate_magic_link_token(row.email, db, hours=336, invalidate_existing=False, multi_use=True)
+            token_main = generate_magic_link_token(row.email, db, hours=336, invalidate_existing=False, multi_use=True)
             db.commit()
 
             photo_url = build_dashboard_url(locale, token_photo, "photo")
