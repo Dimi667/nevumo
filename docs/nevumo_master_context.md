@@ -1613,10 +1613,12 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - Frontend: ClaimProfileBanner component updated with cityLocativeForm prop and Polish-specific logic
 - seed_unclaimed_banner_translations.py: Updated and re-seeded to database
 
-**Task 6A — Profile Strength Email** — PLANNED:
-- Trigger: first service added (is_complete: False → True)
-- Content: personalized advice based on missing profile fields
-- Languages: 34 (provider.locale)
+**Task 6A — Profile Strength Email (June 30, 2026)** — COMPLETE:
+- Universal daily Railway Scheduler job (not event-triggered), targets all providers with incomplete profile (photo/gallery/description/phone), self-correcting 14-day resend cycle
+- 34-language translations seeded (816 rows, profile_strength_email.* namespace)
+- Magic Link auth in email CTAs with new multi_use token flag (single-use preserved for standard login, multi-use for email links)
+- 5 separate per-section tokens per provider, 14-day expiry, deep-link anchors with auto-scroll
+- See claimed_profiles_plan_2.md Блокер 7Ж for full architecture
 
 **Issue 5 Partial Implementation (June 24, 2026)** — PARTIAL:
 - ClaimProfileBanner.tsx: scraped_email показан под business name (пълен, не masked)

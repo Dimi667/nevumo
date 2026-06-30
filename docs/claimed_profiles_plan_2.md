@@ -605,24 +605,36 @@ Frontend fix + seed (Kimi-2.6)
 
 ---
 
-### Задача 6А — Profile Strength Email 🟡
-(Не е блокер. Изпълнява се след Блокер 7А. Критична за макс ефект от кампанията.)
+### Блокер 7Ж/Task 6A — Profile Strength Email ✅ ЗАВЪРШЕН (30 юни 2026)
 
-**Кога се изпраща:**
-При първото завършване на onboarding (is_complete: False → True).
-Тригер: POST /api/v1/provider/services (добавяне на първа услуга) →
-backend проверява completeness → ако is_complete стане True → изпраща имейла.
+**Архитектура (преработена от оригиналния план):**
+Универсален имейл за ВСИЧКИ провайдъри (не само claimed/campaign), изпращан през Railway Scheduler ежедневен job — не event-driven trigger при POST /services.
 
-**Какво проверява и съдържа имейлът:**
-- Липсва снимка → "Добави профилна снимка — профилите със снимка получават значително повече запитвания. Качи снимка тук → [линк]"
-- Галерия празна → "Имаш място за 8 снимки — покажи работата си. Клиентите искат да видят резултати. Добави снимки → [линк]"
-- Описание < 100 символа → "Подобри описанието си — добри описания обясняват специализацията, опита и района. Пример: 'Хидравличен специалист с 10г. опит в Варшава. Авария 24/7. Безплатна оценка.'"
-- Телефон липсва → "Добави телефон — клиентите предпочитат да се свържат директно. Добави → [линк]"
+**Тригер:** Railway Scheduler daily cron, `apps/api/scripts/job_profile_strength_email.py`
+Условие: `business_name IS NOT NULL AND category_slug IS NOT NULL AND (profile_strength_email_sent_at IS NULL OR sent_at < NOW() - 14 days) AND (photo missing OR gallery empty OR description < 100 chars OR phone missing)`
+Self-correcting: автоматичен повторен имейл на всеки 14 дни ако профилът остава непълен; спира автоматично щом полетата се попълнят.
 
-**Език:** lang от provider.locale
-**Template:** apps/api/scripts/templates/profile_strength_pl.html (+ 34 езика)
-**Тригер в код:** apps/api/routes/provider.py → POST /services → след db.commit()
-**Модел:** Claude (текст на имейла на 34 езика) → Kimi-2.6 (template) → SWE-1.6 (backend тригер)
+**Съдържание:** 4 секции (профилна снимка, галерия снимки, описание с категорийно-специфичен пример, телефон) + FOMO subject line с динамичен брой липсващи неща.
+
+**Автентикация в имейл линковете:** Magic Link (Blocker 7Б), не claim token.
+- Нова колона `magic_link_tokens.multi_use` (BOOLEAN) — explicit разделение: стандартен login = single-use, profile strength email линкове = multi_use=True
+- 5 отделни tokens на провайдър (по един за всяка секция + главен CTA), 14-дневен expiry, кликваеми многократно
+- `generate_magic_link_token(email, db, hours, invalidate_existing, multi_use)` — reusable функция в auth_service.py
+
+**Deep-linking:** всеки CTA отвежда директно до секцията (`#photo-section`, `#gallery-section`, `#details-section`) с auto-scroll на frontend, не само общ dashboard URL.
+
+**Файлове:**
+- apps/api/models.py — `Provider.profile_strength_email_sent_at`, `MagicLinkToken.multi_use`
+- apps/api/services/email_service.py — `send_profile_strength_email()`
+- apps/api/services/templates/profile_strength.html — единен Jinja2 template (34 езика чрез DB lookup, не отделни файлове по език)
+- apps/api/scripts/seed_profile_strength_email_{1,2,3}.py — 34 езика, 23 ключа всеки (816 преводи общо)
+- apps/api/scripts/job_profile_strength_email.py — scheduler job
+- apps/api/routes/auth.py — magic_link_auth() conditional single-use/multi-use check
+- apps/api/alembic/versions/ff8bc78d912a_*, 2d8e3cfff429_*, 5469b385e382_* — миграции
+
+**Модел:** Claude (34 езика текст + архитектура) → Kimi-2.6 (seed скриптове, template, job script) → SWE-1.6 (backend логика, migrations, diagnostics, git)
+
+**E2E тествано в production:** ✅ 2 тест провайдъра, всички 5 CTA линка, multi-use потвърдено в DB (used_at без блокиране на следващ клик), 14-дневен expiry потвърден.
 
 ---
 

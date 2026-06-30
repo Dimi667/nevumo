@@ -50,6 +50,7 @@ CREATE TABLE providers (
     claim_token TEXT UNIQUE,                  -- Magic token for claiming unclaimed profiles
     data_source TEXT NOT NULL DEFAULT 'manual', -- 'manual', 'scraped', 'imported', etc.
     scraped_phone TEXT,                         -- phone от scraping, pre-fills user.phone при claim
+    profile_strength_email_sent_at TIMESTAMPTZ, -- Last time profile strength email was sent
     created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -92,6 +93,10 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token) WHERE cl
 - Добавено поле: `city_locative_form TEXT` — локативна форма на града за езици с граматическа деклинсия
 - Използва се в ClaimProfileBanner за правилна граматика (напр. полски: "w Warszawie" вместо "w Warszawa")
 - Данните идват от location_translations.locative_form, не са директно поле на providers таблица
+
+### Промени в providers таблица (June 30, 2026)
+- Добавена колона: `profile_strength_email_sent_at TIMESTAMPTZ` — последно изпращане на profile strength email
+- Използва се от Railway Scheduler job за 14-дневен resend cycle при непълен профил
 
 ---
 
@@ -428,11 +433,16 @@ CREATE TABLE magic_link_tokens (
     token_hash TEXT NOT NULL UNIQUE,          -- SHA-256 of raw token; raw token is sent in email
     expires_at TIMESTAMP NOT NULL,            -- token expiration (e.g., 48 hours)
     used_at TIMESTAMP,                        -- set when token is successfully used
+    multi_use BOOLEAN NOT NULL DEFAULT false, -- If true, token can be reused until expiry (profile strength email links); if false, single-use (standard login)
     created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_magic_tokens_hash ON magic_link_tokens(token_hash);
 CREATE INDEX idx_magic_tokens_email ON magic_link_tokens(email);
+
+### Промени в magic_link_tokens таблица (June 30, 2026)
+- Добавена колона: `multi_use BOOLEAN NOT NULL DEFAULT false` — позволява многократно използване на token до expiry (за profile strength email линкове)
+- Стандартният login остава single-use (multi_use=false), email линковете са multi_use=true
 
 ---
 
