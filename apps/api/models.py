@@ -97,6 +97,9 @@ class Provider(Base):
     profile_strength_email_sent_at: Mapped[Optional[datetime]] = mapped_column(
         DateTime(timezone=True), nullable=True, default=None
     )
+    claimed_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True, default=None
+    )
 
     user: Mapped["User"] = relationship(back_populates="provider")
     services: Mapped[List["Service"]] = relationship(back_populates="provider")

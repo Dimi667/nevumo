@@ -717,6 +717,17 @@ railway run python3.13 -m apps.api.scripts.e2e_outreach_cleanup
 (Railway Scheduler → SQL → имейл summary), без нужда от dashboard UI.
 Модел: SWE-1.6 (backend events) + Kimi-2.6 (frontend instrumentation при нужда)
 
+**Стъпка 1 — claimed_at Timestamp (June 30, 2026):** ✅ COMPLETE
+- claimed_at TIMESTAMPTZ поле добавено в providers таблицата (nullable)
+- Попълва се при двата claim пътя: fast-path (claim_provider()) и verification (verify_claim_code())
+- Production тестван: двата пътя валидирани с уникални test users, timestamp format потвърден (UTC)
+- Засегнати файлове: alembic migration 20260630_add_claimed_at, models.py, routes/providers.py
+- Тестови данни изчистени: всички test providers/users премахнати от production
+
+**Стъпка 2 — Frontend Event Tracking:** ⏳ PENDING
+- trackPageEvent() извиквания в: Provider Full Page банера, claim/[token]/page.tsx, VerifyCodeForm.tsx
+- Event names: banner_view, claim_page_view, verify_code_sent, verify_success, verify_error
+
 ### Блокер 12 — Автоматизиран GDPR Objection/Delete Flow 🔴 GATE
 (Изисква: чл.14 текст от Б14)
 Проблем: Без ръчен капацитет за обработка на чл.21 възражения при >1,000

@@ -604,6 +604,7 @@ async def claim_provider(
     # Claim the profile
     provider.is_claimed = True
     provider.user_id = active_user.id
+    provider.claimed_at = func.now()
     try:
         db.commit()
     except IntegrityError:
@@ -730,6 +731,7 @@ async def verify_claim_code(
     provider.is_claimed = True
     provider.user_id = user.id
     provider.claim_token = None
+    provider.claimed_at = func.now()
     pending.used = True
     try:
         db.commit()

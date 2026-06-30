@@ -49,8 +49,10 @@ CREATE TABLE providers (
     is_claimed BOOLEAN NOT NULL DEFAULT TRUE, -- FALSE for unclaimed (scraped/auto-created) profiles
     claim_token TEXT UNIQUE,                  -- Magic token for claiming unclaimed profiles
     data_source TEXT NOT NULL DEFAULT 'manual', -- 'manual', 'scraped', 'imported', etc.
+    scraped_email TEXT,                        -- email от scraping за banner claim verification
     scraped_phone TEXT,                         -- phone от scraping, pre-fills user.phone при claim
     profile_strength_email_sent_at TIMESTAMPTZ, -- Last time profile strength email was sent
+    claimed_at TIMESTAMPTZ,                     -- Timestamp when profile was claimed (NULL for unclaimed)
     created_at TIMESTAMP DEFAULT NOW()
 );
 

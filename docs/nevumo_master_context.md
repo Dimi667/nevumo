@@ -1620,6 +1620,15 @@ bg, cs, da, de, el, en, es, et, fi, fr, ga, hr, hu, is, it, lb, lt, lv, mk, mt, 
 - 5 separate per-section tokens per provider, 14-day expiry, deep-link anchors with auto-scroll
 - See claimed_profiles_plan_2.md Блокер 7Ж for full architecture
 
+**Blocker 11 Step 1 — claimed_at Timestamp (June 30, 2026)** — COMPLETE:
+- claimed_at TIMESTAMPTZ field added to providers table (nullable, NULL for unclaimed profiles)
+- Populated via func.now() in both claim paths: fast-path claim (claim_provider()) and verification path (verify_claim_code())
+- Alembic migration: 20260630_add_claimed_at (revises: 5469b385e382)
+- Files modified: apps/api/models.py (Provider model), apps/api/routes/providers.py (claim logic)
+- Production tested: both claim paths verified with unique test users, timestamp format confirmed (UTC with timezone)
+- Test data cleaned: all test providers/users removed from production
+- Enables funnel conversion tracking: view → claim time measurement
+
 **Issue 5 Partial Implementation (June 24, 2026)** — PARTIAL:
 - ClaimProfileBanner.tsx: scraped_email показан под business name (пълен, не masked)
 - ClaimProfileBanner.tsx: ?source=banner добавен към claim href
