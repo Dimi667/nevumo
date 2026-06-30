@@ -2,6 +2,29 @@
 
 ---
 
+## 2026-06-30 — Timezone Comparison Error in verify_claim_code()
+
+**Симптом:** 500 Internal Server Error при verify_claim_code() — TypeError: can't compare offset-naive and offset-aware datetimes
+
+**Root cause:** Migration ff8bc78d912a (commit 925f091, Profile Strength Email задача) умишлено/инцидентно сменила pending_claim_verifications timestamp полета от timezone-aware на naive, без да обнови кода в verify_claim_code(), който още сравняваше с datetime.now(timezone.utc). Кодът използваше timezone-aware datetime.now(timezone.utc) за expires_at сравнение, но базата имаше naive timestamps след миграцията.
+
+**Импакт:** 0 реални потребители засегнати — открито само от Б11 функционален тест с @mcp-playwright срещу production, преди bulk кампанията.
+
+**Решение:** datetime.now(timezone.utc) → datetime.utcnow() на двата места в providers.py (commit 6b08f51):
+- Line 459: expires_at calculation за pending_claim_verifications
+- Line 701: expires_at comparison в verify_claim_code()
+
+Това align-ва с установената конвенция в codebase-а, където pending_claim_verifications използва naive timestamps (match-ващи други подобни таблици като magic_link_tokens, password_reset_tokens, pending_lead_claims).
+
+**Файлове:**
+- apps/api/routes/providers.py (2 реда променени)
+
+**Правила за бъдещето:**
+- Migrations да съдържат САМО промени, свързани с конкретната задача — не комбинирай несвързани schema промени в една migration
+- При промяна на timestamp типове (aware ↔ naive) винаги проверявай всички места в кода, където се прави datetime сравнение
+
+---
+
 ## 2026-05-30 — Production Site Down After First Deployment
 
 **Симптом:** nevumo.com не се зарежда. Vercel връща 504 GATEWAY_TIMEOUT на всички SSR страници.

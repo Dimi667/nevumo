@@ -710,7 +710,7 @@ railway run python3.13 -m apps.api.scripts.e2e_outreach_cleanup
 > отложени за следваща фаза). По-долу логиката GATE = твърдо изискване
 > преди production run на Б14 (seed-а), останалите следват успоредно/след.
 
-### Блокер 11 — Banner Tracking Statistics 🔴 GATE
+### Блокер 11 — Banner Tracking Statistics ✅ ЗАВЪРШЕН (30 юни 2026)
 Проблем: Нямаме жива статистика за Banner funnel-а (view → claim) преди
 сийдването да направи профилите публични.
 Решение: Event tracking за claim funnel стъпки, лек автоматизиран отчет
@@ -724,9 +724,27 @@ railway run python3.13 -m apps.api.scripts.e2e_outreach_cleanup
 - Засегнати файлове: alembic migration 20260630_add_claimed_at, models.py, routes/providers.py
 - Тестови данни изчистени: всички test providers/users премахнати от production
 
-**Стъпка 2 — Frontend Event Tracking:** ⏳ PENDING
-- trackPageEvent() извиквания в: Provider Full Page банера, claim/[token]/page.tsx, VerifyCodeForm.tsx
-- Event names: banner_view, claim_page_view, verify_code_sent, verify_success, verify_error
+**Стъпка 2 — Frontend Event Tracking (June 30, 2026):** ✅ COMPLETE
+- trackPageEvent() извиквания в: ClaimProfileBanner.tsx, ClaimProcessor.tsx, VerifyCodeForm.tsx, ProviderFullPage.tsx
+- Event names: banner_view, banner_claim_click, claim_page_view, claim_request_sent, verify_page_view, verify_code_submitted, verify_success, verify_error
+- useRef guard за single execution на view events
+- Production тестван: 7/7 events tracked успешно (verify_success потвърден след timezone fix)
+- Засегнати файлове: 4 frontend файла (ClaimProfileBanner, ClaimProcessor, VerifyCodeForm, ProviderFullPage)
+- Commit: fe31cbd
+
+**Timezone Bug Fix (June 30, 2026):** ✅ FIXED
+- Открит по време на функционален тест на Стъпка 2: 500 Internal Server Error при verify_claim_code()
+- Root cause: Migration ff8bc78d912a (commit 925f091) сменила pending_claim_verifications от timezone-aware на naive, но кодът още използваше datetime.now(timezone.utc)
+- Fix: datetime.now(timezone.utc) → datetime.utcnow() на 2 места в providers.py (commit 6b08f51)
+- Импакт: 0 реални потребители засегнати — открито само от E2E тест преди bulk кампанията
+- Виж docs/incident_logs.md за пълни детайли
+
+**Финален E2E тест (June 30, 2026):** ✅ PASS
+- Всички 7 event-а tracked в правилния ред (banner_view → verify_success)
+- HTTP response: 200 OK (без 500 грешка)
+- providers.claimed_at: попълнен с коректен UTC timestamp
+- providers.is_claimed: True
+- Test provider, user, и page events изчистени след тест
 
 ### Блокер 12 — Автоматизиран GDPR Objection/Delete Flow 🔴 GATE
 (Изисква: чл.14 текст от Б14)
