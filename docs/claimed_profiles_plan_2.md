@@ -387,60 +387,42 @@ Scheduler проверява: "Кой email на коя стъпка е след
 
 ---
 
-### Блокер 7А — Banner Flow Redesign: No auth before code 🔴
-(Изисква: Блокер 6. Блокира: Блокери 7Б–7Ж, Блокер 8)
-Проблем: Сегашният banner flow изисква login ПРЕДИ потребителят да въведе кода.
+### Блокер 7А — Banner Flow Redesign: No auth before code ✅ ЗАВЪРШЕН (23 юни 2026, като част от Блокер 6)
 
-Това е грешна архитектура — кодът сам по себе си е доказателство за собственост.
-Правилен flow:
-Banner click → POST /claim/{token}?source=banner (без JWT) →
-  backend: генерира код → изпраща до scraped_email → връща 202
-  frontend: redirect → /claim/{token}/verify?sent_to=b***@firma.pl
-User въвежда код → POST /claim/{token}/verify →
-  backend: verify code → get_or_create_claim_user(scraped_email) →
-  claims provider → връща JWT + user данни
-Frontend: saveAuth(JWT) → redirect → /provider/dashboard/profile (wizard)
+**Имплементация:**
+- Claim token от email = proof of identity (без login)
+- POST /providers/claim/{token} — no JWT required
+- get_or_create_claim_user() в auth_service.py
+- Cookie = единствен source of truth
 
-Промени в backend (apps/api/routes/providers.py):
-- claim_provider() при source=banner: НЕ изисква auth
-- Ако provider.scraped_email = NULL → 422 NO_EMAIL
-- Ако provider.is_claimed = True → 409 ALREADY_CLAIMED
-- В противен случай: генерира код, записва PendingClaimVerification,
-  изпраща email, връща 202 с masked sent_to — без JWT проверка
-- verify_claim(): след валиден код → извиква get_or_create_claim_user(scraped_email) →
-  claims provider → връща JWT + user + redirect info
+**Файлове:**
+- apps/api/services/auth_service.py — get_or_create_claim_user()
+- apps/api/routes/providers.py — claim endpoint redesign
+- apps/web/lib/auth-store.ts — isAuthenticated() чете Cookie
+- apps/web/app/[lang]/claim/[token]/ClaimProcessor.tsx
+- apps/web/app/[lang]/claim/[token]/page.tsx
 
-Промени в frontend:
-- ClaimProcessor.tsx: премахни 401 handler — banner flow не изисква auth
-- ClaimProcessor.tsx: при 202 — redirect директно към /verify (вече е)
-- VerifyCodeForm.tsx: след успешен verify → saveAuth(JWT) → redirect към wizard
-
-Модел: SWE-1.6 (backend) + Kimi-2.6 (frontend)
+**QA резултати:** ✅ Блокер 7Д потвърди "Email claim flow работи коректно след Блокер 7А промените"
 
 ---
 
-### Блокер 7Б — Magic Link Login за passwordless потребители 🔴
-(Изисква: Блокер 7А. Блокира: Блокер 8)
-Проблем: Потребители, създадени чрез get_or_create_claim_user(), нямат парола.
+### Блокер 7Б — Magic Link Login за passwordless потребители ✅ ЗАВЪРШЕН (24 юни 2026, Auth Phase 3)
 
-Ако затворят браузъра — нямат начин да се върнат. Заключени са завинаги.
-Решение — Magic Link система:
+**Имплементация:**
+- POST /api/v1/auth/request-magic-link — изпраща magic link по email
+- GET /api/v1/auth/magic-link/verify?token={token} — верифицира, връща JWT
+- Magic link: https://nevumo.com/{lang}/auth/magic-link?token={token} (24h TTL)
+- DB: magic_link_tokens таблица (token, user_id, expires_at, used)
+- Email template: magic_link_pl.html
+- Работи паралелно с парола и Google OAuth
 
-Нов endpoint: POST /api/v1/auth/magic-link — приема email, изпраща magic link
-Нов endpoint: GET /api/v1/auth/magic-link/verify?token={token} — верифицира, връща JWT
-Magic link: https://nevumo.com/{lang}/auth/magic-link?token={token} (24h TTL)
-DB: нова таблица magic_link_tokens (token, user_id, expires_at, used)
-Email template: magic_link_pl.html
-Работи паралелно с парола и Google OAuth
-
-Файлове:
+**Файлове:**
 - apps/api/routes/auth.py — 2 нови endpoints
 - apps/api/models.py — MagicLinkToken модел
-- Alembic migration
 - apps/api/services/email_service.py — send_magic_link_email()
-- apps/web/app/[lang]/auth/magic-link/page.tsx — landing за magic link
+- apps/web/app/[lang]/auth/magic-link/page.tsx
 
-Модел: SWE-1.6 (backend) + Kimi-2.6 (frontend)
+**QA резултати:** ✅ Auth Phase 3 COMPLETE (June 24, 2026)
 
 ---
 
@@ -484,15 +466,18 @@ Email template: magic_link_pl.html
 
 ---
 
-### Блокер 7Г — "Изпрати ми нов login link" на Auth страницата 🟡
-(Изисква: Блокер 7Б. Може паралелно с 7В)
-Проблем: Passwordless потребители, загубили magic link-а, нямат начин за вход.
-Решение:
-- Auth страница → под email/password формата → link "Нямате парола? Влезте с имейл линк →"
-- Кликване → показва поле за email → изпраща нов magic link
-- Използва POST /api/v1/auth/magic-link от Блокер 7Б
+### Блокер 7Г — "Изпрати ми нов login link" на Auth страницата ✅ ЗАВЪРШЕН (24 юни 2026, като част от Блокер 7Б)
 
-Модел: Kimi-2.6
+**Имплементация:**
+- Frontend: LoginClient.tsx — "Brak hasła? Zaloguj się linkiem na email →"
+- Появява се на step 2 (след въвеждане на email)
+- Кликване → изпраща линк до вече въведения email → success message
+- Използва POST /api/v1/auth/request-magic-link от Блокер 7Б
+- requestMagicLink() function в auth-api.ts
+
+**Translations:** 8 ключа × 34 езика (seed_magic_link_translations.py)
+
+**QA резултати:** ✅ Tested: passwordless provider → magic link → provider dashboard
 
 ---
 
@@ -508,50 +493,58 @@ Email template: magic_link_pl.html
 
 ---
 
-### Блокер 7Е — Onboarding Redirect Logic 🟡
-(Изисква: Блокер 7А)
-Проблем: При повторен login на вече claimнал потребител — системата не знае
-на коя стъпка от onboarding-а е спрял.
+### Блокер 7Е — Onboarding Redirect Logic ✅ ЗАВЪРШЕН (25 юни 2026, като част от Блокер 7Г+7Е)
 
-Решение:
-- При login → GET /api/v1/provider/profile → проверка на missing_fields
-- Logic:
+**Имплементация:**
+- Backend: determine_post_auth_redirect() функция в auth_service.py — single source of truth за всички post-auth redirects
+- Priority order: claim_token → effective_role → onboarding completeness check
+- For providers: check_onboarding_complete() → redirect based on missing_fields
   - Няма description/photo → Step 1 (profile)
   - Няма услуги → Step 2 (services)
   - Всичко попълнено → Dashboard Overview
+- Dual-role потребители: redirect по role (provider → /provider/dashboard, client → /client/dashboard)
+- New endpoint: POST /api/v1/auth/check-email → returns {exists, has_password, role, oauth_connected}
+- Frontend: LoginClient.tsx smart detection flow (check-email → passwordless auto magic link → magic_link_sent UI)
+- Frontend: ClaimProcessor.tsx updated redirect logic with is_onboarding_complete field
 
-Файлове: ClaimProcessor.tsx, apps/api/routes/provider.py (добави missing_fields в response)
-Модел: SWE-1.6 (backend) + Kimi-2.6 (frontend)
+**Файлове:**
+- apps/api/services/auth_service.py — determine_post_auth_redirect()
+- apps/api/routes/auth.py — check-email endpoint, redirect integration
+- apps/web/app/[lang]/auth/LoginClient.tsx — smart detection flow
+- apps/web/app/[lang]/claim/[token]/ClaimProcessor.tsx — onboarding redirect logic
+- apps/api/scripts/seed_magic_link_sent_translations.py — 34 languages, 3 keys
 
-**⚠️ Dual-role потребители (добавено към 7Е):**
-Nevumo ще има потребители с едновременна роля провайдър + клиент.
-Redirect логиката при login (magic link, OAuth, email/password) трябва да покрива:
-- role='provider' → /provider/dashboard
-- role='client' → /client/dashboard
-- Dual-role потребител → redirect по последно активната роля (use last_active_role
-  field или role от JWT); switch-role endpoint съществува
-Верифицирай MagicLinkClient.tsx redirect преди bulk кампанията.
-Ако last_active_role не съществува в User модела → добави го като part of 7Е.
+**QA резултати:** ✅ check-email response, ✅ passwordless auto magic link, ✅ login redirect (correct lang), ✅ magic link redirect, ✅ register redirect, ✅ Google OAuth redirect
 
 ---
 
-### Блокер 7Ж — Onboarding Pre-fill за Scraped Providers 🟡
-(Изисква: Блокер 7А. Може паралелно с 7Е)
-Проблем: Scraped провайдъри виждат празен wizard въпреки че имаме техните данни.
+### Блокер 7Ж — Onboarding Pre-fill за Scraped Providers ✅ ЗАВЪРШЕН (26 юни 2026)
 
-Налични данни за pre-fill:
-- business_name ✅ (вече се pre-fill-ва)
-- category_slug ✅ (вече се pre-fill-ва)
-- city (Warszawa) ✅ (вече се pre-fill-ва)
-- description — от scraped данни (ако има) → зарежда се в textarea
-- phone — от scraped данни (ако има) → зарежда се в phone поле
+**Имплементация (June 23, 2026):**
+- DB: category_slug column added to providers (migration c1d2e3f4g5h6)
+- Expose category_slug в dashboard API profile response
+- Fix: scraped providers start from Step 1 (not skipped to Step 2)
+- Pre-fill category_slug и Warsaw в Step 2 за scraped providers
+- Add claimed-specific heading в Step 1 за scraped providers ("Znaleźliśmy Twoją firmę na Nevumo!")
 
-Onboarding старт за scraped providers: Step 1 (Profile) — НЕ Step 2.
-Насърчава попълване на снимка и description (препоръчителни, влияят на конверсия).
+**Имплементация (June 26, 2026):**
+- DB: scraped_phone TEXT column added to providers (migration d2e3f4g5h6i7)
+- models.py: scraped_phone field added to Provider model
+- provider_service.py: scraped_phone included in get_provider_profile() response
+- auth_service.py: get_or_create_claim_user() pre-fills user.phone from scraped_phone if user.phone is None
+- providers.py: both call sites pass scraped_phone=provider.scraped_phone
 
-Проверка на текущото състояние преди имплементация: Провери какво вече е
-pre-fill-нато и какво липсва. Не презаписвай работещ код.
-Модел: SWE-1.6 (диагноза) → Kimi-2.6 (имплементация)
+**Файлове:**
+- apps/api/alembic/versions/c1d2e3f4g5h6_add_provider_category_slug.py
+- apps/api/alembic/versions/d2e3f4g5h6i7_add_scraped_phone_to_providers.py
+- apps/api/models.py — category_slug, scraped_phone fields
+- apps/api/services/provider_service.py — get_provider_profile() response
+- apps/api/services/auth_service.py — get_or_create_claim_user()
+- apps/api/routes/providers.py — claim endpoints
+- apps/web/app/[lang]/provider/dashboard/profile/page.tsx — pre-fill logic
+- apps/web/app/[lang]/claim/[token]/page.tsx — heading logic
+
+**QA резултати:** ✅ E2E verified: claim flow → user.phone populated from scraped_phone
 
 ---
 
