@@ -55,6 +55,29 @@ def generate_reset_token() -> tuple[str, str]:
     return raw, hashed
 
 
+def generate_magic_link_token(email: str, db: Session, hours: int = 24, invalidate_existing: bool = True) -> str:
+    """Generate and persist a magic link token for the given email. Returns raw_token. Caller must commit."""
+    import secrets
+    import hashlib
+    from datetime import datetime, timedelta
+    from apps.api.models import MagicLinkToken
+    if invalidate_existing:
+        db.query(MagicLinkToken).filter(
+            MagicLinkToken.email == email,
+            MagicLinkToken.used_at.is_(None),
+        ).delete()
+    raw_token = secrets.token_urlsafe(32)
+    token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
+    magic_token = MagicLinkToken(
+        email=email,
+        token_hash=token_hash,
+        expires_at=datetime.utcnow() + timedelta(hours=hours),
+        lead_id=None,
+    )
+    db.add(magic_token)
+    return raw_token
+
+
 def hash_token(raw: str) -> str:
     return hashlib.sha256(raw.encode()).hexdigest()
 

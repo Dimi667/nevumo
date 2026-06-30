@@ -485,6 +485,86 @@ This withdrawal form was submitted via the Nevumo online form.
             logger.error("[EMAIL_WARNING] send_claim_verification_email failed: %s", exc)
             return False
 
+    def send_profile_strength_email(
+        self,
+        provider_id: int,
+        business_name: str,
+        provider_email: str,
+        locale: str,
+        category_slug: str,
+        show_photo: bool,
+        show_gallery: bool,
+        show_description: bool,
+        show_phone: bool,
+        missing_count: int,
+        photo_url: str,
+        gallery_url: str,
+        description_url: str,
+        phone_url: str,
+        main_url: str,
+        unsubscribe_url: str,
+        db: "Session",
+    ) -> bool:
+        """Send profile strength email in provider's locale. Returns True on success."""
+        import jinja2
+        from pathlib import Path
+        from sqlalchemy import text
+
+        def fetch_translations(lang: str) -> dict:
+            rows = db.execute(
+                text(
+                    "SELECT key, value FROM translations "
+                    "WHERE lang = :lang AND key LIKE 'profile_strength_email.%'"
+                ),
+                {"lang": lang},
+            ).fetchall()
+            return {row.key.split(".", 1)[1]: row.value for row in rows}
+
+        t = fetch_translations(locale)
+        if not t:
+            t = fetch_translations("en")
+        if not t:
+            return False
+
+        for key in ("subject", "hero_found"):
+            if key in t:
+                t[key] = t[key].replace("{n}", str(missing_count))
+
+        templates_dir = Path(__file__).parent / "templates"
+        env = jinja2.Environment(loader=jinja2.FileSystemLoader(str(templates_dir)))
+        template = env.get_template("profile_strength.html")
+        html_content = template.render(
+            t=t,
+            business_name=business_name,
+            category_slug=category_slug,
+            show_photo=show_photo,
+            show_gallery=show_gallery,
+            show_description=show_description,
+            show_phone=show_phone,
+            photo_url=photo_url,
+            gallery_url=gallery_url,
+            description_url=description_url,
+            phone_url=phone_url,
+            main_url=main_url,
+            unsubscribe_url=unsubscribe_url,
+        )
+
+        if not self._enabled:
+            print(f"[profile_strength_email] Resend not enabled, skipping provider {provider_id}")
+            return False
+        try:
+            import resend
+            resend.Emails.send({
+                "from": self._from_email,
+                "to": [provider_email],
+                "subject": t.get("subject", ""),
+                "html": html_content,
+            })
+            return True
+        except Exception as e:
+            print(f"[profile_strength_email] Failed for provider {provider_id}: {e}")
+            return False
+
 
 # Global email service instance
 email_service = EmailService()

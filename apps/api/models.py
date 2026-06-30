@@ -94,6 +94,9 @@ class Provider(Base):
     scraped_phone: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     category_slug: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     data_source: Mapped[str] = mapped_column(String(20), default="manual", nullable=False)
+    profile_strength_email_sent_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True, default=None
+    )
 
     user: Mapped["User"] = relationship(back_populates="provider")
     services: Mapped[List["Service"]] = relationship(back_populates="provider")

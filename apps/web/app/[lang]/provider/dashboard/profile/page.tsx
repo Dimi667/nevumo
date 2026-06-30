@@ -398,6 +398,18 @@ export default function ProfilePage({ params }: PageProps) {
   }, [lang]);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const hash = window.location.hash.replace('#', '');
+    if (!hash) return;
+    const el = document.getElementById(hash);
+    if (el) {
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    }
+  }, [isComplete]);
+
+  useEffect(() => {
     if (sessionStorage.getItem('nevumo_just_claimed') === '1') {
       sessionStorage.removeItem('nevumo_just_claimed');
       setJustClaimed(true);
@@ -1178,16 +1190,18 @@ export default function ProfilePage({ params }: PageProps) {
       </div>
 
       {/* Photo */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
+      <div id="photo-section" className="bg-white rounded-xl border border-gray-200 p-5 scroll-mt-20">
         <h2 className="text-sm font-semibold text-gray-800 mb-4">{t('label_profile_photo', 'Profile photo')}</h2>
         <AvatarUpload imageUrl={imageUrl} uploading={uploading} onFileChange={handleImageChange} t={t} />
       </div>
 
       {/* Gallery */}
-      <GallerySection token={getAuthToken() || ''} t={t} />
+      <div id="gallery-section" className="scroll-mt-20">
+        <GallerySection token={getAuthToken() || ''} t={t} />
+      </div>
 
       {/* Details */}
-      <form noValidate onSubmit={e => e.preventDefault()} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+      <form id="details-section" noValidate onSubmit={e => e.preventDefault()} className="bg-white rounded-xl border border-gray-200 p-5 space-y-4 scroll-mt-20">
         <h2 className="text-sm font-semibold text-gray-800">{t('label_business_details', 'Business details')}</h2>
 
         <div>

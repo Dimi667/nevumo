@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>{{ t.subject }}</title>
+  <style type="text/css">
+    body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+    table,td{mso-table-lspace:0pt;mso-table-rspace:0pt}
+    img{-ms-interpolation-mode:bicubic;border:0;height:auto;line-height:100%;outline:none;text-decoration:none}
+    body{margin:0;padding:0;background:#F9FAFB}
+    .eb{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+    @media only screen and (max-width:620px){
+      .wrap{width:100%!important}
+      .eb{padding:24px 20px!important}
+    }
+  </style>
+</head>
+<body>
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"
+       style="background:#F9FAFB;padding:32px 0;">
+  <tr>
+    <td align="center">
+      <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="600" class="wrap"
+             style="background:#ffffff;border-radius:16px;overflow:hidden;
+                    box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+
+        <!-- LOGO -->
+        <tr>
+          <td class="eb" style="padding:28px 40px 20px;border-bottom:1px solid #F3F4F6;">
+            <a href="https://nevumo.com" target="_blank" style="text-decoration:none;">
+              <img src="https://images.nevumo.com/nevumo-logo.png"
+                   alt="Nevumo" width="140"
+                   style="display:inline-block;border:0;height:auto;max-width:140px;"/>
+            </a>
+          </td>
+        </tr>
+
+        <!-- HERO -->
+        <tr>
+          <td class="eb" style="padding:36px 40px 28px;">
+            <p style="margin:0 0 8px;font-size:13px;color:#9CA3AF;font-weight:500;">
+              {{ t.hero_for }} <strong style="color:#111827;">{{ business_name }}</strong>
+            </p>
+            <h1 style="margin:0 0 16px;font-size:26px;font-weight:800;color:#111827;line-height:1.25;">
+              {{ t.hero_active }}
+            </h1>
+            <p style="margin:0 0 8px;font-size:16px;color:#4B5563;line-height:1.65;">
+              {{ t.hero_found }}
+            </p>
+            <p style="margin:0;font-size:15px;color:#6B7280;line-height:1.55;">
+              {{ t.hero_time }}
+            </p>
+          </td>
+        </tr>
+
+        <!-- DIVIDER -->
+        <tr><td style="padding:0 40px;">
+          <hr style="border:none;border-top:1px solid #F3F4F6;margin:0;"/>
+        </td></tr>
+
+        {% if show_photo %}
+        <!-- BLOCK 1: Profile photo -->
+        <tr>
+          <td class="eb" style="padding:24px 40px 0;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"
+                   style="background:#FFF7ED;border:1px solid #FED7AA;
+                          border-left:4px solid #F97316;border-radius:8px;">
+              <tr>
+                <td style="padding:18px 22px;">
+                  <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#111827;
+                             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    📷&nbsp; {{ t.block1_title }}
+                  </p>
+                  <p style="margin:0 0 14px;font-size:14px;color:#4B5563;line-height:1.6;
+                             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    {{ t.block1_body }}
+                  </p>
+                  <a href="{{ photo_url }}" target="_blank"
+                     style="font-size:14px;font-weight:600;color:#F97316;text-decoration:none;
+                            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    → {{ t.block1_cta }}
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if show_gallery %}
+        <!-- BLOCK 2: Gallery -->
+        <tr>
+          <td class="eb" style="padding:16px 40px 0;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"
+                   style="background:#FFF7ED;border:1px solid #FED7AA;
+                          border-left:4px solid #F97316;border-radius:8px;">
+              <tr>
+                <td style="padding:18px 22px;">
+                  <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#111827;
+                             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    🖼️&nbsp; {{ t.block2_title }}
+                  </p>
+                  <p style="margin:0 0 14px;font-size:14px;color:#4B5563;line-height:1.6;
+                             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    {{ t.block2_body }}
+                  </p>
+                  <a href="{{ gallery_url }}" target="_blank"
+                     style="font-size:14px;font-weight:600;color:#F97316;text-decoration:none;
+                            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    → {{ t.block2_cta }}
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if show_description %}
+        <!-- BLOCK 3: Description -->
+        <tr>
+          <td class="eb" style="padding:16px 40px 0;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"
+                   style="background:#FFF7ED;border:1px solid #FED7AA;
+                          border-left:4px solid #F97316;border-radius:8px;">
+              <tr>
+                <td style="padding:18px 22px;">
+                  <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#111827;
+                             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    📝&nbsp; {{ t.block3_title }}
+                  </p>
+                  <p style="margin:0 0 10px;font-size:14px;color:#4B5563;line-height:1.6;
+                             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    {{ t.block3_body }}
+                  </p>
+                  <p style="margin:0 0 14px;font-size:13px;color:#6B7280;font-style:italic;line-height:1.55;
+                             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    {% if category_slug == 'cleaning' %}{{ t.block3_ex_cleaning }}{% elif category_slug == 'plumbing' %}{{ t.block3_ex_plumbing }}{% else %}{{ t.block3_ex_massage }}{% endif %}
+                  </p>
+                  <a href="{{ description_url }}" target="_blank"
+                     style="font-size:14px;font-weight:600;color:#F97316;text-decoration:none;
+                            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    → {{ t.block3_cta }}
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        {% endif %}
+
+        {% if show_phone %}
+        <!-- BLOCK 4: Phone -->
+        <tr>
+          <td class="eb" style="padding:16px 40px 0;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"
+                   style="background:#FFF7ED;border:1px solid #FED7AA;
+                          border-left:4px solid #F97316;border-radius:8px;">
+              <tr>
+                <td style="padding:18px 22px;">
+                  <p style="margin:0 0 6px;font-size:15px;font-weight:700;color:#111827;
+                             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    📞&nbsp; {{ t.block4_title }}
+                  </p>
+                  <p style="margin:0 0 14px;font-size:14px;color:#4B5563;line-height:1.6;
+                             font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    {{ t.block4_body }}
+                  </p>
+                  <a href="{{ phone_url }}" target="_blank"
+                     style="font-size:14px;font-weight:600;color:#F97316;text-decoration:none;
+                            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    → {{ t.block4_cta }}
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        {% endif %}
+
+        <!-- DIVIDER -->
+        <tr><td style="padding:28px 40px 0;">
+          <hr style="border:none;border-top:1px solid #F3F4F6;margin:0;"/>
+        </td></tr>
+
+        <!-- MAIN CTA -->
+        <tr>
+          <td class="eb" style="padding:28px 40px 36px;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="border-radius:10px;background:#F97316;
+                           box-shadow:0 4px 12px rgba(249,115,22,0.35);">
+                  <a href="{{ main_url }}" target="_blank"
+                     style="display:inline-block;padding:16px 36px;font-size:16px;font-weight:700;
+                            color:#ffffff;text-decoration:none;border-radius:10px;
+                            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+                    {{ t.cta_main }}
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- SIGNATURE -->
+        <tr><td style="padding:0 40px;">
+          <hr style="border:none;border-top:1px solid #F3F4F6;margin:0;"/>
+        </td></tr>
+        <tr>
+          <td class="eb" style="padding:22px 40px 28px;">
+            <p style="margin:0;font-size:14px;color:#374151;line-height:1.7;
+                       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+              Dimitar<br/>
+              <span style="color:#9CA3AF;">Nevumo</span>
+            </p>
+          </td>
+        </tr>
+
+        <!-- FOOTER -->
+        <tr>
+          <td class="eb" style="padding:18px 40px 24px;background:#F9FAFB;
+                                border-top:1px solid #F3F4F6;">
+            <p style="margin:0;font-size:12px;color:#9CA3AF;line-height:1.7;text-align:center;
+                       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+              {{ t.footer_text }}<br/>
+              <a href="{{ unsubscribe_url }}"
+                 style="color:#9CA3AF;text-decoration:underline;">{{ t.footer_unsub }}</a>
+              &nbsp;·&nbsp;
+              <a href="https://nevumo.com"
+                 style="color:#9CA3AF;text-decoration:none;">nevumo.com</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -26,9 +26,10 @@ interface MagicState {
 interface MagicLinkClientProps {
   lang: string;
   token: string;
+  next?: string;
 }
 
-export default function MagicLinkClient({ lang, token }: MagicLinkClientProps) {
+export default function MagicLinkClient({ lang, token, next }: MagicLinkClientProps) {
   const [state, setState] = useState<MagicState>({
     page: 'loading',
     loading: false,
@@ -51,7 +52,9 @@ export default function MagicLinkClient({ lang, token }: MagicLinkClientProps) {
 
       // Auto-redirect after 2 seconds
       setTimeout(() => {
-        if (result.redirect) {
+        if (next) {
+          window.location.href = decodeURIComponent(next);
+        } else if (result.redirect) {
           window.location.href = result.redirect;
         } else {
           const role = result.user?.role ?? 'client';
