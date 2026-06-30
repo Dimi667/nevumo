@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { saveAuth } from '@/lib/auth-store';
+import { trackPageEvent } from '@/lib/tracking';
 
 interface VerifyCodeFormProps {
   lang: string;
@@ -18,8 +19,19 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
   const [resendCooldown, setResendCooldown] = useState(0);
   const [showResend, setShowResend] = useState(false);
   const [resending, setResending] = useState(false);
+  const trackedRef = useRef(false);
 
   const t = (key: string, fallback: string = ''): string => dict[key] || fallback;
+
+  // Track verify page view once on mount
+  useEffect(() => {
+    if (!trackedRef.current) {
+      trackedRef.current = true;
+      trackPageEvent('verify_page_view', 'claim_verify', {
+        claim_token: token,
+      });
+    }
+  }, [token]);
 
   // 60-second timer to show resend button on mount
   useEffect(() => {
@@ -98,6 +110,11 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
     setSubmitting(true);
     setError(null);
 
+    // Track verify code submitted
+    trackPageEvent('verify_code_submitted', 'claim_verify', {
+      claim_token: token,
+    });
+
     try {
       const API_BASE = typeof window === 'undefined' ? process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || '' : process.env.NEXT_PUBLIC_API_URL || '';
       
@@ -113,6 +130,10 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
 
       if (response.ok && data.success) {
         setSuccess(true);
+        // Track verify success
+        trackPageEvent('verify_success', 'claim_verify', {
+          claim_token: token,
+        });
         // Save JWT from backend response and redirect
         saveAuth(data.token, data.user);
         window.location.replace(data.redirect);
@@ -122,26 +143,50 @@ export default function VerifyCodeForm({ lang, token, dict, sentTo }: VerifyCode
       // Handle errors
       if (response.status === 400) {
         const code = data?.detail?.code;
+        let errorCode = 'unknown';
         if (code === 'CODE_INVALID') {
           setError(t('verify_error_invalid'));
+          errorCode = 'CODE_INVALID';
         } else if (code === 'CODE_EXPIRED') {
           setError(t('verify_error_expired'));
+          errorCode = 'CODE_EXPIRED';
         } else if (data.detail === 'invalid_code_format') {
           setError(t('verify_error_format'));
+          errorCode = 'invalid_code_format';
         } else {
           setError(t('verify_error_invalid'));
+          errorCode = 'unknown';
         }
+        // Track verify error
+        trackPageEvent('verify_error', 'claim_verify', {
+          claim_token: token,
+          error_code: errorCode,
+        });
         setShowResend(true);
       } else if (response.status === 409) {
         // Already claimed - redirect back to claim page with error
+        trackPageEvent('verify_error', 'claim_verify', {
+          claim_token: token,
+          error_code: 'ALREADY_CLAIMED',
+        });
         window.location.href = `/${lang}/claim/${token}?error=already_claimed`;
         return;
       } else {
         setError(t('verify_error_invalid'));
+        // Track verify error
+        trackPageEvent('verify_error', 'claim_verify', {
+          claim_token: token,
+          error_code: 'network_error',
+        });
         setShowResend(true);
       }
     } catch {
       setError(t('verify_error_network'));
+      // Track verify error
+      trackPageEvent('verify_error', 'claim_verify', {
+        claim_token: token,
+        error_code: 'network_error',
+      });
       setShowResend(true);
     } finally {
       setSubmitting(false);

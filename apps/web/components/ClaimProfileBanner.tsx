@@ -1,11 +1,14 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { trackPageEvent } from '@/lib/tracking';
 
 interface ClaimProfileBannerProps {
   businessName: string;
   lang: string;
   claimToken: string;
+  providerId?: string;
   searchVolume: number | null;
   categoryLabel: string;
   cityLabel: string;
@@ -24,6 +27,7 @@ export default function ClaimProfileBanner({
   businessName,
   lang,
   claimToken,
+  providerId,
   searchVolume,
   categoryLabel,
   cityLabel,
@@ -31,6 +35,18 @@ export default function ClaimProfileBanner({
   scrapedEmail,
   translations,
 }: ClaimProfileBannerProps) {
+  const trackedRef = useRef(false);
+
+  useEffect(() => {
+    if (!trackedRef.current) {
+      trackedRef.current = true;
+      trackPageEvent('banner_view', 'provider_full_page', {
+        provider_id: providerId || '',
+        claim_token: claimToken,
+      });
+    }
+  }, [providerId, claimToken]);
+
   const formatDesc = () => {
     let desc = translations.desc;
     if (searchVolume === null) {
@@ -46,6 +62,13 @@ export default function ClaimProfileBanner({
   };
 
   const subtitle = translations.subtitle.replace('{businessName}', businessName);
+
+  const handleClaimClick = () => {
+    trackPageEvent('banner_claim_click', 'provider_full_page', {
+      provider_id: providerId || '',
+      claim_token: claimToken,
+    });
+  };
 
   return (
     <div className="bg-gradient-to-r from-orange-500 to-orange-600 py-4 px-6 rounded-xl mb-6">
@@ -72,6 +95,7 @@ export default function ClaimProfileBanner({
         <div className="flex flex-col items-center">
           <Link
             href={`/${lang}/claim/${claimToken}?source=banner`}
+            onClick={handleClaimClick}
             className="bg-white text-orange-600 font-semibold px-6 py-2.5 rounded-lg hover:bg-orange-50 transition-colors whitespace-nowrap text-sm"
           >
             {translations.cta}

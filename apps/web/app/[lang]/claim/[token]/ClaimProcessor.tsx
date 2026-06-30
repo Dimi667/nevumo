@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { saveAuth } from '@/lib/auth-store';
 import { getAuthToken } from '@/lib/auth-store';
 import { API_BASE } from '@/lib/api';
+import { trackPageEvent } from '@/lib/tracking';
 
 interface ClaimProcessorProps {
   token: string;
@@ -39,8 +40,18 @@ export default function ClaimProcessor({
 }: ClaimProcessorProps) {
   const router = useRouter();
   const [errorCode, setErrorCode] = useState<ErrorCode>(null);
+  const trackedRef = useRef(false);
 
   useEffect(() => {
+    // Track claim page view once on mount
+    if (!trackedRef.current) {
+      trackedRef.current = true;
+      trackPageEvent('claim_page_view', 'claim', {
+        claim_token: token,
+        source: source ?? 'direct',
+      });
+    }
+
     const claimKey = `claim_${token}`;
     const sentToKey = `claim_sent_to_${token}`;
 
@@ -97,6 +108,11 @@ export default function ClaimProcessor({
           } catch {
             console.warn('[ClaimProcessor] sessionStorage write failed, continuing redirect');
           }
+          // Track claim request sent
+          trackPageEvent('claim_request_sent', 'claim', {
+            claim_token: token,
+            source: source ?? 'email',
+          });
           const verifyUrl = sentTo
             ? `/${lang}/claim/${token}/verify?sent_to=${encodeURIComponent(sentTo)}`
             : `/${lang}/claim/${token}/verify`;
@@ -139,7 +155,7 @@ export default function ClaimProcessor({
     };
 
     processClaim();
-  }, [token, lang, source]);
+  }, [token, lang, source, trackedRef]);
 
   // ── Error states ─────────────────────────────────────────────────────
   if (errorCode === 'USER_ALREADY_HAS_PROVIDER') {

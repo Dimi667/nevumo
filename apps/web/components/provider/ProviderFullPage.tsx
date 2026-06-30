@@ -511,6 +511,7 @@ export default function ProviderFullPage({ provider, translations, lang }: Provi
               businessName={provider.business_name}
               lang={lang}
               claimToken={provider.claim_token}
+              providerId={provider.id}
               searchVolume={provider.search_volume}
               categoryLabel={provider.category_name}
               cityLabel={provider.city_name}
