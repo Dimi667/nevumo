@@ -101,6 +101,12 @@ class Provider(Base):
         DateTime(timezone=True), nullable=True, default=None
     )
 
+    # GDPR Art.21 objection fields
+    objected_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True, default=None
+    )
+    is_hidden: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
     user: Mapped["User"] = relationship(back_populates="provider")
     services: Mapped[List["Service"]] = relationship(back_populates="provider")
     cities: Mapped[List["ProviderCity"]] = relationship(back_populates="provider")
