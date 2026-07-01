@@ -106,6 +106,7 @@ class Provider(Base):
         DateTime(timezone=True), nullable=True, default=None
     )
     is_hidden: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    objection_token: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, unique=True)
 
     user: Mapped["User"] = relationship(back_populates="provider")
     services: Mapped[List["Service"]] = relationship(back_populates="provider")
