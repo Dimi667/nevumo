@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Informacja o profilu w Nevumo</title>
+  <style type="text/css">
+    body,table,td,a{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+    table,td{mso-table-lspace:0pt;mso-table-rspace:0pt}
+    img{-ms-interpolation-mode:bicubic;border:0;height:auto;line-height:100%;outline:none;text-decoration:none}
+    *{box-sizing:border-box}
+    body{margin:0!important;padding:0!important;background-color:#F3F4F6;
+         font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif}
+    @media only screen and (max-width:620px){
+      .ew{width:100%!important}
+      .eb{padding:10px 20px!important}
+      .cta{display:block!important;width:100%!important;text-align:center!important}
+      .bc{display:block!important;width:100%!important;padding:0 0 14px!important}
+      h1{font-size:22px!important}
+    }
+    .cta-outline {
+      display:inline-block;padding:16px 36px;font-size:16px;font-weight:700;
+      color:#F97316;text-decoration:none;border:2px solid #F97316;
+      border-radius:10px;background:transparent;min-width:280px;text-align:center;
+    }
+    .objection-outline {
+      display:inline-block;padding:16px 36px;font-size:16px;font-weight:700;
+      color:#111827;text-decoration:none;border:2px solid #111827;
+      border-radius:10px;background:transparent;min-width:280px;text-align:center;
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#F3F4F6;">
+
+  <div style="display:none;font-size:1px;color:#F3F4F6;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">
+    Znaleźliśmy {{ business_name }} w publicznych rejestrach. Poniżej — jakie dane przetwarzamy i jakie masz prawa.
+  </div>
+
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F3F4F6;">
+    <tr>
+      <td align="center" class="eb" style="padding:32px 16px;">
+        <table class="ew" role="presentation" border="0" cellpadding="0" cellspacing="0" width="600"
+               style="background:#ffffff;border-radius:12px;overflow:hidden;
+                      box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+
+          <!-- ORANGE TOP ACCENT STRIP -->
+          <tr>
+            <td style="background:#F97316;height:4px;font-size:0;line-height:0;">&nbsp;</td>
+          </tr>
+
+          <!-- HEADER with logo -->
+          <tr>
+            <td style="background:#ffffff;padding:12px 40px 2px;text-align:center;">
+              <a href="https://nevumo.com/pl" target="_blank" style="text-decoration:none;">
+                <img src="https://images.nevumo.com/nevumo-logo.png"
+                     alt="Nevumo" width="160" height="27"
+                     style="display:inline-block;border:0;height:auto;max-width:160px;"/>
+              </a>
+            </td>
+          </tr>
+
+          <!-- HERO / INTRO -->
+          <tr>
+            <td class="eb" style="padding:4px 40px 28px;">
+              <h1 style="margin:0 0 18px;font-size:24px;font-weight:800;color:#111827;line-height:1.25;">
+                Dzień dobry,
+              </h1>
+              <p style="margin:0 0 24px;font-size:15px;color:#4B5563;line-height:1.65;">
+                Znaleźliśmy <strong>{{ business_name }}</strong> w CEIDG i innych publicznie dostępnych
+                źródłach i utworzyliśmy służbowy profil w Nevumo — platformie usługowej
+                w Warszawie. Poniżej znajdziesz pełne informacje zgodnie z art. 14 RODO.
+              </p>
+
+              <!-- CTA BUTTON -->
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <a href="{{ provider_page_link }}" target="_blank" class="cta-outline">
+                      Zarządzaj swoim profilem →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- DIVIDER -->
+          <tr><td style="padding:0 40px;"><hr style="border:none;border-top:1px solid #F3F4F6;margin:0;"/></td></tr>
+
+          <!-- GDPR BOX -->
+          <tr>
+            <td class="eb" style="padding:28px 40px;">
+              <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-left:4px solid #D1D5DB;
+                         border-radius:8px;padding:20px 24px;">
+                <p style="margin:0 0 10px;font-size:11px;font-weight:700;color:#6B7280;
+                         text-transform:uppercase;letter-spacing:0.8px;">
+                  INFORMACJA O PRZETWARZANIU DANYCH OSOBOWYCH (ART. 14 RODO)
+                </p>
+                <p style="margin:0 0 14px;font-size:13px;color:#4B5563;line-height:1.6;">
+                  <strong>Administrator:</strong> ФИЛИПС ЦЕНТЬР БЪЛГАРИЯ ООД (FILIPS CENTAR BALGARIYA OOD),
+                  EIK: 175369610, e-mail: <a href="mailto:privacy@nevumo.com" style="color:#F97316;text-decoration:none;">privacy@nevumo.com</a>
+                </p>
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%"
+                       style="border-collapse:collapse;font-size:13px;">
+                  <tr>
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">Firma</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">{{ business_name }}</td>
+                  </tr>
+                  <tr style="background:#F9FAFB;">
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">Telefon</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">{{ provider_phone }}</td>
+                  </tr>
+                  <tr>
+                    <td style="width:38%;color:#6B7280;padding:7px 10px;vertical-align:top;">E-mail</td>
+                    <td style="width:62%;color:#111827;font-weight:600;padding:7px 10px;">{{ provider_email }}</td>
+                  </tr>
+                </table>
+                <p style="margin:14px 0 5px;font-size:13px;color:#4B5563;line-height:1.6;">
+                  <strong>Cel:</strong> wyświetlanie profilu w katalogu kategorii na Nevumo.com
+                </p>
+                <p style="margin:0 0 5px;font-size:13px;color:#4B5563;line-height:1.6;">
+                  <strong>Podstawa prawna:</strong> art. 6 ust. 1 lit. f RODO — prawnie uzasadniony interes
+                </p>
+                <p style="margin:0 0 5px;font-size:13px;color:#4B5563;line-height:1.6;">
+                  <strong>Źródło danych:</strong> publiczny rejestr CEIDG oraz inne publicznie dostępne strony
+                </p>
+                <p style="margin:0 0 5px;font-size:13px;color:#4B5563;line-height:1.6;">
+                  <strong>Okres przechowywania:</strong> do zgłoszenia żądania usunięcia lub maks. 30 dni po usunięciu
+                </p>
+                <p style="margin:0 0 5px;font-size:13px;color:#4B5563;line-height:1.6;">
+                  <strong>Odbiorcy danych i transfer poza EOG:</strong> pełna lista w Polityce prywatności
+                  → <a href="{{ privacy_policy_link }}" target="_blank" style="color:#F97316;text-decoration:none;">Polityka prywatności</a>
+                </p>
+                <p style="margin:0;font-size:13px;color:#4B5563;line-height:1.6;">
+                  <strong>Prawo do skargi:</strong> do UODO (Polska) lub KZLD (Bułgaria)
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- DIVIDER -->
+          <tr><td style="padding:0 40px;"><hr style="border:none;border-top:1px solid #F3F4F6;margin:0;"/></td></tr>
+
+          <!-- OBJECTION BOX -->
+          <tr>
+            <td class="eb" style="padding:28px 40px;">
+              <div style="background:#ffffff;border:1px solid #E5E7EB;border-left:4px solid #111827;
+                         border-radius:8px;padding:20px 24px;">
+                <p style="margin:0 0 10px;font-size:11px;font-weight:700;color:#6B7280;
+                         text-transform:uppercase;letter-spacing:0.8px;">
+                  PRAWO SPRZECIWU
+                </p>
+                <p style="margin:0 0 16px;font-size:13px;color:#4B5563;line-height:1.6;">
+                  Masz prawo w każdej chwili i bezpłatnie wnieść sprzeciw wobec tego
+                  przetwarzania danych.
+                </p>
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td>
+                      <a href="{{ objection_link }}" target="_blank" class="objection-outline">
+                        Usuń moje dane →
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+
+          <!-- FOOTER -->
+          <tr>
+            <td style="background:#F9FAFB;border-top:1px solid #E5E7EB;padding:24px 40px;text-align:center;">
+              <p style="margin:0 0 10px;font-size:13px;color:#6B7280;line-height:1.7;">
+                <a href="mailto:support@nevumo.com" style="color:#6B7280;text-decoration:none;">support@nevumo.com</a>
+                &nbsp;·&nbsp;
+                <a href="https://nevumo.com/pl/privacy" target="_blank" style="color:#6B7280;text-decoration:none;">Polityka prywatności</a>
+                &nbsp;·&nbsp;
+                <a href="https://nevumo.com/pl/terms-provider" target="_blank" style="color:#6B7280;text-decoration:none;">Regulamin dla usługodawców</a>
+              </p>
+              <p style="margin:0 0 8px;font-size:11px;color:#9CA3AF;line-height:1.5;">
+                ФИЛИПС ЦЕНТЬР БЪЛГАРИЯ ООД (FILIPS CENTAR BALGARIYA OOD) · EIK: 175369610 ·
+                <a href="https://nevumo.com" target="_blank" style="color:#9CA3AF;text-decoration:none;">nevumo.com</a>
+              </p>
+              <p style="margin:8px 0 0;font-size:11px;color:#D1D5DB;">© 2026 Nevumo</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

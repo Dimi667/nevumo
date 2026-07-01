@@ -441,6 +441,41 @@ This withdrawal form was submitted via the Nevumo online form.
         except Exception as e:
             print(f"[EMAIL_WARNING] send_article14_notification failed: {e}", flush=True)
 
+    def send_article14_seed_notification(
+        self,
+        to_email: str,
+        business_name: str,
+        provider_phone: str | None,
+        provider_page_link: str,
+        objection_link: str,
+        privacy_policy_link: str,
+    ) -> None:
+        """Send Art.14 GDPR seed notification email to scraped providers."""
+        try:
+            import jinja2
+            import pathlib
+
+            template_dir = pathlib.Path(__file__).parent / "templates"
+            env = jinja2.Environment(loader=jinja2.FileSystemLoader(str(template_dir)))
+            template = env.get_template("article14_seed_notice_pl.html")
+
+            html = template.render(
+                business_name=business_name,
+                provider_phone=provider_phone,
+                provider_email=to_email,
+                provider_page_link=provider_page_link,
+                objection_link=objection_link,
+                privacy_policy_link=privacy_policy_link,
+            )
+
+            self._send_email(
+                to_email=to_email,
+                subject=f"{business_name} — informacja o profilu w Nevumo",
+                html_body=html,
+            )
+        except Exception as e:
+            print(f"[EMAIL_WARNING] send_article14_seed_notification failed: {e}", flush=True)
+
     def send_claim_welcome_email(
         self,
         provider_email: str,
