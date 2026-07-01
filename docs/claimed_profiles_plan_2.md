@@ -788,8 +788,21 @@ Banner claim flow.
 (Изисква: Б11, Б12, Б13 завършени)
 Проблем: seed_unclaimed_providers.py не съществува; provider страници не
 влизат в категориен листинг/sitemap без Service+ProviderCity записи
-(INNER JOIN изисква и двете); чл.14 имейлът тригерира само при claim,
-не при публикуване.
+(INNER JOIN изисква и двете); чл.14 имейлът тригерира само при публикуване.
+
+**Data source scope (решено 1 юли 2026):** Този seed run използва
+ЕДИНСТВЕНО `warszawa_providers_with_websites.csv` (CEIDG, 795 уникални
+имейла). `panoramafirm_emails_final.csv` (611 имейла, 602 от тях
+неприсъстващи в CEIDG) НЕ се включва — WeNet Group (собственик на
+Panoramafirm.pl) прилага sui generis database right клауза в Regulamin-а
+на сестринския сайт pkt.pl, забраняваща точно extraction за mailing
+lists/търговски оферти; Panoramafirm.pl няма публичен Regulамин,
+но statutory защитата действа независимо от липсата на изрична клауза
+(ЕС Директива 96/9/ЕО). Добавянето на Panoramafirm остава отделна бъдеща
+задача, само след юридическо изясняване — НЕ част от този seed script.
+Скриптът чете директно от CEIDG CSV-то, без merge/dedup логика (единствен
+източник за момента).
+
 Решение:
 - Филтър: само редове с реален email (third "-"/празно/NULL = липсва);
   изключва business_name=empty
