@@ -2,6 +2,24 @@
 
 ---
 
+## 2026-07-01 — Relative redirect URLs в outreach.py чупят cross-origin fetch flow
+
+**Симптом:** RedirectResponse с относителен url (напр. "/pl/outreach/...") се резолства от браузъра спрямо origin-а на API отговора (api.nevumo.com), не спрямо frontend origin-а (nevumo.com), когато redirect идва в отговор на fetch() заявка от друг домейн. Директна browser навигация (GET клик от имейл) работи правилно; POST-през-fetch (objection confirm бутон) се чупеше — получаваше 404 вместо success, въпреки успешно изпълнена операция.
+
+**Root cause:** FastAPI RedirectResponse с относителен URL се интерпретира от браузъра спрямо request origin-а, не спрямо frontend домейн. При cross-origin fetch (objection confirm POST), браузърът следва redirect към api.nevumo.com/pl/outreach/objection вместо nevumo.com/pl/outreach/objection → 404.
+
+**Засегнат код:** outreach_objection_check, outreach_objection_submit, outreach_unsubscribe (и трите endpoint-а в apps/api/routes/outreach.py)
+
+**Открито чрез:** Browser E2E тест с @mcp-playwright network request инспекция (не се хващаше от curl-базирани E2E тестове)
+
+**Решение:** POST endpoints връщат JSON вместо redirect; GET endpoints ползват FRONTEND_BASE_URL абсолютен префикс
+
+**Commit hashes:** 4d5edcc (objection), 6be610a (unsubscribe)
+
+**Забележка:** outreach_unsubscribe е била в production от Блокер 3 с този бъг непроверен — потвърди в следваща диагностика дали има засегнати реални редове преди днешната дата
+
+---
+
 ## 2026-06-30 — Timezone Comparison Error in verify_claim_code()
 
 **Симптом:** 500 Internal Server Error при verify_claim_code() — TypeError: can't compare offset-naive and offset-aware datetimes
