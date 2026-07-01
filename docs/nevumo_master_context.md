@@ -2022,6 +2022,10 @@ Next.js App Router: child pages with `generateMetadata` override `icons` from ro
 - `apps/web/scripts/generate-favicons.js`
 - `apps/web/components/FaviconManager.tsx`
 
+### Architecture Rules — RedirectResponse Endpoints (July 1, 2026)
+
+**RedirectResponse endpoints, консумирани през fetch() (не директна browser навигация), трябва да ползват АБСОЛЮТЕН URL в Location header-а — браузърът резолства относителен redirect URL спрямо origin-а на API отговора, не спрямо frontend origin-а. Причини production бъг, засегнал едновременно нов (objection) и вече пуснат (unsubscribe) endpoint, 2026-07-01 — виж incident_logs.md.**
+
 ### Known Issues — Pre-Launch (June 23, 2026)
 
 ✅ Issue 1: Magic link claim flow — ЗАВЪРШЕН (23 юни 2026)

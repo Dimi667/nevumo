@@ -100,6 +100,13 @@ CREATE UNIQUE INDEX idx_providers_claim_token ON providers(claim_token) WHERE cl
 - Добавена колона: `profile_strength_email_sent_at TIMESTAMPTZ` — последно изпращане на profile strength email
 - Използва се от Railway Scheduler job за 14-дневен resend cycle при непълен профил
 
+### Промени в providers таблица (July 1, 2026)
+- Добавена колона: `objected_at TIMESTAMPTZ` — timestamp на GDPR Art.21 objection (nullable)
+- Добавена колона: `is_hidden BOOLEAN NOT NULL DEFAULT FALSE` — флаг за скриване на provider от листинга/sitemap
+- Добавена колона: `objection_token VARCHAR(64) UNIQUE` — HMAC token за objection flow (nullable)
+- Използват се за автоматизиран GDPR objection/delete flow (Блокер 12)
+- Alembic migrations: 518f47fc537f_add_provider_objection_fields.py, 566352b4ebf8_add_provider_objection_token.py
+
 ---
 
 ## 3. Provider Availability (Cities)

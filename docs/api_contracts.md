@@ -590,6 +590,69 @@ Idempotent — second call for same email is silently accepted.
 
 ---
 
+### GET /api/v1/outreach/objection
+
+**Purpose:** GDPR Art.21 objection inspection — checks token state and redirects to confirmation page without mutating data.
+
+**Query Params:**
+- `token` (required) — Objection token issued to the provider (stored in providers.objection_token)
+
+**Response (302) — valid token, not yet objected:**
+Redirect to `https://nevumo.com/pl/outreach/objection?status=confirm&token={token}`
+
+**Response (302) — valid token, already objected:**
+Redirect to `https://nevumo.com/pl/outreach/objection?status=already_done`
+
+**Response (302) — invalid token:**
+Redirect to `https://nevumo.com/pl/outreach/objection?status=invalid`
+
+**Security:**
+- No authentication required (public endpoint)
+- Token lookup against providers.objection_token (UNIQUE constraint)
+- GET never mutates data — only inspects state and redirects
+
+**Files:** `apps/api/routes/outreach.py`
+
+---
+
+### POST /api/v1/outreach/objection
+
+**Purpose:** GDPR Art.21 objection execution — erases identifying data and hides the provider.
+
+**Query Params:**
+- `token` (required) — Objection token issued to the provider
+
+**Response (200) — valid token, not yet objected:**
+```json
+{"status": "success"}
+```
+Side effects:
+- Sets provider.business_name = NULL
+- Sets provider.scraped_email = NULL
+- Sets provider.scraped_phone = NULL
+- Sets provider.is_hidden = True
+- Sets provider.objected_at = NOW()
+- Preserves provider.objection_token for audit trail
+
+**Response (404) — invalid token:**
+```json
+{"detail": "invalid_token"}
+```
+
+**Response (409) — already objected:**
+```json
+{"detail": "already_objected"}
+```
+
+**Security:**
+- No authentication required (public endpoint)
+- Idempotency guard — second call for already-processed provider returns 409
+- Token lookup against providers.objection_token (UNIQUE constraint)
+
+**Files:** `apps/api/routes/outreach.py`
+
+---
+
 ## 🔹 WEBHOOK ENDPOINTS (Internal — Resend only)
 
 ### POST /api/v1/webhooks/resend
