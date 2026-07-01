@@ -18,6 +18,9 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+# Frontend base URL for objection redirects
+FRONTEND_BASE_URL = "https://nevumo.com"
+
 
 def _verify_hmac_token(email: str, token: str) -> bool:
     """Verify HMAC-SHA256 token for unsubscribe link."""
@@ -90,19 +93,19 @@ def outreach_objection_check(
     if provider is None:
         logger.warning("Objection GET: token not found")
         return RedirectResponse(
-            url="/pl/outreach/objection?status=invalid",
+            url=f"{FRONTEND_BASE_URL}/pl/outreach/objection?status=invalid",
             status_code=302,
         )
 
     if provider.objected_at is not None:
         logger.info("Objection GET: already processed provider_id=%s", provider.id)
         return RedirectResponse(
-            url="/pl/outreach/objection?status=already_done",
+            url=f"{FRONTEND_BASE_URL}/pl/outreach/objection?status=already_done",
             status_code=302,
         )
 
     return RedirectResponse(
-        url=f"/pl/outreach/objection?status=confirm&token={token}",
+        url=f"{FRONTEND_BASE_URL}/pl/outreach/objection?status=confirm&token={token}",
         status_code=302,
     )
 
@@ -111,7 +114,7 @@ def outreach_objection_check(
 def outreach_objection_submit(
     token: str = Query(..., description="Objection token issued to the provider"),
     db: Session = Depends(get_db),
-) -> RedirectResponse:
+):
     """
     Public endpoint — no auth required.
     Performs the GDPR Art.21 objection: erases identifying fields, hides the
@@ -143,7 +146,4 @@ def outreach_objection_submit(
 
     logger.info("Objection POST: completed provider_id=%s", provider.id)
 
-    return RedirectResponse(
-        url="/pl/outreach/objection?status=success",
-        status_code=302,
-    )
+    return {"status": "success"}
