@@ -61,7 +61,7 @@ def outreach_unsubscribe(
         logger.info("Already unsubscribed: %s", email)
 
     return RedirectResponse(
-        url="/pl/outreach/unsubscribe?confirmed=1",
+        url=f"{FRONTEND_BASE_URL}/pl/outreach/unsubscribe?confirmed=1",
         status_code=302,
     )
 
